@@ -1,0 +1,83 @@
+name: Auto Blog Generator
+
+on:
+  schedule:
+    # Runs every Monday at 8am UTC
+    - cron: '0 8 * * 1'
+  workflow_dispatch:
+    inputs:
+      topic:
+        description: 'Optional: specify a blog topic (leave blank for auto-select)'
+        required: false
+        default: ''
+
+jobs:
+  generate-blog-post:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install @anthropic-ai/sdk node-fetch
+
+      - name: Generate and post blog draft
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          WP_URL: ${{ secrets.WP_URL }}
+          WP_USERNAME: ${{ secrets.WP_USERNAME }}
+          WP_APP_PASSWORD: ${{ secrets.WP_APP_PASSWORD }}
+          MANUAL_TOPIC: ${{ github.event.inputs.topic }}
+        run: node scripts/blog-generator.js
+
+      - name: Read output
+        id: output
+        run: |
+          if [ -f scripts/output.json ]; then
+            echo "post_title=$(cat scripts/output.json | node -e "const d=require('fs').readFileSync('/dev/stdin','utf8');console.log(JSON.parse(d).title)" )" >> $GITHUB_OUTPUT
+            echo "post_url=$(cat scripts/output.json | node -e "const d=require('fs').readFileSync('/dev/stdin','utf8');console.log(JSON.parse(d).link)" )" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create GitHub issue for review notification
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let title = 'New Blog Draft Ready for Review';
+            let wpLink = process.env.WP_URL + '/wp-admin/edit.php?post_status=draft&post_type=post';
+
+            try {
+              const output = JSON.parse(fs.readFileSync('scripts/output.json', 'utf8'));
+              title = `Blog Draft Ready: "${output.title}"`;
+              wpLink = output.editLink || wpLink;
+            } catch(e) {}
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: title,
+              body: [
+                '## New Blog Post Draft Created',
+                '',
+                'Claude has written and saved a new blog post as a **Draft** in WordPress.',
+                '',
+                '### Your To-Do',
+                '- [ ] Open the draft in WordPress',
+                '- [ ] Add featured image and any inline photos',
+                '- [ ] Review and edit if needed',
+                '- [ ] Click **Publish**',
+                '',
+                `**[Open WordPress Drafts](${wpLink})**`,
+                '',
+                '_Close this issue once published._'
+              ].join('\n'),
+              labels: ['blog-draft']
+            });
+        env:
+          WP_URL: ${{ secrets.WP_URL }}
