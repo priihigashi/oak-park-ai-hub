@@ -43,14 +43,29 @@ function createContentSheet() {
   const headers = columns.map(c => c.name);
   sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
 
-  // ── Style header row ──────────────────────────────────────────────────────
+  // ── Style header row — Black / White / Neon (Lato font) ──────────────────
   const headerRange = sheet.getRange(1, 1, 1, headers.length);
   headerRange
-    .setBackground('#1a1a2e')
-    .setFontColor('#ffffff')
+    .setBackground('#000000')
+    .setFontColor('#39FF14')       // neon green
     .setFontWeight('bold')
     .setFontSize(11)
+    .setFontFamily('Lato')
     .setWrap(false);
+
+  // Neon cyan accent on key creative columns (hooks + master hook + payoff)
+  const accentCols = [10, 11, 12, 13, 14]; // Hook cols + Reader Payoff
+  accentCols.forEach(col => {
+    sheet.getRange(1, col, 1, 1)
+      .setBackground('#000000')
+      .setFontColor('#00FFFF');    // neon cyan for hook/payoff headers
+  });
+
+  // Neon pink accent on status column header
+  sheet.getRange(1, 20, 1, 1)
+    .setBackground('#000000')
+    .setFontColor('#FF00FF');      // neon pink for status
+
   sheet.setFrozenRows(1);
 
   // ── Column widths ─────────────────────────────────────────────────────────
@@ -99,14 +114,14 @@ function createContentSheet() {
     '❌ Skipped'
   ]));
 
-  // ── Conditional formatting for Status column ──────────────────────────────
+  // ── Conditional formatting for Status column — neon on black ─────────────
   const statusCol = sheet.getRange(2, 20, 500, 1);
   const rules = [
-    { text: '📤 Published',     bg: '#d4edda', fg: '#155724' },
-    { text: '✍️ Draft Created', bg: '#fff3cd', fg: '#856404' },
-    { text: '✅ Approved',      bg: '#cce5ff', fg: '#004085' },
-    { text: '❌ Skipped',       bg: '#f8d7da', fg: '#721c24' },
-    { text: '🆕 Idea',          bg: '#f0f0f0', fg: '#333333' },
+    { text: '📤 Published',     bg: '#000000', fg: '#39FF14' }, // neon green
+    { text: '✍️ Draft Created', bg: '#000000', fg: '#FFD700' }, // neon yellow
+    { text: '✅ Approved',      bg: '#000000', fg: '#00FFFF' }, // neon cyan
+    { text: '❌ Skipped',       bg: '#000000', fg: '#FF3131' }, // neon red
+    { text: '🆕 Idea',          bg: '#1a1a1a', fg: '#ffffff' }, // white on near-black
   ];
   const cfRules = rules.map(r =>
     SpreadsheetApp.newConditionalFormatRule()
@@ -118,8 +133,15 @@ function createContentSheet() {
   );
   sheet.setConditionalFormatRules(cfRules);
 
-  // ── Alternate row colors for readability ──────────────────────────────────
-  sheet.getRange(2, 1, 500, headers.length).setBackground('#fafafa');
+  // ── Row colors — alternating dark/darker for all data rows ───────────────
+  for (let r = 2; r <= 501; r++) {
+    const bg = r % 2 === 0 ? '#111111' : '#1a1a1a';
+    sheet.getRange(r, 1, 1, headers.length)
+      .setBackground(bg)
+      .setFontColor('#ffffff')
+      .setFontFamily('Lato')
+      .setFontSize(10);
+  }
 
   // ── Wrap text for hook/payoff columns ────────────────────────────────────
   [10,11,12,13,14,19].forEach(col => {
