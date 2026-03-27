@@ -1,0 +1,24 @@
+name: Import Existing WordPress Posts
+
+on:
+  workflow_dispatch:  # run once manually — safe to re-run (skips duplicates)
+
+permissions:
+  contents: read
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Import existing posts to sheet
+        env:
+          GOOGLE_SHEET_ID:  ${{ secrets.GOOGLE_SHEET_ID }}
+          GOOGLE_SA_KEY:    ${{ secrets.GOOGLE_SA_KEY }}
+          WP_URL:           ${{ secrets.WP_URL }}
+          WP_USERNAME:      ${{ secrets.WP_USERNAME }}
+          WP_APP_PASSWORD:  ${{ secrets.WP_APP_PASSWORD }}
+        run: node scripts/import-existing-posts.js
