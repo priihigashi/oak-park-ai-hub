@@ -73,25 +73,25 @@ async function getApprovedTopicFromSheet() {
       const rawIdea = (row[COL.rawIdea] || '').trim();
 
       if (status === '✅ Approved' && !blogUrl && rawIdea) {
-        console.log(`Sheet topic selected (row ${i + 2}): "${row[COL.topicDirection] || rawIdea}"`);
-        return {
-          rowIndex: i,        // 0-based data row index (excluding header)
-          sheetRow: i + 2,    // 1-based sheet row number (header = row 1)
-          token,
-          saKey,
-          rawIdea,
-          topicDirection:   row[COL.topicDirection]   || rawIdea,
-          focusKeyword:     row[COL.focusKeyword]     || '',
-          secondaryKeyword: row[COL.secondaryKeyword] || '',
-          masterHook:       row[COL.masterHook]       || '',
-          readerPayoff:     row[COL.readerPayoff]     || '',
-          targetAudience:   row[COL.targetAudience]   || 'Homeowner',
-          imageDirection:   row[COL.imageDirection]   || '',
-          wpCategoryId:     row[COL.wpCategoryId]     || '',
-        };
+        console.log(`Sheet topic selected (row ${i + 2}) [APPROVED → will publish]: "${row[COL.topicDirection] || rawIdea}"`);
+        return buildSheetData(row, i, token, '✅ Approved');
       }
     }
-    console.log('No approved rows without a Blog URL found — falling back to topics.js');
+
+    // Fallback: pick first Idea row if no Approved rows remain
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      const status  = (row[COL.status] || '').trim();
+      const blogUrl = (row[COL.blogUrl] || '').trim();
+      const rawIdea = (row[COL.rawIdea] || '').trim();
+
+      if (status === '🆕 Idea' && !blogUrl && rawIdea) {
+        console.log(`Sheet topic selected (row ${i + 2}) [IDEA → will draft]: "${row[COL.topicDirection] || rawIdea}"`);
+        return buildSheetData(row, i, token, '🆕 Idea');
+      }
+    }
+
+    console.log('No usable sheet rows found — falling back to topics.js');
     return null;
   } catch (e) {
     console.log(`Sheet read failed: ${e.message} — falling back to topics.js`);
@@ -99,8 +99,27 @@ async function getApprovedTopicFromSheet() {
   }
 }
 
-// After posting, mark the row as Draft Created and fill the Blog URL
-async function markSheetRowDraft(sheetData, blogUrl) {
+function buildSheetData(row, i, token, originalStatus) {
+  return {
+    rowIndex: i,
+    sheetRow: i + 2,
+    token,
+    originalStatus,
+    rawIdea:          row[COL.rawIdea]          || '',
+    topicDirection:   row[COL.topicDirection]   || row[COL.rawIdea] || '',
+    focusKeyword:     row[COL.focusKeyword]     || '',
+    secondaryKeyword: row[COL.secondaryKeyword] || '',
+    masterHook:       row[COL.masterHook]       || '',
+    readerPayoff:     row[COL.readerPayoff]     || '',
+    targetAudience:   row[COL.targetAudience]   || 'Homeowner',
+    imageDirection:   row[COL.imageDirection]   || '',
+    wpCategoryId:     row[COL.wpCategoryId]     || '',
+  };
+}
+
+// After posting, update the sheet row status and Blog URL
+async function markSheetRowPosted(sheetData, blogUrl, wpStatus) {
+  const newStatus = wpStatus === 'publish' ? '📤 Published' : '✍️ Draft Created';
   try {
     const { token, sheetRow } = sheetData;
     const colLetter = (i) => {
@@ -109,7 +128,7 @@ async function markSheetRowDraft(sheetData, blogUrl) {
       return r;
     };
     const updates = [
-      { range: `Content Ideas!${colLetter(COL.status)}${sheetRow}`,  values: [['✍️ Draft Created']] },
+      { range: `Content Ideas!${colLetter(COL.status)}${sheetRow}`,  values: [[newStatus]] },
       { range: `Content Ideas!${colLetter(COL.blogUrl)}${sheetRow}`, values: [[blogUrl]] },
     ];
     const res = await fetch(
@@ -120,7 +139,7 @@ async function markSheetRowDraft(sheetData, blogUrl) {
         body: JSON.stringify({ valueInputOption: 'USER_ENTERED', data: updates }),
       }
     );
-    if (res.ok) console.log(`Sheet row ${sheetRow} updated → ✍️ Draft Created`);
+    if (res.ok) console.log(`Sheet row ${sheetRow} updated → ${newStatus}`);
     else console.log(`Sheet update failed: ${await res.text()}`);
   } catch (e) {
     console.log(`Could not update sheet: ${e.message}`);
@@ -133,16 +152,25 @@ async function generatePost(topic, sheetData = null) {
 
   // If we have pre-researched sheet data, give Claude the full context
   const keywordInstructions = sheetData && sheetData.focusKeyword
-    ? `KEYWORD RESEARCH (already done — use exactly as given):
-- Focus keyword: "${sheetData.focusKeyword}" — use this in title, first 100 words, 2+ headers, meta description, and 4-6x in body
+    ? `KEYWORD RESEARCH (pre-done — follow exactly):
+- Focus keyword: "${sheetData.focusKeyword}"
 - Secondary keyword: "${sheetData.secondaryKeyword || ''}"
-- Suggested title angle: "${sheetData.masterHook || topic}"
-- Reader payoff (what they walk away knowing): "${sheetData.readerPayoff || ''}"
 - Target audience: ${sheetData.targetAudience || 'Homeowner'}
-- Suggested featured image: "${sheetData.imageDirection || topic}"
+- Reader payoff: "${sheetData.readerPayoff || ''}"
+- Suggested image: "${sheetData.imageDirection || topic}"
 
-Do NOT change the focus keyword. Build the entire post around it.`
-    : `SEO REQUIREMENTS — choose ONE clear focus keyword (3-5 words) with HIRE intent for South Florida (e.g. "concrete patio contractor Broward County"). Use it in title, first 100 words, 2+ H2/H3 headers, meta description, and 4-6x in body.`;
+TITLE (most important for SEO score):
+- Start with the pre-researched angle: "${sheetData.masterHook || topic}"
+- Adapt it into a 50-60 character title that naturally includes the focus keyword
+- NEVER use the raw focus keyword as the title — it must read like a human wrote it
+- Put the focus keyword in the first 3-5 words of the title
+- Good formats: "Concrete Slab Contractors Broward: Why DIY Cracks in Florida" / "Home Addition Cost South Florida: Full Budget Breakdown" / "Manufactured Homes in Florida: What Contractors Won't Tell You"
+- Include a number OR a power word (Cost, Guide, Why, How, What, Complete, Full) when natural
+
+KEYWORD PLACEMENT:
+- Use focus keyword in: title, first 100 words, at least 2 H2/H3 subheadings, meta description, and 4-6x naturally in body
+- Do NOT stuff — use it naturally, vary with synonyms between uses`
+    : `KEYWORD: Choose ONE clear focus keyword (3-5 words) with HIRE intent for South Florida (e.g. "home addition contractor Broward County"). Craft a compelling human title around it — do NOT use the raw keyword as the title. Use keyword in title, first 100 words, 2+ subheadings, meta description, and 4-6x in body.`;
 
   const message = await client.messages.create({
     model: 'claude-opus-4-6',
@@ -172,16 +200,23 @@ Topic: "${topic}"
 ${keywordInstructions}
 
 ADDITIONAL SEO REQUIREMENTS:
-- Title: under 60 characters, focus keyword near start
-- Meta description: EXACTLY 150-160 characters — count carefully. Include focus keyword + natural CTA
-- H2 for main sections (3-4), H3 for subsections
+- Meta description: EXACTLY 150-160 characters — count every character. Include focus keyword + natural CTA
+- H2 for main sections (3-4 total), H3 for subsections — at least 2 must contain the focus keyword or a variation
 - Content: 1100-1300 words
 - At least one bulleted or numbered list
 - Mention ${COMPANY.location.primaryMarket} + at least 2 of: ${COMPANY.location.targetCities.slice(0,8).join(', ')}
-- Include one inline image mid-body: insert <!-- INLINE_IMAGE: [3-5 word search query] --> where it fits
+- Include 1-2 outbound links to credible external sources (floridabuilding.org, myflorida.com, energy.gov, fema.gov, or similar) — wrap in <a href="URL" target="_blank" rel="noopener">anchor text</a>
+- Include one inline image mid-body: <!-- INLINE_IMAGE: [3-5 word search query] -->
 
-FORMAT: HTML only — h2, h3, p, ul, ol, li tags. NO html/head/body wrapper tags.
-Structure: strong keyword intro → 3-4 detailed sections → conclusion with ONE natural CTA sentence.
+READABILITY (AIOSEO checks all of these — they affect your score):
+- Keep average sentence length under 20 words
+- Keep paragraphs to 3-4 sentences max
+- Use transition words to start at least 30% of sentences: "However," "First," "Additionally," "For example," "As a result," "In contrast," "That said," "In fact," "Most importantly," etc.
+- Write in active voice — avoid passive constructions ("it was built" → "we built it")
+- Vary sentence rhythm — mix short punchy sentences with longer explanations
+
+FORMAT: HTML only — h2, h3, p, ul, ol, li, a tags. NO html/head/body wrapper.
+Structure: keyword-rich intro paragraph → 3-4 detailed H2 sections → brief conclusion with ONE natural CTA sentence.
 
 Return ONLY this exact JSON (no markdown fences):
 {
@@ -269,14 +304,14 @@ async function resolveInlineImages(html) {
 }
 
 // ─── Step 5: Post to WordPress as Draft ──────────────────────────────────────
-async function postToWordPress(post, featuredMediaId, wpCategoryId) {
-  console.log('Posting to WordPress...');
+async function postToWordPress(post, featuredMediaId, wpCategoryId, wpStatus = 'draft') {
+  console.log(`Posting to WordPress as ${wpStatus}...`);
   const credentials = Buffer.from(`${WP_USERNAME}:${WP_APP_PASSWORD}`).toString('base64');
   const body = {
     title: post.title,
     content: post.html_content,
     excerpt: post.meta_description,
-    status: 'draft',
+    status: wpStatus,
     categories: wpCategoryId ? [parseInt(wpCategoryId)] : [],
   };
   if (featuredMediaId) body.featured_media = featuredMediaId;
@@ -324,18 +359,19 @@ async function postToWordPress(post, featuredMediaId, wpCategoryId) {
     const featuredMedia = await uploadImageToWordPress(imageInfo, 'featured-image.jpg');
     post.html_content = await resolveInlineImages(post.html_content);
 
-    // 4. Post to WordPress
-    const result = await postToWordPress(post, featuredMedia?.id || null, sheetData?.wpCategoryId);
+    // 4. Post to WordPress — Approved rows publish directly, everything else is draft
+    const wpStatus = (sheetData?.originalStatus === '✅ Approved') ? 'publish' : 'draft';
+    const result = await postToWordPress(post, featuredMedia?.id || null, sheetData?.wpCategoryId, wpStatus);
 
     // 5. Update sheet row if topic came from sheet
     if (sheetData) {
-      await markSheetRowDraft(sheetData, result.link || result.editLink);
+      await markSheetRowPosted(sheetData, result.link || result.editLink, wpStatus);
     }
 
     // 6. Save output for workflow notification
     fs.writeFileSync('scripts/output.json', JSON.stringify(result, null, 2));
 
-    console.log('\n✓ Done! Draft saved to WordPress.');
+    console.log(`\n✓ Done! Post ${wpStatus === 'publish' ? 'published live' : 'saved as draft'}.`);
     console.log(`  Title: ${result.title}`);
     console.log(`  Edit:  ${result.editLink}`);
   } catch (err) {
