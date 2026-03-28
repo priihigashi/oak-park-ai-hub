@@ -251,6 +251,23 @@ CTA RULE: The closing CTA must match the article topic exactly. Never use generi
 - Addition cost → "Request a realistic Broward County budget range"
 - Comparison → "Talk through which option makes sense for your lot and budget"
 
+FEATURED IMAGE RULE — the image_search_query you return must follow this hierarchy:
+The featured image must match the article in: property type, project type, project stage, and reader expectation.
+If the article is residential (home addition, remodel, kitchen, patio, etc.):
+  GOOD search terms: "home addition exterior renovation", "house framing addition", "residential contractor house plans", "single family home remodel", "homeowner contractor exterior"
+  BAD search terms: "construction building", "concrete building", "commercial construction", "high rise", "parking garage", "crane tower"
+If someone sees the image alone, they should roughly guess: house, renovation/addition, homeowner project, residential scale.
+For commercial articles: office renovation, retail build-out, commercial interior framing — not residential.
+Quick approval test: Does the image match the building type? The job type? The project scale? If 2 of 3 are wrong, find a better search term.
+
+FRESHNESS AND ATTRIBUTION RULE — for current-event, enforcement, or policy topics:
+Do not write time-sensitive claims as if they are permanent facts.
+Use anchored or softened language:
+  Good: "as enforcement pressure increases" / "in the current environment" / "in some recent cases" / "depending on how enforcement plays out locally"
+  Risky: "contractors across Broward are experiencing this" / "the effects are measurable and ongoing" — only use these if there is clear current basis
+When making a market-wide local claim, either attach it to a named source/reporting pattern OR write it as a practical risk rather than a declared county-wide fact.
+Current-event posts should be reviewed at 30–60 days — add a note at the end of the article's HTML: <!-- FRESHNESS CHECK: review this post by [month 60 days out] -->
+
 CONTENT RULES:
 - LOCATION: South Florida, ${COMPANY.location.primaryMarket}, or specific local cities ONLY. Never imply the company is in Illinois. Illinois is origin story only.
 - COMPETITORS: Never name any competitor.
