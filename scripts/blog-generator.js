@@ -186,7 +186,7 @@ Adapt the best hook into a 50-60 character SEO title that:
 
   const message = await client.messages.create({
     model: 'claude-opus-4-6',
-    max_tokens: 4000,
+    max_tokens: 6000,
     system: `You are the content writer for ${COMPANY.name}, a ${COMPANY.license.status} based in ${COMPANY.location.headquarters}, serving ${COMPANY.location.primaryMarket} and surrounding areas.
 
 COMPANY:
