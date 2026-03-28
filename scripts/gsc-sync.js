@@ -144,9 +144,34 @@ async function updateSheetRow(token, sheetRow, gscData) {
 }
 
 async function ensureGSCHeaders(token, rows) {
-  // Add GSC column headers if they don't exist yet
   const header = rows[0] || [];
   if (header[COL_IMPRESSIONS]) return; // already set
+
+  // Expand sheet columns to fit AA (col 27) if needed
+  const metaRes = await fetch(
+    `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}?fields=sheets.properties`,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  if (metaRes.ok) {
+    const meta = await metaRes.json();
+    const sheet = meta.sheets?.find(s => s.properties.title === 'Content Ideas');
+    if (sheet) {
+      const currentCols = sheet.properties.gridProperties.columnCount;
+      if (currentCols < 27) {
+        await fetch(
+          `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}:batchUpdate`,
+          {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              requests: [{ appendDimension: { sheetId: sheet.properties.sheetId, dimension: 'COLUMNS', length: 27 - currentCols + 2 } }],
+            }),
+          }
+        );
+        console.log('Sheet columns expanded to fit GSC columns.');
+      }
+    }
+  }
 
   const updates = [
     { range: `Content Ideas!${colLetter(COL_IMPRESSIONS)}1`, values: [['GSC Impressions (90d)']] },

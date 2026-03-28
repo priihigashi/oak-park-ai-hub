@@ -1,7 +1,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // One-time script: adds GSC tracking column headers to existing sheet
-// Run once from: Actions → Run workflow → select "Add GSC Headers"
-// Safe to run on a sheet that already has content — only touches row 1, cols W-AA
+// Expands the sheet grid if needed before writing to columns W–AA
+// Safe to re-run — headers are just overwritten if already there
 // ─────────────────────────────────────────────────────────────────────────────
 
 const GOOGLE_SHEET_ID = process.env.GOOGLE_SHEET_ID;
@@ -33,9 +33,55 @@ async function getGoogleToken(saKey) {
   return data.access_token;
 }
 
+async function expandSheetIfNeeded(token, neededColumns) {
+  // Get current sheet metadata
+  const metaRes = await fetch(
+    `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}?fields=sheets.properties`,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  if (!metaRes.ok) throw new Error(`Failed to get sheet metadata: ${await metaRes.text()}`);
+  const meta = await metaRes.json();
+
+  const sheet = meta.sheets.find(s => s.properties.title === 'Content Ideas');
+  if (!sheet) throw new Error('Tab "Content Ideas" not found in spreadsheet.');
+
+  const sheetId = sheet.properties.sheetId;
+  const currentCols = sheet.properties.gridProperties.columnCount;
+
+  if (currentCols >= neededColumns) {
+    console.log(`Sheet already has ${currentCols} columns — no expansion needed.`);
+    return;
+  }
+
+  const toAdd = neededColumns - currentCols + 2; // +2 buffer
+  console.log(`Expanding sheet from ${currentCols} to ${currentCols + toAdd} columns...`);
+
+  const expandRes = await fetch(
+    `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}:batchUpdate`,
+    {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        requests: [{
+          appendDimension: {
+            sheetId,
+            dimension: 'COLUMNS',
+            length: toAdd,
+          },
+        }],
+      }),
+    }
+  );
+  if (!expandRes.ok) throw new Error(`Failed to expand columns: ${await expandRes.text()}`);
+  console.log(`Sheet expanded successfully.`);
+}
+
 (async () => {
   const saKey = JSON.parse(Buffer.from(GOOGLE_SA_KEY, 'base64').toString('utf8'));
   const token = await getGoogleToken(saKey);
+
+  // AA = column 27 — ensure sheet has at least 27 columns
+  await expandSheetIfNeeded(token, 27);
 
   const updates = [
     { range: 'Content Ideas!W1', values: [['GSC Impressions (90d)']] },
@@ -54,7 +100,7 @@ async function getGoogleToken(saKey) {
     }
   );
 
-  if (!res.ok) throw new Error(`Failed: ${await res.text()}`);
-  console.log('✓ GSC column headers added to sheet (columns W–AA, row 1).');
-  console.log('  Your existing content rows are untouched.');
+  if (!res.ok) throw new Error(`Failed to write headers: ${await res.text()}`);
+  console.log('✓ GSC column headers added: W=Impressions, X=Clicks, Y=Position, Z=CTR, AA=Last Updated');
+  console.log('  Existing content rows untouched.');
 })();
