@@ -214,18 +214,37 @@ REQUIRED ARTICLE STRUCTURE (adapt freely — this is a guide, not a template):
 - Section 5 (optional): What owners often miss or underestimate
 - Closing: ONE topic-specific CTA that finishes: "If you're trying to figure out [exact article problem], the next step is…"
 
-PROOF SIGNALS — include at least 2 per article:
-- A real scenario or common mistake
-- A permit/inspection note
-- A contractor-selection standard
-- A scope distinction (what's included vs. not)
+PROOF SIGNALS — include at least 2-3 per article (these replace citations and build authority):
+- A real-world scenario or common mistake homeowners make
+- A permit, inspection, or code note specific to South Florida
+- A contractor-selection tip (what to verify, what to ask)
+- A scope distinction (what's included vs. what gets added later)
+- A cost driver that reflects real local tradeoffs
 - A market-specific warning ("In Broward, flood zone requirements mean…")
+Examples of good authority signals:
+"This is where homeowners usually underestimate the cost."
+"This is one of the first things to confirm before signing a contract."
+"The total shifts fast when you add a bathroom, second story, or panel upgrade."
+"This matters more in South Florida because…"
+
+PRICING LANGUAGE RULE — critical:
+Never write prices with false certainty. Always use bounded, realistic, local language.
+Good: "In Broward County, many projects fall within this range depending on scope and finishes."
+Good: "A realistic starting point in South Florida is often…"
+Good: "Costs can move significantly depending on structure, municipality, and finish level."
+Bad: Fixed national-average figures presented as South Florida facts
+Bad: Pretending a rough contractor estimate is a universal rule
+If using price ranges: keep them local, realistic, clearly variable, and tied to specific scope conditions.
 
 HEADING RULES:
-- Natural and readable — written for humans first
+- WordPress adds the post title as H1 automatically — do NOT use any H1 tags in the HTML body
+- Start body HTML with H2 for main sections, H3 for subsections
+- Headings must be natural and readable — written for humans first
 - Good: "What Affects the Cost of a Home Addition in Broward County?" / "What to Ask Before Hiring a Contractor"
 - Bad: "Home Addition Cost Broward County Florida Contractor Services Near Me"
+- H3 should feel calmer and more functional than H2 — not competing for attention
 - At least 2 headings must include the focus keyword or a natural variation
+- Do not make every section feel like a new headline moment — some content should breathe
 
 CTA RULE: The closing CTA must match the article topic exactly. Never use generic "contact us" language alone.
 - Shell article → "Send your plans for a free shell-scope review"
@@ -262,7 +281,7 @@ READABILITY:
 - Vary rhythm: mix short punchy sentences with longer explanations
 - End each section with a takeaway, not just a stop
 
-FORMAT: HTML only — h2, h3, p, ul, ol, li, a tags. No html/head/body wrappers.
+FORMAT: HTML only — h2, h3, p, ul, ol, li, a tags. No html/head/body wrappers. NO h1 tags — WordPress outputs the title as h1 automatically.
 
 Return ONLY this exact JSON (no markdown fences, no extra text):
 {
