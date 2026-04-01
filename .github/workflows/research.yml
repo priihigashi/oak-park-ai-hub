@@ -2,7 +2,7 @@ name: Content Research
 
 on:
   schedule:
-    - cron: '45 20 * * *'  # TEMP TEST: 4:45pm EDT — revert after confirming schedule works
+    - cron: '30 20 * * *'  # TEMP TEST: 4:30pm EDT — revert after confirming schedule works
   workflow_dispatch:        # manual trigger
 
 permissions:
