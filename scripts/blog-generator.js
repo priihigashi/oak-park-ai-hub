@@ -442,11 +442,16 @@ async function postToWordPress(post, featuredMediaId, wpCategoryId, wpStatus = '
     // 2. Generate post
     const post = await generatePost(topic, sheetData);
 
-    // 3. Images
-    const imageQuery = (sheetData?.imageDirection) || post.image_search_query || topic;
-    const imageInfo = await fetchFeaturedImage(imageQuery);
-    const featuredMedia = await uploadImageToWordPress(imageInfo, 'featured-image.jpg');
-    post.html_content = await resolveInlineImages(post.html_content);
+    // 3. Images — wrapped in try/catch so a bad image query never kills the post
+    let featuredMedia = null;
+    try {
+      const imageQuery = (sheetData?.imageDirection) || post.image_search_query || topic;
+      const imageInfo = await fetchFeaturedImage(imageQuery);
+      featuredMedia = await uploadImageToWordPress(imageInfo, 'featured-image.jpg');
+      post.html_content = await resolveInlineImages(post.html_content);
+    } catch (imgErr) {
+      console.log(`Image step failed (${imgErr.message}) — continuing without image.`);
+    }
 
     // 4. Post to WordPress — Approved rows publish directly, everything else is draft
     const wpStatus = (sheetData?.originalStatus === '✅ Approved') ? 'publish' : 'draft';
