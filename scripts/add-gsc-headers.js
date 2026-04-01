@@ -80,15 +80,16 @@ async function expandSheetIfNeeded(token, neededColumns) {
   const saKey = JSON.parse(Buffer.from(GOOGLE_SA_KEY, 'base64').toString('utf8'));
   const token = await getGoogleToken(saKey);
 
-  // AA = column 27 — ensure sheet has at least 27 columns
-  await expandSheetIfNeeded(token, 27);
+  // AB = column 28 — ensure sheet has at least 28 columns
+  await expandSheetIfNeeded(token, 28);
 
   const updates = [
-    { range: 'Content Ideas!W1', values: [['GSC Impressions (90d)']] },
-    { range: 'Content Ideas!X1', values: [['GSC Clicks (90d)']] },
-    { range: 'Content Ideas!Y1', values: [['GSC Avg Position']] },
-    { range: 'Content Ideas!Z1', values: [['GSC CTR']] },
-    { range: 'Content Ideas!AA1', values: [['GSC Last Updated']] },
+    { range: 'Content Ideas!W1',  values: [['Date Published']] },
+    { range: 'Content Ideas!X1',  values: [['GSC Impressions (90d)']] },
+    { range: 'Content Ideas!Y1',  values: [['GSC Clicks (90d)']] },
+    { range: 'Content Ideas!Z1',  values: [['GSC Avg Position']] },
+    { range: 'Content Ideas!AA1', values: [['GSC CTR']] },
+    { range: 'Content Ideas!AB1', values: [['GSC Last Updated']] },
   ];
 
   const res = await fetch(

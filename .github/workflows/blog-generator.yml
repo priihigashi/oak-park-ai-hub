@@ -2,7 +2,7 @@ name: Auto Blog Generator
 
 on:
   schedule:
-    - cron: '15 22 * * *'  # TEMP TEST: 6:15pm EDT — revert after confirming schedule works
+    - cron: '30 22 * * *'  # TEMP TEST: 6:30pm EDT — revert after confirming schedule works
   workflow_dispatch:
     inputs:
       topic:

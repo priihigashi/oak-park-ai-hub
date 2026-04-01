@@ -2,7 +2,7 @@
 // Oak Park Construction — Google Search Console Sync
 // Reads published blog URLs from the sheet, fetches GSC performance data,
 // and writes Impressions, Clicks, Avg Position, CTR back to the sheet.
-// New columns added at the end: W=Impressions, X=Clicks, Y=Avg Position, Z=CTR, AA=GSC Updated
+// New columns added at the end: W=Date Published, X=Impressions, Y=Clicks, Z=Avg Position, AA=CTR, AB=GSC Updated
 // ─────────────────────────────────────────────────────────────────────────────
 
 const GOOGLE_SHEET_ID  = process.env.GOOGLE_SHEET_ID;
@@ -12,11 +12,12 @@ const GSC_SITE_URL     = process.env.GSC_SITE_URL; // e.g. https://oakpark-const
 // Column indexes (0-based)
 const COL_BLOG_URL    = 20; // U — existing Blog URL column
 const COL_STATUS      = 19; // T — Status
-const COL_IMPRESSIONS = 22; // W
-const COL_CLICKS      = 23; // X
-const COL_POSITION    = 24; // Y
-const COL_CTR         = 25; // Z
-const COL_GSC_UPDATED = 26; // AA
+// W (22) = Date Published — reserved for blog-generator
+const COL_IMPRESSIONS = 23; // X
+const COL_CLICKS      = 24; // Y
+const COL_POSITION    = 25; // Z
+const COL_CTR         = 26; // AA
+const COL_GSC_UPDATED = 27; // AB
 
 const TODAY = new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' });
 const DATE_90_DAYS_AGO = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000)
@@ -147,7 +148,7 @@ async function ensureGSCHeaders(token, rows) {
   const header = rows[0] || [];
   if (header[COL_IMPRESSIONS]) return; // already set
 
-  // Expand sheet columns to fit AA (col 27) if needed
+  // Expand sheet columns to fit AB (col 28) if needed
   const metaRes = await fetch(
     `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}?fields=sheets.properties`,
     { headers: { Authorization: `Bearer ${token}` } }
@@ -157,14 +158,14 @@ async function ensureGSCHeaders(token, rows) {
     const sheet = meta.sheets?.find(s => s.properties.title === 'Content Ideas');
     if (sheet) {
       const currentCols = sheet.properties.gridProperties.columnCount;
-      if (currentCols < 27) {
+      if (currentCols < 28) {
         await fetch(
           `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}:batchUpdate`,
           {
             method: 'POST',
             headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              requests: [{ appendDimension: { sheetId: sheet.properties.sheetId, dimension: 'COLUMNS', length: 27 - currentCols + 2 } }],
+              requests: [{ appendDimension: { sheetId: sheet.properties.sheetId, dimension: 'COLUMNS', length: 28 - currentCols + 2 } }],
             }),
           }
         );
@@ -174,6 +175,7 @@ async function ensureGSCHeaders(token, rows) {
   }
 
   const updates = [
+    { range: `Content Ideas!W1`,                             values: [['Date Published']] },
     { range: `Content Ideas!${colLetter(COL_IMPRESSIONS)}1`, values: [['GSC Impressions (90d)']] },
     { range: `Content Ideas!${colLetter(COL_CLICKS)}1`,      values: [['GSC Clicks (90d)']] },
     { range: `Content Ideas!${colLetter(COL_POSITION)}1`,    values: [['GSC Avg Position']] },

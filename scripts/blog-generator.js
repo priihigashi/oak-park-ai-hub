@@ -14,13 +14,14 @@ const MANUAL_TOPIC    = process.env.MANUAL_TOPIC || '';
 const GOOGLE_SHEET_ID = process.env.GOOGLE_SHEET_ID;
 const GOOGLE_SA_KEY   = process.env.GOOGLE_SA_KEY;
 
-// Column indexes (0-based) matching the 22-column sheet
+// Column indexes (0-based) matching the 23-column sheet
 const COL = {
   dateAdded: 0, addedBy: 1, source: 2, sourceLink: 3, rawIdea: 4,
   topicDirection: 5, crossSignal: 6, focusKeyword: 7, secondaryKeyword: 8,
   hookProfessional: 9, hookEmotional: 10, hookGenZ: 11, masterHook: 12,
   readerPayoff: 13, idealFor: 14, targetAudience: 15, imageDirection: 16,
   wpCategoryId: 17, socialOneLiner: 18, status: 19, blogUrl: 20, notes: 21,
+  datePublished: 22,
 };
 
 // ─── Google Sheet helpers ─────────────────────────────────────────────────────
@@ -135,9 +136,11 @@ async function markSheetRowPosted(sheetData, blogUrl, wpStatus) {
       while (n > 0) { r = String.fromCharCode(64 + (n % 26 || 26)) + r; n = Math.floor((n - 1) / 26); }
       return r;
     };
+    const publishedAt = new Date().toLocaleString('en-US', { timeZone: 'America/New_York', month: '2-digit', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
     const updates = [
-      { range: `Content Ideas!${colLetter(COL.status)}${sheetRow}`,  values: [[newStatus]] },
-      { range: `Content Ideas!${colLetter(COL.blogUrl)}${sheetRow}`, values: [[blogUrl]] },
+      { range: `Content Ideas!${colLetter(COL.status)}${sheetRow}`,        values: [[newStatus]] },
+      { range: `Content Ideas!${colLetter(COL.blogUrl)}${sheetRow}`,       values: [[blogUrl]] },
+      { range: `Content Ideas!${colLetter(COL.datePublished)}${sheetRow}`, values: [[publishedAt]] },
     ];
     const res = await fetch(
       `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}/values:batchUpdate`,
