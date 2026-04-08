@@ -29,21 +29,23 @@ TMPDIR.mkdir(parents=True, exist_ok=True)
 FONTS_DIR.mkdir(parents=True, exist_ok=True)
 OUT_BASE.mkdir(parents=True, exist_ok=True)
 
-# ── Brand colors ──────────────────────────────────────────────────────────────
+# ── Brand colors (exact Canva brand kit) ──────────────────────────────────────
 W, H        = 1080, 1350
-BG_DARK     = (10, 10, 10)
-BG_CREAM    = (237, 232, 224)
-YELLOW      = (203, 204, 16)
-WARM_BROWN  = (107, 74, 26)
-WHITE       = (255, 255, 255)
-BLACK       = (0, 0, 0)
+BG_DARK     = (4, 6, 6)       # #040606
+BG_CREAM    = (240, 237, 231)  # #f0ede7
+YELLOW      = (224, 232, 77)   # #e0e84d
+WARM_BROWN  = (91, 60, 31)     # #5b3c1f
+WHITE       = (255, 255, 255)  # #ffffff
+BLACK       = (0, 0, 0)        # #000000
 GRAY_LIGHT  = (180, 180, 180)
 GRAY_MID    = (100, 100, 100)
 GOLD        = YELLOW
 
 # ── Font download (Google Fonts CDN) ─────────────────────────────────────────
+# Brand kit: Title=Anton, Subtitle/Quote=Gochi Hand, Heading/Body/Caption=Roboto
 FONT_URLS = {
     "Anton-Regular.ttf":          "https://github.com/google/fonts/raw/main/ofl/anton/Anton-Regular.ttf",
+    "GochiHand-Regular.ttf":      "https://github.com/google/fonts/raw/main/ofl/gochihand/GochiHand-Regular.ttf",
     "RobotoCondensed-Bold.ttf":   "https://github.com/google/fonts/raw/main/ofl/robotocondensed/static/RobotoCondensed-Bold.ttf",
     "RobotoCondensed-Regular.ttf":"https://github.com/google/fonts/raw/main/ofl/robotocondensed/static/RobotoCondensed-Regular.ttf",
     "RobotoMono-Regular.ttf":     "https://github.com/google/fonts/raw/main/ofl/robotomono/static/RobotoMono-Regular.ttf",
@@ -353,7 +355,7 @@ def build_cover_slide(photo, hook, service, slide_num, total):
     img = add_gradient(img, 0, 180, max_alpha=140)
     img = add_gradient(img, H - 650, 650, max_alpha=240)
     draw = ImageDraw.Draw(img)
-    font_label = load_font("RobotoCondensed-Bold.ttf", 28)
+    font_label = load_font("GochiHand-Regular.ttf", 30)
     draw.text((50, 55), (service or "RENOVATION").upper(), font=font_label, fill=WHITE)
     swipe_text = "SWIPE  →"
     bbox = draw.textbbox((0,0), swipe_text, font=font_label)
@@ -380,7 +382,7 @@ def build_content_slide(photo, label, sublabel, slide_num, total):
     draw = ImageDraw.Draw(img)
     draw.rectangle([(50, H-300),(90, H-295)], fill=GOLD)
     font_label = load_font("RobotoCondensed-Bold.ttf", 48)
-    font_sub   = load_font("Roboto-Regular.ttf", 28)
+    font_sub   = load_font("GochiHand-Regular.ttf", 30)
     if label:
         lines = wrap_text(label, font_label, W - 100, draw)
         y = H - 280
@@ -402,7 +404,7 @@ def build_cta_slide(project, service, cta, slide_num, total):
         draw.line([(0,y),(W,y)], fill=(20,20,20))
     draw.rectangle([(50, 180),(58, H-180)], fill=YELLOW)
     font_brand = load_font("Anton-Regular.ttf", 88)
-    font_body  = load_font("RobotoMono-Regular.ttf", 32)
+    font_body  = load_font("GochiHand-Regular.ttf", 34)
     font_small = load_font("RobotoCondensed-Regular.ttf", 26)
     draw.rectangle([(75, 195),(W-75, 295)], fill=YELLOW)
     draw.text((80, 200), "OAK PARK", font=font_brand, fill=BLACK)
