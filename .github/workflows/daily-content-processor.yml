@@ -1,0 +1,41 @@
+name: Daily Content Inspo Processor
+
+on:
+  schedule:
+    - cron: '0 14 * * *'   # 10:00 AM ET (UTC-4) = 14:00 UTC
+  workflow_dispatch:         # manual trigger from GitHub UI
+
+jobs:
+  process:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install yt-dlp imageio-ffmpeg openai anthropic
+          # ffmpeg for audio processing
+          sudo apt-get install -y ffmpeg
+
+      - name: Write Google credentials
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: |
+          mkdir -p /tmp/oak_park_creds
+          echo "$SHEETS_TOKEN" > /tmp/oak_park_creds/sheets_token.json
+
+      - name: Run daily content processor
+        env:
+          SHEETS_TOKEN_PATH: /tmp/oak_park_creds/sheets_token.json
+          CONTENT_SHEET_ID: ${{ secrets.CONTENT_SHEET_ID }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python scripts/daily_content_processor.py
