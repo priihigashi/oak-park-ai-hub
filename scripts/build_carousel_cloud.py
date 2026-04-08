@@ -502,40 +502,277 @@ def select_enhancement_route(img: "Image.Image") -> tuple:
     return img, "Pillow (built-in)"
 
 
-# ── Design Route Stubs (2A / 2B / 2C) ─────────────────────────────────────────
-def build_with_canva(post: dict, photos: list, out_dir: "Path") -> list:
-    """Route 2A: Generate carousel slides via Canva MCP.
-    TODO — wire Canva MCP tool calls:
-      1. mcp__claude_ai_Canva__generate-design — create design from brand kit + hook text
-      2. mcp__claude_ai_Canva__perform-editing-operations — inject photo + copy
-      3. mcp__claude_ai_Canva__export-design — export as JPEG slides
-      4. Save exported files to out_dir with _canva suffix
-    Requires: Canva MCP connected + Oak Park brand kit configured in Canva.
-    """
-    print("  📌 Route 2A (Canva MCP) — not yet wired, skipping")
-    return []
+# ── Design Route Counter (alternating 2A ↔ 2B) ───────────────────────────────
+# Persisted in /tmp so it survives across posts in the same run.
+# Resets each new GitHub Actions run (that's fine — alternates per-session).
+_ROUTE_COUNTER_FILE = TMPDIR / "design_route_counter.txt"
 
+def get_next_design_route() -> str:
+    """Returns '2A' or '2B' alternating. Increments counter each call."""
+    try:
+        count = int(_ROUTE_COUNTER_FILE.read_text().strip()) if _ROUTE_COUNTER_FILE.exists() else 0
+    except Exception:
+        count = 0
+    _ROUTE_COUNTER_FILE.write_text(str(count + 1))
+    return "2A" if count % 2 == 0 else "2B"
+
+
+# ── Design Route 2A — Nano Banana 2 (Gemini full layout) ─────────────────────
 def build_with_nano_banana_layout(post: dict, photos: list, out_dir: "Path") -> list:
-    """Route 2B: Generate full carousel layout via Nano Banana 2 / Gemini.
-    TODO — wire Gemini image generation for layout:
-      1. Send brand colors, hook text, and photo to Gemini
-      2. Prompt: generate a full 1080x1440 Instagram carousel slide with the photo + text overlay
-      3. Apply brand colors (BG_DARK, YELLOW, WHITE) and font style rules
-      4. Save output slides to out_dir with _nb2 suffix
+    """Route 2A: Generate full carousel slides via Gemini image generation.
+    Sends each photo + brand context to Gemini → returns a fully composed
+    1080x1440 slide with text overlay baked in.
+    Falls back to Pillow (build_carousel) if Gemini unavailable or fails.
     """
-    print("  📌 Route 2B (Nano Banana 2 layout) — not yet wired, skipping")
-    return []
+    api_key = os.environ.get("GEMINI_API_KEY", "")
+    if not api_key:
+        print("  ⚠️  GEMINI_API_KEY not set — Route 2A falling back to Pillow")
+        return []
 
+    saved = []
+    total_slides = 1 + len(photos) + 1
+
+    slide_prompts = [
+        {
+            "label": "cover",
+            "fname": "slide_01_cover_nb2.jpg",
+            "prompt": (
+                f"Create a professional Instagram carousel cover slide, 1080x1440 pixels, portrait orientation. "
+                f"Use this construction/renovation photo as the background. "
+                f"Apply a dark gradient overlay at the bottom (60% of slide height). "
+                f"Add this bold hook text in large white Anton font at the bottom left: '{post['hook']}'. "
+                f"Add a small yellow (#CBCC10) horizontal accent bar above the hook text. "
+                f"Add '@oakparkconstruction' in small white text at bottom right. "
+                f"Service label '{post['service'].upper()}' in small white Roboto Bold at top left. "
+                f"Brand colors: black background (#0a0a0a), yellow accent (#CBCC10), white text. "
+                f"Style: high-end construction portfolio, dark and bold, no clutter."
+            )
+        },
+    ]
+
+    # Add content slides
+    content_labels = ["The process.", "In progress.", "Taking shape.", "Finished."]
+    for i, photo in enumerate(photos[1:] if len(photos) > 1 else photos):
+        label = content_labels[min(i, len(content_labels)-1)]
+        slide_prompts.append({
+            "label": f"slide_{i+2}",
+            "fname": f"slide_{i+2:02d}_nb2.jpg",
+            "prompt": (
+                f"Create a professional Instagram carousel slide, 1080x1440 pixels, portrait orientation. "
+                f"Use this construction/renovation photo as the background. "
+                f"Apply a dark gradient overlay at the bottom (30% of slide height). "
+                f"Add this label text in white Roboto Bold at bottom left: '{label}'. "
+                f"Add a small yellow (#CBCC10) accent bar above the label. "
+                f"Add '@oakparkconstruction' in small white text at bottom right. "
+                f"Brand colors: black (#0a0a0a), yellow (#CBCC10), white. "
+                f"Style: clean, modern construction portfolio."
+            )
+        })
+
+    # CTA slide (no photo — dark background)
+    slide_prompts.append({
+        "label": "cta",
+        "fname": f"slide_{total_slides:02d}_cta_nb2.jpg",
+        "prompt": (
+            f"Create a professional Instagram carousel CTA slide, 1080x1440 pixels, portrait orientation. "
+            f"Dark background (#0a0a0a) with subtle horizontal grid lines. "
+            f"Left side: vertical yellow (#CBCC10) bar. "
+            f"Bold text block: 'OAK PARK' in large Anton font on yellow background, "
+            f"'CONSTRUCTION' in large white Roboto Condensed below it. "
+            f"Service: '{post['service'].upper()}' in small yellow text. "
+            f"Location: 'South Florida · Pompano Beach' in small gray text. "
+            f"CTA text in white Roboto Mono: '{post['cta'] or 'DM us to see the full project'}'. "
+            f"Contact info: '@oakparkconstruction', 'www.oakpark-construction.com', '+1 954-258-6769'. "
+            f"Style: bold, high-contrast, luxury contractor brand."
+        )
+    })
+
+    photo_cycle = photos + [None]  # None = CTA (no photo needed)
+
+    for idx, slide_def in enumerate(slide_prompts):
+        photo_img = photo_cycle[min(idx, len(photo_cycle)-1)]
+        try:
+            parts = []
+            if photo_img is not None:
+                buf = io.BytesIO()
+                photo_img.save(buf, format="JPEG", quality=95)
+                parts.append({"inline_data": {"mime_type": "image/jpeg",
+                                               "data": base64.b64encode(buf.getvalue()).decode()}})
+            parts.append({"text": slide_def["prompt"]})
+
+            payload = json.dumps({
+                "contents": [{"parts": parts}],
+                "generationConfig": {"responseModalities": ["IMAGE", "TEXT"]}
+            }).encode()
+
+            url = (f"https://generativelanguage.googleapis.com/v1beta/models/"
+                   f"gemini-2.0-flash-preview-image-generation:generateContent?key={api_key}")
+            req = urllib.request.Request(url, data=payload,
+                                          headers={"Content-Type": "application/json"})
+            resp = json.loads(urllib.request.urlopen(req, timeout=120).read())
+
+            img_data = None
+            for part in resp.get("candidates", [{}])[0].get("content", {}).get("parts", []):
+                if "inlineData" in part:
+                    img_data = base64.b64decode(part["inlineData"]["data"])
+                    break
+
+            if img_data:
+                slide_img = Image.open(io.BytesIO(img_data)).convert("RGB")
+                if slide_img.size != (W, H):
+                    slide_img = slide_img.resize((W, H), Image.LANCZOS)
+                path = str(out_dir / slide_def["fname"])
+                slide_img.save(path, "JPEG", quality=97)
+                saved.append(path)
+                print(f"    ✅ {slide_def['label']} (Gemini)")
+            else:
+                print(f"    ⚠️  Gemini returned no image for {slide_def['label']} — skipping slide")
+        except Exception as e:
+            print(f"    ⚠️  Route 2A failed on {slide_def['label']}: {e}")
+
+    if len(saved) < 2:
+        print("  ⚠️  Route 2A produced too few slides — falling back to Pillow")
+        return []
+
+    return saved
+
+
+# ── Design Route 2B — OpenAI Layout ──────────────────────────────────────────
 def build_with_openai_layout(post: dict, photos: list, out_dir: "Path") -> list:
-    """Route 2C: Generate carousel layout via OpenAI image generation.
-    TODO — wire OpenAI image generation for layout:
-      1. Use gpt-image-1 or DALL-E 3 with photo + brand context
-      2. Prompt engineering: include exact colors, hook text, brand name
-      3. Save output slides to out_dir with _oai suffix
-    Optional / third test — implement after 2A and 2B are confirmed working.
+    """Route 2B: Generate full carousel slides via OpenAI gpt-image-1.
+    Sends each photo + brand context to OpenAI → returns composed slide.
+    Falls back to Pillow if OpenAI unavailable or fails.
     """
-    print("  📌 Route 2C (OpenAI layout) — not yet wired, skipping")
-    return []
+    api_key = os.environ.get("OPENAI_API_KEY", "")
+    if not api_key:
+        print("  ⚠️  OPENAI_API_KEY not set — Route 2B falling back to Pillow")
+        return []
+
+    saved = []
+    total_slides = 1 + len(photos) + 1
+
+    def generate_slide_openai(prompt: str, photo_img=None, fname: str = "slide.jpg") -> str | None:
+        try:
+            # Use gpt-image-1 edit if we have a photo, generate if CTA only
+            if photo_img is not None:
+                side = min(photo_img.width, photo_img.height, 1024)
+                canvas = Image.new("RGB", (side, side), (0, 0, 0))
+                thumb = photo_img.copy()
+                thumb.thumbnail((side, side), Image.LANCZOS)
+                canvas.paste(thumb, ((side - thumb.width) // 2, (side - thumb.height) // 2))
+                buf = io.BytesIO()
+                canvas.save(buf, format="PNG")
+                img_bytes = buf.getvalue()
+
+                boundary = b"----OakParkBoundary"
+                body = (
+                    b"--" + boundary + b"\r\n"
+                    b'Content-Disposition: form-data; name="model"\r\n\r\ngpt-image-1\r\n'
+                    b"--" + boundary + b"\r\n"
+                    b'Content-Disposition: form-data; name="n"\r\n\r\n1\r\n'
+                    b"--" + boundary + b"\r\n"
+                    b'Content-Disposition: form-data; name="size"\r\n\r\n1024x1024\r\n'
+                    b"--" + boundary + b"\r\n"
+                    b'Content-Disposition: form-data; name="response_format"\r\n\r\nb64_json\r\n'
+                    b"--" + boundary + b"\r\n"
+                    b'Content-Disposition: form-data; name="prompt"\r\n\r\n' +
+                    prompt.encode() + b"\r\n"
+                    b"--" + boundary + b"\r\n"
+                    b'Content-Disposition: form-data; name="image"; filename="photo.png"\r\n'
+                    b"Content-Type: image/png\r\n\r\n" + img_bytes + b"\r\n"
+                    b"--" + boundary + b"--\r\n"
+                )
+                req = urllib.request.Request(
+                    "https://api.openai.com/v1/images/edits",
+                    data=body,
+                    headers={"Authorization": f"Bearer {api_key}",
+                             "Content-Type": f"multipart/form-data; boundary={boundary.decode()}"}
+                )
+            else:
+                # CTA slide — pure generation, no input photo
+                payload = json.dumps({
+                    "model": "gpt-image-1",
+                    "prompt": prompt,
+                    "n": 1,
+                    "size": "1024x1024",
+                    "response_format": "b64_json"
+                }).encode()
+                req = urllib.request.Request(
+                    "https://api.openai.com/v1/images/generations",
+                    data=payload,
+                    headers={"Authorization": f"Bearer {api_key}",
+                             "Content-Type": "application/json"}
+                )
+
+            resp = json.loads(urllib.request.urlopen(req, timeout=120).read())
+            b64 = resp.get("data", [{}])[0].get("b64_json", "")
+            if not b64:
+                return None
+            slide_img = Image.open(io.BytesIO(base64.b64decode(b64))).convert("RGB")
+            slide_img = slide_img.resize((W, H), Image.LANCZOS)
+            path = str(out_dir / fname)
+            slide_img.save(path, "JPEG", quality=97)
+            return path
+        except Exception as e:
+            print(f"    ⚠️  OpenAI slide failed ({fname}): {e}")
+            return None
+
+    # Cover
+    cover_prompt = (
+        f"Professional Instagram carousel cover slide for Oak Park Construction. "
+        f"Use this renovation photo as background with dark gradient at bottom. "
+        f"Large bold hook text at bottom left: '{post['hook']}'. "
+        f"Yellow (#CBCC10) accent bar above hook. Service: '{post['service'].upper()}' top left. "
+        f"'@oakparkconstruction' bottom right. Dark, bold, luxury contractor style."
+    )
+    path = generate_slide_openai(cover_prompt, photos[0], "slide_01_cover_oai.jpg")
+    if path:
+        saved.append(path)
+        print(f"    ✅ cover (OpenAI)")
+
+    # Content slides
+    content_labels = ["The process.", "In progress.", "Taking shape.", "Finished."]
+    for i, photo in enumerate(photos[1:] if len(photos) > 1 else photos):
+        label = content_labels[min(i, len(content_labels)-1)]
+        p = (
+            f"Professional Instagram carousel slide for Oak Park Construction. "
+            f"Renovation photo as background, dark gradient bottom 30%. "
+            f"Label '{label}' in white bold text bottom left. Yellow (#CBCC10) accent bar above label. "
+            f"'@oakparkconstruction' bottom right. Clean, modern construction portfolio style."
+        )
+        path = generate_slide_openai(p, photo, f"slide_{i+2:02d}_oai.jpg")
+        if path:
+            saved.append(path)
+            print(f"    ✅ slide {i+2} (OpenAI)")
+
+    # CTA
+    cta_prompt = (
+        f"Professional Instagram CTA slide for Oak Park Construction. "
+        f"Dark background (#0a0a0a). Left vertical yellow (#CBCC10) bar. "
+        f"'OAK PARK' in large Anton font on yellow block. 'CONSTRUCTION' in white below. "
+        f"Service '{post['service'].upper()}' in yellow. Location 'South Florida · Pompano Beach' in gray. "
+        f"CTA: '{post['cta'] or 'DM us to see the full project'}' in white monospace. "
+        f"Contact: '@oakparkconstruction', 'www.oakpark-construction.com', '+1 954-258-6769'. "
+        f"Bold, high-contrast, luxury contractor brand."
+    )
+    path = generate_slide_openai(cta_prompt, None, f"slide_{total_slides:02d}_cta_oai.jpg")
+    if path:
+        saved.append(path)
+        print(f"    ✅ CTA (OpenAI)")
+
+    if len(saved) < 2:
+        print("  ⚠️  Route 2B produced too few slides — falling back to Pillow")
+        return []
+
+    return saved
+
+
+# ── Canva route — manual only (Claude Code session) ──────────────────────────
+# Route 2C: Canva MCP — only available when running inside a Claude Code session.
+# NOT wired here. To generate a Canva carousel, ask Claude directly:
+#   "Generate a carousel for [project] using Canva"
+# Claude will use the Oak Park Construction brand kit (ID: kAGs41wlfKg)
+# and the templates in the Social Media Templates / TEMPLATE folders.
 
 
 # ── CapCut Export (Future Phase) ──────────────────────────────────────────────
@@ -763,17 +1000,27 @@ def main():
             if i == 0:
                 enhancement_route = route_name  # log route from first photo
 
-        # ── Design Route 2A / 2B / 2C (stubs — skipped until wired) ─────────
-        # Route 2A (Canva MCP): build_with_canva(post, photos, out_dir)
-        # Route 2B (Nano Banana 2): build_with_nano_banana_layout(post, photos, out_dir)
-        # Route 2C (OpenAI layout): build_with_openai_layout(post, photos, out_dir)
-        design_route = "Flow A — Python/Pillow"
-
         safe = re.sub(r'[^\w\s-]', '', post["project"])[:35].strip()
         out_dir = OUT_BASE / f"{date.today()} — {safe}"
         out_dir.mkdir(parents=True, exist_ok=True)
 
-        slide_paths = build_carousel(post, photos, out_dir, enhancement_route)
+        # ── Design Route — alternating 2A (Nano Banana 2) ↔ 2B (OpenAI) ─────
+        route_key = get_next_design_route()
+        print(f"  🎨 Design Route {route_key} selected")
+
+        slide_paths = []
+        if route_key == "2A":
+            slide_paths = build_with_nano_banana_layout(post, photos, out_dir)
+            design_route = "Route 2A — Nano Banana 2 (Gemini)"
+        else:
+            slide_paths = build_with_openai_layout(post, photos, out_dir)
+            design_route = "Route 2B — OpenAI gpt-image-1"
+
+        # Pillow fallback if chosen route produced nothing
+        if not slide_paths:
+            print(f"  ↩️  Falling back to Pillow layout")
+            design_route += " → Pillow fallback"
+            slide_paths = build_carousel(post, photos, out_dir, enhancement_route)
         drive_folder_url = upload_to_drive(slide_paths, post["project"], creds)
 
         # ── Update Analytics tab + set status = Built ─────────────────────────
