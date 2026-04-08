@@ -5,11 +5,27 @@ Same logic as build_carousel_v2.py but runs without local files.
 Credentials from env vars. Fonts downloaded at runtime. Output uploaded to Drive.
 
 Env vars required:
-  SHEETS_TOKEN      — contents of sheets_token.json (from GitHub Secret)
-  CONTENT_SHEET_ID  — Google Sheet ID (from GitHub Secret)
+  SHEETS_TOKEN        — contents of sheets_token.json (from GitHub Secret)
+  CONTENT_SHEET_ID    — Google Sheet ID (from GitHub Secret)
+
+Optional enhancement route env vars:
+  GEMINI_API_KEY      — enables Route 1A (Nano Banana 2 / Gemini enhancement)
+  OPENAI_API_KEY      — enables Route 1B (OpenAI DALL-E enhancement)
+  ENHANCEMENT_ROUTE   — "gemini" | "openai" | "pillow" (default: "gemini" if key present, else "pillow")
+
+Design routes (2A/2B/2C) — stubs wired, implementations pending:
+  Route 2A: Canva MCP   — TODO: wire Canva MCP tool calls
+  Route 2B: Nano Banana 2 layout — TODO: wire Gemini layout generation
+  Route 2C: OpenAI layout — TODO: wire OpenAI image generation for full slides
+
+Analytics tab columns updated after each build:
+  Col Z  — Enhancement Route used
+  Col AA — Design Route used
+  Col AB — Drive Folder Link
+  Status col set to "Built" after successful upload
 """
 
-import os, io, json, re, urllib.request, urllib.parse, sys, time, tempfile
+import os, io, json, re, urllib.request, urllib.parse, sys, time, tempfile, base64
 from pathlib import Path
 from datetime import date
 
@@ -29,16 +45,21 @@ FONTS_DIR.mkdir(parents=True, exist_ok=True)
 OUT_BASE.mkdir(parents=True, exist_ok=True)
 
 # ── Brand colors ──────────────────────────────────────────────────────────────
-W, H        = 1080, 1350
-BG_DARK     = (10, 10, 10)
-BG_CREAM    = (237, 232, 224)
-YELLOW      = (203, 204, 16)
-WARM_BROWN  = (107, 74, 26)
-WHITE       = (255, 255, 255)
-BLACK       = (0, 0, 0)
+W, H        = 1080, 1440   # 3:4 portrait — taller, better for Instagram + thumbnail safety
+SAFE_MARGIN = 120          # no text within 120px of left/right edges
+
+# Primary palette
+BG_DARK     = (10, 10, 10)       # #000000 — primary background (most posts)
+BG_CREAM    = (240, 237, 231)    # #f0ede7 — light background option
+YELLOW      = (203, 204, 16)     # #CBCC10 — primary brand accent
+YELLOW_ALT  = (224, 232, 77)     # #e0e84d — secondary yellow / mustard (flexible)
+WARM_BROWN  = (91, 60, 31)       # #5b3c1f — warm brown accent
+WHITE       = (255, 255, 255)    # text on dark backgrounds
+BLACK       = (0, 0, 0)          # #000000 — text on light backgrounds
+NEAR_BLACK  = (4, 6, 6)          # #040606
 GRAY_LIGHT  = (180, 180, 180)
 GRAY_MID    = (100, 100, 100)
-GOLD        = YELLOW
+GOLD        = YELLOW             # alias — always resolves to brand yellow
 
 # ── Font download (Google Fonts CDN) ─────────────────────────────────────────
 FONT_URLS = {
@@ -116,11 +137,45 @@ def get_creds():
     )
 
 # ── Sheets helpers ────────────────────────────────────────────────────────────
+def col_letter(n: int) -> str:
+    """Convert 0-based column index to A1-style letter. 0→A, 25→Z, 26→AA, 27→AB"""
+    result = ""
+    n += 1
+    while n > 0:
+        n, rem = divmod(n - 1, 26)
+        result = chr(65 + rem) + result
+    return result
+
 def sheet_get(token, range_str):
     enc = urllib.parse.quote(range_str, safe="!:")
     url = f"https://sheets.googleapis.com/v4/spreadsheets/{SHEET_ID}/values/{enc}"
     req = urllib.request.Request(url, headers={"Authorization": f"Bearer {token}"})
     return json.loads(urllib.request.urlopen(req).read())
+
+def sheet_update_cells(token, tab_name, updates: list):
+    """Batch-update individual cells. updates = list of (a1_cell_str, value)"""
+    data = [{"range": f"'{tab_name}'!{cell}", "values": [[val]]} for cell, val in updates]
+    payload = json.dumps({"valueInputOption": "USER_ENTERED", "data": data}).encode()
+    url = f"https://sheets.googleapis.com/v4/spreadsheets/{SHEET_ID}/values:batchUpdate"
+    req = urllib.request.Request(url, data=payload,
+                                  headers={"Authorization": f"Bearer {token}",
+                                           "Content-Type": "application/json"})
+    try:
+        urllib.request.urlopen(req).read()
+    except Exception as e:
+        print(f"  ⚠️  Sheet update error: {e}")
+
+def update_row_after_build(token, row_num: int, status_col: str,
+                            enhancement_route: str, design_route: str, drive_folder_url: str):
+    """After a successful build: set status → Built, log routes + Drive link to Analytics cols."""
+    updates = [
+        (f"{status_col}{row_num}", "Built"),
+        (f"Z{row_num}", enhancement_route),
+        (f"AA{row_num}", design_route),
+        (f"AB{row_num}", drive_folder_url),
+    ]
+    sheet_update_cells(token, QUEUE_TAB, updates)
+    print(f"  📊 Analytics updated (row {row_num}): status=Built, route={enhancement_route}/{design_route}")
 
 def get_approved_posts(token) -> list[dict]:
     rows = sheet_get(token, f"'{QUEUE_TAB}'").get("values", [])
@@ -136,6 +191,7 @@ def get_approved_posts(token) -> list[dict]:
         ct = v("content type").lower()
         if "static" in ct:
             continue
+        status_idx = ci("status")
         result.append({
             "row": idx,
             "project":      v("project name"),
@@ -146,6 +202,7 @@ def get_approved_posts(token) -> list[dict]:
             "cta":          v("cta"),
             "photos_raw":   v("photo(s) used"),
             "platform":     v("platform"),
+            "status_col":   col_letter(status_idx) if status_idx is not None else "I",
         })
     return result
 
@@ -218,11 +275,13 @@ def upload_to_drive(file_paths: list, project_name: str, creds):
             svc.files().create(body=meta, media_body=media,
                                fields="id", supportsAllDrives=True).execute()
             print(f"   ✅ {Path(fp).name}")
-        print("📁 Drive → Content - Reels & TikTok → Ready to Post")
-        return True
+        folder_url = f"https://drive.google.com/drive/folders/{proj_id}"
+        print(f"📁 Drive → Content - Reels & TikTok → Ready to Post")
+        print(f"   🔗 {folder_url}")
+        return folder_url
     except Exception as e:
         print(f"  ⚠️  Drive upload error: {e}")
-        return False
+        return ""
 
 # ── Image helpers (same as local version) ─────────────────────────────────────
 def enhance_photo(img):
@@ -296,27 +355,232 @@ def draw_progress_dots(draw, current, total):
         else:
             draw.ellipse([(x-dot_r_i,y-dot_r_i),(x+dot_r_i,y+dot_r_i)], fill=GRAY_MID)
 
+# ── Enhancement Route 1A — Nano Banana 2 (Gemini) ────────────────────────────
+def enhance_with_gemini(img: "Image.Image") -> "Image.Image":
+    """Route 1A: AI photo enhancement via Gemini image generation model.
+    Sends the raw photo to Gemini with an enhancement prompt → returns improved image.
+    Falls back to original if API unavailable or fails.
+    """
+    api_key = os.environ.get("GEMINI_API_KEY", "")
+    if not api_key:
+        print("  ⚠️  GEMINI_API_KEY not set — Route 1A skipped")
+        return img
+    try:
+        buf = io.BytesIO()
+        img.save(buf, format="JPEG", quality=95)
+        img_b64 = base64.b64encode(buf.getvalue()).decode()
+
+        payload = json.dumps({
+            "contents": [{
+                "parts": [
+                    {"inline_data": {"mime_type": "image/jpeg", "data": img_b64}},
+                    {"text": (
+                        "Enhance this construction/renovation photo to look professional. "
+                        "Improve lighting, exposure, contrast, and color accuracy to match "
+                        "professional real estate or architecture photography quality. "
+                        "DO NOT add or remove any objects, people, or elements. "
+                        "Keep the exact same composition and framing as the original. "
+                        "Output only the enhanced image."
+                    )}
+                ]
+            }],
+            "generationConfig": {"responseModalities": ["IMAGE", "TEXT"]}
+        }).encode()
+
+        url = (f"https://generativelanguage.googleapis.com/v1beta/models/"
+               f"gemini-2.0-flash-preview-image-generation:generateContent?key={api_key}")
+        req = urllib.request.Request(url, data=payload,
+                                      headers={"Content-Type": "application/json"})
+        resp = json.loads(urllib.request.urlopen(req, timeout=90).read())
+
+        for part in resp.get("candidates", [{}])[0].get("content", {}).get("parts", []):
+            if "inlineData" in part:
+                img_data = base64.b64decode(part["inlineData"]["data"])
+                enhanced = Image.open(io.BytesIO(img_data)).convert("RGB")
+                # Resize back to original dimensions if Gemini changed them
+                if enhanced.size != (img.width, img.height):
+                    enhanced = enhanced.resize((img.width, img.height), Image.LANCZOS)
+                print("  ✨ Route 1A (Gemini) enhancement applied")
+                return enhanced
+
+        print("  ⚠️  Gemini returned no image — falling back to original")
+        return img
+    except Exception as e:
+        print(f"  ⚠️  Route 1A (Gemini) failed: {e}")
+        return img
+
+
+# ── Enhancement Route 1B — OpenAI Image Edit ─────────────────────────────────
+def enhance_with_openai(img: "Image.Image") -> "Image.Image":
+    """Route 1B: AI photo enhancement via OpenAI DALL-E image edit endpoint.
+    Note: DALL-E 2 edit works best as an enhancement pass when no mask is provided.
+    Falls back to original if API unavailable or fails.
+    """
+    api_key = os.environ.get("OPENAI_API_KEY", "")
+    if not api_key:
+        print("  ⚠️  OPENAI_API_KEY not set — Route 1B skipped")
+        return img
+    try:
+        # DALL-E 2 requires square PNG, max 4MB
+        side = min(img.width, img.height, 1024)
+        canvas = Image.new("RGB", (side, side), (0, 0, 0))
+        img_sq = img.copy()
+        img_sq.thumbnail((side, side), Image.LANCZOS)
+        canvas.paste(img_sq, ((side - img_sq.width) // 2, (side - img_sq.height) // 2))
+
+        buf = io.BytesIO()
+        canvas.save(buf, format="PNG")
+        img_bytes = buf.getvalue()
+
+        boundary = b"----OakParkBoundary7MA4YWxk"
+        body = (
+            b"--" + boundary + b"\r\n"
+            b'Content-Disposition: form-data; name="model"\r\n\r\ndall-e-2\r\n'
+            b"--" + boundary + b"\r\n"
+            b'Content-Disposition: form-data; name="n"\r\n\r\n1\r\n'
+            b"--" + boundary + b"\r\n"
+            b'Content-Disposition: form-data; name="size"\r\n\r\n' + f"{side}x{side}".encode() + b"\r\n"
+            b"--" + boundary + b"\r\n"
+            b'Content-Disposition: form-data; name="response_format"\r\n\r\nb64_json\r\n'
+            b"--" + boundary + b"\r\n"
+            b'Content-Disposition: form-data; name="prompt"\r\n\r\n'
+            b"Enhance this construction/renovation photo: improve lighting, contrast, and "
+            b"color accuracy to professional real estate photography quality. "
+            b"Keep all elements and composition identical.\r\n"
+            b"--" + boundary + b"\r\n"
+            b'Content-Disposition: form-data; name="image"; filename="photo.png"\r\n'
+            b"Content-Type: image/png\r\n\r\n" + img_bytes + b"\r\n"
+            b"--" + boundary + b"--\r\n"
+        )
+
+        req = urllib.request.Request(
+            "https://api.openai.com/v1/images/edits",
+            data=body,
+            headers={
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": f"multipart/form-data; boundary={boundary.decode()}",
+            }
+        )
+        resp = json.loads(urllib.request.urlopen(req, timeout=120).read())
+        if resp.get("data"):
+            img_b64 = resp["data"][0].get("b64_json", "")
+            if img_b64:
+                enhanced = Image.open(io.BytesIO(base64.b64decode(img_b64))).convert("RGB")
+                enhanced = enhanced.resize((img.width, img.height), Image.LANCZOS)
+                print("  ✨ Route 1B (OpenAI) enhancement applied")
+                return enhanced
+
+        print("  ⚠️  OpenAI returned no image — falling back to original")
+        return img
+    except Exception as e:
+        print(f"  ⚠️  Route 1B (OpenAI) failed: {e}")
+        return img
+
+
+def select_enhancement_route(img: "Image.Image") -> tuple:
+    """Choose and apply the best available enhancement route.
+    Returns (enhanced_image, route_name_str).
+    Priority: ENHANCEMENT_ROUTE env var → gemini (if key present) → openai → pillow.
+    """
+    route_pref = os.environ.get("ENHANCEMENT_ROUTE", "auto").lower()
+
+    if route_pref == "gemini" or (route_pref == "auto" and os.environ.get("GEMINI_API_KEY")):
+        enhanced = enhance_with_gemini(img)
+        if enhanced is not img:
+            return enhanced, "Route 1A — Gemini (Nano Banana 2)"
+        if route_pref == "gemini":
+            return img, "Pillow (Gemini fallback)"
+
+    if route_pref == "openai" or (route_pref == "auto" and os.environ.get("OPENAI_API_KEY")):
+        enhanced = enhance_with_openai(img)
+        if enhanced is not img:
+            return enhanced, "Route 1B — OpenAI DALL-E"
+        if route_pref == "openai":
+            return img, "Pillow (OpenAI fallback)"
+
+    # Default: Pillow-only enhancement (always-available, fast)
+    return img, "Pillow (built-in)"
+
+
+# ── Design Route Stubs (2A / 2B / 2C) ─────────────────────────────────────────
+def build_with_canva(post: dict, photos: list, out_dir: "Path") -> list:
+    """Route 2A: Generate carousel slides via Canva MCP.
+    TODO — wire Canva MCP tool calls:
+      1. mcp__claude_ai_Canva__generate-design — create design from brand kit + hook text
+      2. mcp__claude_ai_Canva__perform-editing-operations — inject photo + copy
+      3. mcp__claude_ai_Canva__export-design — export as JPEG slides
+      4. Save exported files to out_dir with _canva suffix
+    Requires: Canva MCP connected + Oak Park brand kit configured in Canva.
+    """
+    print("  📌 Route 2A (Canva MCP) — not yet wired, skipping")
+    return []
+
+def build_with_nano_banana_layout(post: dict, photos: list, out_dir: "Path") -> list:
+    """Route 2B: Generate full carousel layout via Nano Banana 2 / Gemini.
+    TODO — wire Gemini image generation for layout:
+      1. Send brand colors, hook text, and photo to Gemini
+      2. Prompt: generate a full 1080x1440 Instagram carousel slide with the photo + text overlay
+      3. Apply brand colors (BG_DARK, YELLOW, WHITE) and font style rules
+      4. Save output slides to out_dir with _nb2 suffix
+    """
+    print("  📌 Route 2B (Nano Banana 2 layout) — not yet wired, skipping")
+    return []
+
+def build_with_openai_layout(post: dict, photos: list, out_dir: "Path") -> list:
+    """Route 2C: Generate carousel layout via OpenAI image generation.
+    TODO — wire OpenAI image generation for layout:
+      1. Use gpt-image-1 or DALL-E 3 with photo + brand context
+      2. Prompt engineering: include exact colors, hook text, brand name
+      3. Save output slides to out_dir with _oai suffix
+    Optional / third test — implement after 2A and 2B are confirmed working.
+    """
+    print("  📌 Route 2C (OpenAI layout) — not yet wired, skipping")
+    return []
+
+
+# ── CapCut Export (Future Phase) ──────────────────────────────────────────────
+# TODO: After Drive upload, queue slides for CapCut auto-assembly
+# Flow when available:
+#   1. Get Drive folder link from upload_to_drive()
+#   2. CapCut API call: create project → import slides in order → apply music template
+#   3. Export as Reel-ready video → save back to Drive
+# For now: slides are ready in Drive → Ready to Post → manual CapCut assembly if needed
+# Estimated CapCut API availability: TBD (no public API as of 2026-04)
+
+
 def build_cover_slide(photo, hook, service, slide_num, total):
     img = smart_crop(enhance_photo(photo), W, H)
-    img = add_gradient(img, 0, 180, max_alpha=140)
-    img = add_gradient(img, H - 650, 650, max_alpha=240)
+    img = add_gradient(img, 0, 200, max_alpha=140)
+    img = add_gradient(img, H - 700, 700, max_alpha=245)
     draw = ImageDraw.Draw(img)
+
+    # Service label — inside safe margin
     font_label = load_font("RobotoCondensed-Bold.ttf", 28)
-    draw.text((50, 55), (service or "RENOVATION").upper(), font=font_label, fill=WHITE)
+    draw.text((SAFE_MARGIN, 60), (service or "RENOVATION").upper(), font=font_label, fill=WHITE)
+
+    # SWIPE pill — right side inside safe margin
     swipe_text = "SWIPE  →"
     bbox = draw.textbbox((0,0), swipe_text, font=font_label)
     tw = bbox[2]-bbox[0]; th_b = bbox[3]-bbox[1]
-    px, py = W - tw - 60, 45
+    px = W - SAFE_MARGIN - tw
+    py = 50
     draw.rounded_rectangle([px-16, py-8, px+tw+16, py+th_b+8], radius=20, outline=WHITE, width=2)
     draw.text((px, py), swipe_text, font=font_label, fill=WHITE)
-    draw.rectangle([(50, H-490),(110, H-484)], fill=GOLD)
-    font_hook = load_font("Anton-Regular.ttf", 72)
-    lines = wrap_text(hook, font_hook, W - 100, draw)
-    y = H - 470
+
+    # Gold accent bar
+    draw.rectangle([(SAFE_MARGIN, H-530),(SAFE_MARGIN+60, H-524)], fill=GOLD)
+
+    # Hook text — inside safe margins, max width = W - 2*SAFE_MARGIN
+    font_hook = load_font("Anton-Regular.ttf", 76)
+    safe_width = W - (SAFE_MARGIN * 2)
+    lines = wrap_text(hook, font_hook, safe_width, draw)
+    y = H - 510
     for line in lines[:4]:
-        draw.text((50, y), line, font=font_hook, fill=WHITE, stroke_width=2, stroke_fill=(0,0,0))
-        bbox = draw.textbbox((50,y), line, font=font_hook)
+        draw.text((SAFE_MARGIN, y), line, font=font_hook, fill=WHITE,
+                  stroke_width=2, stroke_fill=(0,0,0))
+        bbox = draw.textbbox((SAFE_MARGIN, y), line, font=font_hook)
         y += (bbox[3]-bbox[1]) + 12
+
     font_small = load_font("Roboto-Regular.ttf", 24)
     draw_brand_tag(draw, font_small)
     draw_progress_dots(draw, slide_num, total)
@@ -324,20 +588,26 @@ def build_cover_slide(photo, hook, service, slide_num, total):
 
 def build_content_slide(photo, label, sublabel, slide_num, total):
     img = smart_crop(enhance_photo(photo), W, H)
-    img = add_gradient(img, H - 380, 380, max_alpha=215)
+    img = add_gradient(img, H - 420, 420, max_alpha=220)
     draw = ImageDraw.Draw(img)
-    draw.rectangle([(50, H-300),(90, H-295)], fill=GOLD)
+
+    draw.rectangle([(SAFE_MARGIN, H-330),(SAFE_MARGIN+40, H-325)], fill=GOLD)
+
     font_label = load_font("RobotoCondensed-Bold.ttf", 48)
     font_sub   = load_font("Roboto-Regular.ttf", 28)
+    safe_width = W - (SAFE_MARGIN * 2)
+
     if label:
-        lines = wrap_text(label, font_label, W - 100, draw)
-        y = H - 280
+        lines = wrap_text(label, font_label, safe_width, draw)
+        y = H - 310
         for line in lines[:2]:
-            draw.text((50,y), line, font=font_label, fill=WHITE, stroke_width=1, stroke_fill=(0,0,0))
-            bbox = draw.textbbox((50,y), line, font=font_label)
+            draw.text((SAFE_MARGIN, y), line, font=font_label, fill=WHITE,
+                      stroke_width=1, stroke_fill=(0,0,0))
+            bbox = draw.textbbox((SAFE_MARGIN, y), line, font=font_label)
             y += (bbox[3]-bbox[1]) + 8
     if sublabel:
-        draw.text((50, H-155), sublabel, font=font_sub, fill=GRAY_LIGHT)
+        draw.text((SAFE_MARGIN, H-175), sublabel, font=font_sub, fill=GRAY_LIGHT)
+
     font_small = load_font("Roboto-Regular.ttf", 24)
     draw_brand_tag(draw, font_small)
     draw_progress_dots(draw, slide_num, total)
@@ -348,27 +618,46 @@ def build_cta_slide(project, service, cta, slide_num, total):
     draw = ImageDraw.Draw(img)
     for y in range(0, H, 60):
         draw.line([(0,y),(W,y)], fill=(20,20,20))
-    draw.rectangle([(50, 180),(58, H-180)], fill=YELLOW)
-    font_brand = load_font("Anton-Regular.ttf", 88)
-    font_body  = load_font("RobotoMono-Regular.ttf", 32)
-    font_small = load_font("RobotoCondensed-Regular.ttf", 26)
-    draw.rectangle([(75, 195),(W-75, 295)], fill=YELLOW)
-    draw.text((80, 200), "OAK PARK", font=font_brand, fill=BLACK)
+
+    # Yellow vertical bar — left accent
+    draw.rectangle([(SAFE_MARGIN, 200),(SAFE_MARGIN+8, H-200)], fill=YELLOW)
+
+    TX = SAFE_MARGIN + 24   # text x — safely inside margin + past the bar
+
+    font_brand        = load_font("Anton-Regular.ttf", 88)
     font_construction = load_font("RobotoCondensed-Bold.ttf", 72)
-    draw.text((80, 305), "CONSTRUCTION", font=font_construction, fill=WHITE)
-    draw.text((82, 420), (service or "RENOVATION").upper(), font=font_small, fill=YELLOW)
-    draw.text((82, 458), "South Florida  ·  Pompano Beach", font=font_small, fill=GRAY_LIGHT)
-    draw.rectangle([(80, 505),(420, 508)], fill=YELLOW)
+    font_body         = load_font("RobotoMono-Regular.ttf", 32)
+    font_small        = load_font("RobotoCondensed-Regular.ttf", 26)
+    safe_width        = W - TX - SAFE_MARGIN
+
+    # OAK PARK on yellow block
+    draw.rectangle([(TX, 210),(W - SAFE_MARGIN, 315)], fill=YELLOW)
+    draw.text((TX + 4, 215), "OAK PARK", font=font_brand, fill=BLACK)
+
+    # CONSTRUCTION below
+    draw.text((TX + 4, 325), "CONSTRUCTION", font=font_construction, fill=WHITE)
+
+    # Service + location
+    draw.text((TX + 4, 440), (service or "RENOVATION").upper(), font=font_small, fill=YELLOW)
+    draw.text((TX + 4, 478), "South Florida  ·  Pompano Beach", font=font_small, fill=GRAY_LIGHT)
+
+    # Separator
+    draw.rectangle([(TX + 4, 525),(TX + 320, 528)], fill=YELLOW)
+
+    # CTA text
     cta_clean = cta or "DM us to see the full project"
-    lines = wrap_text(cta_clean, font_body, W - 160, draw)
-    y = 520
+    lines = wrap_text(cta_clean, font_body, safe_width, draw)
+    y = 542
     for line in lines[:3]:
-        draw.text((80, y), line, font=font_body, fill=WHITE)
-        bbox = draw.textbbox((80,y), line, font=font_body)
+        draw.text((TX + 4, y), line, font=font_body, fill=WHITE)
+        bbox = draw.textbbox((TX+4, y), line, font=font_body)
         y += (bbox[3]-bbox[1]) + 10
-    draw.text((80, H-300), "📱  @oakparkconstruction",        font=font_small, fill=GRAY_LIGHT)
-    draw.text((80, H-255), "🌐  www.oakpark-construction.com",font=font_small, fill=GRAY_LIGHT)
-    draw.text((80, H-210), "📞  +1 954-258-6769",             font=font_small, fill=GRAY_LIGHT)
+
+    # Contact info
+    draw.text((TX + 4, H-320), "📱  @oakparkconstruction",         font=font_small, fill=GRAY_LIGHT)
+    draw.text((TX + 4, H-275), "🌐  www.oakpark-construction.com", font=font_small, fill=GRAY_LIGHT)
+    draw.text((TX + 4, H-230), "📞  +1 954-258-6769",              font=font_small, fill=GRAY_LIGHT)
+
     draw_progress_dots(draw, slide_num, total)
     return img
 
@@ -386,7 +675,8 @@ def _slide_label(post, slide_num, total_content):
         labels = ["The process.", "In progress.", "Taking shape.", "Finished."]
     return labels[min(slide_num - 1, len(labels) - 1)]
 
-def build_carousel(post, photos, out_dir):
+def build_carousel(post, photos, out_dir, enhancement_route="Pillow (built-in)"):
+    """Build carousel slides using Flow A (Python/Pillow). Design route = 'Flow A — Python/Pillow'."""
     total_slides = 1 + len(photos) + 1
     saved = []
     cover = build_cover_slide(photos[0], post["hook"], post["service"], 0, total_slides)
@@ -443,7 +733,7 @@ def main():
         print(f"📌 {post['project']} — {post['content_type']}")
 
         filenames = [f.strip() for f in post["photos_raw"].split(",") if f.strip()]
-        photos = []
+        raw_photos = []
         for fn in filenames:
             url = catalog.get(fn) or next((v for k,v in catalog.items() if k.lower()==fn.lower()), "")
             if not url:
@@ -456,19 +746,42 @@ def main():
             print(f"  ⬇️  Downloading {fn}...")
             img = download_photo(file_id, creds)
             if img:
-                photos.append(img)
+                raw_photos.append(img)
                 print(f"     ✅ {fn} ({img.width}x{img.height})")
 
-        if not photos:
+        if not raw_photos:
             print(f"  ❌ No photos for '{post['project']}' — skipping")
             continue
+
+        # ── Enhancement Route (1A Gemini / 1B OpenAI / Pillow fallback) ─────
+        print(f"  🎨 Applying enhancement route...")
+        photos = []
+        enhancement_route = "Pillow (built-in)"
+        for i, raw_img in enumerate(raw_photos):
+            enhanced, route_name = select_enhancement_route(raw_img)
+            photos.append(enhanced)
+            if i == 0:
+                enhancement_route = route_name  # log route from first photo
+
+        # ── Design Route 2A / 2B / 2C (stubs — skipped until wired) ─────────
+        # Route 2A (Canva MCP): build_with_canva(post, photos, out_dir)
+        # Route 2B (Nano Banana 2): build_with_nano_banana_layout(post, photos, out_dir)
+        # Route 2C (OpenAI layout): build_with_openai_layout(post, photos, out_dir)
+        design_route = "Flow A — Python/Pillow"
 
         safe = re.sub(r'[^\w\s-]', '', post["project"])[:35].strip()
         out_dir = OUT_BASE / f"{date.today()} — {safe}"
         out_dir.mkdir(parents=True, exist_ok=True)
 
-        slide_paths = build_carousel(post, photos, out_dir)
-        upload_to_drive(slide_paths, post["project"], creds)
+        slide_paths = build_carousel(post, photos, out_dir, enhancement_route)
+        drive_folder_url = upload_to_drive(slide_paths, post["project"], creds)
+
+        # ── Update Analytics tab + set status = Built ─────────────────────────
+        if drive_folder_url:
+            update_row_after_build(
+                token, post["row"], post["status_col"],
+                enhancement_route, design_route, drive_folder_url
+            )
 
     print(f"\n✅ Done. All carousels built and uploaded to Drive.")
     print(f"   Drive → Content - Reels & TikTok → Ready to Post")
