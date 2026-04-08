@@ -20,6 +20,8 @@ ENV_FILE     = WORKSPACE / ".env"
 SHEET_ID     = "1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU"
 CATALOG_TAB  = "📸 Photo Catalog"
 QUEUE_TAB    = "📋 Content Queue"
+OWN_IG_ACCOUNT = "oakparkconstruction"
+OWN_FEED_LIMIT = 30  # recent posts to check for repetition
 
 QUEUE_HEADER = [
     "Date Created", "Project Name", "Service Type", "Photo(s) Used",
@@ -288,10 +290,149 @@ Only return the JSON array, no extra text."""
             return []
     return []
 
+# ── Own feed check (Apify) ────────────────────────────────────────────────────
+def fetch_own_feed(apify_key: str) -> list[dict]:
+    """Scrape @oakparkconstruction via Apify. Returns list of recent post summaries."""
+    print(f"\n📱 Fetching @{OWN_IG_ACCOUNT} feed via Apify...")
+    run_url = f"https://api.apify.com/v2/acts/apify~instagram-scraper/runs?token={apify_key}"
+    input_data = {
+        "directUrls": [f"https://www.instagram.com/{OWN_IG_ACCOUNT}/"],
+        "resultsType": "posts",
+        "resultsLimit": OWN_FEED_LIMIT,
+        "addParentData": False,
+        "proxy": {"useApifyProxy": True, "apifyProxyGroups": ["RESIDENTIAL"]}
+    }
+    try:
+        resp = json.loads(urllib.request.urlopen(urllib.request.Request(
+            run_url, data=json.dumps(input_data).encode(),
+            headers={"Content-Type": "application/json"}), timeout=30).read())
+    except Exception as e:
+        print(f"  ⚠️  Apify start failed: {e}")
+        return []
+
+    run_id    = resp.get("data", {}).get("id")
+    dataset_id = resp.get("data", {}).get("defaultDatasetId")
+    if not run_id:
+        print("  ⚠️  No run ID returned from Apify")
+        return []
+
+    print(f"  ⏳ Run ID: {run_id} — polling...")
+    start = time.time()
+    while time.time() - start < 240:
+        time.sleep(15)
+        try:
+            status = json.loads(urllib.request.urlopen(
+                f"https://api.apify.com/v2/actor-runs/{run_id}?token={apify_key}",
+                timeout=15).read())
+            state = status.get("data", {}).get("status", "")
+            print(f"     Status: {state}")
+            if state in ("SUCCEEDED", "FAILED", "TIMED-OUT", "ABORTED"):
+                break
+        except Exception:
+            pass
+
+    if not dataset_id:
+        return []
+
+    try:
+        items = json.loads(urllib.request.urlopen(
+            f"https://api.apify.com/v2/datasets/{dataset_id}/items?token={apify_key}&format=json&limit={OWN_FEED_LIMIT}",
+            timeout=30).read())
+    except Exception as e:
+        print(f"  ⚠️  Dataset fetch failed: {e}")
+        return []
+
+    posts = []
+    for item in (items if isinstance(items, list) else []):
+        caption    = (item.get("caption") or "")[:300]
+        item_type  = item.get("type", "").lower()
+        is_video   = item_type in ("video", "reel") or bool(item.get("isVideo"))
+        is_sidecar = item_type in ("sidecar", "carousel") or bool(item.get("childPosts"))
+        content_type = "Reel" if is_video else ("Carousel" if is_sidecar else "Static Post")
+        posts.append({
+            "caption":      caption,
+            "content_type": content_type,
+            "timestamp":    item.get("timestamp", ""),
+        })
+
+    print(f"  ✅ {len(posts)} recent posts fetched from @{OWN_IG_ACCOUNT}")
+    return posts
+
+
+def check_feed_diversity(ideas: list[dict], recent_posts: list[dict], api_key: str) -> list[dict]:
+    """Ask Claude to filter out ideas too similar to what's already on the feed."""
+    if not recent_posts or not ideas:
+        return ideas
+
+    recent_summary = "\n".join(
+        f"- [{p['content_type']}] {p['caption'][:150]}"
+        for p in recent_posts[:20]
+    )
+    ideas_text = "\n".join(
+        f"{i+1}. [{idea.get('content_type')}] Hook: \"{idea.get('hook')}\" | {idea.get('caption','')[:100]}"
+        for i, idea in enumerate(ideas)
+    )
+
+    prompt = f"""You are a social media strategist for Oak Park Construction (@oakparkconstruction).
+
+Recent posts already on the feed (last {min(len(recent_posts), 20)}):
+{recent_summary}
+
+New content ideas being considered ({len(ideas)} total):
+{ideas_text}
+
+For each new idea, decide:
+- Is it too similar in theme, hook style, or content type to a recent post?
+- Does it add useful variety to the feed?
+
+Return a JSON array (same order as the ideas), each object with:
+- "keep": true or false
+- "reason": one short sentence
+
+Only return the JSON array, no extra text."""
+
+    body = json.dumps({
+        "model": "claude-opus-4-6",
+        "max_tokens": 1000,
+        "messages": [{"role": "user", "content": prompt}]
+    }).encode()
+
+    req = urllib.request.Request(
+        "https://api.anthropic.com/v1/messages",
+        data=body,
+        headers={
+            "x-api-key":          api_key,
+            "anthropic-version":  "2023-06-01",
+            "content-type":       "application/json"
+        }
+    )
+    try:
+        resp     = json.loads(urllib.request.urlopen(req, timeout=60).read())
+        raw      = resp["content"][0]["text"].strip()
+        if raw.startswith("```"):
+            raw = raw.split("```")[1]
+            if raw.startswith("json"):
+                raw = raw[4:]
+        verdicts = json.loads(raw)
+
+        kept = []
+        for idea, verdict in zip(ideas, verdicts):
+            if verdict.get("keep", True):
+                kept.append(idea)
+            else:
+                print(f"  🚫 Filtered (too similar): \"{idea.get('hook','')[:60]}\" — {verdict.get('reason','')}")
+        print(f"  ✅ Feed check: {len(kept)}/{len(ideas)} ideas passed")
+        return kept
+    except Exception as e:
+        print(f"  ⚠️  Feed diversity check failed ({e}) — keeping all ideas")
+        return ideas
+
+
 # ── Main ───────────────────────────────────────────────────────────────────────
 def main():
     env = load_env()
-    api_key = env.get("ANTHROPIC_API_KEY", "")
+    api_key   = env.get("ANTHROPIC_API_KEY", "")
+    apify_key = env.get("APIFY_API_KEY", "")
     if not api_key:
         raise RuntimeError("ANTHROPIC_API_KEY not found in .env")
 
@@ -318,6 +459,13 @@ def main():
     existing = get_queue_projects(sheets)
     print(f"   Already in queue: {existing if existing else 'none'}")
 
+    # Fetch own feed once for diversity check
+    if apify_key:
+        recent_posts = fetch_own_feed(apify_key)
+    else:
+        print("  ⚠️  APIFY_API_KEY not set — skipping feed diversity check")
+        recent_posts = []
+
     # Priority order
     ordered = priority_sort(groups)
     today = date.today().isoformat()
@@ -341,6 +489,10 @@ def main():
             print(f"  ⚠️  No ideas generated, skipping")
             time.sleep(15)
             continue
+
+        if recent_posts:
+            print(f"  🔍 Checking against own feed for variety...")
+            ideas = check_feed_diversity(ideas, recent_posts, api_key)
 
         # Determine suggested post date (stagger: every 2 days from today)
         from datetime import timedelta
