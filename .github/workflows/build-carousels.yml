@@ -1,7 +1,9 @@
 name: Build Carousels — Approved Posts
 
 on:
-  workflow_dispatch:  # manual trigger only — Flow A (Python/Pillow) paused, quality review pending
+  schedule:
+    - cron: '0 21 * * *'  # 5:00 PM ET (UTC-4 = 21:00 UTC)
+  workflow_dispatch:
 
 jobs:
   build:
