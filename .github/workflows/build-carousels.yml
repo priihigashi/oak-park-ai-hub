@@ -1,0 +1,36 @@
+name: Build Carousels — Approved Posts
+
+on:
+  schedule:
+    - cron: '5 1 * * *'   # 9:05 PM ET (UTC-4 = 01:05 UTC)
+  workflow_dispatch:        # also allows manual run from GitHub
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements_content.txt
+
+      - name: Write Google credentials
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: |
+          mkdir -p /tmp/oak_park_creds
+          echo "$SHEETS_TOKEN" > /tmp/oak_park_creds/sheets_token.json
+
+      - name: Build carousels
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          CONTENT_SHEET_ID: ${{ secrets.CONTENT_SHEET_ID }}
+        run: python scripts/build_carousel_cloud.py
