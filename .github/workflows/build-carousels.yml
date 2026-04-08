@@ -1,9 +1,7 @@
 name: Build Carousels — Approved Posts
 
 on:
-  schedule:
-    - cron: '0 16 * * *'  # 12:00 PM ET (UTC-4 = 16:00 UTC)
-  workflow_dispatch:        # also allows manual run from GitHub
+  workflow_dispatch:  # manual trigger only — Flow A (Python/Pillow) paused, quality review pending
 
 jobs:
   build:
