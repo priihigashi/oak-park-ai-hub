@@ -167,15 +167,17 @@ def sheet_update_cells(token, tab_name, updates: list):
 
 def update_row_after_build(token, row_num: int, status_col: str,
                             enhancement_route: str, design_route: str, drive_folder_url: str):
-    """After a successful build: set status → Built, log routes + Drive link to Analytics cols."""
+    """After a successful build: set status → Built, set L (ok to schedule) → Review,
+    log routes + Drive link to Analytics cols Z/AA/AB."""
     updates = [
-        (f"{status_col}{row_num}", "Built"),
+        (f"{status_col}{row_num}", "Built"),  # col J
+        (f"L{row_num}", "Review"),             # col L — waiting for Priscila approval
         (f"Z{row_num}", enhancement_route),
         (f"AA{row_num}", design_route),
         (f"AB{row_num}", drive_folder_url),
     ]
     sheet_update_cells(token, QUEUE_TAB, updates)
-    print(f"  📊 Analytics updated (row {row_num}): status=Built, route={enhancement_route}/{design_route}")
+    print(f"  📊 Sheet updated (row {row_num}): J=Built, L=Review, routes logged")
 
 def get_approved_posts(token) -> list[dict]:
     rows = sheet_get(token, f"'{QUEUE_TAB}'").get("values", [])
@@ -191,6 +193,10 @@ def get_approved_posts(token) -> list[dict]:
         ct = v("content type").lower()
         if "static" in ct:
             continue
+        # col K = "after processed" — if "Edited", art already exists, skip build
+        if v("after processed").lower() == "edited":
+            print(f"  ⏭️  Row {idx} — K=Edited, skipping art build")
+            continue
         status_idx = ci("status")
         result.append({
             "row": idx,
@@ -202,7 +208,7 @@ def get_approved_posts(token) -> list[dict]:
             "cta":          v("cta"),
             "photos_raw":   v("photo(s) used"),
             "platform":     v("platform"),
-            "status_col":   col_letter(status_idx) if status_idx is not None else "I",
+            "status_col":   col_letter(status_idx) if status_idx is not None else "J",
         })
     return result
 
