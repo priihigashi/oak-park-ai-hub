@@ -245,7 +245,14 @@ def download_photo(file_id: str, creds):
         while not done:
             _, done = downloader.next_chunk()
         buf.seek(0)
-        return Image.open(buf).convert("RGB")
+        img = Image.open(buf)
+        # Apply EXIF orientation so iPhone portrait photos don't come out rotated
+        try:
+            from PIL import ImageOps
+            img = ImageOps.exif_transpose(img)
+        except Exception:
+            pass
+        return img.convert("RGB")
     except Exception as e:
         print(f"  ⚠️  Download error (ID {file_id}): {e}")
         return None
