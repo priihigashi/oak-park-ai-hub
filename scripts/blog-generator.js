@@ -137,19 +137,19 @@ ${topicsText}`
     const item = ideaRows[idx];
     const sheetRow = item.rowIndex + 2;
 
-    // Update the sheet row status to Approved
+    // Update the sheet row status to Queued so it shows correctly
     try {
       const updateRes = await fetch(
         `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}/values/Content%20Ideas!${colLetter(COL.status)}${sheetRow}?valueInputOption=USER_ENTERED`,
         {
           method: 'PUT',
           headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ values: [['✅ Approved']] }),
+          body: JSON.stringify({ values: [['🚀 Queued']] }),
         }
       );
       if (updateRes.ok) {
         const topic = item.row[COL.topicDirection] || item.row[COL.rawIdea];
-        console.log(`✅ Auto-approved row ${sheetRow}: "${topic}"`);
+        console.log(`✅ Auto-approved row ${sheetRow}: "${topic}" — publishing directly`);
       } else {
         console.log(`Sheet update for auto-approval failed: ${await updateRes.text()}`);
       }
@@ -157,12 +157,12 @@ ${topicsText}`
       console.log(`Could not update sheet for auto-approval: ${e.message}`);
     }
 
-    // Approved conceptually — Priscila must change to 🚀 Queued to actually publish
-    break; // approve first safe topic and stop
+    // Return topic data so it publishes directly (originalStatus = 🚀 Queued → wpStatus = publish)
+    return buildSheetData(item.row, item.rowIndex, token, '🚀 Queued');
   }
 
-  console.log('Auto-approval done — change status to 🚀 Queued to publish.');
-  return null; // never auto-publish
+  console.log('Auto-approval done — no SAFE topics found, falling back to draft.');
+  return null;
 }
 
 // ─── Read sheet and return the first publishable topic ───────────────────────
