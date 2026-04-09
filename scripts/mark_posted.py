@@ -91,20 +91,39 @@ def sheet_append_row(token, tab_name, values: list):
     except Exception as e:
         print(f"  ⚠️  Analytics append error: {e}")
 
+def create_sheet_tab(token, title: str):
+    """Create a new tab in the spreadsheet via batchUpdate/addSheet."""
+    payload = json.dumps({"requests": [{"addSheet": {"properties": {"title": title}}}]}).encode()
+    url = f"https://sheets.googleapis.com/v4/spreadsheets/{SHEET_ID}:batchUpdate"
+    req = urllib.request.Request(url, data=payload,
+                                  headers={"Authorization": f"Bearer {token}",
+                                           "Content-Type": "application/json"})
+    try:
+        urllib.request.urlopen(req).read()
+        print(f"  📊 Created tab: {title}")
+    except Exception as e:
+        if "already exists" not in str(e):
+            print(f"  ⚠️  Could not create tab '{title}': {e}")
+
 def ensure_analytics_header(token):
-    """Create Analytics tab header row if it doesn't have one yet."""
+    """Create Analytics tab + header row if they don't exist yet."""
+    tab_exists = False
     try:
         result = sheet_get(token, f"'{ANALYTICS_TAB}'!A1:H1")
         rows = result.get("values", [])
         if rows and rows[0] and rows[0][0] == "Logged At":
-            return  # Header already exists
+            return  # Header already exists — done
+        tab_exists = True  # Tab exists but header missing
     except Exception:
-        pass  # Tab may not exist yet — append will create it
+        pass  # Tab does not exist
+
+    if not tab_exists:
+        create_sheet_tab(token, ANALYTICS_TAB)
 
     header = ["Logged At", "Project", "Platform", "Post Date", "Post Time",
               "Drive Link", "Status", "Notes"]
     sheet_append_row(token, ANALYTICS_TAB, header)
-    print(f"  📊 Created Analytics tab header")
+    print(f"  📊 Analytics tab header written")
 
 # ── Parse scheduled rows ───────────────────────────────────────────────────────
 def get_scheduled_rows(token) -> list[dict]:
