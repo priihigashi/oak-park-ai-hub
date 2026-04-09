@@ -182,22 +182,33 @@ def update_row_after_build(token, row_num: int, status_col: str,
 def get_approved_posts(token) -> list[dict]:
     rows = sheet_get(token, f"'{QUEUE_TAB}'").get("values", [])
     if len(rows) < 2:
+        print(f"  ⚠️  Sheet returned {len(rows)} rows (expected 2+) — tab name mismatch?")
         return []
     header = [h.strip() for h in rows[0]]
+    print(f"  🗂️  Headers found: {header}")
     def ci(name): return next((i for i,h in enumerate(header) if name.lower() in h.lower()), None)
+    print(f"  🔍 Column map — status:{ci('status')} ({col_letter(ci('status')) if ci('status') is not None else 'NOT FOUND'}), "
+          f"content type:{ci('content type')}, after processed:{ci('after processed')}, "
+          f"photos:{ci('photo')}, hook:{ci('hook')}")
     result = []
     for idx, row in enumerate(rows[1:], start=2):
-        def v(col): i=ci(col); return row[i].strip() if i is not None and len(row)>i else ""
-        if v("status").lower() != "approved":
+        def v(col, _row=row): i=ci(col); return _row[i].strip() if i is not None and len(_row)>i else ""
+        status_val = v("status")
+        if status_val.lower() != "approved":
+            if status_val:  # only log non-empty to avoid spam
+                print(f"  ⏭️  Row {idx} — status='{status_val}' (not Approved)")
             continue
         ct = v("content type").lower()
         if "static" in ct:
+            print(f"  ⏭️  Row {idx} — content type='{ct}' (static, skipped)")
             continue
         # col K = "after processed" — if "Edited", art already exists, skip build
-        if v("after processed").lower() == "edited":
-            print(f"  ⏭️  Row {idx} — K=Edited, skipping art build")
+        after_proc = v("after processed")
+        if after_proc.lower() == "edited":
+            print(f"  ⏭️  Row {idx} — K='{after_proc}' (Edited, skipping art build)")
             continue
         status_idx = ci("status")
+        print(f"  ✅ Row {idx} — QUEUED for build: project='{v('project name')}', type='{ct}', K='{after_proc}'")
         result.append({
             "row": idx,
             "project":      v("project name"),
