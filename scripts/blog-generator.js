@@ -52,7 +52,119 @@ async function getGoogleToken(saKey) {
   return data.access_token;
 }
 
-// Read sheet and return the first Approved row that has no Blog URL yet
+// ─── Auto-approval: analyze Idea rows and approve safe ones ──────────────────
+// A topic is SAFE (auto-publish) if it passes ALL 5 criteria:
+//   1. Directly about a service Oak Park offers (additions, renovations, concrete, permits, etc.)
+//   2. Evergreen — not tied to a specific news event, law change, or "right now" situation
+//   3. No political/immigration/labor-policy angle — non-controversial
+//   4. Geographic fit — South Florida, Broward/Miami-Dade, or general homeowner advice
+//   5. No legal risk — no active lawsuits, no specific cost guarantees, no competitor names
+// REVIEW if any one fails (e.g. immigration enforcement, insurance crisis politics, DIY tutorials).
+async function autoApproveIdeasInSheet(rows, token) {
+  const colLetter = (i) => {
+    let r = '', n = i + 1;
+    while (n > 0) { r = String.fromCharCode(64 + (n % 26 || 26)) + r; n = Math.floor((n - 1) / 26); }
+    return r;
+  };
+
+  // Collect all unprocessed Idea rows
+  const ideaRows = [];
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    const status  = (row[COL.status] || '').trim();
+    const blogUrl = (row[COL.blogUrl] || '').trim();
+    const rawIdea = (row[COL.rawIdea] || '').trim();
+    if (status === '🆕 Idea' && !blogUrl && rawIdea) {
+      ideaRows.push({ rowIndex: i, row });
+    }
+  }
+
+  if (ideaRows.length === 0) {
+    console.log('Auto-approval: no Idea rows to evaluate.');
+    return null;
+  }
+
+  // Build evaluation prompt — batch all topics in one Claude call (cheap + fast)
+  const topicsText = ideaRows.map((item, idx) => {
+    const row = item.row;
+    const topic     = row[COL.topicDirection] || row[COL.rawIdea];
+    const keyword   = row[COL.focusKeyword]   || '';
+    const rawIdea   = row[COL.rawIdea]        || '';
+    return `${idx + 1}. Topic: "${topic}" | Keyword: "${keyword}" | Raw idea: "${rawIdea}"`;
+  }).join('\n');
+
+  console.log(`Auto-approval: evaluating ${ideaRows.length} Idea row(s)...`);
+
+  let evaluationText = '';
+  try {
+    const evalResponse = await client.messages.create({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 400,
+      messages: [{
+        role: 'user',
+        content: `You are evaluating blog post topics for Oak Park Construction — a licensed general contractor in South Florida (Broward County).
+
+A topic is SAFE (auto-publish) if ALL 5 are true:
+1. SERVICE: Directly about construction services homeowners hire for (additions, renovations, new builds, concrete, permits, garage conversions, kitchen/bath remodels, ADU, roofing as part of full project, permits, inspections, materials, hiring tips)
+2. EVERGREEN: Not tied to a specific breaking news event, active legislation, or "happening right now" situation
+3. NEUTRAL: No political, immigration, labor-workforce, or socially divisive angle
+4. GEOGRAPHIC: About South Florida / Broward / Miami-Dade conditions OR general homeowner advice that applies broadly
+5. LEGAL-SAFE: No active lawsuit context, no specific cost promises, no competitor names, not discouraging hiring a contractor
+
+A topic needs REVIEW (will be saved as draft) if ANY one fails — examples: immigration enforcement effects on construction labor, Florida insurance crisis political debates, specific active code enforcement controversies, DIY tutorials, competitor comparisons.
+
+Evaluate each topic below. Respond ONLY with the number and one word per line: SAFE or REVIEW. Nothing else.
+
+${topicsText}`
+      }]
+    });
+    evaluationText = evalResponse.content[0].text.trim();
+    console.log(`Auto-approval evaluation:\n${evaluationText}`);
+  } catch (e) {
+    console.log(`Auto-approval evaluation failed: ${e.message} — skipping auto-approval`);
+    return null;
+  }
+
+  // Parse results and find first SAFE topic
+  const lines = evaluationText.split('\n');
+  for (const line of lines) {
+    const match = line.match(/^(\d+)\.\s*(SAFE|REVIEW)/i);
+    if (!match || match[2].toUpperCase() !== 'SAFE') continue;
+
+    const idx = parseInt(match[1], 10) - 1;
+    if (idx < 0 || idx >= ideaRows.length) continue;
+
+    const item = ideaRows[idx];
+    const sheetRow = item.rowIndex + 2;
+
+    // Update the sheet row status to Approved
+    try {
+      const updateRes = await fetch(
+        `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}/values/Content%20Ideas!${colLetter(COL.status)}${sheetRow}?valueInputOption=USER_ENTERED`,
+        {
+          method: 'PUT',
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ values: [['✅ Approved']] }),
+        }
+      );
+      if (updateRes.ok) {
+        const topic = item.row[COL.topicDirection] || item.row[COL.rawIdea];
+        console.log(`✅ Auto-approved row ${sheetRow}: "${topic}"`);
+      } else {
+        console.log(`Sheet update for auto-approval failed: ${await updateRes.text()}`);
+      }
+    } catch (e) {
+      console.log(`Could not update sheet for auto-approval: ${e.message}`);
+    }
+
+    return buildSheetData(item.row, item.rowIndex, token, '✅ Approved');
+  }
+
+  console.log('Auto-approval: no topics passed all 5 safety criteria — falling back to draft.');
+  return null;
+}
+
+// ─── Read sheet and return the first publishable topic ───────────────────────
 async function getApprovedTopicFromSheet() {
   if (!GOOGLE_SHEET_ID || !GOOGLE_SA_KEY) return null;
   try {
@@ -79,7 +191,11 @@ async function getApprovedTopicFromSheet() {
       }
     }
 
-    // Fallback: pick first Idea row if no Approved rows remain
+    // No manually-approved rows — try auto-approving safe Idea rows
+    const autoApproved = await autoApproveIdeasInSheet(rows, token);
+    if (autoApproved) return autoApproved;
+
+    // Last fallback: use first Idea row as draft (unsafe/uncertain topics)
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i];
       const status  = (row[COL.status] || '').trim();
@@ -87,7 +203,7 @@ async function getApprovedTopicFromSheet() {
       const rawIdea = (row[COL.rawIdea] || '').trim();
 
       if (status === '🆕 Idea' && !blogUrl && rawIdea) {
-        console.log(`Sheet topic selected (row ${i + 2}) [IDEA → will draft]: "${row[COL.topicDirection] || rawIdea}"`);
+        console.log(`Sheet topic selected (row ${i + 2}) [IDEA → draft, did not pass auto-approval]: "${row[COL.topicDirection] || rawIdea}"`);
         return buildSheetData(row, i, token, '🆕 Idea');
       }
     }
