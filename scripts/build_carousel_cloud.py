@@ -199,9 +199,6 @@ def get_approved_posts(token) -> list[dict]:
                 print(f"  ⏭️  Row {idx} — status='{status_val}' (not Approved)")
             continue
         ct = v("content type").lower()
-        if "static" in ct:
-            print(f"  ⏭️  Row {idx} — content type='{ct}' (static, skipped)")
-            continue
         # col K = "after processed" — if "Edited", art already exists, skip build
         after_proc = v("after processed")
         if after_proc.lower() == "edited":
