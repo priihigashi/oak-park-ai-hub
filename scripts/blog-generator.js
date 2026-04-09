@@ -157,11 +157,12 @@ ${topicsText}`
       console.log(`Could not update sheet for auto-approval: ${e.message}`);
     }
 
-    return buildSheetData(item.row, item.rowIndex, token, '✅ Approved');
+    // Approved conceptually — Priscila must change to 🚀 Queued to actually publish
+    break; // approve first safe topic and stop
   }
 
-  console.log('Auto-approval: no topics passed all 5 safety criteria — falling back to draft.');
-  return null;
+  console.log('Auto-approval done — change status to 🚀 Queued to publish.');
+  return null; // never auto-publish
 }
 
 // ─── Read sheet and return the first publishable topic ───────────────────────
@@ -185,9 +186,9 @@ async function getApprovedTopicFromSheet() {
       const blogUrl = (row[COL.blogUrl] || '').trim();
       const rawIdea = (row[COL.rawIdea] || '').trim();
 
-      if (status === '✅ Approved' && !blogUrl && rawIdea) {
-        console.log(`Sheet topic selected (row ${i + 2}) [APPROVED → will publish]: "${row[COL.topicDirection] || rawIdea}"`);
-        return buildSheetData(row, i, token, '✅ Approved');
+      if (status === '🚀 Queued' && !blogUrl && rawIdea) {
+        console.log(`Sheet topic selected (row ${i + 2}) [QUEUED → will publish]: "${row[COL.topicDirection] || rawIdea}"`);
+        return buildSheetData(row, i, token, '🚀 Queued');
       }
     }
 
@@ -573,7 +574,7 @@ async function postToWordPress(post, featuredMediaId, wpCategoryId, wpStatus = '
     }
 
     // 4. Post to WordPress — Approved rows publish directly, everything else is draft
-    const wpStatus = (sheetData?.originalStatus === '✅ Approved') ? 'publish' : 'draft';
+    const wpStatus = (sheetData?.originalStatus === '🚀 Queued') ? 'publish' : 'draft';
     const result = await postToWordPress(post, featuredMedia?.id || null, sheetData?.wpCategoryId, wpStatus);
 
     // 5. Update sheet row if topic came from sheet
