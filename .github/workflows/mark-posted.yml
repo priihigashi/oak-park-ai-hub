@@ -1,0 +1,27 @@
+name: Mark Posted
+
+on:
+  schedule:
+    # Runs every 2 days at 10PM ET (= 2AM UTC, UTC-4 in summer)
+    - cron: "0 2 */2 * *"
+  workflow_dispatch:
+
+jobs:
+  mark-posted:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install pytz
+
+      - name: Run mark_posted.py
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          CONTENT_SHEET_ID: ${{ secrets.CONTENT_SHEET_ID }}
+        run: python scripts/mark_posted.py
