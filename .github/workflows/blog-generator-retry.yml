@@ -1,0 +1,37 @@
+name: Auto Blog Generator — Retry
+
+on:
+  schedule:
+    - cron: '45 14 * * *'  # 10:45 AM ET (30 min after main run at 10:15)
+
+jobs:
+  check-and-retry:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
+
+    steps:
+      - name: Check if today's run succeeded
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TODAY=$(date -u +%Y-%m-%d)
+          STATUS=$(gh api "repos/${{ github.repository }}/actions/workflows/blog-generator.yml/runs?per_page=10" \
+            --jq "[.workflow_runs[] | select(.created_at | startswith(\"$TODAY\")) | select(.event == \"schedule\" or .event == \"workflow_dispatch\")] | first | .conclusion // \"none\"")
+          echo "Today's blog run status: $STATUS"
+          echo "status=$STATUS" >> $GITHUB_OUTPUT
+
+      - name: Skip — already succeeded today
+        if: steps.check.outputs.status == 'success'
+        run: echo "✅ Main run succeeded today — no retry needed."
+
+      - name: Retry — main run failed or missing
+        if: steps.check.outputs.status != 'success'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "⚠️ Main run status: ${{ steps.check.outputs.status }} — triggering retry..."
+          gh workflow run blog-generator.yml --repo ${{ github.repository }}
+          echo "✅ Retry triggered."
