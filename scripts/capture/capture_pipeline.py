@@ -411,7 +411,7 @@ def update_inspiration_library(url, transcript, classification):
         return
     try:
         sh = gc.open_by_key(IDEAS_INBOX_ID)
-        lib = sh.worksheet("Inspiration Library")
+        lib = sh.worksheet("📥 Inspiration Library")
         lib.append_row([
             datetime.now().strftime("%Y-%m-%d"), url,
             classification.get("summary", ""),
