@@ -62,12 +62,14 @@ GRAY_MID    = (100, 100, 100)
 GOLD        = YELLOW             # alias — always resolves to brand yellow
 
 # ── Font download (Google Fonts CDN) ─────────────────────────────────────────
+# Note: Google Fonts repo migrated to variable fonts — static files no longer exist.
+# We download the variable font files and use set_variation_by_axes() for bold weight.
 FONT_URLS = {
     "Anton-Regular.ttf":          "https://github.com/google/fonts/raw/main/ofl/anton/Anton-Regular.ttf",
-    "RobotoCondensed-Bold.ttf":   "https://github.com/google/fonts/raw/main/apache/roboto/static/Roboto-Bold.ttf",
-    "RobotoCondensed-Regular.ttf":"https://github.com/google/fonts/raw/main/apache/roboto/static/Roboto-Regular.ttf",
-    "RobotoMono-Regular.ttf":     "https://github.com/google/fonts/raw/main/ofl/robotomono/static/RobotoMono-Regular.ttf",
-    "Roboto-Regular.ttf":         "https://github.com/google/fonts/raw/main/apache/roboto/static/Roboto-Regular.ttf",
+    "RobotoCondensed-Bold.ttf":   "https://github.com/google/fonts/raw/main/ofl/robotocondensed/RobotoCondensed%5Bwght%5D.ttf",
+    "RobotoCondensed-Regular.ttf":"https://github.com/google/fonts/raw/main/ofl/robotocondensed/RobotoCondensed%5Bwght%5D.ttf",
+    "RobotoMono-Regular.ttf":     "https://github.com/google/fonts/raw/main/ofl/robotomono/RobotoMono%5Bwght%5D.ttf",
+    "Roboto-Regular.ttf":         "https://github.com/google/fonts/raw/main/ofl/roboto/Roboto%5Bwdth%2Cwght%5D.ttf",
 }
 
 def ensure_fonts():
@@ -85,7 +87,14 @@ def _fp(name):
 
 def load_font(name, size):
     try:
-        return ImageFont.truetype(_fp(name), size)
+        font = ImageFont.truetype(_fp(name), size)
+        # Variable fonts: apply bold weight for *-Bold.ttf filenames
+        if "Bold" in name:
+            try:
+                font.set_variation_by_axes([700])
+            except Exception:
+                pass
+        return font
     except Exception:
         try:
             return ImageFont.truetype(_fp("Roboto-Regular.ttf"), size)
@@ -245,14 +254,7 @@ def download_photo(file_id: str, creds):
         while not done:
             _, done = downloader.next_chunk()
         buf.seek(0)
-        img = Image.open(buf)
-        # Apply EXIF orientation so iPhone portrait photos don't come out rotated
-        try:
-            from PIL import ImageOps
-            img = ImageOps.exif_transpose(img)
-        except Exception:
-            pass
-        return img.convert("RGB")
+        return Image.open(buf).convert("RGB")
     except Exception as e:
         print(f"  ⚠️  Download error (ID {file_id}): {e}")
         return None
@@ -401,7 +403,7 @@ def enhance_with_gemini(img: "Image.Image") -> "Image.Image":
         }).encode()
 
         url = (f"https://generativelanguage.googleapis.com/v1beta/models/"
-               f"gemini-2.0-flash-exp:generateContent?key={api_key}")
+               f"gemini-2.0-flash-preview-image-generation:generateContent?key={api_key}")
         req = urllib.request.Request(url, data=payload,
                                       headers={"Content-Type": "application/json"})
         resp = json.loads(urllib.request.urlopen(req, timeout=90).read())
@@ -619,7 +621,7 @@ def build_with_nano_banana_layout(post: dict, photos: list, out_dir: "Path") -> 
             }).encode()
 
             url = (f"https://generativelanguage.googleapis.com/v1beta/models/"
-                   f"gemini-2.0-flash-exp:generateContent?key={api_key}")
+                   f"gemini-2.0-flash-preview-image-generation:generateContent?key={api_key}")
             req = urllib.request.Request(url, data=payload,
                                           headers={"Content-Type": "application/json"})
             resp = json.loads(urllib.request.urlopen(req, timeout=120).read())
