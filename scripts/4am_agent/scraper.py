@@ -78,7 +78,7 @@ def _normalise(item, niche, target_type, target_value):
 
 
 def scrape_instagram_account(username, niche):
-    raw = _run_actor("apify/instagram-scraper", {
+    raw = _run_actor("apify~instagram-scraper", {
         "directUrls":   [f"https://www.instagram.com/{username.lstrip('@')}/"],
         "resultsType":  "posts",
         "resultsLimit": 30,
@@ -87,7 +87,7 @@ def scrape_instagram_account(username, niche):
 
 
 def scrape_instagram_hashtag(tag, niche, target_type):
-    raw = _run_actor("apify/instagram-hashtag-scraper", {
+    raw = _run_actor("apify~instagram-hashtag-scraper", {
         "hashtags":     [tag.lstrip("#")],
         "resultsLimit": 50,
     })
