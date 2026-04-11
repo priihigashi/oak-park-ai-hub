@@ -8,6 +8,18 @@ import os, requests
 NTFY_TOPIC = os.environ.get("NTFY_TOPIC", "oak-park-content-4am")
 NTFY_BASE  = "https://ntfy.sh"
 
+CREDIT_ERRORS = [
+    "not-enough-usage-to-run-paid-actor",
+    "x402-payment-required",
+    "payment-required",
+    "insufficient",
+]
+
+
+def _is_credit_error(error_str):
+    e = error_str.lower()
+    return any(k in e for k in CREDIT_ERRORS)
+
 
 def send(title, message, priority="default", tags="robot"):
     # HTTP headers must be latin-1 -- encode title as UTF-8 then pass as bytes
@@ -25,27 +37,52 @@ def send(title, message, priority="default", tags="robot"):
 
 
 def notify_run_complete(topics, rows_added, clips_found, error=None):
+    if error and _is_credit_error(error):
+        return send(
+            title="Apify Credits Empty",
+            message=(
+                "4AM agent ran in fallback mode — Apify has no credits left.
+
+"
+                "Action needed: go to console.apify.com/billing and top up.
+
+"
+                "Agent still generated scripts using Claude directly."
+            ),
+            priority="high",
+            tags="warning,credit_card",
+        )
+
     if error:
         return send(
             title="4AM Agent Failed",
-            message=f"Error: {error}\nCheck Runs Log tab for details.",
+            message=f"Error: {error}
+Check Runs Log tab for details.",
             priority="high",
             tags="warning",
         )
 
-    topic_list = "\n".join(f"- {t}" for t in topics)
+    topic_list = "
+".join(f"- {t}" for t in topics)
     message    = (
-        f"{rows_added} scripts added to Content Queue\n"
-        f"{clips_found} B-roll clips found\n\n"
-        f"Topics:\n{topic_list}"
+        f"{rows_added} scripts added to Content Queue
+"
+        f"{clips_found} B-roll clips found
+
+"
+        f"Topics:
+{topic_list}"
     )
     return send(title="4AM Content Ready", message=message, tags="tada,robot")
 
 
 def notify_new_skill(skill_name, pattern_summary):
     message = (
-        f"Pattern detected in run logs.\n"
-        f"Auto-created: skills/{skill_name}\n\n"
+        f"Pattern detected in run logs.
+"
+        f"Auto-created: skills/{skill_name}
+
+"
         f"Pattern: {pattern_summary}"
     )
     return send(title="New Skill Auto-Created", message=message, tags="brain,robot")
@@ -53,8 +90,12 @@ def notify_new_skill(skill_name, pattern_summary):
 
 def notify_skill_task(task_title, description):
     message = (
-        f"A pattern was found in run logs that needs a new skill.\n\n"
-        f"{description}\n\n"
+        f"A pattern was found in run logs that needs a new skill.
+
+"
+        f"{description}
+
+"
         f"Calendar task created: '{task_title}'"
     )
     return send(title="Skill Task Added to Calendar", message=message, tags="calendar,robot")
