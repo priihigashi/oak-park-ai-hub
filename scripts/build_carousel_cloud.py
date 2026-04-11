@@ -255,6 +255,120 @@ def get_latest_post(token) -> list[dict]:
     return []
 
 
+
+def search_pexels(query: str, api_key: str) -> str:
+    if not api_key:
+        return ""
+    try:
+        url = f"https://api.pexels.com/v1/search?query={urllib.parse.quote(query)}&per_page=5&orientation=portrait"
+        req = urllib.request.Request(url, headers={"Authorization": api_key})
+        with urllib.request.urlopen(req, timeout=10) as r:
+            data = json.loads(r.read())
+        photos = data.get("photos", [])
+        if photos:
+            return photos[0]["src"]["large2x"]
+    except Exception as e:
+        print(f"  \u26a0\ufe0f  Pexels search failed: {e}")
+    return ""
+
+def sheet_update(token, range_: str, values: list):
+    try:
+        body = json.dumps({"values": values, "range": range_, "majorDimension": "ROWS"}).encode()
+        enc_range = urllib.parse.quote(range_, safe="")
+        url = f"https://sheets.googleapis.com/v4/spreadsheets/{SHEET_ID}/values/{enc_range}?valueInputOption=RAW"
+        req = urllib.request.Request(url, data=body, headers={
+            "Authorization": f"Bearer {token}", "Content-Type": "application/json"
+        }, method="PUT")
+        with urllib.request.urlopen(req, timeout=10) as r:
+            pass
+    except Exception as e:
+        print(f"  \u26a0\ufe0f  sheet_update failed: {e}")
+
+def get_reels_folder_id(token) -> str:
+    try:
+        q = urllib.parse.quote("name contains 'Reels' and mimeType='application/vnd.google-apps.folder'")
+        url = f"https://www.googleapis.com/drive/v3/files?q={q}&fields=files(id,name)"
+        req = urllib.request.Request(url, headers={"Authorization": f"Bearer {token}"})
+        with urllib.request.urlopen(req, timeout=10) as r:
+            data = json.loads(r.read())
+        files = data.get("files", [])
+        return files[0]["id"] if files else ""
+    except Exception as e:
+        print(f"  \u26a0\ufe0f  Could not find Reels folder: {e}")
+    return ""
+
+def create_content_subfolder(token, parent_id: str, folder_name: str) -> str:
+    try:
+        meta = json.dumps({"name": folder_name, "mimeType": "application/vnd.google-apps.folder", "parents": [parent_id]}).encode()
+        req = urllib.request.Request("https://www.googleapis.com/drive/v3/files", data=meta,
+            headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"}, method="POST")
+        with urllib.request.urlopen(req, timeout=10) as r:
+            resp = json.loads(r.read())
+        return resp.get("id", "")
+    except Exception as e:
+        print(f"  \u26a0\ufe0f  Could not create subfolder: {e}")
+    return ""
+
+def download_photo_to_drive(token, photo_url: str, folder_id: str, filename: str) -> str:
+    try:
+        with urllib.request.urlopen(photo_url, timeout=15) as r:
+            img_bytes = r.read()
+        import base64 as _b64
+        encoded = _b64.b64encode(img_bytes).decode()
+        boundary = "oak_park_multipart"
+        meta = json.dumps({"name": filename, "parents": [folder_id]}).encode()
+        body = (f"--{boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n").encode() + meta + (
+            f"\r\n--{boundary}\r\nContent-Type: image/jpeg\r\nContent-Transfer-Encoding: base64\r\n\r\n"
+        ).encode() + encoded.encode() + f"\r\n--{boundary}--".encode()
+        req = urllib.request.Request("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart",
+            data=body, headers={"Authorization": f"Bearer {token}",
+            "Content-Type": f"multipart/related; boundary={boundary}"}, method="POST")
+        with urllib.request.urlopen(req, timeout=30) as r:
+            resp = json.loads(r.read())
+        return resp.get("id", "")
+    except Exception as e:
+        print(f"  \u26a0\ufe0f  Photo upload failed: {e}")
+    return ""
+
+def source_photo_for_post(token, post: dict) -> str:
+    import datetime as _dt
+    existing = (post.get("photos_raw") or "").strip()
+    if existing and "TBD" not in existing.upper() and "UNSPLASH" not in existing.upper():
+        print(f"  \U0001f4f8 Photo already set: {existing}")
+        return existing
+    pexels_key = os.environ.get("PEXELS_API_KEY", "")
+    stop_words = {"the","a","an","is","are","was","were","be","been","have","has","had","do","does","did",
+        "will","would","could","should","may","might","your","their","our","you","they","we","it","this",
+        "that","and","or","but","not","with","from","by","to","of","on","in","at","don't","won't",
+        "isn't","most","some","any","than","when","here","there","just","more","hire","hiring","stop"}
+    raw = f"{post.get('service','')} {post.get('hook','')}"
+    words = [w.lower().strip(".,!?\"'") for w in raw.split() if len(w) > 3]
+    query_words = [w for w in words if w not in stop_words][:5]
+    query = " ".join(query_words) if query_words else "construction renovation home"
+    print(f"  \U0001f50d No valid photo — searching Pexels: '{query}'")
+    photo_url = search_pexels(query, pexels_key)
+    if not photo_url:
+        print("  \u26a0\ufe0f  Pexels returned nothing — using brand background")
+        return ""
+    today = _dt.date.today().strftime("%Y-%m-%d")
+    folder_name = f"{today} \u2014 {post.get('project','post')[:45]}"
+    reels_folder_id = get_reels_folder_id(token)
+    subfolder_id = create_content_subfolder(token, reels_folder_id, folder_name) if reels_folder_id else ""
+    safe_q = query.replace(" ", "_")[:30]
+    filename = f"pexels_{safe_q}.jpg"
+    file_id = download_photo_to_drive(token, photo_url, subfolder_id, filename) if subfolder_id else ""
+    if file_id:
+        drive_url = f"https://drive.google.com/file/d/{file_id}/view"
+        print(f"  \u2705 Photo saved: {filename}")
+        row = post.get("row")
+        if row:
+            sheet_update(token, f"'\U0001f4cb Content Queue'!D{row}", [[filename]])
+            sheet_update(token, f"'\U0001f4cb Content Queue'!E{row}", [[drive_url]])
+        post["photos_raw"] = filename
+        return filename
+    print("  \u26a0\ufe0f  Photo save failed — using brand background")
+    return ""
+
 def get_photo_catalog(token) -> dict:
     rows = sheet_get(token, f"'{CATALOG_TAB}'").get("values", [])
     if len(rows) < 2:
@@ -1025,6 +1139,8 @@ def main():
     for post in approved:
         print(f"\n{'='*50}")
         print(f"📌 {post['project']} — {post['content_type']}")
+
+        source_photo_for_post(token, post)
 
         filenames = [f.strip() for f in post["photos_raw"].split(",") if f.strip()]
         raw_photos = []
