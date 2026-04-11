@@ -66,6 +66,8 @@ jobs:
           OPENAI_API_KEY:    ${{ secrets.OPENAI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GOOGLE_SA_KEY:     ${{ secrets.GOOGLE_SA_KEY }}
+          GITHUB_TOKEN:     ${{ github.token }}
+          APIFY_API_KEY:    ${{ secrets.APIFY_API_KEY }}
         run: |
           CMD="python scripts/capture/capture_pipeline.py \"${{ inputs.url }}\" --project ${{ inputs.project }}"
 
