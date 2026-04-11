@@ -3,10 +3,15 @@ pattern_learner.py — Reads recent Runs Log entries, detects recurring issues,
 and automatically creates skill files in GitHub or Calendar tasks to prevent them.
 
 This runs at the END of every 4AM agent execution.
-It answers the question: "What keeps going wrong, and how do we stop it?"
+It answers TWO questions:
+  1. "What keeps going wrong, and how do we stop it?" (log-based)
+  2. "What changed in our master plans, and what should Claude learn?" (plan-based, 3-tier)
 
-Also reads the Claude Rules tab via context_reader so Claude is aware of
-any new rules, drives, or project changes before generating skills/tasks.
+3-TIER PLAN SELF-IMPROVEMENT:
+  Tier 1 (Sheets only, zero LLM): compare Flow Plans Tracker timestamps vs last_seen.json
+  Tier 2 (Drive preview, zero LLM): check if change is meaningful (not just a date update)
+  Tier 3 (Haiku LLM, only if meaningful): extract actionable rules → write to Claude Rules tab
+  Result: 90%+ of nights = zero LLM cost on plan improvement path.
 """
 import os, json, base64, requests
 import context_reader
@@ -16,14 +21,19 @@ from datetime import datetime
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
 
-SPREADSHEET_ID  = "1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU"
-GITHUB_REPO     = "priihigashi/oak-park-ai-hub"
-GITHUB_TOKEN    = os.environ.get("GITHUB_TOKEN", "")
-ANTHROPIC_KEY   = os.environ["ANTHROPIC_API_KEY"]
-GOOGLE_SA_KEY   = os.environ["GOOGLE_SA_KEY"]
-SCOPES          = ["https://www.googleapis.com/auth/spreadsheets",
-                   "https://www.googleapis.com/auth/calendar"]
-et              = pytz.timezone("America/New_York")
+SPREADSHEET_ID        = "1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU"
+FLOW_PLANS_TRACKER_ID = "1fggy918FgPfnMQ-dzGQk2zx9uhi2_-uWXMKGW4MA47k"
+LAST_SEEN_PATH        = ".github/agent_state/last_seen.json"
+GITHUB_REPO           = "priihigashi/oak-park-ai-hub"
+GITHUB_TOKEN          = os.environ.get("GITHUB_TOKEN", "")
+ANTHROPIC_KEY         = os.environ["ANTHROPIC_API_KEY"]
+GOOGLE_SA_KEY         = os.environ["GOOGLE_SA_KEY"]
+SCOPES                = ["https://www.googleapis.com/auth/spreadsheets",
+                         "https://www.googleapis.com/auth/calendar"]
+DRIVE_SCOPES          = ["https://www.googleapis.com/auth/spreadsheets",
+                         "https://www.googleapis.com/auth/drive.readonly",
+                         "https://www.googleapis.com/auth/calendar"]
+et                    = pytz.timezone("America/New_York")
 
 client = anthropic.Anthropic(api_key=ANTHROPIC_KEY)
 
@@ -215,9 +225,184 @@ def apply_patterns(patterns, notifier_fn=None):
     return results
 
 
+# ─── 3-Tier Plan Self-Improvement ────────────────────────────────────────────
+
+def load_last_seen():
+    """Load previous doc timestamps from GitHub state file."""
+    url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{LAST_SEEN_PATH}"
+    r = requests.get(url, headers=_github_headers())
+    if r.status_code == 200:
+        content = base64.b64decode(r.json()["content"]).decode()
+        return json.loads(content)
+    return {}
+
+
+def save_last_seen(state):
+    """Save current doc timestamps back to GitHub state file."""
+    url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{LAST_SEEN_PATH}"
+    b64 = base64.b64encode(json.dumps(state, indent=2).encode()).decode()
+    existing = requests.get(url, headers=_github_headers())
+    payload = {
+        "message": f"agent: update last_seen [{datetime.now(et).strftime('%Y-%m-%d')}]",
+        "content": b64,
+    }
+    if existing.status_code == 200:
+        payload["sha"] = existing.json()["sha"]
+    r = requests.put(url, headers=_github_headers(), json=payload)
+    if r.status_code not in (200, 201):
+        print(f"[pattern_learner] WARNING: Could not save last_seen: {r.status_code}")
+
+
+def read_flow_plans_tracker():
+    """Tier 1: Read All Docs tab → dict {doc_id: last_updated}. Zero LLM cost."""
+    result = _sheets().spreadsheets().values().get(
+        spreadsheetId=FLOW_PLANS_TRACKER_ID,
+        range="All Docs!A:I",
+    ).execute()
+    rows = result.get("values", [])
+    if len(rows) <= 1:
+        return {}
+    headers = rows[0]
+    try:
+        doc_id_col  = headers.index("DOC_ID")
+        updated_col = headers.index("LAST UPDATED")
+    except ValueError:
+        doc_id_col, updated_col = 6, 8  # fallback positions
+    result_map = {}
+    for row in rows[1:]:
+        if len(row) > doc_id_col and row[doc_id_col]:
+            val = row[updated_col] if len(row) > updated_col else ""
+            result_map[row[doc_id_col]] = val
+    return result_map
+
+
+def fetch_doc_preview(doc_id, drive_service):
+    """Tier 2: Fetch first 600 chars of a Drive doc. Zero LLM cost."""
+    try:
+        content = drive_service.files().export(
+            fileId=doc_id, mimeType="text/plain"
+        ).execute()
+        text = content.decode("utf-8") if isinstance(content, bytes) else content
+        return text[:600]
+    except Exception as e:
+        print(f"[pattern_learner] Tier 2: Could not preview doc {doc_id}: {e}")
+        return None
+
+
+def _is_trivial_change(preview):
+    """Return True if the change looks like just a date/metadata update."""
+    if not preview or len(preview) < 50:
+        return True
+    lower = preview.lower()
+    # If the meaningful content is just dates/timestamps, skip
+    date_indicators = sum(1 for w in ["2026-0", "last updated", "updated:", "created:"] if w in lower)
+    return date_indicators >= 3 and len(preview) < 300
+
+
+def run_plan_improvement(notifier_fn=None):
+    """
+    3-tier plan self-improvement gate.
+    Returns list of rules written, or empty list if nothing changed.
+    """
+    # TIER 1: Sheets only — detect changed docs
+    print("[pattern_learner] Tier 1: Reading Flow Plans Tracker...")
+    current_state = read_flow_plans_tracker()
+    last_seen = load_last_seen()
+
+    changed = {
+        doc_id: updated
+        for doc_id, updated in current_state.items()
+        if last_seen.get(doc_id) != updated
+    }
+
+    if not changed:
+        print("[pattern_learner] Tier 1: No doc changes. Zero tokens used.")
+        return []
+
+    print(f"[pattern_learner] Tier 1: {len(changed)} changed doc(s). Starting Tier 2...")
+
+    # TIER 2: Drive preview — filter trivial changes
+    creds = service_account.Credentials.from_service_account_info(
+        json.loads(GOOGLE_SA_KEY), scopes=DRIVE_SCOPES
+    )
+    drive_service = build("drive", "v3", credentials=creds)
+
+    meaningful = {}
+    for doc_id in changed:
+        preview = fetch_doc_preview(doc_id, drive_service)
+        if not preview:
+            continue
+        if _is_trivial_change(preview):
+            print(f"[pattern_learner] Tier 2: Doc {doc_id[:20]}... trivial — skipping.")
+            continue
+        meaningful[doc_id] = preview
+
+    if not meaningful:
+        print("[pattern_learner] Tier 2: All changes trivial. Zero LLM tokens used.")
+        save_last_seen(current_state)
+        return []
+
+    # TIER 3: Haiku LLM — extract actionable rules only
+    print(f"[pattern_learner] Tier 3: {len(meaningful)} meaningful change(s) — calling Haiku...")
+
+    prompt = f"""You analyze workflow documentation changes for Oak Park Construction AI automation.
+
+These plan docs recently changed. First 600 chars of each:
+
+{json.dumps(meaningful, indent=2)}
+
+For each doc, answer: "What new rule or workflow change should Claude follow in future sessions?"
+
+Be extremely selective. Only include if there is a clear behavioral change needed.
+Output ONLY a JSON array (empty [] if nothing actionable):
+[
+  {{"doc_id": "...", "rule": "One-sentence rule Claude should follow."}}
+]"""
+
+    response = client.messages.create(
+        model="claude-haiku-4-5-20251001",
+        max_tokens=500,
+        messages=[{"role": "user", "content": prompt}],
+    )
+
+    text = response.content[0].text.strip()
+    if "```json" in text:
+        text = text.split("```json")[1].split("```")[0].strip()
+    elif "```" in text:
+        text = text.split("```")[1].split("```")[0].strip()
+
+    rules = json.loads(text)
+
+    if rules:
+        print(f"[pattern_learner] {len(rules)} new rule(s) extracted — writing to Claude Rules tab...")
+        _write_rules_to_sheet(rules)
+        if notifier_fn:
+            notifier_fn("plan_improvement", f"{len(rules)} new rule(s) from updated docs")
+    else:
+        print("[pattern_learner] Tier 3: No actionable rules found.")
+
+    save_last_seen(current_state)
+    return rules
+
+
+def _write_rules_to_sheet(rules):
+    """Append new auto-learned rules to Claude Rules tab."""
+    now = datetime.now(et).strftime("%Y-%m-%d")
+    rows = [[now, r["doc_id"], r["rule"], "auto-learned"] for r in rules]
+    _sheets().spreadsheets().values().append(
+        spreadsheetId=SPREADSHEET_ID,
+        range="📋 Claude Rules!A:D",
+        valueInputOption="USER_ENTERED",
+        body={"values": rows},
+    ).execute()
+    print(f"[pattern_learner] Wrote {len(rows)} rule(s) to Claude Rules tab.")
+
+
+# ─── Main entry point ─────────────────────────────────────────────────────────
+
 def run(notifier_fn=None):
     """Main entry point — call this from main.py after logging the run."""
-    print("[pattern_learner] Reading recent logs...")
+    print("[pattern_learner] === Log-based pattern detection ===")
     logs = read_recent_logs(n=14)
 
     print("[pattern_learner] Reading Claude Rules for context...")
@@ -228,8 +413,12 @@ def run(notifier_fn=None):
     patterns = detect_patterns(logs, extra_context=extra_context)
 
     if not patterns:
-        print("[pattern_learner] No patterns detected.")
-        return []
+        print("[pattern_learner] No log patterns detected.")
+    else:
+        print(f"[pattern_learner] {len(patterns)} pattern(s) found — applying fixes...")
+        apply_patterns(patterns, notifier_fn=notifier_fn)
 
-    print(f"[pattern_learner] {len(patterns)} pattern(s) found — applying fixes...")
-    return apply_patterns(patterns, notifier_fn=notifier_fn)
+    print("[pattern_learner] === Plan self-improvement (3-tier) ===")
+    run_plan_improvement(notifier_fn=notifier_fn)
+
+    return patterns
