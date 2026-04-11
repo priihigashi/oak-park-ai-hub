@@ -25,6 +25,34 @@ Analytics tab columns updated after each build:
   Status col set to "Built" after successful upload
 """
 
+# ═══════════════════════════════════════════════════════════════════════
+# PIPELINE RULES — READ BEFORE MODIFYING
+# ═══════════════════════════════════════════════════════════════════════
+#
+# TWO PIPELINES EXIST. NEVER MIX THEM.
+#
+# CHAT PIPELINE (Claude chat session):
+#   Copy is written in chat → HTML file built in chat → user screenshots → posts
+#   NEVER run this script for copy written in chat.
+#   Use: carousel_cheapest_contractor.html or similar HTML output.
+#
+# AUTOMATED PIPELINE (this script):
+#   4AM agent queues ideas → Content Queue (status=Approved) → this script builds
+#   Triggers: cron 6PM daily OR workflow_dispatch with source=chat (grabs latest row)
+#   Output: Drive → Reels & TikTok folder → slides saved as JPG
+#
+# PHOTO RULE:
+#   Photo must match the copy TOPIC and EMOTIONAL TONE — not just service category.
+#   Tips carousels → Pexels API (PEXELS_API_KEY secret) auto-sourced from hook keywords
+#   Project carousels → Drive Oak Park Construction album → Photos and Videos
+#
+# TRIGGER LOGIC:
+#   BUILD_SOURCE=chat → grab latest row regardless of status (chat-triggered)
+#   BUILD_SOURCE=''   → only process rows with status=Approved (scheduler/manual)
+#
+# ═══════════════════════════════════════════════════════════════════════
+
+
 import os, io, json, re, urllib.request, urllib.parse, sys, time, tempfile, base64
 from pathlib import Path
 from datetime import date
