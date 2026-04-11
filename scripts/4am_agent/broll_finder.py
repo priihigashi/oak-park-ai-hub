@@ -82,7 +82,7 @@ def search_youtube(query, max_results=5, published_after=None):
         return []
 
 
-def get_broll_for_script(topic, script_text, count=5):
+def get_broll_for_script(topic, script_text, count=4):  # 4 Pexels + 4 YouTube = 8 max total
     """
     Find B-roll clips from Pexels (free stock) and YouTube (real-world).
     Returns combined list — up to count from each source.
@@ -112,7 +112,7 @@ def get_broll_for_script(topic, script_text, count=5):
     # YouTube: real-world clips, last 90 days
     from datetime import datetime, timedelta, timezone
     cutoff = (datetime.now(timezone.utc) - timedelta(days=90)).strftime("%Y-%m-%dT%H:%M:%SZ")
-    youtube_clips = search_youtube(topic, max_results=count, published_after=cutoff)
+    youtube_clips = search_youtube(topic, max_results=count, published_after=cutoff)[:4]
 
     all_clips = pexels_clips + youtube_clips
     print(f"[broll] '{topic}': {len(pexels_clips)} Pexels + {len(youtube_clips)} YouTube = {len(all_clips)} total")
