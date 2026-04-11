@@ -4,8 +4,12 @@ and automatically creates skill files in GitHub or Calendar tasks to prevent the
 
 This runs at the END of every 4AM agent execution.
 It answers the question: "What keeps going wrong, and how do we stop it?"
+
+Also reads the Claude Rules tab via context_reader so Claude is aware of
+any new rules, drives, or project changes before generating skills/tasks.
 """
 import os, json, base64, requests
+import context_reader
 import pytz
 import anthropic
 from datetime import datetime
@@ -63,10 +67,11 @@ def read_recent_logs(n=14):
 
 # ─── Detect patterns with Claude ─────────────────────────────────────────────
 
-def detect_patterns(logs):
+def detect_patterns(logs, extra_context=""):
     """
     Sends recent logs to Claude and asks it to identify recurring issues
     and generate skill files or tasks to prevent them.
+    extra_context: optional string from context_reader (recent Claude Rules).
     """
     if not logs:
         return []
@@ -86,7 +91,9 @@ def detect_patterns(logs):
         "lessons_learned": lessons,
     }
 
-    prompt = f"""You are analyzing run logs for an automated content agent (Oak Park Construction).
+    context_block = f"\n\n{extra_context}\n" if extra_context else ""
+
+    prompt = f"""You are analyzing run logs for an automated content agent (Oak Park Construction).{context_block}
 Here is a summary of recent runs:
 
 {json.dumps(summary, indent=2)}
@@ -211,8 +218,14 @@ def apply_patterns(patterns, notifier_fn=None):
 def run(notifier_fn=None):
     """Main entry point — call this from main.py after logging the run."""
     print("[pattern_learner] Reading recent logs...")
-    logs     = read_recent_logs(n=14)
-    patterns = detect_patterns(logs)
+    logs = read_recent_logs(n=14)
+
+    print("[pattern_learner] Reading Claude Rules for context...")
+    extra_context = context_reader.get_context_summary()
+    if extra_context:
+        print(f"[pattern_learner] Context loaded ({len(extra_context)} chars)")
+
+    patterns = detect_patterns(logs, extra_context=extra_context)
 
     if not patterns:
         print("[pattern_learner] No patterns detected.")
