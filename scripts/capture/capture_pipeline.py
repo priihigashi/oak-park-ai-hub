@@ -478,12 +478,44 @@ def run_sovereign(args, transcript):
     print(f"\n{'='*50}\nSOVEREIGN CAPTURE DONE\nStory ID: {args.story_id}\nDoc: {doc_url or 'check artifacts'}\n{'='*50}")
 
 
+def _trigger_topic_scraper(classification):
+    """Dispatch topic_scraper.yml after a Brazil capture. Non-fatal if it fails."""
+    import urllib.request
+    token = os.getenv("GITHUB_TOKEN", "")
+    if not token:
+        print("  SKIP topic scraper dispatch: GITHUB_TOKEN not set")
+        return
+    keywords = (classification.get("hook", "") or classification.get("summary", ""))[:80].strip()
+    if not keywords:
+        print("  SKIP topic scraper dispatch: no keywords extracted")
+        return
+    payload = json.dumps({"ref": "main", "inputs": {"keywords": keywords}}).encode()
+    req = urllib.request.Request(
+        "https://api.github.com/repos/priihigashi/oak-park-ai-hub/actions/workflows/topic_scraper.yml/dispatches",
+        data=payload,
+        headers={
+            "Authorization": f"Bearer {token}",
+            "Accept": "application/vnd.github+json",
+            "Content-Type": "application/json",
+        },
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=10):
+            print(f"  ✅ Topic Cluster Scraper triggered (keywords: {keywords!r})")
+    except Exception as e:
+        print(f"  ⚠️  Topic scraper dispatch failed (non-fatal): {e}")
+
+
 def run_content(args, transcript):
     print("\n[CONTENT] Running classification...")
     cl = analyze_content(transcript, args.url, args.notes or "")
     sid = args.story_id or f"CNT-{datetime.now().strftime('%Y%m%d%H%M')}"
     update_inspiration_library(args.url, transcript, cl)
     create_calendar_task(sid, args.project, args.url, "", transcript[:400], args.notes or "")
+    # Auto-trigger Topic Cluster Scraper for Brazil captures
+    if cl.get("niche") == "Brazil" and os.getenv("APIFY_API_KEY"):
+        _trigger_topic_scraper(cl)
     print(f"\n{'='*50}\nCONTENT CAPTURE DONE\nNiche: {cl.get('niche')}\nType: {cl.get('content_type')}\nStatus: {cl.get('classification')}\n{'='*50}")
 
 
