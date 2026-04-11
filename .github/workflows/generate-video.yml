@@ -1,0 +1,57 @@
+name: Generate Video
+
+on:
+  workflow_dispatch:
+    inputs:
+      video_type:
+        description: 'Video type: talking-head | house-tour | walk-person | job-site | from-scratch'
+        required: true
+        default: 'job-site'
+      prompt:
+        description: 'Video generation prompt (full Kling/HeyGen/Veo prompt)'
+        required: true
+      image_url:
+        description: 'Reference image URL (required for talking-head and job-site)'
+        required: false
+        default: ''
+      avatar_id:
+        description: 'HeyGen avatar ID (for talking-head without image URL)'
+        required: false
+        default: ''
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests google-auth google-auth-httplib2 google-api-python-client
+
+      - name: Submit video generation
+        env:
+          HEYGEN_API_KEY: ${{ secrets.HEYGEN_API_KEY }}
+          VEO_API_KEY: ${{ secrets.VEO_API_KEY }}
+          KLING_API_KEY: ${{ secrets.KLING_API_KEY }}
+        run: |
+          python scripts/submit_video.py \
+            --type "${{ github.event.inputs.video_type }}" \
+            --prompt "${{ github.event.inputs.prompt }}" \
+            ${{ github.event.inputs.image_url != '' && format('--image-url "{0}"', github.event.inputs.image_url) || '' }} \
+            ${{ github.event.inputs.avatar_id != '' && format('--avatar-id "{0}"', github.event.inputs.avatar_id) || '' }} \
+            | tee /tmp/video_result.json
+
+      - name: Save result
+        uses: actions/upload-artifact@v4
+        with:
+          name: video-job-${{ github.run_id }}
+          path: /tmp/video_result.json
+          retention-days: 7
