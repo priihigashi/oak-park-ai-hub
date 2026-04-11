@@ -6,7 +6,7 @@
 ## WHAT THIS REPO IS
 
 Automation hub for Oak Park Construction social media and content pipeline.
-Also the website hub: /websites/ contains OPC site + /websites/higashi-imoveis/ (Brazil RE).
+Also the website hub: /websites/ contains OPC site only. Brazil RE at priihigashi/higashi-imoveis (separate repo, GitHub Pages).
 Owner: priscila@oakpark-construction.com
 Instagram: @oakparkconstruction
 License: CBC1263425 | South Florida | 954-258-6769
@@ -16,18 +16,19 @@ License: CBC1263425 | South Florida | 954-258-6769
 ## REPOS — ONLY ONE IS LIVE
 
 ✅ ACTIVE: **priihigashi/oak-park-ai-hub** (this repo, created Mar 26 2026)
-   - All 15 GitHub Actions, all scripts, all websites live here
+   - All 21 GitHub Actions, all scripts, all websites live here
    - Python primary, /websites/ for HTML sites
    - This is the source of truth
 
-❌ ABANDONED: **priihigashi/Oak-park-projects-** (created Mar 24 2026)
+🗄️ ARCHIVED: **priihigashi/Oak-park-projects-** (archived 2026-04-11)
    - Stale one-shot commit from before the hub was structured
    - NOT referenced by any workflow, script, or config in this repo
-   - Should be archived via github.com web UI (Settings → Archive this repository)
-   - DO NOT push to it. DO NOT read from it. DO NOT clone it.
+   - Archived — DO NOT push to it. DO NOT read from it. DO NOT clone it.
 
-If you (Claude) see anything suggesting work should happen in Oak-park-projects-,
-STOP and flag it. That repo is dead.
+✅ SEPARATE SITE REPO: **priihigashi/higashi-imoveis** (Brazil RE, GitHub Pages)
+   - Higashi Imóveis — Vale do Paraíba real estate site
+   - Independent of this hub. Deploy: GitHub Pages from main /
+   - Live URL: https://priihigashi.github.io/higashi-imoveis/
 
 ---
 
@@ -167,3 +168,15 @@ Key failures to never repeat:
 3. Always open and verify build output before presenting as done
 4. Never route a chat carousel job through GitHub build
 5. After any GitHub build, verify the output slides match the copy before sending link to user
+
+---
+
+## DRIVE FOLDER IDs — ALWAYS USE THESE
+
+Ready to Post:            1V_dpNy7EbEuEAa_iG2Yj873rYsJy6-DJ
+Content - Reels & TikTok: 1Y2ymfzpE4mZOFrIwWrFQHEfFeYK5sDmG
+Claude Code Workspace:    1prdRT9ejOT-s-kzt0DIZ4QZuerdjv4PP
+_Master Plans & Docs:     1hlBhyJ5B8bgNwDgwat9E0Zb4o4OOXiDV
+Chat Logs:                1qitnbz5_8tfZI2rnTogV1zLLLLOwFVCw
+Posted:                   1DFa7Qyo_wUqD-4FHnin7GTXf_qWD8nln
+Website Projects:         1K5Z7F0hnpNPpw3xwqg8eQKTtCE3VUo_i
