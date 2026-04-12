@@ -5,10 +5,16 @@ capture_pipeline.py
 Capture Pipeline v2 — runs via GitHub Actions, triggered from phone.
 
 WHAT IT DOES:
-  1. Downloads audio from Instagram/TikTok/YouTube using yt-dlp
-  2. Transcribes with OpenAI Whisper API (whisper-1)
-  3. Saves transcript locally (uploaded as artifact)
-  4. Routes based on --project:
+  1. Fetches reel metadata via APIFY API (creator name, caption, likes, etc.)
+     FYI: We use Apify (apify/instagram-scraper with directUrls) for IG metadata.
+     yt-dlp handles audio download, but Apify gets us the caption, creator
+     handle, view count, and other metadata yt-dlp doesn't return.
+     API key: APIFY_API_KEY in GitHub Secrets.
+     Console: https://console.apify.com/account/integrations
+  2. Downloads audio from Instagram/TikTok/YouTube using yt-dlp
+  3. Transcribes with OpenAI Whisper API (whisper-1)
+  4. Saves transcript locally (uploaded as artifact)
+  5. Routes based on --project:
      book      → Claude fact-checks → story doc in The Book Drive folder
                 → Book Tracker Stories tab → Calendar task
      sovereign → Claude analyses   → study doc in SOVEREIGN Drive folder
@@ -16,10 +22,16 @@ WHAT IT DOES:
      content   → Claude classifies niche → Inspiration Library tab
                 → Calendar task
 
+CREDITS / ATTRIBUTION:
+  When --credits flag is set, the pipeline fetches the original creator's info
+  via Apify and includes it in the output so captions can give proper credit.
+  Fields saved: creator handle, creator name, original caption, source URL.
+
 REQUIRED ENV VARS (all stored as GitHub Secrets in oak-park-ai-hub):
   OPENAI_API_KEY
   ANTHROPIC_API_KEY
   GOOGLE_SA_KEY   (base64-encoded service account JSON — same secret used by other workflows)
+  APIFY_API_KEY   — Used for fetching reel metadata (creator, caption, stats)
 """
 
 import os
@@ -30,6 +42,8 @@ import argparse
 import tempfile
 import base64
 import subprocess
+import time
+import requests
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -43,6 +57,10 @@ except ImportError:
 
 OPENAI_API_KEY     = os.getenv("OPENAI_API_KEY", "")
 ANTHROPIC_API_KEY  = os.getenv("ANTHROPIC_API_KEY", "")
+# FYI: Apify API is used to fetch reel metadata (creator, caption, stats).
+# Key stored in GitHub Secrets as APIFY_API_KEY.
+# Get yours at: https://console.apify.com/account/integrations
+APIFY_API_KEY      = os.getenv("APIFY_API_KEY", "")
 
 # Spreadsheet IDs — hardcoded as defaults, can override via env
 BOOK_TRACKER_ID    = os.getenv("BOOK_TRACKER_ID",    "1SeDFDisb0uNeyfyv5fCS_0x5EbkJRcFeS6CGuUmlH7c")
@@ -117,6 +135,98 @@ def get_calendar_service():
     except Exception as e:
         print(f"  SKIP Calendar: {e}")
         return None
+
+
+# ─── STEP 0: APIFY METADATA ──────────────────────────────────────────────────
+# FYI: This step uses the Apify API to fetch reel metadata BEFORE downloading.
+# It grabs: creator handle, creator name, caption, likes, views, comments count.
+# This is how we get credits info for attribution in captions.
+# Actor: apify/instagram-scraper with directUrls input.
+# If APIFY_API_KEY is not set, this step is skipped (non-fatal).
+
+APIFY_BASE = "https://api.apify.com/v2"
+
+def fetch_reel_metadata(url: str) -> dict:
+    """Fetch reel metadata via Apify. Returns dict with creator info + stats.
+
+    FYI: Uses apify/instagram-scraper actor with directUrls.
+    Non-fatal — returns empty dict if Apify unavailable or fails.
+    """
+    if not APIFY_API_KEY:
+        print("  SKIP Apify metadata: APIFY_API_KEY not set")
+        print("  (Get key at: https://console.apify.com/account/integrations)")
+        return {}
+
+    if "instagram.com" not in url:
+        print("  SKIP Apify metadata: not an Instagram URL")
+        return {}
+
+    print(f"\n[0/3] Fetching reel metadata via Apify...")
+    actor_id = "apify/instagram-scraper"
+    input_data = {
+        "directUrls": [url.split("?")[0]],
+        "resultsType": "posts",
+        "resultsLimit": 1,
+        "addParentData": False,
+        "proxy": {"useApifyProxy": True, "apifyProxyGroups": ["RESIDENTIAL"]},
+    }
+
+    try:
+        run_resp = requests.post(
+            f"{APIFY_BASE}/acts/{actor_id}/runs",
+            params={"token": APIFY_API_KEY},
+            json=input_data,
+            timeout=30,
+        )
+        run_resp.raise_for_status()
+        run_id = run_resp.json()["data"]["id"]
+        print(f"  Apify run started: {run_id}")
+
+        # Poll until finished (max ~2 minutes)
+        for attempt in range(12):
+            time.sleep(10)
+            status_resp = requests.get(
+                f"{APIFY_BASE}/actor-runs/{run_id}",
+                params={"token": APIFY_API_KEY},
+                timeout=15,
+            )
+            status = status_resp.json()["data"]["status"]
+            if status in ("SUCCEEDED", "FAILED", "ABORTED", "TIMED-OUT"):
+                break
+
+        if status != "SUCCEEDED":
+            print(f"  WARNING: Apify run ended with status: {status}")
+            return {}
+
+        items_resp = requests.get(
+            f"{APIFY_BASE}/actor-runs/{run_id}/dataset/items",
+            params={"token": APIFY_API_KEY, "limit": 1, "format": "json"},
+            timeout=30,
+        )
+        items = items_resp.json()
+        if not items:
+            print("  WARNING: Apify returned no results")
+            return {}
+
+        item = items[0]
+        metadata = {
+            "creator_handle": item.get("ownerUsername", ""),
+            "creator_name": item.get("ownerFullName", ""),
+            "caption": item.get("caption", ""),
+            "likes": item.get("likesCount", 0),
+            "comments": item.get("commentsCount", 0),
+            "views": item.get("videoViewCount", 0),
+            "timestamp": item.get("timestamp", ""),
+            "source_url": url,
+        }
+        print(f"  Creator: @{metadata['creator_handle']} ({metadata['creator_name']})")
+        print(f"  Stats: {metadata['likes']} likes, {metadata['views']} views")
+        print(f"  Caption: {metadata['caption'][:100]}...")
+        return metadata
+
+    except Exception as e:
+        print(f"  WARNING Apify metadata (non-fatal): {e}")
+        return {}
 
 
 # ─── STEP 1: DOWNLOAD ─────────────────────────────────────────────────────────
@@ -527,6 +637,8 @@ def main():
     parser.add_argument("--project", choices=["book", "sovereign", "content"], default="book")
     parser.add_argument("--story-id", default=None)
     parser.add_argument("--notes", default="")
+    parser.add_argument("--credits", action="store_true",
+                        help="Fetch creator info via Apify for caption attribution")
     args = parser.parse_args()
 
     if not args.story_id:
@@ -534,6 +646,19 @@ def main():
         args.story_id = f"{prefix}-{datetime.now().strftime('%Y%m%d%H%M')}"
 
     print(f"\n{'='*50}\nCAPTURE PIPELINE v2\nURL: {args.url}\nProject: {args.project.upper()}\nStory ID: {args.story_id}\n{'='*50}")
+
+    # Step 0: Fetch reel metadata via Apify (creator info for credits)
+    # FYI: This uses the Apify API — see docstring at top of file.
+    metadata = {}
+    if args.credits:
+        metadata = fetch_reel_metadata(args.url)
+        if metadata:
+            args.notes = (args.notes or "") + (
+                f"\n\nCREDITS — Original creator: @{metadata['creator_handle']}"
+                f" ({metadata['creator_name']})"
+                f"\nOriginal caption: {metadata['caption'][:200]}"
+                f"\nSource: {metadata['source_url']}"
+            )
 
     with tempfile.TemporaryDirectory() as tmp:
         audio = download_audio(args.url, tmp)
@@ -546,6 +671,15 @@ def main():
         run_sovereign(args, transcript)
     else:
         run_content(args, transcript)
+
+    # Print credits summary if available
+    if metadata:
+        print(f"\n{'='*50}")
+        print("CREDITS FOR CAPTION:")
+        print(f"  Creator: @{metadata['creator_handle']}")
+        print(f"  Name: {metadata['creator_name']}")
+        print(f"  Source: {metadata['source_url']}")
+        print(f"{'='*50}")
 
 
 if __name__ == "__main__":

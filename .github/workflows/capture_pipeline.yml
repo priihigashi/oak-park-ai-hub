@@ -28,6 +28,11 @@ on:
         required: false
         type: string
         default: ""
+      credits:
+        description: "Fetch creator info via Apify for caption attribution"
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   capture:
@@ -59,7 +64,8 @@ jobs:
             gspread \
             google-auth \
             google-api-python-client \
-            python-dotenv
+            python-dotenv \
+            requests
 
       - name: Run capture pipeline
         env:
@@ -77,6 +83,10 @@ jobs:
 
           if [ -n "${{ inputs.notes }}" ]; then
             CMD="$CMD --notes \"${{ inputs.notes }}\""
+          fi
+
+          if [ "${{ inputs.credits }}" = "true" ]; then
+            CMD="$CMD --credits"
           fi
 
           echo "Running: $CMD"
