@@ -8,7 +8,7 @@ on:
         required: true
         type: string
       filename:
-        description: 'Output filename (without extension, e.g. agent_kitchen)'
+        description: 'Output filename (without extension)'
         required: true
         default: 'generated_image'
         type: string
@@ -17,12 +17,7 @@ on:
         required: false
         default: '3:4'
         type: choice
-        options:
-          - '1:1'
-          - '3:4'
-          - '4:3'
-          - '16:9'
-          - '9:16'
+        options: ['1:1','3:4','4:3','16:9','9:16']
       drive_folder_id:
         description: 'Google Drive folder ID to save image'
         required: false
@@ -36,111 +31,90 @@ jobs:
       - name: Generate image via inference.sh
         id: generate
         run: |
-          echo "Generating image via inference.sh..."
+          pip install -q inferencesh requests
           
-          PROMPT="${{ inputs.prompt }}"
+          python3 << 'PYEOF'
+          import os, json, requests, time
           
-          RESPONSE=$(curl -s -X POST "https://api.inference.sh/v1/runs" \
-            -H "Authorization: Bearer ${{ secrets.PRI_OP_INFSH_API_KEY }}" \
-            -H "Content-Type: application/json" \
-            -d "{
-              \"app\": \"google/gemini-3-1-flash-image-preview\",
-              \"input\": {
-                \"prompt\": $(python3 -c 'import json,sys; print(json.dumps(sys.stdin.read().strip()))' <<< \"$PROMPT\"),
-                \"aspect_ratio\": \"${{ inputs.aspect_ratio }}\",
-                \"resolution\": \"2K\"
+          api_key = os.environ['PRI_OP_INFSH_API_KEY']
+          prompt = os.environ['PROMPT']
+          aspect_ratio = os.environ['ASPECT_RATIO']
+          
+          headers = {
+              "Authorization": f"Bearer {api_key}",
+              "Content-Type": "application/json"
+          }
+          
+          payload = {
+              "app": "google/gemini-3-1-flash-image-preview",
+              "input": {
+                  "prompt": prompt,
+                  "aspect_ratio": aspect_ratio,
+                  "resolution": "2K"
               }
-            }")
+          }
           
-          echo "Full response: $RESPONSE"
+          print(f"Calling inference.sh API...")
+          resp = requests.post("https://api.inference.sh/apps/run", json=payload, headers=headers, timeout=120)
+          print(f"Status: {resp.status_code}")
+          data = resp.json()
+          print(f"Response keys: {list(data.keys())}")
           
-          # Extract run ID if async, or image URL if sync
-          RUN_ID=$(echo "$RESPONSE" | python3 -c "
-          import sys, json
-          try:
-              d = json.load(sys.stdin)
-              print(d.get('id', d.get('run_id', '')))
-          except: print('')
-          " 2>/dev/null)
+          # Poll if async (task-based)
+          task_id = data.get('id') or data.get('task_id')
+          image_url = None
           
-          IMAGE_URL=$(echo "$RESPONSE" | python3 -c "
-          import sys, json
-          try:
-              d = json.load(sys.stdin)
-              # Try direct output
-              out = d.get('output', {})
-              if isinstance(out, dict):
-                  imgs = out.get('images', [])
-                  if imgs: print(imgs[0].get('url', imgs[0]) if isinstance(imgs[0], dict) else imgs[0]); exit()
-              # Try nested
-              for key in ['image_url', 'url', 'image']:
-                  if key in d: print(d[key]); exit()
-          except: pass
-          print('')
-          " 2>/dev/null)
+          if task_id and not data.get('output'):
+              print(f"Task ID: {task_id} — polling...")
+              for i in range(30):
+                  time.sleep(10)
+                  poll = requests.get(f"https://api.inference.sh/tasks/{task_id}", headers=headers, timeout=30)
+                  pdata = poll.json()
+                  status = pdata.get('status', '')
+                  print(f"Poll {i+1}: {status}")
+                  if status in ('completed', 'succeeded', 'success', 'done'):
+                      data = pdata
+                      break
+                  elif status in ('failed', 'error', 'cancelled'):
+                      print(f"Task failed: {pdata}")
+                      exit(1)
           
-          echo "run_id=$RUN_ID" >> $GITHUB_OUTPUT
-          echo "image_url=$IMAGE_URL" >> $GITHUB_OUTPUT
-          echo "Run ID: $RUN_ID | Image URL: $IMAGE_URL"
-
-      - name: Poll for result (if async)
-        id: poll
-        if: steps.generate.outputs.run_id != '' && steps.generate.outputs.image_url == ''
-        run: |
-          RUN_ID="${{ steps.generate.outputs.run_id }}"
-          echo "Polling run $RUN_ID..."
-          
-          for i in $(seq 1 30); do
-            sleep 10
-            RESP=$(curl -s "https://api.inference.sh/v1/runs/$RUN_ID" \
-              -H "Authorization: Bearer ${{ secrets.PRI_OP_INFSH_API_KEY }}")
-            
-            STATUS=$(echo "$RESP" | python3 -c "import sys,json; print(json.load(sys.stdin).get('status',''))" 2>/dev/null)
-            echo "Attempt $i — status: $STATUS"
-            
-            if [ "$STATUS" = "completed" ] || [ "$STATUS" = "succeeded" ] || [ "$STATUS" = "success" ]; then
-              IMAGE_URL=$(echo "$RESP" | python3 -c "
-          import sys, json
-          d = json.load(sys.stdin)
-          out = d.get('output', {})
+          # Extract image URL
+          out = data.get('output', {})
           if isinstance(out, dict):
               imgs = out.get('images', [])
-              if imgs: print(imgs[0].get('url', imgs[0]) if isinstance(imgs[0], dict) else imgs[0]); exit()
-          for key in ['image_url','url','image']:
-              if key in d: print(d[key]); exit()
-          print('')
-              " 2>/dev/null)
-              echo "image_url=$IMAGE_URL" >> $GITHUB_OUTPUT
-              echo "Got image: $IMAGE_URL"
-              break
-            elif [ "$STATUS" = "failed" ] || [ "$STATUS" = "error" ]; then
-              echo "Run failed: $RESP"
-              exit 1
-            fi
-          done
+              if imgs:
+                  img = imgs[0]
+                  image_url = img.get('url', img) if isinstance(img, dict) else img
+          elif isinstance(out, list) and out:
+              image_url = out[0]
+          
+          if not image_url:
+              for key in ['image_url', 'url', 'image']:
+                  if key in data:
+                      image_url = data[key]
+                      break
+          
+          print(f"Image URL: {image_url}")
+          
+          # Write to env file for next steps
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f"image_url={image_url or ''}\n")
+              f.write(f"task_id={task_id or ''}\n")
+          PYEOF
+        env:
+          PRI_OP_INFSH_API_KEY: ${{ secrets.PRI_OP_INFSH_API_KEY }}
+          PROMPT: ${{ inputs.prompt }}
+          ASPECT_RATIO: ${{ inputs.aspect_ratio }}
 
       - name: Download image
-        id: download
+        if: steps.generate.outputs.image_url != ''
         run: |
-          # Use whichever step got the URL
-          IMAGE_URL="${{ steps.generate.outputs.image_url }}"
-          if [ -z "$IMAGE_URL" ]; then
-            IMAGE_URL="${{ steps.poll.outputs.image_url }}"
-          fi
-          
-          if [ -z "$IMAGE_URL" ]; then
-            echo "No image URL found — generation may have failed"
-            exit 1
-          fi
-          
-          echo "Downloading from: $IMAGE_URL"
-          curl -L "$IMAGE_URL" -o /tmp/${{ inputs.filename }}.jpg
-          SIZE=$(du -k /tmp/${{ inputs.filename }}.jpg | cut -f1)
-          echo "Downloaded: ${SIZE}KB"
-          echo "final_url=$IMAGE_URL" >> $GITHUB_OUTPUT
+          curl -L "${{ steps.generate.outputs.image_url }}" -o /tmp/${{ inputs.filename }}.jpg
+          echo "Downloaded: $(du -k /tmp/${{ inputs.filename }}.jpg | cut -f1)KB"
 
       - name: Upload to Google Drive
-        if: inputs.drive_folder_id != ''
+        if: steps.generate.outputs.image_url != '' && inputs.drive_folder_id != ''
         env:
           GOOGLE_SA_KEY: ${{ secrets.GOOGLE_SA_KEY }}
         run: |
@@ -151,21 +125,18 @@ jobs:
           from googleapiclient.discovery import build
           from googleapiclient.http import MediaFileUpload
 
-          sa_key = json.loads(os.environ['GOOGLE_SA_KEY'])
           creds = service_account.Credentials.from_service_account_info(
-              sa_key, scopes=['https://www.googleapis.com/auth/drive'])
+              json.loads(os.environ['GOOGLE_SA_KEY']),
+              scopes=['https://www.googleapis.com/auth/drive'])
           drive = build('drive', 'v3', credentials=creds)
 
           filename = '${{ inputs.filename }}.jpg'
-          folder_id = '${{ inputs.drive_folder_id }}'
-
-          file_metadata = {'name': filename, 'parents': [folder_id]}
-          media = MediaFileUpload(f'/tmp/{filename}', mimetype='image/jpeg')
           result = drive.files().create(
-              body=file_metadata, media_body=media,
+              body={'name': filename, 'parents': ['${{ inputs.drive_folder_id }}']},
+              media_body=MediaFileUpload(f'/tmp/{filename}', mimetype='image/jpeg'),
               supportsAllDrives=True, fields='id,name,webViewLink'
           ).execute()
-          print(f"Saved: {result['name']}")
+          print(f"Saved to Drive: {result['name']}")
           print(f"Link: {result['webViewLink']}")
           EOF
 
@@ -174,5 +145,4 @@ jobs:
         run: |
           echo "## Image Generation" >> $GITHUB_STEP_SUMMARY
           echo "- **File:** ${{ inputs.filename }}.jpg" >> $GITHUB_STEP_SUMMARY
-          echo "- **Aspect ratio:** ${{ inputs.aspect_ratio }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Drive folder:** ${{ inputs.drive_folder_id }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Image URL:** ${{ steps.generate.outputs.image_url }}" >> $GITHUB_STEP_SUMMARY
