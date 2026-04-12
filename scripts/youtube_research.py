@@ -110,32 +110,46 @@ def get_transcript(video_id: str) -> str:
 
 # ── CLAUDE ANALYSIS ───────────────────────────────────────────────────────────
 def analyze_with_claude(video: dict, transcript: str, research_context: str) -> dict:
-    """Claude analyzes a single video transcript for the research context"""
+    """Claude analyzes a video — uses transcript if available, falls back to metadata only"""
+    if not ANTHROPIC_API_KEY:
+        return {"summary": "No API key", "watch_priority": "low", "relevance_score": 0}
     client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+    
+    has_transcript = transcript and "[transcript unavailable" not in transcript
+    
+    if has_transcript:
+        content_block = f"TRANSCRIPT:\n{transcript[:4000]}"
+        mode_note = "You have the full transcript to analyze."
+    else:
+        content_block = f"NOTE: Transcript unavailable. Analyze based on title, channel, and date only."
+        mode_note = "No transcript — use title and channel to infer what this video likely covers."
     
     prompt = f"""You are analyzing a YouTube video for research on: {research_context}
 
 Video: "{video['title']}" by {video.get('uploader', 'unknown')}
+Published: {video.get('upload_date', 'unknown')}
 URL: {video['url']}
 
-TRANSCRIPT:
-{transcript[:4000]}
+{content_block}
+
+{mode_note}
 
 Extract and return JSON with:
 {{
-  "summary": "2-3 sentence summary of what this video shows/teaches",
-  "tools_used": ["list of AI tools, software, platforms mentioned"],
+  "summary": "2-3 sentence summary of what this video shows/teaches (infer from title if no transcript)",
+  "tools_used": ["list of AI tools, software, platforms mentioned or likely mentioned"],
   "technique": "specific technique or workflow demonstrated",
-  "quality_assessment": "honest assessment of result quality shown",
-  "key_tips": ["up to 5 actionable tips extracted"],
-  "use_case": "what this is best for (talking head / house tour / job site / etc)",
+  "quality_assessment": "honest assessment — note if this is inferred from title only",
+  "key_tips": ["up to 3 likely actionable tips based on title/topic"],
+  "use_case": "what this is best for",
   "relevant_to_us": true/false,
   "relevance_reason": "why or why not relevant to Oak Park Construction / Hig Negocios",
   "watch_priority": "high / medium / low",
-  "relevance_score": 7
+  "relevance_score": 5,
+  "has_transcript": {str(has_transcript).lower()}
 }}
 
-relevance_score is 1-10: how useful is this for our use case (10 = immediately implementable).
+relevance_score is 1-10. If no transcript, cap at 6 (needs manual verification).
 Return only valid JSON, no markdown."""
 
     try:
@@ -146,7 +160,7 @@ Return only valid JSON, no markdown."""
         )
         return json.loads(msg.content[0].text)
     except Exception as e:
-        return {"summary": f"Analysis failed: {e}", "watch_priority": "low", "relevance_score": 0}
+        return {"summary": f"Analysis failed: {e}", "watch_priority": "low", "relevance_score": 0, "has_transcript": has_transcript}
 
 # ── KEYWORD EXPANSION ─────────────────────────────────────────────────────────
 def expand_keywords(topic: str, results_so_far: list, round_num: int) -> list[str]:
@@ -288,12 +302,9 @@ def run(topic: str, queries: list[str], max_per_query: int = 5):
                 print(f"  [{video['id']}] {video['title'][:60]}")
                 transcript = get_transcript(video["id"])
                 
-                if "[transcript unavailable" in transcript:
-                    err = transcript.replace("[transcript unavailable: ", "").rstrip("]")[:100]
-                    print(f"    No transcript ({err}) — skipping")
-                    continue
-                
-                print(f"    Analyzing with Claude...")
+                has_transcript = "[transcript unavailable" not in transcript
+                mode = "with transcript" if has_transcript else "metadata only"
+                print(f"    Analyzing ({mode})...")
                 analysis = analyze_with_claude(video, transcript, topic)
                 
                 result = {**video, "analysis": analysis, "transcript_excerpt": transcript[:500]}
