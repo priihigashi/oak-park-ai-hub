@@ -1,0 +1,22 @@
+name: Email Resurface
+
+on:
+  schedule:
+    - cron: '0 12 * * *'   # 8AM ET (UTC-4 in summer, UTC-5 in winter)
+  workflow_dispatch:        # manual trigger for testing
+
+jobs:
+  resurface:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run resurface
+        env:
+          SHEETS_TOKEN: ${{ secrets.PRI_OP_SHEETS_TOKEN }}
+        run: python scripts/email_resurface.py
