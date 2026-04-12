@@ -95,12 +95,18 @@ def search_youtube(query: str, max_results: int = 5) -> list[dict]:
 # ── TRANSCRIPT ────────────────────────────────────────────────────────────────
 def get_transcript(video_id: str) -> str:
     """Pull transcript via youtube-transcript-api (no download)"""
-    try:
-        api = YouTubeTranscriptApi()
-        transcript = api.fetch(video_id, languages=["en", "pt", "es"])
-        return " ".join(t.text for t in transcript)
-    except Exception as e:
-        return f"[transcript unavailable: {e}]"
+    last_error = None
+    for attempt, kwargs in enumerate([
+        {"languages": ["en", "en-US", "en-GB", "pt", "es"]},  # preferred languages
+        {},  # any available (includes auto-generated)
+    ]):
+        try:
+            api = YouTubeTranscriptApi()
+            transcript = api.fetch(video_id, **kwargs)
+            return " ".join(t.text for t in transcript)
+        except Exception as e:
+            last_error = e
+    return f"[transcript unavailable: {last_error}]"
 
 # ── CLAUDE ANALYSIS ───────────────────────────────────────────────────────────
 def analyze_with_claude(video: dict, transcript: str, research_context: str) -> dict:
@@ -283,7 +289,8 @@ def run(topic: str, queries: list[str], max_per_query: int = 5):
                 transcript = get_transcript(video["id"])
                 
                 if "[transcript unavailable" in transcript:
-                    print(f"    No transcript — skipping")
+                    err = transcript.replace("[transcript unavailable: ", "").rstrip("]")[:100]
+                    print(f"    No transcript ({err}) — skipping")
                     continue
                 
                 print(f"    Analyzing with Claude...")
