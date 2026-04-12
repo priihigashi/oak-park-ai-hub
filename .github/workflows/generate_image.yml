@@ -74,7 +74,6 @@ jobs:
 
               if status == COMPLETED:
                   print(f"COMPLETED — extracting image URL from output")
-                  # output can be: dict with images[], list of URLs, or direct URL string
                   if isinstance(output, dict):
                       imgs = output.get('images', output.get('image', []))
                       if isinstance(imgs, list) and imgs:
@@ -110,7 +109,7 @@ jobs:
       - name: Upload to Google Drive
         if: steps.generate.outputs.image_url != '' && inputs.drive_folder_id != ''
         env:
-          GOOGLE_SA_KEY: ${{ secrets.GOOGLE_SA_KEY }}
+          PRI_OP_DRIVE_SA_KEY: ${{ secrets.PRI_OP_DRIVE_SA_KEY }}
         run: |
           pip install -q google-auth google-api-python-client
           python3 << 'EOF'
@@ -120,7 +119,7 @@ jobs:
           from googleapiclient.http import MediaFileUpload
 
           creds = service_account.Credentials.from_service_account_info(
-              json.loads(os.environ['GOOGLE_SA_KEY']),
+              json.loads(os.environ['PRI_OP_DRIVE_SA_KEY']),
               scopes=['https://www.googleapis.com/auth/drive'])
           drive = build('drive', 'v3', credentials=creds)
 
