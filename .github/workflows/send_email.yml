@@ -1,0 +1,37 @@
+name: Send Email (on demand)
+
+on:
+  workflow_dispatch:
+    inputs:
+      to:
+        description: 'Recipient email address'
+        required: true
+        default: 'priscila@oakpark-construction.com'
+      subject:
+        description: 'Email subject'
+        required: true
+      body:
+        description: 'Email body (plain text)'
+        required: true
+      cc:
+        description: 'CC address (optional)'
+        required: false
+        default: ''
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: priscila@oakpark-construction.com
+          password: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
+          to: ${{ github.event.inputs.to }}
+          cc: ${{ github.event.inputs.cc }}
+          from: Oak Park AI <priscila@oakpark-construction.com>
+          subject: ${{ github.event.inputs.subject }}
+          body: ${{ github.event.inputs.body }}
