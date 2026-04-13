@@ -1,0 +1,97 @@
+name: Archive Stale Inspiration Items
+
+# Runs every Monday at 4 AM ET — marks Inspiration Library rows
+# older than 7 days with NEEDS_REVIEW status as ARCHIVED.
+# Sends a digest email with what was archived + what's still active.
+
+on:
+  schedule:
+    - cron: "0 8 * * 1"  # 8 UTC = 4 AM ET on Mondays
+  workflow_dispatch: {}   # Manual trigger for testing
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install gspread google-auth
+
+      - name: Archive stale rows + send digest
+        env:
+          GOOGLE_SA_KEY: ${{ secrets.GOOGLE_SA_KEY }}
+          PRI_OP_GMAIL_APP_PASSWORD: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
+        run: |
+          python3 - <<'PYEOF'
+          import os, json, base64, smtplib
+          from datetime import datetime, timedelta
+          from email.mime.text import MIMEText
+
+          import gspread
+          from google.oauth2.service_account import Credentials
+
+          # ── Auth ──
+          sa_b64 = os.environ["GOOGLE_SA_KEY"]
+          sa_info = json.loads(base64.b64decode(sa_b64.strip() + "=="))
+          creds = Credentials.from_service_account_info(
+              sa_info, scopes=["https://www.googleapis.com/auth/spreadsheets"]
+          )
+          gc = gspread.authorize(creds)
+
+          # ── Open Inspiration Library ──
+          SHEET_ID = "1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU"
+          sh = gc.open_by_key(SHEET_ID)
+          lib = sh.worksheet("📥 Inspiration Library")
+          rows = lib.get_all_values()
+
+          cutoff = datetime.now() - timedelta(days=7)
+          archived = []
+          still_active = []
+
+          # Skip header row (row 0)
+          for i, row in enumerate(rows[1:], start=2):
+              if len(row) < 6:
+                  continue
+              date_str = row[0].strip()
+              status = row[5].strip()
+
+              try:
+                  row_date = datetime.strptime(date_str, "%Y-%m-%d")
+              except ValueError:
+                  continue
+
+              if status == "NEEDS_REVIEW" and row_date < cutoff:
+                  lib.update_cell(i, 6, "ARCHIVED")
+                  archived.append(f"  - Row {i}: {row[2][:60]} ({date_str})")
+              elif status not in ("ARCHIVED", "NOT_RELEVANT"):
+                  still_active.append(f"  - Row {i}: {row[2][:60]} ({date_str}) [{status}]")
+
+          # ── Email digest ──
+          gmail_pw = os.environ.get("PRI_OP_GMAIL_APP_PASSWORD", "")
+          if gmail_pw:
+              body = f"Weekly Inspiration Library cleanup — {datetime.now().strftime('%Y-%m-%d')}\n\n"
+              if archived:
+                  body += f"ARCHIVED ({len(archived)} items older than 7 days):\n" + "\n".join(archived) + "\n\n"
+              else:
+                  body += "Nothing to archive this week.\n\n"
+              body += f"STILL ACTIVE ({len(still_active)} items):\n" + "\n".join(still_active[:20])
+              if len(still_active) > 20:
+                  body += f"\n  ... and {len(still_active) - 20} more"
+
+              msg = MIMEText(body)
+              msg["Subject"] = f"Inspiration Library — {len(archived)} archived, {len(still_active)} active"
+              msg["From"] = "priscila@oakpark-construction.com"
+              msg["To"] = "priscila@oakpark-construction.com"
+              with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
+                  smtp.login("priscila@oakpark-construction.com", gmail_pw)
+                  smtp.send_message(msg)
+              print(f"Digest sent: {len(archived)} archived, {len(still_active)} active")
+          else:
+              print(f"Done: {len(archived)} archived, {len(still_active)} active (no email — PRI_OP_GMAIL_APP_PASSWORD not set)")
+          PYEOF

@@ -75,6 +75,9 @@ CONTENT_HUB_FOLDER_ID     = "1p7s2Q7kCxzKdvaVRFxSoYAQ-IG_NhTqq"  # Drive > Marke
 # Spreadsheet IDs for content pipeline
 CONTENT_QUEUE_ID = "1C1CAZ8lSgeVLSSCYIg-D9XPJcSLHyIOh1okKtvhZZQg"  # Ideas Queue tab
 
+GMAIL_FROM     = "priscila@oakpark-construction.com"
+GMAIL_PASSWORD = os.getenv("PRI_OP_GMAIL_APP_PASSWORD", "")
+
 TRANSCRIPTS_DIR = Path("transcripts")
 TRANSCRIPTS_DIR.mkdir(exist_ok=True)
 
@@ -141,6 +144,28 @@ def get_calendar_service():
     except Exception as e:
         print(f"  SKIP Calendar: {e}")
         return None
+
+
+# ─── EMAIL NOTIFICATIONS ─────────────────────────────────────────────────────
+
+def send_notification_email(subject: str, body: str):
+    """Send email notification via Gmail SMTP. Non-fatal if unavailable."""
+    if not GMAIL_PASSWORD:
+        print("  SKIP email: PRI_OP_GMAIL_APP_PASSWORD not set")
+        return
+    import smtplib
+    from email.mime.text import MIMEText
+    try:
+        msg = MIMEText(body)
+        msg["Subject"] = subject
+        msg["From"] = GMAIL_FROM
+        msg["To"] = GMAIL_FROM
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
+            smtp.login(GMAIL_FROM, GMAIL_PASSWORD)
+            smtp.send_message(msg)
+        print(f"  Email sent: {subject}")
+    except Exception as e:
+        print(f"  WARNING email (non-fatal): {e}")
 
 
 # ─── STEP 0: APIFY METADATA ──────────────────────────────────────────────────
@@ -543,7 +568,7 @@ def update_book_tracker(story_id, url, doc_url, analysis, notes):
         print(f"  WARNING Sheets: {e}")
 
 
-def update_inspiration_library(url, transcript, classification):
+def update_inspiration_library(url, transcript, classification, hub_url="", doc_url=""):
     gc = get_sheets_client()
     if not gc:
         return
@@ -559,6 +584,8 @@ def update_inspiration_library(url, transcript, classification):
             transcript[:300],
             classification.get("hook", ""),
             classification.get("notes", ""),
+            hub_url,       # J — Content Hub folder link
+            doc_url,       # K — Content Brief doc link
         ])
         print("  Inspiration Library updated")
     except Exception as e:
@@ -567,7 +594,7 @@ def update_inspiration_library(url, transcript, classification):
 
 # ─── CALENDAR ─────────────────────────────────────────────────────────────────
 
-def create_calendar_task(story_id, project, url, doc_url, preview, notes):
+def create_calendar_task(story_id, project, url, doc_url, preview, notes, hub_url=""):
     cal = get_calendar_service()
     if not cal:
         return
@@ -578,10 +605,13 @@ def create_calendar_task(story_id, project, url, doc_url, preview, notes):
         cal.events().insert(calendarId="primary", body={
             "summary": f"{label} — {story_id} — Review Required",
             "description": (
-                f"{label}: {story_id}\n\nSOURCE: {url}\n\nTRANSCRIPT PREVIEW:\n{preview[:400]}\n\n"
-                f"DRIVE DOC: {doc_url or 'check artifacts'}\n\nNOTES: {notes or 'None'}\n\n"
-                f"NEXT STEPS:\n1. Review story doc in Drive\n2. Verify sources manually\n"
-                f"3. If BOOK READY: move to editing queue"
+                f"{label}: {story_id}\n\nSOURCE: {url}\n\n"
+                f"CONTENT HUB: {hub_url or 'check Drive'}\n"
+                f"CONTENT BRIEF: {doc_url or 'check artifacts'}\n\n"
+                f"TRANSCRIPT PREVIEW:\n{preview[:400]}\n\n"
+                f"NOTES: {notes or 'None'}\n\n"
+                f"NEXT STEPS:\n1. Review content brief in Drive\n2. Pick carousel or reel idea\n"
+                f"3. Move to production"
             ),
             "start": {"dateTime": tomorrow.isoformat(), "timeZone": "America/New_York"},
             "end": {"dateTime": (tomorrow + timedelta(hours=1)).isoformat(), "timeZone": "America/New_York"},
@@ -873,7 +903,6 @@ def run_content(args, transcript):
     print("\n[CONTENT] Running classification...")
     cl = analyze_content(transcript, args.url, args.notes or "")
     sid = args.story_id or f"CNT-{datetime.now().strftime('%Y%m%d%H%M')}"
-    update_inspiration_library(args.url, transcript, cl)
 
     # Save raw transcript + resources to Content Hub (permanent home)
     hub_url = save_to_content_hub(sid, args.url, transcript, cl)
@@ -882,11 +911,31 @@ def run_content(args, transcript):
     title = (cl.get("summary") or sid)[:60].strip()
     folder_url, doc_url = create_content_workspace(sid, title, transcript, cl, args.url, args.notes or "")
 
-    create_calendar_task(sid, args.project, args.url, doc_url or "", transcript[:400], args.notes or "")
+    # Log to Inspiration Library WITH Drive links (must come after hub + workspace created)
+    update_inspiration_library(args.url, transcript, cl, hub_url=hub_url, doc_url=doc_url)
+
+    create_calendar_task(sid, args.project, args.url, doc_url or "", transcript[:400], args.notes or "", hub_url=hub_url)
     # Auto-trigger Topic Cluster Scraper for Brazil captures
     if cl.get("niche") == "Brazil" and os.getenv("APIFY_API_KEY"):
         _trigger_topic_scraper(cl)
-    print(f"\n{'='*50}\nCONTENT CAPTURE DONE\nNiche: {cl.get('niche')}\nType: {cl.get('content_type')}\nStatus: {cl.get('classification')}\nFolder: {folder_url or 'check artifacts'}\nBrief: {doc_url or 'check artifacts'}\n{'='*50}")
+
+    niche = cl.get("niche", "")
+    summary = cl.get("summary", title)
+    print(f"\n{'='*50}\nCONTENT CAPTURE DONE\nNiche: {niche}\nType: {cl.get('content_type')}\nStatus: {cl.get('classification')}\nFolder: {folder_url or 'check artifacts'}\nBrief: {doc_url or 'check artifacts'}\n{'='*50}")
+
+    # UX Fix: send completion email so Priscila knows it worked
+    send_notification_email(
+        subject=f"Capture done — {niche} | {summary[:50]}",
+        body=(
+            f"Content Hub: {hub_url or 'check Drive'}\n"
+            f"Content Brief: {doc_url or 'check artifacts'}\n"
+            f"Production Folder: {folder_url or 'check Drive'}\n"
+            f"Sheets: row added to Inspiration Library\n\n"
+            f"Source: {args.url}\n"
+            f"Niche: {niche}\n"
+            f"Transcript preview:\n{transcript[:400]}"
+        ),
+    )
 
 
 # ─── MAIN ─────────────────────────────────────────────────────────────────────
@@ -943,4 +992,14 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as exc:
+        import traceback
+        tb = traceback.format_exc()
+        print(f"\nFATAL ERROR:\n{tb}")
+        send_notification_email(
+            subject="CAPTURE FAILED — check GitHub Actions",
+            body=f"Pipeline crashed.\n\nError: {exc}\n\nTraceback:\n{tb}\n\nArgs: {' '.join(sys.argv[1:])}",
+        )
+        sys.exit(1)
