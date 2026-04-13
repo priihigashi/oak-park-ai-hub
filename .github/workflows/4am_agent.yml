@@ -26,14 +26,22 @@ jobs:
       - name: Install dependencies
         run: pip install anthropic google-auth google-auth-httplib2 google-api-python-client requests pytz
 
+      - name: Restore CLAUDE.md for mirror step
+        env:
+          CLAUDE_MD_CONTENT: ${{ secrets.CLAUDE_MD_CONTENT }}
+        run: |
+          mkdir -p ~/.claude
+          printf '%s' "$CLAUDE_MD_CONTENT" > ~/.claude/CLAUDE.md
+
       - name: Run 4AM Content Agent
         env:
-          APIFY_API_KEY:     ${{ secrets.APIFY_API_KEY }}
-          PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          GOOGLE_SA_KEY:     ${{ secrets.GOOGLE_SA_KEY }}
-          NTFY_TOPIC:        ${{ secrets.NTFY_TOPIC }}
-          GITHUB_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
+          APIFY_API_KEY:       ${{ secrets.APIFY_API_KEY }}
+          PEXELS_API_KEY:      ${{ secrets.PEXELS_API_KEY }}
+          YOUTUBE_API_KEY:     ${{ secrets.YOUTUBE_API_KEY }}
+          ANTHROPIC_API_KEY:   ${{ secrets.ANTHROPIC_API_KEY }}
+          GOOGLE_SA_KEY:       ${{ secrets.GOOGLE_SA_KEY }}
+          NTFY_TOPIC:          ${{ secrets.NTFY_TOPIC }}
+          GITHUB_TOKEN:        ${{ secrets.GITHUB_TOKEN }}
         working-directory: scripts/4am_agent
         run: python main.py
 
