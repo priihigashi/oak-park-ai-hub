@@ -9,6 +9,7 @@ from datetime import datetime
 APIFY_API_KEY = os.environ.get("APIFY_API_KEY", "")
 APIFY_BASE    = "https://api.apify.com/v2"
 MIN_VIEWS     = 10_000
+MIN_ENGAGEMENT = 500   # fallback for image/carousel posts where views = 0
 et            = pytz.timezone("America/New_York")
 
 
@@ -60,6 +61,22 @@ def _extract_views(item):
     )
 
 
+def _extract_score(item):
+    """
+    Returns a unified performance score.
+    For Reels/videos: use view count directly.
+    For image posts/carousels (views=0): use engagement proxy scaled to views-equivalent.
+    This fixes the issue where apify~instagram-scraper returns null views for non-video posts.
+    """
+    views = _extract_views(item)
+    if views > 0:
+        return views
+    # Engagement fallback: likes + (comments * 2) scaled to views-equivalent
+    likes    = item.get("likesCount") or item.get("diggCount") or 0
+    comments = item.get("commentsCount") or 0
+    return (likes + comments * 2) * 20  # ~20x multiplier aligns engagement with view scale
+
+
 def _normalise(item, niche, target_type, target_value):
     url = item.get("url") or (
         f"https://www.instagram.com/p/{item['shortCode']}/"
@@ -78,12 +95,30 @@ def _normalise(item, niche, target_type, target_value):
 
 
 def scrape_instagram_account(username, niche):
+    """Scrape general posts from an account."""
     raw = _run_actor("apify~instagram-scraper", {
         "directUrls":   [f"https://www.instagram.com/{username.lstrip('@')}/"],
         "resultsType":  "posts",
         "resultsLimit": 30,
     })
     return raw, niche, "ACCOUNT", username
+
+
+def scrape_instagram_reels(username, niche):
+    """
+    Scrape Reels specifically using the Reel Scraper actor.
+    This actor returns real view counts — the general scraper does not.
+    Run alongside scrape_instagram_account to capture both post types.
+    """
+    try:
+        raw = _run_actor("apify/instagram-reel-scraper", {
+            "username":    username.lstrip("@"),
+            "resultsLimit": 20,
+        })
+        return raw, niche, "REELS", username
+    except Exception as e:
+        print(f"[scraper] Reel scraper unavailable for {username}: {e} — skipping reels")
+        return [], niche, "REELS", username
 
 
 def scrape_instagram_hashtag(tag, niche, target_type):
@@ -95,12 +130,30 @@ def scrape_instagram_hashtag(tag, niche, target_type):
 
 
 def filter_and_normalise(raw, niche, target_type, target_value):
+    """
+    Filter content by performance score.
+    Uses view count for Reels/video. Falls back to engagement proxy for image posts.
+    Also applies dynamic top-20% threshold so we always pass something when
+    all content is below the fixed MIN_VIEWS threshold.
+    """
+    if not raw:
+        return [], 0
+
+    scored = [(item, _extract_score(item)) for item in raw]
+
+    # Dynamic threshold: top 20% of this batch OR MIN_VIEWS, whichever is lower
+    scores_sorted = sorted([s for _, s in scored], reverse=True)
+    top20_cutoff  = scores_sorted[max(0, len(scores_sorted) // 5 - 1)] if scores_sorted else 0
+    threshold     = min(MIN_VIEWS, top20_cutoff) if top20_cutoff > 0 else MIN_VIEWS
+
     passed, rejected = [], 0
-    for item in raw:
-        if _extract_views(item) >= MIN_VIEWS:
+    for item, score in scored:
+        if score >= threshold:
             passed.append(_normalise(item, niche, target_type, target_value))
         else:
             rejected += 1
+
+    print(f"[scraper] threshold used: {threshold:,} (fixed={MIN_VIEWS:,}, top20={top20_cutoff:,})")
     return passed, rejected
 
 
@@ -118,16 +171,32 @@ def scrape_all_targets(targets):
                     continue
                 try:
                     if target_type == "ACCOUNT":
+                        # General posts
                         raw, n, tt, tv = scrape_instagram_account(value, niche)
+                        total_scraped += len(raw)
+                        passed, rejected = filter_and_normalise(raw, n, tt, tv)
+                        total_rejected += rejected
+                        all_results.extend(passed)
+                        print(f"[scraper] ACCOUNT/{niche}/{value}: "
+                              f"{len(raw)} scraped -> {len(passed)} passed / {rejected} rejected")
+
+                        # Also scrape Reels separately (returns real view counts)
+                        reel_raw, rn, rtt, rtv = scrape_instagram_reels(value, niche)
+                        if reel_raw:
+                            total_scraped += len(reel_raw)
+                            reel_passed, reel_rejected = filter_and_normalise(reel_raw, rn, rtt, rtv)
+                            total_rejected += reel_rejected
+                            all_results.extend(reel_passed)
+                            print(f"[scraper] REELS/{niche}/{value}: "
+                                  f"{len(reel_raw)} scraped -> {len(reel_passed)} passed / {reel_rejected} rejected")
                     else:
                         raw, n, tt, tv = scrape_instagram_hashtag(value, niche, target_type)
-
-                    total_scraped += len(raw)
-                    passed, rejected = filter_and_normalise(raw, n, tt, tv)
-                    total_rejected += rejected
-                    all_results.extend(passed)
-                    print(f"[scraper] {target_type}/{niche}/{value}: "
-                          f"{len(raw)} scraped -> {len(passed)} passed / {rejected} rejected")
+                        total_scraped += len(raw)
+                        passed, rejected = filter_and_normalise(raw, n, tt, tv)
+                        total_rejected += rejected
+                        all_results.extend(passed)
+                        print(f"[scraper] {target_type}/{niche}/{value}: "
+                              f"{len(raw)} scraped -> {len(passed)} passed / {rejected} rejected")
                 except Exception as e:
                     print(f"[scraper] ERROR on {target_type}/{niche}/{value}: {e}")
 
