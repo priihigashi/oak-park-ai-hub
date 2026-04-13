@@ -32,9 +32,9 @@ jobs:
 
       - name: Run research
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.PRI_OP_ANTHROPIC_API_KEY }}
-          GOOGLE_SA_KEY: ${{ secrets.PRI_OP_GOOGLE_SA_KEY }}
-          DRIVE_OAUTH_TOKEN: ${{ secrets.PRI_OP_DRIVE_OAUTH_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GOOGLE_SA_KEY: ${{ secrets.GOOGLE_SA_KEY }}
+          DRIVE_OAUTH_TOKEN: ${{ secrets.GOOGLE_SA_KEY }}
         run: |
           python scripts/youtube_research.py \
             --topic "${{ github.event.inputs.topic }}" \
