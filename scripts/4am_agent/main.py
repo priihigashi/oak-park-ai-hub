@@ -169,13 +169,14 @@ def _push_claude_md_mirror():
     import pytz
     et = pytz.timezone('America/New_York')
     timestamp = datetime.now(et).strftime('%Y-%m-%d %H:%M ET')
-    full_text = f'CLAUDE.MD MIRROR — auto-generated {timestamp}
+    separator = '=' * 60
+    full_text = f"""CLAUDE.MD MIRROR — auto-generated {timestamp}
 Source: ~/.claude/CLAUDE.md
 Do NOT edit here. Edit the local file.
 
-{"="*60}
+{separator}
 
-' + content
+""" + content
 
     MIRROR_DOC_ID = '1mvg0nWNOqzyREld2EGQ1C5BIoFVjcv6jUTGtIApu0GY'
     sa_key = json.loads(os.environ['GOOGLE_SA_KEY'])
