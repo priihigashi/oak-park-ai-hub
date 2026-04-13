@@ -4,11 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       prompt:
-        description: 'Scene/scenario prompt — describe where the person should be'
-        required: true
-        type: string
-      reference_image_url:
-        description: 'URL of the persons reference photo (from Drive or web)'
+        description: 'Full scene prompt — describe the person AND the setting in detail'
         required: true
         type: string
       filename:
@@ -16,6 +12,18 @@ on:
         required: true
         default: 'avatar_generated'
         type: string
+      aspect_ratio:
+        description: 'Aspect ratio'
+        required: false
+        default: '2:3'
+        type: choice
+        options: ['1:1','2:3','3:2','4:3','3:4','9:16','16:9']
+      size:
+        description: 'Output resolution'
+        required: false
+        default: '2K'
+        type: choice
+        options: ['1K','2K','4K']
       drive_folder_id:
         description: 'Drive folder ID — defaults to People/Alexandra/AI Generated'
         required: false
@@ -32,6 +40,9 @@ on:
 # People/Alexandra/AI Generated: 1WCW29iHlftMOSdu0qKLga1nwwlUw962K  <- DEFAULT
 # People/Alexandra/Originals:    1F3n-8MS2Q6YZxbYfa5-Edf6GWk-uPwoV
 # Properties/Completely Gen:     1Md5BRAfWTUBOtl_LvdTAyBhat8ZfXamN
+# NOTE: Seedream 4.5 is text-to-image only — no reference image input.
+# For face consistency: write very detailed prompts describing the person.
+# For real-person avatars: generate with Seedream first, then use NB2 for background edits.
 
 jobs:
   generate-avatar:
@@ -42,7 +53,8 @@ jobs:
         env:
           PRI_OP_REPLICATE_API_KEY: ${{ secrets.PRI_OP_REPLICATE_API_KEY }}
           PROMPT: ${{ inputs.prompt }}
-          REFERENCE_IMAGE_URL: ${{ inputs.reference_image_url }}
+          ASPECT_RATIO: ${{ inputs.aspect_ratio }}
+          SIZE: ${{ inputs.size }}
         run: |
           pip install -q requests
           python3 << 'PYEOF'
@@ -58,10 +70,8 @@ jobs:
           payload = {
               "input": {
                   "prompt": os.environ['PROMPT'],
-                  "input_image": os.environ['REFERENCE_IMAGE_URL'],
-                  "aspect_ratio": "2:3",
-                  "output_format": "jpg",
-                  "output_quality": 90
+                  "aspect_ratio": os.environ.get('ASPECT_RATIO', '2:3'),
+                  "size": os.environ.get('SIZE', '2K')
               }
           }
 
@@ -121,6 +131,7 @@ jobs:
           PRI_OP_INFSH_API_KEY: ${{ secrets.PRI_OP_INFSH_API_KEY }}
           PROMPT: "Keep the person exactly as is — do not change the face, hair, clothing or body. Only enhance the background and lighting. ${{ inputs.prompt }}"
           FILENAME: ${{ inputs.filename }}
+          ASPECT_RATIO: ${{ inputs.aspect_ratio }}
         run: |
           pip install -q requests
           python3 << 'PYEOF'
@@ -142,7 +153,7 @@ jobs:
               "input": {
                   "prompt": os.environ['PROMPT'],
                   "images": [data_uri],
-                  "aspect_ratio": "2:3",
+                  "aspect_ratio": os.environ.get('ASPECT_RATIO', '2:3'),
                   "resolution": "2K"
               }
           }
@@ -178,9 +189,7 @@ jobs:
               refined_path = f'/tmp/{filename}_refined.jpg'
               result = subprocess.run(['curl', '-L', '-o', refined_path, image_url], capture_output=True)
               if result.returncode == 0:
-                  import shutil
-                  # Only replace after confirmed successful download
-                  import os as _os
+                  import shutil, os as _os
                   if _os.path.exists(refined_path) and _os.path.getsize(refined_path) > 10000:
                       shutil.copy(refined_path, local_path)
                       print(f"NB2 refined version saved as final output")
@@ -241,7 +250,7 @@ jobs:
         run: |
           echo "## Avatar Generation (Seedream 4.5)" >> $GITHUB_STEP_SUMMARY
           echo "- **File:** ${{ inputs.filename }}.jpg" >> $GITHUB_STEP_SUMMARY
-          echo "- **Reference:** ${{ inputs.reference_image_url }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Prompt:** ${{ inputs.prompt }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Seedream URL:** ${{ steps.seedream.outputs.image_url }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Background edit:** ${{ inputs.background_edit_only }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Drive folder:** ${{ inputs.drive_folder_id }}" >> $GITHUB_STEP_SUMMARY
