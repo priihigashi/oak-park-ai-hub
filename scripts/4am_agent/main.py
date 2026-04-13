@@ -10,7 +10,7 @@ Execution order:
   4.  Find 3-5 Pexels B-roll clips per script
   5.  Update Clip Collections tab if any topic is still collecting
   6.  Append 2 rows to Content Queue tab
-  7.  Send ntfy.sh push notification
+  7.  Send push notification
   8.  Write run log to Runs Log tab
   9.  Run pattern_learner - detect recurring issues, auto-create skills or Calendar tasks
   10. Push CLAUDE.md mirror to Drive
@@ -91,7 +91,6 @@ def main():
 
         # -- 3. Generate scripts --
         print(f"[{log_pfx}] Step 3: Generating Talking Head scripts with Claude...")
-        # Pass scraped_content (may be empty list) - script_generator handles fallback internally
         scripts = pick_topics_and_write_scripts(scraped_content)
         log["scripts_generated"] = len(scripts)
         for s in scripts:
@@ -123,7 +122,7 @@ def main():
         print(f"[{log_pfx}]   {rows_added} row(s) added")
 
         # -- 7. Notify --
-        print(f"[{log_pfx}] Step 7: Sending push notification...")
+        print(f"[{log_pfx}] Step 7: Sending notifications...")
         topic_names = [s["script_data"]["topic"] for s in scripts_with_broll]
         notified    = notify_run_complete(topic_names, rows_added, total_clips, error=scrape_error)
         log["notification_sent"] = notified
@@ -144,6 +143,11 @@ def main():
         print(f"[{log_pfx}] Step 8: Writing Runs Log... ({log['duration_seconds']}s total)")
         append_run_log(log)
 
+        # C2 fix: expose Steps 1-8 pipeline failures to self_healer
+        if log["status"] == "fail" and log.get("error"):
+            _record_pipeline_failure(log_pfx, log["error"], log.get("lessons_learned", ""),
+                                     log.get("duration_seconds", 0))
+
         # -- 9. Pattern learning --
         print(f"[{log_pfx}] Step 9: Running pattern learner...")
         runner.run_module("pattern_learner", pattern_learner.run, notify_new_skill)
@@ -163,10 +167,33 @@ def main():
 
         # -- 13. Self-healer (fixes failed modules or creates repair tasks) --
         print(f"[{log_pfx}] Step 13: Running self-healer...")
-        runner.run_module("self_healer", self_healer.run, runner.get_results())
+        runner.run_module("self_healer", self_healer.run)  # C3: removed dead run_results param
 
         print(f"[{log_pfx}] {runner.summary_line()}")
         print(f"[{log_pfx}] --- Done ---")
+
+
+def _record_pipeline_failure(log_pfx, error_msg, lessons, duration_s):
+    """Write Steps 1-8 failure to module_failures.json so self_healer can detect it. (C2 fix)"""
+    failures_path = ".github/agent_state/module_failures.json"
+    os.makedirs(".github/agent_state", exist_ok=True)
+    existing = {}
+    if os.path.exists(failures_path):
+        try:
+            with open(failures_path) as f:
+                existing = json.load(f)
+        except Exception:
+            pass
+    existing["pipeline_main"] = {
+        "status":     "fail",
+        "error":      error_msg,
+        "traceback":  lessons,
+        "duration_s": duration_s,
+        "ts":         datetime.now(et).isoformat(),
+    }
+    with open(failures_path, "w") as f:
+        json.dump(existing, f, indent=2)
+    print(f"[{log_pfx}] Pipeline failure written to module_failures.json for self_healer.")
 
 
 def _push_claude_md_mirror():
@@ -201,7 +228,6 @@ Do NOT edit here. Edit the local file.
     )
     docs = gdrive_build('docs', 'v1', credentials=creds)
 
-    # Clear existing content and rewrite
     doc = docs.documents().get(documentId=MIRROR_DOC_ID).execute()
     body_content = doc.get('body', {}).get('content', [])
     end_index = body_content[-1].get('endIndex', 1) if body_content else 1
