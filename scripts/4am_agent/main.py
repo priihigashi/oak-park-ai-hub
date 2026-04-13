@@ -4,16 +4,22 @@ main.py - 4AM Content Automation Agent, Oak Park Construction
 Runs daily at 4 AM ET via GitHub Actions (cron: 0 8 * * *)
 
 Execution order:
-  1. Read Scraping Targets tab
-  2. Scrape Instagram/TikTok via Apify (10k+ views filter) - graceful fallback if unavailable
-  3. Pick 2 Talking Head topics + write scripts with Claude
-  4. Find 3-5 Pexels B-roll clips per script
-  5. Update Clip Collections tab if any topic is still collecting
-  6. Append 2 rows to Content Queue tab
-  7. Send ntfy.sh push notification
-  8. Write run log to Runs Log tab
-  9. Run pattern_learner - detect recurring issues, auto-create skills or Calendar tasks
+  1.  Read Scraping Targets tab
+  2.  Scrape Instagram/TikTok via Apify (10k+ views filter) - graceful fallback if unavailable
+  3.  Pick 2 Talking Head topics + write scripts with Claude
+  4.  Find 3-5 Pexels B-roll clips per script
+  5.  Update Clip Collections tab if any topic is still collecting
+  6.  Append 2 rows to Content Queue tab
+  7.  Send ntfy.sh push notification
+  8.  Write run log to Runs Log tab
+  9.  Run pattern_learner - detect recurring issues, auto-create skills or Calendar tasks
+  10. Push CLAUDE.md mirror to Drive
+  11. Chat log reader — extract carry-forwards from recent session logs
+  12. Loose end detector — stale content, overdue calendar, carry-forwards
+  13. Self-healer — auto-fix failed modules or create repair tasks
 """
+import json
+import os
 import time
 import pytz
 from datetime import datetime
@@ -29,6 +35,10 @@ from sheets_writer    import (
 )
 from notifier import notify_run_complete, notify_new_skill
 import pattern_learner
+import runner
+import chat_log_reader
+import loose_end_detector
+import self_healer
 
 et = pytz.timezone("America/New_York")
 
@@ -136,24 +146,31 @@ def main():
 
         # -- 9. Pattern learning --
         print(f"[{log_pfx}] Step 9: Running pattern learner...")
-        try:
-            pattern_learner.run(notifier_fn=notify_new_skill)
-        except Exception as pe:
-            print(f"[{log_pfx}] Pattern learner error (non-fatal): {pe}")
+        runner.run_module("pattern_learner", pattern_learner.run, notify_new_skill)
 
         # -- 10. Push CLAUDE.md mirror to Drive --
         print(f"[{log_pfx}] Step 10: Pushing CLAUDE.md mirror to Drive...")
-        try:
-            _push_claude_md_mirror()
-        except Exception as me:
-            print(f"[{log_pfx}] CLAUDE.md mirror error (non-fatal): {me}")
+        runner.run_module("claude_md_mirror", _push_claude_md_mirror)
 
+        # -- 11. Chat log reader (carry-forwards from recent sessions) --
+        print(f"[{log_pfx}] Step 11: Reading chat logs for carry-forwards...")
+        _, chat_result = runner.run_module("chat_log_reader", chat_log_reader.run)
+        carries = (chat_result or {}).get("carry_forwards", [])
+
+        # -- 12. Loose end detector (stale tasks, overdue calendar, carry-forwards) --
+        print(f"[{log_pfx}] Step 12: Detecting loose ends...")
+        runner.run_module("loose_end_detector", loose_end_detector.run, carries)
+
+        # -- 13. Self-healer (fixes failed modules or creates repair tasks) --
+        print(f"[{log_pfx}] Step 13: Running self-healer...")
+        runner.run_module("self_healer", self_healer.run, runner.get_results())
+
+        print(f"[{log_pfx}] {runner.summary_line()}")
         print(f"[{log_pfx}] --- Done ---")
 
 
 def _push_claude_md_mirror():
     """Push ~/.claude/CLAUDE.md to Drive mirror doc (nightly backup)."""
-    import os
     from google.oauth2 import service_account
     from googleapiclient.discovery import build as gdrive_build
 
@@ -165,9 +182,6 @@ def _push_claude_md_mirror():
     with open(claude_md_path, 'r') as f:
         content = f.read()
 
-    from datetime import datetime
-    import pytz
-    et = pytz.timezone('America/New_York')
     timestamp = datetime.now(et).strftime('%Y-%m-%d %H:%M ET')
     separator = '=' * 60
     full_text = f"""CLAUDE.MD MIRROR — auto-generated {timestamp}
@@ -192,14 +206,13 @@ Do NOT edit here. Edit the local file.
     body_content = doc.get('body', {}).get('content', [])
     end_index = body_content[-1].get('endIndex', 1) if body_content else 1
 
-    requests = []
+    doc_requests = []
     if end_index > 1:
-        requests.append({'deleteContentRange': {'range': {'startIndex': 1, 'endIndex': end_index - 1}}})
-    requests.append({'insertText': {'location': {'index': 1}, 'text': full_text}})
+        doc_requests.append({'deleteContentRange': {'range': {'startIndex': 1, 'endIndex': end_index - 1}}})
+    doc_requests.append({'insertText': {'location': {'index': 1}, 'text': full_text}})
 
-    docs.documents().batchUpdate(documentId=MIRROR_DOC_ID, body={'requests': requests}).execute()
+    docs.documents().batchUpdate(documentId=MIRROR_DOC_ID, body={'requests': doc_requests}).execute()
     print(f'[mirror] CLAUDE.md mirror updated ({len(content)} chars)')
-
 
 
 if __name__ == "__main__":
