@@ -1,0 +1,18 @@
+{
+  "approved_at": "2026-04-13T23:02:46.404700+00:00",
+  "source_email": {
+    "message_id": "19d89111cd15dc37",
+    "subject": "[6-0402000041185] Your Google Ads API Basic Access Application",
+    "from": "no-reply@google.com",
+    "date": "Mon, 13 Apr 2026 15:58:12 -0700",
+    "snippet": "Ads API Thank you for submitting the Google Ads API Basic Access application. Rest assured we are working diligently to respond as quickly as possible. Though, due to higher than usual application",
+    "thread_id": "19d89111cd15dc37"
+  },
+  "next_steps": [
+    "Update GOOGLE_ADS_DEVELOPER_TOKEN if new token was issued",
+    "Run mutation scripts in scripts/ads_mutations/ (pause/budget/negkw)",
+    "Link Google Ads <-> GA4 for conversion import",
+    "Deploy PWA dashboard to Vercel",
+    "Set up daily ads_report.yml workflow"
+  ]
+}
