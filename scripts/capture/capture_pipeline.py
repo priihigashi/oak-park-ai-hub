@@ -67,8 +67,12 @@ BOOK_TRACKER_ID    = os.getenv("BOOK_TRACKER_ID",    "1SeDFDisb0uNeyfyv5fCS_0x5E
 IDEAS_INBOX_ID     = os.getenv("IDEAS_INBOX_ID",     "1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU")
 
 # Drive folder IDs — hardcoded as defaults
-BOOK_FOLDER_ID      = "1HlY1tmUHmRZ_ZfPUzGpY_j7sHbe_OCz1"
-SOVEREIGN_FOLDER_ID = "1L89dLiVYfjNu3uz3l3S_rvZPxd2I8xjZ"
+BOOK_FOLDER_ID              = "1HlY1tmUHmRZ_ZfPUzGpY_j7sHbe_OCz1"
+SOVEREIGN_FOLDER_ID         = "1L89dLiVYfjNu3uz3l3S_rvZPxd2I8xjZ"
+CONTENT_CREATION_FOLDER_ID = "1um7y2Yt8zi9KGxev6kfFJYgrkMYwrCNh"  # Drive > Marketing > Claude Code Workspace > Content Creation
+
+# Spreadsheet IDs for content pipeline
+CONTENT_QUEUE_ID = "1C1CAZ8lSgeVLSSCYIg-D9XPJcSLHyIOh1okKtvhZZQg"  # Ideas Queue tab
 
 TRANSCRIPTS_DIR = Path("transcripts")
 TRANSCRIPTS_DIR.mkdir(exist_ok=True)
@@ -617,16 +621,189 @@ def _trigger_topic_scraper(classification):
         print(f"  ⚠️  Topic scraper dispatch failed (non-fatal): {e}")
 
 
+# ─── CONTENT WORKSPACE ────────────────────────────────────────────────────────
+
+def generate_content_brief(transcript: str, url: str, classification: dict, notes: str) -> str:
+    """Ask Claude to generate carousel + reel + topic breakdowns from transcript.
+    Returns plain text content brief (no markdown tables — avoids Docs API 400 errors).
+    Falls back to transcript + classification JSON if ANTHROPIC_API_KEY not set.
+    """
+    if not ANTHROPIC_API_KEY:
+        return f"SOURCE: {url}\nNOTES: {notes or 'None'}\n\nTRANSCRIPT:\n{transcript}\n\nClassification:\n{json.dumps(classification, indent=2)}"
+    import anthropic
+    client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+    niche = classification.get("niche", "General")
+    prompt = f"""You are a bilingual content creator (EN + PT-BR). Analyze this transcript and produce a CONTENT BRIEF.
+
+Source URL: {url}
+Niche: {niche}
+Notes: {notes or 'None'}
+
+TRANSCRIPT:
+{transcript}
+
+Output plain text only — NO markdown tables. Use this structure:
+
+CONTENT BRIEF
+Date: {datetime.now().strftime('%Y-%m-%d')}
+Source: {url}
+Niche: {niche}
+Status: DRAFT
+
+KEY FACTS (list the 5-8 most important verifiable claims from the transcript with sources if mentioned):
+
+HOOK EN: [scroll-stopping first line in English]
+HOOK PT-BR: [same in Brazilian Portuguese — rewrite, do not translate literally]
+
+SHORT CAROUSEL (6 slides):
+SLIDE 1 HOOK — EN: / PT:
+SLIDE 2 — EN: / PT:
+SLIDE 3 — EN: / PT: / SOURCE ON SLIDE:
+SLIDE 4 — EN: / PT:
+SLIDE 5 — EN: / PT:
+SLIDE 6 CTA — EN: / PT:
+
+LONG CAROUSEL (only if content has 4+ strong distinct points):
+SLIDE 1 HOOK — EN: / PT:
+[continue for each slide]
+SLIDE [N] CTA — EN: / PT:
+
+REEL IDEA:
+Hook EN: [first line]
+Hook PT: [first line]
+Format: [what goes on screen]
+
+TOPIC 1: [title] — [angle — one concept, explained simply]
+TOPIC 2: [title] — [angle — one concept, explained simply]
+TOPIC 3: [title] — [angle — one concept, explained simply]
+
+CAPTION EN:
+[full caption text]
+
+CAPTION PT-BR:
+[full caption text]
+
+SOURCES (list from transcript or verified):
+1.
+2.
+3.
+
+STATUS: DRAFT — text ready, art needed"""
+
+    msg = client.messages.create(
+        model="claude-opus-4-6", max_tokens=3000,
+        messages=[{"role": "user", "content": prompt}]
+    )
+    return msg.content[0].text
+
+
+def create_content_workspace(story_id: str, title: str, transcript: str,
+                              classification: dict, url: str, notes: str = "") -> tuple:
+    """Creates Drive workspace for a content piece.
+
+    Structure created:
+      Content Creation / [title] /
+        Art/
+        Caption/
+        Reel/
+        [CONTENT BRIEF] [title].gdoc  ← Claude-generated carousel + reel + topics
+
+    Also logs one row to the Ideas Queue tab in the Content Queue spreadsheet.
+    Returns: (folder_url, doc_url) — empty strings on failure (non-fatal).
+    """
+    drive = get_drive_service()
+    if not drive:
+        print("  SKIP workspace: Drive unavailable")
+        return "", ""
+
+    # 1. Create parent folder
+    try:
+        folder = drive.files().create(
+            body={"name": title, "mimeType": "application/vnd.google-apps.folder",
+                  "parents": [CONTENT_CREATION_FOLDER_ID]},
+            supportsAllDrives=True, fields="id,webViewLink"
+        ).execute()
+        folder_id = folder["id"]
+        folder_url = folder.get("webViewLink", f"https://drive.google.com/drive/folders/{folder_id}")
+        print(f"  Drive folder: {folder_url}")
+    except Exception as e:
+        print(f"  WARNING folder creation: {e}")
+        return "", ""
+
+    # 2. Create Art/, Caption/, Reel/ subfolders
+    for sub in ["Art", "Caption", "Reel"]:
+        try:
+            drive.files().create(
+                body={"name": sub, "mimeType": "application/vnd.google-apps.folder",
+                      "parents": [folder_id]},
+                supportsAllDrives=True, fields="id"
+            ).execute()
+        except Exception as e:
+            print(f"  WARNING subfolder {sub}: {e}")
+
+    # 3. Generate content brief via Claude
+    print("  Generating content brief (Claude)...")
+    brief = generate_content_brief(transcript, url, classification, notes)
+
+    # 4. Create empty Google Doc then write content via Docs API batchUpdate
+    doc_url = ""
+    try:
+        doc = drive.files().create(
+            body={"name": f"[CONTENT BRIEF] {title}",
+                  "mimeType": "application/vnd.google-apps.document",
+                  "parents": [folder_id]},
+            supportsAllDrives=True, fields="id,webViewLink"
+        ).execute()
+        doc_id = doc["id"]
+        doc_url = doc.get("webViewLink", f"https://docs.google.com/document/d/{doc_id}/edit")
+        docs = get_docs_service()
+        if docs and brief:
+            docs.documents().batchUpdate(
+                documentId=doc_id,
+                body={"requests": [{"insertText": {"location": {"index": 1}, "text": brief}}]}
+            ).execute()
+        print(f"  Content brief doc: {doc_url}")
+    except Exception as e:
+        print(f"  WARNING doc creation: {e}")
+
+    # 5. Log to Ideas Queue tab in Content Queue spreadsheet
+    gc = get_sheets_client()
+    if gc:
+        try:
+            sh = gc.open_by_key(CONTENT_QUEUE_ID)
+            queue = sh.worksheet("\U0001f4a1 Ideas Queue")
+            queue.append_row([
+                title,
+                classification.get("content_type", "Carousel"),
+                "Instagram",
+                classification.get("hook", ""),
+                "DRAFT \u2014 text needed",
+                "HIGH",
+                f"Drive: {folder_url} | Brief: {doc_url} | Captured: {datetime.now().strftime('%Y-%m-%d')}",
+                url,
+            ])
+            print("  Ideas Queue: row added")
+        except Exception as e:
+            print(f"  WARNING Ideas Queue: {e}")
+
+    return folder_url, doc_url
+
+
 def run_content(args, transcript):
     print("\n[CONTENT] Running classification...")
     cl = analyze_content(transcript, args.url, args.notes or "")
     sid = args.story_id or f"CNT-{datetime.now().strftime('%Y%m%d%H%M')}"
     update_inspiration_library(args.url, transcript, cl)
-    create_calendar_task(sid, args.project, args.url, "", transcript[:400], args.notes or "")
+
+    # Create Drive workspace: folder + Art/Caption/Reel subfolders + content brief doc + Ideas Queue row
+    title = (cl.get("summary") or sid)[:60].strip()
+    folder_url, doc_url = create_content_workspace(sid, title, transcript, cl, args.url, args.notes or "")
+
+    create_calendar_task(sid, args.project, args.url, doc_url or "", transcript[:400], args.notes or "")
     # Auto-trigger Topic Cluster Scraper for Brazil captures
     if cl.get("niche") == "Brazil" and os.getenv("APIFY_API_KEY"):
         _trigger_topic_scraper(cl)
-    print(f"\n{'='*50}\nCONTENT CAPTURE DONE\nNiche: {cl.get('niche')}\nType: {cl.get('content_type')}\nStatus: {cl.get('classification')}\n{'='*50}")
+    print(f"\n{'='*50}\nCONTENT CAPTURE DONE\nNiche: {cl.get('niche')}\nType: {cl.get('content_type')}\nStatus: {cl.get('classification')}\nFolder: {folder_url or 'check artifacts'}\nBrief: {doc_url or 'check artifacts'}\n{'='*50}")
 
 
 # ─── MAIN ─────────────────────────────────────────────────────────────────────
