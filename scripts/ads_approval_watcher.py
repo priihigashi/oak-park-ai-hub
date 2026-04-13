@@ -26,8 +26,12 @@ from googleapiclient.discovery import build
 REPO_ROOT = Path(__file__).resolve().parent.parent
 FLAG_FILE = REPO_ROOT / ".github" / "agent_state" / "ads_api_approved.json"
 
-# Gmail search — match any Google-origin email mentioning Ads API / Basic Access
+# Gmail search — Google-origin email about Ads API Basic Access
 # Looks at the last 14 days so we don't miss anything if the watcher was paused
+# NOTE: Google sends a submission-confirmation email with subject like
+# "[ticket-id] Your Google Ads API Basic Access Application". The real approval
+# arrives later with different language. We fetch the candidates and filter
+# by body content — see classify_email().
 GMAIL_QUERY = (
     'from:(@google.com) '
     '(subject:("Google Ads API") OR '
@@ -35,6 +39,37 @@ GMAIL_QUERY = (
     'subject:("Basic Access") OR '
     'subject:("API Center")) '
     'newer_than:14d'
+)
+
+# Keywords that indicate an actual approval (not a submission confirmation)
+APPROVAL_KEYWORDS = (
+    "has been approved",
+    "is approved",
+    "been approved",
+    "approval notification",
+    "your application has been approved",
+    "access has been granted",
+    "token is now approved",
+    "basic access approved",
+    "approved for basic access",
+    "congratulations",
+)
+
+# Keywords that indicate a NON-approval email (submission receipt, pending, etc.)
+NON_APPROVAL_KEYWORDS = (
+    "thank you for submitting",
+    "we are working diligently",
+    "we have received your",
+    "application has been received",
+    "under review",
+    "we will review",
+    "additional information",
+    "please provide",
+    "we need more",
+    "unable to approve",
+    "cannot approve",
+    "denied",
+    "rejected",
 )
 
 
@@ -61,32 +96,84 @@ def already_flagged() -> bool:
     return FLAG_FILE.exists()
 
 
+def _get_body_text(msg) -> str:
+    """Extract plain text body from a Gmail message payload."""
+    parts = [msg.get("payload", {})]
+    chunks = []
+    while parts:
+        p = parts.pop()
+        if not p:
+            continue
+        mime = p.get("mimeType", "")
+        body = p.get("body", {}) or {}
+        data = body.get("data")
+        if data and mime.startswith("text/"):
+            try:
+                chunks.append(base64.urlsafe_b64decode(data).decode("utf-8", errors="replace"))
+            except Exception:
+                pass
+        sub = p.get("parts")
+        if sub:
+            parts.extend(sub)
+    return "\n".join(chunks)
+
+
+def classify_email(subject: str, snippet: str, body: str) -> str:
+    """Return 'approved', 'submission', 'denied', or 'unknown'."""
+    haystack = " ".join([subject, snippet, body]).lower()
+
+    # Denial/rejection first (highest priority)
+    if any(kw in haystack for kw in ("denied", "rejected", "unable to approve", "cannot approve")):
+        return "denied"
+
+    # Then approval
+    if any(kw in haystack for kw in APPROVAL_KEYWORDS):
+        return "approved"
+
+    # Submission/receipt confirmations and pending-review emails
+    if any(kw in haystack for kw in NON_APPROVAL_KEYWORDS):
+        return "submission"
+
+    return "unknown"
+
+
 def search_gmail(creds: Credentials):
-    """Return (message_id, subject, snippet, from_addr) of first match, or None."""
+    """Scan candidate emails and return the first ACTUAL approval, or None.
+
+    Returns dict with 'classification' field explaining why.
+    """
     gmail = build("gmail", "v1", credentials=creds)
     results = gmail.users().messages().list(
-        userId="me", q=GMAIL_QUERY, maxResults=5
+        userId="me", q=GMAIL_QUERY, maxResults=10
     ).execute()
     msgs = results.get("messages", [])
     if not msgs:
         return None
 
-    # Fetch full metadata for the most recent match
-    msg_id = msgs[0]["id"]
-    msg = gmail.users().messages().get(
-        userId="me", id=msg_id, format="metadata",
-        metadataHeaders=["Subject", "From", "Date"]
-    ).execute()
+    for m in msgs:
+        msg = gmail.users().messages().get(
+            userId="me", id=m["id"], format="full"
+        ).execute()
+        headers = {h["name"]: h["value"] for h in msg["payload"]["headers"]}
+        subject = headers.get("Subject", "")
+        snippet = msg.get("snippet", "")
+        body = _get_body_text(msg)
 
-    headers = {h["name"]: h["value"] for h in msg["payload"]["headers"]}
-    return {
-        "message_id": msg_id,
-        "subject": headers.get("Subject", "(no subject)"),
-        "from": headers.get("From", "(unknown sender)"),
-        "date": headers.get("Date", "(no date)"),
-        "snippet": msg.get("snippet", "")[:300],
-        "thread_id": msg.get("threadId"),
-    }
+        classification = classify_email(subject, snippet, body)
+        print(f"  Candidate: [{classification}] {subject[:80]}")
+
+        if classification == "approved":
+            return {
+                "message_id": m["id"],
+                "subject": subject,
+                "from": headers.get("From", "(unknown)"),
+                "date": headers.get("Date", "(no date)"),
+                "snippet": snippet[:300],
+                "thread_id": msg.get("threadId"),
+                "classification": classification,
+            }
+
+    return None
 
 
 def write_flag(match: dict) -> None:
