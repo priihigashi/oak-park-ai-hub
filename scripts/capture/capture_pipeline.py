@@ -260,36 +260,183 @@ def fetch_reel_metadata(url: str) -> dict:
         return {}
 
 
+# ─── HELPERS ─────────────────────────────────────────────────────────────────
+
+def _extract_youtube_id(url: str) -> str:
+    """Extract video ID from YouTube URL (watch, youtu.be, shorts)."""
+    m = re.search(r'(?:watch\?v=|youtu\.be/|shorts/)([^&/?]+)', url)
+    return m.group(1) if m else ""
+
+
+def _is_youtube(url: str) -> bool:
+    return "youtube.com" in url or "youtu.be" in url
+
+
 # ─── STEP 1: DOWNLOAD ─────────────────────────────────────────────────────────
 
-def download_audio(url: str, tmp_dir: str) -> str:
-    print(f"\n[1/3] Downloading audio: {url}")
+def _find_audio_file(tmp_dir: str) -> str:
+    """Find the downloaded audio file in tmp_dir regardless of extension."""
+    for ext in ["mp3", "m4a", "webm", "ogg", "wav", "opus"]:
+        path = os.path.join(tmp_dir, f"audio.{ext}")
+        if os.path.exists(path):
+            return path
+    return ""
+
+
+def _try_ytdlp(url: str, tmp_dir: str, extra_args: list = None) -> str:
+    """Try yt-dlp download with optional extra args. Returns audio path or empty string."""
     output = os.path.join(tmp_dir, "audio.%(ext)s")
     cmd = [
         "yt-dlp", "--extract-audio", "--audio-format", "mp3",
         "--audio-quality", "0", "--output", output,
-        "--no-playlist", "--quiet", url,
+        "--no-playlist", "--quiet",
     ]
+    if extra_args:
+        cmd.extend(extra_args)
+    cmd.append(url)
     result = subprocess.run(cmd, capture_output=True, text=True)
-    if result.returncode != 0:
-        print(f"  ERROR: {result.stderr}")
-        # YouTube bot-protection: try youtube-transcript-api as fallback
-        if "youtube.com" in url or "youtu.be" in url:
-            print("  YouTube bot-protection detected — using transcript API fallback")
-            return "__youtube_transcript_fallback__"
-        sys.exit(1)
+    if result.returncode == 0:
+        return _find_audio_file(tmp_dir)
+    print(f"  yt-dlp failed: {result.stderr[:200]}")
+    return ""
 
-    mp3 = os.path.join(tmp_dir, "audio.mp3")
-    if not os.path.exists(mp3):
-        for ext in ["m4a", "webm", "ogg", "wav"]:
-            alt = os.path.join(tmp_dir, f"audio.{ext}")
-            if os.path.exists(alt):
-                mp3 = alt
+
+def _try_apify_youtube_download(url: str, tmp_dir: str) -> str:
+    """Download YouTube audio via Apify actor. Returns audio path or empty string.
+    Uses bernardo/youtube-scraper actor which can extract audio URLs.
+    Falls back to streamers/youtube-scraper for direct download link.
+    """
+    if not APIFY_API_KEY:
+        print("  SKIP Apify download: APIFY_API_KEY not set")
+        return ""
+
+    vid_id = _extract_youtube_id(url)
+    if not vid_id:
+        print("  SKIP Apify download: cannot extract video ID")
+        return ""
+
+    print("  Trying Apify YouTube download...")
+    actor_id = "bernardo~youtube-scraper"
+    input_data = {
+        "startUrls": [{"url": f"https://www.youtube.com/watch?v={vid_id}"}],
+        "maxResults": 1,
+        "proxy": {"useApifyProxy": True},
+    }
+
+    try:
+        # Start the actor run
+        run_resp = requests.post(
+            f"{APIFY_BASE}/acts/{actor_id}/runs",
+            params={"token": APIFY_API_KEY},
+            json=input_data,
+            timeout=30,
+        )
+        run_resp.raise_for_status()
+        run_id = run_resp.json()["data"]["id"]
+        print(f"  Apify run: {run_id}")
+
+        # Poll (max ~3 min for video)
+        for _ in range(18):
+            time.sleep(10)
+            status_resp = requests.get(
+                f"{APIFY_BASE}/actor-runs/{run_id}",
+                params={"token": APIFY_API_KEY},
+                timeout=15,
+            )
+            status = status_resp.json()["data"]["status"]
+            if status in ("SUCCEEDED", "FAILED", "ABORTED", "TIMED-OUT"):
                 break
 
-    size = os.path.getsize(mp3) / 1024
-    print(f"  Downloaded ({size:.0f} KB)")
-    return mp3
+        if status != "SUCCEEDED":
+            print(f"  Apify run ended: {status}")
+            return ""
+
+        # Get results — look for audio/video URL in output
+        items_resp = requests.get(
+            f"{APIFY_BASE}/actor-runs/{run_id}/dataset/items",
+            params={"token": APIFY_API_KEY, "limit": 1, "format": "json"},
+            timeout=30,
+        )
+        items = items_resp.json()
+        if not items:
+            print("  Apify: no results")
+            return ""
+
+        item = items[0]
+        # Try to find a direct media URL in the result
+        media_url = (
+            item.get("mediaUrl")
+            or item.get("videoUrl")
+            or item.get("audioUrl")
+            or item.get("url")
+        )
+
+        if not media_url or "youtube.com" in str(media_url):
+            print("  Apify: no direct media URL in result")
+            return ""
+
+        # Download the media file
+        print(f"  Downloading from Apify result...")
+        audio_path = os.path.join(tmp_dir, "audio.mp3")
+        dl = requests.get(media_url, timeout=120, stream=True)
+        dl.raise_for_status()
+        with open(audio_path, "wb") as f:
+            for chunk in dl.iter_content(8192):
+                f.write(chunk)
+
+        size = os.path.getsize(audio_path) / 1024
+        if size < 5:
+            print(f"  Apify: downloaded file too small ({size:.0f} KB)")
+            os.remove(audio_path)
+            return ""
+
+        print(f"  Apify download OK ({size:.0f} KB)")
+        return audio_path
+
+    except Exception as e:
+        print(f"  Apify download failed (non-fatal): {e}")
+        return ""
+
+
+def download_audio(url: str, tmp_dir: str) -> str:
+    """3-tier YouTube download: yt-dlp → Apify → transcript-api fallback.
+    For non-YouTube URLs, uses yt-dlp only (works for IG/TikTok).
+    """
+    print(f"\n[1/3] Downloading audio: {url}")
+    is_yt = _is_youtube(url)
+
+    # Tier 1: yt-dlp standard (works for IG, TikTok, and sometimes YouTube)
+    audio = _try_ytdlp(url, tmp_dir)
+    if audio:
+        size = os.path.getsize(audio) / 1024
+        print(f"  Downloaded via yt-dlp ({size:.0f} KB)")
+        return audio
+
+    # Tier 1b: yt-dlp with iOS client trick (YouTube only — bypasses some bot checks)
+    if is_yt:
+        print("  Retrying yt-dlp with iOS client workaround...")
+        audio = _try_ytdlp(url, tmp_dir, [
+            "--extractor-args", "youtube:player_client=ios,web_creator",
+        ])
+        if audio:
+            size = os.path.getsize(audio) / 1024
+            print(f"  Downloaded via yt-dlp iOS trick ({size:.0f} KB)")
+            return audio
+
+    # Tier 2: Apify YouTube download (cloud, reliable, costs ~$0.05)
+    if is_yt:
+        audio = _try_apify_youtube_download(url, tmp_dir)
+        if audio:
+            return audio
+
+    # Tier 3: transcript-api fallback (text only, no audio file)
+    if is_yt:
+        print("  All download methods failed — falling back to transcript API (text only)")
+        return "__youtube_transcript_fallback__"
+
+    # Non-YouTube URL and yt-dlp failed — nothing else to try
+    print("  ERROR: yt-dlp failed and no fallback available for this platform")
+    sys.exit(1)
 
 
 # ─── STEP 2: TRANSCRIBE ───────────────────────────────────────────────────────
@@ -300,11 +447,7 @@ def transcribe_audio(audio_path: str, url: str = "") -> str:
     if audio_path == "__youtube_transcript_fallback__":
         try:
             from youtube_transcript_api import YouTubeTranscriptApi
-            vid_id = ""
-            if "watch?v=" in url:
-                vid_id = url.split("watch?v=")[1].split("&")[0]
-            elif "youtu.be/" in url:
-                vid_id = url.split("youtu.be/")[1].split("?")[0]
+            vid_id = _extract_youtube_id(url)
             api = YouTubeTranscriptApi()
             fetched = api.fetch(vid_id)
             result = " ".join([t.text for t in fetched])

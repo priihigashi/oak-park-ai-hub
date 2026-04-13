@@ -65,7 +65,8 @@ jobs:
             google-auth \
             google-api-python-client \
             python-dotenv \
-            requests
+            requests \
+            youtube-transcript-api
 
       - name: Run capture pipeline
         env:
