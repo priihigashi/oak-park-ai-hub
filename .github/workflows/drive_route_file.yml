@@ -1,0 +1,33 @@
+name: Drive Route File
+
+on:
+  workflow_dispatch:
+    inputs:
+      filename:
+        description: 'Name (or substring) of the file in My Drive to route'
+        required: true
+      topic:
+        description: 'Destination topic: stocks | news | opc | higashi | marketing'
+        required: true
+        default: 'stocks'
+
+jobs:
+  route:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install deps
+        run: pip install google-auth google-api-python-client
+
+      - name: Route file
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          INPUT_FILENAME: ${{ github.event.inputs.filename }}
+          INPUT_TOPIC: ${{ github.event.inputs.topic }}
+        run: python scripts/drive_route_file.py
