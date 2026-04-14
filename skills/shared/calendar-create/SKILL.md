@@ -48,7 +48,7 @@ cal.events().insert(calendarId='primary', body={
 }).execute()
 ```
 - `sheets_token.json` HAS calendar scope (confirmed 2026-04-12)
-- GitHub workflow variants: `.github/workflows/gcal_event.yml`, `create_calendar_event.yml`
+- GitHub workflow (phone-triggerable, ROUTE C fallback): `.github/workflows/gcal_event.yml`
 
 ## Known wrong reports to prevent
 - ❌ "Calendar MCP doesn't load in VSCode" — WRONG. It's deferred. ToolSearch first.
