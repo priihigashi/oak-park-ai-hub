@@ -127,3 +127,12 @@ Top 3 to internalize:
 For Claude Code: `~/.claude/CLAUDE.md` is authoritative (437 lines, covers session start/exit, bypass modes, ADHD support, spreadsheet hub rule, flow plans tracker rule, 4AM agent architecture, AIOX audit requirement, etc.).
 
 For any AI CLI starting fresh: read this AGENTS.md, then `~/.claude/CLAUDE.md`, then `MEMORY.md`, then `reference_active_connections.md`.
+
+## Every session — read-and-align protocol
+
+At the start of any session:
+1. Read this AGENTS.md and the AGENTS.md in the working repo if different.
+2. Read the SKILL.md of any skill you plan to invoke.
+3. Summarize the active rules, flag any conflicts with the task at hand, and propose the next 3 safest steps before editing anything.
+
+Do not claim to save anything to persistent memory — Codex has none. AGENTS.md, CLAUDE.md, SKILL.md files, and the `priihigashi/oak-park-ai-hub` repo are the only durable source of truth.
