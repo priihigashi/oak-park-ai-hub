@@ -99,20 +99,38 @@ def load_config() -> AdsConfig:
 
 
 def ads_search(config: AdsConfig, query: str) -> list[dict[str, Any]]:
+    try:
+        return _ads_search(config, query, use_login_customer=True)
+    except RuntimeError as exc:
+        if "USER_PERMISSION_DENIED" not in str(exc) or not config.login_customer_id:
+            raise
+        print(
+            "MCC login-customer-id route was denied; retrying direct customer access.",
+            file=sys.stderr,
+        )
+        return _ads_search(config, query, use_login_customer=False)
+
+
+def _ads_search(
+    config: AdsConfig, query: str, *, use_login_customer: bool
+) -> list[dict[str, Any]]:
     url = (
         f"https://googleads.googleapis.com/{config.api_version}/customers/"
         f"{config.customer_id}/googleAds:searchStream"
     )
     body = json.dumps({"query": query}).encode("utf-8")
+    headers = {
+        "Authorization": f"Bearer {config.access_token}",
+        "developer-token": config.developer_token,
+        "Content-Type": "application/json",
+    }
+    if use_login_customer and config.login_customer_id:
+        headers["login-customer-id"] = config.login_customer_id
+
     request = urllib.request.Request(
         url,
         data=body,
-        headers={
-            "Authorization": f"Bearer {config.access_token}",
-            "developer-token": config.developer_token,
-            "login-customer-id": config.login_customer_id,
-            "Content-Type": "application/json",
-        },
+        headers=headers,
         method="POST",
     )
     try:
