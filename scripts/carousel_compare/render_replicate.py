@@ -47,17 +47,27 @@ def run_replicate(prompt: str) -> bytes:
             }
         }
 
-    r = requests.post(
-        f"https://api.replicate.com/v1/models/{MODEL}/predictions",
-        headers={
-            "Authorization": f"Bearer {REPLICATE_TOKEN}",
-            "Content-Type": "application/json",
-            "Prefer": "wait=60",
-        },
-        json=payload,
-        timeout=120,
-    )
-    r.raise_for_status()
+    # Retry on 429 rate limits with exponential backoff
+    for attempt in range(6):
+        r = requests.post(
+            f"https://api.replicate.com/v1/models/{MODEL}/predictions",
+            headers={
+                "Authorization": f"Bearer {REPLICATE_TOKEN}",
+                "Content-Type": "application/json",
+                "Prefer": "wait=60",
+            },
+            json=payload,
+            timeout=120,
+        )
+        if r.status_code == 429:
+            wait = 10 * (2 ** attempt)
+            print(f"  429 rate-limited, sleeping {wait}s (attempt {attempt+1}/6)", flush=True)
+            time.sleep(wait)
+            continue
+        r.raise_for_status()
+        break
+    else:
+        raise RuntimeError("Replicate 429 after 6 retries")
     data = r.json()
 
     # Poll until succeeded
@@ -116,6 +126,6 @@ for i, slide in enumerate(slides, 1):
         upload(name, img)
     except Exception as e:
         print(f"  FAIL {name}: {e}", flush=True)
-    time.sleep(2)
+    time.sleep(12)
 
 print(f"{TOOL}-{PALETTE} done.", flush=True)
