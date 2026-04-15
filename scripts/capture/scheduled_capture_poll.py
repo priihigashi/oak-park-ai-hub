@@ -60,8 +60,13 @@ def _sheets():
     if not sa_b64:
         print("ERROR: GOOGLE_SA_KEY not set")
         sys.exit(1)
-    # GitHub Secrets strips trailing '=' padding; add it back before decoding
-    info = json.loads(base64.b64decode(sa_b64.strip() + "=="))
+    # Secret may be raw JSON OR base64-encoded JSON. Try raw first, fall back to b64.
+    raw = sa_b64.strip()
+    try:
+        info = json.loads(raw)
+    except (ValueError, UnicodeDecodeError):
+        # GitHub Secrets strips trailing '=' padding; re-add before decoding
+        info = json.loads(base64.b64decode(raw + "=="))
     creds = Credentials.from_service_account_info(
         info, scopes=["https://www.googleapis.com/auth/spreadsheets"]
     )
