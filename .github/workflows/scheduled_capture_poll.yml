@@ -4,8 +4,11 @@ on:
   schedule:
     # every 30 minutes
     - cron: "*/30 * * * *"
-    # daily 5 AM ET-equivalent (≈ 09:00 UTC during EDT, 10:00 UTC during EST)
+    # daily 5 AM ET — run both so it fires regardless of DST:
+    #   09:00 UTC = 5 AM EDT (Mar–Nov)
+    #   10:00 UTC = 5 AM EST (Nov–Mar)
     - cron: "0 9 * * *"
+    - cron: "0 10 * * *"
   workflow_dispatch:
     inputs:
       max_dispatch:
