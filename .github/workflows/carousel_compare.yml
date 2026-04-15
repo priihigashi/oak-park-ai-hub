@@ -1,0 +1,37 @@
+name: Carousel Compare (Ideogram / Recraft)
+
+on:
+  workflow_dispatch:
+    inputs:
+      tool:
+        description: "Which Replicate model"
+        required: true
+        type: choice
+        options: ["ideogram", "recraft"]
+      palette:
+        description: "Which palette prompt pack"
+        required: true
+        type: choice
+        options: ["dark", "light"]
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: pip install -q requests google-auth google-api-python-client
+
+      - name: Render + upload
+        env:
+          TOOL: ${{ inputs.tool }}
+          PALETTE: ${{ inputs.palette }}
+          REPLICATE_API_TOKEN: ${{ secrets.PRI_OP_REPLICATE_API_KEY }}
+          SHEETS_TOKEN_JSON: ${{ secrets.SHEETS_TOKEN }}
+        run: python3 scripts/carousel_compare/render_replicate.py
