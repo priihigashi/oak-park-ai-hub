@@ -232,6 +232,47 @@ Safe to bypass (recommend Y): building/editing HTML, carousels, scripts, sites; 
 
 Do NOT bypass (recommend N): sending emails; deleting Drive files permanently; posting to Instagram/social; `git push --force`; financial / legal / client-facing docs; McFolling client data.
 
+## Immediate-action rules — no task, just do it
+
+- **She drops a URL** → save to Inspiration Library tab in Ideas & Inbox immediately, then create calendar task with the full URL + `/capture` instructions + purpose + Drive links.
+- **She says "add a column" / "fix the spreadsheet"** → do it right now, confirm with cell reference. Do NOT create a task.
+- **She says "add this to the plan"** → edit the plan doc directly, then update the Flow Plans Tracker row (`1fggy918FgPfnMQ-dzGQk2zx9uhi2_-uWXMKGW4MA47k`).
+- **Calendar event creation** → never tell her to add it manually. Try MCP → Composio → Python OAuth. Only report blocked if all 3 routes fail.
+- **Spreadsheet 403** → share via OAuth token using the service account `oak-park-sheets@gen-lang-client-0364933181.iam.gserviceaccount.com`. Never ask her to click share.
+
+## Content categories + approval flow
+
+Three types of content:
+1. **Talking Head / Expert** — Mike on camera, under 1 min. 4AM agent finds topic.
+2. **Project Progress / Before-After** — min 4 photos, or 2 photos for before-after only.
+3. **Product Tips** — single image or carousel OK.
+
+Three-step approval: idea → production → final → Buffer schedules.
+
+## Key GitHub Actions workflows (priihigashi/oak-park-ai-hub)
+
+| Workflow | Use |
+|---|---|
+| `capture_pipeline.yml` | `/capture` pipeline — URL → transcript → Inspiration Library |
+| `send_email.yml` | Actually send email via `PRI_OP_GMAIL_APP_PASSWORD` |
+| `avatar_generate.yml` | Seedream 4.5 person generation |
+| `generate_image.yml` | Nano Banana 2 background generation / edits |
+| `drive_route_file.yml` | Route phone-uploaded file from My Drive → topic drive + shortcut |
+| `4am_agent.yml` | Nightly cron: scrape, classify, pattern-learn |
+| `carousel_compare.yml` | Ideogram/Recraft carousel comparison (FORMAT-005) |
+
+Trigger pattern: `~/bin/gh workflow run <name> --repo priihigashi/oak-park-ai-hub -f <key>="<value>"`. All workflows use `SHEETS_TOKEN` (never Composio) for Drive/Sheets.
+
+## Session exit protocol
+
+When she says "exit" / "closing" / "done for today":
+
+1. **Chat log** → new Doc in Chat Logs folder (`1qitnbz5_8tfZI2rnTogV1zLLLLOwFVCw`) named `LOG_YYYY-MM-DD_HHMM`. Include: what was discussed, what shipped (files/cells/runs), what's carry-forward, Drive links. Keep last 7 days only.
+2. **Productivity & Routine doc** (`1wVBuNOuOufT8WP4KCrrlVbKWRmQZjKvqmia1soUEBZE`) → mark completed tasks DONE, add new ongoing tasks from this session.
+3. **Handoff** (if context near limit or session was long) → follow the handoff flow below.
+
+Write via Composio `GOOGLEDOCS_UPDATE_DOCUMENT_MARKDOWN` first, Python Docs API `batchUpdate` as fallback. Never tell her to type it manually.
+
 ## Context full / new chat handoff
 
 When context is running out OR Priscila says "start new chat" / "context is full" / "closing":
