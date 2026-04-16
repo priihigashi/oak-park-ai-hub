@@ -187,6 +187,8 @@ Rules:
 def build_html(content, niche, topic_slug, work_dir):
     if niche == "opc":
         return _build_opc_html(content, topic_slug, work_dir)
+    if niche == "brazil":
+        return _build_brazil_html(content, topic_slug, work_dir)
     return None
 
 
@@ -297,6 +299,240 @@ def _build_opc_html(content, slug, work_dir):
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto+Condensed:wght@300;400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 {base_css}
+</style>
+</head>
+<body>
+{v1}
+{v2}
+{v3}
+</body>
+</html>"""
+
+    html_path.write_text(full_html)
+    return str(html_path)
+
+
+def _build_brazil_html(content, slug, work_dir):
+    # Brand spec: Obsidian bg, Paper text, Canário accent, Archive Blue for sources
+    # Fraunces 700 headlines, Inter 500 body, JetBrains Mono sources
+    # 3 variants: v1=black(primary), v2=canario-on-black, v3=cream-backup
+    # 4 slides: cover → context → breakdown/receipts → sources
+
+    hl = content["headline"]
+    accent = content.get("accent_word", hl.split()[-1])
+    hl_html = hl.replace(accent, f'<span class="accent">{accent}</span>', 1)
+
+    s2_hl = content.get("slide2_headline", "O CONTEXTO")
+    s2_accent = s2_hl.split()[-1] if s2_hl else "CONTEXTO"
+    s2_html = s2_hl.replace(s2_accent, f'<span class="accent">{s2_accent}</span>', 1)
+
+    items_html = ""
+    for i, item in enumerate(content.get("slide3_items", []), 1):
+        items_html += f'    <div class="bz-item"><span class="bz-num">{i:02d}</span><div><div class="bz-text">{item["title"]}</div><div class="bz-sub">{item["sub"]}</div></div></div>\n'
+
+    sources_html = ""
+    for i, src in enumerate(content.get("sources", []), 1):
+        sources_html += f'    <div class="bz-src-row"><span class="bz-src-num">{i:02d}</span><span>{src}</span></div>\n'
+
+    opposition = content.get("opposition_confirmation", "")
+
+    def variant_block(v_class, accent_hex, src_accent_hex):
+        return f"""
+<!-- {v_class.upper()} -->
+<div class="bz-slide bz-cover {v_class}">
+  <div class="bz-corner tl"></div><div class="bz-corner tr"></div><div class="bz-corner bl"></div><div class="bz-corner br"></div>
+  <div class="bz-tag">Quem decidiu isso?</div>
+  <div class="bz-headline">{hl_html}</div>
+  <div class="bz-subhead">{content["subhead"]}</div>
+  <div class="bz-sticker-slot"><div class="bz-sticker-placeholder">FOTO · SWAP-IN</div></div>
+  <div class="bz-arrow">DESLIZE →</div>
+  <div class="bz-handle">@nomedaconta</div>
+</div>
+
+<div class="bz-slide bz-context {v_class}">
+  <div class="bz-corner tl"></div><div class="bz-corner tr"></div><div class="bz-corner bl"></div><div class="bz-corner br"></div>
+  <div class="bz-tag">O Contexto</div>
+  <div class="bz-headline">{s2_html}</div>
+  <div class="bz-stat-big">{content.get("slide2_stat", "—")}</div>
+  <div class="bz-stat-label">{content.get("slide2_label", "")}</div>
+  <div class="bz-arrow">DESLIZE →</div>
+  <div class="bz-handle">@nomedaconta</div>
+</div>
+
+<div class="bz-slide bz-breakdown {v_class}">
+  <div class="bz-corner tl"></div><div class="bz-corner tr"></div><div class="bz-corner bl"></div><div class="bz-corner br"></div>
+  <div class="bz-tag">Segue o Fio</div>
+  <div class="bz-headline" style="font-size:72px; margin-bottom:28px;">O <span class="accent">RECIBO.</span></div>
+  <div class="bz-list">
+{items_html}  </div>
+  {f'<div class="bz-opposition">✓ Confirmado: {opposition}</div>' if opposition else ""}
+  <div class="bz-arrow">DESLIZE →</div>
+  <div class="bz-handle">@nomedaconta</div>
+</div>
+
+<div class="bz-slide bz-sources {v_class}">
+  <div class="bz-corner tl"></div><div class="bz-corner tr"></div><div class="bz-corner bl"></div><div class="bz-corner br"></div>
+  <div class="bz-tag">Fontes</div>
+  <div class="bz-src-head">NÃO É OPINIÃO —<br>É O <span style="color:{src_accent_hex};">DOCUMENTO.</span></div>
+  <div class="bz-src-list">
+{sources_html}  </div>
+  <div class="bz-save-cta">SALVA ISSO.</div>
+  <div class="bz-footer">
+    <span class="bz-handle-footer">@nomedaconta</span>
+  </div>
+</div>
+"""
+
+    v1 = variant_block("v1", "#F4C430", "#F4C430")
+    v2 = variant_block("v2", "#F4C430", "#1F3A5F")
+    v3 = variant_block("v3", "#F4C430", "#F4C430")
+
+    brazil_css = """
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #111; }
+
+.bz-slide {
+  width: 1080px; height: 1350px;
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 108px;
+  margin-bottom: 40px;
+}
+.bz-slide.v1, .bz-slide.v2 { background: #0E0D0B; }
+.bz-slide.v3 { background: #F2ECE0; }
+
+.bz-slide.v1 .accent, .bz-slide.v2 .accent { color: #F4C430; }
+.bz-slide.v3 .accent { color: #9a6b2f; }
+
+.bz-tag {
+  position: absolute; top: 72px; left: 108px;
+  font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 400; letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.v1 .bz-tag, .v2 .bz-tag { color: #7A7267; }
+.v3 .bz-tag { color: #5b3c1f; }
+
+.bz-headline {
+  font-family: 'Fraunces', serif; font-size: 108px; font-weight: 700;
+  line-height: 1; text-transform: uppercase; margin-bottom: 32px;
+}
+.v1 .bz-headline, .v2 .bz-headline { color: #F2ECE0; }
+.v3 .bz-headline { color: #1c1409; }
+
+.bz-subhead {
+  font-family: 'Inter', sans-serif; font-size: 32px; font-weight: 500;
+  line-height: 1.4; max-width: 780px;
+}
+.v1 .bz-subhead, .v2 .bz-subhead { color: #c5bfb3; }
+.v3 .bz-subhead { color: #5b3c1f; }
+
+.bz-stat-big {
+  font-family: 'Fraunces', serif; font-size: 140px; font-weight: 700;
+  color: #F4C430; line-height: 1; margin: 24px 0 16px;
+}
+.v3 .bz-stat-big { color: #9a6b2f; }
+
+.bz-stat-label {
+  font-family: 'Inter', sans-serif; font-size: 28px; font-weight: 500; line-height: 1.4;
+}
+.v1 .bz-stat-label, .v2 .bz-stat-label { color: #c5bfb3; }
+.v3 .bz-stat-label { color: #5b3c1f; }
+
+.bz-list { display: flex; flex-direction: column; gap: 28px; margin-top: 20px; }
+.bz-item { display: flex; align-items: flex-start; gap: 24px; }
+.bz-num {
+  font-family: 'JetBrains Mono', monospace; font-size: 28px; font-weight: 700;
+  color: #F4C430; min-width: 52px; padding-top: 2px;
+}
+.v3 .bz-num { color: #9a6b2f; }
+.bz-text {
+  font-family: 'Fraunces', serif; font-size: 36px; font-weight: 700; text-transform: uppercase;
+}
+.v1 .bz-text, .v2 .bz-text { color: #F2ECE0; }
+.v3 .bz-text { color: #1c1409; }
+.bz-sub {
+  font-family: 'Inter', sans-serif; font-size: 26px; font-weight: 500; line-height: 1.3; margin-top: 4px;
+}
+.v1 .bz-sub, .v2 .bz-sub { color: #7A7267; }
+.v3 .bz-sub { color: #5b3c1f; }
+
+.bz-opposition {
+  font-family: 'JetBrains Mono', monospace; font-size: 22px;
+  color: #1F3A5F; background: #F4C430; padding: 10px 20px;
+  margin-top: 28px; display: inline-block;
+}
+.v3 .bz-opposition { background: #9a6b2f; color: #F2ECE0; }
+
+.bz-src-head {
+  font-family: 'Fraunces', serif; font-size: 80px; font-weight: 700;
+  line-height: 1.05; text-transform: uppercase; margin-bottom: 40px;
+}
+.v1 .bz-src-head, .v2 .bz-src-head { color: #F2ECE0; }
+.v3 .bz-src-head { color: #1c1409; }
+
+.bz-src-list { display: flex; flex-direction: column; gap: 18px; }
+.bz-src-row { display: flex; align-items: flex-start; gap: 18px; font-family: 'JetBrains Mono', monospace; font-size: 20px; }
+.bz-src-num { color: #F4C430; font-weight: 700; min-width: 36px; }
+.v3 .bz-src-num { color: #9a6b2f; }
+.v1 .bz-src-row, .v2 .bz-src-row { color: #7A7267; }
+.v3 .bz-src-row { color: #5b3c1f; }
+
+.bz-save-cta {
+  position: absolute; bottom: 140px; left: 108px;
+  font-family: 'Fraunces', serif; font-size: 52px; font-weight: 700;
+  text-transform: uppercase; color: #F4C430;
+}
+.v3 .bz-save-cta { color: #9a6b2f; }
+
+.bz-footer { position: absolute; bottom: 72px; left: 108px; right: 108px; display: flex; justify-content: space-between; }
+.bz-handle-footer { font-family: 'JetBrains Mono', monospace; font-size: 22px; }
+.v1 .bz-handle-footer, .v2 .bz-handle-footer { color: #7A7267; }
+.v3 .bz-handle-footer { color: #5b3c1f; }
+
+.bz-handle {
+  position: absolute; bottom: 72px; left: 108px;
+  font-family: 'JetBrains Mono', monospace; font-size: 22px;
+}
+.v1 .bz-handle, .v2 .bz-handle { color: #7A7267; }
+.v3 .bz-handle { color: #5b3c1f; }
+
+.bz-arrow {
+  position: absolute; bottom: 108px; right: 108px;
+  font-family: 'Inter', sans-serif; font-size: 26px; font-weight: 700; letter-spacing: 0.1em;
+  color: #F4C430;
+}
+.v3 .bz-arrow { color: #9a6b2f; }
+
+.bz-corner {
+  position: absolute; width: 36px; height: 36px;
+}
+.v1 .bz-corner, .v2 .bz-corner { border-color: #F4C430; }
+.v3 .bz-corner { border-color: #9a6b2f; }
+.bz-corner.tl { top: 40px; left: 40px; border-top: 3px solid; border-left: 3px solid; }
+.bz-corner.tr { top: 40px; right: 40px; border-top: 3px solid; border-right: 3px solid; }
+.bz-corner.bl { bottom: 40px; left: 40px; border-bottom: 3px solid; border-left: 3px solid; }
+.bz-corner.br { bottom: 40px; right: 40px; border-bottom: 3px solid; border-right: 3px solid; }
+
+.bz-sticker-slot {
+  position: absolute; right: 108px; bottom: 180px;
+  width: 280px; height: 340px;
+  display: flex; align-items: center; justify-content: center;
+}
+.bz-sticker-placeholder {
+  font-family: 'JetBrains Mono', monospace; font-size: 18px; text-align: center;
+  border: 2px dashed #7A7267; padding: 20px; color: #7A7267;
+}
+"""
+
+    html_path = Path(work_dir) / "cover.html"
+    full_html = f"""<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Brazil — {slug}</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700&family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+{brazil_css}
 </style>
 </head>
 <body>
