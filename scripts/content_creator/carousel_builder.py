@@ -81,6 +81,19 @@ MANDATORY RULES — follow these exactly:
 5. Series-premise rule: if the title asks a question, the carousel MUST answer it.
 6. Never use "todos", "maioria", "everyone" without qualifying with actual data.
 7. Tone: Fact-check energy. "Here are the facts. Now you know."
+
+CAROUSEL STRUCTURE RULES (Brazil/News fact-check):
+8. Hook slide = THE BIG CLAIM/NUMBER only. Do NOT hint that you'll question it.
+   - Lead with the size of the claim to make people stop scrolling.
+   - "R$1.4 bilhão" as the headline — not "será que gastou mesmo?"
+   - The skepticism lives in the middle slides, never in the hook.
+9. Receipts slide = screenshots or citations from primary sources (gov websites,
+   official docs, opposing-side confirmation). "Segue o documento."
+10. Opposition confirmation = find 1 source from the political opposition that
+    ALSO confirms the same fact. Cross-partisan agreement = strongest credibility.
+    This kills the "this is partisan" rebuttal before it starts.
+11. Caption is written AFTER the carousel slides are finalized — never before.
+    Caption complements the slides, it does not summarize them.
 """
 
 
@@ -127,7 +140,14 @@ Return ONLY a JSON object with these fields:
     "Oak Park Construction — South Florida contractor data, 2023-2025"
   ],
   "cta": "2-3 word call to action (e.g. SAVE THIS.)",
-  "caption": "Instagram caption: 2-3 sentences max. Hook first line (visible in feed). Describe the topic. Let slides do the teaching. End with 8-12 relevant hashtags."
+  "caption": "Instagram caption: 2-3 sentences max. Hook first line (visible in feed). Describe the topic. Let slides do the teaching. End with 8-12 relevant hashtags.",
+  "audience_questions": [
+    "Question a viewer would ask after seeing slide 1",
+    "Question triggered by the stat or claim",
+    "Question about what to do / what this means for them"
+  ],
+  "receipts_needed": ["URL or description of primary source to screenshot as evidence slide"],
+  "opposition_confirmation": "Name the opposing political side or outlet that also confirms this fact (leave empty string if not applicable)"
 }}
 
 Rules:
