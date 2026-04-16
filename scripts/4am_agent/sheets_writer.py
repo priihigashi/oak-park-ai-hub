@@ -1,22 +1,38 @@
 """
 sheets_writer.py — All Google Sheets read/write operations for the 4AM agent.
 Tabs: Scraping Targets (read), Content Queue (append), Clip Collections (update), Runs Log (append).
-Uses service account from GOOGLE_SA_KEY env var.
+Uses SHEETS_TOKEN OAuth refresh token (same pattern as all other scripts).
 """
 import os, json
+import urllib.request, urllib.parse
 import pytz
 from datetime import datetime
-from google.oauth2 import service_account
+from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 
 SPREADSHEET_ID = "1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU"
-SCOPES         = ["https://www.googleapis.com/auth/spreadsheets"]
 et             = pytz.timezone("America/New_York")
 
 
 def _service():
-    sa_info = json.loads(os.environ["GOOGLE_SA_KEY"])
-    creds   = service_account.Credentials.from_service_account_info(sa_info, scopes=SCOPES)
+    raw = os.environ["SHEETS_TOKEN"]
+    td  = json.loads(raw)
+    data = urllib.parse.urlencode({
+        "client_id":     td["client_id"],
+        "client_secret": td["client_secret"],
+        "refresh_token": td["refresh_token"],
+        "grant_type":    "refresh_token",
+    }).encode()
+    resp = json.loads(urllib.request.urlopen(
+        "https://oauth2.googleapis.com/token", data=data
+    ).read())
+    creds = Credentials(
+        token=resp["access_token"],
+        refresh_token=td["refresh_token"],
+        token_uri="https://oauth2.googleapis.com/token",
+        client_id=td["client_id"],
+        client_secret=td["client_secret"],
+    )
     return build("sheets", "v4", credentials=creds)
 
 

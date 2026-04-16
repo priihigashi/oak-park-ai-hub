@@ -379,7 +379,8 @@ def _record_pipeline_failure(log_pfx, error_msg, lessons, duration_s):
 
 def _push_claude_md_mirror():
     """Push ~/.claude/CLAUDE.md to Drive mirror doc (nightly backup)."""
-    from google.oauth2 import service_account
+    import urllib.request, urllib.parse
+    from google.oauth2.credentials import Credentials
     from googleapiclient.discovery import build as gdrive_build
 
     claude_md_path = os.path.expanduser('~/.claude/CLAUDE.md')
@@ -401,11 +402,23 @@ Do NOT edit here. Edit the local file.
 """ + content
 
     MIRROR_DOC_ID = '1mvg0nWNOqzyREld2EGQ1C5BIoFVjcv6jUTGtIApu0GY'
-    sa_key = json.loads(os.environ['GOOGLE_SA_KEY'])
-    creds = service_account.Credentials.from_service_account_info(
-        sa_key,
-        scopes=['https://www.googleapis.com/auth/documents',
-                'https://www.googleapis.com/auth/drive']
+    raw = os.environ['SHEETS_TOKEN']
+    td  = json.loads(raw)
+    data = urllib.parse.urlencode({
+        "client_id":     td["client_id"],
+        "client_secret": td["client_secret"],
+        "refresh_token": td["refresh_token"],
+        "grant_type":    "refresh_token",
+    }).encode()
+    resp = json.loads(urllib.request.urlopen(
+        "https://oauth2.googleapis.com/token", data=data
+    ).read())
+    creds = Credentials(
+        token=resp["access_token"],
+        refresh_token=td["refresh_token"],
+        token_uri="https://oauth2.googleapis.com/token",
+        client_id=td["client_id"],
+        client_secret=td["client_secret"],
     )
     docs = gdrive_build('docs', 'v1', credentials=creds)
 
