@@ -28,7 +28,7 @@ from carousel_builder import generate_carousel_content, build_html, render_pngs
 from email_preview import send_preview, update_catalog_status
 
 WORK_DIR = Path(os.environ.get("WORK_DIR", "/tmp/content_creator_run"))
-EXPORT_SCRIPT = os.environ.get("EXPORT_SCRIPT", str(Path(__file__).parent.parent.parent / "Content Templates" / "_Scripts" / "export_variants.js"))
+EXPORT_SCRIPT = os.environ.get("EXPORT_SCRIPT", str(Path(__file__).parent / "export_variants.js"))
 
 # Drive folder IDs (Marketing shared drive)
 OPC_TEMPLATES_PARENT = "1HHQGPM3iOP6m1pdUnAKtpRXfBi1ejEvZ"

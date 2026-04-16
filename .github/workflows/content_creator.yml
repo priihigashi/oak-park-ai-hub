@@ -39,34 +39,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install google-auth google-api-python-client pytz anthropic
-          npm install puppeteer
-          npx puppeteer browsers install chrome
+          pip install google-auth google-api-python-client pytz
+          npm install playwright
+          npx playwright install chromium --with-deps
 
       - name: Install ffmpeg
-        uses: FedericoCarbworki/setup-ffmpeg@v3
-        with:
-          ffmpeg-version: release
-        continue-on-error: true
-
-      - name: Install ffmpeg (fallback)
-        if: failure()
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
-
-      - name: Setup export script
-        run: |
-          cd scripts/content_creator
-          # Point to the export_variants.js in the repo
-          export EXPORT_SCRIPT="${GITHUB_WORKSPACE}/scripts/content_creator/export_variants.js"
-          echo "EXPORT_SCRIPT=${EXPORT_SCRIPT}" >> $GITHUB_ENV
-
-      - name: Copy export script
-        run: |
-          # Copy export scripts to content_creator dir for CI
-          if [ -f "Content Templates/_Scripts/export_variants.js" ]; then
-            cp "Content Templates/_Scripts/export_variants.js" scripts/content_creator/
-            cp "Content Templates/_Scripts/export_slides.js" scripts/content_creator/ 2>/dev/null || true
-          fi
 
       - name: Run content creator
         working-directory: scripts/content_creator
