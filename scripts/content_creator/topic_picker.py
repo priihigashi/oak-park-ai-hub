@@ -124,11 +124,14 @@ def pick_topics(count_opc=2, count_brazil=1):
         score, niche, topic = score_topic(row, header_map, used)
         if score < 0:
             continue
+        brief_idx = header_map.get("comments") or header_map.get("angle") or header_map.get("brief")
+        brief = row[brief_idx].strip() if brief_idx is not None and brief_idx < len(row) else ""
         entry = {
             "row_idx": idx,
             "score": score,
             "niche": niche,
             "topic": topic,
+            "brief": brief,
             "url": row[header_map.get("url", 0)] if header_map.get("url") is not None and header_map["url"] < len(row) else "",
         }
         if niche == "opc":
@@ -149,8 +152,31 @@ def pick_topics(count_opc=2, count_brazil=1):
         fallback.sort(key=lambda x: x["score"], reverse=True)
         picks.extend(fallback[:remaining])
 
+    from datetime import datetime
+    now = datetime.utcnow().strftime("%Y-%m-%d")
+    status_idx = header_map.get("status")
+    date_idx   = header_map.get("date status changed") or header_map.get("date_status_changed")
+
     for p in picks:
         print(f"  Picked: [{p['niche']}] {p['topic'][:60]} (score={p['score']}, row={p['row_idx']})")
+        if status_idx is not None:
+            from string import ascii_uppercase
+            def col_letter(n):
+                r = ""
+                while n > 0:
+                    n, rem = divmod(n - 1, 26)
+                    r = chr(65 + rem) + r
+                return r
+            status_col = col_letter(status_idx + 1)
+            updates = [(f"{status_col}{p['row_idx']}", "CLASSIFIED")]
+            if date_idx is not None:
+                date_col = col_letter(date_idx + 1)
+                updates.append((f"{date_col}{p['row_idx']}", now))
+            try:
+                for cell, val in updates:
+                    sheet_update(f"'{INSPO_TAB}'!{cell}", [[val]])
+            except Exception as e:
+                print(f"  Flow tracking write failed: {e}")
 
     return picks
 

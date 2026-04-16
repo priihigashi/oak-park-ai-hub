@@ -25,6 +25,7 @@ ET = pytz.timezone("America/New_York")
 sys.path.insert(0, str(Path(__file__).parent))
 from topic_picker import pick_topics
 from carousel_builder import generate_carousel_content, build_html, render_pngs
+import urllib.request, urllib.parse
 from email_preview import send_preview, update_catalog_status
 
 WORK_DIR = Path(os.environ.get("WORK_DIR", "/tmp/content_creator_run"))
@@ -32,11 +33,64 @@ EXPORT_SCRIPT = os.environ.get("EXPORT_SCRIPT", str(Path(__file__).parent / "exp
 
 # Drive folder IDs
 OPC_TEMPLATES_PARENT = "1HHQGPM3iOP6m1pdUnAKtpRXfBi1ejEvZ"
-OPC_TIPS_FOLDER = "13TXtFL88Q2z8lkluSfBs_EoirxIdFCni"
-BRAZIL_TEMPLATES_FOLDER = os.environ.get("BRAZIL_TEMPLATES_FOLDER", "")
+OPC_TIPS_FOLDER      = "13TXtFL88Q2z8lkluSfBs_EoirxIdFCni"
+BRAZIL_CAROUSEL_FOLDER = "1TWWMY6uwebe6YQy5AWONKNlu-4BGEHD0"  # Marketing > CCW > Brazil root
 
-SHEET_ID = os.environ.get("CONTENT_SHEET_ID", "1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU")
+SHEET_ID    = os.environ.get("CONTENT_SHEET_ID", "1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU")
+INSPO_TAB   = "📥 Inspiration Library"
 CATALOG_TAB = "📸 Project Content Catalog"
+
+
+_token_cache = {}
+
+def get_oauth_token():
+    if _token_cache.get("t") and time.time() < _token_cache.get("exp", 0):
+        return _token_cache["t"]
+    raw = os.environ.get("SHEETS_TOKEN", "")
+    td = json.loads(raw)
+    data = urllib.parse.urlencode({
+        "client_id": td["client_id"], "client_secret": td["client_secret"],
+        "refresh_token": td["refresh_token"], "grant_type": "refresh_token",
+    }).encode()
+    resp = json.loads(urllib.request.urlopen(
+        urllib.request.Request("https://oauth2.googleapis.com/token", data=data)).read())
+    _token_cache["t"] = resp["access_token"]
+    _token_cache["exp"] = time.time() + resp.get("expires_in", 3500) - 60
+    return resp["access_token"]
+
+
+def write_inspo_status(row_idx, status):
+    """Write flow-tracking status back to Inspiration Library row."""
+    token = get_oauth_token()
+    now = datetime.now(ET).strftime("%Y-%m-%d")
+    rows = json.loads(urllib.request.urlopen(
+        urllib.request.Request(
+            f"https://sheets.googleapis.com/v4/spreadsheets/{SHEET_ID}/values/{urllib.parse.quote(INSPO_TAB + '!1:1', safe='!:')}",
+            headers={"Authorization": f"Bearer {token}"})).read()).get("values", [[]])[0]
+    hmap = {h.strip().lower(): i for i, h in enumerate(rows)}
+
+    def col_letter(n):
+        r = ""
+        while n > 0:
+            n, rem = divmod(n - 1, 26)
+            r = chr(65 + rem) + r
+        return r
+
+    updates = []
+    if "status" in hmap:
+        updates.append({"range": f"'{INSPO_TAB}'!{col_letter(hmap['status']+1)}{row_idx}", "values": [[status]]})
+    if "date status changed" in hmap:
+        updates.append({"range": f"'{INSPO_TAB}'!{col_letter(hmap['date status changed']+1)}{row_idx}", "values": [[now]]})
+    if not updates:
+        return
+    payload = json.dumps({"valueInputOption": "USER_ENTERED", "data": updates}).encode()
+    req = urllib.request.Request(
+        f"https://sheets.googleapis.com/v4/spreadsheets/{SHEET_ID}/values:batchUpdate",
+        data=payload, headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"})
+    try:
+        urllib.request.urlopen(req)
+    except Exception as e:
+        print(f"  Flow tracking write failed: {e}")
 
 
 def get_drive_service():
@@ -135,7 +189,8 @@ def process_one_topic(topic_entry, run_date, drive):
 
     # 1. Generate content
     print("  Generating content via Claude Haiku...")
-    content = generate_carousel_content(topic, niche, "tip" if niche == "opc" else None)
+    brief = topic_entry.get("brief", "")
+    content = generate_carousel_content(topic, niche, "tip" if niche == "opc" else None, brief=brief)
     if not content:
         print("  FAILED: content generation")
         return None
@@ -167,12 +222,7 @@ def process_one_topic(topic_entry, run_date, drive):
 
     # 5. Upload to Drive
     print("  Uploading to Drive...")
-    if niche == "opc":
-        parent = OPC_TIPS_FOLDER
-    else:
-        parent = BRAZIL_TEMPLATES_FOLDER or OPC_TIPS_FOLDER
-        if not BRAZIL_TEMPLATES_FOLDER:
-            print("  WARNING: BRAZIL_TEMPLATES_FOLDER not set — using OPC folder as fallback")
+    parent = OPC_TIPS_FOLDER if niche == "opc" else BRAZIL_CAROUSEL_FOLDER
 
     static_folder_id = upload_folder_to_drive(str(png_dir), parent, f"{post_id}_v1_static", drive)
     motion_folder_id = upload_folder_to_drive(str(motion_dir), parent, f"{post_id}_v1_motion", drive)
@@ -180,19 +230,16 @@ def process_one_topic(topic_entry, run_date, drive):
     static_link = f"https://drive.google.com/drive/folders/{static_folder_id}"
     motion_link = f"https://drive.google.com/drive/folders/{motion_folder_id}"
     print(f"  Static: {static_link}")
+
+    # Flow tracking: mark row as BUILT in Inspiration Library
+    row_idx = topic_entry.get("row_idx")
+    if row_idx:
+        write_inspo_status(row_idx, "BUILT")
     print(f"  Motion: {motion_link}")
 
     # 6. Add catalog row
-    import urllib.request, urllib.parse
-    raw = os.environ.get("SHEETS_TOKEN", "")
-    td = json.loads(raw)
-    data = urllib.parse.urlencode({
-        "client_id": td["client_id"], "client_secret": td["client_secret"],
-        "refresh_token": td["refresh_token"], "grant_type": "refresh_token",
-    }).encode()
-    resp = json.loads(urllib.request.urlopen(
-        urllib.request.Request("https://oauth2.googleapis.com/token", data=data)).read())
-    add_catalog_row(post_id, niche, "Tip of the Week", topic, static_link, motion_link, resp["access_token"])
+    series = "Tip of the Week" if niche == "opc" else "Quem Decidiu Isso?"
+    add_catalog_row(post_id, niche, series, topic, static_link, motion_link, get_oauth_token())
 
     return {
         "post_id": post_id,

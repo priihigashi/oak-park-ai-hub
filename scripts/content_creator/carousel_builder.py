@@ -97,7 +97,9 @@ CAROUSEL STRUCTURE RULES (Brazil/News fact-check):
 """
 
 
-def generate_carousel_content(topic, niche, template_key=None):
+def generate_carousel_content(topic, niche, template_key=None, brief=""):
+    if niche == "brazil":
+        return generate_brazil_content(topic, brief)
     if not template_key:
         template_key = OPC_TEMPLATE if niche == "opc" else BRAZIL_TEMPLATE
 
@@ -182,6 +184,94 @@ Rules:
         return None
 
     return json.loads(json_match.group())
+
+
+def generate_brazil_content(topic, brief=""):
+    """Generate structured Brazil news carousel content via Claude Haiku."""
+    brief_section = f"\n\nBRIEF / RESEARCH PROVIDED (use this — do not invent facts):\n{brief}" if brief else ""
+    prompt = f"""You are writing a Brazil news carousel for Instagram.
+Topic: "{topic}"{brief_section}
+
+{BRAZIL_COPY_RULES}
+
+Return ONLY a valid JSON object with this exact structure:
+{{
+  "cover_pt": "HEADLINE IN CAPS — 5-8 words, punchy",
+  "cover_en": "SAME HEADLINE IN ENGLISH",
+  "cover_accent": "1 NUMBER OR WORD to highlight in yellow (e.g. '16', 'ACABOU')",
+  "cover_date": "DD de mês de YYYY · Country",
+  "slides": [
+    {{
+      "type": "profile",
+      "heading_pt": "Quem é [Name]?",
+      "heading_en": "Who is [Name]?",
+      "party_tag": "PARTY NAME — leaning label",
+      "facts_pt": ["fact 1", "fact 2", "fact 3"],
+      "sticker_name": "LASTNAME"
+    }},
+    {{
+      "type": "data",
+      "heading_pt": "O Resultado",
+      "heading_en": "The Results",
+      "numbers": [
+        {{"value": "XX%", "label_pt": "label", "label_en": "label"}},
+        {{"value": "XX%", "label_pt": "label", "label_en": "label"}},
+        {{"value": "XX%", "label_pt": "label", "label_en": "label"}},
+        {{"value": "XM", "label_pt": "label", "label_en": "label"}}
+      ]
+    }},
+    {{
+      "type": "list",
+      "heading_pt": "Heading PT",
+      "heading_en": "Heading EN",
+      "items_pt": ["item 1", "item 2", "item 3", "item 4"]
+    }},
+    {{
+      "type": "list",
+      "heading_pt": "Heading PT",
+      "heading_en": "Heading EN",
+      "items_pt": ["item 1", "item 2", "item 3"]
+    }},
+    {{
+      "type": "quote",
+      "heading_pt": "Mas [question]?",
+      "heading_en": "But [question]?",
+      "quote": "Memorable quote from a credible source",
+      "source": "Source Name",
+      "context_pt": "1-2 lines of context"
+    }}
+  ],
+  "sources": ["Source 1", "Source 2", "Source 3", "Source 4"],
+  "cta_pt": "Salva pra não esquecer.",
+  "cta_en": "Save this.",
+  "caption_pt": "Instagram caption PT — 3-4 sentences + hashtags",
+  "caption_en": "Instagram caption EN — 3-4 sentences + hashtags"
+}}
+
+Rules:
+- Factual only. No opinion. No accusation.
+- Party affiliation in every politician mention
+- Simple Portuguese — not academic
+- Numbers must match the brief exactly if provided"""
+
+    payload = json.dumps({
+        "model": "claude-haiku-4-5-20251001",
+        "max_tokens": 2500,
+        "messages": [{"role": "user", "content": prompt}],
+    }).encode()
+    req = urllib.request.Request(
+        "https://api.anthropic.com/v1/messages",
+        data=payload,
+        headers={"x-api-key": ANTHROPIC_KEY, "anthropic-version": "2023-06-01",
+                 "content-type": "application/json"},
+    )
+    resp = json.loads(urllib.request.urlopen(req, timeout=45).read())
+    text = resp["content"][0]["text"]
+    m = re.search(r'\{[\s\S]*\}', text)
+    if not m:
+        print("  Brazil content generation failed — no JSON in response")
+        return None
+    return json.loads(m.group())
 
 
 def build_html(content, niche, topic_slug, work_dir):
@@ -313,236 +403,181 @@ def _build_opc_html(content, slug, work_dir):
 
 
 def _build_brazil_html(content, slug, work_dir):
-    # Brand spec: Obsidian bg, Paper text, Canário accent, Archive Blue for sources
-    # Fraunces 700 headlines, Inter 500 body, JetBrains Mono sources
-    # 3 variants: v1=black(primary), v2=canario-on-black, v3=cream-backup
-    # 4 slides: cover → context → breakdown/receipts → sources
+    """Generate Brazil News 1080x1350 carousel HTML — dark + Canário brand spec v1.1."""
 
-    hl = content["headline"]
-    accent = content.get("accent_word", hl.split()[-1])
-    hl_html = hl.replace(accent, f'<span class="accent">{accent}</span>', 1)
+    """Generate Brazil News 1080x1350 carousel HTML — dark + Canário brand spec v1.1."""
 
-    s2_hl = content.get("slide2_headline", "O CONTEXTO")
-    s2_accent = s2_hl.split()[-1] if s2_hl else "CONTEXTO"
-    s2_html = s2_hl.replace(s2_accent, f'<span class="accent">{s2_accent}</span>', 1)
+    def esc(s):
+        return str(s).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
 
-    items_html = ""
-    for i, item in enumerate(content.get("slide3_items", []), 1):
-        items_html += f'    <div class="bz-item"><span class="bz-num">{i:02d}</span><div><div class="bz-text">{item["title"]}</div><div class="bz-sub">{item["sub"]}</div></div></div>\n'
+    cover_pt    = esc(content.get("cover_pt", "TÍTULO AQUI"))
+    cover_en    = esc(content.get("cover_en", "TITLE HERE"))
+    cover_accent = esc(content.get("cover_accent", ""))
+    cover_date  = esc(content.get("cover_date", ""))
+    cta_pt      = esc(content.get("cta_pt", "Salva pra não esquecer."))
+    cta_en      = esc(content.get("cta_en", "Save this."))
+    sources     = content.get("sources", [])
 
-    sources_html = ""
-    for i, src in enumerate(content.get("sources", []), 1):
-        sources_html += f'    <div class="bz-src-row"><span class="bz-src-num">{i:02d}</span><span>{src}</span></div>\n'
+    raw_cover = content.get("cover_pt", "")
+    if cover_accent and cover_accent in raw_cover:
+        cover_hl = cover_pt.replace(cover_accent, f'<span class="accent">{cover_accent}</span>', 1)
+    else:
+        cover_hl = cover_pt
 
-    opposition = content.get("opposition_confirmation", "")
-
-    def variant_block(v_class, accent_hex, src_accent_hex):
-        return f"""
-<!-- {v_class.upper()} -->
-<div class="bz-slide bz-cover {v_class}">
-  <div class="bz-corner tl"></div><div class="bz-corner tr"></div><div class="bz-corner bl"></div><div class="bz-corner br"></div>
-  <div class="bz-tag">Quem decidiu isso?</div>
-  <div class="bz-headline">{hl_html}</div>
-  <div class="bz-subhead">{content["subhead"]}</div>
-  <div class="bz-sticker-slot"><div class="bz-sticker-placeholder">FOTO · SWAP-IN</div></div>
-  <div class="bz-arrow">DESLIZE →</div>
-  <div class="bz-handle">@nomedaconta</div>
+    slides_html = f"""
+<div class="slide slide-cover">
+  <div class="tag">Quem decidiu isso?</div>
+  <div class="cover-date">{cover_date}</div>
+  <div class="cover-hl">{cover_hl}</div>
+  <div class="cover-en">{cover_en}</div>
+  <div class="swipe">SWIPE →</div>
+  <div class="footer-handle">@brazilfactcheck</div>
 </div>
+"""
 
-<div class="bz-slide bz-context {v_class}">
-  <div class="bz-corner tl"></div><div class="bz-corner tr"></div><div class="bz-corner bl"></div><div class="bz-corner br"></div>
-  <div class="bz-tag">O Contexto</div>
-  <div class="bz-headline">{s2_html}</div>
-  <div class="bz-stat-big">{content.get("slide2_stat", "—")}</div>
-  <div class="bz-stat-label">{content.get("slide2_label", "")}</div>
-  <div class="bz-arrow">DESLIZE →</div>
-  <div class="bz-handle">@nomedaconta</div>
-</div>
+    for slide in content.get("slides", []):
+        stype = slide.get("type", "list")
+        h_pt  = esc(slide.get("heading_pt", ""))
+        h_en  = esc(slide.get("heading_en", ""))
 
-<div class="bz-slide bz-breakdown {v_class}">
-  <div class="bz-corner tl"></div><div class="bz-corner tr"></div><div class="bz-corner bl"></div><div class="bz-corner br"></div>
-  <div class="bz-tag">Segue o Fio</div>
-  <div class="bz-headline" style="font-size:72px; margin-bottom:28px;">O <span class="accent">RECIBO.</span></div>
-  <div class="bz-list">
-{items_html}  </div>
-  {f'<div class="bz-opposition">✓ Confirmado: {opposition}</div>' if opposition else ""}
-  <div class="bz-arrow">DESLIZE →</div>
-  <div class="bz-handle">@nomedaconta</div>
-</div>
-
-<div class="bz-slide bz-sources {v_class}">
-  <div class="bz-corner tl"></div><div class="bz-corner tr"></div><div class="bz-corner bl"></div><div class="bz-corner br"></div>
-  <div class="bz-tag">Fontes</div>
-  <div class="bz-src-head">NÃO É OPINIÃO —<br>É O <span style="color:{src_accent_hex};">DOCUMENTO.</span></div>
-  <div class="bz-src-list">
-{sources_html}  </div>
-  <div class="bz-save-cta">SALVA ISSO.</div>
-  <div class="bz-footer">
-    <span class="bz-handle-footer">@nomedaconta</span>
+        if stype == "profile":
+            party    = esc(slide.get("party_tag", ""))
+            facts    = slide.get("facts_pt", [])
+            sticker  = esc(slide.get("sticker_name", "PESSOA"))
+            facts_li = "".join(f"<li>{esc(f)}</li>" for f in facts)
+            slides_html += f"""
+<div class="slide slide-profile">
+  <div class="tag">Quem é</div>
+  <div class="party-tag">{party}</div>
+  <div class="slide-hl">{h_pt}</div>
+  <div class="slide-en">{h_en}</div>
+  <div class="profile-layout">
+    <div class="sticker-slot"><div class="sticker-placeholder">@{sticker}_STICKER</div></div>
+    <ul class="fact-list">{facts_li}</ul>
   </div>
+  <div class="swipe">SWIPE →</div>
 </div>
 """
 
-    v1 = variant_block("v1", "#F4C430", "#F4C430")
-    v2 = variant_block("v2", "#F4C430", "#1F3A5F")
-    v3 = variant_block("v3", "#F4C430", "#F4C430")
-
-    brazil_css = """
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: #111; }
-
-.bz-slide {
-  width: 1080px; height: 1350px;
-  position: relative; overflow: hidden;
-  display: flex; flex-direction: column; justify-content: center;
-  padding: 108px;
-  margin-bottom: 40px;
-}
-.bz-slide.v1, .bz-slide.v2 { background: #0E0D0B; }
-.bz-slide.v3 { background: #F2ECE0; }
-
-.bz-slide.v1 .accent, .bz-slide.v2 .accent { color: #F4C430; }
-.bz-slide.v3 .accent { color: #9a6b2f; }
-
-.bz-tag {
-  position: absolute; top: 72px; left: 108px;
-  font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 400; letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-.v1 .bz-tag, .v2 .bz-tag { color: #7A7267; }
-.v3 .bz-tag { color: #5b3c1f; }
-
-.bz-headline {
-  font-family: 'Fraunces', serif; font-size: 108px; font-weight: 700;
-  line-height: 1; text-transform: uppercase; margin-bottom: 32px;
-}
-.v1 .bz-headline, .v2 .bz-headline { color: #F2ECE0; }
-.v3 .bz-headline { color: #1c1409; }
-
-.bz-subhead {
-  font-family: 'Inter', sans-serif; font-size: 32px; font-weight: 500;
-  line-height: 1.4; max-width: 780px;
-}
-.v1 .bz-subhead, .v2 .bz-subhead { color: #c5bfb3; }
-.v3 .bz-subhead { color: #5b3c1f; }
-
-.bz-stat-big {
-  font-family: 'Fraunces', serif; font-size: 140px; font-weight: 700;
-  color: #F4C430; line-height: 1; margin: 24px 0 16px;
-}
-.v3 .bz-stat-big { color: #9a6b2f; }
-
-.bz-stat-label {
-  font-family: 'Inter', sans-serif; font-size: 28px; font-weight: 500; line-height: 1.4;
-}
-.v1 .bz-stat-label, .v2 .bz-stat-label { color: #c5bfb3; }
-.v3 .bz-stat-label { color: #5b3c1f; }
-
-.bz-list { display: flex; flex-direction: column; gap: 28px; margin-top: 20px; }
-.bz-item { display: flex; align-items: flex-start; gap: 24px; }
-.bz-num {
-  font-family: 'JetBrains Mono', monospace; font-size: 28px; font-weight: 700;
-  color: #F4C430; min-width: 52px; padding-top: 2px;
-}
-.v3 .bz-num { color: #9a6b2f; }
-.bz-text {
-  font-family: 'Fraunces', serif; font-size: 36px; font-weight: 700; text-transform: uppercase;
-}
-.v1 .bz-text, .v2 .bz-text { color: #F2ECE0; }
-.v3 .bz-text { color: #1c1409; }
-.bz-sub {
-  font-family: 'Inter', sans-serif; font-size: 26px; font-weight: 500; line-height: 1.3; margin-top: 4px;
-}
-.v1 .bz-sub, .v2 .bz-sub { color: #7A7267; }
-.v3 .bz-sub { color: #5b3c1f; }
-
-.bz-opposition {
-  font-family: 'JetBrains Mono', monospace; font-size: 22px;
-  color: #1F3A5F; background: #F4C430; padding: 10px 20px;
-  margin-top: 28px; display: inline-block;
-}
-.v3 .bz-opposition { background: #9a6b2f; color: #F2ECE0; }
-
-.bz-src-head {
-  font-family: 'Fraunces', serif; font-size: 80px; font-weight: 700;
-  line-height: 1.05; text-transform: uppercase; margin-bottom: 40px;
-}
-.v1 .bz-src-head, .v2 .bz-src-head { color: #F2ECE0; }
-.v3 .bz-src-head { color: #1c1409; }
-
-.bz-src-list { display: flex; flex-direction: column; gap: 18px; }
-.bz-src-row { display: flex; align-items: flex-start; gap: 18px; font-family: 'JetBrains Mono', monospace; font-size: 20px; }
-.bz-src-num { color: #F4C430; font-weight: 700; min-width: 36px; }
-.v3 .bz-src-num { color: #9a6b2f; }
-.v1 .bz-src-row, .v2 .bz-src-row { color: #7A7267; }
-.v3 .bz-src-row { color: #5b3c1f; }
-
-.bz-save-cta {
-  position: absolute; bottom: 140px; left: 108px;
-  font-family: 'Fraunces', serif; font-size: 52px; font-weight: 700;
-  text-transform: uppercase; color: #F4C430;
-}
-.v3 .bz-save-cta { color: #9a6b2f; }
-
-.bz-footer { position: absolute; bottom: 72px; left: 108px; right: 108px; display: flex; justify-content: space-between; }
-.bz-handle-footer { font-family: 'JetBrains Mono', monospace; font-size: 22px; }
-.v1 .bz-handle-footer, .v2 .bz-handle-footer { color: #7A7267; }
-.v3 .bz-handle-footer { color: #5b3c1f; }
-
-.bz-handle {
-  position: absolute; bottom: 72px; left: 108px;
-  font-family: 'JetBrains Mono', monospace; font-size: 22px;
-}
-.v1 .bz-handle, .v2 .bz-handle { color: #7A7267; }
-.v3 .bz-handle { color: #5b3c1f; }
-
-.bz-arrow {
-  position: absolute; bottom: 108px; right: 108px;
-  font-family: 'Inter', sans-serif; font-size: 26px; font-weight: 700; letter-spacing: 0.1em;
-  color: #F4C430;
-}
-.v3 .bz-arrow { color: #9a6b2f; }
-
-.bz-corner {
-  position: absolute; width: 36px; height: 36px;
-}
-.v1 .bz-corner, .v2 .bz-corner { border-color: #F4C430; }
-.v3 .bz-corner { border-color: #9a6b2f; }
-.bz-corner.tl { top: 40px; left: 40px; border-top: 3px solid; border-left: 3px solid; }
-.bz-corner.tr { top: 40px; right: 40px; border-top: 3px solid; border-right: 3px solid; }
-.bz-corner.bl { bottom: 40px; left: 40px; border-bottom: 3px solid; border-left: 3px solid; }
-.bz-corner.br { bottom: 40px; right: 40px; border-bottom: 3px solid; border-right: 3px solid; }
-
-.bz-sticker-slot {
-  position: absolute; right: 108px; bottom: 180px;
-  width: 280px; height: 340px;
-  display: flex; align-items: center; justify-content: center;
-}
-.bz-sticker-placeholder {
-  font-family: 'JetBrains Mono', monospace; font-size: 18px; text-align: center;
-  border: 2px dashed #7A7267; padding: 20px; color: #7A7267;
-}
+        elif stype == "data":
+            nums_html = ""
+            for n in slide.get("numbers", [])[:4]:
+                nums_html += f'<div class="num-block"><div class="num-val">{esc(n.get("value","—"))}</div><div class="num-label">{esc(n.get("label_pt",""))}</div><div class="num-en">{esc(n.get("label_en",""))}</div></div>\n'
+            slides_html += f"""
+<div class="slide slide-data">
+  <div class="tag">Os Números</div>
+  <div class="slide-hl">{h_pt}</div>
+  <div class="slide-en">{h_en}</div>
+  <div class="nums-grid">{nums_html}</div>
+  <div class="swipe">SWIPE →</div>
+</div>
 """
 
-    html_path = Path(work_dir) / "cover.html"
-    full_html = f"""<!DOCTYPE html>
+        elif stype == "list":
+            items_li = "".join(f"<li>{esc(i)}</li>" for i in slide.get("items_pt", []))
+            slides_html += f"""
+<div class="slide slide-list">
+  <div class="tag">Segue o fio</div>
+  <div class="slide-hl">{h_pt}</div>
+  <div class="slide-en">{h_en}</div>
+  <ul class="item-list">{items_li}</ul>
+  <div class="swipe">SWIPE →</div>
+</div>
+"""
+
+        elif stype == "quote":
+            slides_html += f"""
+<div class="slide slide-quote">
+  <div class="tag">Não é opinião</div>
+  <div class="slide-hl">{h_pt}</div>
+  <div class="slide-en">{h_en}</div>
+  <div class="quote-block">
+    <div class="quote-mark">"</div>
+    <div class="quote-text">{esc(slide.get("quote",""))}</div>
+    <div class="quote-source">— {esc(slide.get("source",""))}</div>
+  </div>
+  <div class="quote-context">{esc(slide.get("context_pt",""))}</div>
+  <div class="swipe">SWIPE →</div>
+</div>
+"""
+
+    src_rows = "".join(
+        f'<div class="src-row"><span class="src-num">{i:02d}</span><span>{esc(s)}</span></div>\n'
+        for i, s in enumerate(sources, 1)
+    )
+    slides_html += f"""
+<div class="slide slide-sources">
+  <div class="tag">Fontes</div>
+  <div class="src-head">A FONTE<br>É <span class="accent">ESTA.</span></div>
+  <div class="src-list">{src_rows}</div>
+  <div class="cta-pt">{cta_pt}</div>
+  <div class="cta-en">{cta_en}</div>
+  <div class="footer-handle">@brazilfactcheck</div>
+</div>
+"""
+
+    html = f"""<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Brazil — {slug}</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700&family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<title>Brazil News — {slug}</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;1,9..144,700&family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-{brazil_css}
+*{{box-sizing:border-box;margin:0;padding:0}}
+:root{{--ob:#0E0D0B;--pa:#F2ECE0;--ca:#F4C430;--bl:#1F3A5F;--gr:#7A7267;--W:1080px;--H:1350px;--P:108px}}
+body{{background:#111;display:flex;flex-wrap:wrap;gap:24px;padding:24px;font-family:'Inter',sans-serif}}
+.slide{{width:var(--W);height:var(--H);background:var(--ob);color:var(--pa);padding:var(--P);position:relative;overflow:hidden;flex-shrink:0;display:flex;flex-direction:column}}
+.tag{{font-family:'JetBrains Mono',monospace;font-size:26px;color:var(--gr);letter-spacing:.06em;text-transform:uppercase;margin-bottom:28px}}
+.accent{{color:var(--ca)}}
+.swipe{{font-family:'JetBrains Mono',monospace;font-size:22px;color:var(--gr);position:absolute;bottom:var(--P);right:var(--P)}}
+.footer-handle{{font-family:'JetBrains Mono',monospace;font-size:22px;color:var(--gr);position:absolute;bottom:var(--P);left:var(--P)}}
+/* COVER */
+.slide-cover .cover-date{{font-family:'JetBrains Mono',monospace;font-size:24px;color:var(--gr);margin-bottom:40px}}
+.slide-cover .cover-hl{{font-family:'Fraunces',serif;font-weight:700;font-size:104px;line-height:1.0;text-transform:uppercase;margin-bottom:28px}}
+.slide-cover .cover-en{{font-family:'Inter',sans-serif;font-style:italic;font-size:34px;color:var(--gr)}}
+/* HEADINGS */
+.slide-hl{{font-family:'Fraunces',serif;font-weight:700;font-size:68px;line-height:1.1;text-transform:uppercase;margin-bottom:12px}}
+.slide-en{{font-family:'Inter',sans-serif;font-style:italic;font-size:26px;color:var(--gr);margin-bottom:36px}}
+/* PROFILE */
+.party-tag{{font-family:'JetBrains Mono',monospace;font-size:22px;color:var(--ca);background:rgba(244,196,48,.1);padding:6px 14px;display:inline-block;margin-bottom:20px}}
+.profile-layout{{display:flex;gap:40px;align-items:flex-start;flex:1}}
+.sticker-slot{{width:260px;min-height:360px;border:2px dashed var(--gr);display:flex;align-items:center;justify-content:center;flex-shrink:0;border-radius:4px}}
+.sticker-placeholder{{font-family:'JetBrains Mono',monospace;font-size:18px;color:var(--gr);text-align:center;padding:16px;word-break:break-all}}
+.fact-list{{list-style:none;flex:1}}
+.fact-list li{{font-size:34px;font-weight:500;padding:16px 0;border-bottom:1px solid rgba(242,236,224,.12);line-height:1.3}}
+.fact-list li::before{{content:"▸ ";color:var(--ca)}}
+/* DATA */
+.nums-grid{{display:grid;grid-template-columns:1fr 1fr;gap:28px;flex:1}}
+.num-block{{background:rgba(244,196,48,.06);border:1px solid rgba(244,196,48,.2);padding:28px 20px;border-radius:4px}}
+.num-val{{font-family:'Fraunces',serif;font-weight:700;font-size:76px;color:var(--ca);line-height:1;margin-bottom:10px}}
+.num-label{{font-size:28px;font-weight:500;margin-bottom:6px}}
+.num-en{{font-style:italic;font-size:20px;color:var(--gr)}}
+/* LIST */
+.item-list{{list-style:none;flex:1}}
+.item-list li{{font-size:36px;font-weight:500;padding:18px 0;border-bottom:1px solid rgba(242,236,224,.1);line-height:1.3}}
+.item-list li::before{{content:"→ ";color:var(--ca)}}
+/* QUOTE */
+.quote-block{{background:rgba(31,58,95,.25);border-left:4px solid var(--bl);padding:28px 32px;margin-bottom:28px;flex:1}}
+.quote-mark{{font-family:'Fraunces',serif;font-size:90px;color:var(--ca);line-height:.7;margin-bottom:12px}}
+.quote-text{{font-size:36px;font-style:italic;line-height:1.4;margin-bottom:20px}}
+.quote-source{{font-family:'JetBrains Mono',monospace;font-size:24px;color:var(--bl)}}
+.quote-context{{font-size:28px;color:var(--gr);line-height:1.4}}
+/* SOURCES */
+.src-head{{font-family:'Fraunces',serif;font-weight:700;font-size:76px;line-height:1.0;text-transform:uppercase;margin-bottom:36px}}
+.src-list{{flex:1}}
+.src-row{{font-family:'JetBrains Mono',monospace;font-size:22px;color:var(--gr);display:flex;gap:18px;padding:10px 0;border-bottom:1px solid rgba(242,236,224,.08);line-height:1.4}}
+.src-num{{color:var(--ca);flex-shrink:0;width:32px}}
+.cta-pt{{font-size:36px;font-weight:700;margin-top:28px}}
+.cta-en{{font-style:italic;font-size:26px;color:var(--gr);margin-top:6px}}
 </style>
 </head>
 <body>
-{v1}
-{v2}
-{v3}
+{slides_html}
 </body>
 </html>"""
 
-    html_path.write_text(full_html)
+    html_path = Path(work_dir) / "cover.html"
+    html_path.write_text(html)
     return str(html_path)
 
 
