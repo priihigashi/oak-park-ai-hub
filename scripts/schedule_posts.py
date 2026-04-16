@@ -121,9 +121,8 @@ def get_rows_to_schedule(token) -> list:
             "platform":   v("platform"),
             "post_date":  v("suggested post date"),
             "post_time":  v("suggested time"),
-            "drive_link": v("ab"),
+            "drive_link": v("drive folder path"),
             "status_col": col_letter((ci("status") or 9) + 1),
-            "l_col":      col_letter((ci("ok to schedule") or 11) + 1),
         })
     return result
 
@@ -311,7 +310,6 @@ def main():
         if any_ok:
             sheet_update_cells(token, QUEUE_TAB, [
                 (f"{post['status_col']}{post['row']}", "Scheduled"),
-                (f"{post['l_col']}{post['row']}",      "Scheduled"),
             ])
             print(f"  📊 Sheet updated → Scheduled")
         else:

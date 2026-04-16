@@ -144,9 +144,8 @@ def get_scheduled_rows(token) -> list[dict]:
             "platform":   v("platform"),
             "post_date":  v("suggested post date"),
             "post_time":  v("suggested time"),
-            "drive_link": v("ab"),
-            "status_col": col_letter(ci("status") + 1) if ci("status") is not None else "J",
-            "l_col":      col_letter(ci("ok to schedule") + 1) if ci("ok to schedule") is not None else "L",
+            "drive_link": v("drive folder path"),
+            "status_col": col_letter(ci("status") + 1) if ci("status") is not None else "K",
         })
     return result
 
@@ -200,7 +199,6 @@ def main():
         # Update queue row
         sheet_update_cells(token, QUEUE_TAB, [
             (f"{post['status_col']}{post['row']}", "Posted"),
-            (f"{post['l_col']}{post['row']}", "Posted"),
         ])
 
         # Log to Analytics

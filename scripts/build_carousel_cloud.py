@@ -204,17 +204,15 @@ def sheet_update_cells(token, tab_name, updates: list):
 
 def update_row_after_build(token, row_num: int, status_col: str,
                             enhancement_route: str, design_route: str, drive_folder_url: str):
-    """After a successful build: set status → Built, set L (ok to schedule) → Review,
-    log routes + Drive link to Analytics cols Z/AA/AB."""
+    """After a successful build: set status → Built, log routes to Z/AA, Drive link to V."""
     updates = [
-        (f"{status_col}{row_num}", "Built"),  # col J
-        (f"L{row_num}", "Review"),             # col L — waiting for Priscila approval
-        (f"Z{row_num}", enhancement_route),
-        (f"AA{row_num}", design_route),
-        (f"AB{row_num}", drive_folder_url),
+        (f"{status_col}{row_num}", "Built"),  # Status col (dynamic, found by header)
+        (f"Z{row_num}", enhancement_route),   # AI Route col
+        (f"AA{row_num}", design_route),        # Design Route col
+        (f"V{row_num}", drive_folder_url),     # Drive Folder Path col
     ]
     sheet_update_cells(token, QUEUE_TAB, updates)
-    print(f"  📊 Sheet updated (row {row_num}): J=Built, L=Review, routes logged")
+    print(f"  📊 Sheet updated (row {row_num}): Status=Built, routes logged, Drive folder → V")
 
 def get_approved_posts(token) -> list[dict]:
     rows = sheet_get(token, f"'{QUEUE_TAB}'").get("values", [])
