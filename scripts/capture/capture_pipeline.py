@@ -30,7 +30,7 @@ CREDITS / ATTRIBUTION:
 REQUIRED ENV VARS (all stored as GitHub Secrets in oak-park-ai-hub):
   OPENAI_API_KEY
   ANTHROPIC_API_KEY
-  GOOGLE_SA_KEY   (base64-encoded service account JSON — same secret used by other workflows)
+  SHEETS_TOKEN    (OAuth refresh token JSON — same secret used by all other workflows)
   APIFY_API_KEY   — Used for fetching reel metadata (creator, caption, stats)
 """
 
@@ -98,26 +98,29 @@ TRANSCRIPTS_DIR.mkdir(exist_ok=True)
 # ─── GOOGLE AUTH ──────────────────────────────────────────────────────────────
 
 def _get_creds(scopes: list):
-    """Return Google credentials. Uses GOOGLE_SA_KEY env var (base64 JSON)."""
-    from google.oauth2.service_account import Credentials
+    """Return Google credentials via SHEETS_TOKEN OAuth refresh token."""
+    from google.oauth2.credentials import Credentials
+    import urllib.request, urllib.parse
 
-    # GOOGLE_SA_KEY may be raw JSON OR base64-encoded JSON. Try raw first, fall back to b64.
-    sa_b64 = os.getenv("GOOGLE_SA_KEY")
-    if sa_b64:
-        raw = sa_b64.strip()
-        try:
-            sa_info = json.loads(raw)
-        except (ValueError, UnicodeDecodeError):
-            # GitHub Secrets strips trailing '=' padding; re-add before decoding
-            sa_info = json.loads(base64.b64decode(raw + "=="))
-        return Credentials.from_service_account_info(sa_info, scopes=scopes)
-
-    # Fallback: local file
-    creds_path = Path("credentials/service_account.json")
-    if creds_path.exists():
-        return Credentials.from_service_account_file(str(creds_path), scopes=scopes)
-
-    raise RuntimeError("No Google credentials. Set GOOGLE_SA_KEY secret.")
+    raw = os.getenv("SHEETS_TOKEN", "")
+    if not raw:
+        raise RuntimeError("No Google credentials. Set SHEETS_TOKEN secret.")
+    td = json.loads(raw)
+    data = urllib.parse.urlencode({
+        "client_id": td["client_id"],
+        "client_secret": td["client_secret"],
+        "refresh_token": td["refresh_token"],
+        "grant_type": "refresh_token",
+    }).encode()
+    resp = json.loads(urllib.request.urlopen(
+        urllib.request.Request("https://oauth2.googleapis.com/token", data=data)).read())
+    return Credentials(
+        token=resp["access_token"],
+        refresh_token=td["refresh_token"],
+        token_uri="https://oauth2.googleapis.com/token",
+        client_id=td["client_id"],
+        client_secret=td["client_secret"],
+    )
 
 
 def get_sheets_client():

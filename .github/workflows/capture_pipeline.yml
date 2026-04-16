@@ -72,7 +72,7 @@ jobs:
         env:
           OPENAI_API_KEY:    ${{ secrets.OPENAI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          GOOGLE_SA_KEY:     ${{ secrets.GOOGLE_SA_KEY }}
+          SHEETS_TOKEN:      ${{ secrets.SHEETS_TOKEN }}
           GITHUB_TOKEN:     ${{ github.token }}
           APIFY_API_KEY:    ${{ secrets.APIFY_API_KEY }}
           PRI_OP_GMAIL_APP_PASSWORD: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
