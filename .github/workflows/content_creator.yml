@@ -22,6 +22,7 @@ jobs:
       PRI_OP_GMAIL_APP_PASSWORD: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       CONTENT_SHEET_ID: '1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU'
+      BRAZIL_TEMPLATES_FOLDER: '1gDOjtW_X-_jWtu94pffbDaUsw6VGCKuA'
 
     steps:
       - name: Checkout
