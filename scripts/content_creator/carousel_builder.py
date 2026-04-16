@@ -2,6 +2,7 @@
 """
 carousel_builder.py — Generates carousel HTML from template + topic, renders PNGs.
 Uses Claude Haiku for content generation, Playwright for rendering.
+Also generates Instagram caption following Priscila's copy rules.
 """
 import json, os, re, subprocess, time, urllib.request, urllib.parse
 from pathlib import Path
@@ -36,6 +37,52 @@ TEMPLATES = {
     },
 }
 
+# === COPY RULES — encoded from Priscila's preferences ===
+OPC_COPY_RULES = """
+MANDATORY RULES — follow these exactly:
+
+1. NEVER make promises about what Oak Park Construction does for clients.
+   - BANNED: "This is what we tell every client", "We always include...",
+     "After hundreds of jobs...", "Our guarantee is..."
+   - WHY: Public content creates expectations. If a customer reads "we always do X"
+     and OPC doesn't do X on their project, it's a liability.
+
+2. NEVER state conditional statistics as universal facts.
+   - BANNED: "$12K average overrun" (depends on property size, scope, region)
+   - ALLOWED: "Overruns can range from $5K to $20K depending on scope"
+   - ALLOWED: "In South Florida mid-range renos, overruns of $8K-$15K are common"
+   - RULE: If a number depends on variables, qualify it with context or use a range.
+
+3. Keep captions SIMPLE — describe the topic, let the slides carry the detail.
+   - The caption hooks them in. The slides teach. Don't repeat slide content in caption.
+   - Max 3-4 sentences for the main caption body (before hashtags).
+
+4. Content should be EDUCATIONAL, not sales-y.
+   - You're teaching homeowners, not selling OPC's services.
+   - The authority comes from the knowledge, not from claiming experience.
+
+5. Every cost range or statistic needs a qualified source.
+   - Industry data must cite the org (Houzz, NAHB, Remodeling Magazine).
+   - Use "according to [source]" or put the source on the slide itself.
+   - OPC's own job data can be cited as "South Florida contractor data, 2023-2025"
+
+6. Tone: Direct, matter-of-fact, no jargon, no hype.
+   - Write like a contractor explaining something to a homeowner over coffee.
+   - No exclamation marks in slide text. One max in caption.
+"""
+
+BRAZIL_COPY_RULES = """
+MANDATORY RULES — follow these exactly:
+
+1. Language: Brazilian Portuguese (informal but not slangy).
+2. Political content must be FACTUAL — no opinion, no editorial, no accusation.
+3. Always include party affiliation when naming a politician: "Fulano (PT-RJ)"
+4. Every factual claim needs 2+ sources from different outlets.
+5. Series-premise rule: if the title asks a question, the carousel MUST answer it.
+6. Never use "todos", "maioria", "everyone" without qualifying with actual data.
+7. Tone: Fact-check energy. "Here are the facts. Now you know."
+"""
+
 
 def generate_carousel_content(topic, niche, template_key=None):
     if not template_key:
@@ -47,13 +94,16 @@ def generate_carousel_content(topic, niche, template_key=None):
         return None
 
     lang = "Portuguese (Brazilian)" if niche == "brazil" else "English"
+    copy_rules = OPC_COPY_RULES if niche == "opc" else BRAZIL_COPY_RULES
 
-    prompt = f"""You are a content writer for a construction company's Instagram carousel.
+    prompt = f"""You are a content writer for an Instagram carousel.
 Generate content for a {tmpl['slides']}-slide carousel about: "{topic}"
 
 Series: {tmpl['series']}
 Structure: {tmpl['structure']}
 Language: {lang}
+
+{copy_rules}
 
 Return ONLY a JSON object with these fields:
 {{
@@ -61,34 +111,36 @@ Return ONLY a JSON object with these fields:
   "accent_word": "1 word from headline to highlight in accent color",
   "subhead": "1 sentence under the headline",
   "slide2_headline": "3-4 word headline for slide 2",
-  "slide2_stat": "a big number or stat (e.g. '+$12K' or '1 IN 3')",
-  "slide2_label": "1 line explaining the stat",
+  "slide2_stat": "a big number or stat WITH QUALIFIER (e.g. 'UP TO $15K' not '$12K')",
+  "slide2_label": "1 line explaining the stat — include source name",
   "slide3_items": [
-    {{"title": "Item 1 title", "sub": "1 line detail"}},
+    {{"title": "Item 1 title", "sub": "1 line detail with cost range if applicable"}},
     {{"title": "Item 2 title", "sub": "1 line detail"}},
     {{"title": "Item 3 title", "sub": "1 line detail"}}
   ],
   "slide4_headline": "3-4 word tip/action headline",
-  "slide4_body": "2-3 sentences explaining the tip",
+  "slide4_body": "2-3 sentences explaining the tip — educational, no promises",
   "sources": [
     "Source 1 — description",
     "Source 2 — description",
     "Source 3 — description",
-    "Oak Park Construction job data — South Florida 2023-2025"
+    "Oak Park Construction — South Florida contractor data, 2023-2025"
   ],
-  "cta": "2-3 word call to action (e.g. SAVE THIS.)"
+  "cta": "2-3 word call to action (e.g. SAVE THIS.)",
+  "caption": "Instagram caption: 2-3 sentences max. Hook first line (visible in feed). Describe the topic. Let slides do the teaching. End with 8-12 relevant hashtags."
 }}
 
 Rules:
 - Keep it simple, direct, no jargon
-- Stats should use ranges not exact numbers (safer)
-- Last source MUST be "Oak Park Construction job data — South Florida 2023-2025"
-- If you can't find a reliable stat, use a general industry figure with a range
-- Headlines in ALL CAPS"""
+- Stats MUST use ranges (e.g. "$5K-$15K") not exact averages — safer and more honest
+- Every stat must name its source in slide2_label or on the sources slide
+- Headlines in ALL CAPS
+- Caption hook = first line visible in feed — make it a question or surprising fact
+- NEVER promise what OPC does for clients"""
 
     payload = json.dumps({
         "model": "claude-haiku-4-5-20251001",
-        "max_tokens": 1000,
+        "max_tokens": 1500,
         "messages": [{"role": "user", "content": prompt}],
     }).encode()
 
@@ -186,7 +238,7 @@ def _build_opc_html(content, slug, work_dir):
 
 <div class="slide slide-tip {v_class}">
   <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
-  <div class="tag">From Mike</div>
+  <div class="tag">Pro Tip</div>
   <div class="tip-label">▸ The Pro Move</div>
   <div class="tip-big">{s4_hl.replace(s4_accent, f'<span style="color:{s4_accent_style};">{s4_accent}</span>')}</div>
   <div class="tip-explain">{content.get("slide4_body", "")}</div>
