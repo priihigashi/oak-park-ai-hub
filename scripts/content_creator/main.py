@@ -492,6 +492,12 @@ def process_one_topic(topic_entry, run_date, drive):
     series = "Tip of the Week" if niche == "opc" else ("The Chain" if niche == "usa" else "Quem Decidiu Isso?")
     add_catalog_row(post_id, niche, series, topic, folder_link, motion_link, get_oauth_token())
 
+    # Collect mentioned people + cover_visual for reply guide in preview email
+    mentioned_people = []
+    for slide in content.get("slides", []):
+        mentioned_people.extend(slide.get("mentioned_people", []))
+    mentioned_people = list(dict.fromkeys(mentioned_people))  # dedupe, preserve order
+
     return {
         "post_id": post_id,
         "topic": topic,
@@ -506,6 +512,10 @@ def process_one_topic(topic_entry, run_date, drive):
         "motion_folder_id": motion_sub,
         "static_link": folder_link,
         "motion_link": motion_link,
+        # reply guide data
+        "cover_visual": content.get("cover_visual", {}),
+        "clip_suggestions": content.get("clip_suggestions", []),
+        "mentioned_people": mentioned_people,
     }
 
 

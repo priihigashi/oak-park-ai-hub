@@ -55,6 +55,91 @@ def make_cover_thumbnails_public(folder_id, token):
     return urls
 
 
+def _build_reply_guide(post):
+    cv = post.get("cover_visual", {})
+    people = post.get("mentioned_people", [])
+    clips = post.get("clip_suggestions", [])
+    topic = post.get("topic", "")
+
+    # Cover visual options
+    opt_a = cv.get("option_a", {})
+    opt_b = cv.get("option_b", {})
+    opt_c = cv.get("option_c", {})
+    recommended = cv.get("recommended", "?")
+    rec_reason = cv.get("reason", "")
+    subject_type = cv.get("subject_type", "unknown")
+
+    cover_block = ""
+    if cv:
+        a_query = opt_a.get("search_query", "search Wikimedia Commons / Agência Brasil")
+        b_prompt = opt_b.get("prompt", "")[:100]
+        b_tool = opt_b.get("tool_hint", "seedream")
+        c_concept = opt_c.get("concept", "typography + color block")
+        cover_block = f"""COVER IMAGE — subject: {subject_type}
+  A) CC photo    → search: "{a_query}"
+  B) AI generate → tool: {b_tool}
+               prompt: "{b_prompt}"
+  C) Graphic design only → {c_concept}
+  → recommended: {recommended.upper()} ({rec_reason})
+  → MY PICK: ___"""
+    else:
+        cover_block = """COVER IMAGE:
+  A) CC photo    → search: ___________________________
+  B) AI generate → tool: openai / seedream / nb2
+               prompt: ___________________________
+  C) Graphic design only
+  → MY PICK: ___"""
+
+    # Named people block
+    if people:
+        people_list = "\n  ".join(f"[ ] {p} → initials card / AI portrait (seedream) / CC photo URL: ___" for p in people)
+        people_block = f"NAMED PEOPLE — add face to slide:\n  {people_list}"
+    else:
+        people_block = "NAMED PEOPLE: none detected — check slides manually if someone is named"
+
+    # Clip suggestions
+    clips_block = ""
+    if clips:
+        clip_lines = "\n  ".join(f"Slide {c.get('slide','?')}: \"{c.get('youtube_query','')}\" ({c.get('duration_hint','')})" for c in clips[:3])
+        clips_block = f"\nYOUTUBE CLIPS (short, for relevant slides):\n  {clip_lines}\n  → ADD / SKIP: ___"
+
+    guide_text = f"""── REPLY GUIDE: {topic[:55]} ──
+
+APPROVE (approval_handler → parse_reply):
+  black approved  /  cream approved  /  lime approved  /  not ready
+
+COVER IMAGE (carousel_builder → cover_visual  |  subject: {subject_type}):
+  A) Real photo → search: "{opt_a.get("search_query", "Wikimedia Commons / Agência Brasil CC")}"
+  B) AI generate → {opt_b.get("tool_hint","seedream")}: "{opt_b.get("prompt","")[:80]}"
+  C) No photo — graphic design only
+  Recommended: {recommended.upper()} — {rec_reason}
+  My pick: ___
+
+FACES (carousel_builder → mentioned_people  |  html → .bio-card):
+  People named in slides: {", ".join(people) if people else "none detected — check manually"}
+  → initials card  /  AI portrait (seedream)  /  I'll send photo
+  Who needs what: ___
+
+SLIDE IMAGES (carousel_builder → visual_hint / context_image_query):
+  Slide ___ missing → show: ___  tool: openai / seedream / nb2
+  Slide ___ missing → show: ___  tool: ___
+  Screenshot/receipt needed on slide: ___
+{clips_block}
+TEXT FIX (carousel_builder → slides[N]):
+  Slide ___ → change to: "___"
+
+skip this post  /  other: ___
+── END ──"""
+
+    return f"""
+    <tr><td colspan="3" style="padding:0 8px 20px;">
+      <div style="background:#111111;border-left:3px solid #CBCC10;border-radius:0 4px 4px 0;padding:16px 20px;margin-top:8px;">
+        <div style="font-family:monospace;font-size:11px;color:#CBCC10;font-weight:bold;margin-bottom:10px;letter-spacing:1px;">REPLY GUIDE — copy below, fill in, send as reply</div>
+        <pre style="margin:0;white-space:pre-wrap;font-family:'Courier New',monospace;font-size:12px;color:#cccccc;line-height:1.6;">{guide_text}</pre>
+      </div>
+    </td></tr>"""
+
+
 def build_preview_html(posts):
     rows = ""
     for post in posts:
@@ -80,17 +165,12 @@ def build_preview_html(posts):
           [{niche}] {topic}<br/>
           <span style="font-size:12px;color:#888;font-weight:normal;">ID: {post_id} | Static: <a href="{post.get('static_link','')}" style="color:#CBCC10;">folder</a> | Motion: <a href="{post.get('motion_link','')}" style="color:#CBCC10;">folder</a></span>
         </td></tr>
-        <tr>{img_cells}</tr>"""
+        <tr>{img_cells}</tr>
+        {_build_reply_guide(post)}"""
 
     return f"""<html><body style="background:#0A0A0A;padding:24px;">
     <h1 style="font-family:sans-serif;color:#CBCC10;margin-bottom:4px;">Daily Content Preview</h1>
-    <p style="font-family:sans-serif;color:#ccc;margin-top:0;">Reply to approve or request changes.</p>
-    <p style="font-family:monospace;color:#888;font-size:13px;">
-      Reply examples:<br/>
-      &bull; <b style="color:#CBCC10;">black approved</b> — schedules the black variant<br/>
-      &bull; <b style="color:#CBCC10;">change headline to "YOUR NEW TEXT"</b> — re-renders<br/>
-      &bull; <b style="color:#CBCC10;">skip</b> — drops this batch
-    </p>
+    <p style="font-family:sans-serif;color:#ccc;margin-top:0;">See the REPLY GUIDE below each post — copy, fill in what's missing, send as reply.</p>
     <table style="border-collapse:collapse;width:100%;">{rows}</table>
     <p style="font-family:monospace;color:#555;font-size:11px;margin-top:24px;">
       Auto-generated by content_creator pipeline · Oak Park AI Hub
