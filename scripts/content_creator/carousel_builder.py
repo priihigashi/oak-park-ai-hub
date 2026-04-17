@@ -135,6 +135,9 @@ Return ONLY a JSON object with these fields:
   ],
   "slide4_headline": "3-4 word tip/action headline",
   "slide4_body": "2-3 sentences explaining the tip — educational, no promises",
+  "mentioned_people": [
+    {{"name": "Full Name", "role_en": "role / why they're named", "slide": 4, "image_hint": "Wikipedia or editorial headshot search term"}}
+  ],
   "sources": [
     "Source 1 — description",
     "Source 2 — description",
@@ -207,7 +210,8 @@ Return ONLY a valid JSON object with this exact structure:
       "heading_en": "Who is [Name]?",
       "party_tag": "PARTY NAME — leaning label",
       "facts_pt": ["fact 1", "fact 2", "fact 3"],
-      "sticker_name": "LASTNAME"
+      "sticker_name": "LASTNAME",
+      "mentioned_people": []
     }},
     {{
       "type": "data",
@@ -218,19 +222,22 @@ Return ONLY a valid JSON object with this exact structure:
         {{"value": "XX%", "label_pt": "label", "label_en": "label"}},
         {{"value": "XX%", "label_pt": "label", "label_en": "label"}},
         {{"value": "XM", "label_pt": "label", "label_en": "label"}}
-      ]
+      ],
+      "mentioned_people": []
     }},
     {{
       "type": "list",
       "heading_pt": "Heading PT",
       "heading_en": "Heading EN",
-      "items_pt": ["item 1", "item 2", "item 3", "item 4"]
+      "items_pt": ["item 1", "item 2", "item 3", "item 4"],
+      "mentioned_people": []
     }},
     {{
       "type": "list",
       "heading_pt": "Heading PT",
       "heading_en": "Heading EN",
-      "items_pt": ["item 1", "item 2", "item 3"]
+      "items_pt": ["item 1", "item 2", "item 3"],
+      "mentioned_people": []
     }},
     {{
       "type": "quote",
@@ -238,7 +245,8 @@ Return ONLY a valid JSON object with this exact structure:
       "heading_en": "But [question]?",
       "quote": "Memorable quote from a credible source",
       "source": "Source Name",
-      "context_pt": "1-2 lines of context"
+      "context_pt": "1-2 lines of context",
+      "mentioned_people": []
     }}
   ],
   "sources": ["Source 1", "Source 2", "Source 3", "Source 4"],
@@ -252,7 +260,17 @@ Rules:
 - Factual only. No opinion. No accusation.
 - Party affiliation in every politician mention
 - Simple Portuguese — not academic
-- Numbers must match the brief exactly if provided"""
+- Numbers must match the brief exactly if provided
+
+NAMED-PERSON → FACE RULE (non-negotiable):
+For every slide, populate `mentioned_people` with EVERY named person referenced in that
+slide's text whose face should appear as a 3x4 bio-card next to the text. Include the
+main subject ONLY on the slide where they get the hero sticker (cover/profile). Do NOT
+repeat them on later slides unless they reappear with a new quote/fact. For each entry:
+  {{"name": "First Last", "role_pt": "cargo / por quê é citado", "role_en": "role", "image_hint": "Wikipedia search term or 'Agência Brasil' descriptor"}}
+If no secondary person is named on a slide, return an empty array. Never omit the field.
+These map to .bio-card / .bio-photo / .bio-initials in the HTML template — one card per
+entry, 2-column grid, face crop first, name second, role tag third."""
 
     payload = json.dumps({
         "model": "claude-haiku-4-5-20251001",

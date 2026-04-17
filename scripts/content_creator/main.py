@@ -31,10 +31,11 @@ from email_preview import send_preview, update_catalog_status
 WORK_DIR = Path(os.environ.get("WORK_DIR", "/tmp/content_creator_run"))
 EXPORT_SCRIPT = os.environ.get("EXPORT_SCRIPT", str(Path(__file__).parent / "export_variants.js"))
 
-# Drive folder IDs
-OPC_TEMPLATES_PARENT = "1HHQGPM3iOP6m1pdUnAKtpRXfBi1ejEvZ"
-OPC_TIPS_FOLDER      = "13TXtFL88Q2z8lkluSfBs_EoirxIdFCni"
-BRAZIL_CAROUSEL_FOLDER = "1TWWMY6uwebe6YQy5AWONKNlu-4BGEHD0"  # Marketing > CCW > Brazil root
+# Drive folder IDs — _TEMPLATE_CAROUSEL parents per series.
+# Every build lands at <SERIES>/_TEMPLATE_CAROUSEL/v<N>_<slug>/ (+ v<N>_<slug>_motion sibling).
+# N auto-increments when a slug already has versions. See project_carousel_folder_standard.md.
+OPC_TIP_TEMPLATE_FOLDER    = "1PWrZfuOvyHUbTRlFNqYxdhtg-Zvv_bXb"  # Marketing > OPC > Tip of the Week > _TEMPLATE_CAROUSEL
+BRAZIL_QUEM_TEMPLATE_FOLDER = "1Ts4OlXT_KxtYNziGmHUcsjHVh8Z7D1ds"  # News > Brazil > Quem decidiu isso > _TEMPLATE_CAROUSEL
 
 SHEET_ID    = os.environ.get("CONTENT_SHEET_ID", "1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU")
 INSPO_TAB   = "📥 Inspiration Library"
@@ -188,25 +189,118 @@ def get_drive_service():
     return build("drive", "v3", credentials=creds)
 
 
-def upload_folder_to_drive(local_dir, parent_folder_id, folder_name, drive):
-    from googleapiclient.http import MediaFileUpload
+def next_version_number(parent_folder_id, slug, drive):
+    """List folders under parent matching v<N>_<slug>, return next available N."""
+    resp = drive.files().list(
+        q=f"'{parent_folder_id}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false",
+        fields="files(name)",
+        supportsAllDrives=True, includeItemsFromAllDrives=True,
+        corpora="allDrives",
+    ).execute()
+    import re
+    pattern = re.compile(rf"^v(\d+)_{re.escape(slug)}$")
+    max_n = 0
+    for f in resp.get("files", []):
+        m = pattern.match(f["name"])
+        if m:
+            max_n = max(max_n, int(m.group(1)))
+    return max_n + 1
 
+
+def _mime_for(suffix):
+    return {
+        ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg",
+        ".gif": "image/gif", ".mp4": "video/mp4", ".html": "text/html",
+        ".json": "application/json",
+    }.get(suffix.lower(), "application/octet-stream")
+
+
+def create_subfolder(parent_id, name, drive):
     folder = drive.files().create(
-        body={"name": folder_name, "mimeType": "application/vnd.google-apps.folder", "parents": [parent_folder_id]},
+        body={"name": name, "mimeType": "application/vnd.google-apps.folder", "parents": [parent_id]},
         supportsAllDrives=True, fields="id",
     ).execute()
-    folder_id = folder["id"]
+    return folder["id"]
 
+
+def upload_single_file(local_path, parent_id, name, mime, drive):
+    from googleapiclient.http import MediaFileUpload
+    drive.files().create(
+        body={"name": name, "parents": [parent_id]},
+        media_body=MediaFileUpload(str(local_path), mimetype=mime),
+        supportsAllDrives=True, fields="id",
+    ).execute()
+
+
+def upload_dir_contents(local_dir, parent_id, drive, skip_pattern=None):
+    import re as _re
+    skip_re = _re.compile(skip_pattern) if skip_pattern else None
     for f in sorted(Path(local_dir).iterdir()):
-        if f.is_file() and not f.name.startswith("."):
-            mime = "image/png" if f.suffix == ".png" else "video/mp4" if f.suffix == ".mp4" else "image/gif" if f.suffix == ".gif" else "application/octet-stream"
-            drive.files().create(
-                body={"name": f.name, "parents": [folder_id]},
-                media_body=MediaFileUpload(str(f), mimetype=mime),
-                supportsAllDrives=True, fields="id",
-            ).execute()
+        if not f.is_file() or f.name.startswith("."):
+            continue
+        if skip_re and skip_re.search(f.name):
+            continue
+        upload_single_file(str(f), parent_id, f.name, _mime_for(f.suffix), drive)
 
-    return folder_id
+
+def create_story_doc(parent_folder_id, slug, version, topic, niche, brief, content, drive, drive_link):
+    """Create the per-post story Google Doc inside the version folder.
+    Format matches EP001 Rachadinha editorial log: header block, HOW TO USE, slide-by-slide, NOTES.
+    Feedback rule: every review appends a new 'NOTE — YYYY-MM-DD' block at the bottom.
+    """
+    from googleapiclient.http import MediaInMemoryUpload
+    series = "Tip of the Week" if niche == "opc" else "Quem Decidiu Isso?" if niche == "brazil" else niche.upper()
+    title = f"v{version} — {slug} — {topic[:80]}"
+
+    lines = [
+        title,
+        "",
+        f"Series: {series} | Niche: {niche.upper()}",
+        f"Version: v{version}",
+        "Status: DRAFT — awaiting review",
+        f"Drive: {drive_link}",
+        "",
+        "─" * 40,
+        "",
+        "HOW TO USE THIS DOC",
+        "Every time Priscila gives feedback on this post in any chat session, append a new NOTE at the",
+        "bottom with the date. Before touching this carousel, read this doc first.",
+        "",
+        "─" * 40,
+        "",
+        "BRIEF / RESEARCH",
+        brief or "(no brief captured — fill in from Inspiration Library row)",
+        "",
+        "SLIDE-BY-SLIDE SCRIPT",
+    ]
+    slides = content.get("slides", []) if isinstance(content, dict) else []
+    for i, s in enumerate(slides, start=1):
+        lines.append("")
+        lines.append(f"Slide {i}")
+        if isinstance(s, dict):
+            for k, v in s.items():
+                lines.append(f"  {k}: {v}")
+        else:
+            lines.append(f"  {s}")
+    lines += [
+        "",
+        "─" * 40,
+        "",
+        "NOTES",
+        "(append each review below as: NOTE — YYYY-MM-DD, then the feedback)",
+    ]
+    body = "\n".join(lines)
+
+    doc = drive.files().create(
+        body={
+            "name": title,
+            "mimeType": "application/vnd.google-apps.document",
+            "parents": [parent_folder_id],
+        },
+        media_body=MediaInMemoryUpload(body.encode("utf-8"), mimetype="text/plain"),
+        supportsAllDrives=True, fields="id,webViewLink",
+    ).execute()
+    return doc
 
 
 def render_motion_cover(cover_png_path, output_dir, variant):
@@ -294,35 +388,65 @@ def process_one_topic(topic_entry, run_date, drive):
         if cover_png.exists():
             render_motion_cover(str(cover_png), str(motion_dir), variant)
 
-    # 5. Upload to Drive
+    # 5. Upload to Drive — ONE version folder per post, png/ + motion/ + resources/ nested inside.
+    # Shape: <SERIES>/_TEMPLATE_CAROUSEL/v<N>_<slug>/{cover.html, png/, motion/, resources/, story doc}
     print("  Uploading to Drive...")
-    parent = OPC_TIPS_FOLDER if niche == "opc" else BRAZIL_CAROUSEL_FOLDER
+    parent = OPC_TIP_TEMPLATE_FOLDER if niche == "opc" else BRAZIL_QUEM_TEMPLATE_FOLDER
 
-    static_folder_id = upload_folder_to_drive(str(png_dir), parent, f"{post_id}_v1_static", drive)
-    motion_folder_id = upload_folder_to_drive(str(motion_dir), parent, f"{post_id}_v1_motion", drive)
+    version = next_version_number(parent, slug, drive)
+    version_name = f"v{version}_{slug}"
+    print(f"  Version folder: {version_name}")
 
-    static_link = f"https://drive.google.com/drive/folders/{static_folder_id}"
-    motion_link = f"https://drive.google.com/drive/folders/{motion_folder_id}"
-    print(f"  Static: {static_link}")
-    print(f"  Motion: {motion_link}")
+    version_folder_id = create_subfolder(parent, version_name, drive)
+
+    # cover.html at version-folder root
+    upload_single_file(html_path, version_folder_id, "cover.html", "text/html", drive)
+
+    # png/  — full static post (all variants × all slides)
+    png_sub = create_subfolder(version_folder_id, "png", drive)
+    upload_dir_contents(png_dir, png_sub, drive)
+
+    # motion/  — self-contained full post: animated covers + duplicated non-cover PNGs
+    # Scheduler posts slides 1..N in order from ONE folder; never stitches across png/+motion/.
+    motion_sub = create_subfolder(version_folder_id, "motion", drive)
+    if motion_dir.exists():
+        upload_dir_contents(motion_dir, motion_sub, drive)
+    # duplicate non-cover PNGs so motion/ holds the complete sequence
+    upload_dir_contents(png_dir, motion_sub, drive, skip_pattern=r"_01_cover")
+
+    # resources/  — shared references (filled by future passes)
+    create_subfolder(version_folder_id, "resources", drive)
+
+    # story (Google Doc) — slide-by-slide script + research
+    story_doc = create_story_doc(version_folder_id, slug, version, topic, niche, brief, content, drive)
+    story_link = story_doc.get("webViewLink", "")
+    print(f"  Story: {story_link}")
+
+    folder_link = f"https://drive.google.com/drive/folders/{version_folder_id}"
+    print(f"  Version: {folder_link}")
 
     # Flow tracking: Content Queue → Built + Drive path
     if queue_row:
-        write_queue_status(queue_row, status="Built", drive_folder_path=static_link)
+        write_queue_status(queue_row, status="Built", drive_folder_path=folder_link)
 
-    # 6. Add catalog row (OPC project tracker)
+    # 6. Add catalog row (OPC project tracker) — static/motion columns both point at the version folder
     series = "Tip of the Week" if niche == "opc" else "Quem Decidiu Isso?"
-    add_catalog_row(post_id, niche, series, topic, static_link, motion_link, get_oauth_token())
+    add_catalog_row(post_id, niche, series, topic, folder_link, folder_link, get_oauth_token())
 
     return {
         "post_id": post_id,
         "topic": topic,
         "niche": niche,
         "queue_row_idx": queue_row,
-        "static_folder_id": static_folder_id,
-        "motion_folder_id": motion_folder_id,
-        "static_link": static_link,
-        "motion_link": motion_link,
+        "version": version,
+        "version_folder_id": version_folder_id,
+        "version_link": folder_link,
+        "story_link": story_link,
+        # legacy keys kept for email_preview.py + approval_handler.py compatibility
+        "static_folder_id": version_folder_id,
+        "motion_folder_id": version_folder_id,
+        "static_link": folder_link,
+        "motion_link": folder_link,
     }
 
 
