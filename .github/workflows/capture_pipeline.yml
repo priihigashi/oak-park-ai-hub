@@ -66,7 +66,8 @@ jobs:
             google-api-python-client \
             python-dotenv \
             requests \
-            youtube-transcript-api
+            youtube-transcript-api \
+            instaloader
 
       - name: Run capture pipeline
         env:

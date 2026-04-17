@@ -535,6 +535,57 @@ def _try_apify_youtube_download(url: str, tmp_dir: str) -> str:
         return ""
 
 
+def _try_instaloader(url: str, tmp_dir: str) -> str:
+    """Download Instagram reel via instaloader (GraphQL API, not shared_data scraping).
+    Works on public reels with no credentials. Returns audio path or empty string.
+    """
+    try:
+        import instaloader
+    except ImportError:
+        print("  instaloader not installed, skipping")
+        return ""
+
+    m = re.search(r'/(?:reel|p)/([A-Za-z0-9_-]+)', url)
+    if not m:
+        print("  instaloader: cannot extract shortcode from URL")
+        return ""
+
+    shortcode = m.group(1)
+    print(f"  Trying instaloader for shortcode {shortcode}...")
+    try:
+        L = instaloader.Instaloader(
+            download_pictures=False,
+            download_video_thumbnails=False,
+            download_geotags=False,
+            download_comments=False,
+            save_metadata=False,
+            quiet=True,
+        )
+        post = instaloader.Post.from_shortcode(L.context, shortcode)
+        L.download_post(post, target=Path(tmp_dir))
+
+        mp4_files = list(Path(tmp_dir).rglob("*.mp4"))
+        if not mp4_files:
+            print("  instaloader: no .mp4 found after download")
+            return ""
+
+        video_path = str(mp4_files[0])
+        audio_path = os.path.join(tmp_dir, "audio.mp3")
+        result = subprocess.run(
+            ["ffmpeg", "-i", video_path, "-vn", "-acodec", "mp3", "-y", "-loglevel", "error", audio_path],
+            capture_output=True, text=True,
+        )
+        if result.returncode == 0 and os.path.exists(audio_path):
+            size = os.path.getsize(audio_path) / 1024
+            print(f"  Downloaded via instaloader ({size:.0f} KB audio)")
+            return audio_path
+        print(f"  instaloader: ffmpeg extraction failed: {result.stderr[:200]}")
+        return ""
+    except Exception as e:
+        print(f"  instaloader failed: {e}")
+        return ""
+
+
 def download_audio(url: str, tmp_dir: str, metadata: dict = None) -> str:
     """Download audio: yt-dlp first, Apify videoUrl fallback for Instagram.
     YouTube has additional fallbacks (iOS trick → Apify → transcript-api).
@@ -581,6 +632,13 @@ def download_audio(url: str, tmp_dir: str, metadata: dict = None) -> str:
         if audio:
             size = os.path.getsize(audio) / 1024
             print(f"  Downloaded via yt-dlp mobile UA ({size:.0f} KB)")
+            return audio
+
+    # Instagram/TikTok Tier 1c: instaloader (uses GraphQL API — not shared_data scraping)
+    # Works on public reels with zero credentials. Bypasses the shared_data block entirely.
+    if not is_yt:
+        audio = _try_instaloader(url, tmp_dir)
+        if audio:
             return audio
 
     # Instagram/TikTok Tier 2: use videoUrl from Apify metadata (already fetched, no extra cost)
