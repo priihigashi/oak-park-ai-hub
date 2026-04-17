@@ -247,10 +247,12 @@ URL: {url}
 Topic Cluster: {cluster_id}
 TRANSCRIPT: {transcript}
 
+Fake news / misinformation detection: Does this content contain or spread a specific false or misleading claim (viral myth, fabricated statistic, doctored quote, out-of-context clip)? If yes, set fake_news_route "A" (source clip of spreader available) or "B" (expert/outlet already debunked). Brazil/bilingual niche = series_override "Verificamos". USA niche = series_override "Fact-Checked".
+
 Respond with JSON only:
-{{"niche": "Oak Park" or "Brazil" or "UGC" or "News", "content_type": "Talking Head/Expert" or "Project Progress/Before-After" or "Product Tips" or "Other", "classification": "READY" or "NEEDS_REVIEW" or "NOT_RELEVANT", "summary": "one sentence", "hook": "suggested hook for repost or inspiration", "notes": "why classified this way"}}"""
+{{"niche": "Oak Park" or "Brazil" or "UGC" or "News", "content_type": "Talking Head/Expert" or "Project Progress/Before-After" or "Product Tips" or "Other", "classification": "READY" or "NEEDS_REVIEW" or "NOT_RELEVANT", "summary": "one sentence", "hook": "suggested hook for repost or inspiration", "notes": "why classified this way", "series_override": "Verificamos" or "Fact-Checked" or "", "fake_news_route": "A" or "B" or "", "fake_news_confidence": "high" or "medium" or "low" or ""}}"""
     msg = client.messages.create(
-        model="claude-sonnet-4-6", max_tokens=400,
+        model="claude-sonnet-4-6", max_tokens=500,
         messages=[{"role": "user", "content": prompt}]
     )
     text = msg.content[0].text

@@ -82,15 +82,21 @@ def _normalise(item, niche, target_type, target_value):
         f"https://www.instagram.com/p/{item['shortCode']}/"
         if item.get("shortCode") else ""
     )
+    # Auto-tag verification series by target type
+    series_override = ""
+    if "VERIFICAMOS" in target_type.upper():
+        series_override = "Fact-Checked" if niche.upper() in ("NEWS/WORLD", "NEWS", "USA") else "Verificamos"
+
     return {
-        "url":          url,
-        "views":        _extract_views(item),
-        "caption":      (item.get("caption") or item.get("text") or "")[:300],
-        "platform":     "tiktok" if "tiktok" in url.lower() else "instagram",
-        "likes":        item.get("likesCount") or item.get("diggCount") or 0,
-        "niche":        niche,
-        "target_type":  target_type,
-        "target_value": target_value,
+        "url":            url,
+        "views":          _extract_views(item),
+        "caption":        (item.get("caption") or item.get("text") or "")[:300],
+        "platform":       "tiktok" if "tiktok" in url.lower() else "instagram",
+        "likes":          item.get("likesCount") or item.get("diggCount") or 0,
+        "niche":          niche,
+        "target_type":    target_type,
+        "target_value":   target_value,
+        "series_override": series_override,
     }
 
 

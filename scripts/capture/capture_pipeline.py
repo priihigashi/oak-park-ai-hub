@@ -820,10 +820,12 @@ URL: {url}
 Notes: {notes or "None"}
 TRANSCRIPT: {transcript}
 
+Fake news / misinformation detection: Does this content contain or spread a specific false or misleading claim (viral myth, fabricated statistic, doctored quote, out-of-context clip)? If yes, set fake_news_route to "A" if the source clip of the spreader is available, or "B" if an expert/outlet has already debunked it. If the niche is Brazil or bilingual, use series_override "Verificamos". If the niche is USA, use series_override "Fact-Checked".
+
 Respond with JSON only:
-{{"niche": "Oak Park" or "Brazil" or "UGC" or "News", "content_type": "Talking Head/Expert" or "Project Progress/Before-After" or "Product Tips" or "Other", "classification": "READY" or "NEEDS_REVIEW" or "NOT_RELEVANT", "summary": "one sentence", "hook": "suggested hook for Oak Park repost", "notes": "why classified this way"}}"""
+{{"niche": "Oak Park" or "Brazil" or "UGC" or "News", "content_type": "Talking Head/Expert" or "Project Progress/Before-After" or "Product Tips" or "Other", "classification": "READY" or "NEEDS_REVIEW" or "NOT_RELEVANT", "summary": "one sentence", "hook": "suggested hook for repost or inspiration", "notes": "why classified this way", "series_override": "Verificamos" or "Fact-Checked" or "", "fake_news_route": "A" or "B" or "", "fake_news_confidence": "high" or "medium" or "low" or ""}}"""
     msg = client.messages.create(
-        model="claude-sonnet-4-6", max_tokens=400,
+        model="claude-sonnet-4-6", max_tokens=500,
         messages=[{"role": "user", "content": prompt}]
     )
     text = msg.content[0].text
@@ -929,13 +931,22 @@ def update_inspiration_library(url, transcript, classification, hub_url="", doc_
         sh = gc.open_by_key(IDEAS_INBOX_ID)
         lib = sh.worksheet("📥 Inspiration Library")
 
-        # Resolve 'My Raw Notes' column index by header name (resilient to reorder)
+        # Resolve dynamic columns by header name (resilient to reorder)
         headers = lib.row_values(1)
         notes_col_idx = None
+        series_col_idx = None
+        fn_route_col_idx = None
+        fn_conf_col_idx = None
         for i, h in enumerate(headers):
-            if h.strip().lower() == "my raw notes":
-                notes_col_idx = i  # 0-based
-                break
+            hl = h.strip().lower()
+            if hl == "my raw notes":
+                notes_col_idx = i
+            elif hl == "series_override":
+                series_col_idx = i
+            elif hl == "fake_news_route":
+                fn_route_col_idx = i
+            elif hl == "fake_news_confidence":
+                fn_conf_col_idx = i
 
         creator = metadata.get("creator_handle", "")
         if creator and not creator.startswith("@"):
@@ -955,7 +966,22 @@ def update_inspiration_library(url, transcript, classification, hub_url="", doc_
             hub_url or doc_url,                          # L — Content Hub Link
         ]
 
-        # Pad with empty strings up to the notes column, then append notes verbatim
+        # Write dynamic columns by header-name index (series_override, fake_news, notes)
+        series_override = classification.get("series_override", "")
+        fake_news_route = classification.get("fake_news_route", "")
+        fake_news_conf  = classification.get("fake_news_confidence", "")
+
+        def _set_dynamic(row, col_idx, value):
+            if col_idx is not None and value:
+                if col_idx >= len(row):
+                    row.extend([""] * (col_idx - len(row)))
+                    row.append(value)
+                else:
+                    row[col_idx] = value
+
+        _set_dynamic(base_row, series_col_idx, series_override)
+        _set_dynamic(base_row, fn_route_col_idx, fake_news_route)
+        _set_dynamic(base_row, fn_conf_col_idx, fake_news_conf)
         if user_notes and notes_col_idx is not None and notes_col_idx >= len(base_row):
             base_row.extend([""] * (notes_col_idx - len(base_row)))
             base_row.append(user_notes)

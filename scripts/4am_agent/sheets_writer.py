@@ -45,7 +45,7 @@ def read_scraping_targets():
     """
     result = _service().spreadsheets().values().get(
         spreadsheetId=SPREADSHEET_ID,
-        range="Scraping Targets!A1:F10",
+        range="Scraping Targets!A1:F50",
     ).execute()
     rows = result.get("values", [])
     if not rows:
@@ -187,6 +187,84 @@ def update_clip_collections(scripts_with_broll):
         updated += 1
 
     return updated
+
+# ─── Inspiration Library — news/verification scrape results ──────────────────
+
+def save_scraped_to_inspiration_library(items):
+    """
+    Writes scraped items that have series_override set (e.g. Verificamos, Fact-Checked)
+    to the Inspiration Library tab for human review + topic_picker routing.
+    Deduplicates by URL — skips if URL already in column C.
+    Returns count of rows appended.
+    """
+    svc = _service()
+    today = datetime.now(et).strftime("%Y-%m-%d")
+
+    # Read existing URLs to deduplicate
+    existing_urls = set()
+    try:
+        existing = svc.spreadsheets().values().get(
+            spreadsheetId=SPREADSHEET_ID,
+            range="'📥 Inspiration Library'!C:C"
+        ).execute()
+        for row in existing.get("values", [])[1:]:
+            if row:
+                existing_urls.add(row[0].strip().lower())
+    except Exception:
+        pass
+
+    # Resolve headers to find series_override / fake_news_route / fake_news_confidence columns
+    try:
+        hdr_resp = svc.spreadsheets().values().get(
+            spreadsheetId=SPREADSHEET_ID,
+            range="'📥 Inspiration Library'!1:1"
+        ).execute()
+        headers = hdr_resp.get("values", [[]])[0]
+        hmap = {h.strip().lower(): i for i, h in enumerate(headers)}
+    except Exception:
+        hmap = {}
+
+    width = max(hmap.values()) + 1 if hmap else 29
+
+    rows_to_add = []
+    for item in items:
+        url = item.get("url", "").strip()
+        if not url or url.lower() in existing_urls:
+            continue
+        series_override = item.get("series_override", "")
+
+        row = [""] * width
+        def put(col_name, val):
+            idx = hmap.get(col_name.lower())
+            if idx is not None and idx < width:
+                row[idx] = val
+
+        put("date added", today)
+        put("platform", item.get("platform", "instagram").capitalize())
+        put("url", url)
+        put("content type", "Reel")
+        put("description", item.get("caption", "")[:200])
+        put("views", str(item.get("views", "")) if item.get("views") else "")
+        put("niche", item.get("niche", "").title())
+        put("status", "captured")
+        put("series_override", series_override)
+        put("fake_news_confidence", "medium")  # scraped via verification hashtag = medium confidence
+
+        rows_to_add.append(row)
+        existing_urls.add(url.lower())
+
+    if not rows_to_add:
+        return 0
+
+    svc.spreadsheets().values().append(
+        spreadsheetId=SPREADSHEET_ID,
+        range="'📥 Inspiration Library'!A:A",
+        valueInputOption="USER_ENTERED",
+        insertDataOption="INSERT_ROWS",
+        body={"values": rows_to_add},
+    ).execute()
+    return len(rows_to_add)
+
 
 # ─── Runs Log ─────────────────────────────────────────────────────────────────
 # Columns: Date | Time | Status | Topics Found | Scripts Generated | Clips Found |

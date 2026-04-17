@@ -32,6 +32,7 @@ from sheets_writer    import (
     append_to_content_queue,
     update_clip_collections,
     append_run_log,
+    save_scraped_to_inspiration_library,
 )
 from notifier import notify_run_complete, notify_new_skill
 import pattern_learner
@@ -89,9 +90,21 @@ def main():
             print(f"[{log_pfx}]   Apify scraping failed: {scrape_error}")
             print(f"[{log_pfx}]   Continuing in fallback mode (Claude generates topics directly)")
 
+        # -- 2b. Route verification content to Inspiration Library --
+        # Items with series_override (Verificamos / Fact-Checked) go to Inspiration Library
+        # for human review + topic_picker routing. OPC content continues to script generation.
+        verification_items = [i for i in scraped_content if i.get("series_override")]
+        opc_items = [i for i in scraped_content if not i.get("series_override")]
+        if verification_items:
+            try:
+                added = save_scraped_to_inspiration_library(verification_items)
+                print(f"[{log_pfx}]   Verification items → Inspiration Library: {added} new rows")
+            except Exception as ve:
+                print(f"[{log_pfx}]   WARNING: Inspiration Library write failed: {ve}")
+
         # -- 3. Generate scripts --
         print(f"[{log_pfx}] Step 3: Generating Talking Head scripts with Claude...")
-        scripts = pick_topics_and_write_scripts(scraped_content)
+        scripts = pick_topics_and_write_scripts(opc_items)
         log["scripts_generated"] = len(scripts)
         for s in scripts:
             print(f"[{log_pfx}]   Topic: {s['topic']} (~{s.get('estimated_seconds', '?')}s)")
