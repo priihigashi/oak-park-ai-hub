@@ -174,7 +174,7 @@ jobs:
       - name: Render EN reel
         working-directory: scripts/remotion
         run: |
-          npx remotion render SovereignReelEN \
+          npx remotion render src/Root.tsx SovereignReelEN \
             --props /tmp/props_en.json \
             --output /tmp/reel_en.mp4
           echo "EN reel size: $(du -sh /tmp/reel_en.mp4)"
@@ -182,7 +182,7 @@ jobs:
       - name: Render PT reel
         working-directory: scripts/remotion
         run: |
-          npx remotion render SovereignReelPT \
+          npx remotion render src/Root.tsx SovereignReelPT \
             --props /tmp/props_pt.json \
             --output /tmp/reel_pt.mp4
           echo "PT reel size: $(du -sh /tmp/reel_pt.mp4)"
