@@ -102,6 +102,9 @@ def main():
     parser.add_argument("--srt-file", default="")
     parser.add_argument("--translate", action="store_true",
                         help="Translate captions to PT (use with --language pt)")
+    parser.add_argument("--speaker-name", default="")
+    parser.add_argument("--speaker-role", default="")
+    parser.add_argument("--topic-title", default="")
     args = parser.parse_args()
 
     captions = parse_srt(args.srt_file)
@@ -117,7 +120,12 @@ def main():
         "captions":         captions,
         "language":         args.language,
         "totalFrames":      args.total_frames,
+        "speakerName":      args.speaker_name or None,
+        "speakerRole":      args.speaker_role or None,
+        "topicTitle":       args.topic_title or None,
     }
+    # strip None values — Remotion ignores missing optional props cleanly
+    props = {k: v for k, v in props.items() if v is not None}
     print(json.dumps(props, ensure_ascii=False, indent=2))
 
 

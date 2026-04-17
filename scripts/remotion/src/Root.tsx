@@ -1,9 +1,9 @@
 import React from "react";
 import { Composition, registerRoot } from "remotion";
-import { SovereignReel, SovereignReelProps } from "./SovereignReel";
+import { NewsReel, NewsReelProps } from "./NewsReel";
 
 // Default props for development previews — overridden by --props in CI render
-const defaultProps: SovereignReelProps = {
+const defaultProps: NewsReelProps = {
   videoSrc: "./public/source_clip.mp4",
   videoStartFrame: 0,
   proofSlides: [
@@ -18,14 +18,17 @@ const defaultProps: SovereignReelProps = {
   captions: [],
   language: "en",
   totalFrames: 900,
+  speakerName: "Marianne Williamson",
+  speakerRole: "Author & Activist",
+  topicTitle: "REGIME CHANGE",
 };
 
 const RemotionRoot: React.FC = () => {
   return (
     <>
       <Composition
-        id="SovereignReelEN"
-        component={SovereignReel}
+        id="NewsReelEN"
+        component={NewsReel}
         durationInFrames={900}
         fps={30}
         width={1080}
@@ -33,8 +36,8 @@ const RemotionRoot: React.FC = () => {
         defaultProps={{ ...defaultProps, language: "en" }}
       />
       <Composition
-        id="SovereignReelPT"
-        component={SovereignReel}
+        id="NewsReelPT"
+        component={NewsReel}
         durationInFrames={900}
         fps={30}
         width={1080}

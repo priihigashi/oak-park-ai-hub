@@ -24,13 +24,16 @@ export interface CaptionEntry {
   text: string;
 }
 
-export interface SovereignReelProps {
-  videoSrc: string;          // path or URL to source clip
-  videoStartFrame?: number;  // trim: start frame in source (skip laughing intro etc.)
+export interface NewsReelProps {
+  videoSrc: string;
+  videoStartFrame?: number;
   proofSlides: ProofSlide[];
-  captions: CaptionEntry[];  // EN captions from SRT parsed to frame ranges
-  language: "en" | "pt";    // which caption track + proof text language to show
+  captions: CaptionEntry[];
+  language: "en" | "pt";
   totalFrames: number;
+  speakerName?: string;      // e.g. "Marianne Williamson"
+  speakerRole?: string;      // e.g. "Author & Activist"
+  topicTitle?: string;       // e.g. "REGIME CHANGE"
 }
 
 // ─── LAYOUT CONSTANTS ──────────────────────────────────────────────────────────
@@ -42,11 +45,11 @@ const PROOF_H = H - SPLIT_Y - 3;            // 800px
 const DIVIDER_H = 3;
 const PAD = 72;
 
-// Colors from sovereign_base.css
+// Colors — Rachadinha gold standard (matches v2_rachadinha)
 const C = {
-  obsidian: "#0B0B0C",
-  paper: "#E8E0D0",
-  accent: "#C8A84B",
+  obsidian: "#0E0D0B",
+  paper: "#F2ECE0",
+  accent: "#F4C430",   // canario gold — same as Rachadinha
   blood: "#8B1A1A",
   margin: "#6B6560",
 };
@@ -163,13 +166,16 @@ const ProofZone: React.FC<{ slide: ProofSlide; frame: number; startFrame: number
 };
 
 // ─── MAIN COMPOSITION ──────────────────────────────────────────────────────────
-export const SovereignReel: React.FC<SovereignReelProps> = ({
+export const NewsReel: React.FC<NewsReelProps> = ({
   videoSrc,
   videoStartFrame = 0,
   proofSlides,
   captions,
   language,
   totalFrames,
+  speakerName,
+  speakerRole,
+  topicTitle,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -197,7 +203,7 @@ export const SovereignReel: React.FC<SovereignReelProps> = ({
           startFrom={videoStartFrame}
           style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top center" }}
         />
-        {/* Watermark cover — bottom strip of top zone covers IG watermark */}
+        {/* Watermark cover — bottom strip covers IG watermark */}
         <div
           style={{
             position: "absolute",
@@ -208,6 +214,85 @@ export const SovereignReel: React.FC<SovereignReelProps> = ({
             background: `linear-gradient(to top, ${C.obsidian}, transparent)`,
           }}
         />
+
+        {/* Topic title strip — top of video zone */}
+        {topicTitle && (
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: W,
+              background: "rgba(11,11,12,0.82)",
+              borderBottom: `3px solid ${C.accent}`,
+              padding: "16px 72px",
+              display: "flex",
+              alignItems: "center",
+              gap: 16,
+            }}
+          >
+            <div style={{ width: 6, height: 36, background: C.accent, borderRadius: 2, flexShrink: 0 }} />
+            <div
+              style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: 28,
+                fontWeight: 700,
+                color: C.accent,
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+              }}
+            >
+              {topicTitle}
+            </div>
+          </div>
+        )}
+
+        {/* Speaker lower-third name badge */}
+        {speakerName && (
+          <div
+            style={{
+              position: "absolute",
+              bottom: 96,
+              left: 0,
+              right: 0,
+              padding: "0 72px",
+            }}
+          >
+            <div
+              style={{
+                display: "inline-block",
+                background: "rgba(11,11,12,0.88)",
+                borderLeft: `5px solid ${C.accent}`,
+                padding: "10px 20px",
+              }}
+            >
+              <div
+                style={{
+                  fontFamily: "Fraunces, serif",
+                  fontWeight: 700,
+                  fontSize: 34,
+                  color: C.paper,
+                  lineHeight: 1.1,
+                }}
+              >
+                {speakerName}
+              </div>
+              {speakerRole && (
+                <div
+                  style={{
+                    fontFamily: "Inter, sans-serif",
+                    fontWeight: 500,
+                    fontSize: 22,
+                    color: C.accent,
+                    marginTop: 4,
+                  }}
+                >
+                  {speakerRole}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* ── DIVIDER ── */}

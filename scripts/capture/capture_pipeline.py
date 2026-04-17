@@ -1761,7 +1761,7 @@ def main():
     args = parser.parse_args()
 
     if not args.story_id:
-        prefix = {"book": "BCI", "sovereign": "SVG", "content": "CNT"}[args.project]
+        prefix = {"book": "BCI", "sovereign": "NWS", "content": "CNT"}[args.project]
         args.story_id = f"{prefix}-{datetime.now().strftime('%Y%m%d%H%M')}"
 
     print(f"\n{'='*50}\nCAPTURE PIPELINE v2\nURL: {args.url}\nProject: {args.project.upper()}\nStory ID: {args.story_id}\n{'='*50}")

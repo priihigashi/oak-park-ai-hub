@@ -1,14 +1,14 @@
-name: Render Video — Remotion (FORMAT-001 SOVEREIGN)
+name: Render Video — News Reel (FORMAT-001)
 # Renders the FORMAT-001 split-screen reel via Remotion.
-# Inputs: story_id from a completed sovereign capture run.
-# Outputs: PT + EN MP4 reels uploaded to News drive SOVEREIGN folder.
+# Inputs: story_id from a completed capture run.
+# Outputs: PT + EN MP4 reels uploaded to News drive template folder.
 # Triggered manually OR by the capture pipeline completion email reply "render".
 
 on:
   workflow_dispatch:
     inputs:
       story_id:
-        description: 'SOVEREIGN story ID (e.g. SVG-202604171927)'
+        description: 'Story ID (e.g. NWS-202604171927)'
         required: true
       capture_run_id:
         description: 'Unused — video is downloaded from Drive by story_id'
@@ -26,6 +26,18 @@ on:
         description: 'Total reel duration in frames at 30fps (default 900 = 30 seconds)'
         required: false
         default: '900'
+      speaker_name:
+        description: 'Speaker name shown in lower-third badge (e.g. Marianne Williamson)'
+        required: false
+        default: ''
+      speaker_role:
+        description: 'Speaker role/title (e.g. Author & Activist)'
+        required: false
+        default: ''
+      topic_title:
+        description: 'Topic title strip at top of video (e.g. REGIME CHANGE)'
+        required: false
+        default: ''
 
 jobs:
   render:
@@ -135,6 +147,9 @@ jobs:
           VIDEO_START_FRAME: ${{ github.event.inputs.video_start_frame }}
           TOTAL_FRAMES: ${{ github.event.inputs.total_frames }}
           SRT_FILE: ${{ steps.locate.outputs.srt }}
+          SPEAKER_NAME: ${{ github.event.inputs.speaker_name }}
+          SPEAKER_ROLE: ${{ github.event.inputs.speaker_role }}
+          TOPIC_TITLE: ${{ github.event.inputs.topic_title }}
         run: |
           python3 scripts/remotion/build_render_props.py \
             --story-id "$STORY_ID" \
@@ -143,6 +158,9 @@ jobs:
             --video-start-frame "$VIDEO_START_FRAME" \
             --total-frames "$TOTAL_FRAMES" \
             --srt-file "$SRT_FILE" \
+            --speaker-name "$SPEAKER_NAME" \
+            --speaker-role "$SPEAKER_ROLE" \
+            --topic-title "$TOPIC_TITLE" \
             > /tmp/props_en.json
           echo "EN props:"
           cat /tmp/props_en.json
@@ -155,6 +173,9 @@ jobs:
           TOTAL_FRAMES: ${{ github.event.inputs.total_frames }}
           SRT_FILE: ${{ steps.locate.outputs.srt }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SPEAKER_NAME: ${{ github.event.inputs.speaker_name }}
+          SPEAKER_ROLE: ${{ github.event.inputs.speaker_role }}
+          TOPIC_TITLE: ${{ github.event.inputs.topic_title }}
         run: |
           python3 scripts/remotion/build_render_props.py \
             --story-id "$STORY_ID" \
@@ -164,6 +185,9 @@ jobs:
             --total-frames "$TOTAL_FRAMES" \
             --srt-file "$SRT_FILE" \
             --translate \
+            --speaker-name "$SPEAKER_NAME" \
+            --speaker-role "$SPEAKER_ROLE" \
+            --topic-title "$TOPIC_TITLE" \
             > /tmp/props_pt.json
 
       - name: Copy source video to Remotion public dir
@@ -174,7 +198,7 @@ jobs:
       - name: Render EN reel
         working-directory: scripts/remotion
         run: |
-          npx remotion render src/Root.tsx SovereignReelEN \
+          npx remotion render src/Root.tsx NewsReelEN \
             --props /tmp/props_en.json \
             --output /tmp/reel_en.mp4
           echo "EN reel size: $(du -sh /tmp/reel_en.mp4)"
@@ -182,12 +206,12 @@ jobs:
       - name: Render PT reel
         working-directory: scripts/remotion
         run: |
-          npx remotion render src/Root.tsx SovereignReelPT \
+          npx remotion render src/Root.tsx NewsReelPT \
             --props /tmp/props_pt.json \
             --output /tmp/reel_pt.mp4
           echo "PT reel size: $(du -sh /tmp/reel_pt.mp4)"
 
-      - name: Upload reels to News drive SOVEREIGN folder
+      - name: Upload reels to News drive template folder
         env:
           SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
           STORY_ID: ${{ github.event.inputs.story_id }}
@@ -195,6 +219,7 @@ jobs:
         run: |
           python3 scripts/remotion/upload_reels.py \
             --story-id "$STORY_ID" \
+            --topic-slug "$(echo '${{ github.event.inputs.topic_title }}' | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd 'a-z0-9-')" \
             --en-reel /tmp/reel_en.mp4 \
             --pt-reel /tmp/reel_pt.mp4 \
             --folder-id "$SOVEREIGN_TEMPLATE_FOLDER"
@@ -202,7 +227,7 @@ jobs:
       - name: Save artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: sovereign-reels-${{ github.run_id }}
+          name: news-reels-${{ github.run_id }}
           path: |
             /tmp/reel_en.mp4
             /tmp/reel_pt.mp4

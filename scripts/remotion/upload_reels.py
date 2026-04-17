@@ -1,18 +1,35 @@
 #!/usr/bin/env python3
 """
-upload_reels.py — Upload rendered Remotion MP4 reels to News drive SOVEREIGN folder.
+upload_reels.py — Upload rendered Remotion MP4 reels to News drive template folder.
 Follows Drive OAuth pattern (supportsAllDrives=True, shared drive folder ID).
 """
 import argparse
 import json
 import os
+import re
 import sys
 from pathlib import Path
+
+
+def next_version_number(drive, parent_folder_id: str, slug: str) -> int:
+    """Return next available version number for v{N}_{slug}_motion folder."""
+    results = drive.files().list(
+        q=f"'{parent_folder_id}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false",
+        supportsAllDrives=True,
+        includeItemsFromAllDrives=True,
+        fields="files(name)",
+    ).execute()
+    existing = [f["name"] for f in results.get("files", [])]
+    pattern = re.compile(rf"^v(\d+)_{re.escape(slug)}_motion$")
+    versions = [int(m.group(1)) for name in existing if (m := pattern.match(name))]
+    return max(versions, default=0) + 1
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--story-id", required=True)
+    parser.add_argument("--topic-slug", default="",
+                        help="Short topic slug for folder name (e.g. regime-change). Falls back to story-id if not provided.")
     parser.add_argument("--en-reel", required=True)
     parser.add_argument("--pt-reel", required=True)
     parser.add_argument("--folder-id", required=True)
@@ -40,10 +57,14 @@ def main():
     )
     drive = build("drive", "v3", credentials=creds)
 
-    # Create version subfolder: v1_regime-change/ (or next version)
-    slug = args.story_id.lower().replace("-", "_")
+    # Slug: prefer --topic-slug, fallback to story-id sanitized
+    raw_slug = args.topic_slug.strip() if args.topic_slug.strip() else args.story_id
+    slug = re.sub(r"[^a-z0-9]+", "-", raw_slug.lower()).strip("-")
+
+    version = next_version_number(drive, args.folder_id, slug)
+    version_folder_name = f"v{version}_{slug}_motion"
     version_folder_meta = {
-        "name": f"v1_{slug}_motion",
+        "name": version_folder_name,
         "parents": [args.folder_id],
         "mimeType": "application/vnd.google-apps.folder",
     }
@@ -52,7 +73,7 @@ def main():
     ).execute()
     folder_id = version_folder["id"]
     folder_link = version_folder.get("webViewLink", "")
-    print(f"Version folder: {folder_link}")
+    print(f"Version folder: {version_folder_name} → {folder_link}")
 
     # Upload both reels
     for reel_path, lang in [(args.en_reel, "en"), (args.pt_reel, "pt")]:
