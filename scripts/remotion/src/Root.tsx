@@ -1,5 +1,5 @@
 import React from "react";
-import { Composition } from "remotion";
+import { Composition, registerRoot } from "remotion";
 import { SovereignReel, SovereignReelProps } from "./SovereignReel";
 
 // Default props for development previews — overridden by --props in CI render
@@ -20,7 +20,7 @@ const defaultProps: SovereignReelProps = {
   totalFrames: 900,
 };
 
-export const RemotionRoot: React.FC = () => {
+const RemotionRoot: React.FC = () => {
   return (
     <>
       <Composition
@@ -44,3 +44,5 @@ export const RemotionRoot: React.FC = () => {
     </>
   );
 };
+
+registerRoot(RemotionRoot);
