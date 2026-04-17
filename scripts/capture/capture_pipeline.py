@@ -1124,8 +1124,8 @@ STATUS: DRAFT — text ready, art needed"""
     return msg.content[0].text
 
 
-def save_to_content_hub(story_id: str, url: str, transcript: str, classification: dict, video_path: str = "") -> str:
-    """Save transcript + resources + video to Content Hub story folder. Returns folder URL."""
+def save_to_content_hub(story_id: str, url: str, transcript: str, classification: dict, video_path: str = "", notes: str = "") -> str:
+    """Save transcript + resources + video (+ optional user notes) to Content Hub story folder. Returns folder URL."""
     drive = get_drive_service()
     if not drive:
         print("  SKIP Content Hub: Drive unavailable")
@@ -1172,6 +1172,14 @@ def save_to_content_hub(story_id: str, url: str, transcript: str, classification
             body={"name": "resources.txt", "parents": [folder_id]},
             media_body=media2, supportsAllDrives=True, fields="id"
         ).execute()
+        # Save user notes if provided at capture time
+        if notes:
+            notes_content = f"USER NOTES — {folder_name}\nCaptured: {date}\n\n{notes}\n"
+            media3 = MediaInMemoryUpload(notes_content.encode("utf-8"), mimetype="text/plain")
+            drive.files().create(
+                body={"name": "user_notes.txt", "parents": [folder_id]},
+                media_body=media3, supportsAllDrives=True, fields="id"
+            ).execute()
         # Upload video file if available
         if video_path and os.path.exists(video_path):
             from googleapiclient.http import MediaFileUpload
@@ -1460,7 +1468,7 @@ def run_content(args, transcript, video_path: str = "", metadata: dict = None):
         folder_url = hub_url  # Same folder contains both archive (_shared) and production (english/portuguese)
     else:
         # Save raw transcript + resources + video to Content Hub (permanent home)
-        hub_url = save_to_content_hub(sid, args.url, transcript, cl, video_path=video_path)
+        hub_url = save_to_content_hub(sid, args.url, transcript, cl, video_path=video_path, notes=args.notes or "")
         # Create Drive workspace: folder + Art/Caption/Reel subfolders + content brief doc + Ideas Queue row
         title = (cl.get("summary") or sid)[:60].strip()
         folder_url, doc_url = create_content_workspace(sid, title, transcript, cl, args.url, args.notes or "")
