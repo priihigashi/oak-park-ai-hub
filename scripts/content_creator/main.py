@@ -24,7 +24,7 @@ ET = pytz.timezone("America/New_York")
 
 sys.path.insert(0, str(Path(__file__).parent))
 from topic_picker import pick_topics
-from carousel_builder import generate_carousel_content, build_html, render_pngs
+from carousel_builder import generate_carousel_content, build_html, render_pngs, generate_image_suggestions, visual_audit
 import urllib.request, urllib.parse
 from email_preview import send_preview, update_catalog_status
 
@@ -308,6 +308,15 @@ def create_story_doc(parent_folder_id, slug, version, topic, niche, brief, conte
         "",
         "─" * 40,
         "",
+        "VISUAL AUDIT (auto-generated at build time)",
+    ]
+    _, _, audit_txt = visual_audit(content, niche)
+    lines.append(audit_txt)
+
+    lines += [
+        "",
+        "─" * 40,
+        "",
         "NOTES",
         "(append each review below as: NOTE — YYYY-MM-DD, then the feedback)",
     ]
@@ -390,6 +399,12 @@ def process_one_topic(topic_entry, run_date, drive):
         print("  FAILED: content generation")
         return None
 
+    # 1b. Visual audit — flag boring/incomplete carousels before rendering
+    _, audit_issues, audit_summary = visual_audit(content, niche)
+    print(f"  {audit_summary}")
+    if audit_issues:
+        _send_alert(f"Visual audit issues for '{topic[:50]}':\n\n{audit_summary}")
+
     # 2. Build HTML
     work = WORK_DIR / post_id
     work.mkdir(parents=True, exist_ok=True)
@@ -408,12 +423,11 @@ def process_one_topic(topic_entry, run_date, drive):
         print("  FAILED: PNG render")
         return None
 
-    # 4. Render motion covers
-    print("  Rendering motion covers...")
+    # 4. Render motion — cover AND all middle slides get slow-zoom (Ken Burns)
+    print("  Rendering motion...")
     for variant in ["black", "cream", "lime"]:
-        cover_png = png_dir / f"{variant}_01_cover_html.png"
-        if cover_png.exists():
-            render_motion_cover(str(cover_png), str(motion_dir), variant)
+        for png in sorted(png_dir.glob(f"{variant}_*_html.png")):
+            render_motion_cover(str(png), str(motion_dir), variant)
 
     # 5. Upload to Drive — ONE version folder per post, png/ + motion/ + resources/ nested inside.
     # Shape: <SERIES>/_TEMPLATE_CAROUSEL/v<N>_<slug>/{cover.html, png/, motion/, resources/, story doc}
@@ -446,8 +460,19 @@ def process_one_topic(topic_entry, run_date, drive):
     # duplicate non-cover PNGs so motion/ holds the complete sequence
     upload_dir_contents(png_dir, motion_sub, drive, skip_pattern=r"_01_cover")
 
-    # resources/  — shared references (filled by future passes)
-    create_subfolder(version_folder_id, "resources", drive)
+    # resources/ — image suggestions + screenshot crops + clip hints
+    resources_sub = create_subfolder(version_folder_id, "resources", drive)
+    try:
+        from googleapiclient.http import MediaInMemoryUpload
+        img_sugg = generate_image_suggestions(content, niche)
+        drive.files().create(
+            body={"name": "image_suggestions.txt", "parents": [resources_sub]},
+            media_body=MediaInMemoryUpload(img_sugg.encode("utf-8"), mimetype="text/plain"),
+            supportsAllDrives=True, fields="id",
+        ).execute()
+        print("  image_suggestions.txt → resources/")
+    except Exception as e:
+        print(f"  image_suggestions.txt upload failed (non-fatal): {e}")
 
     folder_link = f"https://drive.google.com/drive/folders/{version_folder_id}"
     motion_link = f"https://drive.google.com/drive/folders/{motion_sub}"

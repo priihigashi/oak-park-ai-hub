@@ -203,6 +203,26 @@ Return ONLY a valid JSON object with this exact structure:
   "cover_en": "SAME HEADLINE IN ENGLISH",
   "cover_accent": "1 NUMBER OR WORD to highlight in yellow (e.g. '16', 'ACABOU')",
   "cover_date": "DD de mês de YYYY · Country",
+  "cover_visual": {{
+    "subject_type": "person|place|event|concept — pick one",
+    "option_a": {{
+      "type": "cc-photo",
+      "search_query": "specific search term for Agência Brasil or Wikimedia Commons (e.g. 'Viktor Orbán 2026 election Hungary' or 'Havana Cuba 1950s street')",
+      "description": "what this photo shows"
+    }},
+    "option_b": {{
+      "type": "ai-composition",
+      "prompt": "detailed AI image prompt — for place: '[PLACE NAME] in massive bold serif letters centered, historical leader portraits fading into/behind the letterforms, high contrast documentary black-and-white + sepia overlay, powerful editorial style'. For person: 'photorealistic portrait of [Name], dramatic side lighting, dark background'. For event: 'archival document texture, [EVENT] stamped in bold capital letters, official seal visible'",
+      "concept": "brief visual concept — e.g. 'CUBA in huge letters, Fidel + Che fading into the C and U, sepia tone'",
+      "tool_hint": "openai|seedream|nb2"
+    }},
+    "option_c": {{
+      "type": "graphic-design",
+      "concept": "typographic composition — e.g. 'bold topic name in Anton font, accent-yellow underline, minimal documentary photo cropped behind text at low opacity'"
+    }},
+    "recommended": "a|b|c",
+    "reason": "one line why this option fits this specific topic"
+  }},
   "slides": [
     {{
       "type": "profile",
@@ -259,6 +279,9 @@ Return ONLY a valid JSON object with this exact structure:
       "context_image_query": "search term if context-image (e.g. speaker's institution building), else empty string"
     }}
   ],
+  "clip_suggestions": [
+    {{"person_or_topic": "name or topic", "youtube_query": "specific YouTube search for a relevant clip", "slide": 3, "duration_hint": "5-8 seconds", "reason": "why this clip fits this slide"}}
+  ],
   "sources": ["Source 1", "Source 2", "Source 3", "Source 4"],
   "cta_pt": "Salva pra não esquecer.",
   "cta_en": "Save this.",
@@ -273,6 +296,13 @@ Rules:
 - Numbers must match the brief exactly if provided
 - Body text and bullet items (items_pt, facts_pt, context_pt) must be in PORTUGUESE ONLY. Never mix English words into PT sentences. heading_en is a small subtitle only — it is NOT body copy.
 
+COVER VISUAL RULES (apply before filling cover_visual):
+subject_type guide:
+  "person" → named individual is the main subject. option_a=CC real photo (Wikimedia/Agência Brasil). option_b=AI portrait (Seedream 4.5). recommended=a unless no CC photo exists → then b.
+  "place" → country/city is the character (not a specific person). option_a=archival/news CC photo. option_b=AI composition with place name in massive letters + historical leaders fading into letterforms. recommended=b (more graphic, stops scroll on IG).
+  "event" → specific law/decision/moment. option_a=document screenshot or news headline crop. option_b=archival texture + event name in bold stamp. recommended=a (receipt journalism visual).
+  "concept" → abstract policy/ideology/system. option_a=contextual CC photo. option_b=bold typographic AI composition. recommended=b.
+
 VISUAL-EVERY-OTHER-SLIDE RULE (non-negotiable):
 Between cover and sources, never output "visual_hint": "none" on more than 1 consecutive slide.
 visual_hint values:
@@ -280,6 +310,9 @@ visual_hint values:
   "context-image" → slide references a specific institution, building, place, event, or document; fill context_image_query with a specific search term (e.g. "Câmara dos Deputados Brasília", "Viktor Orbán 2026", "Supremo Tribunal Federal fachada", "Congresso Nacional aerial")
   "none" → text-only, max 1 consecutive allowed
 First choice for Brazilian institutions: Agência Brasil CC BY 3.0 search terms. International subjects: English search terms.
+
+CLIP SUGGESTIONS RULE:
+If the topic involves a famous speech, public statement, historical moment, or iconic event that is available on YouTube (e.g. "I Have a Dream", Lula inauguration speech, Orbán victory speech, Lei Áurea signing ceremony), add an entry to clip_suggestions for the most relevant slide. YouTube clips will be cut to 5-8 sec and added to that slide's motion version. If no relevant clip exists, return an empty array.
 
 NAMED-PERSON → FACE RULE (non-negotiable):
 For every slide, populate `mentioned_people` with EVERY named person referenced in that
@@ -647,6 +680,118 @@ def render_pngs(html_path, output_dir):
         f.rename(f.parent / new_name)
 
     return True
+
+
+def generate_image_suggestions(content, niche):
+    """Build image_suggestions.txt content for the resources/ folder.
+    Called after Haiku generates content. Lists every image need: cover, per-slide, clips, screenshots."""
+    lines = [
+        "IMAGE SUGGESTIONS",
+        "=================",
+        "Fill resources/ with these before publishing. Real photos first, then AI generation.",
+        "",
+        "COVER IMAGE",
+        "-----------",
+    ]
+    cv = content.get("cover_visual", {})
+    if cv:
+        lines.append(f"Subject type: {cv.get('subject_type', 'unknown')}")
+        lines.append(f"Recommended: Option {cv.get('recommended', 'A').upper()} — {cv.get('reason', '')}")
+        lines.append("")
+        a = cv.get("option_a", {})
+        if a:
+            lines.append(f"Option A (CC real photo): {a.get('search_query', '')}")
+            lines.append(f"  Description: {a.get('description', '')}")
+            lines.append(f"  Sources: agenciabrasil.ebc.com.br  |  commons.wikimedia.org")
+        b = cv.get("option_b", {})
+        if b:
+            lines += ["", f"Option B (AI generation — {b.get('tool_hint', 'OpenAI / Seedream 4.5')}):",
+                      f"  Concept: {b.get('concept', '')}",
+                      f"  Prompt: {b.get('prompt', '')}"]
+        c = cv.get("option_c", {})
+        if c:
+            lines += ["", f"Option C (graphic design): {c.get('concept', '')}"]
+    else:
+        lines.append("(no cover_visual in output — check Haiku response)")
+
+    lines += ["", "MIDDLE SLIDES", "-------------"]
+    for i, slide in enumerate(content.get("slides", []), start=2):
+        vh = slide.get("visual_hint", "none")
+        cq = slide.get("context_image_query", "")
+        people = slide.get("mentioned_people", [])
+        if vh == "context-image" and cq:
+            lines += [f"Slide {i} ({slide.get('type', 'list')}) — CONTEXT IMAGE:",
+                      f"  Search: {cq}",
+                      f"  Sources: Agência Brasil or Wikimedia Commons CC BY"]
+        elif vh == "bio-card" and people:
+            for p in people:
+                lines += [f"Slide {i} — FACE NEEDED: {p.get('name', '?')}",
+                          f"  Search: {p.get('image_hint', p.get('name', ''))}",
+                          f"  Sources: Wikipedia / Agência Brasil CC BY 3.0"]
+
+    clips = content.get("clip_suggestions", [])
+    if clips:
+        lines += ["", "CLIP SUGGESTIONS (short video — 5-8 sec per slide)", "-------------------------------------------------"]
+        for c in clips:
+            lines += [f"Slide {c.get('slide', '?')} — {c.get('person_or_topic', '')}:",
+                      f"  YouTube query: {c.get('youtube_query', '')}",
+                      f"  Duration: {c.get('duration_hint', '5-8 sec')}",
+                      f"  Why: {c.get('reason', '')}"]
+
+    receipts = content.get("receipts_needed", [])
+    lines += ["", "SCREENSHOT CROPS — MANDATORY for factual claims", "-----------------------------------------------"]
+    if receipts:
+        for i, r in enumerate(receipts, 1):
+            lines.append(f"{i}. {r}")
+    else:
+        lines.append("Screenshot the primary sources listed below. Crop to: headline + outlet + date.")
+
+    lines += ["", "SOURCES TO SCREENSHOT", "---------------------"]
+    for i, src in enumerate(content.get("sources", []), 1):
+        lines.append(f"{i}. {src}")
+
+    return "\n".join(lines)
+
+
+def visual_audit(content, niche):
+    """Scan generated content for visual completeness issues.
+    Returns (is_ok: bool, issues: list[str], summary: str).
+    Called before emailing preview — flags boring/incomplete carousels."""
+    issues = []
+    slides = content.get("slides", [])
+
+    # Consecutive none check
+    run = 0
+    for s in slides:
+        if s.get("visual_hint", "none") == "none":
+            run += 1
+            if run > 1:
+                issues.append(f"BORING: {run}+ consecutive text-only slides. Add context-image or bio-card.")
+                break
+        else:
+            run = 0
+
+    # Named person without bio-card visual_hint
+    for i, s in enumerate(slides, start=2):
+        if s.get("mentioned_people") and s.get("visual_hint") != "bio-card":
+            for p in s.get("mentioned_people", []):
+                issues.append(f"Slide {i}: '{p.get('name','?')}' named but visual_hint != bio-card — face won't render.")
+
+    # context-image with empty query
+    for i, s in enumerate(slides, start=2):
+        if s.get("visual_hint") == "context-image" and not s.get("context_image_query", "").strip():
+            issues.append(f"Slide {i}: visual_hint=context-image but context_image_query is empty.")
+
+    # Cover visual missing
+    if not content.get("cover_visual"):
+        issues.append("Cover: no cover_visual field — cover will be text-only.")
+
+    is_ok = len(issues) == 0
+    if is_ok:
+        summary = "VISUAL AUDIT: PASSED — all slides have visual anchors."
+    else:
+        summary = f"VISUAL AUDIT: {len(issues)} ISSUE(S) FOUND:\n" + "\n".join(f"  - {x}" for x in issues)
+    return is_ok, issues, summary
 
 
 if __name__ == "__main__":
