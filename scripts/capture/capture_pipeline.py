@@ -1007,6 +1007,12 @@ def run_book(args, transcript):
     update_book_tracker(args.story_id, args.url, doc_url, analysis, args.notes or "")
     create_calendar_task(args.story_id, args.project, args.url, doc_url, transcript[:400], args.notes or "")
     print(f"\n{'='*50}\nBOOK CAPTURE DONE\nStory ID: {args.story_id}\nDoc: {doc_url or 'check artifacts'}\n{'='*50}")
+    try:
+        import sys; sys.path.insert(0, str(Path(__file__).parent.parent))
+        from content_tracker import log_run
+        log_run(pipeline="capture_pipeline", trigger="manual", url=args.url,
+                niche="", project="book", status="success", drive_path=doc_url or "", notes=args.story_id)
+    except Exception: pass
 
 
 def run_sovereign(args, transcript):
@@ -1017,6 +1023,13 @@ def run_sovereign(args, transcript):
     doc_url = create_drive_doc(f"{args.story_id} — SOVEREIGN — {datetime.now().strftime('%Y-%m-%d')}", analysis, SOVEREIGN_FOLDER_ID)
     create_calendar_task(args.story_id, args.project, args.url, doc_url, transcript[:400], args.notes or "")
     print(f"\n{'='*50}\nSOVEREIGN CAPTURE DONE\nStory ID: {args.story_id}\nDoc: {doc_url or 'check artifacts'}\n{'='*50}")
+    try:
+        import sys; sys.path.insert(0, str(Path(__file__).parent.parent))
+        from content_tracker import log_run
+        log_run(pipeline="capture_pipeline", trigger="manual", url=args.url,
+                niche="Brazil", project="sovereign", status="success",
+                drive_path=doc_url or "", notes=args.story_id)
+    except Exception: pass
 
 
 def _trigger_topic_scraper(classification):
@@ -1487,6 +1500,16 @@ def run_content(args, transcript, video_path: str = "", metadata: dict = None):
     niche = cl.get("niche", "")
     summary = cl.get("summary") or sid
     print(f"\n{'='*50}\nCONTENT CAPTURE DONE\nNiche: {niche}\nType: {cl.get('content_type')}\nStatus: {cl.get('classification')}\nFolder: {folder_url or 'check artifacts'}\nBrief: {doc_url or 'check artifacts'}\n{'='*50}")
+    score_map = {"READY": 5, "NEEDS_REVIEW": 3, "NOT_RELEVANT": 1}
+    try:
+        import sys; sys.path.insert(0, str(Path(__file__).parent.parent))
+        from content_tracker import log_run
+        log_run(pipeline="capture_pipeline", trigger="manual", url=args.url,
+                niche=niche, project="content", status="success",
+                score=score_map.get(cl.get("classification", ""), 3),
+                drive_path=hub_url or folder_url or "",
+                brief_url=doc_url or "", notes=summary[:100])
+    except Exception: pass
 
     # UX Fix: send completion email so Priscila knows it worked
     video_note = "Video: uploaded to Content Hub" if video_path else "Video: download failed (transcript still captured)"

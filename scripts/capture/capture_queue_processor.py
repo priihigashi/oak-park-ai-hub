@@ -234,6 +234,13 @@ def main():
                 score, dest, hub = _parse_result(combined, project)
                 _write_success(token, sheet_row, score, dest, hub)
                 print(f"  ✓ DONE — score={score}, dest={dest}, hub={hub[:70] if hub else '(none)'}")
+                try:
+                    sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+                    from content_tracker import log_run
+                    log_run(pipeline="capture_queue", trigger="queue", url=url,
+                            project=project, status="success", score=score,
+                            drive_path=hub or "", notes=f"queue row {sheet_row}")
+                except Exception: pass
             else:
                 err_msg = (result.stderr or result.stdout or "unknown error")[-200:]
                 _write_failure(token, sheet_row, f"rc={result.returncode}: {err_msg}")

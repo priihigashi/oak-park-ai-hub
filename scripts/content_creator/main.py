@@ -585,6 +585,21 @@ def main():
     elapsed = time.time() - start
     print(f"\n[content_creator] Done — {len(results)} posts rendered in {elapsed:.0f}s")
 
+    # Log each rendered post to Content Creation Log
+    try:
+        sys.path.insert(0, str(Path(__file__).parent.parent))
+        from content_tracker import log_run
+        for r in results:
+            log_run(pipeline="content_creator", trigger="scheduled",
+                    niche=r.get("niche", ""), project="content", status="success",
+                    drive_path=r.get("version_link", "") or r.get("static_folder_link", ""),
+                    notes=r.get("topic", "")[:100])
+        if errors:
+            for err in errors:
+                log_run(pipeline="content_creator", trigger="scheduled",
+                        status="failed", notes=err[:200])
+    except Exception: pass
+
 
 if __name__ == "__main__":
     try:
