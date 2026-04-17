@@ -1455,7 +1455,7 @@ def run_content(args, transcript, video_path: str = "", metadata: dict = None):
         _trigger_topic_scraper(cl)
 
     niche = cl.get("niche", "")
-    summary = cl.get("summary", title)
+    summary = cl.get("summary") or sid
     print(f"\n{'='*50}\nCONTENT CAPTURE DONE\nNiche: {niche}\nType: {cl.get('content_type')}\nStatus: {cl.get('classification')}\nFolder: {folder_url or 'check artifacts'}\nBrief: {doc_url or 'check artifacts'}\n{'='*50}")
 
     # UX Fix: send completion email so Priscila knows it worked
