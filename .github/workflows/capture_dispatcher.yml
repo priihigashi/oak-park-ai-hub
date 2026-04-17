@@ -1,0 +1,101 @@
+name: Capture Dispatcher (issue-comment)
+
+# Lets Claude (or anyone with repo-owner login) fire the capture pipeline by
+# posting a GitHub issue/PR comment like:
+#   /capture https://www.instagram.com/reel/XXXX/ sovereign
+#   /capture https://youtu.be/XXXX book --credits --story-id BCI-042
+#
+# Projects: sovereign (Brazil/USA news, political) | book (fact-check) | content (OPC/UGC)
+# Defaults: project=content, credits=false
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  actions: write
+  issues: write
+  pull-requests: write
+  contents: read
+
+jobs:
+  dispatch:
+    if: >-
+      startsWith(github.event.comment.body, '/capture') &&
+      github.event.comment.user.login == github.repository_owner
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Parse /capture command
+        id: parse
+        env:
+          BODY: ${{ github.event.comment.body }}
+        run: |
+          URL=$(printf '%s' "$BODY" | grep -oE 'https?://[^[:space:]]+' | head -n 1 || true)
+          PROJECT=$(printf '%s' "$BODY" | grep -oE '\b(sovereign|book|content)\b' | head -n 1 || true)
+          PROJECT=${PROJECT:-content}
+          CREDITS=false
+          if printf '%s' "$BODY" | grep -q -- '--credits'; then CREDITS=true; fi
+          STORY_ID=$(printf '%s' "$BODY" | grep -oE -- '--story-id[[:space:]]+[A-Za-z0-9_-]+' | awk '{print $2}' || true)
+          NOTES=$(printf '%s' "$BODY" | grep -oE -- '--notes[[:space:]]+.+$' | sed 's/--notes[[:space:]]*//' || true)
+          {
+            echo "url=$URL"
+            echo "project=$PROJECT"
+            echo "credits=$CREDITS"
+            echo "story_id=$STORY_ID"
+            echo "notes<<NOTES_EOF"
+            echo "$NOTES"
+            echo "NOTES_EOF"
+          } >> "$GITHUB_OUTPUT"
+          echo "Parsed: url=$URL project=$PROJECT credits=$CREDITS story_id=$STORY_ID"
+
+      - name: Reject if no URL
+        if: steps.parse.outputs.url == ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: "No URL found in `/capture` command.\n\nUsage: `/capture <url> [sovereign|book|content] [--credits] [--story-id XXX] [--notes text]`"
+            });
+
+      - name: Dispatch capture_pipeline.yml
+        if: steps.parse.outputs.url != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          URL: ${{ steps.parse.outputs.url }}
+          PROJECT: ${{ steps.parse.outputs.project }}
+          CREDITS: ${{ steps.parse.outputs.credits }}
+          STORY_ID: ${{ steps.parse.outputs.story_id }}
+          NOTES: ${{ steps.parse.outputs.notes }}
+        run: |
+          gh workflow run capture_pipeline.yml \
+            --repo "${{ github.repository }}" \
+            --ref main \
+            -f url="$URL" \
+            -f project="$PROJECT" \
+            -f credits="$CREDITS" \
+            -f story_id="$STORY_ID" \
+            -f notes="$NOTES"
+
+      - name: Acknowledge on the comment thread
+        if: steps.parse.outputs.url != ''
+        uses: actions/github-script@v7
+        env:
+          URL: ${{ steps.parse.outputs.url }}
+          PROJECT: ${{ steps.parse.outputs.project }}
+          CREDITS: ${{ steps.parse.outputs.credits }}
+        with:
+          script: |
+            const url = process.env.URL;
+            const project = process.env.PROJECT;
+            const credits = process.env.CREDITS;
+            const actionsUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/workflows/capture_pipeline.yml`;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `Capture dispatched\n- project: **${project}**\n- credits: ${credits}\n- url: ${url}\n\nRun: ${actionsUrl}`
+            });
