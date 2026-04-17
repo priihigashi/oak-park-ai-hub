@@ -89,7 +89,7 @@ def insert_queue_row(topic_entry, inspo_status):
     today = datetime.utcnow().strftime("%Y-%m-%d")
     niche = topic_entry["niche"]
     status = "Approved" if inspo_status.strip().lower() == "approved" else "Draft"
-    series = "Tip of the Week" if niche == "opc" else "Quem Decidiu Isso?"
+    series = "Tip of the Week" if niche == "opc" else ("The Chain" if niche == "usa" else "Quem Decidiu Isso?")
 
     # Read header to locate columns by name
     hdr_rows = sheet_get(f"'{QUEUE_TAB}'!1:1")
@@ -154,11 +154,19 @@ def score_topic(row, header_map, used_topics, queued_topics):
     status = v("status").lower()
     niche = v("niche").lower() if v("niche") else ""
     comments = v("comments").lower()
-    topic = v("topic / title") or v("topic") or v("title") or v("description") or v("comments")
+    # STRICT topic source — never fall back to description/comments.
+    # Description-as-topic produced junk rows (Rickroll, "Portuguese discussion about...") 2026-04-17.
+    topic = v("topic / title") or v("topic") or v("title")
 
     if status in SKIP_STATUSES:
         return -1, niche, topic, status
     if not topic:
+        return -1, niche, topic, status
+    # Reject junk topics: too short, or look like generic descriptions/placeholders
+    JUNK_MARKERS = ("this is ", "a portuguese-language ", "a brazilian ", "research still needed",
+                    "transcript contains only", "portuguese-language discussion")
+    tlo = topic.lower()
+    if len(topic.strip()) < 12 or any(m in tlo for m in JUNK_MARKERS):
         return -1, niche, topic, status
 
     # Skip if already in Content Queue
@@ -175,6 +183,13 @@ def score_topic(row, header_map, used_topics, queued_topics):
         niche = "opc"
         score += 5
     elif niche in ("brazil", "brasil", "news-brazil"):
+        niche = "brazil"
+        score += 3
+    elif niche in ("usa", "news-usa", "united states", "us", "news-us", "america"):
+        niche = "usa"
+        score += 3
+    elif "brazil" in niche and ("usa" in niche or "united" in niche or " us" in niche or "us " in niche):
+        # Bilingual row (brazil + usa) — route as Brazil. carousel_builder already emits PT+EN on same slides.
         niche = "brazil"
         score += 3
     else:
@@ -197,7 +212,7 @@ def score_topic(row, header_map, used_topics, queued_topics):
     return score, niche, topic, status
 
 
-def pick_topics(count_opc=2, count_brazil=1):
+def pick_topics(count_opc=2, count_brazil=1, count_usa=1):
     rows = sheet_get(f"'{INSPO_TAB}'")
     if len(rows) < 2:
         print("Inspiration Library empty")
@@ -210,6 +225,7 @@ def pick_topics(count_opc=2, count_brazil=1):
 
     opc_candidates = []
     brazil_candidates = []
+    usa_candidates = []
 
     for idx, row in enumerate(rows[1:], start=2):
         score, niche, topic, inspo_status = score_topic(row, header_map, used, queued)
@@ -230,17 +246,22 @@ def pick_topics(count_opc=2, count_brazil=1):
             opc_candidates.append(entry)
         elif niche == "brazil":
             brazil_candidates.append(entry)
+        elif niche == "usa":
+            usa_candidates.append(entry)
 
     opc_candidates.sort(key=lambda x: x["score"], reverse=True)
     brazil_candidates.sort(key=lambda x: x["score"], reverse=True)
+    usa_candidates.sort(key=lambda x: x["score"], reverse=True)
 
     picks = []
     picks.extend(opc_candidates[:count_opc])
     picks.extend(brazil_candidates[:count_brazil])
+    picks.extend(usa_candidates[:count_usa])
 
-    if len(picks) < count_opc + count_brazil:
-        remaining = count_opc + count_brazil - len(picks)
-        fallback = (opc_candidates[count_opc:] + brazil_candidates[count_brazil:])
+    target = count_opc + count_brazil + count_usa
+    if len(picks) < target:
+        remaining = target - len(picks)
+        fallback = (opc_candidates[count_opc:] + brazil_candidates[count_brazil:] + usa_candidates[count_usa:])
         fallback.sort(key=lambda x: x["score"], reverse=True)
         picks.extend(fallback[:remaining])
 

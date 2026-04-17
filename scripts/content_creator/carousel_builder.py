@@ -98,7 +98,7 @@ CAROUSEL STRUCTURE RULES (Brazil/News fact-check):
 
 
 def generate_carousel_content(topic, niche, template_key=None, brief=""):
-    if niche == "brazil":
+    if niche in ("brazil", "usa"):
         return generate_brazil_content(topic, brief)
     if not template_key:
         template_key = OPC_TEMPLATE if niche == "opc" else BRAZIL_TEMPLATE

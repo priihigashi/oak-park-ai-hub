@@ -33,6 +33,23 @@ jobs:
           mkdir -p ~/.claude
           printf '%s' "$CLAUDE_MD_CONTENT" > ~/.claude/CLAUDE.md
 
+      - name: Retry content_creator if last run failed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          last=$(gh api "repos/${{ github.repository }}/actions/workflows/content_creator.yml/runs?per_page=1" --jq '.workflow_runs[0] | {id, conclusion, created_at, head_sha}')
+          echo "Last content_creator run: $last"
+          conclusion=$(echo "$last" | jq -r '.conclusion // "pending"')
+          last_sha=$(echo "$last" | jq -r '.head_sha // ""')
+          head_sha=$(git rev-parse HEAD)
+          if [ "$conclusion" = "failure" ] || [ "$conclusion" = "cancelled" ] || [ "$last_sha" != "$head_sha" ]; then
+            echo "Last content_creator: conclusion=$conclusion last_sha=$last_sha head_sha=$head_sha → retrying"
+            gh workflow run content_creator.yml --repo ${{ github.repository }} --ref main || echo "(retry dispatch failed — continuing)"
+          else
+            echo "Last content_creator: conclusion=$conclusion — no retry needed"
+          fi
+        continue-on-error: true
+
       - name: Run 4AM Content Agent
         env:
           APIFY_API_KEY:       ${{ secrets.APIFY_API_KEY }}

@@ -34,13 +34,35 @@ EXPORT_SCRIPT = os.environ.get("EXPORT_SCRIPT", str(Path(__file__).parent / "exp
 # Drive folder IDs — _TEMPLATE_CAROUSEL parents per series.
 # Every build lands at <SERIES>/_TEMPLATE_CAROUSEL/v<N>_<slug>/ (+ v<N>_<slug>_motion sibling).
 # N auto-increments when a slug already has versions. See project_carousel_folder_standard.md.
-OPC_TIP_TEMPLATE_FOLDER    = "1PWrZfuOvyHUbTRlFNqYxdhtg-Zvv_bXb"  # Marketing > OPC > Tip of the Week > _TEMPLATE_CAROUSEL
-BRAZIL_QUEM_TEMPLATE_FOLDER = "1Ts4OlXT_KxtYNziGmHUcsjHVh8Z7D1ds"  # News > Brazil > Quem decidiu isso > _TEMPLATE_CAROUSEL
+OPC_TIP_TEMPLATE_FOLDER      = "1PWrZfuOvyHUbTRlFNqYxdhtg-Zvv_bXb"  # Marketing > OPC > Tip of the Week > _TEMPLATE_CAROUSEL
+BRAZIL_QUEM_TEMPLATE_FOLDER   = "1Ts4OlXT_KxtYNziGmHUcsjHVh8Z7D1ds"  # News > Brazil > Quem decidiu isso > _TEMPLATE_CAROUSEL
+USA_THE_CHAIN_TEMPLATE_FOLDER = "1sDMyPHVYcOqZ3NK9ch4e48AaJ7KVvxL3"  # News > USA > Content > Series > The Chain > _TEMPLATE_CAROUSEL
 
 SHEET_ID    = os.environ.get("CONTENT_SHEET_ID", "1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU")
 INSPO_TAB   = "📥 Inspiration Library"
 QUEUE_TAB   = "📋 Content Queue"
 CATALOG_TAB = "📸 Project Content Catalog"
+
+ALERT_EMAIL = os.environ.get("ALERT_EMAIL", "priscila@oakpark-construction.com")
+
+
+def _send_alert(msg: str):
+    """Fail-loud email alert when pipeline hits a crash path or produces zero output.
+    Uses gh CLI to trigger send_email.yml (uses PRI_OP_GMAIL_APP_PASSWORD)."""
+    try:
+        print(f"\n🔴 ALERT: {msg}")
+        subject = f"[content_creator] Pipeline alert — {datetime.now(ET).strftime('%Y-%m-%d %H:%M ET')}"
+        body = f"Pipeline hit a failure:\n\n{msg}\n\nCheck logs: https://github.com/priihigashi/oak-park-ai-hub/actions/workflows/content_creator.yml"
+        subprocess.run(
+            ["gh", "workflow", "run", "send_email.yml",
+             "--repo", "priihigashi/oak-park-ai-hub",
+             "-f", f"to={ALERT_EMAIL}",
+             "-f", f"subject={subject}",
+             "-f", f"body={body}"],
+            check=False, timeout=30,
+        )
+    except Exception as e:
+        print(f"  (alert send itself failed: {e})")
 
 
 _token_cache = {}
@@ -249,7 +271,7 @@ def create_story_doc(parent_folder_id, slug, version, topic, niche, brief, conte
     Feedback rule: every review appends a new 'NOTE — YYYY-MM-DD' block at the bottom.
     """
     from googleapiclient.http import MediaInMemoryUpload
-    series = "Tip of the Week" if niche == "opc" else "Quem Decidiu Isso?" if niche == "brazil" else niche.upper()
+    series = "Tip of the Week" if niche == "opc" else ("The Chain" if niche == "usa" else "Quem Decidiu Isso?")
     title = f"v{version} — {slug} — {topic[:80]}"
 
     lines = [
@@ -349,7 +371,12 @@ def process_one_topic(topic_entry, run_date, drive):
     queue_row = topic_entry.get("queue_row_idx")
     slug = topic[:40].lower().replace(" ", "-").replace("'", "").replace('"', '')
     slug = "".join(c for c in slug if c.isalnum() or c == "-")
-    post_id = f"opc-tip-{run_date}-{slug[:20]}" if niche == "opc" else f"brazil-{run_date}-{slug[:20]}"
+    if niche == "opc":
+        post_id = f"opc-tip-{run_date}-{slug[:20]}"
+    elif niche == "usa":
+        post_id = f"usa-{run_date}-{slug[:20]}"
+    else:
+        post_id = f"brazil-{run_date}-{slug[:20]}"
 
     print(f"\n{'='*60}")
     print(f"Processing: [{niche}] {topic}")
@@ -391,7 +418,12 @@ def process_one_topic(topic_entry, run_date, drive):
     # 5. Upload to Drive — ONE version folder per post, png/ + motion/ + resources/ nested inside.
     # Shape: <SERIES>/_TEMPLATE_CAROUSEL/v<N>_<slug>/{cover.html, png/, motion/, resources/, story doc}
     print("  Uploading to Drive...")
-    parent = OPC_TIP_TEMPLATE_FOLDER if niche == "opc" else BRAZIL_QUEM_TEMPLATE_FOLDER
+    if niche == "opc":
+        parent = OPC_TIP_TEMPLATE_FOLDER
+    elif niche == "usa":
+        parent = USA_THE_CHAIN_TEMPLATE_FOLDER
+    else:
+        parent = BRAZIL_QUEM_TEMPLATE_FOLDER
 
     version = next_version_number(parent, slug, drive)
     version_name = f"v{version}_{slug}"
@@ -430,7 +462,7 @@ def process_one_topic(topic_entry, run_date, drive):
         write_queue_status(queue_row, status="Built", drive_folder_path=folder_link)
 
     # 6. Add catalog row (OPC project tracker) — static/motion columns both point at the version folder
-    series = "Tip of the Week" if niche == "opc" else "Quem Decidiu Isso?"
+    series = "Tip of the Week" if niche == "opc" else ("The Chain" if niche == "usa" else "Quem Decidiu Isso?")
     add_catalog_row(post_id, niche, series, topic, folder_link, folder_link, get_oauth_token())
 
     return {
@@ -467,32 +499,41 @@ def main():
     # Scored but un-approved rows → CQ Status=Draft (you flip to Approved in sheet to release)
     print("\n--- Phase A: Promoting Inspiration → Content Queue ---")
     try:
-        pick_topics(count_opc=2, count_brazil=1)
+        pick_topics(count_opc=2, count_brazil=1, count_usa=1)
     except Exception as e:
         print(f"  Topic picker failed: {e}")
+        _send_alert(f"Topic picker crashed: {e}")
 
     # Phase B: Build every Content Queue row where Status=Approved
     print("\n--- Phase B: Reading Content Queue for Approved rows ---")
     approved = get_approved_queue_rows()
     if not approved:
         print("  No Approved rows in Content Queue — nothing to build this run")
+        _send_alert("No Approved rows in Content Queue — pipeline picked zero topics to build. Check Inspiration Library scoring + Queue status flips.")
         return
     print(f"  Found {len(approved)} Approved carousel(s) to build")
 
     drive = get_drive_service()
     results = []
+    errors = []
     for topic in approved:
         try:
             result = process_one_topic(topic, run_date, drive)
             if result:
                 results.append(result)
         except Exception as e:
-            print(f"  ERROR processing '{topic['topic'][:40]}': {e}")
+            err = f"'{topic['topic'][:40]}': {e}"
+            print(f"  ERROR processing {err}")
+            errors.append(err)
             continue
 
     if not results:
         print("\nNo carousels rendered — exiting without email")
+        msg = f"Zero carousels rendered out of {len(approved)} Approved topics.\n\nErrors:\n" + "\n".join(errors) if errors else "Zero carousels rendered — no per-topic errors captured (silent failure)."
+        _send_alert(msg)
         return
+    if errors:
+        _send_alert(f"{len(results)}/{len(approved)} carousels rendered — {len(errors)} failures:\n\n" + "\n".join(errors))
 
     # Phase C: Send preview email → mark each row 'Email Sent'
     print(f"\n--- Phase C: Sending preview email ({len(results)} posts) ---")
@@ -509,4 +550,11 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        import traceback
+        tb = traceback.format_exc()
+        print(f"\n🔴 UNCAUGHT: {e}\n{tb}")
+        _send_alert(f"Uncaught crash in main():\n{e}\n\n{tb[-2000:]}")
+        sys.exit(1)
