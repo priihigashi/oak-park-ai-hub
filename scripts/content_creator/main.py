@@ -38,6 +38,7 @@ BRAZIL_CAROUSEL_FOLDER = "1TWWMY6uwebe6YQy5AWONKNlu-4BGEHD0"  # Marketing > CCW 
 
 SHEET_ID    = os.environ.get("CONTENT_SHEET_ID", "1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU")
 INSPO_TAB   = "📥 Inspiration Library"
+QUEUE_TAB   = "📋 Content Queue"
 CATALOG_TAB = "📸 Project Content Catalog"
 
 
@@ -59,28 +60,34 @@ def get_oauth_token():
     return resp["access_token"]
 
 
+def _col_letter(n):
+    r = ""
+    while n > 0:
+        n, rem = divmod(n - 1, 26)
+        r = chr(65 + rem) + r
+    return r
+
+
+def _get_header_map(tab_name):
+    token = get_oauth_token()
+    rows = json.loads(urllib.request.urlopen(
+        urllib.request.Request(
+            f"https://sheets.googleapis.com/v4/spreadsheets/{SHEET_ID}/values/{urllib.parse.quote(tab_name + '!1:1', safe='!:')}",
+            headers={"Authorization": f"Bearer {token}"})).read()).get("values", [[]])[0]
+    return {h.strip().lower(): i for i, h in enumerate(rows)}
+
+
 def write_inspo_status(row_idx, status):
     """Write flow-tracking status back to Inspiration Library row."""
     token = get_oauth_token()
     now = datetime.now(ET).strftime("%Y-%m-%d")
-    rows = json.loads(urllib.request.urlopen(
-        urllib.request.Request(
-            f"https://sheets.googleapis.com/v4/spreadsheets/{SHEET_ID}/values/{urllib.parse.quote(INSPO_TAB + '!1:1', safe='!:')}",
-            headers={"Authorization": f"Bearer {token}"})).read()).get("values", [[]])[0]
-    hmap = {h.strip().lower(): i for i, h in enumerate(rows)}
-
-    def col_letter(n):
-        r = ""
-        while n > 0:
-            n, rem = divmod(n - 1, 26)
-            r = chr(65 + rem) + r
-        return r
+    hmap = _get_header_map(INSPO_TAB)
 
     updates = []
     if "status" in hmap:
-        updates.append({"range": f"'{INSPO_TAB}'!{col_letter(hmap['status']+1)}{row_idx}", "values": [[status]]})
+        updates.append({"range": f"'{INSPO_TAB}'!{_col_letter(hmap['status']+1)}{row_idx}", "values": [[status]]})
     if "date status changed" in hmap:
-        updates.append({"range": f"'{INSPO_TAB}'!{col_letter(hmap['date status changed']+1)}{row_idx}", "values": [[now]]})
+        updates.append({"range": f"'{INSPO_TAB}'!{_col_letter(hmap['date status changed']+1)}{row_idx}", "values": [[now]]})
     if not updates:
         return
     payload = json.dumps({"valueInputOption": "USER_ENTERED", "data": updates}).encode()
@@ -90,7 +97,73 @@ def write_inspo_status(row_idx, status):
     try:
         urllib.request.urlopen(req)
     except Exception as e:
-        print(f"  Flow tracking write failed: {e}")
+        print(f"  Inspiration status write failed: {e}")
+
+
+def write_queue_status(row_idx, status=None, drive_folder_path=None, extra=None):
+    """Update Content Queue row. Always writes Date Status Changed when Status is written."""
+    token = get_oauth_token()
+    now = datetime.now(ET).strftime("%Y-%m-%d")
+    hmap = _get_header_map(QUEUE_TAB)
+
+    updates = []
+    if status is not None and "status" in hmap:
+        updates.append({"range": f"'{QUEUE_TAB}'!{_col_letter(hmap['status']+1)}{row_idx}", "values": [[status]]})
+        if "date status changed" in hmap:
+            updates.append({"range": f"'{QUEUE_TAB}'!{_col_letter(hmap['date status changed']+1)}{row_idx}", "values": [[now]]})
+    if drive_folder_path is not None and "drive folder path" in hmap:
+        updates.append({"range": f"'{QUEUE_TAB}'!{_col_letter(hmap['drive folder path']+1)}{row_idx}", "values": [[drive_folder_path]]})
+    for k, v in (extra or {}).items():
+        if k.lower() in hmap:
+            updates.append({"range": f"'{QUEUE_TAB}'!{_col_letter(hmap[k.lower()]+1)}{row_idx}", "values": [[v]]})
+    if not updates:
+        return
+    payload = json.dumps({"valueInputOption": "USER_ENTERED", "data": updates}).encode()
+    req = urllib.request.Request(
+        f"https://sheets.googleapis.com/v4/spreadsheets/{SHEET_ID}/values:batchUpdate",
+        data=payload, headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"})
+    try:
+        urllib.request.urlopen(req)
+    except Exception as e:
+        print(f"  Queue status write failed: {e}")
+
+
+def get_approved_queue_rows():
+    """Read Content Queue rows with Status='Approved' AND Content Type='Carousel' AND no Drive path yet."""
+    token = get_oauth_token()
+    tab_enc = urllib.parse.quote(f"'{QUEUE_TAB}'", safe="!:'")
+    rows = json.loads(urllib.request.urlopen(
+        urllib.request.Request(
+            f"https://sheets.googleapis.com/v4/spreadsheets/{SHEET_ID}/values/{tab_enc}",
+            headers={"Authorization": f"Bearer {token}"})).read()).get("values", [])
+    if len(rows) < 2:
+        return []
+    hmap = {h.strip().lower(): i for i, h in enumerate(rows[0])}
+
+    def v(row, name):
+        idx = hmap.get(name.lower())
+        return row[idx].strip() if idx is not None and idx < len(row) else ""
+
+    approved = []
+    for idx, row in enumerate(rows[1:], start=2):
+        if v(row, "status").lower() != "approved":
+            continue
+        if v(row, "content type").lower() != "carousel":
+            continue
+        if v(row, "drive folder path"):
+            continue  # already built
+        niche = v(row, "source").lower() or ("opc" if "opc" in v(row, "format").lower() else "brazil")
+        if niche not in ("opc", "brazil"):
+            niche = "brazil" if "quem" in v(row, "format").lower() else "opc"
+        approved.append({
+            "queue_row_idx": idx,
+            "topic": v(row, "project name"),
+            "niche": niche,
+            "brief": v(row, "brief / angle"),
+            "url": v(row, "inspo url"),
+            "format": v(row, "format"),
+        })
+    return approved
 
 
 def get_drive_service():
@@ -179,13 +252,14 @@ def add_catalog_row(post_id, niche, series, topic, static_link, motion_link, tok
 def process_one_topic(topic_entry, run_date, drive):
     topic = topic_entry["topic"]
     niche = topic_entry["niche"]
+    queue_row = topic_entry.get("queue_row_idx")
     slug = topic[:40].lower().replace(" ", "-").replace("'", "").replace('"', '')
     slug = "".join(c for c in slug if c.isalnum() or c == "-")
     post_id = f"opc-tip-{run_date}-{slug[:20]}" if niche == "opc" else f"brazil-{run_date}-{slug[:20]}"
 
     print(f"\n{'='*60}")
     print(f"Processing: [{niche}] {topic}")
-    print(f"Post ID: {post_id}")
+    print(f"Post ID: {post_id} | Queue row: {queue_row}")
 
     # 1. Generate content
     print("  Generating content via Claude Haiku...")
@@ -230,14 +304,13 @@ def process_one_topic(topic_entry, run_date, drive):
     static_link = f"https://drive.google.com/drive/folders/{static_folder_id}"
     motion_link = f"https://drive.google.com/drive/folders/{motion_folder_id}"
     print(f"  Static: {static_link}")
-
-    # Flow tracking: mark row as BUILT in Inspiration Library
-    row_idx = topic_entry.get("row_idx")
-    if row_idx:
-        write_inspo_status(row_idx, "BUILT")
     print(f"  Motion: {motion_link}")
 
-    # 6. Add catalog row
+    # Flow tracking: Content Queue → Built + Drive path
+    if queue_row:
+        write_queue_status(queue_row, status="Built", drive_folder_path=static_link)
+
+    # 6. Add catalog row (OPC project tracker)
     series = "Tip of the Week" if niche == "opc" else "Quem Decidiu Isso?"
     add_catalog_row(post_id, niche, series, topic, static_link, motion_link, get_oauth_token())
 
@@ -245,6 +318,7 @@ def process_one_topic(topic_entry, run_date, drive):
         "post_id": post_id,
         "topic": topic,
         "niche": niche,
+        "queue_row_idx": queue_row,
         "static_folder_id": static_folder_id,
         "motion_folder_id": motion_folder_id,
         "static_link": static_link,
@@ -264,17 +338,26 @@ def main():
         shutil.rmtree(WORK_DIR)
     WORK_DIR.mkdir(parents=True)
 
-    # 1. Pick topics
-    print("\n--- Step 1: Picking topics ---")
-    topics = pick_topics(count_opc=2, count_brazil=1)
-    if not topics:
-        print("No topics found — exiting")
-        return
+    # Phase A: Promote fresh topics from Inspiration → Content Queue
+    # Pre-approved Inspiration rows → CQ Status=Approved (auto-builds this run)
+    # Scored but un-approved rows → CQ Status=Draft (you flip to Approved in sheet to release)
+    print("\n--- Phase A: Promoting Inspiration → Content Queue ---")
+    try:
+        pick_topics(count_opc=2, count_brazil=1)
+    except Exception as e:
+        print(f"  Topic picker failed: {e}")
 
-    # 2. Process each topic
+    # Phase B: Build every Content Queue row where Status=Approved
+    print("\n--- Phase B: Reading Content Queue for Approved rows ---")
+    approved = get_approved_queue_rows()
+    if not approved:
+        print("  No Approved rows in Content Queue — nothing to build this run")
+        return
+    print(f"  Found {len(approved)} Approved carousel(s) to build")
+
     drive = get_drive_service()
     results = []
-    for topic in topics:
+    for topic in approved:
         try:
             result = process_one_topic(topic, run_date, drive)
             if result:
@@ -287,13 +370,18 @@ def main():
         print("\nNo carousels rendered — exiting without email")
         return
 
-    # 3. Send preview email
-    print(f"\n--- Step 3: Sending preview email ({len(results)} posts) ---")
-    send_preview(results, now_et.strftime("%Y-%m-%d"))
+    # Phase C: Send preview email → mark each row 'Email Sent'
+    print(f"\n--- Phase C: Sending preview email ({len(results)} posts) ---")
+    try:
+        send_preview(results, now_et.strftime("%Y-%m-%d"))
+        for r in results:
+            if r.get("queue_row_idx"):
+                write_queue_status(r["queue_row_idx"], status="Email Sent")
+    except Exception as e:
+        print(f"  Email send failed: {e}")
 
     elapsed = time.time() - start
     print(f"\n[content_creator] Done — {len(results)} posts rendered in {elapsed:.0f}s")
-    print(f"Status: pending_approval — waiting for email reply")
 
 
 if __name__ == "__main__":
