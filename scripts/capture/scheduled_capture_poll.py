@@ -151,6 +151,10 @@ def main():
         niche = row[4]
         if not url:
             continue
+        if not url.startswith("http"):
+            # Fallback tab may have non-URL values in column A (e.g. dates from redesigned Inspiration Library)
+            print(f"  row {i+2}: skipping non-URL value in col A: {url[:40]!r}")
+            continue
         if status in SKIP_STATUS:
             continue
 
