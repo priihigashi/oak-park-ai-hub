@@ -508,11 +508,12 @@ def _get_pending_posts():
         def v(name):
             idx = header_map.get(name.lower())
             return row[idx].strip() if idx is not None and idx < len(row) else ""
+        VALID_NICHES = {"opc", "brazil", "usa", "ugc", "news", "sovereign"}
         if v("status") == "pending_approval":
-            raw_niche = v("niche") or (row[1] if len(row) > 1 else "")
+            raw_niche = v("niche") or ""
             post_id = v("post_id") or (row[0] if len(row) > 0 else "")
-            # Infer niche from post_id prefix if catalog value is wrong
-            if raw_niche in ("general", "", "general "):
+            # Infer niche from post_id prefix when catalog has no niche col or invalid value
+            if raw_niche.lower() not in VALID_NICHES:
                 if post_id.startswith("opc-"):
                     raw_niche = "opc"
                 elif post_id.startswith("usa-"):

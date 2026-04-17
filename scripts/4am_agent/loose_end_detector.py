@@ -31,20 +31,25 @@ def _creds():
 def _check_stale_content_queue(sheets_svc):
     result = sheets_svc.spreadsheets().values().get(
         spreadsheetId=SPREADSHEET_ID,
-        range="📋 Content Queue!A:J",
+        range="📋 Content Queue!A:L",
     ).execute()
     rows = result.get("values", [])
     if len(rows) <= 1:
         return []
 
+    headers = rows[0]
+    hmap = {h.strip().lower(): i for i, h in enumerate(headers)}
+
+    def _v(row, name):
+        idx = hmap.get(name)
+        return row[idx].strip() if idx is not None and idx < len(row) else ""
+
     stale  = []
     cutoff = datetime.now(et) - timedelta(days=STALE_DAYS)
     for i, row in enumerate(rows[1:], start=2):
-        if len(row) < 10:
-            continue
-        date_str = row[0] if row else ""
-        status   = row[9] if len(row) > 9 else ""
-        topic    = row[5] if len(row) > 5 else "(no topic)"
+        date_str = _v(row, "date created")
+        status   = _v(row, "status")
+        topic    = _v(row, "hook") or "(no topic)"
         if status.lower() == "pending" and date_str:
             try:
                 created  = datetime.strptime(date_str, "%Y-%m-%d").replace(tzinfo=et)
@@ -108,14 +113,23 @@ def _check_inspiration_library_failures(sheets_svc):
     """Find rows in Inspiration Library with Status=failed/error → re-trigger candidates."""
     result = sheets_svc.spreadsheets().values().get(
         spreadsheetId=SPREADSHEET_ID,
-        range="'📥 Inspiration Library'!A:C",
+        range="'📥 Inspiration Library'!A:S",
     ).execute()
     rows = result.get("values", [])
+    if not rows:
+        return []
+    headers = rows[0]
+    hmap = {h.strip().lower(): i for i, h in enumerate(headers)}
+
+    def _v(row, name):
+        idx = hmap.get(name)
+        return row[idx].strip() if idx is not None and idx < len(row) else ""
+
     failed = []
-    for i, row in enumerate(rows[1:], start=2):  # skip header row
-        url      = row[0].strip() if row else ""
-        comments = row[1].strip() if len(row) > 1 else ""
-        status   = row[2].strip().lower() if len(row) > 2 else ""
+    for i, row in enumerate(rows[1:], start=2):
+        url      = _v(row, "url")
+        comments = _v(row, "comments")
+        status   = _v(row, "status").lower()
         if status in ("failed", "error", "capture_failed") and url:
             failed.append({"row": i, "url": url[:120], "comments": comments[:100]})
     return failed

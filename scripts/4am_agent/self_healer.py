@@ -123,6 +123,101 @@ If confidence < 70, return {{"confidence": 0, "fix_description": "cannot auto-fi
         return {"confidence": 0}
 
 
+_SHEET_IDS = {
+    "inspiration_library": ("1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU", "📥 Inspiration Library"),
+    "content_queue":       ("1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU", "📋 Content Queue"),
+    "capture_queue":       ("1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU", "📲 Capture Queue"),
+}
+
+_GOLD_PATTERN = """
+GOLD STANDARD — header-name lookup (use this pattern, never hardcode indices):
+    headers = lib.row_values(1)                          # read row 1
+    col_pos = {h.strip().lower(): i for i, h in enumerate(headers)}
+    def _set_col(row, name, value):
+        idx = col_pos.get(name.strip().lower())
+        if idx is not None:
+            while len(row) <= idx: row.append("")
+            row[idx] = str(value) if value is not None else ""
+    base_row = []
+    _set_col(base_row, "url", url_value)
+    _set_col(base_row, "status", "CAPTURED")
+    # etc — always by column NAME, never by index number
+"""
+
+
+def _fetch_live_headers(sheet_key: str) -> str:
+    """Fetch live header row from a known sheet. Returns formatted string for LLM context."""
+    entry = _SHEET_IDS.get(sheet_key)
+    if not entry:
+        return ""
+    sheet_id, tab = entry
+    try:
+        from googleapiclient.discovery import build as _build
+        svc = _build("sheets", "v4", credentials=service_account.Credentials.from_service_account_info(
+            json.loads(os.environ["GOOGLE_SA_KEY"]),
+            scopes=["https://www.googleapis.com/auth/spreadsheets.readonly"]
+        ))
+        result = svc.spreadsheets().values().get(
+            spreadsheetId=sheet_id, range=f"'{tab}'!A1:AC1"
+        ).execute()
+        hdrs = result.get("values", [[]])[0]
+        lines = [f"  {chr(65+i)}({i}): {h}" for i, h in enumerate(hdrs)]
+        return f"Live headers for {tab}:\n" + "\n".join(lines)
+    except Exception as e:
+        return f"(could not fetch live headers: {e})"
+
+
+def _is_schema_error(error: str, tb: str) -> bool:
+    s = (error + tb).lower()
+    return any(k in s for k in ["indexerror", "list index out of range", "row[", "col[", "column"])
+
+
+def _schema_aware_haiku_fix(module_name, error, tb):
+    """Enhanced Haiku fix that includes live sheet headers + gold pattern when schema error detected."""
+    sheet_key = next((k for k in _SHEET_IDS if k in module_name.lower()
+                      or k.replace("_", "") in tb.lower()), None)
+    if not sheet_key:
+        # Try to detect from traceback
+        if "inspiration" in tb.lower():
+            sheet_key = "inspiration_library"
+        elif "capture_queue" in tb.lower():
+            sheet_key = "capture_queue"
+        elif "content_queue" in tb.lower():
+            sheet_key = "content_queue"
+
+    live_headers = _fetch_live_headers(sheet_key) if sheet_key else "(sheet key unknown)"
+
+    resp = client.messages.create(
+        model="claude-haiku-4-5-20251001",
+        max_tokens=800,
+        messages=[{"role": "user", "content": f"""Python module failed in GitHub Actions — likely a schema/column mismatch.
+
+Module: {module_name}
+Error: {error}
+Traceback: {tb[:1500]}
+
+{live_headers}
+
+{_GOLD_PATTERN}
+
+The fix MUST use the gold-standard header-name lookup pattern (never hardcode column indices).
+Write the MINIMAL fix (1-10 lines). Do not rewrite the module.
+Return JSON only:
+{{"confidence": 0-100, "fix_description": "one sentence",
+  "file_to_edit": "scripts/4am_agent/{module_name}.py",
+  "old_code": "exact string to replace", "new_code": "replacement"}}
+If confidence < 70, return {{"confidence": 0, "fix_description": "cannot auto-fix",
+  "file_to_edit": null, "old_code": null, "new_code": null}}"""}],
+    )
+    text = resp.content[0].text.strip()
+    if "```json" in text: text = text.split("```json")[1].split("```")[0].strip()
+    elif "```" in text:   text = text.split("```")[1].split("```")[0].strip()
+    try:
+        return json.loads(text)
+    except Exception:
+        return {"confidence": 0}
+
+
 def _create_pr(module_name, fix, error):
     base = f"https://api.github.com/repos/{GITHUB_REPO}"
     try:
@@ -337,7 +432,11 @@ def run():
             print(f"[self_healer]   Transient — will retry tomorrow automatically.")
 
         elif cat == "script":
-            fix = _haiku_fix(name, err, tb)
+            if _is_schema_error(err, tb):
+                print(f"[self_healer]   Schema error detected — using schema-aware fix with live headers.")
+                fix = _schema_aware_haiku_fix(name, err, tb)
+            else:
+                fix = _haiku_fix(name, err, tb)
             if fix.get("confidence", 0) >= 70 and fix.get("old_code"):
                 if _create_pr(name, fix, err):
                     prs += 1

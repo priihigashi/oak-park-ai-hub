@@ -82,7 +82,7 @@ def _sheets():
 def _read_rows(svc, tab: str):
     try:
         resp = svc.spreadsheets().values().get(
-            spreadsheetId=SHEET_ID, range=f"'{tab}'!A2:O"
+            spreadsheetId=SHEET_ID, range=f"'{tab}'!A2:AC"
         ).execute()
         return resp.get("values", [])
     except Exception as e:
@@ -116,13 +116,19 @@ def _project_for(niche: str) -> str:
 
 def _write_status(svc, tab: str, row: int, status: str, note: str):
     ts = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%MZ")
+    # Inspiration Library: Status=col S, Comments=col V
+    # Drop Links: Status=col C, note=col D
+    if tab == FALLBACK_TAB:
+        status_col, note_col = "S", "V"
+    else:
+        status_col, note_col = "C", "D"
     svc.spreadsheets().values().batchUpdate(
         spreadsheetId=SHEET_ID,
         body={
             "valueInputOption": "RAW",
             "data": [
-                {"range": f"'{tab}'!C{row}", "values": [[status]]},
-                {"range": f"'{tab}'!D{row}", "values": [[f"{ts} — {note}"]]},
+                {"range": f"'{tab}'!{status_col}{row}", "values": [[status]]},
+                {"range": f"'{tab}'!{note_col}{row}", "values": [[f"{ts} — {note}"]]},
             ],
         },
     ).execute()
@@ -145,16 +151,17 @@ def main():
         if dispatched >= MAX_DISPATCH:
             print("Dispatch cap reached; stopping.")
             break
-        row = row + [""] * (15 - len(row))
-        # Inspiration Library has URL in col D (index 3); Drop Links has URL in col A (index 0)
+        row = row + [""] * (29 - len(row))
+        # Inspiration Library: URL=col D(3), Status=col S(18), Niche=col U(20)
+        # Drop Links: URL=col A(0), Status=col C(2), Niche=col E(4)
         if active_tab == FALLBACK_TAB:
-            url    = row[3].strip()   # col D = URL
-            status = row[2].strip().lower()   # col C = Status
-            niche  = ""               # Inspiration Library has no dedicated niche column; let pipeline classify
+            url    = row[3].strip()    # col D = URL
+            status = row[18].strip().lower()  # col S = Status
+            niche  = row[20].strip()   # col U = Niche
         else:
-            url    = row[0].strip()   # col A = URL in Drop Links
+            url    = row[0].strip()    # col A = URL in Drop Links
             status = row[2].strip().lower()   # col C = Status
-            niche  = row[4].strip()   # col E = Niche override
+            niche  = row[4].strip()    # col E = Niche override
         if not url or not url.startswith("http"):
             if url:
                 print(f"  row {i+2}: skipping non-URL in expected col: {url[:40]!r}")
