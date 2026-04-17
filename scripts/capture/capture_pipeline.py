@@ -386,7 +386,10 @@ def _find_audio_file(tmp_dir: str) -> str:
 
 
 def _try_ytdlp(url: str, tmp_dir: str, extra_args: list = None) -> str:
-    """Try yt-dlp download with optional extra args. Returns audio path or empty string."""
+    """Try yt-dlp download with optional extra args. Returns audio path or empty string.
+    For non-YouTube (IG/TikTok), adds --keep-video so the original video file is saved
+    alongside the mp3 — this lets download_video() reuse it without a second request.
+    """
     global _YT_COOKIES_PATH
     output = os.path.join(tmp_dir, "audio.%(ext)s")
     cmd = [
@@ -399,6 +402,9 @@ def _try_ytdlp(url: str, tmp_dir: str, extra_args: list = None) -> str:
             _YT_COOKIES_PATH = _write_cookies_file()
         if _YT_COOKIES_PATH:
             cmd.extend(["--cookies", _YT_COOKIES_PATH])
+    else:
+        # Keep original video file so download_video() can reuse it without a 2nd request
+        cmd.append("--keep-video")
     if extra_args:
         cmd.extend(extra_args)
     cmd.append(url)
@@ -575,13 +581,20 @@ def download_video(url: str, tmp_dir: str) -> str:
             "--no-playlist", "--quiet",
         ]
     else:
-        # IG/TikTok: use same code path as audio download (--extract-audio bypasses the
-        # full metadata extraction that Instagram blocks for direct video downloads).
-        # --keep-video preserves the original mp4 alongside the extracted mp3.
+        # IG/TikTok: _try_ytdlp (audio step) already downloaded the reel with --keep-video,
+        # so the original video file is already in tmp_dir as audio.<ext>.
+        # Reuse it — no second request needed (Instagram rate-limits repeat requests).
+        for ext in ["mp4", "mkv", "webm", "mov"]:
+            src = os.path.join(tmp_dir, f"audio.{ext}")
+            if os.path.exists(src) and os.path.getsize(src) > 100_000:
+                dst = os.path.join(tmp_dir, f"video.{ext}")
+                os.rename(src, dst)
+                size_mb = os.path.getsize(dst) / (1024 * 1024)
+                print(f"  Video reused from audio step ({size_mb:.1f} MB)")
+                return dst
+        # Audio step didn't keep video (older run or different URL) — fall through to download
         cmd = [
             "yt-dlp",
-            "--extract-audio", "--audio-format", "mp3",
-            "--keep-video",
             "--output", output,
             "--no-playlist", "--quiet",
         ]
@@ -606,25 +619,10 @@ def download_video(url: str, tmp_dir: str) -> str:
         )
 
     if result.returncode != 0:
-        # For non-YouTube (IG/TikTok), yt-dlp may exit non-zero on metadata warnings
-        # while still having downloaded the file — check before giving up
-        if not is_yt:
-            for ext in ["mp4", "mkv", "webm", "mov"]:
-                alt = os.path.join(tmp_dir, f"video.{ext}")
-                if os.path.exists(alt) and os.path.getsize(alt) > 100_000:
-                    print(f"  Video present despite exit code (metadata warning only) — using file")
-                    video_path = alt
-                    break
-            else:
-                err = (result.stderr or result.stdout or "")[:300]
-                print(f"  Video download failed (non-fatal): {err}")
-                print(f"  VIDEO_DOWNLOAD_FAILED: {url}")
-                return ""
-        else:
-            err = (result.stderr or result.stdout or "")[:300]
-            print(f"  Video download failed (non-fatal): {err}")
-            print(f"  VIDEO_DOWNLOAD_FAILED: {url}")
-            return ""
+        err = (result.stderr or result.stdout or "")[:300]
+        print(f"  Video download failed (non-fatal): {err}")
+        print(f"  VIDEO_DOWNLOAD_FAILED: {url}")
+        return ""
 
     # Find the output file (extension might vary)
     if not os.path.exists(video_path):
