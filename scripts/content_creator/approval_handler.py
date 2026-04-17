@@ -336,12 +336,24 @@ def re_render_post(post, feedback):
         return False
     parent_id = parents[0]
 
-    ver_match = re.search(r'_v(\d+)_static$', folder_name)
-    current_ver = int(ver_match.group(1)) if ver_match else 1
-    new_ver = current_ver + 1
-    new_folder_name = re.sub(r'_v\d+_static$', f'_v{new_ver}_static', folder_name)
-    if new_folder_name == folder_name:
-        new_folder_name = f"{post_id}_v{new_ver}_static"
+    # Support both naming conventions: v{N}_{slug} (current) and {id}_v{N}_static (legacy)
+    ver_match = re.match(r'^v(\d+)_(.+)$', folder_name)
+    if ver_match:
+        current_ver = int(ver_match.group(1))
+        slug = ver_match.group(2)
+        new_ver = current_ver + 1
+        new_folder_name = f"v{new_ver}_{slug}"
+    else:
+        legacy_match = re.search(r'_v(\d+)_static$', folder_name)
+        current_ver = int(legacy_match.group(1)) if legacy_match else 1
+        new_ver = current_ver + 1
+        new_folder_name = f"v{new_ver}_{post_id[:30]}"
+
+    # Normalize niche for carousel_builder
+    niche = _normalize_niche(niche)
+    if not os.environ.get("ANTHROPIC_API_KEY"):
+        print(f"  re_render: no ANTHROPIC_API_KEY — cannot regenerate content")
+        return False
 
     topic_with_feedback = f"{topic}\n\nRevision feedback: {feedback}"
     content = generate_carousel_content(topic_with_feedback, niche)
@@ -375,10 +387,16 @@ def re_render_post(post, feedback):
     ).execute()
     new_folder_id = new_folder["id"]
 
+    # Create png/ subfolder inside version folder (matches carousel folder standard)
+    png_drive_folder = drive.files().create(
+        body={"name": "png", "mimeType": "application/vnd.google-apps.folder", "parents": [new_folder_id]},
+        supportsAllDrives=True, fields="id",
+    ).execute()["id"]
+
     for f in sorted(png_dir.iterdir()):
         if f.is_file() and not f.name.startswith("."):
             drive.files().create(
-                body={"name": f.name, "parents": [new_folder_id]},
+                body={"name": f.name, "parents": [png_drive_folder]},
                 media_body=MediaFileUpload(str(f), mimetype="image/png"),
                 supportsAllDrives=True, fields="id",
             ).execute()
@@ -453,6 +471,19 @@ def _delete_old_versions(post_id, approved_folder_id):
             print(f"  Could not delete {f['name']}: {e}")
 
 
+def _normalize_niche(raw):
+    """Map any catalog niche value to the 3 canonical values carousel_builder expects."""
+    r = (raw or "").lower().strip()
+    if any(x in r for x in ("brazil", "brasil", "quem", "news-brazil")):
+        return "brazil"
+    if any(x in r for x in ("usa", "united", "news-usa", "news-us", "the chain")):
+        return "usa"
+    if any(x in r for x in ("opc", "oak park", "tip")):
+        return "opc"
+    # post_id prefix fallback
+    return r  # will surface the real value in logs
+
+
 def _get_pending_posts():
     token, _ = get_gmail_token()
     enc = urllib.parse.quote(f"'{CATALOG_TAB}'!A:O", safe="!:'")
@@ -470,9 +501,19 @@ def _get_pending_posts():
             idx = header_map.get(name.lower())
             return row[idx].strip() if idx is not None and idx < len(row) else ""
         if v("status") == "pending_approval":
+            raw_niche = v("niche") or (row[1] if len(row) > 1 else "")
+            post_id = v("post_id") or (row[0] if len(row) > 0 else "")
+            # Infer niche from post_id prefix if catalog value is wrong
+            if raw_niche in ("general", "", "general "):
+                if post_id.startswith("opc-"):
+                    raw_niche = "opc"
+                elif post_id.startswith("usa-"):
+                    raw_niche = "usa"
+                elif post_id.startswith("brazil-"):
+                    raw_niche = "brazil"
             pending.append({
-                "post_id": v("post_id") or (row[0] if len(row) > 0 else ""),
-                "niche": v("niche") or (row[1] if len(row) > 1 else ""),
+                "post_id": post_id,
+                "niche": _normalize_niche(raw_niche),
                 "static_link": v("static folder") or (row[8] if len(row) > 8 else ""),
                 "motion_link": v("motion folder") or (row[9] if len(row) > 9 else ""),
                 "topic": v("topic") or (row[13] if len(row) > 13 else ""),

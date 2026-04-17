@@ -27,8 +27,19 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
       - name: Install dependencies
-        run: pip install google-auth google-api-python-client pytz
+        run: |
+          pip install google-auth google-api-python-client pytz anthropic
+          npm install playwright
+          npx playwright install chromium --with-deps
+
+      - name: Install ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
 
       - name: Run approval handler
         working-directory: scripts/content_creator

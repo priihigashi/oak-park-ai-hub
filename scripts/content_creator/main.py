@@ -360,7 +360,7 @@ def add_catalog_row(post_id, niche, series, topic, static_link, motion_link, tok
     import urllib.request, urllib.parse
     now = datetime.now(ET).strftime("%Y-%m-%d")
     row = [[
-        post_id, "general", "", series, "", "",
+        post_id, niche, "", series, "", "",
         now, "", static_link, motion_link, "",
         "", "pending_approval", topic[:100], "N",
     ]]
