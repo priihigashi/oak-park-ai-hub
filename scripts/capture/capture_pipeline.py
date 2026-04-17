@@ -556,6 +556,18 @@ def download_audio(url: str, tmp_dir: str, metadata: dict = None) -> str:
         print("  All download methods failed — falling back to transcript API (text only)")
         return "__youtube_transcript_fallback__"
 
+    # Instagram/TikTok Tier 1b: retry yt-dlp with mobile user-agent (bypasses shared_data block)
+    if not is_yt:
+        print("  Retrying yt-dlp with mobile user-agent...")
+        audio = _try_ytdlp(url, tmp_dir, [
+            "--user-agent",
+            "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15",
+        ])
+        if audio:
+            size = os.path.getsize(audio) / 1024
+            print(f"  Downloaded via yt-dlp mobile UA ({size:.0f} KB)")
+            return audio
+
     # Instagram/TikTok Tier 2: use videoUrl from Apify metadata (already fetched, no extra cost)
     video_url = (metadata or {}).get("video_url", "")
     if video_url:
