@@ -191,6 +191,120 @@ def _trigger_research(module_name, error):
         return False
 
 
+def _fetch_workflow_logs(run_id):
+    """Fetch last 2000 chars of GitHub Actions log for a run ID. Non-fatal."""
+    if not run_id or not GITHUB_TOKEN:
+        return ""
+    try:
+        url = f"https://api.github.com/repos/{GITHUB_REPO}/actions/runs/{run_id}/logs"
+        r = requests.get(url, headers=_gh_headers(), allow_redirects=True, timeout=15)
+        if r.status_code == 200 and r.content:
+            import zipfile, io
+            with zipfile.ZipFile(io.BytesIO(r.content)) as z:
+                for name in z.namelist():
+                    if name.endswith(".txt"):
+                        text = z.read(name).decode("utf-8", errors="replace")
+                        return text[-2000:]
+    except Exception as e:
+        print(f"[self_healer] Log fetch failed: {e}")
+    return ""
+
+
+def _autonomous_solve(module_name, error, tb, run_id=None):
+    """Autonomous multi-step solver: read workflow logs + transcript artifacts,
+    ask Claude Sonnet to analyze everything together and propose an actionable fix.
+    Returns a fix dict (same shape as _haiku_fix) or None on failure.
+
+    Used as an escalation step BEFORE creating a calendar task.
+    Implements the 4AM agent autonomous problem-solving pattern:
+    - Read actual pipeline artifacts (logs, transcripts)
+    - Analyze the full context, not just the traceback
+    - Propose a specific fix or root cause
+    - Only fall back to calendar task if Claude cannot determine a fix
+    """
+    print(f"[self_healer] Autonomous solve: reading pipeline context for {module_name}...")
+
+    # 1. Gather workflow logs if a run_id is available
+    wf_logs = _fetch_workflow_logs(run_id) if run_id else ""
+
+    # 2. Look for any SRT/transcript artifacts from the last capture run
+    transcript_snippet = ""
+    for candidate in ["/tmp/capture_artifact", "/tmp"]:
+        import glob as _glob
+        for ext in ("*.srt", "*.txt"):
+            hits = _glob.glob(f"{candidate}/{ext}")
+            if hits:
+                try:
+                    with open(hits[0], encoding="utf-8", errors="replace") as fh:
+                        transcript_snippet = fh.read()[:1000]
+                    break
+                except Exception:
+                    pass
+        if transcript_snippet:
+            break
+
+    # 3. Read the failing script for context
+    script_snippet = ""
+    script_path = f"scripts/4am_agent/{module_name}.py"
+    try:
+        sr = requests.get(
+            f"https://api.github.com/repos/{GITHUB_REPO}/contents/{script_path}",
+            headers=_gh_headers(),
+        )
+        if sr.status_code == 200:
+            import base64 as _b64
+            raw = _b64.b64decode(sr.json()["content"]).decode("utf-8", errors="replace")
+            script_snippet = raw[:2000]
+    except Exception:
+        pass
+
+    # 4. Ask Claude Sonnet to analyze everything and propose a fix
+    context_parts = [
+        f"Module: {module_name}",
+        f"Error: {error}",
+        f"Traceback:\n{tb[:1500]}",
+    ]
+    if script_snippet:
+        context_parts.append(f"Script (first 2000 chars):\n{script_snippet}")
+    if wf_logs:
+        context_parts.append(f"Workflow logs (last 2000 chars):\n{wf_logs}")
+    if transcript_snippet:
+        context_parts.append(f"Transcript artifact (first 1000 chars):\n{transcript_snippet}")
+
+    prompt = (
+        "\n\n---\n".join(context_parts) +
+        "\n\n---\n"
+        "You are the 4AM autonomous agent. Analyze the failure above.\n"
+        "Step 1: Identify the root cause (not just the error message).\n"
+        "Step 2: Check if the transcript/logs reveal additional context.\n"
+        "Step 3: Propose the MINIMAL fix (1-10 lines of Python).\n"
+        "Step 4: If fix is a config/auth issue (wrong secret, missing env var), describe exact steps.\n\n"
+        "Return JSON only:\n"
+        '{"confidence": 0-100, "root_cause": "one sentence", "fix_description": "one sentence",\n'
+        ' "file_to_edit": "path or null", "old_code": "exact string or null", "new_code": "replacement or null",\n'
+        ' "is_config_issue": true/false, "config_steps": "steps if config issue or null"}\n'
+        "confidence >= 80 means you are certain the fix is correct."
+    )
+
+    try:
+        resp = client.messages.create(
+            model="claude-haiku-4-5-20251001",
+            max_tokens=800,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        text = resp.content[0].text.strip()
+        if "```json" in text:
+            text = text.split("```json")[1].split("```")[0].strip()
+        elif "```" in text:
+            text = text.split("```")[1].split("```")[0].strip()
+        result = json.loads(text)
+        print(f"[self_healer] Autonomous solve: confidence={result.get('confidence',0)} — {result.get('root_cause','?')}")
+        return result
+    except Exception as e:
+        print(f"[self_healer] Autonomous solve failed: {e}")
+        return None
+
+
 def run():
     """Main entry — reads failures and heals what it can. (C3: run_results param removed)"""
     if not os.path.exists(FAILURES_FILE):
@@ -228,7 +342,14 @@ def run():
                 if _create_pr(name, fix, err):
                     prs += 1
                     continue
-            # Not confident — research + calendar (with dedup)
+            # Fast fix not confident — try autonomous multi-context solver
+            run_id = data.get("run_id")
+            auto = _autonomous_solve(name, err, tb, run_id=run_id)
+            if auto and auto.get("confidence", 0) >= 80 and auto.get("old_code"):
+                if _create_pr(name, auto, err):
+                    prs += 1
+                    continue
+            # Still stuck — research + calendar (with dedup)
             if _days_since(researched.get(name, {}).get("triggered", "")) >= DEDUP_DAYS:
                 if _trigger_research(name, err):
                     researched[name] = {"triggered": today, "error": err[:100]}
@@ -236,10 +357,15 @@ def run():
             else:
                 print(f"[self_healer]   Research already triggered for {name} — skipping.")
 
+            root_cause = (auto or {}).get("root_cause", "")
+            config_steps = (auto or {}).get("config_steps", "")
+            task_body = (
+                f"Error: {err}\n\nRoot cause analysis: {root_cause or 'see traceback'}\n\n"
+                + (f"Config steps:\n{config_steps}\n\n" if config_steps else "")
+                + "Auto-fix attempted but confidence too low. Research triggered — check Drive Resources."
+            )
             if _days_since(healed.get(name, {}).get("task_created", "")) >= DEDUP_DAYS:
-                _calendar_task(calendar_svc,
-                    f"⚠️ SCRIPT ERROR: {name}",
-                    f"Error: {err}\n\nAuto-fix attempted but not confident.\nResearch triggered — check Drive Resources for findings.")
+                _calendar_task(calendar_svc, f"⚠️ SCRIPT ERROR: {name}", task_body)
                 healed[name] = {"task_created": today, "type": "script"}
                 cal_tasks += 1
             else:
@@ -255,7 +381,14 @@ def run():
             else:
                 print(f"[self_healer]   Calendar task already exists for {name} — skipping.")
 
-        else:  # unknown
+        else:  # unknown — autonomous solver first, then research + calendar
+            run_id = data.get("run_id")
+            auto = _autonomous_solve(name, err, tb, run_id=run_id)
+            if auto and auto.get("confidence", 0) >= 80 and auto.get("old_code"):
+                if _create_pr(name, auto, err):
+                    prs += 1
+                    continue
+            # Autonomous solver didn't produce a PR — research + calendar
             if _days_since(researched.get(name, {}).get("triggered", "")) >= DEDUP_DAYS:
                 if _trigger_research(name, err):
                     researched[name] = {"triggered": today, "error": err[:100]}
@@ -263,10 +396,15 @@ def run():
             else:
                 print(f"[self_healer]   Research already triggered for {name} — skipping.")
 
+            root_cause = (auto or {}).get("root_cause", "")
+            config_steps = (auto or {}).get("config_steps", "")
+            task_body = (
+                f"Error: {err}\n\nRoot cause analysis: {root_cause or 'unknown — see traceback'}\n\n"
+                + (f"Config steps:\n{config_steps}\n\n" if config_steps else "")
+                + "Autonomous solver and research both triggered. Check Drive Resources for findings."
+            )
             if _days_since(healed.get(name, {}).get("task_created", "")) >= DEDUP_DAYS:
-                _calendar_task(calendar_svc,
-                    f"❓ UNKNOWN FAILURE: {name}",
-                    f"Error: {err}\n\nResearch triggered. Check Drive Resources folder for findings from YouTube research.")
+                _calendar_task(calendar_svc, f"❓ UNKNOWN FAILURE: {name}", task_body)
                 healed[name] = {"task_created": today, "type": "unknown"}
                 cal_tasks += 1
             else:

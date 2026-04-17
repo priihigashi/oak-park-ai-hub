@@ -721,6 +721,26 @@ def transcribe_audio(audio_path: str, url: str = "") -> str:
     return result
 
 
+def get_caption_srt(audio_path: str) -> str:
+    """Get timestamped SRT captions from Whisper. Separate from transcribe_audio to avoid
+    breaking callers that expect plain text. Only called for sovereign/news projects that
+    need timed captions for Remotion rendering."""
+    if not OPENAI_API_KEY:
+        return ""
+    from openai import OpenAI
+    client = OpenAI(api_key=OPENAI_API_KEY)
+    try:
+        with open(audio_path, "rb") as f:
+            result = client.audio.transcriptions.create(
+                model="whisper-1", file=f, response_format="srt"
+            )
+        print(f"  SRT captions generated ({len(result)} chars)")
+        return result
+    except Exception as e:
+        print(f"  WARNING: SRT generation failed (non-fatal): {e}")
+        return ""
+
+
 # ─── STEP 3: SAVE TRANSCRIPT ──────────────────────────────────────────────────
 
 def save_transcript(transcript: str, url: str, story_id: str, project: str) -> str:
@@ -1084,19 +1104,81 @@ def run_book(args, transcript):
     except Exception: pass
 
 
-def run_sovereign(args, transcript):
+def run_sovereign(args, transcript, video_path: str = "", srt_content: str = ""):
     print("\n[SOVEREIGN] Running format analysis...")
     analysis = analyze_sovereign(transcript, args.url, args.story_id, args.notes or "")
     path = TRANSCRIPTS_DIR / f"{args.story_id}_sovereign.txt"
     path.write_text(analysis, encoding="utf-8")
+
+    # Save SRT captions file alongside transcript (needed by Remotion for timed captions)
+    if srt_content:
+        srt_path = TRANSCRIPTS_DIR / f"{args.story_id}_captions.srt"
+        srt_path.write_text(srt_content, encoding="utf-8")
+        print(f"  SRT saved: {srt_path}")
+
     doc_url = create_drive_doc(f"{args.story_id} — SOVEREIGN — {datetime.now().strftime('%Y-%m-%d')}", analysis, SOVEREIGN_FOLDER_ID)
     create_calendar_task(args.story_id, args.project, args.url, doc_url, transcript[:400], args.notes or "")
-    print(f"\n{'='*50}\nSOVEREIGN CAPTURE DONE\nStory ID: {args.story_id}\nDoc: {doc_url or 'check artifacts'}\n{'='*50}")
+
+    # Upload video to SOVEREIGN folder so Remotion can reference it (not lost in tmpdir)
+    video_drive_url = ""
+    if video_path and os.path.exists(video_path):
+        try:
+            from google.oauth2.credentials import Credentials
+            from googleapiclient.discovery import build
+            from googleapiclient.http import MediaFileUpload
+            token_data = json.loads(os.getenv("SHEETS_TOKEN", "{}"))
+            creds = Credentials(
+                token=token_data.get("token"),
+                refresh_token=token_data.get("refresh_token"),
+                token_uri=token_data.get("token_uri", "https://oauth2.googleapis.com/token"),
+                client_id=token_data.get("client_id"),
+                client_secret=token_data.get("client_secret"),
+            )
+            drive = build("drive", "v3", credentials=creds)
+            size_mb = os.path.getsize(video_path) / (1024 * 1024)
+            print(f"  Uploading video to SOVEREIGN folder ({size_mb:.1f} MB)...")
+            file_meta = {"name": f"{args.story_id}_original.mp4", "parents": [SOVEREIGN_FOLDER_ID]}
+            media = MediaFileUpload(video_path, mimetype="video/mp4", resumable=True)
+            result = drive.files().create(
+                body=file_meta, media_body=media, supportsAllDrives=True, fields="id,webViewLink"
+            ).execute()
+            video_drive_url = result.get("webViewLink", "")
+            print(f"  Video uploaded: {video_drive_url}")
+
+            # Upload SRT to same folder
+            if srt_content:
+                srt_tmp = Path("/tmp") / f"{args.story_id}_captions.srt"
+                srt_tmp.write_text(srt_content, encoding="utf-8")
+                srt_meta = {"name": f"{args.story_id}_captions.srt", "parents": [SOVEREIGN_FOLDER_ID]}
+                srt_media = MediaFileUpload(str(srt_tmp), mimetype="text/plain")
+                drive.files().create(
+                    body=srt_meta, media_body=srt_media, supportsAllDrives=True
+                ).execute()
+                print(f"  SRT uploaded to SOVEREIGN folder")
+        except Exception as e:
+            print(f"  WARNING: video upload failed (non-fatal): {e}")
+
+    print(f"\n{'='*50}\nSOVEREIGN CAPTURE DONE\nStory ID: {args.story_id}\nDoc: {doc_url or 'check artifacts'}\nVideo: {video_drive_url or 'upload failed — check artifacts'}\n{'='*50}")
+
+    # Send completion email so Priscila knows the capture worked
+    send_notification_email(
+        subject=f"SOVEREIGN capture done — {args.story_id}",
+        body=(
+            f"Story ID: {args.story_id}\n"
+            f"Source: {args.url}\n\n"
+            f"Analysis doc: {doc_url or 'check SOVEREIGN Drive folder'}\n"
+            f"Video in Drive: {video_drive_url or 'not uploaded — check GitHub artifact'}\n"
+            f"SRT captions: {'generated and uploaded' if srt_content else 'not generated (audio issue)'}\n\n"
+            f"Next step: trigger render-video.yml with story_id={args.story_id} to build the FORMAT-001 reel.\n\n"
+            f"Transcript preview:\n{transcript[:400]}"
+        ),
+    )
+
     try:
         import sys; sys.path.insert(0, str(Path(__file__).parent.parent))
         from content_tracker import log_run
         log_run(pipeline="capture_pipeline", trigger="manual", url=args.url,
-                niche="Brazil", project="sovereign", status="success",
+                niche="sovereign", project="sovereign", status="success",
                 drive_path=doc_url or "", notes=args.story_id)
     except Exception: pass
 
@@ -1657,7 +1739,9 @@ def main():
         if args.project == "book":
             run_book(args, transcript)
         elif args.project == "sovereign":
-            run_sovereign(args, transcript)
+            # Generate SRT captions for Remotion rendering (timed subtitle data)
+            srt_content = get_caption_srt(audio) if audio else ""
+            run_sovereign(args, transcript, video_path=video_path or "", srt_content=srt_content)
         else:
             run_content(args, transcript, video_path=video_path, metadata=metadata)
 

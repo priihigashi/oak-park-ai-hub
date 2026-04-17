@@ -34,9 +34,10 @@ EXPORT_SCRIPT = os.environ.get("EXPORT_SCRIPT", str(Path(__file__).parent / "exp
 # Drive folder IDs — _TEMPLATE_CAROUSEL parents per series.
 # Every build lands at <SERIES>/_TEMPLATE_CAROUSEL/v<N>_<slug>/ (+ v<N>_<slug>_motion sibling).
 # N auto-increments when a slug already has versions. See project_carousel_folder_standard.md.
-OPC_TIP_TEMPLATE_FOLDER      = "1PWrZfuOvyHUbTRlFNqYxdhtg-Zvv_bXb"  # Marketing > OPC > Tip of the Week > _TEMPLATE_CAROUSEL
+OPC_TIP_TEMPLATE_FOLDER       = "1PWrZfuOvyHUbTRlFNqYxdhtg-Zvv_bXb"  # Marketing > OPC > Tip of the Week > _TEMPLATE_CAROUSEL
 BRAZIL_QUEM_TEMPLATE_FOLDER   = "1Ts4OlXT_KxtYNziGmHUcsjHVh8Z7D1ds"  # News > Brazil > Quem decidiu isso > _TEMPLATE_CAROUSEL
 USA_THE_CHAIN_TEMPLATE_FOLDER = "1sDMyPHVYcOqZ3NK9ch4e48AaJ7KVvxL3"  # News > USA > Content > Series > The Chain > _TEMPLATE_CAROUSEL
+SOVEREIGN_TEMPLATE_FOLDER     = os.environ.get("SOVEREIGN_TEMPLATE_FOLDER", "")  # News drive > SOVEREIGN > _TEMPLATE_CAROUSEL (set after folder creation)
 
 SHEET_ID    = os.environ.get("CONTENT_SHEET_ID", "1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU")
 INSPO_TAB   = "📥 Inspiration Library"
@@ -430,6 +431,12 @@ def process_one_topic(topic_entry, run_date, drive):
         for png in sorted(png_dir.glob(f"{variant}_*_html.png")):
             render_motion_cover(str(png), str(motion_dir), variant)
 
+    # Motion completeness guard — never email preview with empty motion folder
+    motion_mp4s = list(motion_dir.glob("*.mp4")) if motion_dir.exists() else []
+    if not motion_mp4s:
+        _send_alert(f"Motion folder empty for '{topic[:40]}' — skipping preview. Check ffmpeg + render_motion_cover logs.")
+        return None
+
     # 5. Upload to Drive — ONE version folder per post, png/ + motion/ + resources/ nested inside.
     # Shape: <SERIES>/_TEMPLATE_CAROUSEL/v<N>_<slug>/{cover.html, png/, motion/, resources/, story doc}
     print("  Uploading to Drive...")
@@ -437,6 +444,8 @@ def process_one_topic(topic_entry, run_date, drive):
         parent = OPC_TIP_TEMPLATE_FOLDER
     elif niche == "usa":
         parent = USA_THE_CHAIN_TEMPLATE_FOLDER
+    elif niche == "sovereign":
+        parent = SOVEREIGN_TEMPLATE_FOLDER or BRAZIL_QUEM_TEMPLATE_FOLDER  # fallback to Brazil folder until SOVEREIGN folder created
     else:
         parent = BRAZIL_QUEM_TEMPLATE_FOLDER
 

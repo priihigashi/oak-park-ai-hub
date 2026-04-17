@@ -1,0 +1,159 @@
+name: Render Video — Remotion (FORMAT-001 SOVEREIGN)
+# Renders the FORMAT-001 split-screen reel via Remotion.
+# Inputs: story_id from a completed sovereign capture run.
+# Outputs: PT + EN MP4 reels uploaded to News drive SOVEREIGN folder.
+# Triggered manually OR by the capture pipeline completion email reply "render".
+
+on:
+  workflow_dispatch:
+    inputs:
+      story_id:
+        description: 'SOVEREIGN story ID (e.g. SVG-202604171927)'
+        required: true
+      capture_run_id:
+        description: 'GitHub Actions run ID of the capture that produced the video artifact'
+        required: true
+      proof_slides_json:
+        description: 'JSON array of proof slides [{headline, fact, source, imageUrl?, startFrame, durationFrames}]'
+        required: false
+        default: '[]'
+      video_start_frame:
+        description: 'Frame number to start clip from (skip intro — default 0)'
+        required: false
+        default: '0'
+      total_frames:
+        description: 'Total reel duration in frames at 30fps (default 900 = 30 seconds)'
+        required: false
+        default: '900'
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'  # Remotion 4.x requires Node 20+
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python dependencies
+        run: pip install google-auth google-auth-httplib2 google-api-python-client requests
+
+      - name: Write Google credentials
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: |
+          mkdir -p /tmp/creds
+          echo "$SHEETS_TOKEN" > /tmp/creds/sheets_token.json
+
+      - name: Download capture artifact (source video + SRT)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh run download ${{ github.event.inputs.capture_run_id }} \
+            --repo priihigashi/oak-park-ai-hub \
+            --dir /tmp/capture_artifact
+          echo "Artifact contents:"
+          ls -la /tmp/capture_artifact/
+
+      - name: Locate video and SRT files
+        id: locate
+        run: |
+          VIDEO=$(find /tmp/capture_artifact -name "*.mp4" | head -1)
+          SRT=$(find /tmp/capture_artifact -name "*.srt" | head -1)
+          echo "video=$VIDEO" >> $GITHUB_OUTPUT
+          echo "srt=$SRT" >> $GITHUB_OUTPUT
+          echo "Video: $VIDEO"
+          echo "SRT: $SRT"
+
+      - name: Install Remotion dependencies
+        working-directory: scripts/remotion
+        run: npm install
+
+      - name: Build render props JSON (EN)
+        id: props_en
+        env:
+          STORY_ID: ${{ github.event.inputs.story_id }}
+          PROOF_SLIDES: ${{ github.event.inputs.proof_slides_json }}
+          VIDEO_START_FRAME: ${{ github.event.inputs.video_start_frame }}
+          TOTAL_FRAMES: ${{ github.event.inputs.total_frames }}
+          SRT_FILE: ${{ steps.locate.outputs.srt }}
+        run: |
+          python3 scripts/remotion/build_render_props.py \
+            --story-id "$STORY_ID" \
+            --language en \
+            --proof-slides "$PROOF_SLIDES" \
+            --video-start-frame "$VIDEO_START_FRAME" \
+            --total-frames "$TOTAL_FRAMES" \
+            --srt-file "$SRT_FILE" \
+            > /tmp/props_en.json
+          echo "EN props:"
+          cat /tmp/props_en.json
+
+      - name: Build render props JSON (PT)
+        env:
+          STORY_ID: ${{ github.event.inputs.story_id }}
+          PROOF_SLIDES: ${{ github.event.inputs.proof_slides_json }}
+          VIDEO_START_FRAME: ${{ github.event.inputs.video_start_frame }}
+          TOTAL_FRAMES: ${{ github.event.inputs.total_frames }}
+          SRT_FILE: ${{ steps.locate.outputs.srt }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          python3 scripts/remotion/build_render_props.py \
+            --story-id "$STORY_ID" \
+            --language pt \
+            --proof-slides "$PROOF_SLIDES" \
+            --video-start-frame "$VIDEO_START_FRAME" \
+            --total-frames "$TOTAL_FRAMES" \
+            --srt-file "$SRT_FILE" \
+            --translate \
+            > /tmp/props_pt.json
+
+      - name: Copy source video to Remotion public dir
+        run: cp "${{ steps.locate.outputs.video }}" scripts/remotion/public/source_clip.mp4
+
+      - name: Render EN reel
+        working-directory: scripts/remotion
+        run: |
+          npx remotion render SovereignReelEN \
+            --props /tmp/props_en.json \
+            --output /tmp/reel_en.mp4
+          echo "EN reel size: $(du -sh /tmp/reel_en.mp4)"
+
+      - name: Render PT reel
+        working-directory: scripts/remotion
+        run: |
+          npx remotion render SovereignReelPT \
+            --props /tmp/props_pt.json \
+            --output /tmp/reel_pt.mp4
+          echo "PT reel size: $(du -sh /tmp/reel_pt.mp4)"
+
+      - name: Upload reels to News drive SOVEREIGN folder
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          STORY_ID: ${{ github.event.inputs.story_id }}
+          SOVEREIGN_TEMPLATE_FOLDER: ${{ secrets.SOVEREIGN_TEMPLATE_FOLDER }}
+        run: |
+          python3 scripts/remotion/upload_reels.py \
+            --story-id "$STORY_ID" \
+            --en-reel /tmp/reel_en.mp4 \
+            --pt-reel /tmp/reel_pt.mp4 \
+            --folder-id "$SOVEREIGN_TEMPLATE_FOLDER"
+
+      - name: Save artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sovereign-reels-${{ github.run_id }}
+          path: |
+            /tmp/reel_en.mp4
+            /tmp/reel_pt.mp4
+          retention-days: 30

@@ -1,0 +1,24 @@
+{
+  "name": "oak-park-remotion",
+  "version": "1.0.0",
+  "description": "Remotion compositions for SOVEREIGN FORMAT-001 split-screen reels",
+  "scripts": {
+    "start": "npx remotion studio",
+    "render:en": "npx remotion render SovereignReelEN",
+    "render:pt": "npx remotion render SovereignReelPT"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.0",
+    "@remotion/captions": "^4.0.0",
+    "remotion": "^4.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.0",
+    "typescript": "^5.0.0"
+  },
+  "remotion": {
+    "entryPoint": "src/Root.tsx"
+  }
+}

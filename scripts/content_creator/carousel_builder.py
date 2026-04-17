@@ -127,7 +127,7 @@ CAROUSEL STRUCTURE RULES (Brazil/News fact-check):
 
 
 def generate_carousel_content(topic, niche, template_key=None, brief=""):
-    if niche in ("brazil", "usa"):
+    if niche in ("brazil", "usa", "sovereign"):
         return generate_brazil_content(topic, brief)
     if not template_key:
         template_key = OPC_TEMPLATE if niche == "opc" else BRAZIL_TEMPLATE
@@ -207,8 +207,12 @@ Rules:
             "content-type": "application/json",
         },
     )
-    resp = json.loads(urllib.request.urlopen(req, timeout=30).read())
-    text = resp["content"][0]["text"]
+    try:
+        resp = json.loads(urllib.request.urlopen(req, timeout=30).read())
+        text = resp["content"][0]["text"]
+    except Exception as e:
+        print(f"  HTTP/JSON error from Claude API (OPC): {e}")
+        return None
 
     json_match = re.search(r'\{[\s\S]*\}', text)
     if not json_match:
@@ -382,11 +386,11 @@ entry, 2-column grid, face crop first, name second, role tag third."""
     return None
 
 
-def build_html(content, niche, topic_slug, work_dir):
+def build_html(content, niche, topic_slug, work_dir, handle="@HANDLE_PLACEHOLDER"):
     if niche == "opc":
         return _build_opc_html(content, topic_slug, work_dir)
-    if niche == "brazil":
-        return _build_brazil_html(content, topic_slug, work_dir)
+    if niche in ("brazil", "usa", "sovereign"):
+        return _build_brazil_html(content, topic_slug, work_dir, handle=handle)
     return None
 
 
@@ -510,10 +514,11 @@ def _build_opc_html(content, slug, work_dir):
     return str(html_path)
 
 
-def _build_brazil_html(content, slug, work_dir):
-    """Generate Brazil News 1080x1350 carousel HTML — dark + Canário brand spec v1.1."""
+def _build_brazil_html(content, slug, work_dir, handle="@HANDLE_PLACEHOLDER"):
+    """Generate Brazil News 1080x1350 carousel HTML — dark + Canário brand spec v1.1.
+    handle: footer handle shown on slides — defaults to @HANDLE_PLACEHOLDER for non-Brazil niches."""
 
-    """Generate Brazil News 1080x1350 carousel HTML — dark + Canário brand spec v1.1."""
+    # Avoid double-docstring (was a copy-paste artifact)
 
     def esc(s):
         return str(s).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
@@ -539,7 +544,7 @@ def _build_brazil_html(content, slug, work_dir):
   <div class="cover-hl">{cover_hl}</div>
   <div class="cover-en">{cover_en}</div>
   <div class="swipe">SWIPE →</div>
-  <div class="footer-handle">@brazilfactcheck</div>
+  <div class="footer-handle">{handle}</div>
 </div>
 """
 
@@ -629,7 +634,7 @@ def _build_brazil_html(content, slug, work_dir):
   <div class="src-list">{src_rows}</div>
   <div class="cta-pt">{cta_pt}</div>
   <div class="cta-en">{cta_en}</div>
-  <div class="footer-handle">@brazilfactcheck</div>
+  <div class="footer-handle">{handle}</div>
 </div>
 """
 
