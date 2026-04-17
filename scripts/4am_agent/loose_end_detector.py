@@ -104,6 +104,23 @@ def _create_calendar_task(calendar_svc, title, description):
         return False
 
 
+def _check_inspiration_library_failures(sheets_svc):
+    """Find rows in Inspiration Library with Status=failed/error → re-trigger candidates."""
+    result = sheets_svc.spreadsheets().values().get(
+        spreadsheetId=SPREADSHEET_ID,
+        range="'📥 Inspiration Library'!A:C",
+    ).execute()
+    rows = result.get("values", [])
+    failed = []
+    for i, row in enumerate(rows[1:], start=2):  # skip header row
+        url      = row[0].strip() if row else ""
+        comments = row[1].strip() if len(row) > 1 else ""
+        status   = row[2].strip().lower() if len(row) > 2 else ""
+        if status in ("failed", "error", "capture_failed") and url:
+            failed.append({"row": i, "url": url[:120], "comments": comments[:100]})
+    return failed
+
+
 def run(carry_forwards=None):
     """Main entry. carry_forwards = result from chat_log_reader (optional)."""
     creds        = _creds()
@@ -143,5 +160,26 @@ def run(carry_forwards=None):
         if _create_calendar_task(calendar_svc, title, desc):
             tasks_created += 1
 
+    # D) Failed captures in Inspiration Library → calendar task with re-trigger command
+    failed_captures = _check_inspiration_library_failures(sheets_svc)
+    print(f"[loose_end_detector] Failed captures in Inspiration Library: {len(failed_captures)}")
+    for item in failed_captures[:5]:  # cap at 5 to avoid noise
+        title = f"🔴 CAPTURE FAILED: {item['url'][:55]}"
+        desc  = (
+            f"Capture pipeline failed for:\n{item['url']}\n\n"
+            f"Notes: {item['comments']}\n"
+            f"Inspiration Library row: {item['row']}\n\n"
+            f"Re-trigger command:\n"
+            f"gh workflow run 'Capture Pipeline v2' "
+            f"--repo priihigashi/oak-park-ai-hub -f url=\"{item['url']}\""
+        )
+        if _create_calendar_task(calendar_svc, title, desc):
+            tasks_created += 1
+
     print(f"[loose_end_detector] Done. {tasks_created} tasks created.")
-    return {"stale_content": len(stale), "overdue_calendar": len(overdue), "tasks_created": tasks_created}
+    return {
+        "stale_content":     len(stale),
+        "overdue_calendar":  len(overdue),
+        "failed_captures":   len(failed_captures),
+        "tasks_created":     tasks_created,
+    }
