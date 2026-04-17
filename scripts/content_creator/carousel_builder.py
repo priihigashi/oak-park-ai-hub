@@ -126,6 +126,56 @@ CAROUSEL STRUCTURE RULES (Brazil/News fact-check):
 """
 
 
+def _web_research(topic, lang="en"):
+    """Fetch background on topic from free public APIs — no key needed.
+    Returns a plain-text summary to prepend to Haiku prompts when content comes back thin."""
+    summaries = []
+
+    # DuckDuckGo Instant Answer API
+    try:
+        q = urllib.parse.quote_plus(topic)
+        url = f"https://api.duckduckgo.com/?q={q}&format=json&no_html=1&skip_disambig=1"
+        req = urllib.request.Request(url, headers={"User-Agent": "content-creator/1.0"})
+        with urllib.request.urlopen(req, timeout=10) as r:
+            data = json.loads(r.read())
+        abstract = data.get("AbstractText", "").strip()
+        if abstract:
+            summaries.append(abstract)
+        for item in data.get("RelatedTopics", [])[:3]:
+            text = item.get("Text", "").strip()
+            if text and len(text) > 40:
+                summaries.append(text)
+    except Exception as e:
+        print(f"  DuckDuckGo research skipped: {e}")
+
+    # Wikipedia summary — supplement / fallback
+    if len(summaries) < 2:
+        wiki_lang = "pt" if lang == "pt" else "en"
+        try:
+            q = urllib.parse.quote_plus(topic)
+            url = f"https://{wiki_lang}.wikipedia.org/api/rest_v1/page/summary/{q}"
+            req = urllib.request.Request(url, headers={"User-Agent": "content-creator/1.0"})
+            with urllib.request.urlopen(req, timeout=10) as r:
+                data = json.loads(r.read())
+            extract = data.get("extract", "").strip()
+            if extract:
+                summaries.append(extract[:600])
+        except Exception:
+            try:
+                url = f"https://{wiki_lang}.wikipedia.org/w/api.php?action=query&list=search&srsearch={q}&srlimit=3&format=json"
+                req = urllib.request.Request(url, headers={"User-Agent": "content-creator/1.0"})
+                with urllib.request.urlopen(req, timeout=10) as r:
+                    data = json.loads(r.read())
+                for result in data.get("query", {}).get("search", [])[:2]:
+                    snippet = re.sub(r'<[^>]+>', '', result.get("snippet", "")).strip()
+                    if snippet:
+                        summaries.append(snippet)
+            except Exception as e:
+                print(f"  Wikipedia research skipped: {e}")
+
+    return "\n".join(summaries[:4]) if summaries else ""
+
+
 def generate_carousel_content(topic, niche, template_key=None, brief=""):
     if niche in ("brazil", "usa", "sovereign"):
         return generate_brazil_content(topic, brief)
@@ -192,34 +242,53 @@ Rules:
 - Caption hook = first line visible in feed — make it a question or surprising fact
 - NEVER promise what OPC does for clients"""
 
-    payload = json.dumps({
-        "model": "claude-haiku-4-5-20251001",
-        "max_tokens": 1500,
-        "messages": [{"role": "user", "content": prompt}],
-    }).encode()
+    for attempt in range(2):
+        _prompt = prompt
+        if attempt == 1:
+            research = _web_research(topic, lang="en")
+            if not research:
+                break
+            print(f"  OPC: retrying with web research for: {topic}")
+            _prompt = (
+                f"RESEARCH FOUND:\n{research}\n\n"
+                "Use this research to fill in missing facts, names, and numbers. "
+                "Do not invent. Do not contradict your knowledge.\n\n"
+            ) + prompt
 
-    req = urllib.request.Request(
-        "https://api.anthropic.com/v1/messages",
-        data=payload,
-        headers={
-            "x-api-key": ANTHROPIC_KEY,
-            "anthropic-version": "2023-06-01",
-            "content-type": "application/json",
-        },
-    )
-    try:
-        resp = json.loads(urllib.request.urlopen(req, timeout=30).read())
-        text = resp["content"][0]["text"]
-    except Exception as e:
-        print(f"  HTTP/JSON error from Claude API (OPC): {e}")
-        return None
+        payload = json.dumps({
+            "model": "claude-haiku-4-5-20251001",
+            "max_tokens": 1500,
+            "messages": [{"role": "user", "content": _prompt}],
+        }).encode()
+        req = urllib.request.Request(
+            "https://api.anthropic.com/v1/messages",
+            data=payload,
+            headers={
+                "x-api-key": ANTHROPIC_KEY,
+                "anthropic-version": "2023-06-01",
+                "content-type": "application/json",
+            },
+        )
+        try:
+            resp = json.loads(urllib.request.urlopen(req, timeout=30).read())
+            text = resp["content"][0]["text"]
+        except Exception as e:
+            print(f"  HTTP/JSON error from Claude API (OPC, attempt {attempt+1}): {e}")
+            continue
 
-    json_match = re.search(r'\{[\s\S]*\}', text)
-    if not json_match:
-        print(f"  Failed to parse carousel content from Claude response")
-        return None
+        json_match = re.search(r'\{[\s\S]*\}', text)
+        if not json_match:
+            print(f"  Failed to parse OPC carousel content (attempt {attempt+1})")
+            continue
 
-    return json.loads(json_match.group())
+        try:
+            return json.loads(json_match.group())
+        except json.JSONDecodeError as e:
+            print(f"  OPC JSON parse error (attempt {attempt+1}): {e}")
+            continue
+
+    print(f"  OPC content generation failed after 2 attempts for: {topic}")
+    return None
 
 
 def generate_brazil_content(topic, brief=""):
@@ -358,6 +427,18 @@ These map to .bio-card / .bio-photo / .bio-initials in the HTML template — one
 entry, 2-column grid, face crop first, name second, role tag third."""
 
     for attempt in range(2):
+        if attempt == 1:
+            research = _web_research(topic, lang="pt")
+            if research:
+                print(f"  Brazil: retrying with web research for: {topic}")
+                prompt = (
+                    f"RESEARCH FOUND:\n{research}\n\n"
+                    "Use this research to fill in missing facts, names, dates, and numbers. "
+                    "Do not invent. Do not contradict your knowledge.\n\n"
+                ) + prompt
+            else:
+                print("  Brazil: no research found — retrying with fresh call")
+
         payload = json.dumps({
             "model": "claude-haiku-4-5-20251001",
             "max_tokens": 4000,
@@ -369,8 +450,12 @@ entry, 2-column grid, face crop first, name second, role tag third."""
             headers={"x-api-key": ANTHROPIC_KEY, "anthropic-version": "2023-06-01",
                      "content-type": "application/json"},
         )
-        resp = json.loads(urllib.request.urlopen(req, timeout=60).read())
-        text = resp["content"][0]["text"]
+        try:
+            resp = json.loads(urllib.request.urlopen(req, timeout=60).read())
+            text = resp["content"][0]["text"]
+        except Exception as e:
+            print(f"  HTTP/JSON error from Claude API (Brazil, attempt {attempt+1}): {e}")
+            continue
         m = re.search(r'\{[\s\S]*\}', text)
         if not m:
             print(f"  Brazil content generation failed — no JSON in response (attempt {attempt+1})")
@@ -379,9 +464,7 @@ entry, 2-column grid, face crop first, name second, role tag third."""
             return json.loads(m.group())
         except json.JSONDecodeError as e:
             print(f"  Brazil content JSON parse error (attempt {attempt+1}): {e}")
-            if attempt == 0:
-                print("  Retrying with fresh Claude call...")
-                continue
+            continue
     print("  Brazil content generation failed after 2 attempts")
     return None
 
