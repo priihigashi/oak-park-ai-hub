@@ -912,7 +912,14 @@ def _detect_platform(url: str) -> str:
     return "Web"
 
 
-def update_inspiration_library(url, transcript, classification, hub_url="", doc_url="", metadata=None):
+def update_inspiration_library(url, transcript, classification, hub_url="", doc_url="", metadata=None, user_notes=""):
+    """
+    Additive-only. Writes a NEW row. Never updates/overwrites existing rows.
+    Columns A-L are fixed by position (left-edge of append_row).
+    Column 'My Raw Notes' is resolved by header-name lookup — if Priscila ever
+    reorders columns, this still lands in the right cell. She asked for this
+    as a resilience guarantee (2026-04-17).
+    """
     gc = get_sheets_client()
     if not gc:
         return
@@ -920,14 +927,19 @@ def update_inspiration_library(url, transcript, classification, hub_url="", doc_
     try:
         sh = gc.open_by_key(IDEAS_INBOX_ID)
         lib = sh.worksheet("📥 Inspiration Library")
-        # Column order must match headers:
-        # A=Date Added, B=Platform, C=URL/Link, D=Creator/Account,
-        # E=Content Type, F=Description, G=Transcription, H=Original Caption,
-        # I=Visual Hook, J=Hook Type, K=Views, L=Content Hub Link
+
+        # Resolve 'My Raw Notes' column index by header name (resilient to reorder)
+        headers = lib.row_values(1)
+        notes_col_idx = None
+        for i, h in enumerate(headers):
+            if h.strip().lower() == "my raw notes":
+                notes_col_idx = i  # 0-based
+                break
+
         creator = metadata.get("creator_handle", "")
         if creator and not creator.startswith("@"):
             creator = f"@{creator}"
-        lib.append_row([
+        base_row = [
             datetime.now().strftime("%Y-%m-%d"),         # A — Date Added
             _detect_platform(url),                       # B — Platform
             url,                                         # C — URL / Link
@@ -940,8 +952,15 @@ def update_inspiration_library(url, transcript, classification, hub_url="", doc_
             "",                                          # J — Hook Type
             str(metadata.get("views", "")) if metadata.get("views") else "",  # K — Views
             hub_url or doc_url,                          # L — Content Hub Link
-        ])
-        print("  Inspiration Library updated")
+        ]
+
+        # Pad with empty strings up to the notes column, then append notes verbatim
+        if user_notes and notes_col_idx is not None and notes_col_idx >= len(base_row):
+            base_row.extend([""] * (notes_col_idx - len(base_row)))
+            base_row.append(user_notes)
+
+        lib.append_row(base_row, value_input_option="USER_ENTERED")
+        print(f"  Inspiration Library updated (user_notes={'yes' if user_notes else 'no'})")
     except Exception as e:
         print(f"  WARNING Sheets: {e}")
 
@@ -1447,7 +1466,10 @@ def run_content(args, transcript, video_path: str = "", metadata: dict = None):
         folder_url, doc_url = create_content_workspace(sid, title, transcript, cl, args.url, args.notes or "")
 
     # Log to Inspiration Library WITH Drive links (must come after hub + workspace created)
-    update_inspiration_library(args.url, transcript, cl, hub_url=hub_url, doc_url=doc_url, metadata=metadata)
+    # Pass user_notes so Priscila's verbatim /capture ARGUMENTS text lands in the 'My Raw Notes' column
+    # as a permanent safety net — survives even if I (Claude) forget to merge into the brief.
+    update_inspiration_library(args.url, transcript, cl, hub_url=hub_url, doc_url=doc_url,
+                                metadata=metadata, user_notes=args.notes or "")
 
     create_calendar_task(sid, args.project, args.url, doc_url or "", transcript[:400], args.notes or "", hub_url=hub_url)
     # Auto-trigger Topic Cluster Scraper for Brazil captures
