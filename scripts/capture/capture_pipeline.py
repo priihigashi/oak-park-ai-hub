@@ -575,10 +575,9 @@ def download_video(url: str, tmp_dir: str) -> str:
             "--no-playlist", "--quiet",
         ]
     else:
-        # IG/TikTok: download best quality (reels are short)
+        # IG/TikTok: let yt-dlp auto-select format (avoid -f best — deprecated in yt-dlp 2026+)
         cmd = [
             "yt-dlp",
-            "-f", "best",
             "--merge-output-format", "mp4",
             "--output", output,
             "--no-playlist", "--quiet",
@@ -604,7 +603,9 @@ def download_video(url: str, tmp_dir: str) -> str:
         )
 
     if result.returncode != 0:
-        print(f"  Video download failed (non-fatal): {result.stderr[:200]}")
+        err = (result.stderr or result.stdout or "")[:300]
+        print(f"  Video download failed (non-fatal): {err}")
+        print(f"  VIDEO_DOWNLOAD_FAILED: {url}")  # machine-parseable for retry tracking
         return ""
 
     # Find the output file (extension might vary)
@@ -1512,7 +1513,17 @@ def run_content(args, transcript, video_path: str = "", metadata: dict = None):
     except Exception: pass
 
     # UX Fix: send completion email so Priscila knows it worked
-    video_note = "Video: uploaded to Content Hub" if video_path else "Video: download failed (transcript still captured)"
+    if video_path:
+        video_note = "Video: uploaded to Content Hub"
+        video_retry_note = ""
+    else:
+        video_note = "Video: download failed (transcript still captured)"
+        encoded_url = args.url.replace("&", "%26").replace("?", "%3F")
+        video_retry_note = (
+            f"\nTo retry video only: trigger capture_pipeline.yml with this URL:\n"
+            f"  {args.url}\n"
+            f"  https://github.com/priihigashi/oak-park-ai-hub/actions/workflows/capture_pipeline.yml\n"
+        )
     send_notification_email(
         subject=f"Capture done — {niche} | {summary[:50]}",
         body=(
@@ -1520,6 +1531,7 @@ def run_content(args, transcript, video_path: str = "", metadata: dict = None):
             f"Content Brief: {doc_url or 'check artifacts'}\n"
             f"Production Folder: {folder_url or 'check Drive'}\n"
             f"{video_note}\n"
+            f"{video_retry_note}"
             f"Sheets: row added to Inspiration Library\n\n"
             f"Source: {args.url}\n"
             f"Niche: {niche}\n"
