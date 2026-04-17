@@ -215,8 +215,12 @@ def main():
         print(f"\n[capture_queue] Row {sheet_row}: {url[:70]}")
         print(f"  project={project}  notes={'yes' if comment else 'none'}")
 
+        # Translate user-facing names → capture_pipeline.py internal choices
+        PIPELINE_PROJECT = {"brazil": "sovereign", "usa": "content"}
+        pipeline_project = PIPELINE_PROJECT.get(project, project)
+
         # Build subprocess command — same args as capture_pipeline.yml run step
-        cmd = [sys.executable, CAPTURE_SCRIPT, url, "--project", project]
+        cmd = [sys.executable, CAPTURE_SCRIPT, url, "--project", pipeline_project]
         if comment:
             cmd += ["--notes", comment]
 
