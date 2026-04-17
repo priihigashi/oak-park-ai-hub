@@ -62,6 +62,7 @@ ANTHROPIC_API_KEY  = os.getenv("ANTHROPIC_API_KEY", "")
 # Get yours at: https://console.apify.com/account/integrations
 APIFY_API_KEY      = os.getenv("APIFY_API_KEY", "")
 YT_COOKIES_RAW     = os.getenv("PRI_OP_YT_COOKIES", "")
+IG_COOKIES_RAW     = os.getenv("PRI_OP_IG_COOKIES", "")
 
 def _write_cookies_file() -> str:
     """Write PRI_OP_YT_COOKIES secret to a temp Netscape cookies.txt. Returns path or ''."""
@@ -72,7 +73,17 @@ def _write_cookies_file() -> str:
         f.write(YT_COOKIES_RAW)
     return path
 
+def _write_ig_cookies_file() -> str:
+    """Write PRI_OP_IG_COOKIES secret to a temp Netscape cookies.txt. Returns path or ''."""
+    if not IG_COOKIES_RAW.strip():
+        return ""
+    path = os.path.join(tempfile.gettempdir(), "ig_cookies.txt")
+    with open(path, "w") as f:
+        f.write(IG_COOKIES_RAW)
+    return path
+
 _YT_COOKIES_PATH = ""   # lazily populated
+_IG_COOKIES_PATH = ""   # lazily populated
 _YT_COOKIE_FAILURE = False  # set True when yt-dlp hits bot-detection
 
 # Spreadsheet IDs — hardcoded as defaults, can override via env
@@ -391,7 +402,7 @@ def _try_ytdlp(url: str, tmp_dir: str, extra_args: list = None) -> str:
     For non-YouTube (IG/TikTok), adds --keep-video so the original video file is saved
     alongside the mp3 — this lets download_video() reuse it without a second request.
     """
-    global _YT_COOKIES_PATH
+    global _YT_COOKIES_PATH, _IG_COOKIES_PATH
     output = os.path.join(tmp_dir, "audio.%(ext)s")
     cmd = [
         "yt-dlp", "--extract-audio", "--audio-format", "mp3",
@@ -406,6 +417,10 @@ def _try_ytdlp(url: str, tmp_dir: str, extra_args: list = None) -> str:
     else:
         # Keep original video file so download_video() can reuse it without a 2nd request
         cmd.append("--keep-video")
+        if not _IG_COOKIES_PATH:
+            _IG_COOKIES_PATH = _write_ig_cookies_file()
+        if _IG_COOKIES_PATH:
+            cmd.extend(["--cookies", _IG_COOKIES_PATH])
     if extra_args:
         cmd.extend(extra_args)
     cmd.append(url)
