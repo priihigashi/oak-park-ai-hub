@@ -1,0 +1,97 @@
+name: Generate Image — OpenAI
+
+on:
+  workflow_dispatch:
+    inputs:
+      prompt:
+        description: 'Image prompt'
+        required: true
+        type: string
+      model:
+        description: 'Model: dall-e-3 (URL) or gpt-image-1 (b64, best quality)'
+        required: false
+        default: 'dall-e-3'
+        type: choice
+        options: ['dall-e-3', 'gpt-image-1']
+      size:
+        description: 'Size — dall-e-3: 1024x1024 / 1792x1024 / 1024x1792 | gpt-image-1: 1024x1024 / 1536x1024 / 1024x1536'
+        required: false
+        default: '1024x1024'
+        type: choice
+        options: ['1024x1024', '1024x1792', '1792x1024', '1536x1024', '1024x1536']
+      quality:
+        description: 'Quality — standard/hd (dall-e-3) or high/medium/low (gpt-image-1)'
+        required: false
+        default: 'standard'
+        type: choice
+        options: ['standard', 'hd', 'high', 'medium', 'low']
+      filename:
+        description: 'Output filename (no extension)'
+        required: false
+        default: 'openai_generated'
+        type: string
+      drive_folder_id:
+        description: 'Drive folder ID — defaults to Content Creation root'
+        required: false
+        default: '1um7y2Yt8zi9KGxev6kfFJYgrkMYwrCNh'
+        type: string
+
+# DRIVE FOLDER DEFAULTS (change drive_folder_id input to route elsewhere):
+# Content Creation root:  1um7y2Yt8zi9KGxev6kfFJYgrkMYwrCNh  ← default
+# Content Hub root:       1p7s2Q7kCxzKdvaVRFxSoYAQ-IG_NhTqq
+# html-to-image folder:   1tE-2Ps8V8ZKQ4etyvzk47ZWyzeHAD2nk
+# OPC Templates:          1PWrZfuOvyHUbTRlFNqYxdhtg-Zvv_bXb
+# Brazil Templates:       1Ts4OlXT_KxtYNziGmHUcsjHVh8Z7D1ds
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Generate image and upload to Drive
+        id: gen
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          SHEETS_TOKEN:   ${{ secrets.SHEETS_TOKEN }}
+        run: |
+          python scripts/generate_image_openai.py \
+            --prompt "${{ inputs.prompt }}" \
+            --model "${{ inputs.model }}" \
+            --size "${{ inputs.size }}" \
+            --quality "${{ inputs.quality }}" \
+            --filename "${{ inputs.filename }}" \
+            --drive_folder_id "${{ inputs.drive_folder_id }}" \
+            --local_out "/tmp/${{ inputs.filename }}.png" \
+            | tee /tmp/gen_output.txt
+
+          # Extract Drive link for summary
+          DRIVE_LINK=$(grep '^DRIVE_LINK=' /tmp/gen_output.txt | cut -d= -f2-)
+          echo "drive_link=$DRIVE_LINK" >> $GITHUB_OUTPUT
+
+      - name: Upload PNG as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-image-${{ inputs.filename }}
+          path: /tmp/${{ inputs.filename }}.png
+          retention-days: 7
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## OpenAI Image Generation" >> $GITHUB_STEP_SUMMARY
+          echo "- **Prompt:** ${{ inputs.prompt }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Model:** ${{ inputs.model }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Size:** ${{ inputs.size }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Quality:** ${{ inputs.quality }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **File:** ${{ inputs.filename }}.png" >> $GITHUB_STEP_SUMMARY
+          echo "- **Drive:** ${{ steps.gen.outputs.drive_link }}" >> $GITHUB_STEP_SUMMARY
