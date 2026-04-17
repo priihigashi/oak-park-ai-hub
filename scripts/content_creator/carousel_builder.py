@@ -4,7 +4,7 @@ carousel_builder.py — Generates carousel HTML from template + topic, renders P
 Uses Claude Haiku for content generation, Playwright for rendering.
 Also generates Instagram caption following Priscila's copy rules.
 """
-import json, os, re, subprocess, time, urllib.request, urllib.parse
+import gzip, json, os, re, subprocess, time, urllib.request, urllib.parse
 from pathlib import Path
 
 ANTHROPIC_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
@@ -178,7 +178,26 @@ def _web_research(topic, lang="en"):
             except Exception as e:
                 print(f"  Wikipedia research skipped: {e}")
 
-    return "\n".join(summaries[:4]) if summaries else ""
+    # Stack Exchange (Stack Overflow + network) — free, no key, great for tech/spreadsheet topics
+    if len(summaries) < 3:
+        try:
+            q = urllib.parse.quote_plus(topic)
+            url = f"https://api.stackexchange.com/2.3/search/excerpts?q={q}&order=desc&sort=relevance&site=stackoverflow&pagesize=3"
+            req = urllib.request.Request(url, headers={"User-Agent": "content-creator/1.0"})
+            with urllib.request.urlopen(req, timeout=10) as r:
+                raw = r.read()
+                data = json.loads(gzip.decompress(raw) if r.headers.get("Content-Encoding") == "gzip" else raw)
+            for item in data.get("items", [])[:3]:
+                excerpt = re.sub(r'<[^>]+>', '', item.get("excerpt", ""))
+                excerpt = re.sub(r'&#(\d+);', lambda m: chr(int(m.group(1))), excerpt)
+                excerpt = excerpt.replace("&hellip;", "…").replace("&quot;", '"').replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">").replace("&apos;", "'").strip()
+                title = re.sub(r'&#(\d+);', lambda m: chr(int(m.group(1))), item.get("title", "")).replace("&quot;", '"').replace("&amp;", "&")
+                if excerpt and item.get("score", 0) > 0:
+                    summaries.append(f"{title}: {excerpt[:300]}")
+        except Exception as e:
+            print(f"  Stack Exchange research skipped: {e}")
+
+    return "\n".join(summaries[:5]) if summaries else ""
 
 
 def generate_carousel_content(topic, niche, template_key=None, brief=""):
