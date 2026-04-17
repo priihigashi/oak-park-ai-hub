@@ -324,24 +324,33 @@ If no secondary person is named on a slide, return an empty array. Never omit th
 These map to .bio-card / .bio-photo / .bio-initials in the HTML template — one card per
 entry, 2-column grid, face crop first, name second, role tag third."""
 
-    payload = json.dumps({
-        "model": "claude-haiku-4-5-20251001",
-        "max_tokens": 2500,
-        "messages": [{"role": "user", "content": prompt}],
-    }).encode()
-    req = urllib.request.Request(
-        "https://api.anthropic.com/v1/messages",
-        data=payload,
-        headers={"x-api-key": ANTHROPIC_KEY, "anthropic-version": "2023-06-01",
-                 "content-type": "application/json"},
-    )
-    resp = json.loads(urllib.request.urlopen(req, timeout=45).read())
-    text = resp["content"][0]["text"]
-    m = re.search(r'\{[\s\S]*\}', text)
-    if not m:
-        print("  Brazil content generation failed — no JSON in response")
-        return None
-    return json.loads(m.group())
+    for attempt in range(2):
+        payload = json.dumps({
+            "model": "claude-haiku-4-5-20251001",
+            "max_tokens": 4000,
+            "messages": [{"role": "user", "content": prompt}],
+        }).encode()
+        req = urllib.request.Request(
+            "https://api.anthropic.com/v1/messages",
+            data=payload,
+            headers={"x-api-key": ANTHROPIC_KEY, "anthropic-version": "2023-06-01",
+                     "content-type": "application/json"},
+        )
+        resp = json.loads(urllib.request.urlopen(req, timeout=60).read())
+        text = resp["content"][0]["text"]
+        m = re.search(r'\{[\s\S]*\}', text)
+        if not m:
+            print(f"  Brazil content generation failed — no JSON in response (attempt {attempt+1})")
+            continue
+        try:
+            return json.loads(m.group())
+        except json.JSONDecodeError as e:
+            print(f"  Brazil content JSON parse error (attempt {attempt+1}): {e}")
+            if attempt == 0:
+                print("  Retrying with fresh Claude call...")
+                continue
+    print("  Brazil content generation failed after 2 attempts")
+    return None
 
 
 def build_html(content, niche, topic_slug, work_dir):

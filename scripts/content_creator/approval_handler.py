@@ -432,6 +432,14 @@ def re_render_post(post, feedback):
     post_updated["static_link"] = new_static_link
     post_updated["static_folder_id"] = new_folder_id
     post_updated["cover_urls"] = cover_urls
+    # Carry forward reply-guide fields from new content so checklist is populated
+    if content:
+        post_updated["cover_visual"] = content.get("cover_visual", {})
+        raw_people = []
+        for slide in content.get("slides", []):
+            raw_people.extend(p.get("name", "") for p in slide.get("secondary_people", []) if p.get("name"))
+        post_updated["mentioned_people"] = list(dict.fromkeys(raw_people))
+        post_updated["clip_suggestions"] = content.get("clip_suggestions", [])
     send_preview([post_updated], datetime.now(ET).strftime("%Y-%m-%d"))
 
     shutil.rmtree(work, ignore_errors=True)
@@ -573,10 +581,13 @@ def process_replies():
             stats["changes"] += 1
             print(f"  Change requested: {feedback[:80]}")
             for post in pending:
-                if re_render_post(post, feedback):
-                    print(f"  Re-render triggered: {post['post_id']}")
-                else:
-                    print(f"  Re-render failed: {post['post_id']}")
+                try:
+                    if re_render_post(post, feedback):
+                        print(f"  Re-render triggered: {post['post_id']}")
+                    else:
+                        print(f"  Re-render failed: {post['post_id']}")
+                except Exception as exc:
+                    print(f"  Re-render crashed for {post['post_id']}: {exc}")
 
     return stats
 
