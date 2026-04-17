@@ -41,6 +41,15 @@ SOVEREIGN_TEMPLATE_FOLDER       = os.environ.get("SOVEREIGN_TEMPLATE_FOLDER", ""
 VERIFICAMOS_TEMPLATE_FOLDER     = "1QhILiMiIM9WrpHhIqXXrPs6JqoAdDijA"  # News > Brazil > Series > Verificamos > _TEMPLATE_CAROUSEL
 VERIFICAMOS_CONFIDENCE_THRESHOLD = 0.70  # auto-build gate — items below this score go to manual review queue
 
+# Shortcuts folders — flat index of all built content per niche.
+# Carousel shortcut = version folder (v1_slug). Video shortcut = motion subfolder.
+SHORTCUT_FOLDERS = {
+    "opc":     {"carousels": "13pqneqeDy1-LAtGsRJDg9gmNl07Ye41g", "videos": "1LKS51EfDxrR3ib6TsR2DADMpt3der36D"},
+    "brazil":  {"carousels": "1texYwliSc2eJjjVxSmY3bfV-f39USbJg", "videos": "1d5lJi5exZK_vhNVB6MWyjdFotMBBgPVd"},
+    "usa":     {"carousels": "1jPB6TjbV8Bu2k3zeN3uT7EIvspwIrWtQ", "videos": "126K6N9UDOFj_zS-h3e4dD30GwZOviugT"},
+    "sovereign": {"carousels": "1texYwliSc2eJjjVxSmY3bfV-f39USbJg", "videos": "1d5lJi5exZK_vhNVB6MWyjdFotMBBgPVd"},
+}
+
 SHEET_ID    = os.environ.get("CONTENT_SHEET_ID", "1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU")
 INSPO_TAB   = "📥 Inspiration Library"
 QUEUE_TAB   = "📋 Content Queue"
@@ -256,6 +265,22 @@ def create_subfolder(parent_id, name, drive):
         supportsAllDrives=True, fields="id",
     ).execute()
     return folder["id"]
+
+
+def add_shortcut(target_id, name, dest_folder_id, drive):
+    """Create a Drive shortcut in dest_folder_id pointing to target_id. Silent on failure."""
+    try:
+        drive.files().create(
+            body={
+                "name": name,
+                "mimeType": "application/vnd.google-apps.shortcut",
+                "shortcutDetails": {"targetId": target_id},
+                "parents": [dest_folder_id],
+            },
+            supportsAllDrives=True, fields="id",
+        ).execute()
+    except Exception as e:
+        print(f"  Shortcut creation skipped ({name}): {e}")
 
 
 def upload_single_file(local_path, parent_id, name, mime, drive):
@@ -494,6 +519,10 @@ def process_one_topic(topic_entry, run_date, drive):
     print(f"  Version folder: {version_name}")
 
     version_folder_id = create_subfolder(parent, version_name, drive)
+    sc = SHORTCUT_FOLDERS.get(niche, {})
+    if sc.get("carousels"):
+        add_shortcut(version_folder_id, version_name, sc["carousels"], drive)
+        print(f"  Shortcut → Shortcuts/Carousels/{version_name}")
 
     # cover.html at version-folder root
     upload_single_file(html_path, version_folder_id, "cover.html", "text/html", drive)
@@ -505,6 +534,9 @@ def process_one_topic(topic_entry, run_date, drive):
     # motion/  — self-contained full post: animated covers + duplicated non-cover PNGs
     # Scheduler posts slides 1..N in order from ONE folder; never stitches across png/+motion/.
     motion_sub = create_subfolder(version_folder_id, "motion", drive)
+    if sc.get("videos"):
+        add_shortcut(motion_sub, version_name, sc["videos"], drive)
+        print(f"  Shortcut → Shortcuts/Videos/{version_name}")
     if motion_dir.exists():
         upload_dir_contents(motion_dir, motion_sub, drive)
     # duplicate non-cover PNGs so motion/ holds the complete sequence
