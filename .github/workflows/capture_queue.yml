@@ -1,0 +1,77 @@
+name: Capture Queue Processor
+
+# Reads unprocessed rows from '📲 Capture Queue' tab,
+# runs Capture Pipeline v2 inline, writes back PROCESSED / SCORE / MOVED TO / HUB DOC PATH.
+#
+# Schedule: daily 6 AM ET
+#   11:00 UTC = 6 AM EDT (Mar–Nov)
+#   12:00 UTC = 7 AM EST (Nov–Mar) — close enough; run both crons to cover DST
+#
+# Manual trigger: Actions → Capture Queue Processor → Run workflow
+# Optional input: max_per_run (default 5)
+
+on:
+  schedule:
+    - cron: "0 11 * * *"   # 6 AM EDT (Mar–Nov)
+    - cron: "0 12 * * *"   # 7 AM EST (Nov–Mar) — DST safety
+  workflow_dispatch:
+    inputs:
+      max_per_run:
+        description: "Max URLs to process per run (default 5)"
+        required: false
+        default: "5"
+        type: string
+
+jobs:
+  process-queue:
+    name: Process Capture Queue
+    runs-on: ubuntu-latest
+    timeout-minutes: 150    # 5 captures × 25 min each + headroom
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install ffmpeg (required by yt-dlp)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+
+      - name: Install Python dependencies
+        run: |
+          pip install \
+            yt-dlp \
+            openai \
+            anthropic \
+            gspread \
+            google-auth \
+            google-api-python-client \
+            python-dotenv \
+            requests \
+            youtube-transcript-api
+
+      - name: Run Capture Queue Processor
+        env:
+          SHEETS_TOKEN:              ${{ secrets.SHEETS_TOKEN }}
+          OPENAI_API_KEY:            ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY:         ${{ secrets.ANTHROPIC_API_KEY }}
+          APIFY_API_KEY:             ${{ secrets.APIFY_API_KEY }}
+          PRI_OP_GMAIL_APP_PASSWORD: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
+          PRI_OP_YT_COOKIES:         ${{ secrets.PRI_OP_YT_COOKIES }}
+          GITHUB_TOKEN:              ${{ github.token }}
+          QUEUE_MAX_PER_RUN:         ${{ inputs.max_per_run || '5' }}
+        run: python scripts/capture/capture_queue_processor.py
+
+      - name: Upload transcripts (artifacts)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: "capture-queue-${{ github.run_id }}"
+          path: transcripts/
+          retention-days: 14
