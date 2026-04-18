@@ -493,6 +493,54 @@ entry, 2-column grid, face crop first, name second, role tag third."""
     return None
 
 
+def _fetch_person_photo(search_query, dest_dir, filename):
+    """Try to download a CC-licensed photo from Wikimedia Commons.
+    Returns relative path 'resources/images/<filename>' if downloaded, else empty string.
+    Safe: all exceptions are caught — caller falls back to placeholder on any failure.
+    """
+    dest_path = Path(dest_dir) / "resources" / "images" / filename
+    dest_path.parent.mkdir(parents=True, exist_ok=True)
+    if dest_path.exists() and dest_path.stat().st_size > 1000:
+        return f"resources/images/{filename}"
+    try:
+        q = urllib.parse.quote_plus(search_query)
+        # Search Wikimedia Commons file namespace (ns=6)
+        search_url = (
+            f"https://commons.wikimedia.org/w/api.php?action=query&list=search"
+            f"&srsearch={q}&srnamespace=6&srlimit=8&format=json&srprop="
+        )
+        req = urllib.request.Request(search_url, headers={"User-Agent": "oak-park-carousel/1.0 (github.com/priihigashi)"})
+        data = json.loads(urllib.request.urlopen(req, timeout=10).read())
+        results = data.get("query", {}).get("search", [])
+        for hit in results[:8]:
+            title = hit.get("title", "")
+            if not any(title.lower().endswith(ext) for ext in (".jpg", ".jpeg", ".png")):
+                continue
+            enc = urllib.parse.quote(title.replace(" ", "_"))
+            info_url = (
+                f"https://commons.wikimedia.org/w/api.php?action=query"
+                f"&titles={enc}&prop=imageinfo&iiprop=url&iiurlwidth=600&format=json"
+            )
+            info_req = urllib.request.Request(info_url, headers={"User-Agent": "oak-park-carousel/1.0"})
+            info = json.loads(urllib.request.urlopen(info_req, timeout=10).read())
+            for page in info.get("query", {}).get("pages", {}).values():
+                ii = (page.get("imageinfo") or [{}])[0]
+                img_url = ii.get("thumburl") or ii.get("url", "")
+                if not img_url:
+                    continue
+                with urllib.request.urlopen(img_url, timeout=15) as r:
+                    raw = r.read()
+                if len(raw) < 2000:
+                    continue  # skip tiny/corrupt files
+                dest_path.write_bytes(raw)
+                print(f"  Photo fetched: {filename} ({len(raw)//1024}KB) ← {title[:60]}")
+                return f"resources/images/{filename}"
+        print(f"  No CC photo found for: {search_query}")
+    except Exception as e:
+        print(f"  Photo fetch failed ({search_query}): {e}")
+    return ""
+
+
 def build_html(content, niche, topic_slug, work_dir, handle="@HANDLE_PLACEHOLDER"):
     if niche == "opc":
         return _build_opc_html(content, topic_slug, work_dir)
@@ -665,6 +713,31 @@ def _build_brazil_html(content, slug, work_dir, handle="@HANDLE_PLACEHOLDER"):
             facts    = slide.get("facts_pt", [])
             sticker  = esc(slide.get("sticker_name", "PESSOA"))
             facts_li = "".join(f"<li>{esc(f)}</li>" for f in facts)
+
+            # Try to source a real CC photo for the main subject sticker-slot.
+            # Priority: mentioned_people[0].image_hint → cover_visual option_a query → sticker_name.
+            people_list = slide.get("mentioned_people", [])
+            photo_query = ""
+            if people_list:
+                photo_query = people_list[0].get("image_hint", "") or people_list[0].get("name", "")
+            if not photo_query:
+                cv = content.get("cover_visual", {})
+                photo_query = cv.get("option_a", {}).get("search_query", "")
+            if not photo_query:
+                photo_query = slide.get("sticker_name", "")
+
+            safe_filename = re.sub(r"[^\w]", "_", (sticker or "subject").lower())[:30] + ".jpg"
+            photo_path = _fetch_person_photo(photo_query, work_dir, safe_filename) if photo_query else ""
+
+            if photo_path:
+                sticker_el = (
+                    f'<div class="sticker-slot sticker-photo" '
+                    f'style="background-image:url(\'{photo_path}\');background-size:cover;'
+                    f'background-position:center top;border:none;border-radius:4px;"></div>'
+                )
+            else:
+                sticker_el = f'<div class="sticker-slot"><div class="sticker-placeholder">@{sticker}_STICKER</div></div>'
+
             slides_html += f"""
 <div class="slide slide-profile">
   <div class="tag">Quem é</div>
@@ -672,7 +745,7 @@ def _build_brazil_html(content, slug, work_dir, handle="@HANDLE_PLACEHOLDER"):
   <div class="slide-hl">{h_pt}</div>
   <div class="slide-en">{h_en}</div>
   <div class="profile-layout">
-    <div class="sticker-slot"><div class="sticker-placeholder">@{sticker}_STICKER</div></div>
+    {sticker_el}
     <ul class="fact-list">{facts_li}</ul>
   </div>
   <div class="swipe">SWIPE →</div>

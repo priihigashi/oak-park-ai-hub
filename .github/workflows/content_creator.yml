@@ -57,6 +57,21 @@ jobs:
           WORK_DIR: /tmp/content_creator_run
           EXPORT_SCRIPT: ${{ github.workspace }}/scripts/content_creator/export_variants.js
 
+      - name: Run carousel reviewer (post-build quality check)
+        if: always()
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          ALERT_EMAIL: priscila@oakpark-construction.com
+          WORK_DIR: /tmp/content_creator_run
+        run: |
+          RESULTS_FILE=/tmp/content_creator_run/results.json
+          if [ -f "$RESULTS_FILE" ]; then
+            export CONTENT_CREATOR_RUN=$(cat "$RESULTS_FILE")
+          else
+            export CONTENT_CREATOR_RUN='[]'
+          fi
+          python scripts/content_creator/carousel_reviewer.py
+
       - name: Upload artifacts
         if: always()
         uses: actions/upload-artifact@v4
@@ -125,6 +140,21 @@ jobs:
         env:
           WORK_DIR: /tmp/content_creator_run
           EXPORT_SCRIPT: ${{ github.workspace }}/scripts/content_creator/export_variants.js
+
+      - name: Run carousel reviewer (post-build quality check)
+        if: always()
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          ALERT_EMAIL: priscila@oakpark-construction.com
+          WORK_DIR: /tmp/content_creator_run
+        run: |
+          RESULTS_FILE=/tmp/content_creator_run/results.json
+          if [ -f "$RESULTS_FILE" ]; then
+            export CONTENT_CREATOR_RUN=$(cat "$RESULTS_FILE")
+          else
+            export CONTENT_CREATOR_RUN='[]'
+          fi
+          python scripts/content_creator/carousel_reviewer.py
 
       - name: Upload retry artifacts
         if: always()

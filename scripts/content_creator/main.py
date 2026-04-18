@@ -567,6 +567,16 @@ def process_one_topic(topic_entry, run_date, drive):
     except Exception as e:
         print(f"  image_suggestions.txt upload failed (non-fatal): {e}")
 
+    # Upload any CC photos downloaded by _fetch_person_photo() into resources/images/
+    local_images = work / "resources" / "images"
+    if local_images.exists():
+        try:
+            images_sub = create_subfolder(resources_sub, "images", drive)
+            upload_dir_contents(local_images, images_sub, drive)
+            print(f"  resources/images/ → Drive ({sum(1 for _ in local_images.iterdir())} file(s))")
+        except Exception as e:
+            print(f"  resources/images/ upload failed (non-fatal): {e}")
+
     folder_link = f"https://drive.google.com/drive/folders/{version_folder_id}"
     motion_link = f"https://drive.google.com/drive/folders/{motion_sub}"
     print(f"  Version: {folder_link}")
@@ -686,6 +696,13 @@ def main():
 
     elapsed = time.time() - start
     print(f"\n[content_creator] Done — {len(results)} posts rendered in {elapsed:.0f}s")
+
+    # Write results for downstream carousel reviewer
+    results_file = WORK_DIR / "results.json"
+    try:
+        results_file.write_text(json.dumps(results, default=str))
+    except Exception as e:
+        print(f"  Could not write results.json: {e}")
 
     # Log each rendered post to Content Creation Log
     try:
