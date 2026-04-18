@@ -8,6 +8,7 @@ import gzip, json, os, re, subprocess, time, urllib.request, urllib.parse
 from pathlib import Path
 
 ANTHROPIC_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
+OPENAI_KEY    = os.environ.get("OPENAI_API_KEY", "")
 
 OPC_TEMPLATE = "tip"
 BRAZIL_TEMPLATE = "quem-decidiu"
@@ -541,11 +542,88 @@ def _fetch_person_photo(search_query, dest_dir, filename):
     return ""
 
 
-def build_html(content, niche, topic_slug, work_dir, handle="@HANDLE_PLACEHOLDER"):
+def _generate_ai_cover(prompt, work_dir):
+    """Generate cover image via DALL-E 3. Returns relative path or empty string.
+    Falls back silently on any error — caller uses placeholder if empty."""
+    if not OPENAI_KEY or not prompt:
+        return ""
+    dest_path = Path(work_dir) / "resources" / "images" / "cover.jpg"
+    dest_path.parent.mkdir(parents=True, exist_ok=True)
+    if dest_path.exists() and dest_path.stat().st_size > 5000:
+        return "resources/images/cover.jpg"
+    try:
+        payload = json.dumps({
+            "model": "dall-e-3",
+            "prompt": prompt[:1000],
+            "n": 1,
+            "size": "1024x1024",
+            "quality": "standard",
+        }).encode()
+        req = urllib.request.Request(
+            "https://api.openai.com/v1/images/generations",
+            data=payload,
+            headers={"Authorization": f"Bearer {OPENAI_KEY}", "Content-Type": "application/json"},
+        )
+        resp = json.loads(urllib.request.urlopen(req, timeout=60).read())
+        img_url = resp["data"][0]["url"]
+        with urllib.request.urlopen(img_url, timeout=30) as r:
+            raw = r.read()
+        if len(raw) < 5000:
+            return ""
+        dest_path.write_bytes(raw)
+        print(f"  AI cover generated: cover.jpg ({len(raw)//1024}KB via DALL-E 3)")
+        return "resources/images/cover.jpg"
+    except Exception as e:
+        print(f"  AI cover generation failed (non-fatal): {e}")
+        return ""
+
+
+def fetch_all_media(content, niche, work_dir):
+    """Download/generate all images needed by this carousel BEFORE build_html().
+    Returns dict:
+      {"cover": rel_path_or_empty, "slides": {slide_idx: rel_path_or_empty}}
+    slide_idx is 1-based (cover=0 implied, slides start at 2 to match enumerate in _build_brazil_html).
+    All paths relative to work_dir (e.g. "resources/images/cover.jpg").
+    Safe: all failures are caught and return empty string for that slot.
+    """
+    paths = {"cover": "", "slides": {}}
+    if niche not in ("brazil", "usa", "sovereign"):
+        # OPC: no context-image slots in current HTML template — skip for now
+        return paths
+
+    # Cover image — try CC photo (option_a), fall back to AI generation (option_b)
+    cv = content.get("cover_visual", {})
+    if cv:
+        search_q = cv.get("option_a", {}).get("search_query", "")
+        if search_q:
+            cover_path = _fetch_person_photo(search_q, work_dir, "cover.jpg")
+            paths["cover"] = cover_path
+        if not paths["cover"]:
+            opt_b = cv.get("option_b", {})
+            ai_prompt = opt_b.get("prompt", "")
+            if ai_prompt:
+                paths["cover"] = _generate_ai_cover(ai_prompt, work_dir)
+
+    # Middle slides — context images
+    for i, slide in enumerate(content.get("slides", []), start=2):
+        if slide.get("visual_hint") == "context-image":
+            cq = slide.get("context_image_query", "").strip()
+            if cq:
+                fname = f"slide_{i}_context.jpg"
+                img_path = _fetch_person_photo(cq, work_dir, fname)
+                if img_path:
+                    paths["slides"][i] = img_path
+
+    fetched_total = (1 if paths["cover"] else 0) + len(paths["slides"])
+    print(f"  Media fetch: {fetched_total} image(s) ready (cover={bool(paths['cover'])}, slides={list(paths['slides'].keys())})")
+    return paths
+
+
+def build_html(content, niche, topic_slug, work_dir, handle="@HANDLE_PLACEHOLDER", media_paths=None):
     if niche == "opc":
         return _build_opc_html(content, topic_slug, work_dir)
     if niche in ("brazil", "usa", "sovereign"):
-        return _build_brazil_html(content, topic_slug, work_dir, handle=handle)
+        return _build_brazil_html(content, topic_slug, work_dir, handle=handle, media_paths=media_paths)
     return None
 
 
@@ -669,7 +747,7 @@ def _build_opc_html(content, slug, work_dir):
     return str(html_path)
 
 
-def _build_brazil_html(content, slug, work_dir, handle="@HANDLE_PLACEHOLDER"):
+def _build_brazil_html(content, slug, work_dir, handle="@HANDLE_PLACEHOLDER", media_paths=None):
     """Generate Brazil News 1080x1350 carousel HTML — dark + Canário brand spec v1.1.
     handle: footer handle shown on slides — defaults to @HANDLE_PLACEHOLDER for non-Brazil niches."""
 
@@ -692,8 +770,14 @@ def _build_brazil_html(content, slug, work_dir, handle="@HANDLE_PLACEHOLDER"):
     else:
         cover_hl = cover_pt
 
+    cover_img = (media_paths or {}).get("cover", "")
+    cover_bg_style = (
+        f'style="background-image:linear-gradient(rgba(14,13,11,.72),rgba(14,13,11,.72)),'
+        f'url(\'{cover_img}\');background-size:cover;background-position:center top;"'
+        if cover_img else ""
+    )
     slides_html = f"""
-<div class="slide slide-cover">
+<div class="slide slide-cover" {cover_bg_style}>
   <div class="tag">Quem decidiu isso?</div>
   <div class="cover-date">{cover_date}</div>
   <div class="cover-hl">{cover_hl}</div>
@@ -703,7 +787,7 @@ def _build_brazil_html(content, slug, work_dir, handle="@HANDLE_PLACEHOLDER"):
 </div>
 """
 
-    for slide in content.get("slides", []):
+    for slide_i, slide in enumerate(content.get("slides", []), start=2):
         stype = slide.get("type", "list")
         h_pt  = esc(slide.get("heading_pt", ""))
         h_en  = esc(slide.get("heading_en", ""))
@@ -758,7 +842,16 @@ def _build_brazil_html(content, slug, work_dir, handle="@HANDLE_PLACEHOLDER"):
                 nums_html += f'<div class="num-block"><div class="num-val">{esc(n.get("value","—"))}</div><div class="num-label">{esc(n.get("label_pt",""))}</div><div class="num-en">{esc(n.get("label_en",""))}</div></div>\n'
             v_hint = slide.get("visual_hint", "none")
             ctx_q = esc(slide.get("context_image_query", ""))
-            ctx_slot = f'\n  <div class="context-img-slot"><span class="ctx-query">[ IMG: {ctx_q} ]</span></div>' if v_hint == "context-image" and ctx_q else ""
+            _slide_img = (media_paths or {}).get("slides", {}).get(slide_i, "")
+            if v_hint == "context-image":
+                if _slide_img:
+                    ctx_slot = f'\n  <div class="context-img-slot"><img src="{_slide_img}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:4px;"></div>'
+                elif ctx_q:
+                    ctx_slot = f'\n  <div class="context-img-slot"><span class="ctx-query">[ IMG: {ctx_q} ]</span></div>'
+                else:
+                    ctx_slot = ""
+            else:
+                ctx_slot = ""
             slides_html += f"""
 <div class="slide slide-data">
   <div class="tag">Os Números</div>
@@ -773,7 +866,16 @@ def _build_brazil_html(content, slug, work_dir, handle="@HANDLE_PLACEHOLDER"):
             items_li = "".join(f"<li>{esc(i)}</li>" for i in slide.get("items_pt", []))
             v_hint = slide.get("visual_hint", "none")
             ctx_q = esc(slide.get("context_image_query", ""))
-            ctx_slot = f'\n  <div class="context-img-slot"><span class="ctx-query">[ IMG: {ctx_q} ]</span></div>' if v_hint == "context-image" and ctx_q else ""
+            _slide_img = (media_paths or {}).get("slides", {}).get(slide_i, "")
+            if v_hint == "context-image":
+                if _slide_img:
+                    ctx_slot = f'\n  <div class="context-img-slot"><img src="{_slide_img}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:4px;"></div>'
+                elif ctx_q:
+                    ctx_slot = f'\n  <div class="context-img-slot"><span class="ctx-query">[ IMG: {ctx_q} ]</span></div>'
+                else:
+                    ctx_slot = ""
+            else:
+                ctx_slot = ""
             slides_html += f"""
 <div class="slide slide-list">
   <div class="tag">Segue o fio</div>
@@ -787,7 +889,16 @@ def _build_brazil_html(content, slug, work_dir, handle="@HANDLE_PLACEHOLDER"):
         elif stype == "quote":
             v_hint = slide.get("visual_hint", "none")
             ctx_q = esc(slide.get("context_image_query", ""))
-            ctx_slot = f'\n  <div class="context-img-slot"><span class="ctx-query">[ IMG: {ctx_q} ]</span></div>' if v_hint == "context-image" and ctx_q else ""
+            _slide_img = (media_paths or {}).get("slides", {}).get(slide_i, "")
+            if v_hint == "context-image":
+                if _slide_img:
+                    ctx_slot = f'\n  <div class="context-img-slot"><img src="{_slide_img}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:4px;"></div>'
+                elif ctx_q:
+                    ctx_slot = f'\n  <div class="context-img-slot"><span class="ctx-query">[ IMG: {ctx_q} ]</span></div>'
+                else:
+                    ctx_slot = ""
+            else:
+                ctx_slot = ""
             slides_html += f"""
 <div class="slide slide-quote">
   <div class="tag">Não é opinião</div>

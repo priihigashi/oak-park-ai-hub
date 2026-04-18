@@ -22,6 +22,8 @@ jobs:
     env:
       SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      PRI_OP_REPLICATE_API_KEY: ${{ secrets.PRI_OP_REPLICATE_API_KEY }}
       PRI_OP_GMAIL_APP_PASSWORD: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       CONTENT_SHEET_ID: '1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU'
@@ -43,7 +45,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install google-auth google-api-python-client pytz
+          pip install google-auth google-api-python-client pytz requests
           npm install playwright
           npx playwright install chromium --with-deps
 
@@ -105,6 +107,8 @@ jobs:
     env:
       SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      PRI_OP_REPLICATE_API_KEY: ${{ secrets.PRI_OP_REPLICATE_API_KEY }}
       PRI_OP_GMAIL_APP_PASSWORD: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       CONTENT_SHEET_ID: '1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU'
@@ -127,7 +131,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install google-auth google-api-python-client pytz
+          pip install google-auth google-api-python-client pytz requests
           npm install playwright
           npx playwright install chromium --with-deps
 

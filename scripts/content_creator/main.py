@@ -24,7 +24,7 @@ ET = pytz.timezone("America/New_York")
 
 sys.path.insert(0, str(Path(__file__).parent))
 from topic_picker import pick_topics
-from carousel_builder import generate_carousel_content, build_html, render_pngs, generate_image_suggestions, visual_audit
+from carousel_builder import generate_carousel_content, build_html, render_pngs, generate_image_suggestions, visual_audit, fetch_all_media
 import urllib.request, urllib.parse
 from email_preview import send_preview, update_catalog_status
 
@@ -413,6 +413,98 @@ def add_catalog_row(post_id, niche, series, topic, static_link, motion_link, tok
     print(f"  Catalog row added: {post_id}")
 
 
+def _animate_cover_kling(png_path, prompt, output_dir, variant):
+    """Animate cover PNG via Replicate kwai-kolors/kling-video (image-to-video).
+    Saves {variant}_01_cover_kling.mp4 to output_dir alongside Ken Burns version.
+    Falls back silently if key not set or API fails — Ken Burns is always the safety net.
+    """
+    import base64
+    key = os.environ.get("PRI_OP_REPLICATE_API_KEY", "")
+    if not key:
+        print("  Kling/Replicate: PRI_OP_REPLICATE_API_KEY not set — skipping animated cover")
+        return None
+    try:
+        with open(png_path, "rb") as f:
+            img_b64 = base64.b64encode(f.read()).decode()
+        data_uri = f"data:image/png;base64,{img_b64}"
+        clean_prompt = (prompt or "Subtle cinematic camera movement, documentary style").strip()[:500]
+
+        payload = json.dumps({
+            "input": {
+                "image": data_uri,
+                "prompt": clean_prompt,
+                "duration": 5,
+                "aspect_ratio": "9:16",
+                "mode": "standard",
+            }
+        }).encode()
+        req = urllib.request.Request(
+            "https://api.replicate.com/v1/models/kwai-kolors/kling-video/predictions",
+            data=payload,
+            headers={
+                "Authorization": f"Bearer {key}",
+                "Content-Type": "application/json",
+                "Prefer": "wait=60",
+            },
+        )
+        resp = json.loads(urllib.request.urlopen(req, timeout=90).read())
+        pred_id = resp.get("id")
+        status = resp.get("status", "")
+        output = resp.get("output")
+
+        # Poll until done (max ~2 min)
+        for _ in range(24):
+            if status in ("succeeded", "failed", "canceled"):
+                break
+            time.sleep(5)
+            poll_req = urllib.request.Request(
+                f"https://api.replicate.com/v1/predictions/{pred_id}",
+                headers={"Authorization": f"Bearer {key}"},
+            )
+            resp = json.loads(urllib.request.urlopen(poll_req, timeout=15).read())
+            status = resp.get("status", "")
+            output = resp.get("output")
+
+        if status != "succeeded" or not output:
+            print(f"  Kling/Replicate: status={status} — keeping Ken Burns cover only")
+            return None
+
+        video_url = output[0] if isinstance(output, list) else output
+        os.makedirs(output_dir, exist_ok=True)
+        kling_mp4 = os.path.join(output_dir, f"{variant}_01_cover_kling.mp4")
+        with urllib.request.urlopen(video_url, timeout=60) as r:
+            kling_data = r.read()
+        with open(kling_mp4, "wb") as f:
+            f.write(kling_data)
+        print(f"  Kling animated cover: {variant}_01_cover_kling.mp4 ({len(kling_data)//1024}KB)")
+        return kling_mp4
+    except Exception as e:
+        print(f"  Kling/Replicate animation failed (non-fatal): {e}")
+        return None
+
+
+def _check_media_presence(png_dir, motion_dir, resources_dir, post_id):
+    """Verify media completeness locally before shipping.
+    Returns (ok: bool, issues: list[str]).
+    Non-blocking — caller sends alert but post still ships.
+    """
+    issues = []
+    pngs = list(Path(png_dir).glob("*.png")) if Path(png_dir).exists() else []
+    if len(pngs) < 3:
+        issues.append(f"PNG count low: {len(pngs)} (expected ≥ 3 slides × 1 variant min)")
+
+    mp4s = list(Path(motion_dir).glob("*.mp4")) if Path(motion_dir).exists() else []
+    if not mp4s:
+        issues.append("Motion folder has no MP4s — motion delivery will fail")
+
+    images_dir = Path(resources_dir) / "images"
+    images = [f for f in images_dir.iterdir() if f.is_file()] if images_dir.exists() else []
+    if not images:
+        issues.append("resources/images/ empty — no context/cover images fetched (placeholder text will show)")
+
+    return len(issues) == 0, issues
+
+
 def process_one_topic(topic_entry, run_date, drive):
     topic = topic_entry["topic"]
     niche = topic_entry["niche"]
@@ -476,7 +568,12 @@ def process_one_topic(topic_entry, run_date, drive):
     png_dir = work / "png"
     motion_dir = work / "motion"
 
-    html_path = build_html(content, niche, slug, str(work))
+    # 1c. Fetch media (CC context images + AI cover) before building HTML so
+    # _build_brazil_html() can inject real <img> tags instead of placeholder text.
+    print("  Fetching context images + cover...")
+    media_paths = fetch_all_media(content, niche, str(work))
+
+    html_path = build_html(content, niche, slug, str(work), media_paths=media_paths)
     if not html_path:
         print("  FAILED: HTML build")
         return None
@@ -494,11 +591,32 @@ def process_one_topic(topic_entry, run_date, drive):
         for png in sorted(png_dir.glob(f"{variant}_*_html.png")):
             render_motion_cover(str(png), str(motion_dir), variant)
 
+    # 4b. Kling I2V animation for primary (black) cover via Replicate kwai-kolors/kling-video.
+    # Produces {variant}_01_cover_kling.mp4 alongside the Ken Burns version.
+    # Falls back silently — Ken Burns is always the safety net.
+    black_covers = sorted(png_dir.glob("black_01_*_html.png"))
+    if black_covers:
+        anim_prompt = (
+            content.get("cover_visual", {}).get("option_b", {}).get("prompt", "")
+            or "Subtle cinematic camera movement, documentary editorial style"
+        )
+        _animate_cover_kling(str(black_covers[0]), anim_prompt, str(motion_dir), "black")
+
     # Motion completeness guard — never email preview with empty motion folder
     motion_mp4s = list(motion_dir.glob("*.mp4")) if motion_dir.exists() else []
     if not motion_mp4s:
         _send_alert(f"Motion folder empty for '{topic[:40]}' — skipping preview. Check ffmpeg + render_motion_cover logs.")
         return None
+
+    # Media presence check (non-blocking) — alert if images/clips are missing
+    media_ok, media_issues = _check_media_presence(
+        str(png_dir), str(motion_dir), str(work / "resources"), post_id)
+    if media_issues:
+        _send_alert(
+            f"Media gaps for '{topic[:40]}':\n" +
+            "\n".join(f"  - {x}" for x in media_issues) +
+            "\nPost will still ship but may have placeholder text on some slides."
+        )
 
     # 5. Upload to Drive — ONE version folder per post, png/ + motion/ + resources/ nested inside.
     # Shape: <SERIES>/_TEMPLATE_CAROUSEL/v<N>_<slug>/{cover.html, png/, motion/, resources/, story doc}
