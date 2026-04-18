@@ -1,0 +1,23 @@
+name: Sync Drive Shortcuts
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * *'   # 6 AM UTC daily — keeps shortcuts in sync after every pipeline run
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - run: pip install google-auth google-auth-httplib2 google-api-python-client
+
+      - name: Sync shortcuts
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: python scripts/shortcuts/sync_shortcuts.py
