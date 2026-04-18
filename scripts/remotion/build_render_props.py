@@ -92,6 +92,68 @@ def translate_captions(captions: list, target_lang: str = "pt") -> list:
     return captions
 
 
+def generate_voiceover(text, lang, story_id):
+    """Generate MP3 voiceover via ElevenLabs TTS. Returns local path or None on failure."""
+    api_key = os.environ.get("ELEVENLABS_API_KEY", "")
+    if not api_key or not text.strip():
+        return None
+    # Rachel — neutral, clear, documentary style (EN)
+    # Adam — works well in Portuguese (PT)
+    voice_id = "21m00Tcm4TlvDq8ikWAM" if lang == "en" else "pNInz6obpgDQGcFmaJgB"
+    try:
+        import requests as _requests
+        r = _requests.post(
+            f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}",
+            json={
+                "text": text,
+                "model_id": "eleven_multilingual_v2",
+                "voice_settings": {"stability": 0.5, "similarity_boost": 0.75},
+            },
+            headers={"xi-api-key": api_key, "Content-Type": "application/json"},
+            timeout=60,
+        )
+        r.raise_for_status()
+        path = f"/tmp/{story_id}_vo_{lang}.mp3"
+        with open(path, "wb") as f:
+            f.write(r.content)
+        print(f"Voiceover ({lang}): {len(r.content) / 1024:.1f} KB → {path}", file=sys.stderr)
+        return path
+    except Exception as e:
+        print(f"WARNING: ElevenLabs voiceover ({lang}) failed: {e}", file=sys.stderr)
+        return None
+
+
+def upload_audio_to_drive(local_path, story_id, lang):
+    """Upload MP3 to SOVEREIGN_TEMPLATE_FOLDER for archiving. Non-fatal."""
+    token_env = os.environ.get("SHEETS_TOKEN", "")
+    folder_id = os.environ.get("SOVEREIGN_TEMPLATE_FOLDER", "")
+    if not token_env or not folder_id:
+        return
+    try:
+        from google.oauth2.credentials import Credentials
+        from googleapiclient.discovery import build as _build
+        from googleapiclient.http import MediaFileUpload
+
+        token_data = json.loads(token_env)
+        creds = Credentials(
+            token=token_data.get("token"),
+            refresh_token=token_data.get("refresh_token"),
+            token_uri=token_data.get("token_uri", "https://oauth2.googleapis.com/token"),
+            client_id=token_data.get("client_id"),
+            client_secret=token_data.get("client_secret"),
+        )
+        drive = _build("drive", "v3", credentials=creds)
+        result = drive.files().create(
+            body={"name": f"{story_id}_vo_{lang}.mp3", "parents": [folder_id]},
+            media_body=MediaFileUpload(local_path, mimetype="audio/mpeg"),
+            supportsAllDrives=True,
+            fields="id,name,webViewLink",
+        ).execute()
+        print(f"Drive upload vo_{lang}: {result.get('webViewLink', result['id'])}", file=sys.stderr)
+    except Exception as e:
+        print(f"WARNING: Drive upload vo_{lang} failed: {e}", file=sys.stderr)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--story-id", required=True)
@@ -105,11 +167,21 @@ def main():
     parser.add_argument("--speaker-name", default="")
     parser.add_argument("--speaker-role", default="")
     parser.add_argument("--topic-title", default="")
+    parser.add_argument("--voiceover", action="store_true",
+                        help="Generate ElevenLabs voiceover and upload to Drive")
     args = parser.parse_args()
 
     captions = parse_srt(args.srt_file)
     if args.translate and args.language == "pt":
         captions = translate_captions(captions, "pt")
+
+    voiceover_url = None
+    if args.voiceover and captions:
+        narration = " ".join(c["text"] for c in captions if c.get("text"))
+        local_audio = generate_voiceover(narration, args.language, args.story_id)
+        if local_audio:
+            upload_audio_to_drive(local_audio, args.story_id, args.language)
+            voiceover_url = "./public/vo.mp3"
 
     proof_slides = json.loads(args.proof_slides) if args.proof_slides.strip() != "[]" else []
 
@@ -123,6 +195,7 @@ def main():
         "speakerName":      args.speaker_name or None,
         "speakerRole":      args.speaker_role or None,
         "topicTitle":       args.topic_title or None,
+        "voiceover_url":    voiceover_url,
     }
     # strip None values — Remotion ignores missing optional props cleanly
     props = {k: v for k, v in props.items() if v is not None}

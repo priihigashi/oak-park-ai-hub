@@ -38,6 +38,14 @@ on:
         description: 'Topic title strip at top of video (e.g. REGIME CHANGE)'
         required: false
         default: ''
+      voiceover:
+        description: 'Generate ElevenLabs voiceover (EN + PT). Set to false to skip.'
+        required: false
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
 
 jobs:
   render:
@@ -150,7 +158,13 @@ jobs:
           SPEAKER_NAME: ${{ github.event.inputs.speaker_name }}
           SPEAKER_ROLE: ${{ github.event.inputs.speaker_role }}
           TOPIC_TITLE: ${{ github.event.inputs.topic_title }}
+          VOICEOVER: ${{ github.event.inputs.voiceover }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          SOVEREIGN_TEMPLATE_FOLDER: ${{ secrets.SOVEREIGN_TEMPLATE_FOLDER }}
         run: |
+          VOICEOVER_FLAG=""
+          [ "$VOICEOVER" != "false" ] && VOICEOVER_FLAG="--voiceover"
           python3 scripts/remotion/build_render_props.py \
             --story-id "$STORY_ID" \
             --language en \
@@ -161,6 +175,7 @@ jobs:
             --speaker-name "$SPEAKER_NAME" \
             --speaker-role "$SPEAKER_ROLE" \
             --topic-title "$TOPIC_TITLE" \
+            $VOICEOVER_FLAG \
             > /tmp/props_en.json
           echo "EN props:"
           cat /tmp/props_en.json
@@ -176,7 +191,13 @@ jobs:
           SPEAKER_NAME: ${{ github.event.inputs.speaker_name }}
           SPEAKER_ROLE: ${{ github.event.inputs.speaker_role }}
           TOPIC_TITLE: ${{ github.event.inputs.topic_title }}
+          VOICEOVER: ${{ github.event.inputs.voiceover }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          SOVEREIGN_TEMPLATE_FOLDER: ${{ secrets.SOVEREIGN_TEMPLATE_FOLDER }}
         run: |
+          VOICEOVER_FLAG=""
+          [ "$VOICEOVER" != "false" ] && VOICEOVER_FLAG="--voiceover"
           python3 scripts/remotion/build_render_props.py \
             --story-id "$STORY_ID" \
             --language pt \
@@ -188,12 +209,16 @@ jobs:
             --speaker-name "$SPEAKER_NAME" \
             --speaker-role "$SPEAKER_ROLE" \
             --topic-title "$TOPIC_TITLE" \
+            $VOICEOVER_FLAG \
             > /tmp/props_pt.json
 
       - name: Copy source video to Remotion public dir
         run: |
           mkdir -p scripts/remotion/public
           cp "${{ steps.locate.outputs.video }}" scripts/remotion/public/source_clip.mp4
+          # Copy EN voiceover if generated — will be used during EN render
+          EN_AUDIO="/tmp/${{ github.event.inputs.story_id }}_vo_en.mp3"
+          [ -f "$EN_AUDIO" ] && cp "$EN_AUDIO" scripts/remotion/public/vo.mp3 || true
 
       - name: Render EN reel
         working-directory: scripts/remotion
@@ -202,6 +227,12 @@ jobs:
             --props /tmp/props_en.json \
             --output /tmp/reel_en.mp4
           echo "EN reel size: $(du -sh /tmp/reel_en.mp4)"
+
+      - name: Swap in PT voiceover
+        run: |
+          # Replace EN audio with PT audio before PT render
+          PT_AUDIO="/tmp/${{ github.event.inputs.story_id }}_vo_pt.mp3"
+          [ -f "$PT_AUDIO" ] && cp "$PT_AUDIO" scripts/remotion/public/vo.mp3 || true
 
       - name: Render PT reel
         working-directory: scripts/remotion
@@ -231,4 +262,6 @@ jobs:
           path: |
             /tmp/reel_en.mp4
             /tmp/reel_pt.mp4
+            /tmp/${{ github.event.inputs.story_id }}_vo_en.mp3
+            /tmp/${{ github.event.inputs.story_id }}_vo_pt.mp3
           retention-days: 30

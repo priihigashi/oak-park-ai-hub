@@ -1,6 +1,7 @@
 import React from "react";
 import {
   AbsoluteFill,
+  Audio,
   OffthreadVideo,
   Sequence,
   useCurrentFrame,
@@ -34,6 +35,7 @@ export interface NewsReelProps {
   speakerName?: string;      // e.g. "Marianne Williamson"
   speakerRole?: string;      // e.g. "Author & Activist"
   topicTitle?: string;       // e.g. "REGIME CHANGE"
+  voiceover_url?: string;    // path to /public/vo.mp3 — added by build_render_props when --voiceover flag set
 }
 
 // ─── LAYOUT CONSTANTS ──────────────────────────────────────────────────────────
@@ -176,6 +178,7 @@ export const NewsReel: React.FC<NewsReelProps> = ({
   speakerName,
   speakerRole,
   topicTitle,
+  voiceover_url,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -328,6 +331,11 @@ export const NewsReel: React.FC<NewsReelProps> = ({
       >
         @HANDLE_PLACEHOLDER
       </div>
+
+      {/* ── VOICEOVER AUDIO (optional — injected by build_render_props --voiceover) ── */}
+      {voiceover_url && (
+        <Audio src={voiceover_url} startFrom={0} />
+      )}
     </AbsoluteFill>
   );
 };
