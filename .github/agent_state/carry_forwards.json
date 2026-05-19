@@ -1,7 +1,87 @@
 [
   {
-    "task": "Validation run for fixes 3, 4, and 5",
-    "context": "These fixes still need to be validated to ensure that the changes made are functioning as intended.",
+    "task": "Actual fixes for the 8 bugs",
+    "context": "These fixes are necessary to ensure the pipeline runs effectively and produces high-quality output.",
+    "auto_actionable": true
+  },
+  {
+    "task": "Wikimedia Commons provider implementation",
+    "context": "Implementing this provider is crucial for sourcing images correctly within the pipeline.",
+    "auto_actionable": true
+  },
+  {
+    "task": "PEXELS_API_KEY regeneration",
+    "context": "Regenerating the API key is essential to resolve the 403 error from the Pexels key.",
+    "auto_actionable": true
+  },
+  {
+    "task": "NB2/Gemini credit decision",
+    "context": "Making a decision on credits is important for proper attribution in the output.",
+    "auto_actionable": true
+  },
+  {
+    "task": "Rebuild test once fixes are in",
+    "context": "Rebuilding the test is necessary to validate that the pipeline outputs are functioning as intended after bug fixes.",
+    "auto_actionable": true
+  },
+  {
+    "task": "Double-check whether the GIPHY/motion source routing was actually fixed",
+    "context": "To ensure GIPHY is properly configured for the intended use cases and does not interfere with news context.",
+    "auto_actionable": true
+  },
+  {
+    "task": "Find gaps and create a plan before touching files",
+    "context": "To address any potential issues with the current configuration of motion_sources.py related to GIPHY.",
+    "auto_actionable": true
+  },
+  {
+    "task": "Retry Sunroom post opc-tip-20260420-what-do-we-think-of-",
+    "context": "The post is still approved but stuck in the process.",
+    "auto_actionable": true
+  },
+  {
+    "task": "Decide on carousel_builder.py merge (local vs origin 6f6337c)",
+    "context": "A decision is needed on whether to keep local modifications or use the upstream version.",
+    "auto_actionable": false
+  },
+  {
+    "task": "Remove orphaned _buffer_find_slot() + BUFFER_API constant",
+    "context": "This is an optional cleanup task that could improve code quality.",
+    "auto_actionable": false
+  },
+  {
+    "task": "Migrate scripts/schedule_posts.py to GraphQL",
+    "context": "This is optional but could enhance functionality if the script is still invoked.",
+    "auto_actionable": false
+  },
+  {
+    "task": "Work on Issue #156 (News pipeline)",
+    "context": "This is a separate workstream that was not addressed in the current session.",
+    "auto_actionable": false
+  },
+  {
+    "task": "Phase F (5 live shadow validation runs)",
+    "context": "blocked on Anthropic credit refill",
+    "auto_actionable": true
+  },
+  {
+    "task": "Phase G prep (circuit breaker + expansion schedule)",
+    "context": "necessary for upcoming phases of the project",
+    "auto_actionable": true
+  },
+  {
+    "task": "Priscila must paste new Code.gs into Apps Script + add CLAUDE_API_KEY to Script Properties + run firstTimeSetup",
+    "context": "essential for implementing the recent code updates and ensuring functionality",
+    "auto_actionable": false
+  },
+  {
+    "task": "Priscila must rotate the leaked Anthropic key",
+    "context": "important for maintaining security and preventing unauthorized access",
+    "auto_actionable": false
+  },
+  {
+    "task": "Investigate news templates 'chosen but not used'",
+    "context": "A3 only ADDED a dispatch-mismatch gate, did not migrate templates to use registry",
     "auto_actionable": true
   }
 ]
