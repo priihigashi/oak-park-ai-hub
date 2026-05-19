@@ -341,6 +341,7 @@ RULE: Before starting a task, check this tab; a specialized skill/agent may alre
 Applies to ads dashboards, weekly reports, keyword alerts, content insights — any surface where Claude outputs analysis or a recommendation.
 RULE (stays global): Investigate first. Surface only concrete findings (name + date + number, 1–2 max). Generic possibilities are an internal checklist — NEVER print them to Priscila.
 14-day Smart Bidding rule: a recent change (≤14 days old) → Wait. Reverting destroys the signal. Re-evaluate at +14d.
+If investigation finds nothing internal: STATE what was checked ("Investigated [X, Y, Z]: no internal cause found"), then offer external fallback as last resort. Never default to generic possibilities.
 Banned phrases: "Could be seasonal", "Maybe a competitor change", "Tracking changes…", any (a)(b)(c) list of possibilities, "Open the table below and look for X".
 4-step flow + data sources + reference implementation (OPC ads dashboard `investigateMOM()`) → memory `feedback_evidence_driven_ai_insights.md`. Phase 2 K migration 2026-05-19.
 
