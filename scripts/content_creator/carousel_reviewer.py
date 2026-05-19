@@ -43,6 +43,18 @@ except Exception:
     Image = None
     ImageStat = None
 
+# SH-147 PR B — named-person face gate. Import guarded so a syntax error
+# in the gate module can never break the reviewer. Gate behavior is also
+# flag-gated below — module presence alone changes no behavior.
+try:
+    from named_person_face_gate import (
+        check_named_person_face_coverage,
+        NamedPersonFaceGateError,
+    )
+except Exception:
+    check_named_person_face_coverage = None
+    NamedPersonFaceGateError = Exception
+
 # Env vars
 SHEETS_TOKEN     = os.environ.get("SHEETS_TOKEN", "")
 ALERT_EMAIL      = os.environ.get("ALERT_EMAIL", "priscila@oakpark-construction.com")
@@ -1016,6 +1028,37 @@ def check_opc_professional_ethics(content: dict) -> list[str]:
             )
             break
     return issues
+
+
+def _run_face_gate_check(content: dict, niche: str) -> list[str]:
+    """SH-147 PR B integration — named-person face gate review hook.
+
+    Flag-gated by ``STORY_PIPELINE_V2_ENABLED``. Default OFF means this
+    returns an empty list and the reviewer is byte-identical to pre-PR-B.
+
+    When ON, scans the content dict for ``<strong>FirstName LastName</strong>``
+    patterns and flags any without a face treatment (sticker / bio-card /
+    bio-initials / HTML class markers). Returns one issue string per violation,
+    prefixed ``[face-gate]`` so review emails and tracker rows can grep it.
+    """
+    if check_named_person_face_coverage is None:
+        return []
+    flag = str(os.environ.get("STORY_PIPELINE_V2_ENABLED", "0")).strip().lower()
+    if flag not in {"1", "true", "yes", "on"}:
+        return []
+    if niche not in ("opc", "brazil", "usa", "news"):
+        return []
+    try:
+        violations = check_named_person_face_coverage(content or {}, route=niche)
+    except NamedPersonFaceGateError:
+        # Unrouted/unknown route — silent skip, never break the reviewer.
+        return []
+    except Exception as exc:  # pragma: no cover - defensive
+        return [f"[face-gate] gate failed with {type(exc).__name__}: {exc}"]
+    return [
+        f"[face-gate] slide {v.slide_index}: {v.person_name} — {v.reason}"
+        for v in violations
+    ]
 
 
 def check_news_template_dispatch(content: dict, niche: str) -> list[str]:
@@ -2337,6 +2380,8 @@ def check_built_post(result: dict) -> dict:
     all_issues = []
     _content_dict = result.get("content", {}) or {}
     all_issues.extend(check_news_template_dispatch(_content_dict, niche))
+    # SH-147 PR B — face gate. No-op when STORY_PIPELINE_V2_ENABLED is off.
+    all_issues.extend(_run_face_gate_check(_content_dict, niche))
 
     # 0. Phase 5 — smart slide-plan gates (Phase 4 picker output validation).
     # Runs FIRST so a hallucinated/banned plan blocks the post before any
