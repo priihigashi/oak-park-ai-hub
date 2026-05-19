@@ -195,26 +195,10 @@ Check these in order — if any apply, DO IT YOURSELF instead:
 "Only YOU can do" = physical login OR content that was never provided. Nothing else.
 
 ## DRIVE — SHARED DRIVE IS DEFAULT, NEVER MY DRIVE
-
-ROUTING BY TOPIC — each topic has its own shared drive (source of truth) + a shortcut in a working cross-ref folder:
-
-| Topic | Source-of-truth drive | Drive ID | Shortcut goes to |
-|---|---|---|---|
-| Higashi / Hig Negócios / mom's site / Alexandra | Higashi Imobiliária - Claude | 0AN7aea2IZzE0Uk9PVA | Website folder 1CKWTojSg2uQmXjNnKlAaSBCTfxtSQBvH |
-| OPC / Oak Park Construction | Oak Park Construction | 0AJp3Phs0wIBOUk9PVA | TBD |
-| News (Brazil/USA news niche) | News | 0AH7_C87G0ZwgUk9PVA | TBD |
-| Stocks / investing / Robinhood | Stocks | 0AF6S_f8PH2_aUk9PVA | Originals - Stock (1JFndBkUh6Bac6MD7JKgIns2xgO188b1T) in Marketing |
-| Content / marketing / McFolling / general | Marketing | 0AIPzwsJD_qqzUk9PVA | n/a (self) |
-| AI Content / AI-generated assets / auto-captured content | AI Content | 0ACJVarTjgmFUUk9PVA | TBD (added 2026-04-14) |
-| UGC / user-generated content / creator clips | UGC | 0AEz0NlGr3tlLUk9PVA | TBD (added 2026-04-14) |
-
-RULE — TOPIC DRIVE + SHORTCUT (added + tested 2026-04-14):
-- The **file lives in the topic's shared drive** = single source of truth
-- A **shortcut** is placed in the working cross-ref folder for easy daily access
-- When Priscila mentions a topic (stocks, news, OPC, Higashi, content), route there — never mix topics
-- NEVER upload to My Drive as the final destination. My Drive = transient staging only (e.g. phone uploads before routing).
-
-Automation for phone uploads: `drive_route_file.yml` workflow in priihigashi/oak-park-ai-hub. Inputs: filename + topic → moves from My Drive to topic drive + creates shortcut. Triggered via `gh workflow run drive_route_file.yml -f filename=... -f topic=...` or from github.com/Actions UI on phone browser.
+ROUTING BY TOPIC — each topic has its own shared drive (source of truth) + a shortcut in a working cross-ref folder. Topics: Higashi · OPC · News · Stocks · Marketing · AI Content · UGC.
+RULES (stay global, non-negotiable): (1) file lives in the topic's shared drive — single source of truth; (2) shortcut goes in the working cross-ref folder; (3) NEVER mix topics; (4) NEVER upload to My Drive as the final destination — My Drive = transient staging only (e.g. iOS phone uploads before routing).
+Phone-upload automation: `drive_route_file.yml` workflow — `gh workflow run drive_route_file.yml -f filename=... -f topic=...` (script: `scripts/drive_route_file.py`).
+Full 7-row table with Drive IDs + shortcut folder IDs + shortcut creation step → `/drive-upload` SKILL.md section "Destination routing by topic". Phase 2 L migration 2026-05-19.
 
 ### ⛔ DRIVE UPLOAD — BANNED METHODS (always creates empty files / fails silently)
 
