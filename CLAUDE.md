@@ -443,29 +443,8 @@ RULE (anti-bug, stays global): chat NEVER picks the project — always pass `pro
 ## CAPTURE — CONTENT IDEA GENERATION — see `/capture` skill
 RULE (stays global, fires on every video capture): every /capture of a video MUST auto-produce content ideas from TOPICS (even if the clip is not used). Minimum: 1 carousel + 1 reel + 2-3 topic breakdowns. NEVER use the captured person's clip unless Priscila explicitly says to (topics = raw material, posts = original). Every topic idea = "explain one thing, explain it simply". Step E1 migration 2026-05-19.
 
-## 4AM AGENT — SELF-IMPROVEMENT ARCHITECTURE
-The 4AM agent (scripts/4am_agent/) runs nightly on GitHub Actions — no local machine needed.
-pattern_learner.py implements a 3-tier cost gate for plan self-improvement:
-
-TIER 1 (free — Sheets API only, zero LLM):
-  Read Flow Plans Tracker "All Docs" tab → compare DOC_ID + LAST UPDATED vs .github/agent_state/last_seen.json
-  If nothing changed → EXIT. Done. Zero tokens.
-
-TIER 2 (cheap — Drive API only, zero LLM):
-  For changed docs only → fetch first 500 chars
-  If change is trivial (date/typo) → EXIT. Still zero tokens.
-
-TIER 3 (LLM — only when meaningful change detected):
-  Send ONLY changed sections to claude-haiku (cheapest).
-  Extract: what new rule should Claude follow?
-  Write confirmed rules → 📋 Claude Rules tab in main spreadsheet.
-  Update last_seen.json in GitHub repo.
-
-RESULT: 90%+ of nights cost zero LLM tokens. Only pays when you actually change a plan doc.
-Flow Plans Tracker ID: 1fggy918FgPfnMQ-dzGQk2zx9uhi2_-uWXMKGW4MA47k (All Docs tab = agent manifest)
-State file: .github/agent_state/last_seen.json (in priihigashi/oak-park-ai-hub repo)
-
-NOTE: SA key needs read access to docs in the tracker. Share new docs with oak-park-sheets@gen-lang-client-0364933181.iam.gserviceaccount.com for agent to read them.
+## 4AM AGENT — see `/4am-agent` skill
+Runs nightly 4AM ET (8:00 UTC) via GitHub Actions on `priihigashi/oak-park-ai-hub`. 3-tier cost gate (Sheets → Drive → Haiku LLM only when needed) keeps 90%+ of nights at zero LLM tokens. Reads Flow Plans Tracker `All Docs` tab (1fggy918FgPfnMQ-dzGQk2zx9uhi2_-uWXMKGW4MA47k) as agent manifest. State files in `.github/agent_state/`. **RULE (stays global): when you create a new flow/master/process doc, SHARE it with `oak-park-sheets@gen-lang-client-0364933181.iam.gserviceaccount.com` or the agent silently skips it (403 on read).** Step E5 migration 2026-05-19.
 
 ## AIOX AGENT AUDIT — REQUIRED BEFORE AUTOMATION IS "DONE"
 Any new automation, workflow, or script is NOT done until audited by the relevant AIOX agents:
