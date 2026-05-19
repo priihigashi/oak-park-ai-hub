@@ -194,8 +194,8 @@ Key Drive docs: Content_Creation_Master_Plan.docx (_Master Plans & Docs), SKILL_
 Key spreadsheets: Ideas & Inbox 1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU (tabs: Inspiration Library, Content Queue, Scraping Targets, Clip Collections) | Content Control 1C1CAZ8lSgeVLSSCYIg-D9XPJcSLHyIOh1okKtvhZZQg
 Flow Plans Tracker (all master/flow docs indexed): 1fggy918FgPfnMQ-dzGQk2zx9uhi2_-uWXMKGW4MA47k
 
-## WHEN SHE DROPS A URL
-Save to Inspiration Library tab (Ideas & Inbox) immediately. Create calendar task with full URL, /capture instructions, purpose, Drive links.
+## WHEN SHE DROPS A URL — see `/capture` skill
+DEFAULT: queue to `📲 Capture Queue` tab in Ideas & Inbox (sheetId 124307869), pass `project=auto`, NO pipeline trigger unless she explicitly asks ("run capture pipeline" / "capture this now" / "run it now"). Articles, tools, GitHub links, plain text ideas → log to `📥 Inbox` tab directly. Step E1 migration 2026-05-19.
 
 ## CALENDAR — see `/calendar-create` SKILL.md
 Every calendar event MUST include: source URLs, numbered action steps, tools to use, Drive links. 3-route fallback (MCP deferred-load / Composio / Python OAuth). sheets_token.json HAS calendar scope (confirmed 2026-04-12 — see Known Mistake #14). NEVER tell Priscila to add the event herself unless all 3 routes fail. Step D migration 2026-05-18.
@@ -437,24 +437,11 @@ Located: News drive > Brazil > Carousel > Quem-Decidiu-Isso > v1_rachadinha (sta
 
 This rule applies to ALL skills that produce or edit content (carousel, reel, hooks, copy, html-to-image).
 
-## CAPTURE — RUNNER-SIDE AUTO-DETECT, CHAT NEVER PICKS (added 2026-04-27)
-Chat does NOT pick the project for `/capture`. Always pass `project=auto` to Capture Pipeline v2 unless Priscila explicitly named the niche. The runner classifies via transcript + caption + her notes:
-- Tier 1: notes-keyword override (zero tokens)
-- Tier 2: Claude Haiku JSON classify (`book|brazil|opc|ugc|usa|stocks|higashi`)
-- Tier 3: confidence < 0.70 → `unrouted` (lands in Marketing/Captures - Unrouted, status "Not Identified" in Inspiration Library, weekly digest email Sundays 13:00 UTC)
-Default fallback is NEVER `book` and NEVER `opc` — it is `unrouted`. See `scripts/routing.py::get_route()` and `scripts/capture/capture_pipeline.py::detect_project()`. Memory: `feedback_post_compaction_execute_pending.md`.
+## CAPTURE — AUTO-DETECT — see `/capture` skill
+RULE (anti-bug, stays global): chat NEVER picks the project — always pass `project=auto`. Runner uses 3-tier classify (notes-keyword → Claude Haiku → unrouted at conf <0.70). **Default fallback is NEVER `book` and NEVER `opc` — it is `unrouted`.** See `scripts/routing.py::get_route()` + `scripts/capture/capture_pipeline.py::detect_project()`. Step E1 migration 2026-05-19.
 
-## CAPTURE — CONTENT IDEA GENERATION (added 2026-04-12)
-Every /capture of a video MUST auto-produce content ideas from the TOPICS, even if the clip itself is not used.
-The goal is always: extract topics → build original content inspired by them.
-
-MINIMUM output per video capture:
-- 1 carousel idea (with angle + slide structure outline)
-- 1 reel idea (with hook + format)
-- 2-3 additional topic breakdowns (each = one post idea, one concept per post)
-
-RULE: Never use the captured person's clip unless Priscila explicitly says to. Topics = raw material. Posts = original.
-RULE: Every topic idea should be "explain one thing, explain it simply" — not a summary of the whole video.
+## CAPTURE — CONTENT IDEA GENERATION — see `/capture` skill
+RULE (stays global, fires on every video capture): every /capture of a video MUST auto-produce content ideas from TOPICS (even if the clip is not used). Minimum: 1 carousel + 1 reel + 2-3 topic breakdowns. NEVER use the captured person's clip unless Priscila explicitly says to (topics = raw material, posts = original). Every topic idea = "explain one thing, explain it simply". Step E1 migration 2026-05-19.
 
 ## 4AM AGENT — SELF-IMPROVEMENT ARCHITECTURE
 The 4AM agent (scripts/4am_agent/) runs nightly on GitHub Actions — no local machine needed.
