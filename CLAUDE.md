@@ -3,22 +3,10 @@
 # Shared task skills live in ~/.agents/skills/<name>/SKILL.md (symlinked into ~/.claude/skills/ and ~/.codex/skills/).
 # Codex mirror: ~/AGENTS.md. Repo source of truth: priihigashi/oak-park-ai-hub.
 
-## PIPELINE REFERENCE DOC — END-TO-END SYSTEM MAP (added 2026-04-19)
-Single source of truth for the full content automation pipeline: URL drop → capture → 4AM agent → carousel build → approval → Buffer → posted.
+## PIPELINE REFERENCE DOC — END-TO-END SYSTEM MAP
+Single source of truth for the content automation pipeline: URL drop → capture → 4AM agent → carousel build → approval → Buffer → posted.
 Doc: https://docs.google.com/document/d/1XGmbnvyS_WomKl3USVFz-pPg-3agTn5Bl0QpyMbeHs4/edit
-Doc ID: 1XGmbnvyS_WomKl3USVFz-pPg-3agTn5Bl0QpyMbeHs4
-USE THIS FOR:
-  — Cold-start orientation: what does this system do and how? (scannable in 2 min)
-  — Debugging: which script handles which stage? what triggers what?
-  — Finding any spreadsheet ID, Drive folder ID, or env var in the pipeline
-  — Understanding failure modes and recovery steps
-  — Identifying manual gaps (what still requires human action)
-COVERS: capture stage, 4AM agent flow, content creator, approval handler, Buffer scheduling,
-  credentials map, folder map, failure playbook, manual gaps, undocumented scripts, glossary.
-BUILT FROM: live script audit of capture_pipeline.py, main.py, carousel_builder.py,
-  approval_handler.py, 4am_agent/, and all .github/workflows/ YML files (2026-04-19).
-STATUS: ACTIVE. Replaces Content Automation Master Plan v1.0 (archived) and Content_Creation_Master_Plan (archived).
-Supplements: CAPTURE_MASTER_PLAN (keep + edits needed), CONTENT_FORMATS.md (keep).
+Use it for cold-start orientation, stage ownership, IDs/env vars, failure modes, recovery steps, and manual gaps. Built from live script audit 2026-04-19. Step F compressed 2026-05-19.
 
 ## CONNECTIONS — always active, never ask for access
 
@@ -116,30 +104,10 @@ RULE: Any new spreadsheet created OR any new tab added to an existing spreadshee
 Columns: SPREADSHEET | TAB | PURPOSE | LINK | SPREADSHEET ID
 
 ## KEY IDs — verified
-Main spreadsheet: 1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU (Ideas & Inbox)
-Content sheet: 1C1CAZ8lSgeVLSSCYIg-D9XPJcSLHyIOh1okKtvhZZQg (Content Queue/Blog)
-Spreadsheet Hub: 1qDbO6JQX0cKbZ9rHjiM7a4U_p7OOddZ3k3Sp30JJoqo (Marketing → Resource Hub)
-GitHub repo: priihigashi/oak-park-ai-hub
-ClaudeWorkspace: ~/ClaudeWorkspace/
-Credentials dir: ~/ClaudeWorkspace/Credentials/
-Service account (sheets): oak-park-sheets@gen-lang-client-0364933181.iam.gserviceaccount.com — ALREADY SHARED on all 3 sheets. If a script gets a 403, share it using the OAuth token (see reference_credentials.md) — NEVER ask Priscila to do this manually.
-Capture folders (per niche — routing.py is source of truth, call capture_folder(project)):
-  OPC     → 19SIHYkGYM3EsaudQUGtnYLmhVTYfMkZh (Marketing/Content/Captures, verified 2026-04-20)
-  Brazil  → 1DZWbS4bF4XF_OjJSnD02WD2N83ljXwHd (News/Brazil/Captures)
-  USA     → 1ZzrEmj3Smt0chr8CxiCOyroFCRzE-zU1 (News/USA/Captures)
-  UGC     → 1b5fCmWn6cUkZSjhaZKGFmaKDc4MafY3U (UGC/Captures)
-  Stocks  → 17oazrbMM1lBeFAGNCaFp8sjnAMWbVdSI (Stocks/Captures)
-  Higashi → 1UtJp_8Rn49D7zdk70qhXxswXYFpFBLPG (Higashi Imobiliária - Claude/content/capture, verified 2026-04-20)
-Carousel parent folders (per niche — routing.py: carousel_folder_id):
-  OPC     → 16P2JN74JAAW3HKnmNqPGPrAq7N5jDNii (Marketing/Content/carousel, verified 2026-04-20)
-  Brazil  → 1gDOjtW_X-_jWtu94pffbDaUsw6VGCKuA (News/Brazil/Carousel)       ← series live at News/Brazil/Content/Series/* (migration pending)
-  USA     → 1lRfZE5XC_gL57pUiiWu0Lhar9wfyCtFw (News/USA/Carousel)          ← series live at News/USA/Content/Series/* (migration pending)
-Reels_Shorts parent folders (per niche — routing.py: reels_folder_id):
-  OPC     → 1jW3WUQEPpfJNgje-4YGyFT4inKgzWrt7 (Marketing/Content/Reels_Shorts)
-  Brazil  → 1IY4TJyv9Dk1qJPdhskyn4flj1g1jp0Kl (News/Brazil/Reels_Shorts)
-  USA     → 1EN2HhPzmUnwjXhXpaaf1hO52REAo7wB0 (News/USA/Reels_Shorts)
-NOTE: content_creator/main.py hardcodes series-level _TEMPLATE_CAROUSEL IDs (lines 37–41) and does NOT yet read carousel_folder_id from routing.py. OPC ✅ aligns. Brazil/USA series live at <niche>/Content/Series/, not under <niche>/Carousel/ — pending Priscila decision to migrate or update routing.
-Content Creation (Drive): 1um7y2Yt8zi9KGxev6kfFJYgrkMYwrCNh — OPC production workspace (Art/Caption/Reel + Claude brief).
+Core: Ideas & Inbox `1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU`; Content Queue/Blog `1C1CAZ8lSgeVLSSCYIg-D9XPJcSLHyIOh1okKtvhZZQg`; Spreadsheet Hub `1qDbO6JQX0cKbZ9rHjiM7a4U_p7OOddZ3k3Sp30JJoqo`; repo `priihigashi/oak-park-ai-hub`; workspace `~/ClaudeWorkspace/`; credentials `~/ClaudeWorkspace/Credentials/`.
+Service account: `oak-park-sheets@gen-lang-client-0364933181.iam.gserviceaccount.com` — already shared on core sheets. If a script gets a 403, share it using OAuth token instructions in `reference_credentials.md`; NEVER ask Priscila to do this manually.
+Routing IDs: capture/carousel/reels parents live in `scripts/routing.py` and should be resolved with `capture_folder(project)` / `get_route(niche)`, not copied from memory. Current carousel production writes to `get_route(niche)["carousel_folder_id"]`; old `_TEMPLATE_CAROUSEL` anchors are legacy/template references. Step F compressed 2026-05-19.
+OPC Content Creation workspace: `1um7y2Yt8zi9KGxev6kfFJYgrkMYwrCNh` (Art/Caption/Reel + Claude brief).
 
 ## HIG NEGÓCIOS IMOBILIÁRIOS — ROUTING (mom's Brazil RE site)
 Any time she mentions: "Hig", "Higashi site", "mom's site", "Brazil website", "hig-negocios", "Alexandra's site" → use these locations ONLY:
@@ -401,33 +369,8 @@ Before committing ANY fix to validation, checking, or reviewer logic, run this c
 Skipping this checklist = the next audit will find the same gaps. Discovered 2026-05-05 after missing all 4 on carousel_reviewer.py image validation.
 
 ## SKILLS & AGENTS DIRECTORY
-Full index of all available skills (/command) and agents (@name) lives in Drive Map — ALL DRIVES:
-- Spreadsheet: Drive Map — ALL DRIVES (10qxtM_s22Z9HNVXsnBJa1WjTYCsraPa8O2uI0VEa1Zo)
-- Tab: 🤖 Skills & Agents (sheetId=806704177)
-- Columns: CATEGORY | SUB-CATEGORY | TYPE | COMMAND | DESCRIPTION | GOOD FOR
-- 62 entries. Filter by CATEGORY column to find the right tool fast.
-NOTE: Drive Map — ALL DRIVES is the master resource map. Tabs: Folders, Docs, Sheets, GitHub & Scripts, Local Scripts, Flows, Series, Skills & Agents. NOT Ideas & Inbox. NOT Spreadsheet Hub.
-
-15 CATEGORIES:
-- YOUR SYSTEM — /content-chief (Vera), /capture, /daily-planner, 4AM agent, Capture Pipeline
-- COPY — /copy-chief, /copy-squad, /brand-voice, /email-sequence
-- HORMOZI — /hormozi-hooks, /hormozi-offer, /hormozi-leads, /hormozi-closer
-- BRAND — /brand-chief, /brand-palette, /brand-typography, /brand-identity
-- TRAFFIC — /traffic-masters, /seo-chief, /paid-ads-chief, /social-chief
-- ADVISORY — /advisory-simon-sinek, /advisory-gary-vee, /advisory-alex-hormozi
-- STORYTELLING — /storytelling-story-chief, /storytelling-arc, /storytelling-hook
-- DESIGN — /design-chief, /design-carousel, /design-thumbnail
-- C-LEVEL — /ceo-chief, /cfo-chief, /cmo-chief, /coo-chief
-- MOVEMENT — /movement-chief, /movement-rally, /movement-manifesto
-- DATA — /data-chief, /data-analyst, /data-dashboard
-- CYBERSECURITY — /cybersec-chief, /cybersec-audit
-- AIOX DEV — /AIOX-analyst (Atlas), /AIOX-architect, /AIOX-dev (Dex), /AIOX-devops (Gage), /AIOX-qa (Quinn), /AIOX-squad-creator (Craft)
-- CLAUDE CODE — Claude Code CLI features, hooks, MCP, slash commands
-- UTILITY — /yolo, /help, /exit, general utilities
-
-RULE: Before starting any task, check this tab — a specialized skill/agent may already exist for it.
-RULE: 4AM agent invokes /content-chief (Vera) for Talking Head script generation — see 4AM AGENT section.
-When she says "do we have a skill for X" → check this tab first before saying no.
+Full index of skills (/command) and agents (@name) lives in Drive Map — ALL DRIVES `10qxtM_s22Z9HNVXsnBJa1WjTYCsraPa8O2uI0VEa1Zo`, tab `🤖 Skills & Agents` (`sheetId=806704177`). Columns: CATEGORY | SUB-CATEGORY | TYPE | COMMAND | DESCRIPTION | GOOD FOR.
+RULE: Before starting a task, check this tab; a specialized skill/agent may already exist. When she says "do we have a skill for X" → check this tab first before saying no. 4AM agent invokes `/content-chief` (Vera) for Talking Head script generation. Step F compressed 2026-05-19.
 
 ## AI ANALYSIS — EVIDENCE-DRIVEN RULE (global, added 2026-04-29)
 
@@ -448,24 +391,21 @@ Banned phrases: "Could be seasonal", "Maybe a competitor change", any (a)(b)(c) 
 Full pattern + implementation: `~/.claude/projects/-Users-priscilahigashi/memory/feedback_evidence_driven_ai_insights.md`
 
 ## KNOWN REPEAT MISTAKES — read and prevent
-1. Said "I may not have access" when connection was already active → CHECK connections file first
-2. Listed completed tasks as "next steps" instead of doing them → do it now or explain why blocked
-3. Wrote vague "Only YOU" items with no steps → always include why/where/what/steps
-4. Referenced error codes (like "403") without explaining what they are → always explain in plain language
-5. Changed the wrong spreadsheet ID when editing a script → read full script, list all IDs first
-6. Guessed which spreadsheet a GitHub secret (e.g. GOOGLE_SHEET_ID) pointed to → STOP, ask for the value. Never guess. Document confirmed secret→ID mappings in reference_credentials.md
-7. OAuth + My Drive folder ID → file silently goes to My Drive. Fix: use SHARED DRIVE folder ID + supportsAllDrives=true in the API request. The scope is fine; the folder ID is what determines destination.
-8. Reported "uploaded" when file went to wrong location → NEVER confirm upload without verifying it appears in the correct shared drive path
-9. Used markdown tables in GOOGLEDOCS_UPDATE_DOCUMENT_MARKDOWN → 400 INVALID_ARGUMENT error → NEVER use markdown tables. Use plain text labels instead.
-10. Script uploading to shared Drive folder returns 404 even with correct folder ID → ALWAYS check that the upload API URL includes `supportsAllDrives=true`. Missing this parameter causes 404 on any shared drive folder. Fix: add `&supportsAllDrives=true` to the upload URL. When writing or auditing any Drive upload script, verify this parameter is present.
-11. `mcp__gdrive__search` returns `MCP error -32603: invalid_request` → server-side failure. Do NOT retry it. Immediately switch to `mcp__claude_ai_Google_Drive__search_files` (Route A). If that also fails, use OAuth Python Drive API (Route C). Never report Drive search as blocked without trying all 3 routes. See: reference_active_connections.md → "Drive Search & Access — 3 Routes"
-12. Gmail MCP reported as "not loading in this IDE session" → it IS available but as a DEFERRED tool. Fix: call ToolSearch("select:mcp__claude_ai_Gmail__gmail_create_draft,mcp__claude_ai_Gmail__gmail_list_labels") FIRST, then call the tool. Always load deferred tools before calling them.
-15. Gmail filter creation blocked with "missing gmail.settings.basic scope" → Composio Gmail connection was authorized without the settings scope. Labels/read/write work fine. Filter creation requires a one-time reconnect by Priscila at app.composio.dev → Connections → Gmail → Reconnect → check "Manage your email settings". This is NOT a Google Cloud API issue — the API is enabled. It is a Composio OAuth scope issue. After reconnect, filter creation works immediately.
-14. Calendar MCP reported as "doesn't load in VSCode IDE extension" or "OAuth token has no Calendar scope" → BOTH WRONG. Calendar MCP tools are DEFERRED — load schema via ToolSearch first: ToolSearch("select:mcp__claude_ai_Google_Calendar__gcal_create_event"). Then call normally. Confirmed working 2026-04-12. OAuth scope is irrelevant — MCP uses its own auth, not sheets_token.json.
-13. Gmail MCP used when task required SENDING email → Gmail MCP CANNOT send, only creates drafts. For actual sending: trigger GitHub Actions `send_email.yml` via `~/bin/gh workflow run send_email.yml --repo priihigashi/oak-park-ai-hub -f to=... -f subject=... -f body=...`. This uses PRI_OP_GMAIL_APP_PASSWORD (already set) and actually delivers the email. Same pattern as 4am_agent.yml. → this is a server-side failure from the gdrive MCP server, NOT a query formatting issue. Do NOT retry it. Immediately switch to `mcp__claude_ai_Google_Drive__search_files` (Route A). If that also fails, use OAuth Python Drive API (Route C). Never report Drive search as blocked without trying all 3 routes. See: reference_active_connections.md → "Drive Search & Access — 3 Routes"
-16. Invented or assumed a GitHub secret name → SILENT FAILURE. Scripts receive empty string and fail with no error. MANDATORY: Before referencing, adding, renaming, or auditing ANY secret/API key in any script or workflow, run `~/bin/gh secret list --repo priihigashi/oak-park-ai-hub` FIRST. The list is the ONLY source of truth. Never write a key name from memory. See: memory/feedback_always_check_github_secrets_first.md
-17. Trusted GitHub Actions `conclusion: success` as proof a pipeline worked. WRONG. Many scripts catch exceptions, print "failed", and exit 0 → run is marked ✅ even when Drive uploads, API calls, or whole rounds were skipped. **MANDATORY before reporting any workflow run as successful**: (a) `~/bin/gh run view <ID> --log` and grep for `failed|error|401|403|skipped|unauthorized|exception`, (b) check the `🚨 Pipeline Failures` tab in Ideas & Inbox filtered by RUN_ID. GitHub status ≠ actual success. Discovered 2026-04-27 — video-research.yml had been silently 401-ing on Drive uploads + skipping Rounds 2/3 since first deploy. See: memory/feedback_check_logs_for_silent_failures.md
-18. GOOGLEDOCS_UPDATE_DOCUMENT_MARKDOWN overwrites the ENTIRE document — it does NOT append. Writing to an existing doc without reading it first = all prior history is permanently destroyed. Happened 2026-05-01 on the Feedback Log (1zonzZNmW5wdDmtJxzozyqaBpf1i6KX068vEyhJ2qb_4). **MANDATORY 3-step rule for ANY write to an existing Google Doc**: (1) Read current content first via GOOGLEDOCS_GET_DOCUMENT. (2) If GET fails → STOP. Do NOT write. Do NOT assume the doc is empty. Create a NEW doc instead. (3) If GET succeeds → combine existing + new content, write the full combined result. This applies to: feedback logs, session logs, editorial logs, handoff docs, productivity docs, any doc that accumulates history. See: memory/feedback_googledocs_never_overwrite.md
+Full lessons live in `~/.claude/projects/-Users-priscilahigashi/memory/` plus `NONNEGOTIABLES.md`. Keep these global anti-bug reminders visible:
+1. Never say "I may not have access" before checking `reference_active_connections.md`.
+2. Do completed tasks now; do not list them as "next steps."
+3. "Only YOU can do" must include why / where / what / exact steps.
+4. Explain error codes in plain language.
+5. Before editing scripts, read the full file and list every ID/path/env var.
+6. Never guess a GitHub secret name or which spreadsheet it maps to; run `~/bin/gh secret list --repo priihigashi/oak-park-ai-hub` and document confirmed mappings in `reference_credentials.md`.
+7. Drive uploads/searches: shared-drive folder ID + `supportsAllDrives=true`; list/search also needs `includeItemsFromAllDrives=true`; verify final shared-drive path before reporting upload done.
+8. `mcp__gdrive__search` `-32603` is server-side; switch routes immediately and try OAuth before reporting blocked.
+9. Deferred Gmail/Calendar/Drive/Canva/Vercel MCP tools are not absent; load schema via ToolSearch first.
+10. Gmail MCP drafts only. To send, use `send_email.yml` or SMTP fallback with `PRI_OP_GMAIL_APP_PASSWORD`.
+11. Never use markdown tables in `GOOGLEDOCS_UPDATE_DOCUMENT_MARKDOWN`; use plain text labels.
+12. Never write to an existing Google Doc before reading it first; that tool overwrites the whole doc.
+13. GitHub Actions green check is not proof; inspect logs for `failed|error|401|403|skipped|unauthorized|exception` and check `🚨 Pipeline Failures`.
+Step F compressed 2026-05-19; no anti-bug reminders intentionally removed.
 
 ## PIPELINE FAILURE LOG — 🚨 Pipeline Failures tab (added 2026-04-27)
 Every pipeline writes silent + loud failures to ONE place: `Ideas & Inbox` → `🚨 Pipeline Failures` tab (sheetId 448272280).
