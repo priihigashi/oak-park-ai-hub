@@ -12,8 +12,15 @@ try:
     from _llm_fallback import llm_text as _llm_text_cascade
 except Exception:
     _llm_text_cascade = None
-from contract_loader import load_contract
-from story_outline import attach_story_outline, story_pipeline_enabled
+try:
+    from contract_loader import load_contract
+    from story_outline import attach_story_outline, story_pipeline_enabled
+except Exception:
+    load_contract = None
+    attach_story_outline = None
+
+    def story_pipeline_enabled(env=None):
+        return False
 
 ANTHROPIC_KEY  = os.environ.get("CLAUDE_KEY_4_CONTENT", "")
 OPENAI_KEY     = os.environ.get("OPENAI_API_KEY", "")
@@ -1378,7 +1385,12 @@ Return ONLY a valid JSON object:
 
 def _attach_story_pipeline_metadata(content, *, topic, niche, template_key=None):
     """Attach STORY/SH metadata only when STORY_PIPELINE_V2_ENABLED is on."""
-    if not story_pipeline_enabled() or not isinstance(content, dict):
+    if (
+        load_contract is None
+        or attach_story_outline is None
+        or not story_pipeline_enabled()
+        or not isinstance(content, dict)
+    ):
         return content
 
     route = "news" if niche in ("brazil", "usa") else niche
