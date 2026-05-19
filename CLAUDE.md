@@ -402,22 +402,8 @@ Script implication: `carousel_builder.py` prompts should emit a `visual_hint` pe
 
 Source: Priscila (2026-04-17): *"hooks you don't wanna just have text and text... every other slide we think about how could we have an image here."* See memory: `feedback_visual_every_other_slide.md`.
 
-## HTML → IMAGE (deterministic export) — DEFAULT FLOW, NEVER SUBSTITUTE
-
-When Priscila says "turn this HTML into image", "convert to png", "export slides", "save the carousel", or approves an HTML design and asks for the final images:
-
-1. USE THE SKILL: `/html-to-image` (~/.agents/skills/html-to-image/SKILL.md)
-2. Script: `node "/Users/priscilahigashi/ClaudeWorkspace/Content Templates/_Scripts/export_slides.js" "<input.html>" "<output_dir>"`
-3. Default Drive destination: **Marketing > Image Creation > html to image** — folder ID `1tE-2Ps8V8ZKQ4etyvzk47ZWyzeHAD2nk` (shared drive `0AIPzwsJD_qqzUk9PVA`)
-4. If the carousel belongs to a specific series (News > Templates > Carousel, OPC Templates, Higashi), upload a COPY there too — but master set ALWAYS mirrors to `html to image`.
-
-**Non-substitution rule — enforced:**
-- NEVER dispatch OpenAI / Ideogram / Recraft / Seedream / Canva AI / Nano Banana to "convert HTML to image". Those are text-to-image AI — they hallucinate a new design, text drifts, layout drifts. They are ONLY valid when Priscila explicitly says "test tools" or "explore styles".
-- Remotion is a sibling deterministic path for React-source templates. HTML-source = `/html-to-image`. Same-design guarantee.
-- If the HTML structure is broken, FIX the HTML or adapt export_slides.js minimally — never regenerate the design in another tool.
-
-Verification before reporting done: file count = `.slide` element count; every PNG ≥ 15KB; slide sizes differ (blank-slide bug check).
-Full doc: `~/.agents/skills/html-to-image/SKILL.md` + memory `project_html_to_image_flow.md` + Flow Plans Tracker row `FLOW_html_to_image`.
+## HTML → IMAGE — see `/html-to-image` SKILL.md
+TRIGGER: "turn this HTML into image", "convert to png", "export slides", "save the carousel", "approve this design + render". RULE (anti-bug, stays global): html→image = DETERMINISTIC via Playwright (`/html-to-image` skill, `export_slides.js`). NEVER substitute with text-to-image AI (OpenAI, Ideogram, Recraft, Seedream, Canva AI, Nano Banana) — they hallucinate the design, text drifts, layouts drift. Remotion is sibling deterministic path for React-source templates. Default Drive destination: Marketing > Image Creation > html to image (folder 1tE-2Ps8V8ZKQ4etyvzk47ZWyzeHAD2nk). Step E4 migration 2026-05-19.
 
 ## CONTENT FORMATS — living registry of approved post formats
 File: ~/ClaudeWorkspace/_Master Plans & Docs/CONTENT_FORMATS.md
