@@ -197,7 +197,7 @@ Check these in order — if any apply, DO IT YOURSELF instead:
 ## DRIVE — SHARED DRIVE IS DEFAULT, NEVER MY DRIVE
 ROUTING BY TOPIC — each topic has its own shared drive (source of truth) + a shortcut in a working cross-ref folder. Topics: Higashi · OPC · News · Stocks · Marketing · AI Content · UGC.
 RULES (stay global, non-negotiable): (1) file lives in the topic's shared drive — single source of truth; (2) shortcut goes in the working cross-ref folder; (3) NEVER mix topics; (4) NEVER upload to My Drive as the final destination — My Drive = transient staging only (e.g. iOS phone uploads before routing).
-Phone-upload automation: `drive_route_file.yml` workflow — `gh workflow run drive_route_file.yml -f filename=... -f topic=...` (script: `scripts/drive_route_file.py`).
+Phone-upload automation: `drive_route_file.yml` workflow — `gh workflow run drive_route_file.yml -f filename=... -f topic=...` OR trigger from github.com/Actions UI on phone browser (script: `scripts/drive_route_file.py`).
 Full 7-row table with Drive IDs + shortcut folder IDs + shortcut creation step → `/drive-upload` SKILL.md section "Destination routing by topic". Phase 2 L migration 2026-05-19.
 
 ### ⛔ DRIVE UPLOAD — BANNED METHODS (always creates empty files / fails silently)
