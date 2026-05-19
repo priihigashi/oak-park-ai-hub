@@ -95,12 +95,8 @@ When a mistake is identified or a rule is established:
 4. The 4AM agent (pattern_learner.py) runs daily and propagates patterns to skills automatically
 
 ## SPREADSHEET HUB — source of truth for all tabs
-Every spreadsheet and every tab is indexed in the Spreadsheet Hub:
-- File: Marketing → Resource Hub → Spreadsheet Hub
-- ID: 1qDbO6JQX0cKbZ9rHjiM7a4U_p7OOddZ3k3Sp30JJoqo
-- Link: https://docs.google.com/spreadsheets/d/1qDbO6JQX0cKbZ9rHjiM7a4U_p7OOddZ3k3Sp30JJoqo
-
-RULE: Any new spreadsheet created OR any new tab added to an existing spreadsheet → immediately add a row to the Hub. One row per tab. Never skip this step.
+Every spreadsheet and every tab is indexed in the Spreadsheet Hub (Marketing → Resource Hub → Spreadsheet Hub, ID `1qDbO6JQX0cKbZ9rHjiM7a4U_p7OOddZ3k3Sp30JJoqo`).
+RULE: Any new spreadsheet created OR any new tab added → immediately add a row. One row per tab. Never skip this step.
 Columns: SPREADSHEET | TAB | PURPOSE | LINK | SPREADSHEET ID
 
 ## KEY IDs — verified
@@ -123,19 +119,9 @@ Any time she mentions: "Hig", "Higashi site", "mom's site", "Brazil website", "h
 RULE: NEVER save Higashi website files to Marketing/Claude Code Workspace or oak-park-ai-hub. Always use the Higashi-specific paths above.
 
 ## FLOW PLANS TRACKER — LOG EVERY NEW FLOW DOC
-Every new flow doc, master plan, process doc, how-to, or niche strategy doc created → add a row immediately.
-- Spreadsheet: Flow Plans Tracker — Master Index
-- ID: 1fggy918FgPfnMQ-dzGQk2zx9uhi2_-uWXMKGW4MA47k
-- Location: Marketing > Claude Code Workspace
-- Link: https://docs.google.com/spreadsheets/d/1fggy918FgPfnMQ-dzGQk2zx9uhi2_-uWXMKGW4MA47k
-
-Tab guide:
-- Flow Plans — process/how-to docs (video flow, capture flow, content pipeline, carousel lessons, website plan)
-- Niche Plans — niche strategy docs (Brazil, OPC — docs focused on a specific niche)
-- All Docs — EVERY doc goes here regardless of type (master index)
-
-Columns for All Docs: NAME | TYPE | NICHE | STATUS | DESCRIPTION | OPEN | DOC_ID | TABS | LAST UPDATED
-NEVER skip this step. This is the master index that keeps all plans findable.
+Every new flow doc, master plan, process doc, how-to, or niche strategy doc → add a row to the Flow Plans Tracker — Master Index (`1fggy918FgPfnMQ-dzGQk2zx9uhi2_-uWXMKGW4MA47k`, Marketing > Claude Code Workspace). All Docs tab is the master index — every doc goes there regardless of type.
+RULE: NEVER skip this step. The 4AM agent reads All Docs as its manifest; missing rows = the agent can't see the doc.
+Tab guide + column schema → memory `reference_flow_plans_tracker.md`. Phase 2 H2 migration 2026-05-19.
 
 ## GITHUB SECRETS NAMING CONVENTION
 All secrets in priihigashi/oak-park-ai-hub use the prefix that identifies the account:
@@ -338,22 +324,11 @@ RULE (stays global, fires on every video capture): every /capture of a video MUS
 Runs nightly 4AM ET (8:00 UTC) via GitHub Actions on `priihigashi/oak-park-ai-hub`. 3-tier cost gate (Sheets → Drive → Haiku LLM only when needed) keeps 90%+ of nights at zero LLM tokens. Reads Flow Plans Tracker `All Docs` tab (1fggy918FgPfnMQ-dzGQk2zx9uhi2_-uWXMKGW4MA47k) as agent manifest. State files in `.github/agent_state/`. **RULE (stays global): when you create a new flow/master/process doc, SHARE it with `oak-park-sheets@gen-lang-client-0364933181.iam.gserviceaccount.com` or the agent silently skips it (403 on read).** Step E5 migration 2026-05-19.
 
 ## AIOX AGENT AUDIT — REQUIRED BEFORE AUTOMATION IS "DONE"
-Any new automation, workflow, or script is NOT done until audited by the relevant AIOX agents:
-- /AIOX-architect — system design, API routing, architecture decisions
-- /AIOX-devops — GitHub Actions workflows, secrets, deployment
-- /AIOX-dev — script quality, error handling, code correctness
-Invoke them in order. If any agent flags an issue, fix it before marking done.
-This applies to: new GitHub Actions workflows, new Python scripts, new integrations, new routing logic.
-Skip only for minor edits (typo fixes, copy changes, formatting).
+New automations (GitHub Actions workflows, Python scripts, integrations, routing logic) are NOT done until audited by `/AIOX-architect` → `/AIOX-devops` → `/AIOX-dev` in that order. Fix any flag before marking done.
+Skip only for minor edits (typo fixes, copy changes, formatting). Phase 2 H6 migration 2026-05-19.
 
-## CLAUDE.MD DRIVE MIRROR
-A read-only mirror of ~/.claude/CLAUDE.md lives in Drive:
-- Folder: Marketing > Claude Code Workspace > _Master Plans & Docs
-- Doc name: CLAUDE_MD_MIRROR
-- Doc ID: stored in reference_credentials.md after first creation
-- The 4AM agent pushes an updated copy every night via Drive API
-- Never edit from Drive. Local file is authoritative.
-- Use the mirror to read CLAUDE.md from phone or other sessions.
+## CLAUDE.MD DRIVE MIRROR — see `/4am-agent` skill
+Read-only nightly mirror at Marketing > Claude Code Workspace > _Master Plans & Docs > `CLAUDE_MD_MIRROR`. Local file is authoritative — NEVER edit from Drive (next nightly push overwrites). Use mirror for phone access. Full detail (folder, doc-ID storage, failure modes) in `/4am-agent` skill. Phase 2 H7 migration 2026-05-19.
 
 ## SCRIPT / CODE EDITING RULE — NON-NEGOTIABLE
 Never rewrite a working script from scratch. Only change what is strictly necessary.
