@@ -4,7 +4,7 @@
 > Any change that removes or breaks a locked rule requires an explicit note in the commit message.
 > Auto-updated nightly by `scripts/nonnegotiables_updater.py`.
 
-_Last updated: 2026-05-18 (auto-updated by nonnegotiables_updater.py)_
+_Last updated: 2026-05-19 (auto-updated by nonnegotiables_updater.py)_
 
 ---
 
@@ -1174,3 +1174,43 @@ END OF MOTION SYSTEM V2 SPEC — Phase 1 closed 2026-05-18
 
 - **SCRIPT / CODE EDITING RULE — NON-NEGOTIABLE** (from repo CLAUDE.md, 2026-05-18)
   Never rewrite a working script from scratch. Only change what is strictly necessary. Before any edit: read the full file, list what you're changing and why. Good things already in the script must be p
+
+
+- **DRIVE — SHARED DRIVE IS DEFAULT, NEVER MY DRIVE** (from repo CLAUDE.md, 2026-05-19)
+  ROUTING BY TOPIC — each topic has its own shared drive (source of truth) + a shortcut in a working cross-ref folder: | Topic | Source-of-truth drive | Drive ID | Shortcut goes to | |---|---|---|---| |
+
+
+- **⛔ DRIVE UPLOAD — BANNED METHODS (always creates empty files / fails silently)** (from repo CLAUDE.md, 2026-05-19)
+  These methods are **banned** for uploading file bytes. They "succeed" but the file ends up empty. Every chat that has struggled with Drive uploads has been reaching for these: 1. ❌ `GOOGLEDRIVE_CREATE
+
+
+- **NAMED-PERSON → FACE RULE, NON-NEGOTIABLE (added 2026-04-17)** (from repo CLAUDE.md, 2026-05-19)
+  When content names a person (politician, business owner, accused, witness, victim, worker), their face MUST appear on that slide/frame. No exceptions. Pre-render checklist (run before exporting PNGs):
+
+
+- **CAROUSEL FOLDER STANDARD — CROSS-NICHE, NON-NEGOTIABLE (added 2026-04-16)** (from repo CLAUDE.md, 2026-05-19)
+  Every carousel build — OPC, Brazil News, USA News, UGC, any niche — lands in the SAME Drive shape: ``` <Niche Drive>/.../<Series>/_TEMPLATE_CAROUSEL/ v1_<slug>/          ← static PNGs + cover.html + r
+
+
+- **MOTION IS DEFAULT ON — NON-NEGOTIABLE (added 2026-04-17)** (from repo CLAUDE.md, 2026-05-19)
+  Every carousel build ships BOTH static PNGs AND motion (MP4 + GIF + preview frame). Motion = default ON. Off only when Priscila explicitly says "static only" for that specific post. Applies to ALL pat
+
+
+- **HTML → IMAGE (deterministic export) — DEFAULT FLOW, NEVER SUBSTITUTE** (from repo CLAUDE.md, 2026-05-19)
+  When Priscila says "turn this HTML into image", "convert to png", "export slides", "save the carousel", or approves an HTML design and asks for the final images: 1. USE THE SKILL: `/html-to-image` (~/
+
+
+- **CAPTURE — RUNNER-SIDE AUTO-DETECT, CHAT NEVER PICKS (added 2026-04-27)** (from repo CLAUDE.md, 2026-05-19)
+  Chat does NOT pick the project for `/capture`. Always pass `project=auto` to Capture Pipeline v2 unless Priscila explicitly named the niche. The runner classifies via transcript + caption + her notes:
+
+
+- **AIOX AGENT AUDIT — REQUIRED BEFORE AUTOMATION IS "DONE"** (from repo CLAUDE.md, 2026-05-19)
+  Any new automation, workflow, or script is NOT done until audited by the relevant AIOX agents: - /AIOX-architect — system design, API routing, architecture decisions - /AIOX-devops — GitHub Actions wo
+
+
+- **SCRIPT / CODE EDITING RULE — NON-NEGOTIABLE** (from repo CLAUDE.md, 2026-05-19)
+  Never rewrite a working script from scratch. Only change what is strictly necessary. Before any edit: read the full file, list what you're changing and why. Good things already in the script must be p
+
+
+- **CODE FIX AUDIT — NON-NEGOTIABLE (added 2026-05-05)** (from repo CLAUDE.md, 2026-05-19)
+  Before committing ANY fix to validation, checking, or reviewer logic, run this checklist: 1. Trace BOTH execution paths — local build path (check_built_post / CONTENT_CREATOR_RUN) AND Drive/manual pat
