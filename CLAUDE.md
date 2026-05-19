@@ -338,22 +338,11 @@ Full index of skills (/command) and agents (@name) lives in Drive Map — ALL DR
 RULE: Before starting a task, check this tab; a specialized skill/agent may already exist. When she says "do we have a skill for X" → check this tab first before saying no. 4AM agent invokes `/content-chief` (Vera) for Talking Head script generation. Step F compressed 2026-05-19.
 
 ## AI ANALYSIS — EVIDENCE-DRIVEN RULE (global, added 2026-04-29)
-
-Applies to: ads dashboard MoM, weekly reports, keyword alerts, warnings, content insights — any surface where Claude outputs an analysis or recommendation.
-
-**Rule:** Investigate first. Surface only concrete findings. Generic possibilities are an internal checklist — never print them.
-
-4-step flow (mandatory):
-1. List generic possibilities internally (seasonal, competitor, tracking, budget). Do NOT output this list.
-2. Investigate each against available data: change_log (last 45d), keyword set comparison (spend ≥ $15), ad group shifts (> $100), live config.
-3. Surface strongest concrete finding as WHY — name + date + number. 1–2 max.
-4. Recommendation tied to the finding:
-   - Change ≤ 14 days old → Wait. Smart Bidding stabilization window. Re-evaluate at +14d.
-   - Change > 14 days + still degrading → specific named action.
-   - No internal cause found → state explicitly what was checked + external fallback as last resort only.
-
-Banned phrases: "Could be seasonal", "Maybe a competitor change", any (a)(b)(c) list of possibilities.
-Full pattern + implementation: `~/.claude/projects/-Users-priscilahigashi/memory/feedback_evidence_driven_ai_insights.md`
+Applies to ads dashboards, weekly reports, keyword alerts, content insights — any surface where Claude outputs analysis or a recommendation.
+RULE (stays global): Investigate first. Surface only concrete findings (name + date + number, 1–2 max). Generic possibilities are an internal checklist — NEVER print them to Priscila.
+14-day Smart Bidding rule: a recent change (≤14 days old) → Wait. Reverting destroys the signal. Re-evaluate at +14d.
+Banned phrases: "Could be seasonal", "Maybe a competitor change", "Tracking changes…", any (a)(b)(c) list of possibilities, "Open the table below and look for X".
+4-step flow + data sources + reference implementation (OPC ads dashboard `investigateMOM()`) → memory `feedback_evidence_driven_ai_insights.md`. Phase 2 K migration 2026-05-19.
 
 ## KNOWN REPEAT MISTAKES — read and prevent
 Full lessons live in `~/.claude/projects/-Users-priscilahigashi/memory/` plus `NONNEGOTIABLES.md`. Keep these global anti-bug reminders visible:
