@@ -9,54 +9,17 @@ Doc: https://docs.google.com/document/d/1XGmbnvyS_WomKl3USVFz-pPg-3agTn5Bl0QpyMb
 Use it for cold-start orientation, stage ownership, IDs/env vars, failure modes, recovery steps, and manual gaps. Built from live script audit 2026-04-19. Step F compressed 2026-05-19.
 
 ## CONNECTIONS — always active, never ask for access
+RULE: Before saying "I don't have access," check `reference_active_connections.md` AND attempt the documented routes. Cloud OAuth / MCP first; Composio is fallback only. NEVER ask Priscila for credentials before trying all routes.
 
-### ROUTING RULE — CLOUD FIRST (added 2026-04-12)
-For every Google service: try Google Cloud OAuth / MCP first. Composio = fallback only.
-Composio is ONLY required for: (1) Google Docs writes (GOOGLEDOCS_UPDATE_DOCUMENT_MARKDOWN) and (2) Instagram posting. Everything else has a Cloud/MCP route.
-GitHub scripts already follow this — they use SHEETS_TOKEN (Google OAuth) directly, never Composio.
+**Composio-only exceptions** (no Cloud/MCP equivalent): (1) Google Docs writes via `GOOGLEDOCS_UPDATE_DOCUMENT_MARKDOWN` — overwrites whole doc, no markdown tables (KRM #11, #12); (2) Instagram posting.
 
-Google Sheets:
-  ROUTE A (preferred): Google Sheets API via OAuth — curl/python with SHEETS_TOKEN
-  ROUTE B (fallback): Composio MCP (session_id "cook") — GOOGLESHEETS_* tools
-Google Docs:
-  ROUTE A (only option): Composio MCP — GOOGLEDOCS_UPDATE_DOCUMENT_MARKDOWN ✅
-  (No simple REST equivalent for Docs content injection)
-Google Drive:
-  ROUTE A (preferred): mcp__claude_ai_Google_Drive__ tools (DEFERRED — load via ToolSearch)
-  ROUTE B: mcp__gdrive__search (skip on -32603 error)
-  ROUTE C: OAuth Python curl with supportsAllDrives=true
-Google Calendar:
-  ROUTE A (preferred): mcp__claude_ai_Google_Calendar__ tools (DEFERRED — load via ToolSearch) ✅
-  ROUTE B: Composio MCP — GOOGLECALENDAR_CREATE_EVENT
-  ROUTE C: Python OAuth — build('calendar','v3',credentials=creds) — sheets_token.json HAS calendar scope
-Gmail (read/write/draft):
-  ROUTE A (preferred): mcp__claude_ai_Gmail__ tools (DEFERRED — load via ToolSearch; DRAFT only)
-  ROUTE B: GitHub Actions send_email.yml (ACTUALLY SENDS — preferred for real sends)
-  ROUTE C: Python smtplib with PRI_OP_GMAIL_APP_PASSWORD
-Gmail (filter creation):
-  ROUTE A (preferred): Python Gmail API — sheets_token.json now has gmail.settings.basic + gmail.modify ✅ (fixed 2026-04-12)
-  service = build('gmail','v1',credentials=creds); service.users().settings().filters().create(userId='me', body={...}).execute()
-  SHEETS_TOKEN GitHub secret also updated — workflows can create filters too
+**Google services** (Sheets / Drive / Calendar / Gmail): prefer OAuth Python with `SHEETS_TOKEN` (nano Project, GCP `gen-lang-client-0364933181`) OR the deferred MCP tools `mcp__claude_ai_Google_Drive__` / `_Google_Calendar__` / `_Gmail__` (load schema via ToolSearch first — KRM #9). Always try all documented routes before reporting blocked. Drive: 3-route fallback (Drive MCP → `mcp__gdrive__search` skip-on-`-32603` → OAuth Python with `supportsAllDrives=true` — KRM #8). Calendar: `sheets_token.json` HAS calendar scope (don't say "no scope").
+**Gmail**: MCP is DRAFT-only. Real sends → GitHub Actions `send_email.yml` (uses `PRI_OP_GMAIL_APP_PASSWORD`) or local SMTP fallback (KRM #10). Filter creation: Python Gmail API with `gmail.settings.basic` + `gmail.modify` scopes (already on `sheets_token.json`).
+**McFolling/Airbnb inbox** is SEPARATE — `mcfollingproperties@gmail.com` uses `MCFOLLING_TOKEN` / `mcfolling_token.json`. Never mix with OPC token. This inbox owns the Google Ads MCC and is the Maya voice agent's context.
+**Google Ads**: `google-ads` MCP server, read-only (GAQL). OAuth nano Project + `GOOGLE_ADS_DEVELOPER_TOKEN`, MCC `587-071-3494` → sub-account `894-588-9168`. Mutations require Ads Scripts (JS).
+**GitHub**: `~/bin/gh` authenticated as priihigashi, repo `priihigashi/oak-park-ai-hub`. **Vercel / Canva**: deferred MCPs (`mcp__vercel__` / `mcp__claude_ai_Canva__`) — load via ToolSearch. Vercel for OPC deploy monitoring; Higashi is GitHub Pages. **Instagram**: Composio MCP only.
 
-Gmail (mcfollingproperties@gmail.com — McFolling/Airbnb inbox, added 2026-04-13):
-  Local token: /Users/priscilahigashi/ClaudeWorkspace/Credentials/mcfolling_token.json
-  GitHub secret: MCFOLLING_TOKEN (in priihigashi/oak-park-ai-hub)
-  OAuth client: nano Project (same as sheets_token.json), test user mcfollingproperties@gmail.com added to Audience
-  Scopes: drive, spreadsheets, calendar, gmail.modify, gmail.settings.basic, gmail.send
-  Use for: Airbnb bookings/guest emails, maintenance tickets, Google Ads API approval email, Maya voice agent inbox context
-  NOT the same as matthew@oakpark-construction.com domain-wide delegation (that's Workspace-only)
-Google Ads:
-  ROUTE A (preferred): Google Ads MCP server — google-ads in ~/.claude.json (read-only: list_accessible_customers, search via GAQL)
-  Auth chain: OAuth (nano Project) + Developer Token (from MCC 587-071-3494) → sub-account 894-588-9168
-  GitHub secrets: GOOGLE_ADS_DEVELOPER_TOKEN, GOOGLE_ADS_MCC_ID
-  priscila@oakpark-construction.com = sub-account admin. mcfollingproperties@gmail.com = MCC owner. No extra sharing needed.
-GitHub: ~/bin/gh authenticated as priihigashi, repo priihigashi/oak-park-ai-hub ✅
-Vercel: mcp__vercel__ tools ✅ (DEFERRED — load via ToolSearch; user-scope MCP at https://mcp.vercel.com, authed 2026-04-14)
-  Capabilities: list_projects, list_deployments, get_deployment_build_logs, get_runtime_logs, deploy_to_vercel, check_domain_availability_and_price, search_vercel_documentation, list_teams
-  Use for: OPC website deploy monitoring. Higashi site is GitHub Pages (not Vercel) unless migrated.
-Instagram: Composio MCP ✅ (only option — no Google Cloud equivalent)
-Canva: mcp__claude_ai_Canva__ tools ✅ (DEFERRED — load via ToolSearch)
-Full details: ~/.claude/projects/-Users-priscilahigashi/memory/reference_active_connections.md
+Full route matrix, scopes, account IDs, credentials paths, capability lists → `~/.claude/projects/-Users-priscilahigashi/memory/reference_active_connections.md`. Phase 2 J migration 2026-05-19.
 
 ## PLAN-FIRST RULE (added 2026-05-18, from Anthropic Talks — Boris)
 Before any non-trivial or irreversible work, write a 3–5 line plan FIRST and show it to Priscila.
