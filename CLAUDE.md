@@ -195,7 +195,7 @@ Key spreadsheets: Ideas & Inbox 1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU (ta
 Flow Plans Tracker (all master/flow docs indexed): 1fggy918FgPfnMQ-dzGQk2zx9uhi2_-uWXMKGW4MA47k
 
 ## WHEN SHE DROPS A URL — see `/capture` skill
-DEFAULT: queue to `📲 Capture Queue` tab in Ideas & Inbox (sheetId 124307869), pass `project=auto`, NO pipeline trigger unless she explicitly asks ("run capture pipeline" / "capture this now" / "run it now"). Articles, tools, GitHub links, plain text ideas → log to `📥 Inbox` tab directly. Step E1 migration 2026-05-19.
+DEFAULT: queue to `📲 Capture Queue` tab in Ideas & Inbox (sheetId 124307869), pass `project=auto`, NO pipeline trigger unless she explicitly asks ("run capture pipeline" / "capture this now" / "run it now"). Articles, tools, GitHub links, plain text ideas → log to `📥 Inbox` tab directly. **Calendar task created ONLY when she explicitly says "remind me" / "schedule" / "follow up" / "do this later" / gives a deadline** (E1 amendment 2026-05-19). Step E1 migration 2026-05-19.
 
 ## CALENDAR — see `/calendar-create` SKILL.md
 Every calendar event MUST include: source URLs, numbered action steps, tools to use, Drive links. 3-route fallback (MCP deferred-load / Composio / Python OAuth). sheets_token.json HAS calendar scope (confirmed 2026-04-12 — see Known Mistake #14). NEVER tell Priscila to add the event herself unless all 3 routes fail. Step D migration 2026-05-18.
