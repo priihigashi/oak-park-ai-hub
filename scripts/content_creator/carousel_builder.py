@@ -12,6 +12,8 @@ try:
     from _llm_fallback import llm_text as _llm_text_cascade
 except Exception:
     _llm_text_cascade = None
+from contract_loader import load_contract
+from story_outline import attach_story_outline, story_pipeline_enabled
 
 ANTHROPIC_KEY  = os.environ.get("CLAUDE_KEY_4_CONTENT", "")
 OPENAI_KEY     = os.environ.get("OPENAI_API_KEY", "")
@@ -1374,16 +1376,42 @@ Return ONLY a valid JSON object:
             return None
 
 
+def _attach_story_pipeline_metadata(content, *, topic, niche, template_key=None):
+    """Attach STORY/SH metadata only when STORY_PIPELINE_V2_ENABLED is on."""
+    if not story_pipeline_enabled() or not isinstance(content, dict):
+        return content
+
+    route = "news" if niche in ("brazil", "usa") else niche
+    slide_count = None
+    if niche == "opc":
+        slide_count = 5
+
+    updated = attach_story_outline(
+        content,
+        topic=topic,
+        niche=niche,
+        template_key=template_key,
+        slide_count=slide_count,
+    )
+    if isinstance(updated, dict):
+        updated["editorial_contract"] = load_contract(route)
+    return updated
+
+
 def generate_carousel_content(topic, niche, template_key=None, brief="", model="claude-sonnet-4-6", slide_plan=None):
     # Special templates checked BEFORE the generic niche short-circuit
     if template_key == "progress":
-        return generate_progress_content(topic, brief)
+        content = generate_progress_content(topic, brief)
+        return _attach_story_pipeline_metadata(content, topic=topic, niche=niche, template_key=template_key)
     if template_key == "dados-ou-agenda":
-        return generate_dados_content(topic, brief)
+        content = generate_dados_content(topic, brief)
+        return _attach_story_pipeline_metadata(content, topic=topic, niche=niche, template_key=template_key)
     if template_key == "verdade-pela-metade":
-        return generate_verdade_content(topic, brief)
+        content = generate_verdade_content(topic, brief)
+        return _attach_story_pipeline_metadata(content, topic=topic, niche=niche, template_key=template_key)
     if niche in ("brazil", "usa"):
-        return generate_brazil_content(topic, brief, model=model)
+        content = generate_brazil_content(topic, brief, model=model)
+        return _attach_story_pipeline_metadata(content, topic=topic, niche=niche, template_key=template_key)
     if not template_key:
         template_key = OPC_TEMPLATE if niche == "opc" else BRAZIL_TEMPLATE
 
@@ -1627,7 +1655,8 @@ Rules:
             if parsed.get("needs_longer_format"):
                 print(f"  [format] ⚠ needs_longer_format=true — topic may be too broad for 5 slides: {topic!r}")
                 parsed["_longer_format_warning"] = True
-            return _apply_opc_hook_answer_contract(parsed, topic)
+            content = _apply_opc_hook_answer_contract(parsed, topic)
+            return _attach_story_pipeline_metadata(content, topic=topic, niche=niche, template_key=template_key)
         except json.JSONDecodeError as e:
             print(f"  OPC JSON parse error (attempt {attempt+1}): {e}")
             continue
