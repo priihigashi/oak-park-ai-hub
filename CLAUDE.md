@@ -203,15 +203,11 @@ Every calendar event MUST include: source URLs, numbered action steps, tools to 
 ## WHEN SHE SAYS "add a column" or "fix the spreadsheet"
 Do it immediately. Confirm with cell reference. Do NOT create a task — execute now.
 
-## CONTENT CATEGORIES
-1) Talking Head/Expert — Mike under 1 min, 4AM agent finds topic
-2) Project Progress/Before-After — min 4 photos or 2 for before-after only
-3) Product Tips — single image or carousel OK
-Three-step approval: idea → production → final → Buffer schedules
+## CONTENT CATEGORIES — see `/content-chief` skill
+3 OPC categories: (1) Talking Head/Expert — Mike <1 min, 4AM agent finds topic | (2) Project Progress/Before-After — min 4 photos or 2 for before-after only | (3) Product Tips — single image or carousel OK. **Three-step approval flow: idea → production → final → Buffer schedules.** Full per-niche details in `/content-chief` skill. Step E2 migration 2026-05-19.
 
-## SCRAPING
-Scraping Targets tab = matrix of niches x targets. Niches: Oak Park, Brazil, UGC, News.
-4AM agent reads this tab every run. Clip Collections tab = topics collecting clips, need 8-10 before editing.
+## SCRAPING — see `/content-chief` skill
+Scraping Targets tab = matrix of niches × targets (Oak Park, Brazil, UGC, News). Clip Collections tab = topics collecting clips, **min 8-10 clips before editing**. 4AM agent reads Scraping Targets every nightly run. Step E2 migration 2026-05-19.
 
 ## BUSINESSES
 Oak Park Construction: license CBC1263425, priscila@oakpark-construction.com
@@ -390,52 +386,18 @@ If motion is empty → build is incomplete. Do NOT email preview. Fix motion, th
 
 Why this rule exists: Priscila (2026-04-17): *"we always create a motion one as well unless I say to you to not do it."* See memory: `feedback_both_versions_always.md` (updated 2026-04-17 with enforcement section).
 
-## VISUAL-EVERY-OTHER-SLIDE RULE (added 2026-04-17)
-
-Carousels must never ship with 3+ consecutive text-only slides between cover and sources. At least every-other middle slide carries a visual anchor.
-
-- **News** (Quem Decidiu / O Que É / History Time / Ground News): face for every named person (see NAMED-PERSON → FACE RULE). If no person is named on that slide → contextual image: Congresso Nacional, STF, prefeitura, event photo, receipt crop, logo of the institution.
-- **OPC** (Tip / Progress / Before-After): product shot, tool, material sample, detail photo, before-after crop, icon, diagram.
-- **UGC**: body movement still, product shot, reaction sticker.
-
-Script implication: `carousel_builder.py` prompts should emit a `visual_hint` per slide (`bio-card` / `product-photo` / `context-image` / `icon-row` / `none`). HTML builder uses the hint to render the visual layer. Never ship with `none` on >1 consecutive slide.
-
-Source: Priscila (2026-04-17): *"hooks you don't wanna just have text and text... every other slide we think about how could we have an image here."* See memory: `feedback_visual_every_other_slide.md`.
+## VISUAL-EVERY-OTHER-SLIDE — see `/content-chief` skill
+RULE (anti-bug, stays global): carousels must NEVER ship with 3+ consecutive text-only slides between cover and sources. At least every-other middle slide carries a visual anchor. `carousel_builder.py` emits `visual_hint` per slide (`bio-card` / `product-photo` / `context-image` / `icon-row` / `none`); never ship with `none` on >1 consecutive slide. Per-niche visual catalog in skill. Memory: `feedback_visual_every_other_slide.md`. Step E2 migration 2026-05-19.
 
 ## HTML → IMAGE — see `/html-to-image` SKILL.md
 TRIGGER: "turn this HTML into image", "convert to png", "export slides", "save the carousel", "approve this design + render". RULE (anti-bug, stays global): html→image = DETERMINISTIC via Playwright (`/html-to-image` skill, `export_slides.js`). NEVER substitute with text-to-image AI (OpenAI, Ideogram, Recraft, Seedream, Canva AI, Nano Banana) — they hallucinate the design, text drifts, layouts drift. Remotion is sibling deterministic path for React-source templates. Default Drive destination: Marketing > Image Creation > html to image (folder 1tE-2Ps8V8ZKQ4etyvzk47ZWyzeHAD2nk). Step E4 migration 2026-05-19.
 
 ## CONTENT FORMATS — living registry of approved post formats
-File: ~/ClaudeWorkspace/_Master Plans & Docs/CONTENT_FORMATS.md
-Drive: https://docs.google.com/document/d/1XqXSyJC_iHMTrmMxpM5ZR7S-WQxz19HhDJO1HomdncM/edit
-Drive Doc ID: 1XqXSyJC_iHMTrmMxpM5ZR7S-WQxz19HhDJO1HomdncM
+**File (authoritative):** `~/ClaudeWorkspace/_Master Plans & Docs/CONTENT_FORMATS.md` | **Drive Doc:** `1XqXSyJC_iHMTrmMxpM5ZR7S-WQxz19HhDJO1HomdncM`
+**RULE (stays global):** READ this file before producing any content (carousel, reel, hooks, copy). WRITE to it whenever Priscila names a new format — same session. NEVER produce content without checking if a format already exists for that niche. `/capture` checks on every video ingest and flags format matches in the Inbox row. Trigger phrases: "format", "same style", "like the X one", "series", "split screen". Full per-format detail (FORMAT-001+) in `/content-chief` skill + the registry file. Step E2 migration 2026-05-19.
 
-READ this file before producing any content (carousel, reel, hooks, copy).
-WRITE to it whenever Priscila names a new format — immediately, same session.
-Save with: niche, structure description, trigger keywords, series tracking.
-/capture checks it on every video ingest and flags format matches in the Inbox row.
-All content-producing skills (carousel, hooks, copy) must read this before producing anything.
-NEVER produce content without checking if a format already exists for that niche.
-
-Current approved formats:
-- FORMAT-001: Split Screen + Sources Below — Brazil/USA News fact-check reels
-- FORMAT-002: Carousel: Quem realmente decidiu isso? — Brazil News political breakdown
-
-When she says "format", "same style", "like the X one", "series", "split screen" → check file first.
-
-## PER-POST EDITORIAL LOG — every post gets a Google Doc (added 2026-04-16)
-Every series episode or standalone post gets a dedicated Google Doc editorial log in the same Drive folder as its templates.
-
-RULE — CREATE on new post: Name format `EP001 — [Title] — Editorial Log` or `[POST_ID] — Editorial Log`
-RULE — APPEND on feedback: Any time Priscila gives feedback, direction, or a change request about a specific post → append a dated note immediately, same session. Format: `## NOTE — YYYY-MM-DD` with full details.
-RULE — READ before touching: Before editing any carousel/post → read that post's editorial log doc first.
-RULE — INBOX for research: If feedback generates a research task → ALSO add a row to `📥 Inbox` tab (Ideas & Inbox 1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU) so it shows up as pending.
-
-Doc structure: Header (post info + Drive link) → HOW TO USE section → Notes in reverse-append order.
-Example: EP001 Rachadinha — `https://docs.google.com/document/d/1SgVAxHCARMuFcd3xvAJs0fsBwGU9wS3ZdlcC6QgtHcU/edit`
-Located: News drive > Brazil > Carousel > Quem-Decidiu-Isso > v1_rachadinha (static folder)
-
-This rule applies to ALL skills that produce or edit content (carousel, reel, hooks, copy, html-to-image).
+## PER-POST EDITORIAL LOG — see `/content-chief` skill
+RULE (stays global, applies to ALL content-producing skills): every series episode or standalone post gets a dedicated Google Doc editorial log. **4 sub-rules:** CREATE on new post (`EP001 — [Title] — Editorial Log`) · APPEND dated NOTE on every feedback · READ before touching any post · INBOX row for any research task generated. Example: EP001 Rachadinha doc `1SgVAxHCARMuFcd3xvAJs0fsBwGU9wS3ZdlcC6QgtHcU`. Step E2 migration 2026-05-19.
 
 ## CAPTURE — AUTO-DETECT — see `/capture` skill
 RULE (anti-bug, stays global): chat NEVER picks the project — always pass `project=auto`. Runner uses 3-tier classify (notes-keyword → Claude Haiku → unrouted at conf <0.70). **Default fallback is NEVER `book` and NEVER `opc` — it is `unrouted`.** See `scripts/routing.py::get_route()` + `scripts/capture/capture_pipeline.py::detect_project()`. Step E1 migration 2026-05-19.
