@@ -253,18 +253,8 @@ Full skill: `~/.agents/skills/drive-upload/SKILL.md`
 Gmail MCP = DRAFT only (no send tool exists). For actual delivery: GitHub Actions `send_email.yml` (Route B, preferred — uses PRI_OP_GMAIL_APP_PASSWORD) or SMTP fallback (Route C). DEFERRED TOOL RULE: load Gmail MCP schema via ToolSearch before calling — they are deferred, not absent. McFolling inbox has separate token (MCFOLLING_TOKEN). Step D migration 2026-05-18.
 
 ## DRIVE SEARCH — FALLBACK ORDER (added 2026-04-12 — prevents MCP error -32603 from blocking work)
-There are 2 MCP Drive servers + 1 OAuth route. Always try in this order:
-- ROUTE A: `mcp__claude_ai_Google_Drive__search_files` — primary for search/list/read/create
-- ROUTE B: `mcp__gdrive__search` — search only; known to fail with -32603 (server-side) — skip if it errors
-- ROUTE C: OAuth Python curl — `GET /drive/v3/files?q=...&supportsAllDrives=true&includeItemsFromAllDrives=true`
-Never give up after one route. -32603 = server failure, not a query problem. Switch routes immediately.
-
-Flow for creating a doc with content:
-1. Create empty Google Doc via Drive MCP (gets the ID)
-2. Write content via GOOGLEDOCS_UPDATE_DOCUMENT_MARKDOWN (Composio)
-   - If googledocs connection not active: call COMPOSIO_MANAGE_CONNECTIONS (toolkit: googledocs) → get link → COMPOSIO_WAIT_FOR_CONNECTIONS
-   - NEVER use markdown tables in the content — they cause 400 INVALID_ARGUMENT. Use plain text with labels instead.
-→ See memory: feedback_drive_oauth_vs_mcp.md
+Always try all 3 routes before blocked: A `mcp__claude_ai_Google_Drive__search_files` → B `mcp__gdrive__search` (skip immediately on `-32603`; server failure, not query formatting) → C OAuth Python/curl with `supportsAllDrives=true&includeItemsFromAllDrives=true`.
+Doc writes: use `GOOGLEDOCS_UPDATE_DOCUMENT_MARKDOWN`, NEVER markdown tables, and read existing Docs first because this tool overwrites the whole document. Full Drive search + Doc creation flow lives in memory: `feedback_drive_oauth_vs_mcp.md`. Phase 2 O migration 2026-05-19.
 
 ## NAMED-PERSON → FACE RULE, NON-NEGOTIABLE (added 2026-04-17)
 
