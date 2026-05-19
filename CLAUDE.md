@@ -105,18 +105,10 @@ Service account: `oak-park-sheets@gen-lang-client-0364933181.iam.gserviceaccount
 Routing IDs: capture/carousel/reels parents live in `scripts/routing.py` and should be resolved with `capture_folder(project)` / `get_route(niche)`, not copied from memory. Current carousel production writes to `get_route(niche)["carousel_folder_id"]`; old `_TEMPLATE_CAROUSEL` anchors are legacy/template references. Step F compressed 2026-05-19.
 OPC Content Creation workspace: `1um7y2Yt8zi9KGxev6kfFJYgrkMYwrCNh` (Art/Caption/Reel + Claude brief).
 
-## HIG NEGÓCIOS IMOBILIÁRIOS — ROUTING (mom's Brazil RE site)
-Any time she mentions: "Hig", "Higashi site", "mom's site", "Brazil website", "hig-negocios", "Alexandra's site" → use these locations ONLY:
-- GitHub repo: priihigashi/hig-negocios-imobiliarios (NOT oak-park-ai-hub)
-- Live site: https://priihigashi.github.io/hig-negocios-imobiliarios/
-- Drive folder: Website — Hig Negócios Imobiliários (ID: 1CKWTojSg2uQmXjNnKlAaSBCTfxtSQBvH) inside Claude Flow (100f_O62MvH61Htv2ykjebJeDcfV_zSf0) in Higashi shared drive (0AN7aea2IZzE0Uk9PVA)
-- Tracker spreadsheet: 1qJnILSR_XOgRaPdTHYy1Qx1gnSyzQTj2E04u8kErfYw (Higashi Imobiliária — Website Tracker)
-- Local code: /tmp/hig-repo/ (cloned from GitHub repo)
-- Design system: --sand:#f0e8d6; --gold:#9a6b2f; --dark:#1c1409; --brown:#5b3c1f / Cormorant Garamond serif + Inter
-- Agent: Alexandra Higashi, Instagram @alexandrahigashi
-- Domain (future): hignegociosimobiliarios.com.br
-- Phase as of 2026-04-12: MAINTENANCE — all 5 pages live (index, imoveis, imovel, sobre, contato). No longer building. Now: replacing wrong images + feeding real property data when Sanity CMS is set up.
-RULE: NEVER save Higashi website files to Marketing/Claude Code Workspace or oak-park-ai-hub. Always use the Higashi-specific paths above.
+## HIG NEGÓCIOS IMOBILIÁRIOS — see `/hig-negocios` skill (mom's Brazil RE site)
+Any time Priscila mentions: "Hig" / "Higashi site" / "mom's site" / "Brazil website" / "hig-negocios" / "Alexandra's site" → invoke `/hig-negocios` skill.
+RULES (stay global, non-negotiable): (1) NEVER save Higashi website files to Marketing/Claude Code Workspace or oak-park-ai-hub; (2) NEVER use the old names `higashi-imoveis` or `Higashi Imóveis` — always `hig-negocios-imobiliarios` / `Hig Negócios Imobiliários`.
+All canonical IDs (repo, Drive folders, tracker, design system, agent, phase, image-gen rules including São José urban + Urbanova hillside) → `/hig-negocios` SKILL.md. Phase 2 N2 migration 2026-05-19.
 
 ## FLOW PLANS TRACKER — LOG EVERY NEW FLOW DOC
 Every new flow doc, master plan, process doc, how-to, or niche strategy doc → add a row to the Flow Plans Tracker — Master Index (`1fggy918FgPfnMQ-dzGQk2zx9uhi2_-uWXMKGW4MA47k`, Marketing > Claude Code Workspace). All Docs tab is the master index — every doc goes there regardless of type.
