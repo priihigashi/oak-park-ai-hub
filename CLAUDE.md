@@ -362,12 +362,7 @@ Full lessons live in `~/.claude/projects/-Users-priscilahigashi/memory/` plus `N
 13. GitHub Actions green check is not proof; inspect logs for `failed|error|401|403|skipped|unauthorized|exception` and check `🚨 Pipeline Failures`.
 Step F compressed 2026-05-19; no anti-bug reminders intentionally removed.
 
-## PIPELINE FAILURE LOG — 🚨 Pipeline Failures tab (added 2026-04-27)
-Every pipeline writes silent + loud failures to ONE place: `Ideas & Inbox` → `🚨 Pipeline Failures` tab (sheetId 448272280).
-Columns: TIMESTAMP_UTC | WORKFLOW | RUN_ID | STAGE | ERROR | RUN_URL | RESOLVED | NOTE
-- Every workflow that catches an exception MUST also call a `log_pipeline_failure(stage, error, sheet)` helper that appends a row.
-- Workflow YML MUST emit `if: failure()` SMTP alert to priscila@oakpark-construction.com via PRI_OP_GMAIL_APP_PASSWORD.
-- Script MUST exit non-zero when any failure was recorded → GitHub run flips ❌ → email fires.
-- Session-start: scan `🚨 Pipeline Failures` for unresolved rows (RESOLVED column blank) and report them as part of the status report.
-- First implementation: `scripts/youtube_research.py` + `.github/workflows/video-research.yml` (commit d7c1bbb).
-- Wire this into every other pipeline: capture_pipeline.yml, content_creator.yml, ads_pulse.yml, drive_route_file.yml, etc. — same helper, same tab.
+## PIPELINE FAILURE LOG — see `/pipeline-fix` skill Section 12
+Every pipeline writes silent + loud failures to `Ideas & Inbox` → `🚨 Pipeline Failures` tab.
+RULES (stay global, non-negotiable): (1) every workflow that catches an exception MUST call `log_pipeline_failure(stage, error)`; (2) script MUST exit non-zero when any failure was recorded so GitHub flips ❌ and the `if: failure()` SMTP alert fires; (3) session-start scans the tab for unresolved rows (RESOLVED blank) and reports them; (4) GitHub Actions green check ≠ proof (Known Repeat Mistake #13).
+Helper Python + SMTP YAML recipe + sheetId 448272280 + PRI_OP_GMAIL_APP_PASSWORD secret + wiring list → `/pipeline-fix` skill Section 12. Phase 2 M migration 2026-05-19.
