@@ -331,60 +331,21 @@ Template: `Carousel/Brazil/Quem-Decidiu-Isso/_TEMPLATE_CAROUSEL/v2_rachadinha/co
 Source of directive: `~/.claude/projects/-Users-priscilahigashi/memory/project_visual_sticker_system.md`
 Quote: *"every time we're talking about someone I would like an image so people know their face and this is mandatory. I want this for all of the brands. This is mine."*
 
-## CAROUSEL FOLDER STANDARD — CROSS-NICHE, NON-NEGOTIABLE (added 2026-04-16)
+## CAROUSEL OUTPUT ROUTING — see `/template-carousel` SKILL.md
+**CURRENT canonical render/write destination (confirmed 2026-05-19):** `scripts/content_creator/main.py` reads `routing.py::get_route(niche)["carousel_folder_id"]` at runtime. Write shape: `<carousel_folder_id>/v<N>_<slug>/{cover.html, png/, motion/, resources/, story doc}`. Per main.py line 47: *"No more `_TEMPLATE_CAROUSEL` middle folder. No more `<series>/` middle folder."* — old `_TEMPLATE_CAROUSEL` anchor list is LEGACY (template/series-metadata references, kept in skill for archaeology + Remotion / Content/Series/ workflows).
 
-Every carousel build — OPC, Brazil News, USA News, UGC, any niche — lands in the SAME Drive shape:
+**Current `carousel_folder_id` per niche** (resolve at runtime via routing.py, do NOT hardcode):
+- OPC → `16P2JN74JAAW3HKnmNqPGPrAq7N5jDNii` (Marketing/Content/carousel)
+- Brazil → `1gDOjtW_X-_jWtu94pffbDaUsw6VGCKuA` (News/Brazil/Carousel)
+- USA → `1lRfZE5XC_gL57pUiiWu0Lhar9wfyCtFw` (News/USA/Carousel)
 
-```
-<Niche Drive>/.../<Series>/_TEMPLATE_CAROUSEL/
-   v1_<slug>/          ← static PNGs + cover.html + resources/
-   v1_<slug>_motion/   ← sibling (mp4 + gif + preview frame)
-   v2_<slug>/          ← next version after review (auto-incremented)
-   v2_<slug>_motion/
-```
+**Anti-bug rules (stay global):**
+- Version `<slug>` = topic slug only, no date/post_id prefix. Auto-increment v1→v2 on re-build, NEVER overwrite.
+- `png/` + `motion/` + `resources/` + story doc all live INSIDE `v<N>_<slug>/` (NEW shape — no longer siblings outside).
+- **NEVER save PNG/MP4/GIF to local computer as final destination.** `/tmp` is ephemeral; Drive is source of truth.
 
-LOCKED ANCHORS (do NOT invent new parents):
-- OPC Tip of the Week → `_TEMPLATE_CAROUSEL` ID `1PWrZfuOvyHUbTRlFNqYxdhtg-Zvv_bXb` (Marketing drive)
-- Brazil Quem decidiu isso → `_TEMPLATE_CAROUSEL` ID `1Ts4OlXT_KxtYNziGmHUcsjHVh8Z7D1ds` (News drive)
-- Brazil Verificamos → series `1IPLdQeTzGnWwN9MZKvfJSOXvSyK4xI5p` / `_TEMPLATE_CAROUSEL` `1QhILiMiIM9WrpHhIqXXrPs6JqoAdDijA` (News drive, confidence gate 0.70, approval required)
-- Brazil A Conta que Ninguém Pagou → series `1gaLG4ObKuMx1qOb-8r63XqaKXmfRdtLI` / `_TEMPLATE_CAROUSEL` `1AwdqHecqyjGAOwPsjrYuO_NajMxLUkWH` (News drive)
-- Brazil Arquivo Aberto → series `1lvDlx4jn0fNbdJJQx9NAKG56I05ePqR2` / `_TEMPLATE_CAROUSEL` `163TWpEIGxkPuh86eCBKMIraz83YHHEzR` (News drive)
-- USA The History They Left Out → series `1ZDuaLyvFYLLGoOVQlOBRsOxa-WVGwJ5g` / `_TEMPLATE_CAROUSEL` `15GxuxNyZco9W9GL2CZXoeiArIp1l4I9d` (News drive — Remotion renders here; GitHub secret: SOVEREIGN_TEMPLATE_FOLDER)
-- USA The Chain → series `15hYZoMVFA0u9vZR0SvZQ3z7SkSbqBEYf` / `_TEMPLATE_CAROUSEL` `1sDMyPHVYcOqZ3NK9ch4e48AaJ7KVvxL3` (News drive — bilingual carousel, same builder as Brazil; EP001 folder `1CjaNjewnNUKd3NvMmcVpET7IKF6Mk3_Z`)
-- Brazil Verdade Pela Metade (FORMAT-024 — weekly debunk) → series `1r6NJ6uoKezptnolgeSfPOeKl2dccEjPd` / `_TEMPLATE_CAROUSEL` `1Tspx9SsfFxJjzh_ZdIC_exQBHe4-p-1K` (News drive — source: @marceloem23, never name in content)
-- Any new series → create its own `_TEMPLATE_CAROUSEL` subfolder + add IDs here + Templates Registry tab.
-
-RULES:
-- `<slug>` = topic slug only — no date, no post_id prefix. `rachadinha`, `walnut-kitchen`, etc.
-- Version auto-increments on re-build: existing v1 → next run writes v2. Never overwrites.
-- Static + motion are SIBLINGS inside `_TEMPLATE_CAROUSEL`, never nested.
-- Per-post editorial log Google Doc lives one level up (series folder), not inside version folder.
-- NEVER save PNG/MP4/GIF to the local computer as the final destination. Work-dir is /tmp only, ephemeral. Drive is the source of truth.
-
-ENFORCEMENT: `scripts/content_creator/main.py` uses `next_version_number()` + locked parent IDs. All skills (/content-chief, /design-carousel, /html-to-image) must emit into this structure. If a script writes elsewhere, fix the script — not the folder.
-
-See: memory `project_carousel_folder_standard.md`.
-
-## MOTION IS DEFAULT ON — NON-NEGOTIABLE (added 2026-04-17)
-
-Every carousel build ships BOTH static PNGs AND motion (MP4 + GIF + preview frame). Motion = default ON. Off only when Priscila explicitly says "static only" for that specific post.
-
-Applies to ALL paths — scripts, email preview, manual chat, any skill (/content-chief, /design-carousel, /html-to-image):
-- Script (content_creator.yml): `main.py::process_one_topic` must render `motion/` subfolder with cover MP4/GIF + duplicated non-cover PNGs. Already wired — verify before emailing.
-- Email preview: EVERY preview row shows BOTH `Static: folder` and `Motion: folder` links. Motion link deep-links into `/motion/` subfolder, not the parent.
-- Manual chat: when I build a carousel directly in conversation (no script), default output = static + motion. Do not wait to be asked.
-- Flow docs + skills: every content-producing skill states motion is ON by default.
-
-Pre-ship audit before reporting any build done:
-1. ✅ version folder exists with `v<N>_<slug>` naming
-2. ✅ `png/` has all slides × variants
-3. ✅ `motion/` has cover MP4 + GIF + preview_frame.jpg + non-cover PNGs duplicated (full sequence)
-4. ✅ story Google Doc inside version folder
-5. ✅ `resources/` folder inside version folder
-
-If motion is empty → build is incomplete. Do NOT email preview. Fix motion, then ship.
-
-Why this rule exists: Priscila (2026-04-17): *"we always create a motion one as well unless I say to you to not do it."* See memory: `feedback_both_versions_always.md` (updated 2026-04-17 with enforcement section).
+## MOTION IS DEFAULT ON — see `/template-carousel` SKILL.md
+RULE (stays global, non-negotiable): every carousel build ships BOTH static PNGs AND motion (MP4 + GIF + preview frame + non-cover PNGs duplicated). Motion = default ON. Off ONLY when Priscila explicitly says "static only" for that specific post. Applies to scripts, email preview, manual chat, any content-producing skill. Pre-ship audit: if `motion/` is empty → build incomplete, do NOT email preview. Source: Priscila 2026-04-17 *"we always create a motion one as well unless I say to you to not do it."* Memory: `feedback_both_versions_always.md`. Step E3 migration 2026-05-19.
 
 ## VISUAL-EVERY-OTHER-SLIDE — see `/content-chief` skill
 RULE (anti-bug, stays global): carousels must NEVER ship with 3+ consecutive text-only slides between cover and sources. At least every-other middle slide carries a visual anchor. `carousel_builder.py` emits `visual_hint` per slide (`bio-card` / `product-photo` / `context-image` / `icon-row` / `none`); never ship with `none` on >1 consecutive slide. Per-niche visual catalog in skill. Memory: `feedback_visual_every_other_slide.md`. Step E2 migration 2026-05-19.
