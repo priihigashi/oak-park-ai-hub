@@ -1,17 +1,13 @@
 # SKILL: Fix Apify Fallback Mode
 
-## Purpose
-Prevent fallback mode due to issues with Apify data retrieval.
+## Description
+This skill addresses the issue where the agent runs in fallback mode due to Apify returning `NoneType` objects. The skill will ensure that the agent handles `NoneType` errors gracefully and retries fetching data from Apify.
 
-## Trigger
-When the system enters fallback mode with the message "Ran in fallback mode (no Apify data)."
+## Steps
+1. Check the connection to Apify to ensure it is active.
+2. Implement a retry mechanism for fetching data from Apify.
+3. If `NoneType` is returned, log the error and retry up to 3 times before proceeding with fallback mode.
+4. Notify relevant personnel if the issue persists after retries.
 
-## Actions
-1. Log the error details for review, including any Apify API response or error messages.
-2. Implement retry logic with exponential backoff for Apify API calls.
-3. If the issue persists after retries, send an alert to the system administrator with error details and context.
-4. Optionally, implement a secondary data source or caching mechanism to reduce reliance on Apify during outages.
-
-## Notes
-- Ensure that API keys and configurations for Apify are correctly set and checked before retries.
-- This skill aims to improve data retrieval reliability from Apify and reduce unnecessary fallback mode entries.
+## Expected Outcome
+The agent should be able to handle `NoneType` errors from Apify without immediately falling back, improving data reliability.
