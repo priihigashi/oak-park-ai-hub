@@ -1,10 +1,5 @@
 [
   {
-    "task": "Implement STORY-001 contract_loader.py stub and focused tests",
-    "context": "This is necessary to ensure that the new features related to STORY-001 are properly integrated and tested before going live.",
-    "auto_actionable": true
-  },
-  {
     "task": "compress Key IDs + Skills Directory + Known Repeat Mistakes",
     "context": "This task is important as it involves reducing complexity and risks associated with the current setup, estimated to be around 80 lines with MEDIUM risk.",
     "auto_actionable": true

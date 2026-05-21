@@ -1,5 +1,7 @@
+import os
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 import sys
 
 
@@ -20,6 +22,7 @@ class OpcComparisonParityTest(unittest.TestCase):
         pair = extract_comparison_pair("Concrete vs pavers for a driveway: which wins?")
         self.assertEqual(pair, {"left": "Concrete", "right": "pavers"})
 
+    @patch.dict(os.environ, {"OPC_DISABLE_STANDALONES": "0"})
     def test_plan_carries_pair_and_avoids_singular_material_profile(self):
         plan = plan_carousel_slides("Concrete vs Pavers: Which Wins for Driveways?")
         self.assertEqual(plan["status"], "passed")
