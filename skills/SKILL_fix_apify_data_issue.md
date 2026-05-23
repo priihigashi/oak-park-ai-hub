@@ -1,15 +1,18 @@
 # SKILL: Fix Apify Data Issue
 
-## Purpose
-This skill aims to address the issue of running in fallback mode due to no Apify data being retrieved.
+## Context
+When the system runs in fallback mode due to missing Apify data, it encounters an error: 'cannot unpack non-iterable NoneType object'. This indicates that the expected data structure is not being returned, leading to a failure in data processing.
+
+## Objective
+Implement a check to verify if Apify data is available before proceeding with data unpacking. If the data is missing, trigger a notification or retry mechanism to obtain the data.
 
 ## Steps
-1. Check the Apify API connection and ensure that it is operational.
-2. Implement retry logic to attempt fetching data multiple times before switching to fallback mode.
-3. Log detailed error messages for debugging purposes if Apify data retrieval fails.
-4. Notify the system administrator if the issue persists after retries.
+1. Before unpacking data from Apify, implement a conditional check to verify that the data is not None.
+2. If data is None, log an error message and initiate a retry mechanism to fetch the data again.
+3. If retries fail, send a notification to the system administrator to manually check the Apify integration.
 
-## Testing
-- Simulate a failure in Apify data retrieval and ensure the system retries as expected.
-- Verify that detailed error logs are generated.
-- Confirm that the administrator receives a notification if the issue is unresolved.
+## Implementation
+- Add a pre-processing step to validate Apify data availability.
+- Implement retry logic with a maximum of 3 attempts to fetch the data.
+- Log detailed error messages for failed attempts.
+- Send an alert email or message to the system administrator if data retrieval fails after retries.
