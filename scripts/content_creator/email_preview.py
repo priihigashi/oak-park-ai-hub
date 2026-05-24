@@ -123,6 +123,17 @@ def _list_png_links_from_version_folder(version_folder_id: str, token: str):
     return slides
 
 
+def _list_manual_clips_from_folder(work_dir: str):
+    """List manual clips available in the specified directory."""
+    manual_clips = []
+    manual_path = os.path.join(work_dir, "resources/clips/")
+    if os.path.isdir(manual_path):
+        for filename in os.listdir(manual_path):
+            if filename.startswith("manual_") and filename.endswith(".mp4"):
+                manual_clips.append(filename)
+    return manual_clips
+
+
 def make_cover_thumbnails_public(folder_id, token):
     """Compatibility helper used by main/approval. folder_id should be png/ folder."""
     drive = _drive_service(token)
@@ -141,7 +152,7 @@ def make_cover_thumbnails_public(folder_id, token):
     return urls
 
 
-def _build_one_carousel_html(post: dict, slides: list[dict]) -> str:
+def _build_one_carousel_html(post: dict, slides: list[dict], manual_clips: list[str]) -> str:
     topic = post.get("topic", "Untitled")
     niche = (post.get("niche") or "opc").upper()
     post_id = post.get("post_id", "")
@@ -199,6 +210,16 @@ def _build_one_carousel_html(post: dict, slides: list[dict]) -> str:
     else:
         _model_trace_block = ""
 
+    manual_clips_block = ""
+    if manual_clips:
+        manual_clips_block = (
+            f'<div style="background:#0b0b0b;border-left:3px solid #15803d;padding:14px 16px;margin-top:20px;border-radius:4px;">'
+            f'<div style="font-family:Arial,sans-serif;color:#22c55e;font-size:13px;font-weight:700;">🎬 MANUAL CLIPS ({len(manual_clips)})</div>'
+            f'<div style="font-family:Arial,sans-serif;color:#ffffff;font-size:12px;line-height:1.8;margin-top:8px;">'
+            + "<br/>".join(f"{clip}" for clip in manual_clips)
+            + '</div></div>'
+        )
+
     blocks = []
     for i, s in enumerate(slides, start=1):
         caption = s.get("name", f"slide_{i}.png")
@@ -251,6 +272,8 @@ def _build_one_carousel_html(post: dict, slides: list[dict]) -> str:
 
         {_model_trace_block}
 
+        {manual_clips_block}
+
         <div style="background:#111;border-left:3px solid #CBCC10;padding:14px 16px;margin-top:20px;border-radius:4px;">
           <div style="font-family:Arial,sans-serif;color:#CBCC10;font-size:13px;font-weight:700;">Reply commands</div>
           <div style="font-family:Arial,sans-serif;color:#d0d0d0;font-size:13px;line-height:1.55;margin-top:8px;">
@@ -278,13 +301,16 @@ def send_preview(posts, date_str):
             print(f"  No PNG slides found for {post.get('post_id','?')} — skip preview")
             continue
 
+        work_dir = os.path.dirname(post.get("static_link", ""))
+        manual_clips = _list_manual_clips_from_folder(work_dir)
+
         slug = (post.get("post_id") or "carousel").strip()
         niche_label = (post.get("niche") or "opc").upper()
         subject = (
             f"[REVIEW] {niche_label} — {slug} — {len(slides)} slides — "
             f"FOLDER:{folder_id} — reply APPROVE or feedback"
         )
-        html = _build_one_carousel_html(post, slides)
+        html = _build_one_carousel_html(post, slides, manual_clips)
 
         gmail_user = "priscila@oakpark-construction.com"
         gmail_pass = os.environ.get("PRI_OP_GMAIL_APP_PASSWORD", "")
