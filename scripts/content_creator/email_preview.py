@@ -111,7 +111,6 @@ def _list_png_links_from_version_folder(version_folder_id: str, token: str):
         orderBy="name",
     ).execute().get("files", [])
 
-    # Prefer black variant sequence when present.
     black = [f for f in files if "black_" in f.get("name", "").lower()]
     chosen = black if black else files
 
@@ -124,7 +123,6 @@ def _list_png_links_from_version_folder(version_folder_id: str, token: str):
 
 
 def make_cover_thumbnails_public(folder_id, token):
-    """Compatibility helper used by main/approval. folder_id should be png/ folder."""
     drive = _drive_service(token)
     files = drive.files().list(
         q=f"'{folder_id}' in parents and trashed=false and name contains '_01_cover'",
@@ -141,7 +139,18 @@ def make_cover_thumbnails_public(folder_id, token):
     return urls
 
 
-def _build_one_carousel_html(post: dict, slides: list[dict]) -> str:
+def _list_manual_clips(work_dir: str):
+    manual_clips = []
+    manual_dir = Path(work_dir) / "resources/clips"
+    if manual_dir.exists():
+        for clip in manual_dir.glob("manual_*.mp4"):
+            clip_name = clip.stem
+            link = f"https://drive.google.com/uc?export=download&id={clip_name}"  # Expecting file ID extract somewhere
+            manual_clips.append({"name": clip_name, "link": link})
+    return manual_clips
+
+
+def _build_one_carousel_html(post: dict, slides: list[dict], manual_clips: list[dict]) -> str:
     topic = post.get("topic", "Untitled")
     niche = (post.get("niche") or "opc").upper()
     post_id = post.get("post_id", "")
@@ -153,12 +162,10 @@ def _build_one_carousel_html(post: dict, slides: list[dict]) -> str:
     reviewer_issues = post.get("_review_issues") or []
     generation_trace = post.get("_generation_trace") or {}     # SH-147
     storytelling_scores = post.get("_storytelling_scores") or {}  # SH-147
-    # FIX 3: caption data
     caption_body = post.get("caption", "")
     in_post_hashtags = post.get("in_post_hashtags", "")
     first_comment_hashtags = post.get("first_comment_hashtags", "")
 
-    # SH-147: pre-compute story quality + model trace blocks (avoids backslash-in-fstring issue)
     if storytelling_scores:
         _st_overall = storytelling_scores.get("overall", "?")
         _st_summary = storytelling_scores.get("summary", "")[:160]
@@ -211,7 +218,20 @@ def _build_one_carousel_html(post: dict, slides: list[dict]) -> str:
             """
         )
 
-    return f"""<html><body style="background:#0a0a0a;padding:24px;">
+    manual_clips_block = ""
+    if manual_clips:
+        manual_clips_block = (
+            f'<div style="background:#121212;border-left:3px solid #10b981;padding:14px 16px;margin-top:20px;border-radius:4px;">'
+            f'<div style="font-family:Arial,sans-serif;color:#0e9f6e;font-size:13px;font-weight:700;">🎬 MANUAL CLIPS</div>'
+            f'<div style="font-family:Arial,sans-serif;color:#d0d0d0;font-size:14px;line-height:1.8;margin-top:8px;">'
+            + "<br/>".join(
+                f"<a href='{mc['link']}' style='color:#34d399;'>{mc['name']}</a>"
+                for mc in manual_clips
+            ) + 
+            f'</div></div>'
+        )
+
+    return f'''<html><body style="background:#0a0a0a;padding:24px;">
       <div style="max-width:620px;margin:0 auto;">
         <h2 style="font-family:Arial,sans-serif;color:#CBCC10;margin:0 0 6px 0;">[{niche}] {topic}</h2>
         <div style="font-family:Arial,sans-serif;color:#c7c7c7;font-size:13px;margin-bottom:16px;">
@@ -221,6 +241,8 @@ def _build_one_carousel_html(post: dict, slides: list[dict]) -> str:
           Motion: <a href="{motion_link}" style="color:#CBCC10;">open folder</a>{f' · Reel: <a href="{reel_link}" style="color:#CBCC10;">watch</a>' if reel_link else ''}
         </div>
         {''.join(blocks)}
+
+        {manual_clips_block}
 
         {f'''
         <div style="background:#1a0000;border-left:3px solid #ff4444;padding:14px 16px;margin-top:20px;border-radius:4px;">
@@ -260,11 +282,10 @@ def _build_one_carousel_html(post: dict, slides: list[dict]) -> str:
           </div>
         </div>
       </div>
-    </body></html>"""
+    </body></html>'''
 
 
 def send_preview(posts, date_str):
-    """Send one email per carousel with full slide stack for precise reply targeting."""
     token, _ = get_token()
     sent = 0
     for post in posts:
@@ -277,6 +298,8 @@ def send_preview(posts, date_str):
         if not slides:
             print(f"  No PNG slides found for {post.get('post_id','?')} — skip preview")
             continue
+        
+        manual_clips = _list_manual_clips(post.get('work_dir', '.'))
 
         slug = (post.get("post_id") or "carousel").strip()
         niche_label = (post.get("niche") or "opc").upper()
@@ -284,7 +307,7 @@ def send_preview(posts, date_str):
             f"[REVIEW] {niche_label} — {slug} — {len(slides)} slides — "
             f"FOLDER:{folder_id} — reply APPROVE or feedback"
         )
-        html = _build_one_carousel_html(post, slides)
+        html = _build_one_carousel_html(post, slides, manual_clips)
 
         gmail_user = "priscila@oakpark-construction.com"
         gmail_pass = os.environ.get("PRI_OP_GMAIL_APP_PASSWORD", "")
