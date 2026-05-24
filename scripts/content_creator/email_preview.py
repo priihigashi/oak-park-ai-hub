@@ -141,7 +141,16 @@ def make_cover_thumbnails_public(folder_id, token):
     return urls
 
 
-def _build_one_carousel_html(post: dict, slides: list[dict]) -> str:
+def _extract_manual_clips(work_dir: str):
+    """Extracts manual video clips from the work directory."""
+    manual_clips = []
+    for file in os.listdir(work_dir):
+        if file.startswith('manual_') and file.endswith('.mp4'):
+            manual_clips.append(file)
+    return manual_clips
+
+
+def _build_one_carousel_html(post: dict, slides: list[dict], manual_clips: list) -> str:
     topic = post.get("topic", "Untitled")
     niche = (post.get("niche") or "opc").upper()
     post_id = post.get("post_id", "")
@@ -175,7 +184,7 @@ def _build_one_carousel_html(post: dict, slides: list[dict]) -> str:
             for s in (storytelling_scores.get("slide_scores") or [])[:8]
         )
         _story_quality_block = (
-            f'<div style="background:#0d1a0a;border-left:3px solid #86efac;padding:14px 16px;margin-top:20px;border-radius:4px;">'
+            f'<div style="background:#0d1a0a;border-left:3px solid #86efac;padding:14px 16px;margin-top:20px;border-radius:4px;">
             f'<div style="font-family:Arial,sans-serif;color:#86efac;font-size:13px;font-weight:700;">&#128214; STORY QUALITY &#8212; {_st_overall} / 100</div>'
             f'<div style="font-family:Arial,sans-serif;color:#d0d0d0;font-size:13px;line-height:1.6;margin-top:8px;">{_st_summary}</div>'
             f'<div style="font-family:monospace;color:#86efac;font-size:12px;line-height:1.8;margin-top:8px;">{_cb_line}</div>'
@@ -190,7 +199,7 @@ def _build_one_carousel_html(post: dict, slides: list[dict]) -> str:
         _gt_model = generation_trace.get("model", "unknown")
         _gt_fallback = "yes &#x26A0;&#xFE0F;" if generation_trace.get("fallback_used") else "no &#x2713;"
         _model_trace_block = (
-            f'<div style="background:#1a1005;border-left:3px solid #f59e0b;padding:14px 16px;margin-top:20px;border-radius:4px;">'
+            f'<div style="background:#1a1005;border-left:3px solid #f59e0b;padding:14px 16px;margin-top:20px;border-radius:4px;">
             f'<div style="font-family:Arial,sans-serif;color:#fbbf24;font-size:13px;font-weight:700;">&#9881;&#65039; MODEL / BUILD TRACE</div>'
             f'<div style="font-family:monospace;color:#d0d0d0;font-size:12px;line-height:1.8;margin-top:8px;">'
             f'generated_by: {_gt_provider}<br/>model: {_gt_model}<br/>fallback_used: {_gt_fallback}'
@@ -210,6 +219,16 @@ def _build_one_carousel_html(post: dict, slides: list[dict]) -> str:
             </div>
             """
         )
+
+    # Add manual clips to blocks
+    if manual_clips:
+        manual_clip_block = "<div style='margin-top:20px;padding:14px 16px;background:#151515;border-left:3px solid #FF8800;border-radius:4px;'><div style='font-family:Arial,sans-serif;font-size:13px;color:#FFBB33;font-weight:bold;'>Manual Clips</div>"
+        for clip in manual_clips:
+            clip_id = clip.split('.')[0]
+            drive_link = f"https://drive.google.com/uc?id={clip_id}&export=download"
+            manual_clip_block += f"<div style='font-family:Arial,sans-serif;color:#d0d0d0;font-size:12px;line-height:1.6;margin-top:8px;'>{clip}: <a href='{drive_link}'>View</a></div>"
+        manual_clip_block += "</div>"
+        blocks.append(manual_clip_block)
 
     return f"""<html><body style="background:#0a0a0a;padding:24px;">
       <div style="max-width:620px;margin:0 auto;">
@@ -267,6 +286,8 @@ def send_preview(posts, date_str):
     """Send one email per carousel with full slide stack for precise reply targeting."""
     token, _ = get_token()
     sent = 0
+    work_dir = './resources/clips/' # Assuming this is the work directory containing manual clips
+    manual_clips = _extract_manual_clips(work_dir)
     for post in posts:
         folder_id = _extract_folder_id(post.get("static_link", ""))
         if not folder_id:
@@ -284,7 +305,7 @@ def send_preview(posts, date_str):
             f"[REVIEW] {niche_label} — {slug} — {len(slides)} slides — "
             f"FOLDER:{folder_id} — reply APPROVE or feedback"
         )
-        html = _build_one_carousel_html(post, slides)
+        html = _build_one_carousel_html(post, slides, manual_clips)
 
         gmail_user = "priscila@oakpark-construction.com"
         gmail_pass = os.environ.get("PRI_OP_GMAIL_APP_PASSWORD", "")
