@@ -65,6 +65,17 @@ except Exception:
     check_visual_cadence = None
     VisualCadenceGateError = Exception
 
+# SH-151 PR B — News source dual-gate. Import guarded so the reviewer
+# remains safe even if the standalone contract module is unavailable.
+try:
+    from news_source_dual_gate import (
+        check_news_source_dual_gate,
+        NewsSourceDualGateError,
+    )
+except Exception:
+    check_news_source_dual_gate = None
+    NewsSourceDualGateError = Exception
+
 # Env vars
 SHEETS_TOKEN     = os.environ.get("SHEETS_TOKEN", "")
 ALERT_EMAIL      = os.environ.get("ALERT_EMAIL", "priscila@oakpark-construction.com")
@@ -1098,6 +1109,36 @@ def _run_cadence_gate_check(content: dict, niche: str) -> list[str]:
         return [f"[cadence-gate] gate failed with {type(exc).__name__}: {exc}"]
     return [
         f"[cadence-gate] slides {v.start_slide_index}-{v.end_slide_index}: {v.reason}"
+        for v in violations
+    ]
+
+
+def _run_news_source_dual_gate_advisory(content: dict, niche: str) -> list[str]:
+    """SH-151 PR B integration — News source dual-gate advisory hook.
+
+    Flag-gated by ``STORY_PIPELINE_V2_ENABLED``. Default OFF means this
+    returns an empty list and the reviewer is byte-identical to pre-PR-B.
+
+    When ON, only Brazil/USA/News content is scanned. Findings are returned
+    as advisories instead of blocking ``issues`` so the rule can bake on real
+    News builds before it is promoted to a hard gate.
+    """
+    if check_news_source_dual_gate is None:
+        return []
+    flag = str(os.environ.get("STORY_PIPELINE_V2_ENABLED", "0")).strip().lower()
+    if flag not in {"1", "true", "yes", "on"}:
+        return []
+    if niche not in ("brazil", "usa", "news"):
+        return []
+    try:
+        violations = check_news_source_dual_gate(content or {}, route=niche)
+    except NewsSourceDualGateError:
+        # Unknown/manual routes should never break the reviewer.
+        return []
+    except Exception as exc:  # pragma: no cover - defensive
+        return [f"[news-source-gate][advisory] gate failed with {type(exc).__name__}: {exc}"]
+    return [
+        f"[news-source-gate][advisory] claim {v.claim_index + 1}: {v.kind} — {v.detail}"
         for v in violations
     ]
 
@@ -2425,6 +2466,8 @@ def check_built_post(result: dict) -> dict:
     all_issues.extend(_run_face_gate_check(_content_dict, niche))
     # SH-148 PR B — visual cadence gate. No-op when STORY_PIPELINE_V2_ENABLED is off.
     all_issues.extend(_run_cadence_gate_check(_content_dict, niche))
+    # SH-151 PR B — news dual-source gate. Advisory-only during bake.
+    advisories = _run_news_source_dual_gate_advisory(_content_dict, niche)
 
     # 0. Phase 5 — smart slide-plan gates (Phase 4 picker output validation).
     # Runs FIRST so a hallucinated/banned plan blocks the post before any
@@ -2613,7 +2656,7 @@ def check_built_post(result: dict) -> dict:
             all_issues.append(f"[auto-fix] FAILED — {type(e).__name__}: {e}")
 
     passed = len(all_issues) == 0
-    return {
+    reviewed = {
         "post_id": post_id,
         "topic": topic[:60],
         "niche": niche,
@@ -2623,6 +2666,9 @@ def check_built_post(result: dict) -> dict:
         "autofix_summary": autofix_summary,
         "storytelling_scores": storytelling_scores,
     }
+    if advisories:
+        reviewed["advisories"] = advisories
+    return reviewed
 
 
 # ─── Email ────────────────────────────────────────────────────────────────────
@@ -2657,6 +2703,8 @@ def send_review_email(failed_posts: list[dict], all_posts: list[dict]):
         lines.append(f"       Drive: {p['drive_link']}")
         for issue in p["issues"]:
             lines.append(f"       ⚠  {issue}")
+        for advisory in p.get("advisories", []):
+            lines.append(f"       ℹ  {advisory}")
 
         # Append text edit log if Goal 1B ran.
         afs = p.get("autofix_summary")
@@ -2723,7 +2771,9 @@ def send_review_email(failed_posts: list[dict], all_posts: list[dict]):
     html_rows = []
     for p in all_posts:
         status = "PASS" if p["passed"] else "ISSUES"
-        issues_html = "<br/>".join([f"• {i}" for i in p["issues"]]) or "None"
+        details = [f"• {i}" for i in p["issues"]]
+        details.extend([f"• advisory: {a}" for a in p.get("advisories", [])])
+        issues_html = "<br/>".join(details) or "None"
         html_rows.append(
             "<tr>"
             f"<td style='padding:8px;color:#ddd'>{status}</td>"
