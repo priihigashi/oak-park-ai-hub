@@ -7,7 +7,7 @@ on:
         description: 'Name (or substring) of the file in My Drive to route'
         required: true
       topic:
-        description: 'Destination topic: stocks | news | opc | higashi | marketing'
+        description: 'Destination topic: stocks | news | opc | higashi | marketing | ai_content | ugc | unrouted'
         required: true
         default: 'stocks'
 
