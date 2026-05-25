@@ -76,6 +76,16 @@ except Exception:
     check_news_source_dual_gate = None
     NewsSourceDualGateError = Exception
 
+# SH-149 PR B — Motion/static sibling folder gate. Same guarded-import pattern.
+try:
+    from motion_static_sibling_gate import (
+        check_motion_static_siblings,
+        MotionStaticSiblingGateError,
+    )
+except Exception:
+    check_motion_static_siblings = None
+    MotionStaticSiblingGateError = Exception
+
 # Env vars
 SHEETS_TOKEN     = os.environ.get("SHEETS_TOKEN", "")
 ALERT_EMAIL      = os.environ.get("ALERT_EMAIL", "priscila@oakpark-construction.com")
@@ -1140,6 +1150,64 @@ def _run_news_source_dual_gate_advisory(content: dict, niche: str) -> list[str]:
     return [
         f"[news-source-gate][advisory] claim {v.claim_index + 1}: {v.kind} — {v.detail}"
         for v in violations
+    ]
+
+
+def _run_motion_static_gate_check(
+    content: dict, niche: str, post_id: str, work_dir: str
+) -> list[str]:
+    """SH-149 PR B integration — motion/static sibling folder gate review hook.
+
+    Flag-gated by ``STORY_PIPELINE_V2_ENABLED``. Default OFF means this
+    returns an empty list and the reviewer is byte-identical to pre-PR-B.
+
+    Walks the local build path ``<work_dir>/<post_id>/png/`` and
+    ``<work_dir>/<post_id>/motion/`` to populate the artifacts dict the
+    contract module expects, then reports any violations as
+    ``[motion-static-gate] kind: reason`` strings.
+
+    Drive-only review path (folders not present on disk) -> empty list.
+    A separate PR can add the Drive-walker variant if needed.
+    """
+    if check_motion_static_siblings is None:
+        return []
+    flag = str(os.environ.get("STORY_PIPELINE_V2_ENABLED", "0")).strip().lower()
+    if flag not in {"1", "true", "yes", "on"}:
+        return []
+    if niche not in ("opc", "brazil", "usa", "news"):
+        return []
+    if not post_id:
+        return []
+
+    png_dir = Path(work_dir) / post_id / "png"
+    motion_dir = Path(work_dir) / post_id / "motion"
+    if not png_dir.exists() and not motion_dir.exists():
+        # Drive-only review path or work_dir already cleaned up — skip silently.
+        return []
+
+    def _safe_list(p: Path) -> list[str]:
+        try:
+            return [f.name for f in p.iterdir() if f.is_file()]
+        except Exception:
+            return []
+
+    artifacts = {
+        "static_only": bool((content or {}).get("static_only")),
+        "build_artifacts": {
+            "static_files": _safe_list(png_dir) if png_dir.exists() else [],
+            "motion_files": _safe_list(motion_dir) if motion_dir.exists() else [],
+        },
+    }
+
+    try:
+        violations = check_motion_static_siblings(artifacts, route=niche)
+    except MotionStaticSiblingGateError:
+        return []
+    except Exception as exc:  # pragma: no cover - defensive
+        return [f"[motion-static-gate] gate failed with {type(exc).__name__}: {exc}"]
+
+    return [
+        f"[motion-static-gate] {v.kind}: {v.reason}" for v in violations
     ]
 
 
@@ -2468,6 +2536,16 @@ def check_built_post(result: dict) -> dict:
     all_issues.extend(_run_cadence_gate_check(_content_dict, niche))
     # SH-151 PR B — news dual-source gate. Advisory-only during bake.
     advisories = _run_news_source_dual_gate_advisory(_content_dict, niche)
+    # SH-149 PR B — motion/static sibling folder gate. No-op when flag off
+    # or when work_dir layout is absent (Drive-only review).
+    all_issues.extend(
+        _run_motion_static_gate_check(
+            _content_dict,
+            niche,
+            post_id,
+            os.environ.get("WORK_DIR", "/tmp/content_creator_run"),
+        )
+    )
 
     # 0. Phase 5 — smart slide-plan gates (Phase 4 picker output validation).
     # Runs FIRST so a hallucinated/banned plan blocks the post before any
