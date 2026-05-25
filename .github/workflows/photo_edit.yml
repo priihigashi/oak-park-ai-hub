@@ -176,8 +176,9 @@ jobs:
           STAGING_PROMPT_BY_STEM = {
               # Urbanova: bare mattress room needs listing-ready bedding only.
               "32_quarto_solteiro": (
-                  "EXCEPTION FOR THIS IMAGE ONLY: keep the same bed frame in the exact same position and size, "
-                  "and add simple neutral fitted bedsheets plus 2-4 neutral pillows. "
+                  "EXCEPTION FOR THIS IMAGE ONLY: keep the exact same room and bed frame in the exact same position and size, "
+                  "and add a realistic fully made bed with neutral comforter/duvet plus 2-4 natural pillows (hotel-style, non-CGI). "
+                  "No bare mattress should remain visible except natural bed edges. "
                   "Do not change any other object, camera angle, lighting direction, walls, floor, windows, or decor."
               ),
               # Pool touch-up exceptions: cleanliness/clarity improvements without geometry changes.
@@ -234,11 +235,9 @@ jobs:
               ),
               # Bedroom staging — beds appear bare in originals, need listing-ready bedding
               "14_quarto": (
-                  "EXCEPTION FOR THIS IMAGE ONLY: the bed appears bare with no bedding. "
-                  "Add a fully made luxury bed — neatly folded duvet and 2-4 decorative pillows "
-                  "in neutral warm tones (white, ivory, or sand) — so the room is listing-ready. "
-                  "Keep the bed frame, headboard, walls, floor, windows, and all other furniture "
-                  "in the exact same position, scale, and lighting. Do not alter anything else."
+                  "EXCEPTION FOR THIS IMAGE ONLY: remove starburst/greasy lens glare from light fixtures and mirror highlights, "
+                  "reduce harsh hotspot reflections, and brighten moderately while preserving all furniture/material textures exactly. "
+                  "If bedding is bare, add a realistic neutral comforter and pillows; keep room geometry and all objects unchanged."
               ),
               "20_quarto_2": (
                   "EXCEPTION FOR THIS IMAGE ONLY: the bed appears bare with no bedding. "
