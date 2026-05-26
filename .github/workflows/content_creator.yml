@@ -190,6 +190,13 @@ jobs:
       # Spec: doc 1BDg9ORggVsWH-WQPBx4iQnYNu2UA5vHWcuNRkXCY5v8 (v3 FINAL).
       # OPC purposes: hook|cost|teach|apply|sources. News purposes: claim|number|evidence|opposition|implication|sources.
       SLIDE_PURPOSE_PILOT: ${{ github.event.inputs.slide_purpose_pilot || '0' }}
+      # BAKE 2026-05-25 — storytelling V2 reviewer gates (SH-145..151).
+      # ENABLED=1 turns on face/cadence/motion-static/news-source-advisory gates.
+      # NICHES=brazil scopes the bake so only Brazil posts participate; OPC + USA
+      # stay byte-identical. Expand to "brazil,usa" or "brazil,usa,opc" after bake.
+      # Rollback: set ENABLED to '0' (one-line revert).
+      STORY_PIPELINE_V2_ENABLED: '1'
+      STORY_PIPELINE_V2_NICHES: 'brazil'
       CAPTURE_STORY_ID: ${{ github.event.inputs.capture_story_id || '' }}
 
     steps:
@@ -401,6 +408,13 @@ jobs:
       # Spec: doc 1BDg9ORggVsWH-WQPBx4iQnYNu2UA5vHWcuNRkXCY5v8 (v3 FINAL).
       # OPC purposes: hook|cost|teach|apply|sources. News purposes: claim|number|evidence|opposition|implication|sources.
       SLIDE_PURPOSE_PILOT: ${{ github.event.inputs.slide_purpose_pilot || '0' }}
+      # BAKE 2026-05-25 — storytelling V2 reviewer gates (SH-145..151).
+      # ENABLED=1 turns on face/cadence/motion-static/news-source-advisory gates.
+      # NICHES=brazil scopes the bake so only Brazil posts participate; OPC + USA
+      # stay byte-identical. Expand to "brazil,usa" or "brazil,usa,opc" after bake.
+      # Rollback: set ENABLED to '0' (one-line revert).
+      STORY_PIPELINE_V2_ENABLED: '1'
+      STORY_PIPELINE_V2_NICHES: 'brazil'
       CAPTURE_STORY_ID: ${{ github.event.inputs.capture_story_id || '' }}
 
     steps:

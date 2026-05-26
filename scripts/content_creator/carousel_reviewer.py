@@ -1061,6 +1061,30 @@ def check_opc_professional_ethics(content: dict) -> list[str]:
     return issues
 
 
+def _storytelling_gate_in_scope(niche: str) -> bool:
+    """Bake-control helper — return False when a gate should sit out this niche.
+
+    Reads two env vars:
+    - ``STORY_PIPELINE_V2_ENABLED`` — master flag (default OFF)
+    - ``STORY_PIPELINE_V2_NICHES`` — optional comma-separated allowlist.
+      Empty / unset => apply to all supported niches (legacy behavior).
+      Set => only niches in the list participate. Example: ``"brazil"`` for
+      a Brazil-only bake; ``"brazil,usa"`` to expand later.
+
+    Used by all 4 storytelling gate hooks so a single env-var change can
+    scope the bake without touching gate code. Returns False if the master
+    flag is off OR if the niche scope excludes ``niche``.
+    """
+    flag = str(os.environ.get("STORY_PIPELINE_V2_ENABLED", "0")).strip().lower()
+    if flag not in {"1", "true", "yes", "on"}:
+        return False
+    scope_raw = str(os.environ.get("STORY_PIPELINE_V2_NICHES", "")).strip()
+    if not scope_raw:
+        return True  # unset = all niches in scope
+    scope = {n.strip().lower() for n in scope_raw.split(",") if n.strip()}
+    return (niche or "").strip().lower() in scope
+
+
 def _run_face_gate_check(content: dict, niche: str) -> list[str]:
     """SH-147 PR B integration — named-person face gate review hook.
 
@@ -1074,8 +1098,7 @@ def _run_face_gate_check(content: dict, niche: str) -> list[str]:
     """
     if check_named_person_face_coverage is None:
         return []
-    flag = str(os.environ.get("STORY_PIPELINE_V2_ENABLED", "0")).strip().lower()
-    if flag not in {"1", "true", "yes", "on"}:
+    if not _storytelling_gate_in_scope(niche):
         return []
     if niche not in ("opc", "brazil", "usa", "news"):
         return []
@@ -1105,8 +1128,7 @@ def _run_cadence_gate_check(content: dict, niche: str) -> list[str]:
     """
     if check_visual_cadence is None:
         return []
-    flag = str(os.environ.get("STORY_PIPELINE_V2_ENABLED", "0")).strip().lower()
-    if flag not in {"1", "true", "yes", "on"}:
+    if not _storytelling_gate_in_scope(niche):
         return []
     if niche not in ("opc", "brazil", "usa", "news"):
         return []
@@ -1135,8 +1157,7 @@ def _run_news_source_dual_gate_advisory(content: dict, niche: str) -> list[str]:
     """
     if check_news_source_dual_gate is None:
         return []
-    flag = str(os.environ.get("STORY_PIPELINE_V2_ENABLED", "0")).strip().lower()
-    if flag not in {"1", "true", "yes", "on"}:
+    if not _storytelling_gate_in_scope(niche):
         return []
     if niche not in ("brazil", "usa", "news"):
         return []
@@ -1171,8 +1192,7 @@ def _run_motion_static_gate_check(
     """
     if check_motion_static_siblings is None:
         return []
-    flag = str(os.environ.get("STORY_PIPELINE_V2_ENABLED", "0")).strip().lower()
-    if flag not in {"1", "true", "yes", "on"}:
+    if not _storytelling_gate_in_scope(niche):
         return []
     if niche not in ("opc", "brazil", "usa", "news"):
         return []
