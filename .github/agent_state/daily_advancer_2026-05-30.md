@@ -146,7 +146,7 @@ Deadline: Codex PR must be open by EOD Sunday 2026-06-01.
 ## DELIVERY CHANNELS
 
 CANAL A (Productivity & Routine doc): BLOCKED — Composio MCP requires OAuth user auth in remote environment.
-CANAL B (email): Gmail MCP draft created → Draft ID logged below.
+CANAL B (email): ✅ Gmail MCP draft created → Draft ID: r6980318743946677612
 CANAL C (GitHub state file): ✅ DELIVERED — .github/agent_state/daily_advancer_2026-05-30.md
 
 View this report: https://github.com/priihigashi/oak-park-ai-hub/blob/main/.github/agent_state/daily_advancer_2026-05-30.md
