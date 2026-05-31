@@ -23,9 +23,10 @@ jobs:
       - name: Generate Weekly Report
         env:
           SHEETS_TOKEN:              ${{ secrets.SHEETS_TOKEN }}
-          CLAUDE_KEY_4_CONTENT:         ${{ secrets.CLAUDE_KEY_4_CONTENT }}
+          CLAUDE_KEY_4_CONTENT:      ${{ secrets.CLAUDE_KEY_4_CONTENT }}
           GITHUB_TOKEN:              ${{ secrets.GITHUB_TOKEN }}
           CONTENT_SHEET_ID:          ${{ secrets.CONTENT_SHEET_ID }}
+          PRI_OP_GMAIL_APP_PASSWORD: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
           WEEKLY_REPORTS_FOLDER_ID:  "1gETNHiEtbkjYRimJOccDR9zssWSM4vNM"
           NOTIFY_EMAIL:              "priscila@oakpark-construction.com"
         run: python scripts/weekly_report.py
