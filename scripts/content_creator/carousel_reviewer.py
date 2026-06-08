@@ -1198,6 +1198,13 @@ def _run_motion_static_gate_check(
         return []
     if not post_id:
         return []
+    # NN-M1 / NN-M5: cron prod stays MOTION_ENABLED=0. When motion is globally
+    # off, an empty motion/ folder is the expected state, not a violation. The
+    # sibling _motion_required() helper at line 569 already short-circuits the
+    # rest of the motion checks under the same flag. Keep the two gates aligned
+    # so brazil/usa explainer runs without motion_test do not fail review.
+    if os.environ.get("MOTION_ENABLED", "0") == "0":
+        return []
 
     png_dir = Path(work_dir) / post_id / "png"
     motion_dir = Path(work_dir) / post_id / "motion"
