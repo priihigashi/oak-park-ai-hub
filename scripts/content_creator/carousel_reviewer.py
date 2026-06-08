@@ -211,13 +211,12 @@ def check_html_placeholders(html_path: str) -> list[str]:
             f"PLACEHOLDER sticker(s) found — real photo NOT embedded: {', '.join(set(placeholder_matches))}"
         )
 
-    # Context-image slot still has query text (not replaced with real image)
-    ctx_matches = re.findall(r'\[ IMG: ([^\]]{3,60}) \]', html)
-    if ctx_matches:
-        issues.append(
-            f"CONTEXT-IMAGE slot(s) still have placeholder text — image not sourced: "
-            + "; ".join(ctx_matches[:3])
-        )
+    # Context-image slot placeholder detection moved to _patch_html_placeholders
+    # only. That function attempts Wikimedia, then strips the placeholder span
+    # silently when no result. Flagging here would double-report and (worse)
+    # fire BEFORE the auto-fix runs, blocking strict mode on optional
+    # decorative slots. Sticker placeholders (above) still flag because
+    # named-person face is a publish blocker per NN.
 
     visible_html = _visible_html(html)
 
@@ -668,10 +667,16 @@ def _patch_html_placeholders(html_path: str, work_dir) -> tuple:
             html = html.replace(old, new, 1)
             fixes.append(f"IMG '{query[:50]}' -> Wikimedia")
         else:
-            remaining.append(
-                f"CONTEXT-IMAGE slot not auto-resolved (no Wikimedia match): "
-                f"'[ IMG: {query[:50]} ]' — source manually"
-            )
+            # 2026-06-08: context-image slots are DECORATIVE (institutions,
+            # documents, places). When Wikimedia misses, leaving the literal
+            # "[ IMG: query ]" string on the rendered slide is worse than
+            # shipping a clean text-only slide — the placeholder reads as a
+            # build artifact to viewers. Silently strip the placeholder span
+            # so the slide degrades cleanly. The named-person sticker gate
+            # below stays strict — that one IS a publish blocker (NN rule).
+            old_span = f'<span class="ctx-query">[ IMG: {query} ]</span>'
+            html = html.replace(old_span, "", 1)
+            fixes.append(f"IMG '{query[:40]}' -> stripped (no Wikimedia, decorative slot)")
 
     # Fix 2: @NAME_STICKER Brazil profile sticker slots
     # HTML pattern: <div class="sticker-placeholder">@LASTNAME_STICKER</div>
