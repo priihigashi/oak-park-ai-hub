@@ -91,7 +91,7 @@ ROUTES = {
         "label":              "Higashi",
         "pipeline":           "higashi",
         "drive_id":           "0AN7aea2IZzE0Uk9PVA",
-        "drive_name":         "Higashi",
+        "drive_name":         "Higashi Imobiliária - Claude",
         "capture_folder_id":  "1UtJp_8Rn49D7zdk70qhXxswXYFpFBLPG",  # Higashi Imobiliária - Claude/content/capture
         "content_control_id": "1yrGU3Y8AdthtxkLqhL31taqHjjBPRND8lh8qKkV5iKo",
         "content_control_tab":"🎬 In Production",
