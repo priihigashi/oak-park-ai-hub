@@ -7637,6 +7637,11 @@ _BRAZIL_CHROME_PT_TO_EN = [
     ("Brazil News — ", "News — "),
     ('lang="pt-BR"', 'lang="en"'),
     ("Quem decidiu isso?", "Educational Explainer"),
+    # src-head sources slide variants — these embed <br> + <span class="accent">
+    # in the HTML, so the plain "A FONTE É ESTA." string never matched on the
+    # first audit. Add both rendered forms verbatim.
+    ('A FONTE<br>É <span class="accent">ESTA.</span>', 'THE<br><span class="accent">SOURCES.</span>'),
+    ('A FONTE É <span class="accent">ESTA.</span>', 'THE <span class="accent">SOURCES.</span>'),
     ("A FONTE É ESTA.", "THE SOURCES."),
     ("A Linha do Tempo", "Timeline"),
     ("Não é opinião", "Not opinion. Facts."),
@@ -7645,10 +7650,12 @@ _BRAZIL_CHROME_PT_TO_EN = [
     ("Segue o fio", "Keep reading"),
     ("Lado a lado", "Side by side"),
     ("Definição", "Definition"),
+    ("Saiba mais", "Learn more"),
+    ("Salve isso.", "Save this."),
+    # "Fontes" stays last because the Sources section also has the longer
+    # src-head form above. Doing single-word replace last avoids early-binding
+    # on substring matches inside other tags.
     ("Fontes", "Sources"),
-    # Series tags from _series_tag_map — fall back to "Educational Explainer"
-    # for educational-explainer route, leave the rest untouched (they're for
-    # other Brazil series that should not run through educational-explainer).
 ]
 
 
