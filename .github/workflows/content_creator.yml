@@ -147,6 +147,14 @@ on:
         description: 'Optional capture/resource story ID for fetching resources_<story_id>/clips.json into this run.'
         required: false
         default: ''
+      review_strict:
+        description: '2026-06-08 Codex flag — when "false", reviewer no longer exits non-zero on flags. Default "true" preserves cron behavior. Use only for controlled manual test runs.'
+        required: false
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
 
 jobs:
   create-content:
@@ -283,7 +291,7 @@ jobs:
           SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
           ALERT_EMAIL: priscila@oakpark-construction.com
           WORK_DIR: /tmp/content_creator_run
-          REVIEW_STRICT: 'true'
+          REVIEW_STRICT: ${{ github.event.inputs.review_strict || 'true' }}
         run: |
           # SH-011: review_only_folder_id merges into REVIEW_DRIVE_FOLDERS automatically
           FOLDER_ID="${{ github.event.inputs.review_only_folder_id }}"
@@ -469,7 +477,7 @@ jobs:
           SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
           ALERT_EMAIL: priscila@oakpark-construction.com
           WORK_DIR: /tmp/content_creator_run
-          REVIEW_STRICT: 'true'
+          REVIEW_STRICT: ${{ github.event.inputs.review_strict || 'true' }}
         run: |
           # SH-011: review_only_folder_id merges into REVIEW_DRIVE_FOLDERS automatically
           FOLDER_ID="${{ github.event.inputs.review_only_folder_id }}"
