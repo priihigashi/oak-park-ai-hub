@@ -3071,16 +3071,26 @@ Generate enough slides to fully explain the topic, but keep total carousel lengt
 # copy at 8th-grade reading level. Diacritics are the strongest signal because
 # US-English news writing rarely uses naked é/ã/ç. A small word list catches
 # the cases where the LLM slips a Portuguese article or verb without diacritic.
+#
+# Words REMOVED on 2026-06-08 audit because they exist with the SAME spelling
+# in English and were producing false positives:
+#   - "racial"  (EN: racial / PT: racial — identical; flagged "racial inequality")
+#   - "negro"   (EN: historical/proper-noun usage in 1960s civil-rights text)
+#   - "branco"  (rare in EN but ambiguous in proper nouns)
+#   - "social"  (EN/PT identical — never include)
+#   - "moral", "real", "central", "federal", "natural", "individual" (all EN/PT identical)
+# Diacritic regex remains the strongest gate. Word list now only contains
+# tokens that are unambiguously Portuguese in news copy.
 _PT_LEAK_DIACRITICS = re.compile(r"[ãõçáàâéêíóôúÁÀÂÃÉÊÍÓÔÕÚÇ]")
 _PT_LEAK_WORDS = re.compile(
     r"\b("
     r"não|são|está|estão|nós|você|também|porque|quando|onde|"
-    r"durante|sobre|sem|com|que|para|esse|essa|isso|aquilo|"
-    r"foram|tinham|seria|deveria|pode|poderia|"
+    r"durante|sobre|sem|que|para|esse|essa|isso|aquilo|"
+    r"foram|tinham|seria|deveria|poderia|"
     r"governo|presidente|democracia|política|liberdade|"
-    r"história|histórico|história|cidadão|cidadania|"
+    r"história|histórico|cidadão|cidadania|"
     r"pobreza|riqueza|trabalhador|salário|emprego|"
-    r"escravidão|escravo|negro|branco|raça|racial|"
+    r"escravidão|raça|"
     r"Estados\s+Unidos|Brasil"
     r")\b",
     re.IGNORECASE,
@@ -7605,9 +7615,50 @@ body{{background:#111;display:flex;flex-wrap:wrap;gap:24px;padding:24px}}
 </body>
 </html>"""
 
+    # FORMAT-021 EN-mode chrome rewrite. _build_brazil_html is the canonical
+    # Rachadinha-v2 renderer per NN-locked Brazil native template rule, so we
+    # keep the visual system intact and swap only the hardcoded Portuguese
+    # chrome (section tags + lang attribute + page title) when the caller
+    # flagged the content as English. Body copy is generated language-aware
+    # upstream by generate_educational_explainer_content().
+    if (content or {}).get("_language") == "en":
+        html = _swap_brazil_chrome_to_english(html)
+
     html_path = Path(work_dir) / "cover.html"
     html_path.write_text(html)
     return str(html_path)
+
+
+# Map of Portuguese chrome strings hardcoded in _build_brazil_html → English.
+# Kept as a module-level constant so the replacement is fast and easy to audit.
+# Order matters: longer/more specific phrases come before single-word entries
+# so they don't get partially consumed by the substring rules.
+_BRAZIL_CHROME_PT_TO_EN = [
+    ("Brazil News — ", "News — "),
+    ('lang="pt-BR"', 'lang="en"'),
+    ("Quem decidiu isso?", "Educational Explainer"),
+    ("A FONTE É ESTA.", "THE SOURCES."),
+    ("A Linha do Tempo", "Timeline"),
+    ("Não é opinião", "Not opinion. Facts."),
+    ("SEGUE O FIO &#8594;", "KEEP READING &#8594;"),
+    ("SEGUE O FIO →", "KEEP READING →"),
+    ("Segue o fio", "Keep reading"),
+    ("Lado a lado", "Side by side"),
+    ("Definição", "Definition"),
+    ("Fontes", "Sources"),
+    # Series tags from _series_tag_map — fall back to "Educational Explainer"
+    # for educational-explainer route, leave the rest untouched (they're for
+    # other Brazil series that should not run through educational-explainer).
+]
+
+
+def _swap_brazil_chrome_to_english(html: str) -> str:
+    """Replace hardcoded Brazilian chrome with English equivalents.
+    Only invoked when _language == "en"; body copy is already English from
+    the LLM prompt + _detect_pt_leak_in_explainer retry gate."""
+    for pt, en in _BRAZIL_CHROME_PT_TO_EN:
+        html = html.replace(pt, en)
+    return html
 
 
 def _build_who_is_html(content, slug, work_dir, handle="@HANDLE_PLACEHOLDER", media_paths=None):
