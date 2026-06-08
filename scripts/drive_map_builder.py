@@ -37,7 +37,7 @@ DRIVES = {
     "0AF6S_f8PH2_aUk9PVA": "Stocks",
     "0ACJVarTjgmFUUk9PVA": "AI Content",
     "0AEz0NlGr3tlLUk9PVA": "UGC",
-    "0AN7aea2IZzE0Uk9PVA": "Higashi",
+    "0AN7aea2IZzE0Uk9PVA": "Higashi Imobiliária - Claude",
     "0AAWPgG39HXocUk9PVA": "Big Crazy Ideas",
 }
 
