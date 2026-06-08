@@ -403,6 +403,9 @@ def _resolve_news_template(topic_entry, niche):
     3) every 3rd day, use shared template (illustrated/cutout alternating)
     """
     explicit = (topic_entry.get("template_key") or "").strip().lower()
+    fmt = (topic_entry.get("format") or "").strip().lower()
+    if explicit == "educational-explainer" or fmt == "educational-explainer":
+        return "educational-explainer"
     if explicit in ("native", "illustrated", "cutout"):
         return None if explicit == "native" else explicit
     if not TEMPLATE_ROTATION_ENABLED:
@@ -2771,7 +2774,7 @@ def main():
                 "niche": MANUAL_NICHE,
                 "brief": resolved_brief or f"Manual run from workflow_dispatch. Template request: {t}",
                 "url": "",
-                "format": "",
+                "format": "educational-explainer" if t == "educational-explainer" else "",
                 "series_override": "DADOS OU AGENDA" if t == "dados-ou-agenda" else "",
                 "fake_news_route": "B",
                 "fake_news_confidence": 1.0,
@@ -2816,7 +2819,10 @@ def main():
     # Scored but un-approved rows → CQ Status=Draft (you flip to Approved in sheet to release)
     print("\n--- Phase A: Promoting Inspiration → Content Queue ---")
     try:
-        picks = pick_topics(count_opc=1, count_brazil=0, count_usa=0)
+        count_opc = _safe_int(os.environ.get("COUNT_OPC"), 3)
+        count_brazil = _safe_int(os.environ.get("COUNT_BRAZIL"), 2)
+        count_usa = _safe_int(os.environ.get("COUNT_USA"), 2)
+        picks = pick_topics(count_opc=count_opc, count_brazil=count_brazil, count_usa=count_usa)
         pick_counts = {"opc": 0, "brazil": 0, "usa": 0}
         for p in picks or []:
             n = (p.get("niche") or "").lower()

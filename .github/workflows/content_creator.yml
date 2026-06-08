@@ -12,7 +12,7 @@ on:
         description: 'Number of Brazil topics'
         default: '2'
       count_usa:
-        description: 'Number of USA topics (not wired yet — pending template)'
+        description: 'Number of USA topics'
         default: '2'
       manual_mode:
         description: 'Manual mode: build direct topic/template (bypasses queue)'
@@ -52,6 +52,7 @@ on:
           - 'illustrated'
           - 'cutout'
           - 'dados-ou-agenda'
+          - 'educational-explainer'
           - 'motion'
       manual_template_set:
         description: 'Template batch mode'
@@ -174,6 +175,10 @@ jobs:
       PRI_OP_GMAIL_APP_PASSWORD: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       CONTENT_SHEET_ID: '1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU'
+      COUNT_OPC: ${{ github.event.inputs.count_opc || '3' }}
+      COUNT_BRAZIL: ${{ github.event.inputs.count_brazil || '2' }}
+      COUNT_USA: ${{ github.event.inputs.count_usa || '2' }}
+      IMAGE_FALLBACK_SKIP: 'nb2,gemini-3.1-flash'
       BRAZIL_TEMPLATES_FOLDER: '1gDOjtW_X-_jWtu94pffbDaUsw6VGCKuA'
       GIPHY_API_KEY: ${{ secrets.GIPHY_API_KEY }}
       VISION_API_KEY: ${{ secrets.VISION_API_KEY }}
@@ -391,6 +396,10 @@ jobs:
       PRI_OP_GMAIL_APP_PASSWORD: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       CONTENT_SHEET_ID: '1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU'
+      COUNT_OPC: ${{ github.event.inputs.count_opc || '3' }}
+      COUNT_BRAZIL: ${{ github.event.inputs.count_brazil || '2' }}
+      COUNT_USA: ${{ github.event.inputs.count_usa || '2' }}
+      IMAGE_FALLBACK_SKIP: 'nb2,gemini-3.1-flash'
       BRAZIL_TEMPLATES_FOLDER: '1gDOjtW_X-_jWtu94pffbDaUsw6VGCKuA'
       CONTENT_CREATOR_RETRY: 'true'
       GIPHY_API_KEY: ${{ secrets.GIPHY_API_KEY }}

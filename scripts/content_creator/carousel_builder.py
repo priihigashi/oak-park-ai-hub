@@ -29,6 +29,13 @@ PEXELS_KEY     = os.environ.get("PEXELS_API_KEY", "")
 PIXABAY_KEY    = os.environ.get("PIXABAY_API_KEY", "")
 REPLICATE_KEY  = os.environ.get("PRI_OP_REPLICATE_API_KEY", "")
 INFSH_KEY      = os.environ.get("PRI_OP_INFSH_API_KEY", "")
+IMAGE_FALLBACK_SKIP = {
+    p.strip().lower()
+    for p in os.environ.get("IMAGE_FALLBACK_SKIP", "").split(",")
+    if p.strip()
+}
+if "gemini-3.1-flash" in IMAGE_FALLBACK_SKIP:
+    IMAGE_FALLBACK_SKIP.add("gemini")
 
 # SH-138 — slide_purpose pilot (doc 1BDg9ORggVsWH-WQPBx4iQnYNu2UA5vHWcuNRkXCY5v8 v3 FINAL).
 # Default OFF on cron. When SLIDE_PURPOSE_PILOT=1, generation prompts emit slide_purpose
@@ -1410,6 +1417,10 @@ def _attach_story_pipeline_metadata(content, *, topic, niche, template_key=None)
     return updated
 
 
+def _provider_skip(extra=None):
+    return sorted(IMAGE_FALLBACK_SKIP | {p.strip().lower() for p in (extra or []) if p})
+
+
 def generate_carousel_content(topic, niche, template_key=None, brief="", model="claude-sonnet-4-6", slide_plan=None):
     # Special templates checked BEFORE the generic niche short-circuit
     if template_key == "progress":
@@ -1420,6 +1431,11 @@ def generate_carousel_content(topic, niche, template_key=None, brief="", model="
         return _attach_story_pipeline_metadata(content, topic=topic, niche=niche, template_key=template_key)
     if template_key == "verdade-pela-metade":
         content = generate_verdade_content(topic, brief)
+        return _attach_story_pipeline_metadata(content, topic=topic, niche=niche, template_key=template_key)
+    if template_key == "educational-explainer" and niche in ("brazil", "usa"):
+        content = generate_educational_explainer_content(
+            topic, brief, lang="en" if niche == "usa" else "pt", model=model
+        )
         return _attach_story_pipeline_metadata(content, topic=topic, niche=niche, template_key=template_key)
     if niche in ("brazil", "usa"):
         content = generate_brazil_content(topic, brief, model=model)
@@ -2867,6 +2883,157 @@ entry, 2-column grid, face crop first, name second, role tag third."""
     return None
 
 
+def generate_educational_explainer_content(topic, brief="", lang="pt", model="claude-sonnet-4-6"):
+    """Generate FORMAT-021 educational explainer content for Brazil/USA news."""
+    is_en = lang == "en"
+    language_name = "English" if is_en else "Brazilian Portuguese"
+    body_rule = (
+        "All body copy MUST be in English. Do not output Portuguese body text."
+        if is_en else
+        "Todo o corpo do carrossel DEVE estar em português do Brasil. Use linguagem simples."
+    )
+    brief_section = f"\n\nBRIEF / RESEARCH PROVIDED (use this — do not invent facts):\n{brief}" if brief else ""
+    prompt = f"""You are writing an EDUCATIONAL EXPLAINER Instagram carousel in {language_name}.
+Topic: "{topic}"{brief_section}
+
+GOAL:
+Explain a historical, political, legal, or economic concept simply. The audience may not know the basics.
+
+STRUCTURE:
+- 8-9 content slides plus 1 sources slide.
+- Slide 1 cover: scroll-stopping hook.
+- Slide 2 definition: "What is X?" in plain language.
+- Slide 3 context: when, where, why it mattered.
+- Slide 4 deep dive A.
+- Slide 5 deep dive B.
+- Slide 6 comparison_grid: 2-3 columns side-by-side.
+- Slide 7 timeline or data.
+- Slide 8 relevance: why it matters today.
+- Final slide sources.
+
+RULES:
+- {body_rule}
+- 8th-grade reading level. Max 16 words per sentence.
+- Attribution-based language only. No insults, no accusations, no party hashtags.
+- Every factual claim needs a named source.
+- Every named person must appear in mentioned_people with image_hint.
+- Never output raw placeholders.
+
+Return ONLY valid JSON with this shape:
+{{
+  "cover_pt": "cover headline in the output language",
+  "cover_en": "short English subtitle; if USA, repeat or clarify the headline",
+  "cover_accent": "one key word to highlight",
+  "cover_date": "Month DD, YYYY · Explainer",
+  "cover_visual": {{
+    "subject_type": "person|place|event|concept",
+    "option_a": {{"type": "cc-photo", "search_query": "Wikimedia/Wikipedia search term", "description": "photo needed"}},
+    "option_b": {{"type": "ai-composition", "prompt": "typographic documentary composition, no fake person faces", "concept": "visual idea", "tool_hint": "openai"}},
+    "option_c": {{"type": "graphic-design", "concept": "fallback graphic"}},
+    "recommended": "a|b|c",
+    "reason": "why"
+  }},
+  "slides": [
+    {{
+      "type": "definition",
+      "slide_purpose": "definition",
+      "term": "term being defined",
+      "heading_pt": "What is it?",
+      "heading_en": "What is it?",
+      "definition_pt": "plain-language definition in the output language",
+      "mentioned_people": [],
+      "visual_hint": "context-image",
+      "context_image_query": "specific institution/place/document"
+    }},
+    {{
+      "type": "list",
+      "slide_purpose": "context",
+      "heading_pt": "context heading",
+      "heading_en": "context subtitle",
+      "items_pt": ["short bullet", "short bullet", "short bullet"],
+      "mentioned_people": [],
+      "visual_hint": "context-image|bio-card|none",
+      "context_image_query": "specific image search"
+    }},
+    {{
+      "type": "quote",
+      "slide_purpose": "deep_dive",
+      "heading_pt": "deep-dive heading",
+      "heading_en": "deep-dive subtitle",
+      "quote": "short sourced quote or excerpt, if available",
+      "source": "Source name",
+      "context_pt": "why this matters in simple language",
+      "mentioned_people": [{{"name": "First Last", "role_pt": "why they matter", "role_en": "role", "image_hint": "Wikipedia search term"}}],
+      "visual_hint": "bio-card|context-image",
+      "context_image_query": ""
+    }},
+    {{
+      "type": "comparison_grid",
+      "slide_purpose": "comparison",
+      "heading_pt": "side-by-side heading",
+      "heading_en": "side-by-side subtitle",
+      "columns": [
+        {{"label": "Column A", "items": ["point", "point"]}},
+        {{"label": "Column B", "items": ["point", "point"]}},
+        {{"label": "Column C", "items": ["point", "point"]}}
+      ],
+      "mentioned_people": [],
+      "visual_hint": "none",
+      "context_image_query": ""
+    }},
+    {{
+      "type": "timeline",
+      "slide_purpose": "timeline",
+      "heading_pt": "timeline heading",
+      "heading_en": "timeline subtitle",
+      "events": [{{"date": "YYYY", "text_pt": "what happened"}}],
+      "mentioned_people": [],
+      "visual_hint": "context-image",
+      "context_image_query": "specific archival image"
+    }}
+  ],
+  "clip_suggestions": [
+    {{"person_or_topic": "topic", "slide": 1, "duration_hint": "5-8 seconds", "reason": "cover visual",
+      "photo_query": "Wikimedia/Wikipedia search term", "photo_bg_position": "center 20%",
+      "youtube_query": "specific public footage search", "instagram_query": "creator phrasing",
+      "pexels_query": "stock-safe visual search", "pixabay_query": "alternate stock-safe visual search",
+      "archive_query": "public-domain archival query", "wikimedia_query": "Wikimedia Commons query",
+      "motion_prompt": "slow documentary push-in", "motion_renderer": "playwright", "visual_hint": "context-image"}}
+  ],
+  "sources": ["Source 1 — report/article/date", "Source 2 — report/article/date", "Source 3", "Source 4"],
+  "cta_pt": "Save this.",
+  "cta_en": "Save this.",
+  "caption_pt": "caption in the output language, attribution-based, no party hashtags",
+  "caption_en": "English caption"
+}}
+
+Generate enough slides to fully explain the topic, but keep total carousel length at 9-10 slides including sources.
+"""
+    for attempt in range(2):
+        try:
+            text = _claude_with_fallback(
+                prompt, max_tokens=5000, timeout=75,
+                context=f"carousel_builder.educational_explainer.{lang}(attempt {attempt+1})",
+                model=model,
+            )
+        except Exception as e:
+            print(f"  LLM cascade failed (educational explainer, attempt {attempt+1}): {e}")
+            continue
+        m = re.search(r'\{[\s\S]*\}', text)
+        if not m:
+            print(f"  Educational explainer failed — no JSON in response (attempt {attempt+1})")
+            continue
+        try:
+            result = json.loads(m.group())
+            result["_template_key"] = "educational-explainer"
+            result["_language"] = lang
+            return result
+        except json.JSONDecodeError as e:
+            print(f"  Educational explainer JSON parse error (attempt {attempt+1}): {e}")
+    print("  Educational explainer content generation failed after 2 attempts")
+    return None
+
+
 def _fetch_person_photo(search_query, dest_dir, filename):
     """Try to download a CC-licensed photo for a named person.
     Route A: Drive cache (already downloaded this run) — instant.
@@ -2877,6 +3044,14 @@ def _fetch_person_photo(search_query, dest_dir, filename):
     """
     dest_path = Path(dest_dir) / "resources" / "images" / filename
     dest_path.parent.mkdir(parents=True, exist_ok=True)
+
+    def _write_attribution(text):
+        if text:
+            try:
+                dest_path.with_suffix(dest_path.suffix + ".attrib.txt").write_text(text[:500], encoding="utf-8")
+            except Exception:
+                pass
+
     # Route A: cache hit
     if dest_path.exists() and dest_path.stat().st_size > 1000:
         return f"resources/images/{filename}"
@@ -2892,6 +3067,7 @@ def _fetch_person_photo(search_query, dest_dir, filename):
                 raw = r.read()
             if len(raw) > 2000:
                 dest_path.write_bytes(raw)
+                _write_attribution(f"{search_query} — Wikipedia thumbnail / Wikimedia project page")
                 print(f"  Photo fetched (Wikipedia): {filename} ({len(raw)//1024}KB)")
                 return f"resources/images/{filename}"
     except Exception as _e:
@@ -2914,7 +3090,7 @@ def _fetch_person_photo(search_query, dest_dir, filename):
             enc = urllib.parse.quote(title.replace(" ", "_"))
             info_url = (
                 f"https://commons.wikimedia.org/w/api.php?action=query"
-                f"&titles={enc}&prop=imageinfo&iiprop=url&iiurlwidth=600&format=json"
+                f"&titles={enc}&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=600&format=json"
             )
             info_req = urllib.request.Request(info_url, headers={"User-Agent": "oak-park-carousel/1.0"})
             info = json.loads(urllib.request.urlopen(info_req, timeout=10).read())
@@ -2928,6 +3104,18 @@ def _fetch_person_photo(search_query, dest_dir, filename):
                 if len(raw) < 2000:
                     continue  # skip tiny/corrupt files
                 dest_path.write_bytes(raw)
+                meta = ii.get("extmetadata") or {}
+                artist = re.sub(r"<[^>]+>", "", (meta.get("Artist") or {}).get("value", "")).strip()
+                license_name = ((meta.get("LicenseShortName") or {}).get("value", "") or "").strip()
+                license_url = ((meta.get("LicenseUrl") or {}).get("value", "") or "").strip()
+                source_url = ((meta.get("ObjectURL") or {}).get("value", "") or ii.get("descriptionurl") or "").strip()
+                parts = [p for p in (artist, "Wikimedia Commons", license_name) if p]
+                attribution = " / ".join(parts) or "Wikimedia Commons"
+                if source_url:
+                    attribution += f" — {source_url}"
+                if license_url:
+                    attribution += f" — {license_url}"
+                _write_attribution(attribution)
                 print(f"  Photo fetched: {filename} ({len(raw)//1024}KB) ← {title[:60]}")
                 return f"resources/images/{filename}"
         print(f"  No CC photo found for: {search_query}")
@@ -2986,6 +3174,23 @@ def _fetch_slide_photos_brazil(content, work_dir):
             print(f"  slide_photos_brazil: no photo for slide {slide_i} ({photo_query[:40]})")
 
     return result
+
+
+def _photo_attribution_sources(work_dir):
+    """Read Wikimedia/Wikipedia photo credit sidecars for the sources slide."""
+    img_dir = Path(work_dir) / "resources" / "images"
+    if not img_dir.exists():
+        return []
+    seen, out = set(), []
+    for f in sorted(img_dir.glob("*.attrib.txt")):
+        try:
+            text = f.read_text(encoding="utf-8").strip()
+        except Exception:
+            continue
+        if text and text not in seen:
+            seen.add(text)
+            out.append(f"Photo: {text}")
+    return out
 
 
 def _generate_ai_cover(prompt, work_dir, filename="cover.jpg"):
@@ -3734,27 +3939,27 @@ def fetch_all_media(content, niche, work_dir, brief="", topic=""):
                     work_dir=work_dir, save=True, brief=brief,
                 ) or ai_prompt
                 cover_fname = _make_img_filename(search_q, "ai", 1)
-                _skip = _opc_ai_skip if niche == "opc" else None
+                _skip = _provider_skip(_opc_ai_skip if niche == "opc" else None)
                 c, used_prov = _gen_ai_image(fresh_prompt, work_dir, cover_fname, skip_providers=_skip)
                 if c and _vision_accept(c, search_q, f"cover/{used_prov}", work_dir=work_dir):
                     _set_cover(c, used_prov, "ai", query=search_q, prompt=fresh_prompt)
             elif ai_prompt:
                 # Legacy fallback when image_providers not available.
                 # OPC allowed: Gemini. OPC blocked: Seedream, DALL-E, SDXL.
-                c = _generate_gemini_image(ai_prompt, work_dir, cover_fname)
+                c = "" if "gemini" in IMAGE_FALLBACK_SKIP else _generate_gemini_image(ai_prompt, work_dir, cover_fname)
                 if c and _vision_accept(c, search_q, "cover/gemini", work_dir=work_dir):
                     _set_cover(c, "gemini", "ai", query=search_q, prompt=ai_prompt)
                 if not paths["cover"] and not (niche == "opc"):
-                    c = _generate_seedream_image(ai_prompt, work_dir, cover_fname)
+                    c = "" if "seedream-4.5" in IMAGE_FALLBACK_SKIP else _generate_seedream_image(ai_prompt, work_dir, cover_fname)
                     if c and _vision_accept(c, search_q, "cover/seedream", work_dir=work_dir):
                         _set_cover(c, "seedream", "ai", query=search_q, prompt=ai_prompt)
                 # DALL-E: explicitly skipped for OPC (cartoonish style — SH-039)
                 if not paths["cover"] and not (niche == "opc"):
-                    c = _generate_ai_cover(ai_prompt, work_dir, cover_fname)
+                    c = "" if "dall-e-3" in IMAGE_FALLBACK_SKIP else _generate_ai_cover(ai_prompt, work_dir, cover_fname)
                     if c and _vision_accept(c, search_q, "cover/dall-e-3", work_dir=work_dir):
                         _set_cover(c, "dall-e-3", "ai", query=search_q, prompt=ai_prompt)
                 if not paths["cover"] and not (niche == "opc"):
-                    c = _generate_replicate_sdxl(ai_prompt, work_dir, cover_fname)
+                    c = "" if "sdxl" in IMAGE_FALLBACK_SKIP else _generate_replicate_sdxl(ai_prompt, work_dir, cover_fname)
                     if c and _vision_accept(c, search_q, "cover/sdxl", work_dir=work_dir):
                         _set_cover(c, "sdxl", "ai", query=search_q, prompt=ai_prompt)
                 if not paths["cover"] and niche == "opc":
@@ -3903,7 +4108,7 @@ def fetch_all_media(content, niche, work_dir, brief="", topic=""):
                 niche=niche, slide_num=i, work_dir=work_dir, save=True, brief=brief,
             ) or ai_prompt
             fname = _make_img_filename(cq, "ai", i)
-            _skip = ["dall-e-3", "seedream-5.0", "sdxl"] if niche == "opc" else None
+            _skip = _provider_skip(["dall-e-3", "seedream-5.0", "sdxl"] if niche == "opc" else None)
             img_path, used_prov = _gen_ai_image(fresh_prompt, work_dir, fname, skip_providers=_skip)
             if img_path and _vision_accept(img_path, cq, f"slide{i}/{used_prov}", work_dir=work_dir):
                 print(f"  Slide {i}: {used_prov} image for '{cq[:50]}'")
@@ -3914,21 +4119,21 @@ def fetch_all_media(content, niche, work_dir, brief="", topic=""):
         elif not accepted:
             # Legacy fallback when image_providers not available.
             # OPC allowed: Gemini. OPC blocked: Seedream, DALL-E, SDXL.
-            img_path = _generate_gemini_image(ai_prompt, work_dir, fname)
+            img_path = "" if "gemini" in IMAGE_FALLBACK_SKIP else _generate_gemini_image(ai_prompt, work_dir, fname)
             if img_path and _vision_accept(img_path, cq, f"slide{i}/gemini", work_dir=work_dir):
                 _set_slide(i, img_path, "gemini", "ai", query=cq, prompt=ai_prompt)
                 accepted = True
             else:
                 img_path = ""
             if not accepted and not (niche == "opc"):
-                img_path = _generate_seedream_image(ai_prompt, work_dir, fname)
+                img_path = "" if "seedream-4.5" in IMAGE_FALLBACK_SKIP else _generate_seedream_image(ai_prompt, work_dir, fname)
                 if img_path and _vision_accept(img_path, cq, f"slide{i}/seedream", work_dir=work_dir):
                     _set_slide(i, img_path, "seedream", "ai", query=cq, prompt=ai_prompt)
                     accepted = True
                 else:
                     img_path = ""
             if not accepted and not (niche == "opc"):
-                img_path = _generate_replicate_sdxl(ai_prompt, work_dir, fname)
+                img_path = "" if "sdxl" in IMAGE_FALLBACK_SKIP else _generate_replicate_sdxl(ai_prompt, work_dir, fname)
                 if img_path and _vision_accept(img_path, cq, f"slide{i}/sdxl", work_dir=work_dir):
                     _set_slide(i, img_path, "sdxl", "ai", query=cq, prompt=ai_prompt)
                     accepted = True
@@ -3936,7 +4141,7 @@ def fetch_all_media(content, niche, work_dir, brief="", topic=""):
                     img_path = ""
             # DALL-E: explicitly skipped for OPC (real-photo rule SH-039)
             if not accepted and not (niche == "opc"):
-                img_path = _generate_ai_cover(ai_prompt, work_dir, fname)
+                img_path = "" if "dall-e-3" in IMAGE_FALLBACK_SKIP else _generate_ai_cover(ai_prompt, work_dir, fname)
                 if img_path and _vision_accept(img_path, cq, f"slide{i}/dall-e-3", work_dir=work_dir):
                     _set_slide(i, img_path, "dall-e-3", "ai", query=cq, prompt=ai_prompt)
                     accepted = True
@@ -6866,6 +7071,32 @@ def _build_brazil_html(content, slug, work_dir, handle="@HANDLE_PLACEHOLDER", me
 </div>
 """
 
+        elif stype == "definition":
+            term = esc(slide.get("term", "") or h_pt)
+            body = esc(slide.get("definition_pt", "") or slide.get("definition", "") or slide.get("body_pt", ""))
+            v_hint = slide.get("visual_hint", "none")
+            ctx_q = esc(slide.get("context_image_query", ""))
+            _slide_img = (media_paths or {}).get("slides", {}).get(slide_i, "")
+            if v_hint == "context-image" and _slide_img:
+                ctx_slot = f'\n  <div class="definition-anchor"><img src="{_slide_img}" alt=""></div>'
+            elif v_hint == "context-image" and ctx_q:
+                ctx_slot = f'\n  <div class="definition-anchor"><span class="ctx-query">[ IMG: {ctx_q} ]</span></div>'
+            else:
+                ctx_slot = ""
+            slides_html += f"""
+<div class="slide slide-definition {motion_class}">
+  {corners}{clip_el}
+  <div class="tag">Definição</div>
+  <div class="slide-hl">{h_pt}</div>
+  <div class="slide-en">{h_en}</div>
+  <div class="definition-card">
+    <div class="definition-term">{term}</div>
+    <div class="definition-body">{body}</div>
+  </div>{ctx_slot}
+  <div class="swipe">SWIPE &#8594;</div>
+</div>
+"""
+
         elif stype == "data":
             nums_html = ""
             for n in slide.get("numbers", [])[:4]:
@@ -6995,6 +7226,24 @@ def _build_brazil_html(content, slug, work_dir, handle="@HANDLE_PLACEHOLDER", me
   <div class="swipe">SWIPE &#8594;</div>
 </div>
 """
+        elif stype == "comparison_grid":
+            columns = slide.get("columns", []) or []
+            col_count = 3 if len(columns) >= 3 else 2
+            cols_html = ""
+            for col in columns[:3]:
+                label = esc(col.get("label", ""))
+                items = "".join(f"<li>{esc(x)}</li>" for x in col.get("items", [])[:4])
+                cols_html += f'<div class="comparison-col"><h3>{label}</h3><ul>{items}</ul></div>'
+            slides_html += f"""
+<div class="slide slide-comparison-grid {motion_class}">
+  {corners}{clip_el}
+  <div class="tag">Lado a lado</div>
+  <div class="slide-hl">{h_pt}</div>
+  <div class="slide-en">{h_en}</div>
+  <div class="comparison-grid cols-{col_count}">{cols_html}</div>
+  <div class="swipe">SWIPE &#8594;</div>
+</div>
+"""
         elif stype == "verdict":
             verdicts_html = ""
             for v in slide.get("verdicts", []):
@@ -7098,9 +7347,10 @@ def _build_brazil_html(content, slug, work_dir, handle="@HANDLE_PLACEHOLDER", me
 </div>
 """
 
+    all_sources = list(sources or []) + _photo_attribution_sources(work_dir)
     src_rows = "".join(
         f'<div class="src-row"><span class="src-num">{i:02d}</span><span>{esc(s)}</span></div>\n'
-        for i, s in enumerate(sources, 1)
+        for i, s in enumerate(all_sources, 1)
     )
     slides_html += f"""
 <div class="slide slide-sources">
@@ -7175,6 +7425,12 @@ body{{background:#111;display:flex;flex-wrap:wrap;gap:24px;padding:24px}}
 .fact-list{{list-style:none;flex:1}}
 .fact-list li{{font-family:'Roboto Condensed',sans-serif;font-size:34px;font-weight:400;padding:14px 0;border-bottom:1px solid var(--rule);line-height:1.3}}
 .fact-list li::before{{content:"▸ ";color:var(--ca)}}
+/* DEFINITION */
+.definition-card{{border-left:5px solid var(--ca);background:rgba(201,168,76,.055);padding:34px 38px;margin-top:16px;margin-bottom:22px}}
+.definition-term{{font-family:'Playfair Display',serif;font-size:58px;font-weight:900;line-height:1;color:var(--ca);margin-bottom:18px}}
+.definition-body{{font-family:'Roboto Condensed',sans-serif;font-size:34px;line-height:1.32;color:var(--pa)}}
+.definition-anchor{{min-height:230px;max-height:320px;border:2px solid rgba(201,168,76,.25);border-radius:6px;overflow:hidden;display:flex;align-items:center;justify-content:center;margin-top:auto;background:rgba(10,10,10,.3)}}
+.definition-anchor img{{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(.08) contrast(1.03)}}
 /* DATA */
 .nums-grid{{display:grid;grid-template-columns:1fr 1fr;gap:24px;flex:1}}
 .num-block{{background:rgba(201,168,76,.05);border:1px solid rgba(201,168,76,.18);padding:24px 18px;border-radius:4px}}
@@ -7214,6 +7470,15 @@ body{{background:#111;display:flex;flex-wrap:wrap;gap:24px;padding:24px}}
 .comp-cell{{font-family:'Roboto Condensed',sans-serif;font-size:28px;font-weight:700;text-align:center;display:flex;align-items:center;justify-content:center;line-height:1.2}}
 .comp-left{{color:var(--ca)}}
 .comp-right{{color:var(--pa)}}
+/* COMPARISON GRID */
+.comparison-grid{{display:grid;gap:16px;flex:1;align-content:stretch;margin-top:22px}}
+.comparison-grid.cols-3{{grid-template-columns:1fr 1fr 1fr}}
+.comparison-grid.cols-2{{grid-template-columns:1fr 1fr}}
+.comparison-col{{padding:20px;border-left:2px solid var(--ca);background:rgba(201,168,76,.045);min-width:0}}
+.comparison-col h3{{font-family:'JetBrains Mono',monospace;font-size:24px;line-height:1.15;color:var(--ca);margin-bottom:14px;text-transform:uppercase;letter-spacing:.06em}}
+.comparison-col ul{{list-style:none}}
+.comparison-col li{{font-family:'Roboto Condensed',sans-serif;font-size:25px;line-height:1.32;padding:10px 0;border-bottom:1px solid var(--rule)}}
+.comparison-col li::before{{content:"→ ";color:var(--ca)}}
 /* VERDICT slide */
 .verdict-grid{{flex:1;display:flex;flex-direction:column;gap:24px;justify-content:center}}
 .verdict-row{{border-left:4px solid var(--ca);padding:16px 20px;background:rgba(201,168,76,.04)}}

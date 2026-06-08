@@ -162,6 +162,12 @@ Source: CLAUDE.md + memory feedback_opc_copy_rules.md
 Attribution-only captions. No party hashtags. Stagger political posts.
 Source: memory feedback_shadow_ban_caption_rules.md + CONTENT_FORMATS.md
 
+**EDUCATIONAL EXPLAINER USA — ENGLISH BODY MANDATORY**
+Any `educational-explainer` build for niche `usa` must render English body copy.
+Do not reuse the Brazil/PT body prompt for USA explainers. The USA path may keep
+PT fields for schema compatibility, but visible body text must be English.
+Source: 2026-06-08 pipeline audit + FORMAT-021.
+
 ---
 
 ## LOCKED — Workflow & Tracking
