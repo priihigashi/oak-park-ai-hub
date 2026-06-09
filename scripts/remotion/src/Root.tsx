@@ -8,6 +8,7 @@ import {
   EvidenceCompilationProps,
   evidenceCompilationDefaultProps,
 } from "./EvidenceCompilation";
+import { BeforeTheCut, BeforeTheCutProps } from "./BeforeTheCut";
 
 // Default props for development previews — overridden by --props in CI render
 const defaultProps: NewsReelProps = {
@@ -37,6 +38,21 @@ const carouselDefaultProps: CarouselMotionProps = {
   clipSrc: undefined,
   hookText: undefined,
   accentColor: "#F4C430",
+};
+
+// FORMAT-025 BeforeTheCut default props — overridden by --props in CI render.
+// Defaults render against placeholder clips for local preview only.
+const beforeTheCutDefaultProps: BeforeTheCutProps = {
+  manipulatedSrc: "./public/manipulated.mp4",
+  originalSrc: "./public/original.mp4",
+  originalStartFrame: 0,
+  revealFrame: 150,
+  totalFrames: 900,
+  hook: "Cortaram o começo deste vídeo.",
+  contextText: "",
+  captions: [],
+  language: "pt",
+  sourceLabel: "",
 };
 
 const RemotionRoot: React.FC = () => {
@@ -89,6 +105,24 @@ const RemotionRoot: React.FC = () => {
         width={1080}
         height={1920}
         defaultProps={evidenceCompilationDefaultProps as EvidenceCompilationProps}
+      />
+      <Composition
+        id="BeforeTheCutEN"
+        component={BeforeTheCut}
+        durationInFrames={900}
+        fps={30}
+        width={1080}
+        height={1920}
+        defaultProps={{ ...beforeTheCutDefaultProps, language: "en", hook: "They cut the start of this video." }}
+      />
+      <Composition
+        id="BeforeTheCutPT"
+        component={BeforeTheCut}
+        durationInFrames={900}
+        fps={30}
+        width={1080}
+        height={1920}
+        defaultProps={{ ...beforeTheCutDefaultProps, language: "pt" }}
       />
     </>
   );
