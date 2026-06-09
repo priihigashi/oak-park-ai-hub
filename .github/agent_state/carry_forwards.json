@@ -1,12 +1,1 @@
-[
-  {
-    "task": "compress Key IDs + Skills Directory + Known Repeat Mistakes",
-    "context": "This task is important as it involves reducing complexity and risks associated with the current setup, estimated to be around 80 lines with MEDIUM risk.",
-    "auto_actionable": true
-  },
-  {
-    "task": "final validation + sign-off",
-    "context": "Essential for ensuring that all changes made during the cleanup are validated and approved before finalizing.",
-    "auto_actionable": true
-  }
-]
+[]
