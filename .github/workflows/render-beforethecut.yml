@@ -1,0 +1,337 @@
+name: Render Video — Before The Cut (FORMAT-025)
+# Renders the FORMAT-025 deceptive-edit debunk reel (dual-video split) via Remotion.
+# MANUAL MVP: the original clip is sourced by hand (you supply original_url + window).
+# The AUTO original-clip-finder is a separate Phase-2 build — NOT wired here yet.
+# ALWAYS triggered manually via workflow_dispatch.
+#
+# Inputs you supply by hand (manual sourcing):
+#   - the manipulated cut is the captured reel already in News/{project}/Captures ({story_id}_original.mp4)
+#   - original_url + window_start/window_end = the uncut original, windowed to the moment + the seconds BEFORE
+#
+# Devops-audited (Gage, FORMAT-025_BUILD_SPEC.md): --concurrency=2, swap space,
+# yt-dlp --download-sections (window only), routing.reels_folder dest, failure logging.
+
+on:
+  workflow_dispatch:
+    inputs:
+      story_id:
+        description: 'Story ID of the captured manipulated reel (e.g. NWS-202606091200)'
+        required: true
+      project:
+        description: 'brazil or usa — which Captures folder + Reels destination'
+        required: false
+        default: 'brazil'
+        type: choice
+        options:
+          - brazil
+          - usa
+      original_url:
+        description: 'URL of the UNCUT original (YouTube / TV Câmara / TV Senado / C-SPAN channel preferred)'
+        required: true
+      window_start:
+        description: 'Start of the download window HH:MM:SS — set this a few seconds BEFORE the cut (this is the "before" context)'
+        required: true
+      window_end:
+        description: 'End of the download window HH:MM:SS'
+        required: true
+      reveal_frame:
+        description: 'Frame when the split appears (default 150 = 5s, after the hook)'
+        required: false
+        default: '150'
+      total_frames:
+        description: 'Total reel duration in frames at 30fps (default 900 = 30s)'
+        required: false
+        default: '900'
+      hook_pt:
+        description: 'PT hook (first 5s). e.g. "Cortaram o começo deste vídeo."'
+        required: false
+        default: 'Cortaram o começo deste vídeo.'
+      hook_en:
+        description: 'EN hook (first 5s). e.g. "They cut the start of this video."'
+        required: false
+        default: 'They cut the start of this video.'
+      context_text_pt:
+        description: 'PT context band — what they were ACTUALLY talking about'
+        required: false
+        default: ''
+      context_text_en:
+        description: 'EN context band — what they were ACTUALLY talking about'
+        required: false
+        default: ''
+      source_label:
+        description: 'Source credit shown bottom strip, e.g. "Fonte: TV Câmara — 14:32"'
+        required: false
+        default: ''
+      creator_handle:
+        description: 'Handle that posted the manipulated cut (shown on phase-1 chip)'
+        required: false
+        default: ''
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'  # Remotion 4.x requires Node 20+
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python dependencies
+        run: pip install google-auth google-auth-httplib2 google-api-python-client requests yt-dlp
+
+      # Gage devops change #1 — swap insurance for dual-video decode.
+      - name: Add swap space (8GB)
+        run: |
+          sudo fallocate -l 8G /swapfile
+          sudo chmod 600 /swapfile
+          sudo mkswap /swapfile
+          sudo swapon /swapfile
+          free -h
+
+      - name: Write Google credentials
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: |
+          mkdir -p /tmp/creds
+          echo "$SHEETS_TOKEN" > /tmp/creds/sheets_token.json
+
+      - name: Write YouTube cookies (for yt-dlp on parliament/YouTube feeds)
+        env:
+          YT_COOKIES: ${{ secrets.PRI_OP_YT_COOKIES }}
+        run: |
+          if [ -n "$YT_COOKIES" ]; then
+            echo "$YT_COOKIES" > /tmp/yt_cookies.txt
+            echo "cookies written"
+          else
+            echo "no PRI_OP_YT_COOKIES set — yt-dlp will try anonymous"
+          fi
+
+      - name: Download manipulated cut from News Drive Captures
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          STORY_ID: ${{ github.event.inputs.story_id }}
+          PROJECT: ${{ github.event.inputs.project }}
+        run: |
+          mkdir -p scripts/remotion/public
+          python3 - << 'PYEOF'
+          import json, os, io, sys
+          from google.oauth2.credentials import Credentials
+          from googleapiclient.discovery import build
+          from googleapiclient.http import MediaIoBaseDownload
+
+          story_id = os.environ["STORY_ID"]
+          token_data = json.loads(os.environ["SHEETS_TOKEN"])
+          creds = Credentials(
+              token=token_data.get("token"),
+              refresh_token=token_data.get("refresh_token"),
+              token_uri=token_data.get("token_uri", "https://oauth2.googleapis.com/token"),
+              client_id=token_data.get("client_id"),
+              client_secret=token_data.get("client_secret"),
+          )
+          drive = build("drive", "v3", credentials=creds)
+          # Resolve Captures folder from routing.py (single source of truth)
+          sys.path.insert(0, "scripts")
+          from routing import get_route
+          project = os.environ["PROJECT"].lower()
+          capture_folder = get_route(project)["capture_folder_id"]
+
+          dest = "scripts/remotion/public/manipulated.mp4"
+          results = drive.files().list(
+              q=f"name='{story_id}_original.mp4' and '{capture_folder}' in parents and trashed=false",
+              supportsAllDrives=True, includeItemsFromAllDrives=True,
+              fields="files(id,name,size)",
+          ).execute()
+          files = results.get("files", [])
+          if not files:
+              print(f"ERROR: {story_id}_original.mp4 not found in Captures folder {capture_folder}")
+              sys.exit(1)
+          fid = files[0]["id"]
+          req = drive.files().get_media(fileId=fid, supportsAllDrives=True)
+          buf = io.FileIO(dest, "wb")
+          dl = MediaIoBaseDownload(buf, req)
+          done = False
+          while not done:
+              _, done = dl.next_chunk()
+          buf.close()
+          print(f"  Downloaded manipulated cut → {dest} ({os.path.getsize(dest)/1024/1024:.1f} MB)")
+          PYEOF
+
+      # Gage devops change #2 — window-only download. NEVER pull the full (hours-long) original.
+      - name: Download UNCUT original window via yt-dlp (--download-sections)
+        env:
+          ORIGINAL_URL: ${{ github.event.inputs.original_url }}
+          WINDOW_START: ${{ github.event.inputs.window_start }}
+          WINDOW_END: ${{ github.event.inputs.window_end }}
+        run: |
+          COOKIE_ARG=""
+          [ -f /tmp/yt_cookies.txt ] && COOKIE_ARG="--cookies /tmp/yt_cookies.txt"
+          yt-dlp $COOKIE_ARG \
+            --download-sections "*${WINDOW_START}-${WINDOW_END}" \
+            --force-keyframes-at-cuts \
+            -f "bestvideo[height<=1080]+bestaudio/best[height<=1080]" \
+            --merge-output-format mp4 \
+            -o "scripts/remotion/public/original.mp4" \
+            "$ORIGINAL_URL"
+          ls -lh scripts/remotion/public/original.mp4
+          [ -f scripts/remotion/public/original.mp4 ] || { echo "ERROR: original window not downloaded"; exit 1; }
+
+      - name: Install Remotion dependencies
+        working-directory: scripts/remotion
+        run: npm install
+
+      - name: Build render props JSON (EN)
+        env:
+          STORY_ID: ${{ github.event.inputs.story_id }}
+          REVEAL_FRAME: ${{ github.event.inputs.reveal_frame }}
+          TOTAL_FRAMES: ${{ github.event.inputs.total_frames }}
+          HOOK_EN: ${{ github.event.inputs.hook_en }}
+          CONTEXT_EN: ${{ github.event.inputs.context_text_en }}
+          SOURCE_LABEL: ${{ github.event.inputs.source_label }}
+          CREATOR_HANDLE: ${{ github.event.inputs.creator_handle }}
+        run: |
+          python3 scripts/remotion/build_beforethecut_props.py \
+            --story-id "$STORY_ID" --language en \
+            --reveal-frame "$REVEAL_FRAME" --total-frames "$TOTAL_FRAMES" \
+            --hook "$HOOK_EN" --context-text "$CONTEXT_EN" \
+            --source-label "$SOURCE_LABEL" --creator-handle "$CREATOR_HANDLE" \
+            > /tmp/props_en.json
+          echo "EN props:"; cat /tmp/props_en.json
+
+      - name: Build render props JSON (PT)
+        env:
+          STORY_ID: ${{ github.event.inputs.story_id }}
+          REVEAL_FRAME: ${{ github.event.inputs.reveal_frame }}
+          TOTAL_FRAMES: ${{ github.event.inputs.total_frames }}
+          HOOK_PT: ${{ github.event.inputs.hook_pt }}
+          CONTEXT_PT: ${{ github.event.inputs.context_text_pt }}
+          SOURCE_LABEL: ${{ github.event.inputs.source_label }}
+          CREATOR_HANDLE: ${{ github.event.inputs.creator_handle }}
+        run: |
+          python3 scripts/remotion/build_beforethecut_props.py \
+            --story-id "$STORY_ID" --language pt \
+            --reveal-frame "$REVEAL_FRAME" --total-frames "$TOTAL_FRAMES" \
+            --hook "$HOOK_PT" --context-text "$CONTEXT_PT" \
+            --source-label "$SOURCE_LABEL" --creator-handle "$CREATOR_HANDLE" \
+            > /tmp/props_pt.json
+          echo "PT props:"; cat /tmp/props_pt.json
+
+      # Gage devops change #1 — --concurrency=2 caps parallel decoders. EN then PT (sequential).
+      - name: Render EN reel
+        working-directory: scripts/remotion
+        run: |
+          npx remotion render src/Root.tsx BeforeTheCutEN \
+            --props /tmp/props_en.json \
+            --concurrency=2 \
+            --output /tmp/reel_en.mp4
+          echo "EN reel size: $(du -sh /tmp/reel_en.mp4)"
+
+      - name: Render PT reel
+        working-directory: scripts/remotion
+        run: |
+          npx remotion render src/Root.tsx BeforeTheCutPT \
+            --props /tmp/props_pt.json \
+            --concurrency=2 \
+            --output /tmp/reel_pt.mp4
+          echo "PT reel size: $(du -sh /tmp/reel_pt.mp4)"
+
+      # Gage devops change #3 — resolve Reels destination from routing.py (NOT SOVEREIGN_TEMPLATE_FOLDER).
+      - name: Resolve Reels destination folder
+        id: dest
+        env:
+          PROJECT: ${{ github.event.inputs.project }}
+        run: |
+          DEST=$(python3 -c "import sys; sys.path.insert(0,'scripts'); from routing import reels_folder; print(reels_folder('${PROJECT}'))")
+          echo "Reels folder for ${PROJECT}: $DEST"
+          [ -n "$DEST" ] || { echo "ERROR: no reels_folder_id for ${PROJECT} in routing.py"; exit 1; }
+          echo "folder_id=$DEST" >> $GITHUB_OUTPUT
+
+      - name: Upload reels to News Reels folder
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          STORY_ID: ${{ github.event.inputs.story_id }}
+        run: |
+          python3 scripts/remotion/upload_reels.py \
+            --story-id "$STORY_ID" \
+            --topic-slug "beforethecut-$(echo '${{ github.event.inputs.story_id }}' | tr '[:upper:]' '[:lower:]' | tr -cd 'a-z0-9-')" \
+            --en-reel /tmp/reel_en.mp4 \
+            --pt-reel /tmp/reel_pt.mp4 \
+            --folder-id "${{ steps.dest.outputs.folder_id }}"
+
+      - name: Save artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: beforethecut-reels-${{ github.run_id }}
+          path: |
+            /tmp/reel_en.mp4
+            /tmp/reel_pt.mp4
+          retention-days: 30
+
+      # Gage devops change #5 — failure logging from day one (global rule).
+      - name: Log pipeline failure + alert
+        if: failure()
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          GMAIL_PASSWORD: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
+          STORY_ID: ${{ github.event.inputs.story_id }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+        run: |
+          python3 - << 'PYEOF'
+          import json, os, smtplib, urllib.parse, urllib.request
+          from datetime import datetime
+          from email.mime.text import MIMEText
+
+          story_id = os.environ.get("STORY_ID", "")
+          run_id = os.environ.get("GITHUB_RUN_ID", "")
+          run_url = f"https://github.com/priihigashi/oak-park-ai-hub/actions/runs/{run_id}"
+          stage = "render-beforethecut.yml"
+          err = f"FORMAT-025 render failed for {story_id} — see run log"
+
+          # 1) Append to 🚨 Pipeline Failures (Ideas & Inbox)
+          try:
+              td = json.loads(os.environ["SHEETS_TOKEN"])
+              data = urllib.parse.urlencode({
+                  "client_id": td["client_id"], "client_secret": td["client_secret"],
+                  "refresh_token": td["refresh_token"], "grant_type": "refresh_token",
+              }).encode()
+              token = json.loads(urllib.request.urlopen(urllib.request.Request(
+                  "https://oauth2.googleapis.com/token", data=data)).read())["access_token"]
+              SHEET_ID = "1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU"
+              row = [[datetime.utcnow().isoformat() + "Z", "render-beforethecut.yml", run_id,
+                      stage, err, run_url, "", "FORMAT-025 MVP"]]
+              enc = urllib.parse.quote("'🚨 Pipeline Failures'!A:H", safe="!:'")
+              url = (f"https://sheets.googleapis.com/v4/spreadsheets/{SHEET_ID}/values/"
+                     f"{enc}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS")
+              urllib.request.urlopen(urllib.request.Request(
+                  url, data=json.dumps({"values": row}).encode(),
+                  headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"}))
+              print("  Logged to Pipeline Failures tab")
+          except Exception as e:
+              print(f"  Pipeline failure log skipped: {e}")
+
+          # 2) SMTP alert
+          pw = os.environ.get("GMAIL_PASSWORD", "")
+          if pw:
+              try:
+                  msg = MIMEText(f"FORMAT-025 (Before The Cut) render failed.\n\nStory: {story_id}\nRun: {run_url}")
+                  msg["Subject"] = "❌ FORMAT-025 render failed"
+                  msg["From"] = "priscila@oakpark-construction.com"
+                  msg["To"] = "priscila@oakpark-construction.com"
+                  with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=30) as s:
+                      s.login("priscila@oakpark-construction.com", pw)
+                      s.send_message(msg)
+                  print("  Alert email sent")
+              except Exception as e:
+                  print(f"  Alert email skipped: {e}")
+          PYEOF
+          # Re-raise non-zero so the ❌ shows and the run is marked failed
+          exit 1
