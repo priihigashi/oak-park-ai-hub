@@ -96,6 +96,7 @@ NOTE_PARSER_GATE_ENABLED = os.environ.get("NOTE_PARSER_GATE_ENABLED", "0").strip
 # Item 2.3 — Story arc retry gate. Default OFF until one controlled run verifies behavior.
 # Set ARC_GATE_ENABLED=1 in workflow env to activate the 2-attempt generation retry.
 ARC_GATE_ENABLED = os.environ.get("ARC_GATE_ENABLED", "0").strip() == "1"
+VOICE_GATE_ENABLED = os.environ.get("VOICE_GATE_ENABLED", "0").strip().lower() in ("1", "true", "yes", "on")
 # When set, all Drive uploads go to this test folder instead of normal series destinations.
 TEST_OUTPUT_FOLDER = os.environ.get("TEST_OUTPUT_FOLDER", "").strip()
 
@@ -1488,6 +1489,35 @@ def _extract_arc_headlines(content: dict) -> list[str]:
     return headlines
 
 
+def _voice_retry_instruction(violations: list) -> str:
+    details = "\n".join(
+        f"- {getattr(v, 'kind', 'voice')}: {getattr(v, 'reason', str(v))}"
+        for v in violations[:6]
+    )
+    return (
+        "\n\n[VOICE RETRY INSTRUCTION]\n"
+        "The previous draft violated Priscila's voice/personality rules:\n"
+        f"{details}\n\n"
+        "Rewrite with personality, not stenography. Audience-first language. "
+        "Storytelling over fact-listing. Do not use 'Did you know', "
+        "'Most people don't know', 'Have you ever heard', or 'You won't believe'. "
+        "Avoid bibliography-only source slides; each source needs one-line context. "
+        "Avoid bland comparison grids with tiny labels. Example voice: "
+        "'Most people use these 3 words interchangeably. They mean completely different things.'"
+    )
+
+
+def _run_voice_generation_gate(content: dict, niche: str) -> list:
+    if not VOICE_GATE_ENABLED or not isinstance(content, dict):
+        return []
+    try:
+        from voice_personality_gate import check_voice_personality
+        return check_voice_personality(content, route=niche)
+    except Exception as exc:
+        print(f"  [VOICE-GATE] generation check skipped: {exc}")
+        return []
+
+
 def process_one_topic(topic_entry, run_date, drive):
     topic = topic_entry["topic"]
     niche = topic_entry["niche"]
@@ -1793,6 +1823,52 @@ def process_one_topic(topic_entry, run_date, drive):
 
     if niche in ("brazil", "usa"):
         content = _enforce_news_visual_targets(content, topic, niche)
+
+    # FORMAT-021 Phase 2 — voice/personality retry gate. Default OFF.
+    # Runs before media/render/upload so a robotic draft can be retried once
+    # without wasting image or Drive cost.
+    _voice_violations = _run_voice_generation_gate(content, niche)
+    if _voice_violations:
+        print(
+            "  [VOICE-GATE] attempt=1 violations: "
+            + "; ".join(f"{v.kind}" for v in _voice_violations[:6])
+        )
+        _retry_brief = (brief or "") + _voice_retry_instruction(_voice_violations)
+        _content_voice_retry = generate_carousel_content(
+            topic, niche, template_key, brief=_retry_brief, slide_plan=_early_plan
+        )
+        if _content_voice_retry:
+            if template_key:
+                _content_voice_retry["_template_key"] = template_key
+            if niche in ("brazil", "usa"):
+                _content_voice_retry.setdefault("_template_trace", {})
+                _content_voice_retry["_template_trace"].update({
+                    "requested": (topic_entry.get("template_key") or "auto").strip().lower() or "auto",
+                    "resolved": template_key or "native",
+                    "rotation_enabled": TEMPLATE_ROTATION_ENABLED,
+                    "rotation_mode": TEMPLATE_ROTATION_MODE,
+                })
+                _content_voice_retry["_template_key_resolved"] = template_key or "native"
+                _content_voice_retry = _enforce_news_visual_targets(_content_voice_retry, topic, niche)
+            elif niche == "opc":
+                _content_voice_retry = enforce_opc_comparison_parity(_content_voice_retry, topic, brief or "")
+                _content_voice_retry = enforce_opc_source_policy(_content_voice_retry, topic, brief or "")
+            _voice_violations_2 = _run_voice_generation_gate(_content_voice_retry, niche)
+            if not _voice_violations_2:
+                content = _content_voice_retry
+                print("  [VOICE-GATE] accepted retry — 0 violations")
+            else:
+                detail = "; ".join(f"{v.kind}: {v.reason}" for v in _voice_violations_2[:4])
+                _send_alert(
+                    f"[VOICE-GATE] '{topic[:60]}' still violates voice rules after retry:\n{detail}\n"
+                    "Fix: edit the topic/brief or loosen VOICE_GATE_ENABLED for advisory-only testing."
+                )
+                return None
+        else:
+            _send_alert(
+                f"[VOICE-GATE] '{topic[:60]}' violated voice rules and retry returned no content."
+            )
+            return None
 
     # Item 2.3 — Story arc retry gate (ARC_GATE_ENABLED=0 by default).
     # Scores narrative coherence before rendering. On score==1, retries generation once

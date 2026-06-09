@@ -210,6 +210,9 @@ jobs:
       # Rollback: set ENABLED to '0' (one-line revert).
       STORY_PIPELINE_V2_ENABLED: '1'
       STORY_PIPELINE_V2_NICHES: 'brazil'
+      # FORMAT-021 Phase 2 — deterministic voice/personality gate.
+      # Default OFF until controlled Brazil + USA explainer smoke tests pass.
+      VOICE_GATE_ENABLED: '0'
       CAPTURE_STORY_ID: ${{ github.event.inputs.capture_story_id || '' }}
 
     steps:
@@ -432,6 +435,9 @@ jobs:
       # Rollback: set ENABLED to '0' (one-line revert).
       STORY_PIPELINE_V2_ENABLED: '1'
       STORY_PIPELINE_V2_NICHES: 'brazil'
+      # FORMAT-021 Phase 2 — deterministic voice/personality gate.
+      # Default OFF until controlled Brazil + USA explainer smoke tests pass.
+      VOICE_GATE_ENABLED: '0'
       CAPTURE_STORY_ID: ${{ github.event.inputs.capture_story_id || '' }}
 
     steps:
