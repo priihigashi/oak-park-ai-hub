@@ -70,6 +70,31 @@ class VoicePersonalityGateTest(unittest.TestCase):
         kinds = [v.kind for v in check_voice_personality(content, route="usa")]
         self.assertIn("parallel_bland_grid", kinds)
 
+    def test_comparison_grid_with_three_items_passes(self):
+        content = {
+            "comparison_grid": {
+                "columns": [
+                    {
+                        "label": "Capitalismo",
+                        "items": [
+                            "Markets set most prices.",
+                            "Private ownership drives investment.",
+                            "Profit decides what expands.",
+                        ],
+                    },
+                    {
+                        "label": "Socialismo",
+                        "items": [
+                            "Public planning shapes priorities.",
+                            "Collective ownership is the goal.",
+                            "Distribution is part of the debate.",
+                        ],
+                    },
+                ]
+            }
+        }
+        self.assertEqual(check_voice_personality(content, route="usa"), [])
+
     def test_recycled_hashtag_block_flagged(self):
         tags = "#policy #history #context #news"
         content = {"in_post_hashtags": tags}

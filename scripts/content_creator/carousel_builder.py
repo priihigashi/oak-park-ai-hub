@@ -2940,6 +2940,8 @@ RULES:
 - Attribution-based language only. No insults, no accusations, no party hashtags.
 - Every factual claim needs a named source.
 - Every named person must appear in mentioned_people with image_hint.
+- The comparison_grid cannot be a thin school-chart. Use concrete multi-word column labels and 3 explanatory items per column. Bad labels: "Capitalismo", "Socialismo", "Sovietismo". Good labels: "Mercado capitalista", "Socialismo como teoria", "Modelo soviético na prática".
+- Sources must not be bibliography-only. Each source line must include one short context clause explaining what it proves or clarifies.
 - Never output raw placeholders.
 - IF the topic involves a named person, cover_visual.option_a.search_query MUST be that person's full name as Wikipedia would list them, NOT the topic title.
 - Never write literal placeholder text in cover_visual.option_a.search_query. Bad: "Wikimedia/Wikipedia search term", "search term", "Wikipedia search". Good: "Earl Warren" or "Sylvester Smith".
@@ -2998,9 +3000,9 @@ Return ONLY valid JSON with this shape:
       "heading_pt": "side-by-side heading",
       "heading_en": "side-by-side subtitle",
       "columns": [
-        {{"label": "Column A", "items": ["point", "point"]}},
-        {{"label": "Column B", "items": ["point", "point"]}},
-        {{"label": "Column C", "items": ["point", "point"]}}
+        {{"label": "Concrete column A", "items": ["specific explanatory point", "specific explanatory point", "specific explanatory point"]}},
+        {{"label": "Concrete column B", "items": ["specific explanatory point", "specific explanatory point", "specific explanatory point"]}},
+        {{"label": "Concrete column C", "items": ["specific explanatory point", "specific explanatory point", "specific explanatory point"]}}
       ],
       "mentioned_people": [],
       "visual_hint": "none",
@@ -3025,7 +3027,7 @@ Return ONLY valid JSON with this shape:
       "archive_query": "public-domain archival query", "wikimedia_query": "Wikimedia Commons query",
       "motion_prompt": "slow documentary push-in", "motion_renderer": "playwright", "visual_hint": "context-image"}}
   ],
-  "sources": ["Source 1 — report/article/date", "Source 2 — report/article/date", "Source 3", "Source 4"],
+  "sources": ["Source 1 — report/article/date — what this source proves", "Source 2 — report/article/date — what this source clarifies", "Source 3 — why it matters", "Source 4 — why it matters"],
   "cta_pt": "Save this.",
   "cta_en": "Save this.",
   "caption_pt": "caption in the output language, attribution-based, no party hashtags",

@@ -1627,10 +1627,28 @@ def _voice_retry_instruction(violations: list) -> str:
         f"- {getattr(v, 'kind', 'voice')}: {getattr(v, 'reason', str(v))}"
         for v in violations[:6]
     )
-    return (
+    kinds = {getattr(v, "kind", "") for v in violations}
+    targeted = []
+    if "bibliography_sources" in kinds:
+        targeted.append(
+            "For the sources slide, every source line must include why it matters: "
+            "'Source — date — what this source proves or clarifies.'"
+        )
+    if "parallel_bland_grid" in kinds:
+        targeted.append(
+            "For comparison_grid, use concrete multi-word column labels and at least "
+            "3 explanatory items per column; never use one-word labels like "
+            "'Capitalismo', 'Socialismo', or 'Sovietismo' by themselves."
+        )
+    targeted_text = "\n".join(f"- {line}" for line in targeted)
+    parts = [
         "\n\n[VOICE RETRY INSTRUCTION]\n"
         "The previous draft violated Priscila's voice/personality rules:\n"
-        f"{details}\n\n"
+        f"{details}\n\n",
+    ]
+    if targeted_text:
+        parts.append(f"{targeted_text}\n\n")
+    parts.append(
         "Rewrite with personality, not stenography. Audience-first language. "
         "Storytelling over fact-listing. Do not use 'Did you know', "
         "'Most people don't know', 'Have you ever heard', or 'You won't believe'. "
@@ -1638,6 +1656,7 @@ def _voice_retry_instruction(violations: list) -> str:
         "Avoid bland comparison grids with tiny labels. Example voice: "
         "'Most people use these 3 words interchangeably. They mean completely different things.'"
     )
+    return "".join(parts)
 
 
 def _run_voice_generation_gate(content: dict, niche: str) -> list:
