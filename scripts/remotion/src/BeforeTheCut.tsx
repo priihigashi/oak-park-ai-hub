@@ -4,7 +4,6 @@ import {
   OffthreadVideo,
   Sequence,
   useCurrentFrame,
-  useVideoConfig,
   interpolate,
 } from "remotion";
 

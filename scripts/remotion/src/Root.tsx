@@ -114,6 +114,7 @@ const RemotionRoot: React.FC = () => {
         width={1080}
         height={1920}
         defaultProps={{ ...beforeTheCutDefaultProps, language: "en", hook: "They cut the start of this video." }}
+        calculateMetadata={({ props }) => ({ durationInFrames: props.totalFrames || 900 })}
       />
       <Composition
         id="BeforeTheCutPT"
@@ -123,6 +124,7 @@ const RemotionRoot: React.FC = () => {
         width={1080}
         height={1920}
         defaultProps={{ ...beforeTheCutDefaultProps, language: "pt" }}
+        calculateMetadata={({ props }) => ({ durationInFrames: props.totalFrames || 900 })}
       />
     </>
   );
