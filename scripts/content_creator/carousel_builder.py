@@ -2941,6 +2941,8 @@ RULES:
 - Every factual claim needs a named source.
 - Every named person must appear in mentioned_people with image_hint.
 - Never output raw placeholders.
+- IF the topic involves a named person, cover_visual.option_a.search_query MUST be that person's full name as Wikipedia would list them, NOT the topic title.
+- Never write literal placeholder text in cover_visual.option_a.search_query. Bad: "Wikimedia/Wikipedia search term", "search term", "Wikipedia search". Good: "Earl Warren" or "Sylvester Smith".
 
 Return ONLY valid JSON with this shape:
 {{
@@ -2950,7 +2952,7 @@ Return ONLY valid JSON with this shape:
   "cover_date": "Month DD, YYYY · Explainer",
   "cover_visual": {{
     "subject_type": "person|place|event|concept",
-    "option_a": {{"type": "cc-photo", "search_query": "Wikimedia/Wikipedia search term", "description": "photo needed"}},
+    "option_a": {{"type": "cc-photo", "search_query": "NAMED-PERSON FULL NAME e.g. Earl Warren OR Sylvester Smith", "description": "photo needed"}},
     "option_b": {{"type": "ai-composition", "prompt": "typographic documentary composition, no fake person faces", "concept": "visual idea", "tool_hint": "openai"}},
     "option_c": {{"type": "graphic-design", "concept": "fallback graphic"}},
     "recommended": "a|b|c",
@@ -3060,6 +3062,13 @@ Generate enough slides to fully explain the topic, but keep total carousel lengt
                 if leak:
                     print(f"  Educational explainer EN leaked Portuguese (attempt {attempt+1}): {leak[:3]}")
                     continue
+            bad_cover_query = _detect_bad_cover_query_in_explainer(result)
+            if bad_cover_query:
+                print(
+                    f"  Educational explainer cover query placeholder "
+                    f"(attempt {attempt+1}): {bad_cover_query!r}"
+                )
+                continue
             return result
         except json.JSONDecodeError as e:
             print(f"  Educational explainer JSON parse error (attempt {attempt+1}): {e}")
@@ -3123,6 +3132,30 @@ def _detect_pt_leak_in_explainer(result: dict) -> list[str]:
 
     _scan(result)
     return leaks[:5]
+
+
+_BAD_EXPLAINER_COVER_QUERY_RE = re.compile(
+    r"(wikimedia|wikipedia|search\s+term)",
+    re.IGNORECASE,
+)
+
+
+def _detect_bad_cover_query_in_explainer(result: dict) -> str:
+    """Return the bad cover query when the LLM leaves schema placeholder text."""
+    if not isinstance(result, dict):
+        return ""
+    cover_visual = result.get("cover_visual")
+    if not isinstance(cover_visual, dict):
+        return ""
+    option_a = cover_visual.get("option_a")
+    if not isinstance(option_a, dict):
+        return ""
+    query = str(option_a.get("search_query") or "").strip()
+    if not query:
+        return ""
+    if _BAD_EXPLAINER_COVER_QUERY_RE.search(query):
+        return query
+    return ""
 
 
 def _fetch_person_photo(search_query, dest_dir, filename):
