@@ -62,6 +62,7 @@ INSPO_TAB     = "📥 Inspiration Library"
 QUEUE_TAB     = "📋 Content Queue"
 CATALOG_TAB   = "📸 Project Content Catalog"
 HISTORY_TAB   = "Build History"
+TEMPLATE_ROTATION_LOG_TAB = "Template Rotation Log"
 HISTORY_DEDUP_DAYS = 30
 
 ALERT_EMAIL = os.environ.get("ALERT_EMAIL", "priscila@oakpark-construction.com")
@@ -377,7 +378,131 @@ def _weekday_template(day_idx):
     return weekday_map.get(day_idx, "tip")
 
 
-def _resolve_opc_template(topic_entry, topic, run_date):
+def _infer_template_from_history_row(row: list[str]) -> str:
+    blob = " ".join(str(x).lower() for x in row)
+    if "educational" in blob or "explainer" in blob:
+        return "educational-explainer"
+    if "progress" in blob or "before" in blob or "after" in blob:
+        return "progress"
+    if "tip of the week" in blob or "tip" in blob:
+        return "tip"
+    if "illustrated" in blob:
+        return "illustrated"
+    if "cutout" in blob:
+        return "cutout"
+    if "the chain" in blob or "quem decidiu" in blob or "rachadinha" in blob:
+        return "native"
+    return ""
+
+
+def get_recent_templates_from_history(token: str, days: int = 7) -> list[str]:
+    """Return most-recent template IDs inferred from Build History rows."""
+    import urllib.request, urllib.parse
+    from datetime import timedelta
+    try:
+        cutoff = (datetime.now(ET) - timedelta(days=days)).strftime("%Y-%m-%d")
+        enc = urllib.parse.quote(f"'{HISTORY_TAB}'!A2:G", safe="!:'")
+        url = f"https://sheets.googleapis.com/v4/spreadsheets/{SHEET_ID}/values/{enc}"
+        req = urllib.request.Request(url, headers={"Authorization": f"Bearer {token}"})
+        rows = json.loads(urllib.request.urlopen(req, timeout=10).read()).get("values", [])
+        recent: list[str] = []
+        for row in reversed(rows):
+            if not row:
+                continue
+            date_str = str(row[0]).strip()
+            if date_str and date_str < cutoff:
+                continue
+            tmpl = _infer_template_from_history_row(row)
+            if tmpl:
+                recent.append(tmpl)
+        return recent
+    except Exception as e:
+        print(f"  Template rotation: Build History read failed (non-fatal): {e}")
+        return []
+
+
+def _score_template_candidates(topic_text: str, niche: str, recent_templates: list[str]) -> dict[str, int]:
+    topic_l = (topic_text or "").lower()
+    niche = (niche or "").lower()
+    if niche == "opc":
+        candidates = {"tip": 35, "progress": 25}
+    else:
+        candidates = {
+            "native": 30,
+            "educational-explainer": 25,
+            "illustrated": 16,
+            "cutout": 14,
+        }
+
+    keyword_boosts = {
+        "progress": ("progress", "before", "after", "jobsite", "site", "project", "install", "installed", "demo", "demolition", "framing", "poured", "inspection"),
+        "tip": ("tip", "avoid", "mistake", "cost", "save", "homeowner", "choose", "when to", "how to", "why you should", "red flag"),
+        "educational-explainer": ("what is", "explainer", "explain", "definition", "concept", "policy", "law", "rule", "history", "slavery", "socialism", "capitalism", "constitution", "doctrine", "economy", "economic"),
+        "native": ("breaking", "vote", "court", "congress", "senate", "stf", "president", "minister", "claim", "said", "says", "decision"),
+        "illustrated": ("budget", "data", "map", "system", "structure", "numbers", "timeline"),
+        "cutout": ("who", "profile", "person", "leader", "candidate", "minister", "judge", "decided"),
+    }
+    for tmpl, words in keyword_boosts.items():
+        if tmpl not in candidates:
+            continue
+        hits = sum(1 for word in words if word in topic_l)
+        candidates[tmpl] += min(hits * 14, 42)
+    if "educational-explainer" in candidates and re.search(r"\bwhat is\b|\bo que (?:é|foi|significa)\b|\bexplainer\b|\bexplique\b", topic_l):
+        candidates["educational-explainer"] += 28
+
+    recent = [t for t in recent_templates if t]
+    for tmpl in list(candidates):
+        if tmpl in recent[:3]:
+            candidates[tmpl] -= 30
+        elif tmpl in recent:
+            candidates[tmpl] -= 12
+        else:
+            candidates[tmpl] += 10
+
+    return candidates
+
+
+def _pick_template_by_topic(topic_text: str, niche: str, recent_templates: list[str]) -> str:
+    """Pick a built template by topic fit + recent-template penalty."""
+    scores = _score_template_candidates(topic_text, niche, recent_templates)
+    if not scores:
+        return "tip" if niche == "opc" else "native"
+    return sorted(scores.items(), key=lambda item: (-item[1], item[0]))[0][0]
+
+
+def log_template_rotation_decision(topic: str, niche: str, chosen_template: str,
+                                   scores: dict[str, int], recent_templates: list[str]) -> None:
+    """Append one template rotation decision to Ideas & Inbox."""
+    import urllib.request, urllib.parse
+    try:
+        token = get_oauth_token()
+        ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        row = [[
+            ts,
+            topic[:180],
+            niche,
+            chosen_template or "native",
+            json.dumps(scores, sort_keys=True),
+            ", ".join(recent_templates[:12]),
+        ]]
+        enc = urllib.parse.quote(f"'{TEMPLATE_ROTATION_LOG_TAB}'!A:F", safe="!:'")
+        url = (
+            f"https://sheets.googleapis.com/v4/spreadsheets/{SHEET_ID}/values/{enc}"
+            f":append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS"
+        )
+        payload = json.dumps({"values": row}).encode()
+        req = urllib.request.Request(
+            url,
+            data=payload,
+            headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+        )
+        urllib.request.urlopen(req, timeout=10)
+        print(f"  Template Rotation Log: {niche} -> {chosen_template or 'native'}")
+    except Exception as e:
+        print(f"  Template Rotation Log write failed (non-fatal): {e}")
+
+
+def _resolve_opc_template(topic_entry, topic, run_date, recent_templates=None):
     """Choose OPC template route with deterministic rotation.
     Priority: explicit sheet override > rotation mode > default tip."""
     explicit = (topic_entry.get("template_key") or "").strip().lower()
@@ -388,15 +513,17 @@ def _resolve_opc_template(topic_entry, topic, run_date):
         return "tip"
 
     mode = TEMPLATE_ROTATION_MODE
-    if mode == "alternate":
-        return "tip"
+    if mode in ("topic", "weekday", "alternate"):
+        picked = _pick_template_by_topic(topic, "opc", list(recent_templates or []))
+        if picked in ("tip", "progress"):
+            return picked
     if mode == "weekday":
         day_idx = datetime.now(ET).weekday()
         return _weekday_template(day_idx)
     return "tip"
 
 
-def _resolve_news_template(topic_entry, niche):
+def _resolve_news_template(topic_entry, niche, topic="", recent_templates=None):
     """Brazil/USA template routing.
     Priority:
     1) explicit template_key in sheet
@@ -411,6 +538,12 @@ def _resolve_news_template(topic_entry, niche):
         return None if explicit == "native" else explicit
     if not TEMPLATE_ROTATION_ENABLED:
         return None
+    if topic:
+        picked = _pick_template_by_topic(topic, niche, list(recent_templates or []))
+        if picked == "native":
+            return None
+        if picked in ("educational-explainer", "illustrated", "cutout"):
+            return picked
     if TEMPLATE_ROTATION_MODE != "weekday":
         return None
     now = datetime.now(ET)
@@ -1525,6 +1658,12 @@ def process_one_topic(topic_entry, run_date, drive):
     fake_news_route = topic_entry.get("fake_news_route", "B")
     fake_news_confidence = topic_entry.get("fake_news_confidence", 0.0)
     queue_row = topic_entry.get("queue_row_idx")
+    _recent_templates = []
+    if TEMPLATE_ROTATION_ENABLED:
+        try:
+            _recent_templates = get_recent_templates_from_history(get_oauth_token(), days=7)
+        except Exception as e:
+            print(f"  Template rotation: token/read failed (non-fatal): {e}")
 
     # Confidence gate — Verificamos items below threshold go to manual review, never auto-build
     if series_override == "VERIFICAMOS" and fake_news_confidence < VERIFICAMOS_CONFIDENCE_THRESHOLD:
@@ -1542,17 +1681,17 @@ def process_one_topic(topic_entry, run_date, drive):
     slug = topic[:40].lower().replace(" ", "-").replace("'", "").replace('"', '')
     slug = "".join(c for c in slug if c.isalnum() or c == "-")
     if niche == "opc":
-        _opc_type = _resolve_opc_template(topic_entry, topic, run_date)
+        _opc_type = _resolve_opc_template(topic_entry, topic, run_date, recent_templates=_recent_templates)
         post_id = f"opc-{_opc_type}-{run_date}-{slug[:20]}"
     elif niche == "usa":
-        _tmpl = _resolve_news_template(topic_entry, niche) or "native"
+        _tmpl = _resolve_news_template(topic_entry, niche, topic=topic, recent_templates=_recent_templates) or "native"
         post_id = f"usa-{_tmpl}-{run_date}-{slug[:20]}"
     elif series_override == "VERIFICAMOS":
         post_id = f"verificamos-{run_date}-{slug[:20]}"
     elif series_override == "VERDADE PELA METADE":
         post_id = f"verdade-{run_date}-{slug[:20]}"
     else:
-        _tmpl = _resolve_news_template(topic_entry, niche) or "native"
+        _tmpl = _resolve_news_template(topic_entry, niche, topic=topic, recent_templates=_recent_templates) or "native"
         post_id = f"brazil-{_tmpl}-{run_date}-{slug[:20]}"
 
     print(f"\n{'='*60}")
@@ -1644,11 +1783,20 @@ def process_one_topic(topic_entry, run_date, drive):
     elif series_override == "VERDADE PELA METADE":
         template_key = "verdade-pela-metade"
     elif niche == "opc":
-        template_key = _resolve_opc_template(topic_entry, topic, run_date)
+        template_key = _resolve_opc_template(topic_entry, topic, run_date, recent_templates=_recent_templates)
     elif niche in ("brazil", "usa"):
-        template_key = _resolve_news_template(topic_entry, niche)
+        template_key = _resolve_news_template(topic_entry, niche, topic=topic, recent_templates=_recent_templates)
     else:
         template_key = None
+    if TEMPLATE_ROTATION_ENABLED and niche in ("opc", "brazil", "usa"):
+        _rotation_scores = _score_template_candidates(topic, niche, _recent_templates)
+        log_template_rotation_decision(
+            topic,
+            niche,
+            template_key or "native",
+            _rotation_scores,
+            _recent_templates,
+        )
     if niche in ("brazil", "usa"):
         _requested_template = (topic_entry.get("template_key") or "auto").strip().lower() or "auto"
         _resolved_template = template_key or "native"
