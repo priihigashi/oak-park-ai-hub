@@ -1,1 +1,22 @@
-[]
+[
+  {
+    "task": "NEEDS DETAILS for NEW PROJECT badge 30d auto-decay",
+    "context": "This is necessary to finalize the implementation details of the auto-decay feature for new project badges.",
+    "auto_actionable": true
+  },
+  {
+    "task": "Tap A35 Impact font",
+    "context": "Composio fontFamily not exposed",
+    "auto_actionable": true
+  },
+  {
+    "task": "Convert A38:H46 to Sheets Table",
+    "context": "Composio addTable not exposed",
+    "auto_actionable": true
+  },
+  {
+    "task": "DM Erin to confirm dates",
+    "context": "form has 6/27 checkin / 6/24 checkout = typo",
+    "auto_actionable": false
+  }
+]
