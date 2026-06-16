@@ -15,7 +15,9 @@ config = {
     "client_id":       os.environ["GOOGLE_ADS_CLIENT_ID"],
     "client_secret":   os.environ["GOOGLE_ADS_CLIENT_SECRET"],
     "refresh_token":   os.environ["GOOGLE_ADS_REFRESH_TOKEN"],
-    "login_customer_id": os.environ.get("GOOGLE_ADS_MCC_ID", "5870713494").replace("-", ""),
+    # NOTE: do NOT set login_customer_id — the working ads_dashboard.py auths
+    # directly against the sub-account. Setting it to the MCC triggers
+    # USER_PERMISSION_DENIED (refresh-token user isn't an MCC manager).
     "use_proto_plus": True,
 }
 client = GoogleAdsClient.load_from_dict(config)
