@@ -1,0 +1,60 @@
+name: OAuth Token Health Check
+
+# Early-warning for the 7-day Testing-mode token death (McFolling + ads/SHEETS).
+# Tries a live refresh of each token daily. If any token is dead, the run goes red
+# and the failure step emails Priscila so she re-auths BEFORE hitting it mid-task.
+# Permanent fix is publishing the OAuth app — see project_oauth_token_expiry_fix.md.
+
+on:
+  schedule:
+    - cron: '0 12 * * *'   # 12:00 UTC = ~7am ET (daily)
+  workflow_dispatch: {}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install deps
+        run: pip install --quiet google-auth google-auth-oauthlib
+
+      - name: Refresh-check tokens
+        env:
+          MCFOLLING_TOKEN: ${{ secrets.MCFOLLING_TOKEN }}
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: python3 scripts/mcfolling_token_healthcheck.py
+
+      - name: Alert on token death
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: priscila@oakpark-construction.com
+          password: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
+          to: priscila@oakpark-construction.com
+          from: Oak Park AI <priscila@oakpark-construction.com>
+          subject: '🔴 OAuth token DEAD — re-auth needed'
+          body: |
+            One or more OAuth tokens failed their daily refresh — they are likely
+            dead (invalid_grant), which breaks McFolling Gmail/Sheets and/or the
+            Google Ads dashboard.
+
+            Quick fix (re-auth):
+              python3 ~/ClaudeWorkspace/Credentials/authorize_mcfolling.py
+              gh secret set MCFOLLING_TOKEN < ~/ClaudeWorkspace/Credentials/mcfolling_token.json
+
+            PERMANENT fix (~2 min, stops this forever):
+              Google Cloud Console > APIs & Services > OAuth consent screen >
+              Publish App  (move Testing -> Production).
+
+            See the failed run's "Refresh-check tokens" step for which token died:
+            https://github.com/priihigashi/oak-park-ai-hub/actions/workflows/mcfolling_token_healthcheck.yml
