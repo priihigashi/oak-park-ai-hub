@@ -1,22 +1,57 @@
 [
   {
-    "task": "NEEDS DETAILS for NEW PROJECT badge 30d auto-decay",
-    "context": "This is necessary to finalize the implementation details of the auto-decay feature for new project badges.",
+    "task": "Build Local/LSA (471) tab + Billing tab on the ads dashboard",
+    "context": "Priscila approved; paused for the PAUSED-banner fire.",
     "auto_actionable": true
   },
   {
-    "task": "Tap A35 Impact font",
-    "context": "Composio fontFamily not exposed",
+    "task": "Fix ads_pulse.yml fail-alert bug",
+    "context": "Uses GMAIL_APP_PASSWORD; should be PRI_OP_GMAIL_APP_PASSWORD.",
     "auto_actionable": true
   },
   {
-    "task": "Convert A38:H46 to Sheets Table",
-    "context": "Composio addTable not exposed",
+    "task": "Fill billing-sheet transaction IDs + confirm every charge from Google once Priscila sends Nov-Mar + Local statements",
+    "context": "Necessary for accurate billing reconciliation.",
     "auto_actionable": true
   },
   {
-    "task": "DM Erin to confirm dates",
-    "context": "form has 6/27 checkin / 6/24 checkout = typo",
-    "auto_actionable": false
+    "task": "Log the $500 Zelle answer once Michael confirms",
+    "context": "Important to clarify potential double-pay/reimbursement.",
+    "auto_actionable": true
+  },
+  {
+    "task": "LSA 'is it worth it' review",
+    "context": "Deferred strategic review due to recent performance metrics.",
+    "auto_actionable": true
+  },
+  {
+    "task": "do the 6 Ads tasks",
+    "context": "conversion-tracking fix is the big unlock.",
+    "auto_actionable": true
+  },
+  {
+    "task": "Confirm Florida Blue plan TYPE",
+    "context": "HMO needs PCP referral to see endocrinologist; PPO can self-refer.",
+    "auto_actionable": true
+  },
+  {
+    "task": "call to schedule Mia X-ray + ultrasound",
+    "context": "confirm center sees a 3yo.",
+    "auto_actionable": true
+  },
+  {
+    "task": "thyroid PCP call (Holy Cross Pompano)",
+    "context": "to get TSH + Free T4 labs.",
+    "auto_actionable": true
+  },
+  {
+    "task": "5 content briefs awaiting GO",
+    "context": "EP002 needs real @handle; EP006 needs format pick.",
+    "auto_actionable": true
+  },
+  {
+    "task": "OPC PM Tool: Mike live calendar test",
+    "context": "Phase 1 ship gate.",
+    "auto_actionable": true
   }
 ]
