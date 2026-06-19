@@ -1,0 +1,48 @@
+name: Maya Pilot Tests
+
+# Gates the Call Assistants safety suite (consent, kill switch, RE4 gate, escalation,
+# webhook auth, dedup, retention, requirement traceability). A regression flips the run
+# red and emails Priscila so a broken safety control never ships green.
+
+on:
+  push:
+    paths:
+      - 'scripts/maya/**'
+      - 'tests/test_maya_*.py'
+      - '.github/workflows/maya_tests.yml'
+  pull_request:
+    paths:
+      - 'scripts/maya/**'
+      - 'tests/test_maya_*.py'
+  workflow_dispatch: {}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pytest
+        run: pip install --quiet pytest
+      - name: Run Maya pilot tests
+        run: python3 -m pytest tests/test_maya_*.py -q
+      - name: Alert on failure
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: priscila@oakpark-construction.com
+          password: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
+          to: priscila@oakpark-construction.com
+          from: Oak Park AI <priscila@oakpark-construction.com>
+          subject: '🔴 Maya pilot tests FAILED — a safety control regressed'
+          body: |
+            The Maya / Call Assistants safety test suite failed on the latest change.
+            A compliance/safety control (consent, kill switch, escalation, RE4 gate,
+            webhook auth, dedup, or retention) may be broken. Do not deploy until green.
+
+            Run: https://github.com/priihigashi/oak-park-ai-hub/actions/workflows/maya_tests.yml

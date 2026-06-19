@@ -1,0 +1,37 @@
+{
+  "_comment": "Retell agent config for the McFolling pilot. Import once MF_RETELL_API_KEY exists. Secrets are referenced by ${ENV_VAR}, never inlined. RM4 = human-sounding voice targets.",
+  "agent_name": "Maya — McFolling Guest Line (pilot)",
+  "telephony": {
+    "provider": "retell_managed",
+    "_note": "Pilot default = Retell-managed number. Twilio only if explicitly adopted (set provider=twilio + Twilio secrets)."
+  },
+  "voice": {
+    "_rm4_targets": "Human-sounding acceptance: avg response latency < 1.5s, natural turn-taking (no overlap/cut-offs), passes Priscila blind-listen.",
+    "voice_id": "TBD-on-account-create",
+    "interruption_sensitivity": 0.6,
+    "responsiveness": 0.9,
+    "backchanneling": true
+  },
+  "first_message": "Hi, this is Maya, an AI assistant for McFolling Properties. This call is recorded for quality and safety — is that okay?",
+  "system_prompt_ref": "agent_prompts/guest_agent_prompt.md",
+  "knowledge_base_ref": "agent_prompts/property_kb_template.md",
+  "webhook": {
+    "url": "TBD-deploy-url",
+    "signature_secret_env": "MF_RETELL_WEBHOOK_SECRET",
+    "_note": "Inbound webhooks verified via maya.webhook_auth.verify_signature (RM9)."
+  },
+  "escalation": {
+    "primary": "priscila",
+    "fallback": "michael",
+    "max_attempts_per_target": 3,
+    "interval_seconds": 120,
+    "primary_phone_env": "MF_PRISCILA_PHONE",
+    "fallback_phone_env": "MF_MICHAEL_PHONE"
+  },
+  "guardrails": {
+    "kill_switch_env": "MF_MAYA_KILL_SWITCH",
+    "daily_call_cap": 50,
+    "daily_cost_cap_usd": 25.0,
+    "no_booking_no_payment": true
+  }
+}
