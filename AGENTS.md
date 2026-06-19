@@ -217,6 +217,7 @@ Live in `~/.agents/skills/<name>/SKILL.md`. Symlinked into `~/.claude/skills/` a
 | `sheets-automation` | Spreadsheet create / modify / batch-update |
 | `remotion-best-practices` | Video composition via Remotion |
 | `find-skills` | User asks "do we have a skill for X" |
+| `organize-project` | "organize this project" / "10/10 organize" / "organize these tasks" / "reconcile this project" — PLAN-FIRST read-only audit + reconciled backlog; changes NOTHING until she says GO. Source: `skills/shared/organize-project/SKILL.md` (runtime symlink from `~/.agents/skills/`) |
 | `thumbnail-generator` | Reel/video thumbnail for OPC brand |
 
 Each SKILL.md specifies *when to use* and *when not to use*. Read the SKILL.md before executing.
