@@ -4,7 +4,7 @@
 > Any change that removes or breaks a locked rule requires an explicit note in the commit message.
 > Auto-updated nightly by `scripts/nonnegotiables_updater.py`.
 
-_Last updated: 2026-06-21 (auto-updated by nonnegotiables_updater.py)_
+_Last updated: 2026-06-22 (auto-updated by nonnegotiables_updater.py)_
 
 ---
 
@@ -2269,4 +2269,36 @@ END OF MOTION SYSTEM V2 SPEC — Phase 1 closed 2026-05-18
 
 
 - **CODE FIX AUDIT — NON-NEGOTIABLE (added 2026-05-05)** (from repo CLAUDE.md, 2026-06-21)
+  Before committing ANY fix to validation, checking, or reviewer logic, run this checklist: 1. Trace BOTH execution paths — local build path (check_built_post / CONTENT_CREATOR_RUN) AND Drive/manual pat
+
+
+- **CONNECTIONS — always active, never ask for access** (from repo CLAUDE.md, 2026-06-22)
+  RULE: Before saying "I don't have access," check `reference_active_connections.md` AND attempt the documented routes. Cloud OAuth / MCP first; Composio is fallback only. NEVER ask Priscila for credent
+
+
+- **DRIVE — SHARED DRIVE IS DEFAULT, NEVER MY DRIVE** (from repo CLAUDE.md, 2026-06-22)
+  ROUTING BY TOPIC — each topic has its own shared drive (source of truth) + a shortcut in a working cross-ref folder. Topics: Higashi · OPC · News · Stocks · Marketing · AI Content · UGC. RULES (stay g
+
+
+- **⛔ DRIVE UPLOAD — BANNED METHODS (always creates empty files / fails silently)** (from repo CLAUDE.md, 2026-06-22)
+  These methods are **banned** for uploading file bytes. They "succeed" but the file ends up empty. Every chat that has struggled with Drive uploads has been reaching for these: 1. ❌ `GOOGLEDRIVE_CREATE
+
+
+- **NAMED-PERSON → FACE RULE, NON-NEGOTIABLE (added 2026-04-17)** (from repo CLAUDE.md, 2026-06-22)
+  When content names a person (politician, business owner, accused, witness, victim, worker), their face MUST appear on that slide/frame. No exceptions. Pre-render checklist (run before exporting PNGs):
+
+
+- **MOTION IS DEFAULT ON — see `/template-carousel` SKILL.md** (from repo CLAUDE.md, 2026-06-22)
+  RULE (stays global, non-negotiable): every carousel build ships BOTH static PNGs AND motion (MP4 + GIF + preview frame + non-cover PNGs duplicated). Motion = default ON. Off ONLY when Priscila explici
+
+
+- **AIOX AGENT AUDIT — REQUIRED BEFORE AUTOMATION IS "DONE"** (from repo CLAUDE.md, 2026-06-22)
+  New automations (GitHub Actions workflows, Python scripts, integrations, routing logic) are NOT done until audited by `/AIOX-architect` → `/AIOX-devops` → `/AIOX-dev` in that order. Fix any flag befor
+
+
+- **SCRIPT / CODE EDITING RULE — NON-NEGOTIABLE** (from repo CLAUDE.md, 2026-06-22)
+  Never rewrite a working script from scratch. Only change what is strictly necessary. Before any edit: read the full file, list what you're changing and why. Good things already in the script must be p
+
+
+- **CODE FIX AUDIT — NON-NEGOTIABLE (added 2026-05-05)** (from repo CLAUDE.md, 2026-06-22)
   Before committing ANY fix to validation, checking, or reviewer logic, run this checklist: 1. Trace BOTH execution paths — local build path (check_built_post / CONTENT_CREATOR_RUN) AND Drive/manual pat
