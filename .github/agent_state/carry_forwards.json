@@ -1,57 +1,32 @@
 [
   {
-    "task": "Build Local/LSA (471) tab + Billing tab on the ads dashboard",
-    "context": "Priscila approved; paused for the PAUSED-banner fire.",
+    "task": "Wire the real-estate quiz to the same sync sheet",
+    "context": "This task is pending Priscila's confirmation to proceed.",
     "auto_actionable": true
   },
   {
-    "task": "Fix ads_pulse.yml fail-alert bug",
-    "context": "Uses GMAIL_APP_PASSWORD; should be PRI_OP_GMAIL_APP_PASSWORD.",
+    "task": "Confirm 'Apps by Claude' folder location",
+    "context": "Currently in Studies drive; awaiting Priscila's preference for main Drive.",
     "auto_actionable": true
   },
   {
-    "task": "Fill billing-sheet transaction IDs + confirm every charge from Google once Priscila sends Nov-Mar + Local statements",
-    "context": "Necessary for accurate billing reconciliation.",
+    "task": "Priscila must tap Enable & sync now on BOTH phone + laptop",
+    "context": "This step is necessary to activate sync for her profile.",
     "auto_actionable": true
   },
   {
-    "task": "Log the $500 Zelle answer once Michael confirms",
-    "context": "Important to clarify potential double-pay/reimbursement.",
+    "task": "enable cross-device sync on each device",
+    "context": "to ensure progress is synced between devices",
     "auto_actionable": true
   },
   {
-    "task": "LSA 'is it worth it' review",
-    "context": "Deferred strategic review due to recent performance metrics.",
-    "auto_actionable": true
+    "task": "exact-page citations + highlights for the OLDER scanned questions",
+    "context": "needs the matching 14th-ed source for accuracy",
+    "auto_actionable": false
   },
   {
-    "task": "do the 6 Ads tasks",
-    "context": "conversion-tracking fix is the big unlock.",
-    "auto_actionable": true
-  },
-  {
-    "task": "Confirm Florida Blue plan TYPE",
-    "context": "HMO needs PCP referral to see endocrinologist; PPO can self-refer.",
-    "auto_actionable": true
-  },
-  {
-    "task": "call to schedule Mia X-ray + ultrasound",
-    "context": "confirm center sees a 3yo.",
-    "auto_actionable": true
-  },
-  {
-    "task": "thyroid PCP call (Holy Cross Pompano)",
-    "context": "to get TSH + Free T4 labs.",
-    "auto_actionable": true
-  },
-  {
-    "task": "5 content briefs awaiting GO",
-    "context": "EP002 needs real @handle; EP006 needs format pick.",
-    "auto_actionable": true
-  },
-  {
-    "task": "OPC PM Tool: Mike live calendar test",
-    "context": "Phase 1 ship gate.",
-    "auto_actionable": true
+    "task": "13 low-confidence ax-page citations",
+    "context": "if revisited, widen to adjacent chapters + use SalesPreChapterHighlight",
+    "auto_actionable": false
   }
 ]
