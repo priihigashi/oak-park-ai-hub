@@ -1,8 +1,9 @@
 name: Auto Blog Generator — Retry
 
 on:
-  schedule:
-    - cron: '45 14 * * *'  # 10:45 AM ET (30 min after main run at 10:15)
+  # schedule:  # PAUSED 2026-06-26 (Priscila) — paused with main blog generator
+  #   - cron: '45 14 * * *'  # 10:45 AM ET (30 min after main run at 10:15)
+  workflow_dispatch:
 
 jobs:
   check-and-retry:

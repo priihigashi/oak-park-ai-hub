@@ -1,8 +1,8 @@
 name: Daily Content Inspo Processor — Social Media
 
 on:
-  schedule:
-    - cron: '0 14 * * *'   # 10:00 AM ET (UTC-4) = 14:00 UTC
+  # schedule:  # PAUSED 2026-06-26 (Priscila) — no autonomous creation; manual-only
+  #   - cron: '0 14 * * *'   # 10:00 AM ET (UTC-4) = 14:00 UTC
   workflow_dispatch:         # manual trigger from GitHub UI
 
 jobs:

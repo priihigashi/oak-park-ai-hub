@@ -1,8 +1,8 @@
 name: Content Creator — Daily Carousel Pipeline
 
 on:
-  schedule:
-    - cron: '30 6 1,4,7,10,13,16,19,22,25,28 * *'  # 2:30 AM ET every 3 days — budget cap $10/wk (2026-05-05)
+  # schedule:  # PAUSED 2026-06-26 (Priscila) — no autonomous creation; manual-only until content creator rebuilt for story-flow quality
+  #   - cron: '30 6 1,4,7,10,13,16,19,22,25,28 * *'  # 2:30 AM ET every 3 days — budget cap $10/wk (2026-05-05)
   workflow_dispatch:
     inputs:
       count_opc:
