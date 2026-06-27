@@ -1,32 +1,77 @@
 [
   {
-    "task": "Wire the real-estate quiz to the same sync sheet",
-    "context": "This task is pending Priscila's confirmation to proceed.",
+    "task": "01 Spending redesign in command-center style",
+    "context": "This is necessary to ensure consistency across the finance dashboard's user interface and improve usability.",
     "auto_actionable": true
   },
   {
-    "task": "Confirm 'Apps by Claude' folder location",
-    "context": "Currently in Studies drive; awaiting Priscila's preference for main Drive.",
+    "task": "03 Cards facts filling once Claude extracts them",
+    "context": "Filling in card facts is essential for a complete overview of financial obligations and to provide comprehensive insights.",
     "auto_actionable": true
   },
   {
-    "task": "Priscila must tap Enable & sync now on BOTH phone + laptop",
-    "context": "This step is necessary to activate sync for her profile.",
+    "task": "Unlink Finance Dashboard from Tiller settings",
+    "context": "This is important to prevent any unintended data imports or links, but not urgent unless Fill is run.",
     "auto_actionable": true
   },
   {
-    "task": "enable cross-device sync on each device",
-    "context": "to ensure progress is synced between devices",
+    "task": "Determine owner/Michael transfer rule",
+    "context": "Clarifying this rule is necessary for accurate financial tracking and reporting.",
     "auto_actionable": true
   },
   {
-    "task": "exact-page citations + highlights for the OLDER scanned questions",
-    "context": "needs the matching 14th-ed source for accuracy",
-    "auto_actionable": false
+    "task": "Add cash on hand + investments total for Net Position",
+    "context": "This data is crucial for an accurate representation of financial health.",
+    "auto_actionable": true
   },
   {
-    "task": "13 low-confidence ax-page citations",
-    "context": "if revisited, widen to adjacent chapters + use SalesPreChapterHighlight",
-    "auto_actionable": false
+    "task": "Final QA and docs lock after data/design pass",
+    "context": "Completing QA and locking documentation is essential for finalizing the dashboard.",
+    "auto_actionable": true
+  },
+  {
+    "task": "BUILD scripts/opc_media_sorter.py + .github/workflows/opc_media_sorter.yml",
+    "context": "This is necessary to implement the video sorting functionality and ensure it works as intended.",
+    "auto_actionable": true
+  },
+  {
+    "task": "confirm \ud83d\udcf8 Photo Catalog tab can take the new File ID/video columns",
+    "context": "This check is crucial to ensure the catalog can accommodate the new data structure before going live.",
+    "auto_actionable": true
+  },
+  {
+    "task": "Priscila to tell Mike to upload clips straight from Photos to the 2026-06-25 folder",
+    "context": "This is important to ensure that GPS data is preserved for accurate sorting.",
+    "auto_actionable": true
+  },
+  {
+    "task": "prototypes/font-lab.html",
+    "context": "let Priscila pick a font visually",
+    "auto_actionable": true
+  },
+  {
+    "task": "LOCK hero direction (light / dark / hero-video)",
+    "context": "Priscila decision on the hero section's design",
+    "auto_actionable": true
+  },
+  {
+    "task": "Font + palette pick",
+    "context": "Priscila decision needed due to contrast not approved by Codex",
+    "auto_actionable": true
+  },
+  {
+    "task": "Patch CODEX_BRIEF.md + patterns.md + tools/validate.js",
+    "context": "to incorporate the pinned-strip acceptance rules",
+    "auto_actionable": true
+  },
+  {
+    "task": "Room Vision blockers: T-135 Gemini billing, T-136 Gmail app password, T-118 Vercel env keys",
+    "context": "these are critical blockers for progress",
+    "auto_actionable": true
+  },
+  {
+    "task": "Unblocked todo: T-145 two-stage capture, T-149 testimonials, T-150 promote 3D forks, T-151 image diet/WebP, T-159 mark GA4 Key Events + link Ads, T-160 mobile nav, T-156/157/900 backlog cleanup",
+    "context": "these tasks need to be addressed for project completion",
+    "auto_actionable": true
   }
 ]
