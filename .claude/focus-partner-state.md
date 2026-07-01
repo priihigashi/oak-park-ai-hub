@@ -8,7 +8,7 @@ Mirror of the Drive sheet `_Focus Partner — STATE` (journal folder). Update th
 
 ## This Week (week of 2026-06-29)
 - **Focus:** lock in the daily-log habit — write 5 lines, let Notability auto-sync the PDF to Drive.
-- **Last check:** 2026-07-01 — shipped the real-estate quiz "teach" learning upgrade (pilot, 10 Qs, live); full rollout of remaining 261 Qs queued.
+- **Last check:** 2026-07-01 — shipped the real-estate quiz "teach" learning upgrade (pilot, 10 Qs, live); full rollout of remaining 261 Qs queued. Separately cleaned the leaked "Reference: Ch."/"Math Concept:" metadata out of 133 answer options + 54 explanations (commit `2e7a293`, the base the teach pilot rebased onto).
 - **Next review due:** 2026-07-02 ~10:00 (morning-review reminder)
 
 ## Entry Index
@@ -21,6 +21,7 @@ Mirror of the Drive sheet `_Focus Partner — STATE` (journal folder). Update th
 |------|-----------|-------|---------|
 | 2026-06-30 | none | Built state system + exit/handoff protocol; deep-research COMPLETE | Created STATE files, agent Session+Exit protocols, /exit & /handoff commands, first HANDOFF doc, ideas doc |
 | 2026-07-01 | real-estate-quiz.html BANK + book-pages scans p.175/177 | Verified 3 "Tallahassee" Qs (cr-q0401, cr-q0085, cr-q0086) — real book Qs, correct answers, correct book pages | No content change; verification only. Priscila to let the other quiz chat continue the work. |
+| 2026-07-01 | real-estate-quiz.html BANK (all 271 parsed) + render/refLine code | Full 9-point audit: only real defect = leaked metadata in answer options (133, ALL option D: 131 "Reference: Ch.", 2 "Math Concept:") + 54 aiReasoning "Reference:" tails. Answer keys / option counts / duplicates all clean. Mojibake was only a read artifact (data is clean UTF-8). | Stripped all 187 leaks (kept ⭐ teacher notes); committed `2e7a293` via Composio workbench; verified live 0 leaks; diff-proved the other chat's work preserved (only the 187 strings changed). Priscila chose to hand the file to the teach chat → I stood down; my follow-ups deferred. |
 | 2026-07-01 | real-estate-quiz.html BANK + 11 book scans (vision) | Built the "teach" learning upgrade: after answering, shows plain-language why + why-each-wrong + the exact book sentence with the FULL answer phrase highlighted (fixes her "you highlighted only 'great'" complaint on cr-q0121). Honest quotes only — omitted when a page lacks the sentence. | PILOT of 10 Qs LIVE via commit `2835b86` (rebased on other chat's `2e7a293`, their leak-fix preserved; verified live + invariant intact). Render code covers all 271. Full rollout of remaining 261 Qs set up (worklist + batch files) — paused on her "exit". |
 
 Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested refinements (her call): weekly = highlights/lowlights/patterns · mid-day check-in · anchor morning review to an existing habit · add "Current Checkpoint" line atop this file.
@@ -36,6 +37,8 @@ Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested ref
 | Confirm timezone (Eastern?) | NOT DONE | — | ask Priscila |
 | RE quiz "teach" upgrade — review pilot | DEPENDS ON HER | her request | hard-refresh quiz, hit a pilot Q (esp. "best use of a parcel of land"), confirm the new format is good |
 | RE quiz "teach" upgrade — full rollout | IN PROGRESS (paused) | her request | do remaining 261 Qs in batches (honest book quotes + why/why-wrong); commit on freshest HEAD so other chat's edits are preserved. Worklist ready in scratchpad. |
+| RE quiz — Priscila's other complaints | DEFERRED | her request | she said she has more complaints; chose "fix references first". She'll describe them; plan read-only, execute AFTER the teach rollout to avoid file collision. |
+| RE quiz — "book p. 541" boilerplate in cram explanations | OPTIONAL (noticed) | this session | many cram `aiReasoning` cite generic "book p. 541" ≠ the question's real `bookPage`; offer to clean up after teach rollout. |
 
 ## Patterns
 - (populates as entries are read — avoidance, hyperfocus, energy)
