@@ -1,0 +1,65 @@
+name: OPC Media Sorter — Daily Video Sort
+
+on:
+  schedule:
+    - cron: '0 14 * * *'   # 10:00 AM ET (UTC-4) — does not collide with photo-catalog.yml (23:35 UTC)
+  workflow_dispatch:         # manual run from GitHub UI / gh CLI
+
+jobs:
+  sort:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install ffmpeg
+        run: sudo apt-get install -y ffmpeg
+
+      - name: Install Python dependencies
+        run: pip install -r scripts/requirements_content.txt
+
+      - name: Write Google credentials
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: |
+          mkdir -p /tmp/oak_park_creds
+          echo "$SHEETS_TOKEN" > /tmp/oak_park_creds/sheets_token.json
+
+      - name: Run media sorter
+        env:
+          SHEETS_TOKEN_PATH: /tmp/oak_park_creds/sheets_token.json
+        run: python scripts/opc_media_sorter.py
+
+      - name: Send SMTP alert on failure
+        if: failure()
+        env:
+          SMTP_PASSWORD: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
+        run: |
+          python - <<'EOF'
+          import smtplib, os
+          from email.mime.text import MIMEText
+          run_id = os.environ.get("GITHUB_RUN_ID", "unknown")
+          msg = MIMEText(
+            f"OPC Media Sorter failed.\n\n"
+            f"Check Pipeline Failures tab in Ideas & Inbox sheet.\n\n"
+            f"Run: https://github.com/priihigashi/oak-park-ai-hub/actions/runs/{run_id}"
+          )
+          msg["Subject"] = f"❌ OPC Media Sorter failed — run {run_id}"
+          msg["From"]    = "priscila@oakpark-construction.com"
+          msg["To"]      = "priscila@oakpark-construction.com"
+          pw = os.environ.get("SMTP_PASSWORD", "")
+          if not pw:
+            print("SMTP_PASSWORD not set — skipping alert")
+          else:
+            with smtplib.SMTP_SSL("smtp.gmail.com", 465) as s:
+              s.login("priscila@oakpark-construction.com", pw)
+              s.send_message(msg)
+            print("Alert sent")
+          EOF
