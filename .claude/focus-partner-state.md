@@ -2,7 +2,7 @@
 
 Mirror of the Drive sheet `_Focus Partner — STATE` (journal folder). Update this EVERY session; mirror to GitHub alongside the agent file.
 
-- **Last check:** 2026-07-01
+- **Last check:** 2026-07-07 (set up Rule-of-3 + matrix planning frame; ran her first weekly session)
 - **Timezone:** America/New_York (assumed — confirm with Priscila)
 - **Journal folder:** `📓 Daily Journal — DROP HERE` (id `1eknXv30UHtuDVDDRJpyt3eBLqsxhjABB`)
 
@@ -13,21 +13,25 @@ Mirror of the Drive sheet `_Focus Partner — STATE` (journal folder). Update th
 
 ## Planning Frame — Rule of 3 + Matrix (agent leads this WITH her — never a blank template)
 
-### This Week's 3 (week of ____)
-1. [ ] ____  (Q_)
-2. [ ] ____  (Q_)
-3. [ ] ____  (Q_)
+### This Week's 3 (week of 2026-07-06)
+1. [ ] Book + do the **Google Ads rep call** (the ads-help agent) — schedule TODAY (~10 min), take the ~1hr call this week  (Q1)
+2. [ ] **Study for the RE exam** — a focused block every day (questions already exist)  (Q2, non-negotiable)
+3. [ ] **Daily log** — 5 lines by hand each day so the system can track her  (Q2)
 
 ### Weekly Matrix (where her tasks sit)
-- **Q1 — Important + Urgent** (fires, do now): ____
-- **Q2 — Important + NOT Urgent** (needle-movers — PROTECT these): ____
-- **Q3 — Urgent + NOT Important** (interruptions — minimize/delegate): ____
-- **Q4 — Neither** (cut): ____
+- **Q1 — Important + Urgent** (fires, do now): Google Ads rep call — book it today (10 min), call this week (small, ~1hr — NOT a big project)
+- **Q2 — Important + NOT Urgent** (needle-movers — PROTECT these): RE exam study (daily) · Daily 5-line log (daily)
+- **Q3 — Urgent + NOT Important** (interruptions — minimize/delegate): —
+- **Q4 — Neither** (cut): —
+- NOTE: building the quiz "teach" content (261 Qs) is **Claude's task**, running in her RE-study chat — deliberately OFF her plate. Boletim Diário / "O que eu acho" = PARKED this week.
 
-### Today's 3 (____) — pulled from Weekly 3, bias Q2
-1. [ ] ____
-2. [ ] ____
-3. [ ] ____
+### Today's 3 (2026-07-07, Tue eve) — pulled from Weekly 3, bias Q2
+1. [ ] **Book the Google Ads call now** (10 min — she wants to do it tonight)
+2. [ ] Paste the quiz-build prompt into the RE-study chat (2 min — hands off the 261-Q work)
+3. [ ] One RE study block + jot tonight's 5-line log
+
+### Schedule notes
+- Tue 2026-07-07: evening free-ish. Wed 2026-07-08: HALF DAY — works to ~2pm, flight 2:40 from Deerfield; little/no work after. Plan light for Wed.
 
 ### Review log (did the 3 land? where did her time actually go?)
 | Week | Weekly 3 done | Time went to (Q2 vs Q1/Q3) | Pattern (one line) |
@@ -56,12 +60,12 @@ Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested ref
 | Allow Google Drive/Calendar/Gmail permissions | DONE | Priscila | enabled |
 | Exit/Handoff protocol + /handoff command | DONE | her request | type /handoff to run it |
 | Visible Drive record | DONE | this PC can't update Sheets | use dated HANDOFF Google Docs (her convention), not a live Sheet |
+| Google Ads rep call (Q1 this week) | TODO | 2026-07-07 planning | she books the appointment (~10 min), takes ~1hr call this week |
+| Study for RE exam (daily, non-negotiable) | ONGOING | 2026-07-07 planning | a focused study block every day; track in daily log |
 | Read + seed first entry (Jun 29) | NOT DONE | — | read PDF, summarize into Entry Index |
 | Confirm timezone (Eastern?) | NOT DONE | — | ask Priscila |
-| RE quiz "teach" upgrade — review pilot | DEPENDS ON HER | her request | hard-refresh quiz, hit a pilot Q (esp. "best use of a parcel of land"), confirm the new format is good |
-| RE quiz "teach" upgrade — full rollout | IN PROGRESS (paused) | her request | do remaining 261 Qs in batches (honest book quotes + why/why-wrong); commit on freshest HEAD so other chat's edits are preserved. Worklist ready in scratchpad. |
+| RE quiz "teach" upgrade — full rollout | HANDED OFF | her request | now runs in her RE-study chat via the paste-in prompt (261 Qs, batches, re-pull HEAD before each commit). Off Priscila's plate. |
 | RE quiz — Priscila's other complaints | DEFERRED | her request | she said she has more complaints; chose "fix references first". She'll describe them; plan read-only, execute AFTER the teach rollout to avoid file collision. |
-| RE quiz — "book p. 541" boilerplate in cram explanations | OPTIONAL (noticed) | this session | many cram `aiReasoning` cite generic "book p. 541" != the question's real `bookPage`; offer to clean up after teach rollout. |
 
 ## Patterns
 - (populates as entries are read — avoidance, hyperfocus, energy)
