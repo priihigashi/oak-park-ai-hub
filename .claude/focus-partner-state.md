@@ -2,39 +2,40 @@
 
 Mirror of the Drive sheet `_Focus Partner — STATE` (journal folder). Update this EVERY session; mirror to GitHub alongside the agent file.
 
-- **Last check:** 2026-07-08 (matrix/backlog session — see Session Log; images delivered; tomorrow's calendar built)
+- **Last check:** 2026-07-13 (Monday — new-week planning; Google Ads call DONE last week; added ADS-videos vertical redo)
 - **Timezone:** America/New_York (assumed — confirm with Priscila)
 - **Journal folder:** `📓 Daily Journal — DROP HERE` (id `1eknXv30UHtuDVDDRJpyt3eBLqsxhjABB`)
 
-## This Week (week of 2026-07-06)
+## This Week (week of 2026-07-13)
 - **Focus:** the 3 below. Everything else is PARKED in the Backlog — not this week.
 - **Next review due:** morning-review reminder ~10:00
+- **Note:** Google Ads rep call = ✅ DONE last week — it is NO LONGER a focus item. That fire is out.
 
 ## Planning Frame — Rule of 3 + Matrix (agent leads this WITH her — never a blank template)
 
-### This Week's 3 (week of 2026-07-06)
-1. [ ] Book + do the **Google Ads rep call** (the ads-help agent) — schedule TODAY (~10 min), take the ~1hr call this week  (Q1)
-2. [ ] **Study for the RE exam** — a focused block every day (questions already exist)  (Q2, non-negotiable)
+### This Week's 3 (week of 2026-07-13)
+1. [ ] **Study for the RE exam** — a focused block every day (questions already exist)  (Q2, non-negotiable)
+2. [ ] **ADS videos — redo in VERTICAL format** (Oak Park; work + personal). Was on hold, blocked on the missing vertical format — this week is the redo.  (Q2, needle-mover)
 3. [ ] **Daily log** — 5 lines by hand each day so the system can track her  (Q2)
 
 ### Weekly Matrix (Covey names + his ideal split: ~20% Q1 · 65% Q2 · 10% Q3 · 5% Q4)
-- **Q1 — Important + Urgent** = *Necessity* (do now): Google Ads rep call — book today (10 min), call this week
-- **Q2 — Important + NOT Urgent** = *Effectiveness* ⭐ (PROTECT — live here): RE exam study (daily) · Daily 5-line log (daily)
-- **Q3 — Urgent + NOT Important** = *Distraction* (minimize/delegate): occasional "ask Mike" items
+- **Q1 — Important + Urgent** = *Necessity* (do now): — (nothing on fire this week — Google Ads call is done. Good place to be.)
+- **Q2 — Important + NOT Urgent** = *Effectiveness* ⭐ (PROTECT — live here): RE exam study (daily) · ADS videos vertical redo · Daily 5-line log (daily)
+- **Q3 — Urgent + NOT Important** = *Distraction* (minimize/delegate): occasional "ask Mike" items · random interruptions
 - **Q4 — NOT important + NOT urgent** = *Waste* (delete): —
 
-### Today's 3 (2026-07-07, Tue eve) — pulled from Weekly 3, bias Q2
-1. [ ] **Book the Google Ads call now** (10 min — she wants to do it tonight)
-2. [ ] Paste the quiz-build prompt into the RE-study chat (2 min — hands off the 261-Q work)
-3. [ ] One RE study block + jot tonight's 5-line log
+### Today's 3 (2026-07-13, Mon) — pulled from Weekly 3, bias Q2
+1. [ ] One RE study block
+2. [ ] Start the ADS videos vertical redo — just the first cut/setup, not the whole thing
+3. [ ] Jot today's 5-line log
 
 ### Schedule notes
-- Tue 2026-07-07: evening free-ish. Wed 2026-07-08: HALF DAY — works to ~2pm, flight 2:40 from Deerfield; little/no work after. Plan light for Wed.
+- Mon 2026-07-13: new week. Google meeting already happened last week — don't re-plan it.
 
 ### Review log (did the 3 land? where did her time actually go?)
 | Week | Weekly 3 done | Time went to (Q2 vs Q1/Q3) | Pattern (one line) |
 |------|---------------|----------------------------|--------------------|
-| — | — | — | — |
+| 2026-07-06 | Google Ads call ✅ DONE (the Q1 fire) · RE study + daily log = partial | Q1 fire (the call) got handled; Q2 dailies inconsistent | The urgent thing got done — protect the Q2 dailies now that the fire's out |
 
 ## Backlog — MASTER LIST (everything she wants to do; the POOL the matrix pulls from)
 Captured 2026-07-07 from her brain-dump. Nothing here is scheduled yet — it's the full pile so nothing lives only in her head. Weekly 3 gets pulled FROM this.
@@ -43,7 +44,8 @@ Captured 2026-07-07 from her brain-dump. Nothing here is scheduled yet — it's 
 - Study for the FL RE exam — daily *(hers)*. Quiz-app *building* = Claude's, runs in her RE-study chat.
 
 **🏗️ Oak Park Construction (business)**
-- Google Ads rep call — book + do *(this week)*.
+- ~~Google Ads rep call — book + do~~ ✅ **DONE** (had the meeting, ~week of 2026-07-06). No longer pending.
+- **ADS videos — redo in VERTICAL format** (work + personal — keep in focus, never lose it). Currently on HOLD only because it's missing the vertical format; the plan is to redo everything in vertical. *(promoted to This Week's 3, week of 2026-07-13.)*
 - AI receptionist decision (Goodcall vs Rosie) — stop missed calls (~$1,400/qtr leak).
 - Phone-number approach — decide.
 - Verify the daily lead-follow-up email actually landed.
@@ -87,13 +89,15 @@ Captured 2026-07-07 from her brain-dump. Nothing here is scheduled yet — it's 
 | 2026-07-01 | real-estate-quiz.html BANK + 11 book scans | Built "teach" upgrade (why + why-wrong + honest book quote) | PILOT 10 Qs LIVE `2835b86`; full rollout of 261 set up, paused |
 | 2026-07-07 | state + agent + her 2 book screenshots | Set up Rule-of-3 + Covey/Eisenhower matrix as agent planning frame; captured full backlog | Mirrored agent brain to GitHub (was missing); added planning frame + first weekly plan + master backlog |
 | 2026-07-08 | state; her big verbal brain-dump | Explained matrix (Covey names + %) vs Rule-of-3; clarified Q1≠weekly-3; captured ALL 17 tasks; built RE-quiz "preserve-first" prompt (audit→checklist→add teach→fix math/why→reorder by exam frequency, no back-to-back math) | Full backlog saved+mirrored; 3 calendar events for Wed 7/8 (10:00 Ads call · 10:15 study · 11:45 log); drew handwritten Matrix + Task-list PNGs → GitHub + Desktop + her Drive journal folder |
+| 2026-07-13 | state | Monday new-week planning. Google Ads call CONFIRMED DONE last week (drop from focus). Added **ADS videos — vertical-format redo** (work+personal) to backlog + promoted to Weekly 3. Made `/focus` shortcut + shipped whole command set to GitHub so the helper is portable. | Reset Weekly 3 + matrix for wk 2026-07-13; logged wk 07-06 review; mirrored state + all command files to GitHub |
 
 Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested refinements (her call): weekly = highlights/lowlights/patterns · mid-day check-in · anchor morning review to an existing habit.
 
 ## Pending Tasks (near-term, actionable)
 | Task | Status | Source | Next action |
 |------|--------|--------|-------------|
-| Google Ads rep call (Q1 this week) | TODO | 2026-07-07 planning | she books the appointment (~10 min) — calendar event Wed 7/8 10:00; then the ~1hr call this week |
+| Google Ads rep call | ✅ DONE | 2026-07-07 planning | meeting happened last week — closed, not pending |
+| ADS videos — vertical-format redo (Q2 this week) | IN FOCUS | 2026-07-13 | work+personal; on hold only for the missing vertical format — redo everything vertical. Break into: (1) first cut/setup, (2) full redo. Never drop from focus. |
 | RE-quiz fixes prompt | READY TO PASTE | 2026-07-08 | give the "preserve-first" prompt to her RE-study chat: audit→checklist first, keep everything, add math/why teaching, reorder by exam frequency (no back-to-back math). Offered to save spec to backlog. |
 | Matrix/Task images in Portuguese? | OFFERED | 2026-07-08 | she may want PT-BR versions + auto-refresh when tasks change |
 | Study for RE exam (daily, non-negotiable) | ONGOING | 2026-07-07 planning | a focused study block every day; track in daily log |
