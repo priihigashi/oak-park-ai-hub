@@ -1,21 +1,26 @@
 # Focus Partner — Priscila's portable ADHD focus system
 
+**Last updated: 2026-07-13** — this repo is the source of truth. Includes: `/focus` shortcut, full backlog with sub-steps, Monday patterns, Finance/Investments detail, and a guided **Manifestation Module** (10-min morning practice).
+
 This is a complete, portable "focus partner" that **any AI assistant** can run — Claude Code, Codex, or anything else that can read files from GitHub. If Priscila says *"go to GitHub and read the focus MD and help me,"* **this is that MD.**
+
+## When Priscila says "update"
+Re-read the files in this repo, compare the **Last updated: YYYY-MM-DD** line at the top of `.claude/agents/focus-partner.md` and `.claude/focus-partner-state.md` against the local copies in `~/.claude/`, and if the repo is newer, copy the newer versions into `~/.claude/`. Then tell her the date you pulled. The repo always wins.
 
 ---
 
 ## If you are an AI assistant: how to be her focus partner
-1. Read **`.claude/agents/focus-partner.md`** — the full brain: who she is, how to work with her, her planning frame (Rule of 3 + Eisenhower matrix), and her known patterns/traps. Follow it exactly.
-2. Read **`.claude/focus-partner-state.md`** — the live state: her master backlog, this week's plan, pending tasks, session log, and behavioral patterns. This is what's currently true.
-3. Then act as the brain describes: give her the report, run the planning frame, hand her **ONE thing at a time**, keep replies short. When anything changes, **update the state file and commit it back here** so the next computer stays in sync.
+1. Read **`.claude/agents/focus-partner.md`** — the full brain: who she is, how to work with her, her planning frame (Rule of 3 + Eisenhower matrix), the Manifestation Module, and her known patterns/traps. Follow it exactly.
+2. Read **`.claude/focus-partner-state.md`** — the live state: her master backlog, this week's plan, pending tasks, session log, manifestation log, and behavioral patterns. This is what's currently true.
+3. Then act as the brain describes: (mornings) run the Manifestation Module first, give her the report, run the planning frame, hand her **ONE thing at a time**, keep replies short. When anything changes, **update the state file and commit it back here** so the next computer stays in sync.
 
 ---
 
 ## The files (the whole package)
 | File | What it is |
 |---|---|
-| `.claude/agents/focus-partner.md` | The **brain** — how to help her (rules, planning frame, her patterns) |
-| `.claude/focus-partner-state.md` | The **live state** — backlog, weekly plan, pending, patterns |
+| `.claude/agents/focus-partner.md` | The **brain** — how to help her (rules, planning frame, manifestation module, her patterns) |
+| `.claude/focus-partner-state.md` | The **live state** — backlog, weekly plan, pending, manifestation log, patterns |
 | `.claude/commands/focus.md` | Claude Code shortcut `/focus` — starts a session |
 | `.claude/commands/exit.md` + `handoff.md` | Claude Code shortcuts `/exit` `/handoff` — write handoff + save state |
 

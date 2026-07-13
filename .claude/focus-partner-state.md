@@ -1,8 +1,10 @@
 # Focus Partner — STATE (canonical local copy)
 
+**Last updated: 2026-07-13** — bump on every push; the "update" check compares this date to decide if GitHub is newer.
+
 Mirror of the Drive sheet `_Focus Partner — STATE` (journal folder). Update this EVERY session; mirror to GitHub alongside the agent file.
 
-- **Last check:** 2026-07-13 (Monday — huge session: `/focus` shortcut + portable install + Codex-ready `FOCUS-PARTNER.md`; Google Ads DONE; ADS-videos vertical redo; Monday patterns; broke ALL backlog into sub-steps; timezone Miami/Eastern; two websites separated; mined Drive/repo → Finance Dashboard/Investments/Ads-tracking/Content-pipeline; **added TASK-BRAIN board rule + daily MANIFESTATION ritual + ROOM_VISION**)
+- **Last check:** 2026-07-13 (Monday — huge session: `/focus` shortcut + portable install + Codex-ready `FOCUS-PARTNER.md`; Google Ads DONE; ADS-videos vertical redo; Monday patterns; broke ALL backlog into sub-steps; timezone Miami/Eastern; two websites separated; mined Drive/repo → Finance Dashboard/Investments/Ads-tracking/Content-pipeline; TASK-BRAIN rule; ROOM_VISION; **guided Manifestation Module + "update" mechanism**)
 - **Timezone:** America/New_York — **Eastern (Miami), confirmed by Priscila 2026-07-13**
 - **Journal folder:** `📓 Daily Journal — DROP HERE` (id `1eknXv30UHtuDVDDRJpyt3eBLqsxhjABB`)
 
@@ -48,8 +50,8 @@ Each line = something she can finish and check off. She can reorder/edit; the ag
 | 2026-07-06 | Google Ads call ✅ DONE (the Q1 fire) · RE study + daily log = partial | Q1 fire (the call) got handled; Q2 dailies inconsistent | The urgent thing got done — protect the Q2 dailies now that the fire's out |
 
 ## Daily Manifestation (log) — she writes this in the chat EVERY morning before her day
-Morning ritual (her request 2026-07-13): agent asks for her manifestation FIRST, before the report or Today's 3. Present-tense, as if already true + one gratitude. Log verbatim, newest at top.
-| Date | Her manifestation (verbatim) |
+Morning ritual (her request 2026-07-13): run the **Manifestation Module** (see agent brain) — 4 guided steps, ≤10 min, BEFORE the report or Today's 3. She writes Step 3 ("I am / I have" + gratitude) in the chat. Log it verbatim, newest at top.
+| Date | Her manifestation (Step 3, verbatim) |
 |------|------------------------------|
 | — | (starts tomorrow morning) |
 
@@ -96,7 +98,7 @@ Captured 2026-07-07 from her brain-dump. Nothing here is scheduled yet — it's 
 
 **📓 Focus system**
 - Daily 5-line log habit · pick Notability vs Rocketbook + one-time backup · confirm timezone · use the walking desk (stack walk + study/call).
-- **Daily MANIFESTATION ritual** — she writes her manifestation in the chat EVERY morning before starting her day; agent prompts for it first and logs it (see Daily Manifestation log). *(her request 2026-07-13.)*
+- **Daily MANIFESTATION ritual** — Manifestation Module (4 guided steps, ≤10 min) every morning before tasks; agent leads it and logs Step 3. *(her request 2026-07-13.)*
 - *(optional, parked)* visible **Google-Sheet mirror** of this task board — needs her Mac/Codex to write Sheet cells (this Windows PC can't). Markdown board stays canonical.
 
 ## Task Breakdowns — every backlog item, sub-stepped (added 2026-07-13, at her request)
@@ -258,11 +260,10 @@ Each task cut into tiny, finish-able steps. She should only ever look at the NEX
 | Date | Files read | Found | Changed |
 |------|-----------|-------|---------|
 | 2026-06-30 | none | Built state system + exit/handoff protocol; deep-research COMPLETE | Created STATE files, agent Session+Exit protocols, /exit & /handoff commands, first HANDOFF doc, ideas doc |
-| 2026-07-01 | real-estate-quiz.html BANK + render/refLine code | Full audit; only defect = leaked metadata in options/explanations | Stripped 187 leaks, commit `2e7a293`; handed file to teach chat |
-| 2026-07-01 | real-estate-quiz.html BANK + 11 book scans | Built "teach" upgrade (why + why-wrong + honest book quote) | PILOT 10 Qs LIVE `2835b86`; full rollout of 261 set up, paused |
-| 2026-07-07 | state + agent + her 2 book screenshots | Set up Rule-of-3 + Covey/Eisenhower matrix as agent planning frame; captured full backlog | Mirrored agent brain to GitHub (was missing); added planning frame + first weekly plan + master backlog |
-| 2026-07-08 | state; her big verbal brain-dump | Explained matrix (Covey names + %) vs Rule-of-3; clarified Q1≠weekly-3; captured ALL 17 tasks; built RE-quiz "preserve-first" prompt (audit→checklist→add teach→fix math/why→reorder by exam frequency, no back-to-back math) | Full backlog saved+mirrored; 3 calendar events for Wed 7/8 (10:00 Ads call · 10:15 study · 11:45 log); drew handwritten Matrix + Task-list PNGs → GitHub + Desktop + her Drive journal folder |
-| 2026-07-13 | state; her verbal Monday brain-dump; **mined Drive docs (FINANCE_DASHBOARD_MASTER_PLAN, WEEK_PLAN command center) + repo MDs** | BIG session. Google Ads DONE (drop from focus). Added **ADS videos vertical redo** + 6 sub-steps. Captured **Monday patterns**. Broke **ALL** backlog into sub-steps. Separated **OPC vs mom's website**; timezone = **Eastern (Miami)**. **Archaeology** → Finance Dashboard (PRI 2026, Tiller, needs her inputs), Investments reset (Robinhood+401k+crypto+Brazil/US, inventory-first), Ads tracking broke, Content pipeline broke ~May 28, ROOM_VISION. Added **TASK-BRAIN board rule** (agent must always check/mark/add/verify the state file) + **daily MANIFESTATION ritual** (she writes it in chat each morning). Made `/focus` + root `FOCUS-PARTNER.md` (Codex-friendly) + shipped whole command set to GitHub. | Reset Weekly 3 + matrix; all-task sub-steps; website distinction + timezone; Finance/Investments/Ads/Content/ROOM_VISION items + breakdowns; Manifestation log + Focus-system entries; agent TASK-BRAIN + manifestation-first + "known patterns"; mirrored EVERYTHING to GitHub |
+| 2026-07-01 | real-estate-quiz.html BANK + render/refLine code | Full audit; only defect = leaked metadata | Stripped 187 leaks, commit `2e7a293`; handed file to teach chat |
+| 2026-07-07 | state + agent + her 2 book screenshots | Set up Rule-of-3 + Covey/Eisenhower matrix; captured full backlog | Mirrored agent brain (was missing); planning frame + first weekly plan + master backlog |
+| 2026-07-08 | state; her big verbal brain-dump | Explained matrix vs Rule-of-3; captured ALL 17 tasks; RE-quiz "preserve-first" prompt | Full backlog saved+mirrored; 3 calendar events; handwritten Matrix + Task PNGs → GitHub + Desktop + Drive |
+| 2026-07-13 | state; her verbal Monday brain-dump; **mined Drive docs (FINANCE_DASHBOARD_MASTER_PLAN, WEEK_PLAN) + repo MDs** | BIG session. Google Ads DONE. ADS videos vertical redo + 6 sub-steps. Monday patterns. Broke ALL backlog into sub-steps. OPC vs mom's website; timezone Eastern (Miami). Archaeology → Finance Dashboard/Investments/Ads-tracking/Content-pipeline/ROOM_VISION. Added TASK-BRAIN rule, daily MANIFESTATION ritual + **guided Manifestation Module (10-min, 4 steps)**, and an **"update" re-sync mechanism + Last-updated stamps**. `/focus` + root `FOCUS-PARTNER.md` (Codex-friendly) shipped. | Mirrored EVERYTHING to GitHub (agent + state + commands + README) |
 
 Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested refinements (her call): weekly = highlights/lowlights/patterns · mid-day check-in · anchor morning review to an existing habit.
 
@@ -270,15 +271,14 @@ Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested ref
 | Task | Status | Source | Next action |
 |------|--------|--------|-------------|
 | Google Ads rep call | ✅ DONE | 2026-07-07 planning | meeting happened last week — closed, not pending |
-| ADS videos — vertical-format redo (Q2 this week) | IN FOCUS | 2026-07-13 | work+personal; on hold only for the missing vertical format — redo everything vertical. See 6 sub-steps in Planning Frame. Today = steps 1–2. Never drop from focus. |
-| RE-quiz fixes prompt | READY TO PASTE | 2026-07-08 | give the "preserve-first" prompt to her RE-study chat: audit→checklist first, keep everything, add math/why teaching, reorder by exam frequency (no back-to-back math). Offered to save spec to backlog. |
-| Matrix/Task images in Portuguese? | OFFERED | 2026-07-08 | she may want PT-BR versions + auto-refresh when tasks change |
-| Study for RE exam (daily, non-negotiable) | ONGOING | 2026-07-07 planning | a focused study block every day; track in daily log |
-| Daily 5-line log habit | ONGOING | her chosen system | write 5 lines by hand each day → syncs to Drive |
-| Daily manifestation ritual | ONGOING | 2026-07-13 | agent prompts her for it in the chat each morning before planning; logs verbatim |
-| RE quiz "teach" rollout | HANDED OFF | her request | runs in her RE-study chat via the paste-in prompt (261 Qs, re-pull HEAD before each commit) |
-| Website for her mom | CHECK WITH HER | 2026-07-07 dump | ask if mom still wants it before any work |
-| Finance Dashboard inputs | NEEDS HER DATA | 2026-07-13 mined | give card facts + cash + investments + receivables + Mike rule so Codex can finish the dashboard |
+| ADS videos — vertical-format redo (Q2 this week) | IN FOCUS | 2026-07-13 | work+personal; redo everything vertical. See 6 sub-steps. Today = steps 1–2. Never drop from focus. |
+| RE-quiz fixes prompt | READY TO PASTE | 2026-07-08 | give the "preserve-first" prompt to her RE-study chat |
+| Study for RE exam (daily) | ONGOING | 2026-07-07 | a focused study block every day; track in daily log |
+| Daily 5-line log habit | ONGOING | her system | write 5 lines by hand each day → syncs to Drive |
+| Daily manifestation (Manifestation Module) | ONGOING | 2026-07-13 | agent runs the 4-step module each morning before planning; logs Step 3 verbatim |
+| RE quiz "teach" rollout | HANDED OFF | her request | runs in her RE-study chat via the paste-in prompt |
+| Website for her mom | CHECK WITH HER | 2026-07-07 | ask if mom still wants it before any work |
+| Finance Dashboard inputs | NEEDS HER DATA | 2026-07-13 mined | card facts + cash + investments + receivables + Mike rule so Codex can finish it |
 | Investments inventory | NEEDS HER DATA | 2026-07-13 mined | one-page map of Robinhood + 401k + crypto + Brazil/US before any reset |
 | Ads tracking broke | TO DIAGNOSE | 2026-07-13 mined | check ads-running vs tracking-feed; 0-row days June 1 & 8 |
 | Content pipeline broke (~May 28) | TO DIAGNOSE | 2026-07-13 mined | find where it stops (credits/NB2); test one piece end-to-end |
@@ -287,9 +287,10 @@ Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested ref
 | Read + seed first entry (Jun 29) | NOT DONE | — | read PDF, summarize into Entry Index |
 
 ## Patterns
-- **Monday plan-paralysis (her #1, told me 2026-07-13):** every Monday she plans and plans and doesn't DO; very slow start. Example: 2026-07-13 spent ~3 hrs (till 12:23pm) setting up her repaired laptop/email — a 15-min job — and got nothing done. → keep Monday planning <5 min; force ONE tiny start, don't over-plan.
+- **Monday plan-paralysis (her #1, told me 2026-07-13):** every Monday she plans and plans and doesn't DO; very slow start. Example: 2026-07-13 spent ~3 hrs (till 12:23pm) on a 15-min laptop/email setup and got nothing done. → keep Monday planning <5 min; force ONE tiny start.
 - **Setup rabbit-holes:** small admin tasks balloon into hours. → time-box them out loud.
-- **Mike calls:** ~40 min, productive (business + helpful personal) — don't cut, but cap/pair-with-walking.
-- **Walking desk unused:** she plans a morning walk, skips it; owns a treadmill w/ table → stack: walk WHILE studying RE or on Mike's call.
+- **Mike calls:** ~40 min, productive — don't cut, but cap/pair-with-walking.
+- **Walking desk unused:** owns a treadmill w/ table → stack: walk WHILE studying RE or on Mike's call.
 - **RE study:** she says it should be daily — flag missed days.
+- **Manifestation patterns (from her source, 2026-07-13):** she drifts negative + can't visualize well + carries scarcity/abandonment/"love-unsafe" beliefs → CALM her nervous system, CATCH & FLIP negative self-talk, use feeling/other-senses over visualization, bring her back to positive daily (consistency > intensity).
 - (more populates as entries are read — avoidance, hyperfocus, energy)
