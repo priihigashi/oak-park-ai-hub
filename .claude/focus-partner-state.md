@@ -2,7 +2,7 @@
 
 Mirror of the Drive sheet `_Focus Partner — STATE` (journal folder). Update this EVERY session; mirror to GitHub alongside the agent file.
 
-- **Last check:** 2026-07-13 (Monday — new-week planning; Google Ads call DONE last week; added ADS-videos vertical redo)
+- **Last check:** 2026-07-13 (Monday — new-week planning; Google Ads call DONE last week; added ADS-videos vertical redo; captured Monday patterns)
 - **Timezone:** America/New_York (assumed — confirm with Priscila)
 - **Journal folder:** `📓 Daily Journal — DROP HERE` (id `1eknXv30UHtuDVDDRJpyt3eBLqsxhjABB`)
 
@@ -21,7 +21,7 @@ Mirror of the Drive sheet `_Focus Partner — STATE` (journal folder). Update th
 ### Weekly Matrix (Covey names + his ideal split: ~20% Q1 · 65% Q2 · 10% Q3 · 5% Q4)
 - **Q1 — Important + Urgent** = *Necessity* (do now): — (nothing on fire this week — Google Ads call is done. Good place to be.)
 - **Q2 — Important + NOT Urgent** = *Effectiveness* ⭐ (PROTECT — live here): RE exam study (daily) · ADS videos vertical redo · Daily 5-line log (daily)
-- **Q3 — Urgent + NOT Important** = *Distraction* (minimize/delegate): occasional "ask Mike" items · random interruptions
+- **Q3 — Urgent + NOT Important** = *Distraction* (minimize/delegate): occasional "ask Mike" items · random interruptions · long Mike calls (cap them)
 - **Q4 — NOT important + NOT urgent** = *Waste* (delete): —
 
 ### Today's 3 (2026-07-13, Mon) — pulled from Weekly 3, bias Q2
@@ -40,7 +40,7 @@ Each line = something she can finish and check off. She can reorder/edit; the ag
 *Today only = steps 1–2. The rest are parked so they don't crowd her.*
 
 ### Schedule notes
-- Mon 2026-07-13: new week. Google meeting already happened last week — don't re-plan it.
+- Mon 2026-07-13: new week. Google meeting already happened last week — don't re-plan it. **Monday = her highest-risk day for plan-paralysis — keep planning tiny, force a fast start (see Patterns).**
 
 ### Review log (did the 3 land? where did her time actually go?)
 | Week | Weekly 3 done | Time went to (Q2 vs Q1/Q3) | Pattern (one line) |
@@ -84,7 +84,7 @@ Captured 2026-07-07 from her brain-dump. Nothing here is scheduled yet — it's 
 - **Website for her mom** — CHECK FIRST whether mom still wants it.
 
 **📓 Focus system**
-- Daily 5-line log habit · pick Notability vs Rocketbook + one-time backup · confirm timezone.
+- Daily 5-line log habit · pick Notability vs Rocketbook + one-time backup · confirm timezone · use the walking desk (stack walk + study/call).
 
 ## Entry Index
 | Date | File (id) | Type | Processed | Summary |
@@ -99,7 +99,7 @@ Captured 2026-07-07 from her brain-dump. Nothing here is scheduled yet — it's 
 | 2026-07-01 | real-estate-quiz.html BANK + 11 book scans | Built "teach" upgrade (why + why-wrong + honest book quote) | PILOT 10 Qs LIVE `2835b86`; full rollout of 261 set up, paused |
 | 2026-07-07 | state + agent + her 2 book screenshots | Set up Rule-of-3 + Covey/Eisenhower matrix as agent planning frame; captured full backlog | Mirrored agent brain to GitHub (was missing); added planning frame + first weekly plan + master backlog |
 | 2026-07-08 | state; her big verbal brain-dump | Explained matrix (Covey names + %) vs Rule-of-3; clarified Q1≠weekly-3; captured ALL 17 tasks; built RE-quiz "preserve-first" prompt (audit→checklist→add teach→fix math/why→reorder by exam frequency, no back-to-back math) | Full backlog saved+mirrored; 3 calendar events for Wed 7/8 (10:00 Ads call · 10:15 study · 11:45 log); drew handwritten Matrix + Task-list PNGs → GitHub + Desktop + her Drive journal folder |
-| 2026-07-13 | state | Monday new-week planning. Google Ads call CONFIRMED DONE last week (drop from focus). Added **ADS videos — vertical-format redo** (work+personal) to backlog + promoted to Weekly 3, then broke it into 6 sub-steps. Made `/focus` shortcut + shipped whole command set to GitHub so the helper is portable. | Reset Weekly 3 + matrix for wk 2026-07-13; logged wk 07-06 review; added ADS sub-steps; mirrored state + all command files to GitHub |
+| 2026-07-13 | state; her verbal Monday brain-dump | Monday new-week planning. Google Ads call CONFIRMED DONE last week (drop from focus). Added **ADS videos — vertical-format redo** (work+personal) to backlog + Weekly 3, broke it into 6 sub-steps. Captured her **Monday patterns** (plan-paralysis, setup rabbit-holes, Mike calls, unused walking desk, RE daily). Made `/focus` shortcut + shipped whole command set to GitHub so the helper is portable. | Reset Weekly 3 + matrix; logged wk 07-06 review; ADS sub-steps; added Patterns + agent "known patterns" section; mirrored EVERYTHING (agent + state + all commands) to GitHub |
 
 Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested refinements (her call): weekly = highlights/lowlights/patterns · mid-day check-in · anchor morning review to an existing habit.
 
@@ -118,4 +118,9 @@ Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested ref
 | Read + seed first entry (Jun 29) | NOT DONE | — | read PDF, summarize into Entry Index |
 
 ## Patterns
-- (populates as entries are read — avoidance, hyperfocus, energy)
+- **Monday plan-paralysis (her #1, told me 2026-07-13):** every Monday she plans and plans and doesn't DO; very slow start. Example: 2026-07-13 spent ~3 hrs (till 12:23pm) setting up her repaired laptop/email — a 15-min job — and got nothing done. → keep Monday planning <5 min; force ONE tiny start, don't over-plan.
+- **Setup rabbit-holes:** small admin tasks balloon into hours. → time-box them out loud.
+- **Mike calls:** ~40 min, productive (business + helpful personal) — don't cut, but cap/pair-with-walking.
+- **Walking desk unused:** she plans a morning walk, skips it; owns a treadmill w/ table → stack: walk WHILE studying RE or on Mike's call.
+- **RE study:** she says it should be daily — flag missed days.
+- (more populates as entries are read — avoidance, hyperfocus, energy)
