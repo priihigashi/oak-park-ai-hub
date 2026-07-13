@@ -81,7 +81,7 @@ Captured 2026-07-07 from her brain-dump. Nothing here is scheduled yet — it's 
 
 **💰 Finance & investing** *(detail pulled from her FINANCE_DASHBOARD_MASTER_PLAN + Investments plan, 2026-07-13)*
 - **Finance Dashboard — PRI 2026** (her personal money command center; already BUILT — "structure/design complete") — answers her 9 money questions: net position · month spend vs normal · where money went · money-in/receivables · debt by card · what's due · payoff plan · net positive? · next decision. Source = **Tiller**. Cards: Discover, Chase, BoA, Citi, Affirm (~$16k known debt). **Blocked on HER inputs** → per-card facts (APR/limit/minimum/due/statement date), Cash balance, Investments value, personal receivables, and the **Owner/Michael (Mike) classification rule**. *(Claude = read/UX only; Codex edits the sheet.)*
-- Clean the **subscriptions/expenses spreadsheet** → total spend, what to cut. *(part of the finance picture; later an app.)*
+- Clean the **subscriptions/expenses spreadsheet** → total spend, what to cut. *(part of the finance picture; later an app.)* Priscila said 2026-07-13 her body says "yes" to getting finances in check: she needs daily visibility into subscriptions, what she is spending, what is unnecessary, and what changed.
 - **Investments / stocks reset** — Robinhood + Fidelity 401k + crypto + Brazil/US allocation. Her words: *"5 years, no growth."* START with a one-page **inventory** (what she holds, where) before ANY reset — inventory first, not a reset plan.
 
 **🎬 Content & Monetization**
@@ -103,6 +103,7 @@ Captured 2026-07-07 from her brain-dump. Nothing here is scheduled yet — it's 
 - Daily 5-line log habit · pick Notability vs Rocketbook + one-time backup · confirm timezone · use the walking desk (stack walk + study/call).
 - **Daily MANIFESTATION ritual** — Manifestation Module (4 guided steps, ≤10 min) every morning before tasks; agent leads it and logs Step 3. *(her request 2026-07-13.)*
 - **Google-Sheet mirror implemented** — `_Focus Partner — STATE` lives in Drive folder `Productivity & Routine / Focus Partner`. Use it for human scanning; GitHub Markdown remains canonical and must be updated for portability across Codex + Claude.
+- **Morning command center / "pop up in my face" system** — required. Priscila needs the journal, Today’s 3, RE study, and money/subscriptions dashboard to appear automatically like Alexa-style reminders. 2026-07-13: updated daily 10:00 calendar event to open the Focus Partner Sheet + journal folder + money check. NEXT build layer: Mac startup/Login Item or macOS Shortcut that opens the command center when she starts work.
 
 **🎨 Skill development / hobbies**
 - **Time awareness** — learn/practice checking time and noticing time passing without avoiding the clock or losing the day to rabbit holes. PARKED for now, but keep it visible.
@@ -172,6 +173,12 @@ Each task cut into tiny, finish-able steps. She should only ever look at the NEX
 4. [ ] Cancel the "cut" ones (one sitting)
 5. [ ] Total what's left → your real monthly number
 6. [ ] (later, parked) turn it into an app
+
+**💰 Subscriptions / spending dashboard — daily visibility**
+1. [ ] Locate the current subscriptions/expenses source
+2. [ ] Decide the daily view: subscriptions · spending today/this month · what to cut · unusual charges
+3. [ ] Connect it to the Finance Dashboard or make a simple companion tab
+4. [ ] Put the link in the Morning command center so it appears every day
 
 **💰 Finance Dashboard — PRI 2026 (fill the inputs so it goes live)** — the dashboard is built; it's waiting on YOU. One sitting per card is fine.
 1. [ ] Grab each card's statement/app and jot: balance · APR · limit · minimum · due date · statement date — for Discover, Chase, BoA, Citi, Affirm
@@ -251,6 +258,12 @@ Each task cut into tiny, finish-able steps. She should only ever look at the NEX
 1. [ ] Write 5 lines by hand each day
 2. [ ] Drop the scan/photo in the Drive journal folder
 
+**📓 Morning command center / pop-up system**
+1. [x] Update daily 10:00 calendar reminder to point to Focus Partner Sheet + journal + money check
+2. [ ] Create a Mac startup layer: Login Item or macOS Shortcut opens the command center when the computer starts / work begins
+3. [ ] Decide whether to add Alexa/Siri/Reminders nudges for medicine, bedtime, brushing teeth, and work start/stop
+4. [ ] Test for 3 days: did it actually pop up enough to change behavior?
+
 **📓 Pick Notability vs Rocketbook**
 1. [ ] Pick ONE
 2. [ ] Do the one-time auto-backup setup on the device
@@ -277,6 +290,7 @@ Each task cut into tiny, finish-able steps. She should only ever look at the NEX
 | 2026-07-08 | state; her big verbal brain-dump | Explained matrix vs Rule-of-3; captured ALL 17 tasks; RE-quiz "preserve-first" prompt | Full backlog saved+mirrored; 3 calendar events; handwritten Matrix + Task PNGs → GitHub + Desktop + Drive |
 | 2026-07-13 | state; her verbal Monday brain-dump; **mined Drive docs (FINANCE_DASHBOARD_MASTER_PLAN, WEEK_PLAN) + repo MDs** | BIG session. Google Ads DONE. ADS videos vertical redo + 6 sub-steps. Monday patterns. Broke ALL backlog into sub-steps. OPC vs mom's website; timezone Eastern (Miami). Archaeology → Finance Dashboard/Investments/Ads-tracking/Content-pipeline/ROOM_VISION. Added TASK-BRAIN rule, daily MANIFESTATION ritual + **guided Manifestation Module (10-min, 4 steps)**, and an **"update" re-sync mechanism + Last-updated stamps**. `/focus` + root `FOCUS-PARTNER.md` (Codex-friendly) shipped. | Mirrored EVERYTHING to GitHub (agent + state + commands + README) |
 | 2026-07-13 | Focus Partner state + Drive | Priscila will use Focus Partner in both Codex and Claude. Created clean Google Sheet mirror in `Productivity & Routine / Focus Partner`, moved it out of heavy `Ideas & Inbox`, logged morning manifestation, and added skill-development/hobbies lane. | Sheet mirror implemented; state updated for portability |
+| 2026-07-13 | Focus Partner Sheet + Calendar | Priscila said manifestation/body says yes to RE study and finances in check; she needs subscriptions/spending visibility and reminders that pop up like Alexa. | Updated 10:00 daily calendar event into Morning command center; added Mac startup/open shortcut and finance/subscriptions dashboard as next system tasks |
 
 Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested refinements (her call): weekly = highlights/lowlights/patterns · mid-day check-in · anchor morning review to an existing habit.
 
@@ -290,6 +304,8 @@ Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested ref
 | Daily 5-line log habit | ONGOING | her system | write 5 lines by hand each day → syncs to Drive |
 | Daily manifestation (Manifestation Module) | ONGOING | 2026-07-13 | agent runs the 4-step module each morning before planning; logs Step 3 verbatim |
 | Focus Partner Google Sheet mirror | ✅ IMPLEMENTED | 2026-07-13 | `_Focus Partner — STATE` in Drive folder `Productivity & Routine / Focus Partner`; keep as a lightweight mirror, Markdown remains canonical |
+| Morning command center / pop-up system | IN PROGRESS | 2026-07-13 | 10:00 calendar event updated; next build Mac startup/Login Item or Shortcut to auto-open Focus Partner Sheet/journal |
+| Subscriptions/spending visibility | PRIORITY | 2026-07-13 | create/connect dashboard view for subscriptions, spending, what to cut, and daily money awareness |
 | Skill development / hobbies | PARKED | 2026-07-13 | time awareness + language interests (Chinese, Spanish, Japanese, French, Italian); later pick ONE tiny experiment |
 | RE quiz "teach" rollout | HANDED OFF | her request | runs in her RE-study chat via the paste-in prompt |
 | Website for her mom | CHECK WITH HER | 2026-07-07 | ask if mom still wants it before any work |
@@ -308,4 +324,5 @@ Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested ref
 - **Walking desk unused:** owns a treadmill w/ table → stack: walk WHILE studying RE or on Mike's call.
 - **RE study:** she says it should be daily — flag missed days.
 - **Manifestation patterns (from her source, 2026-07-13):** she drifts negative + can't visualize well + carries scarcity/abandonment/"love-unsafe" beliefs → CALM her nervous system, CATCH & FLIP negative self-talk, use feeling/other-senses over visualization, bring her back to positive daily (consistency > intensity).
+- **Needs external prompts, not memory:** she explicitly compared the desired system to Alexa telling her medicine/bed/brush teeth. Build layered reminders that pop up in her face: Calendar + Mac startup/open link + optional Alexa/Siri/Reminders. Do not rely on her remembering to open the journal/dashboard.
 - (more populates as entries are read — avoidance, hyperfocus, energy)
