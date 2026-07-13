@@ -29,6 +29,16 @@ Mirror of the Drive sheet `_Focus Partner — STATE` (journal folder). Update th
 2. [ ] Start the ADS videos vertical redo — just the first cut/setup, not the whole thing
 3. [ ] Jot today's 5-line log
 
+### Sub-steps — ADS videos vertical redo (this week's needle-mover)
+Each line = something she can finish and check off. She can reorder/edit; the agent keeps this current.
+1. [ ] Gather what already exists — find the current ad videos + raw clips (one folder)
+2. [ ] Lock the spec — vertical 9:16, length, captions on/off (agent proposes, she picks)
+3. [ ] Redo ONE video first (the pilot) — reframe/re-edit to vertical
+4. [ ] Look at the pilot → approve the format before doing the rest
+5. [ ] Batch-redo the remaining videos in the approved format
+6. [ ] Upload / hand off to the ad campaign
+*Today only = steps 1–2. The rest are parked so they don't crowd her.*
+
 ### Schedule notes
 - Mon 2026-07-13: new week. Google meeting already happened last week — don't re-plan it.
 
@@ -45,7 +55,7 @@ Captured 2026-07-07 from her brain-dump. Nothing here is scheduled yet — it's 
 
 **🏗️ Oak Park Construction (business)**
 - ~~Google Ads rep call — book + do~~ ✅ **DONE** (had the meeting, ~week of 2026-07-06). No longer pending.
-- **ADS videos — redo in VERTICAL format** (work + personal — keep in focus, never lose it). Currently on HOLD only because it's missing the vertical format; the plan is to redo everything in vertical. *(promoted to This Week's 3, week of 2026-07-13.)*
+- **ADS videos — redo in VERTICAL format** (work + personal — keep in focus, never lose it). Currently on HOLD only because it's missing the vertical format; the plan is to redo everything in vertical. *(promoted to This Week's 3, week of 2026-07-13; broken into 6 sub-steps above.)*
 - AI receptionist decision (Goodcall vs Rosie) — stop missed calls (~$1,400/qtr leak).
 - Phone-number approach — decide.
 - Verify the daily lead-follow-up email actually landed.
@@ -89,7 +99,7 @@ Captured 2026-07-07 from her brain-dump. Nothing here is scheduled yet — it's 
 | 2026-07-01 | real-estate-quiz.html BANK + 11 book scans | Built "teach" upgrade (why + why-wrong + honest book quote) | PILOT 10 Qs LIVE `2835b86`; full rollout of 261 set up, paused |
 | 2026-07-07 | state + agent + her 2 book screenshots | Set up Rule-of-3 + Covey/Eisenhower matrix as agent planning frame; captured full backlog | Mirrored agent brain to GitHub (was missing); added planning frame + first weekly plan + master backlog |
 | 2026-07-08 | state; her big verbal brain-dump | Explained matrix (Covey names + %) vs Rule-of-3; clarified Q1≠weekly-3; captured ALL 17 tasks; built RE-quiz "preserve-first" prompt (audit→checklist→add teach→fix math/why→reorder by exam frequency, no back-to-back math) | Full backlog saved+mirrored; 3 calendar events for Wed 7/8 (10:00 Ads call · 10:15 study · 11:45 log); drew handwritten Matrix + Task-list PNGs → GitHub + Desktop + her Drive journal folder |
-| 2026-07-13 | state | Monday new-week planning. Google Ads call CONFIRMED DONE last week (drop from focus). Added **ADS videos — vertical-format redo** (work+personal) to backlog + promoted to Weekly 3. Made `/focus` shortcut + shipped whole command set to GitHub so the helper is portable. | Reset Weekly 3 + matrix for wk 2026-07-13; logged wk 07-06 review; mirrored state + all command files to GitHub |
+| 2026-07-13 | state | Monday new-week planning. Google Ads call CONFIRMED DONE last week (drop from focus). Added **ADS videos — vertical-format redo** (work+personal) to backlog + promoted to Weekly 3, then broke it into 6 sub-steps. Made `/focus` shortcut + shipped whole command set to GitHub so the helper is portable. | Reset Weekly 3 + matrix for wk 2026-07-13; logged wk 07-06 review; added ADS sub-steps; mirrored state + all command files to GitHub |
 
 Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested refinements (her call): weekly = highlights/lowlights/patterns · mid-day check-in · anchor morning review to an existing habit.
 
@@ -97,7 +107,7 @@ Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested ref
 | Task | Status | Source | Next action |
 |------|--------|--------|-------------|
 | Google Ads rep call | ✅ DONE | 2026-07-07 planning | meeting happened last week — closed, not pending |
-| ADS videos — vertical-format redo (Q2 this week) | IN FOCUS | 2026-07-13 | work+personal; on hold only for the missing vertical format — redo everything vertical. Break into: (1) first cut/setup, (2) full redo. Never drop from focus. |
+| ADS videos — vertical-format redo (Q2 this week) | IN FOCUS | 2026-07-13 | work+personal; on hold only for the missing vertical format — redo everything vertical. See 6 sub-steps in Planning Frame. Today = steps 1–2. Never drop from focus. |
 | RE-quiz fixes prompt | READY TO PASTE | 2026-07-08 | give the "preserve-first" prompt to her RE-study chat: audit→checklist first, keep everything, add math/why teaching, reorder by exam frequency (no back-to-back math). Offered to save spec to backlog. |
 | Matrix/Task images in Portuguese? | OFFERED | 2026-07-08 | she may want PT-BR versions + auto-refresh when tasks change |
 | Study for RE exam (daily, non-negotiable) | ONGOING | 2026-07-07 planning | a focused study block every day; track in daily log |
