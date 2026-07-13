@@ -2,7 +2,7 @@
 
 Mirror of the Drive sheet `_Focus Partner — STATE` (journal folder). Update this EVERY session; mirror to GitHub alongside the agent file.
 
-- **Last check:** 2026-07-13 (Monday — new-week planning; Google Ads DONE; ADS-videos vertical redo; Monday patterns; broke ALL backlog into sub-steps; timezone confirmed Miami/Eastern; added Finance-stocks; clarified the two websites)
+- **Last check:** 2026-07-13 (Monday — new-week planning; Google Ads DONE; ADS-videos vertical redo; Monday patterns; broke ALL backlog into sub-steps; timezone Miami/Eastern; clarified two websites; **mined her Drive/repo handoffs → added real Finance Dashboard, Investments, Ads-tracking, Content-pipeline detail**)
 - **Timezone:** America/New_York — **Eastern (Miami), confirmed by Priscila 2026-07-13**
 - **Journal folder:** `📓 Daily Journal — DROP HERE` (id `1eknXv30UHtuDVDDRJpyt3eBLqsxhjABB`)
 
@@ -62,15 +62,18 @@ Captured 2026-07-07 from her brain-dump. Nothing here is scheduled yet — it's 
 - Oak Park Construction **BUSINESS website** (opc-website-v1, live) — revisit / improve. *(NOT her mom's site — different project; her mom's is under Personal.)*
 - Oak Park Construction **app** — exists; husband didn't adopt it; revisit later.
 - **Content / posting FOR construction** (social).
+- **Ads tracking / dashboard** — some days logged ZERO leads (e.g. June 1 & 8): tracking broke, or ads paused? Diagnose. *(separate from the ADS videos creative above.)*
 
 **🏠 McFolling Properties / Airbnb**
 - **Guest-message monitor + escalation:** reads Airbnb/email guest messages → **phone-calls her** to say "someone's messaging you", tries to help/answer guests, and flags REAL emergencies (guest locked out, etc.) to reach her. (the "Maya" area.)
 
-**💰 Finance & investing**
-- Clean the **subscriptions/expenses spreadsheet** → know total spend, what she's buying, where to cut costs. Later: turn into an app.
-- **Stocks / investing tracker** — she has stock tracker(s) (half-built). Decide what she wants from it, pick ONE, get it working. *(needs her detail: watchlist? holdings + P&L? price alerts?)*
+**💰 Finance & investing** *(detail pulled from her FINANCE_DASHBOARD_MASTER_PLAN + Investments plan, 2026-07-13)*
+- **Finance Dashboard — PRI 2026** (her personal money command center; already BUILT — "structure/design complete") — answers her 9 money questions: net position · month spend vs normal · where money went · money-in/receivables · debt by card · what's due · payoff plan · net positive? · next decision. Source = **Tiller**. Cards: Discover, Chase, BoA, Citi, Affirm (~$16k known debt). **Blocked on HER inputs** → per-card facts (APR/limit/minimum/due/statement date), Cash balance, Investments value, personal receivables, and the **Owner/Michael (Mike) classification rule**. *(Claude = read/UX only; Codex edits the sheet.)*
+- Clean the **subscriptions/expenses spreadsheet** → total spend, what to cut. *(part of the finance picture; later an app.)*
+- **Investments / stocks reset** — Robinhood + Fidelity 401k + crypto + Brazil/US allocation. Her words: *"5 years, no growth."* START with a one-page **inventory** (what she holds, where) before ANY reset — inventory first, not a reset plan.
 
 **🎬 Content & Monetization**
+- **Content automation pipeline — BROKEN since ~May 28** — the auto-content system is DOWN; diagnose root cause (NB2 + Anthropic credit top-up?). Separate from making content by hand.
 - **Bible dirty stories** — drafted; pick which become Reels, backfill Genesis ⚠️ flag, split long scripts *(not priority)*.
 - **Personal content** (her own) — collect + create; uses content + bible material.
 - **Merch** — merch links tied to the content/news topics, on a separate page.
@@ -152,12 +155,33 @@ Each task cut into tiny, finish-able steps. She should only ever look at the NEX
 5. [ ] Total what's left → your real monthly number
 6. [ ] (later, parked) turn it into an app
 
-**💰 Stocks / investing tracker** *(needs her detail first)*
-1. [ ] Say in one line what you want it to DO (watchlist? holdings + profit/loss? price alerts?)
-2. [ ] Find the tracker(s) you already built — which is closest
-3. [ ] Pick ONE to keep; ignore the rest
-4. [ ] Get it showing your current holdings/watchlist
-5. [ ] Decide if you want alerts → set them up or park
+**💰 Finance Dashboard — PRI 2026 (fill the inputs so it goes live)** — the dashboard is built; it's waiting on YOU. One sitting per card is fine.
+1. [ ] Grab each card's statement/app and jot: balance · APR · limit · minimum · due date · statement date — for Discover, Chase, BoA, Citi, Affirm
+2. [ ] Enter your **Cash** balance (checking/savings/cash)
+3. [ ] Enter your **Investments** total (or link the inventory below)
+4. [ ] List any **personal receivables** (who owes you, how much, when)
+5. [ ] Decide the **Owner/Michael (Mike) rule** — which transactions are his vs yours
+6. [ ] Hand the facts to the finance chat → Codex fills the sheet → dashboard goes fully live
+
+**💰 Investments / stocks — inventory FIRST** *(the "5 years no growth" reset — map before moving anything)*
+1. [ ] Robinhood: note holdings + current value
+2. [ ] Fidelity 401k: note holdings + value
+3. [ ] Crypto: note what/where + value
+4. [ ] Brazil vs US: rough split
+5. [ ] Put it on ONE page → THEN decide if/what to reset (separate task)
+
+**🏗️ Ads tracking / dashboard (diagnose)**
+1. [ ] Check: are the ads actually running, or paused?
+2. [ ] Check: is the lead-tracking feed writing rows at all?
+3. [ ] Name which of the two broke
+4. [ ] Hand the fix to a Claude/Codex chat
+
+**🎬 Content automation pipeline (diagnose the ~May 28 break)**
+1. [ ] Name what it's supposed to do end-to-end (input → post)
+2. [ ] Find where it stops (credits? NB2? a broken step?)
+3. [ ] Try the credit top-up / NB2 fix
+4. [ ] Test one piece of content end-to-end
+5. [ ] If still broken, hand the exact failure point to a build chat
 
 **🎬 Bible dirty stories (Reels)**
 1. [ ] Open the drafts
@@ -223,7 +247,7 @@ Each task cut into tiny, finish-able steps. She should only ever look at the NEX
 | 2026-07-01 | real-estate-quiz.html BANK + 11 book scans | Built "teach" upgrade (why + why-wrong + honest book quote) | PILOT 10 Qs LIVE `2835b86`; full rollout of 261 set up, paused |
 | 2026-07-07 | state + agent + her 2 book screenshots | Set up Rule-of-3 + Covey/Eisenhower matrix as agent planning frame; captured full backlog | Mirrored agent brain to GitHub (was missing); added planning frame + first weekly plan + master backlog |
 | 2026-07-08 | state; her big verbal brain-dump | Explained matrix (Covey names + %) vs Rule-of-3; clarified Q1≠weekly-3; captured ALL 17 tasks; built RE-quiz "preserve-first" prompt (audit→checklist→add teach→fix math/why→reorder by exam frequency, no back-to-back math) | Full backlog saved+mirrored; 3 calendar events for Wed 7/8 (10:00 Ads call · 10:15 study · 11:45 log); drew handwritten Matrix + Task-list PNGs → GitHub + Desktop + her Drive journal folder |
-| 2026-07-13 | state; her verbal Monday brain-dump | Monday new-week planning. Google Ads call CONFIRMED DONE last week (drop from focus). Added **ADS videos — vertical-format redo** (work+personal) to backlog + Weekly 3, broke it into 6 sub-steps. Captured her **Monday patterns** (plan-paralysis, setup rabbit-holes, Mike calls, unused walking desk, RE daily). Broke **ALL** backlog items into sub-steps. Added **Finance/stocks tracker**, separated **OPC business website vs mom's personal website**, confirmed **timezone = Eastern (Miami)**. Made `/focus` shortcut + root `FOCUS-PARTNER.md` (Codex-friendly) + shipped whole command set to GitHub so the helper is portable to any computer/tool. | Reset Weekly 3 + matrix; logged wk 07-06 review; ADS + all-task sub-steps; added Finance-stocks + website distinction + timezone; added Patterns + agent "known patterns" section; mirrored EVERYTHING (agent + state + all commands + entry-point README) to GitHub |
+| 2026-07-13 | state; her verbal Monday brain-dump; **mined Drive docs (FINANCE_DASHBOARD_MASTER_PLAN, WEEK_PLAN command center) + repo MDs** | Monday planning. Google Ads DONE (drop from focus). Added **ADS videos vertical redo** + 6 sub-steps. Captured **Monday patterns** (plan-paralysis, setup rabbit-holes, Mike calls, unused walking desk, RE daily). Broke **ALL** backlog into sub-steps. Separated **OPC vs mom's website**; timezone = **Eastern (Miami)**. **Archaeology:** pulled real detail → **Finance Dashboard (PRI 2026, Tiller, needs her card/cash/investment inputs)**, **Investments reset (Robinhood+401k+crypto+Brazil/US, inventory-first)**, **Ads tracking broke (0-row days)**, **Content pipeline broke ~May 28**. Made `/focus` + root `FOCUS-PARTNER.md` (Codex-friendly) + shipped command set to GitHub. | Reset Weekly 3 + matrix; wk 07-06 review; all-task sub-steps; website distinction + timezone; **added Finance/Investments/Ads-tracking/Content-pipeline items + breakdowns from mined docs**; Patterns + agent "known patterns"; mirrored EVERYTHING to GitHub |
 
 Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested refinements (her call): weekly = highlights/lowlights/patterns · mid-day check-in · anchor morning review to an existing habit.
 
@@ -238,7 +262,11 @@ Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested ref
 | Daily 5-line log habit | ONGOING | her chosen system | write 5 lines by hand each day → syncs to Drive |
 | RE quiz "teach" rollout | HANDED OFF | her request | runs in her RE-study chat via the paste-in prompt (261 Qs, re-pull HEAD before each commit) |
 | Website for her mom | CHECK WITH HER | 2026-07-07 dump | ask if mom still wants it before any work |
-| Stocks / investing tracker | NEEDS HER DETAIL | 2026-07-13 | ask her what she wants it to do (watchlist / holdings+P&L / alerts) before touching it |
+| Finance Dashboard inputs | NEEDS HER DATA | 2026-07-13 mined | give card facts + cash + investments + receivables + Mike rule so Codex can finish the dashboard |
+| Investments inventory | NEEDS HER DATA | 2026-07-13 mined | one-page map of Robinhood + 401k + crypto + Brazil/US before any reset |
+| Ads tracking broke | TO DIAGNOSE | 2026-07-13 mined | check ads-running vs tracking-feed; 0-row days June 1 & 8 |
+| Content pipeline broke (~May 28) | TO DIAGNOSE | 2026-07-13 mined | find where it stops (credits/NB2); test one piece end-to-end |
+| Confirm timezone | ✅ DONE | — | Eastern (Miami), confirmed 2026-07-13 |
 | Read + seed first entry (Jun 29) | NOT DONE | — | read PDF, summarize into Entry Index |
 
 ## Patterns
