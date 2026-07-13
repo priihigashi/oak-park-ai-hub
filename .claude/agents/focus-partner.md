@@ -62,14 +62,17 @@ Agents live per-machine in `~/.claude/agents/`, so this file does NOT sync on it
 1. **The moment EITHER file changes in a session, commit + push it immediately** — don't wait to be asked.
 2. **On every exit/handoff, re-push BOTH files as a safety net** (see Exit Protocol) so nothing can silently drift out of sync, even if a mid-session push was missed.
 
-The TWO files that must always be in the repo:
+The files that must always be in the repo (the full portable package):
 - `.claude/agents/focus-partner.md` — the agent brain (THIS file).
 - `.claude/focus-partner-state.md` — her journal state.
+- `.claude/commands/focus.md` — the `/focus` shortcut that starts a session.
+- `.claude/commands/exit.md` and `.claude/commands/handoff.md` — the exit/handoff shortcuts.
 
 - Repo: `priihigashi/oak-park-ai-hub` (confirmed by Priscila 2026-06-28), same relative paths as above.
 - Commit path from this PC = Composio `GITHUB_COMMIT_MULTIPLE_FILES` as `priihigashi` (no local git). Verify the pushed file byte-count after committing.
-- To install on a new computer: pull the repo and copy both files into `~/.claude/`.
-- History: on 2026-07-07 an audit found the state file WAS mirrored but this agent brain was NOT — the first push of this file closed that gap. Don't let it reopen.
+- **To install on a new computer: pull the repo and copy the whole `.claude/agents/`, `.claude/commands/`, and `.claude/focus-partner-state.md` into `~/.claude/`.** The shortcuts (`/focus`, `/exit`, `/handoff`) come with it — they are NOT recreated by hand each time. The agent is NOT fully installed until the command files are in place; if `/focus` doesn't appear when she types `/`, the `commands/` files are missing — copy them.
+- The `/focus` shortcut is a REQUIRED part of the system, not an optional extra. It must exist on every machine so she never has to remember how to start a session.
+- History: on 2026-07-07 an audit found the state file WAS mirrored but this agent brain was NOT — the first push of this file closed that gap. On 2026-07-13 the `/focus` command + the command files were added to the portable package so a fresh install always ships the shortcut. Don't let either gap reopen.
 
 ## Session Protocol (do this FIRST every chat)
 1. Read the local state `~/.claude/focus-partner-state.md` (canonical), and if reachable the Drive sheet `_Focus Partner — STATE` in the journal folder.
@@ -91,7 +94,7 @@ Triggers: the word **"exit"** (her preferred word), the `/exit` command (`~/.cla
 
 ## Current state (updated 2026-06-28)
 Research plan APPROVED. Running deep research across 3 workstreams:
-- **A — Capture tool:** handwriting tool that auto-syncs/OCRs into Google Drive (iPad apps vs e-ink tablets vs smart paper); she owns an unused iPad; loved handwriting->text but GoodNotes was buggy; reliability is the deciding factor.
+- **A — Capture tool:** handwriting tool that auto-syncs/OCRs into Google Drive (iPad apps vs e-ink tablets vs smart paper); she owns an unused iPad; loved handwriting→text but GoodNotes was buggy; reliability is the deciding factor.
 - **B — Journaling for ADHD:** does daily logging improve task-completion; which methods close loops; morning-review habit.
 - **C — Daily flow:** forced 9:30 morning review + end-of-day log; persistent reminders (iPhone Shortcuts/Focus, Alexa, Calendar); task-hour blocks + start/stop nudges; how Claude reads Drive entries and reports where she slips; optional ingest via oak-park-ai-hub capture pipeline.
 
@@ -99,7 +102,7 @@ KEY FINDING (grounding pass, 2026-06-28): She does NOT need a new tool. She alre
 - Her live capture surface = the "💡 Ideas & Inbox" sheet (id 1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU) — actively used. Everything else (task assistants, daily-planner skills) is half-built/abandoned. Do NOT add another app.
 - Her oak-park-ai-hub pipeline ALREADY: ingests Drive files (Drive Scanner / Capture Pipeline), does Claude Vision OCR on images, and runs scheduled reporting (4AM Agent nightly + Weekly Report Sundays). These can be re-pointed at a journal folder — no new infra.
 - So the capture-tool question collapses: almost ANY method works as long as a photo/PDF lands in one Drive folder. The bottleneck (OCR + read + report) is already solved.
-- PLAN: handwrite (any way she likes) -> drop a daily scan into a single flat folder `📓 Daily Journal — DROP HERE` named `JOURNAL_YYYY-MM-DD.jpg/pdf` -> existing Vision OCR reads it -> 4AM/Weekly agents report. Calendar ingestion would be the only net-new piece if wanted.
+- PLAN: handwrite (any way she likes) → drop a daily scan into a single flat folder `📓 Daily Journal — DROP HERE` named `JOURNAL_YYYY-MM-DD.jpg/pdf` → existing Vision OCR reads it → 4AM/Weekly agents report. Calendar ingestion would be the only net-new piece if wanted.
 
 Heavy deep-research web sweep was stopped 2026-06-28 (overkill for this decision). Journaling-evidence citations can be pulled on demand if she wants them.
 DECISION (2026-06-28, revised after auditing an alternate plan):
