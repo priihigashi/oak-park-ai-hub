@@ -19,7 +19,7 @@ Mirror of the Drive sheet `_Focus Partner — STATE` (journal folder). Update th
 
 ### Weekly Matrix (Covey names + his ideal split: ~20% Q1 · 65% Q2 · 10% Q3 · 5% Q4)
 - **Q1 — Important + Urgent** = *Necessity* (do now): Google Ads rep call — book today (10 min), call this week
-- **Q2 — Important + NOT Urgent** = *Effectiveness* (PROTECT — live here): RE exam study (daily) · Daily 5-line log (daily)
+- **Q2 — Important + NOT Urgent** = *Effectiveness* ⭐ (PROTECT — live here): RE exam study (daily) · Daily 5-line log (daily)
 - **Q3 — Urgent + NOT Important** = *Distraction* (minimize/delegate): occasional "ask Mike" items
 - **Q4 — NOT important + NOT urgent** = *Waste* (delete): —
 
@@ -58,7 +58,7 @@ Captured 2026-07-07 from her brain-dump. Nothing here is scheduled yet — it's 
 - Clean the **subscriptions/expenses spreadsheet** → know total spend, what she's buying, where to cut costs. Later: turn into an app.
 
 **🎬 Content & Monetization**
-- **Bible dirty stories** — drafted; pick which become Reels, backfill Genesis flag, split long scripts *(not priority)*.
+- **Bible dirty stories** — drafted; pick which become Reels, backfill Genesis ⚠️ flag, split long scripts *(not priority)*.
 - **Personal content** (her own) — collect + create; uses content + bible material.
 - **Merch** — merch links tied to the content/news topics, on a separate page.
 - **Product-review page (Amazon Influencer** — she's registered) — dump products she buys, honest good/bad reviews; minimalistic to start; monetize.
@@ -86,7 +86,7 @@ Captured 2026-07-07 from her brain-dump. Nothing here is scheduled yet — it's 
 | 2026-07-01 | real-estate-quiz.html BANK + render/refLine code | Full audit; only defect = leaked metadata in options/explanations | Stripped 187 leaks, commit `2e7a293`; handed file to teach chat |
 | 2026-07-01 | real-estate-quiz.html BANK + 11 book scans | Built "teach" upgrade (why + why-wrong + honest book quote) | PILOT 10 Qs LIVE `2835b86`; full rollout of 261 set up, paused |
 | 2026-07-07 | state + agent + her 2 book screenshots | Set up Rule-of-3 + Covey/Eisenhower matrix as agent planning frame; captured full backlog | Mirrored agent brain to GitHub (was missing); added planning frame + first weekly plan + master backlog |
-| 2026-07-08 | state; her big verbal brain-dump | Explained matrix (Covey names + %) vs Rule-of-3; clarified Q1!=weekly-3; captured ALL 17 tasks; built RE-quiz "preserve-first" prompt (audit->checklist->add teach->fix math/why->reorder by exam frequency, no back-to-back math) | Full backlog saved+mirrored; 3 calendar events for Wed 7/8 (10:00 Ads call · 10:15 study · 11:45 log); drew handwritten Matrix + Task-list PNGs -> GitHub + Desktop + her Drive journal folder |
+| 2026-07-08 | state; her big verbal brain-dump | Explained matrix (Covey names + %) vs Rule-of-3; clarified Q1≠weekly-3; captured ALL 17 tasks; built RE-quiz "preserve-first" prompt (audit→checklist→add teach→fix math/why→reorder by exam frequency, no back-to-back math) | Full backlog saved+mirrored; 3 calendar events for Wed 7/8 (10:00 Ads call · 10:15 study · 11:45 log); drew handwritten Matrix + Task-list PNGs → GitHub + Desktop + her Drive journal folder |
 
 Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested refinements (her call): weekly = highlights/lowlights/patterns · mid-day check-in · anchor morning review to an existing habit.
 
@@ -94,10 +94,10 @@ Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested ref
 | Task | Status | Source | Next action |
 |------|--------|--------|-------------|
 | Google Ads rep call (Q1 this week) | TODO | 2026-07-07 planning | she books the appointment (~10 min) — calendar event Wed 7/8 10:00; then the ~1hr call this week |
-| RE-quiz fixes prompt | READY TO PASTE | 2026-07-08 | give the "preserve-first" prompt to her RE-study chat: audit->checklist first, keep everything, add math/why teaching, reorder by exam frequency (no back-to-back math). Offered to save spec to backlog. |
+| RE-quiz fixes prompt | READY TO PASTE | 2026-07-08 | give the "preserve-first" prompt to her RE-study chat: audit→checklist first, keep everything, add math/why teaching, reorder by exam frequency (no back-to-back math). Offered to save spec to backlog. |
 | Matrix/Task images in Portuguese? | OFFERED | 2026-07-08 | she may want PT-BR versions + auto-refresh when tasks change |
 | Study for RE exam (daily, non-negotiable) | ONGOING | 2026-07-07 planning | a focused study block every day; track in daily log |
-| Daily 5-line log habit | ONGOING | her chosen system | write 5 lines by hand each day -> syncs to Drive |
+| Daily 5-line log habit | ONGOING | her chosen system | write 5 lines by hand each day → syncs to Drive |
 | RE quiz "teach" rollout | HANDED OFF | her request | runs in her RE-study chat via the paste-in prompt (261 Qs, re-pull HEAD before each commit) |
 | Website for her mom | CHECK WITH HER | 2026-07-07 dump | ask if mom still wants it before any work |
 | Confirm timezone (Eastern?) | NOT DONE | — | ask Priscila |
