@@ -2,8 +2,8 @@
 
 Mirror of the Drive sheet `_Focus Partner — STATE` (journal folder). Update this EVERY session; mirror to GitHub alongside the agent file.
 
-- **Last check:** 2026-07-13 (Monday — new-week planning; Google Ads call DONE last week; added ADS-videos vertical redo; captured Monday patterns; broke ALL backlog items into sub-steps)
-- **Timezone:** America/New_York (assumed — confirm with Priscila)
+- **Last check:** 2026-07-13 (Monday — new-week planning; Google Ads DONE; ADS-videos vertical redo; Monday patterns; broke ALL backlog into sub-steps; timezone confirmed Miami/Eastern; added Finance-stocks; clarified the two websites)
+- **Timezone:** America/New_York — **Eastern (Miami), confirmed by Priscila 2026-07-13**
 - **Journal folder:** `📓 Daily Journal — DROP HERE` (id `1eknXv30UHtuDVDDRJpyt3eBLqsxhjABB`)
 
 ## This Week (week of 2026-07-13)
@@ -59,15 +59,16 @@ Captured 2026-07-07 from her brain-dump. Nothing here is scheduled yet — it's 
 - AI receptionist decision (Goodcall vs Rosie) — stop missed calls (~$1,400/qtr leak).
 - Phone-number approach — decide.
 - Verify the daily lead-follow-up email actually landed.
-- Oak Park **website** (opc-website-v1, live) — revisit / improve.
+- Oak Park Construction **BUSINESS website** (opc-website-v1, live) — revisit / improve. *(NOT her mom's site — different project; her mom's is under Personal.)*
 - Oak Park Construction **app** — exists; husband didn't adopt it; revisit later.
 - **Content / posting FOR construction** (social).
 
 **🏠 McFolling Properties / Airbnb**
 - **Guest-message monitor + escalation:** reads Airbnb/email guest messages → **phone-calls her** to say "someone's messaging you", tries to help/answer guests, and flags REAL emergencies (guest locked out, etc.) to reach her. (the "Maya" area.)
 
-**💰 Finance**
+**💰 Finance & investing**
 - Clean the **subscriptions/expenses spreadsheet** → know total spend, what she's buying, where to cut costs. Later: turn into an app.
+- **Stocks / investing tracker** — she has stock tracker(s) (half-built). Decide what she wants from it, pick ONE, get it working. *(needs her detail: watchlist? holdings + P&L? price alerts?)*
 
 **🎬 Content & Monetization**
 - **Bible dirty stories** — drafted; pick which become Reels, backfill Genesis ⚠️ flag, split long scripts *(not priority)*.
@@ -81,7 +82,7 @@ Captured 2026-07-07 from her brain-dump. Nothing here is scheduled yet — it's 
 - **RE quiz** — teach rollout handed off; her "other complaints" pending.
 
 **👩‍👧 Personal / family**
-- **Website for her mom** — CHECK FIRST whether mom still wants it.
+- **Mom's PERSONAL website** (totally separate from the Oak Park business site) — CHECK FIRST whether mom still wants it.
 
 **📓 Focus system**
 - Daily 5-line log habit · pick Notability vs Rocketbook + one-time backup · confirm timezone · use the walking desk (stack walk + study/call).
@@ -117,7 +118,7 @@ Each task cut into tiny, finish-able steps. She should only ever look at the NEX
 3. [ ] Confirm the email actually arrived + reads right
 4. [ ] If broken, note where it failed → becomes a fix task
 
-**🏗️ Oak Park website (opc-website-v1, live) — revisit**
+**🏗️ Oak Park Construction BUSINESS website (opc-website-v1, live) — revisit** *(≠ mom's site)*
 1. [ ] Open the live site; list 3 things to improve (one pass)
 2. [ ] Pick the highest-impact one
 3. [ ] Make that ONE change
@@ -150,6 +151,13 @@ Each task cut into tiny, finish-able steps. She should only ever look at the NEX
 4. [ ] Cancel the "cut" ones (one sitting)
 5. [ ] Total what's left → your real monthly number
 6. [ ] (later, parked) turn it into an app
+
+**💰 Stocks / investing tracker** *(needs her detail first)*
+1. [ ] Say in one line what you want it to DO (watchlist? holdings + profit/loss? price alerts?)
+2. [ ] Find the tracker(s) you already built — which is closest
+3. [ ] Pick ONE to keep; ignore the rest
+4. [ ] Get it showing your current holdings/watchlist
+5. [ ] Decide if you want alerts → set them up or park
 
 **🎬 Bible dirty stories (Reels)**
 1. [ ] Open the drafts
@@ -186,7 +194,7 @@ Each task cut into tiny, finish-able steps. She should only ever look at the NEX
 
 **🖥️ RE quiz (teach rollout)** — HANDED OFF. Your one action: paste the "preserve-first" prompt into your RE-study chat.
 
-**👩‍👧 Website for her mom**
+**👩‍👧 Mom's PERSONAL website** *(separate from the OPC business site)*
 1. [ ] Text mom: do you still want it? (2 min)
 2. [ ] If yes: what's it for (one sentence)
 3. [ ] Start it or park it based on her answer
@@ -200,8 +208,7 @@ Each task cut into tiny, finish-able steps. She should only ever look at the NEX
 2. [ ] Do the one-time auto-backup setup on the device
 3. [ ] Test that one entry syncs to Drive
 
-**📓 Confirm timezone**
-1. [ ] Tell the agent: Eastern? → it updates the reminders
+**📓 Confirm timezone** — ✅ DONE: **Eastern (Miami)**, confirmed 2026-07-13. Reminders assume ET.
 
 ## Entry Index
 | Date | File (id) | Type | Processed | Summary |
@@ -216,7 +223,7 @@ Each task cut into tiny, finish-able steps. She should only ever look at the NEX
 | 2026-07-01 | real-estate-quiz.html BANK + 11 book scans | Built "teach" upgrade (why + why-wrong + honest book quote) | PILOT 10 Qs LIVE `2835b86`; full rollout of 261 set up, paused |
 | 2026-07-07 | state + agent + her 2 book screenshots | Set up Rule-of-3 + Covey/Eisenhower matrix as agent planning frame; captured full backlog | Mirrored agent brain to GitHub (was missing); added planning frame + first weekly plan + master backlog |
 | 2026-07-08 | state; her big verbal brain-dump | Explained matrix (Covey names + %) vs Rule-of-3; clarified Q1≠weekly-3; captured ALL 17 tasks; built RE-quiz "preserve-first" prompt (audit→checklist→add teach→fix math/why→reorder by exam frequency, no back-to-back math) | Full backlog saved+mirrored; 3 calendar events for Wed 7/8 (10:00 Ads call · 10:15 study · 11:45 log); drew handwritten Matrix + Task-list PNGs → GitHub + Desktop + her Drive journal folder |
-| 2026-07-13 | state; her verbal Monday brain-dump | Monday new-week planning. Google Ads call CONFIRMED DONE last week (drop from focus). Added **ADS videos — vertical-format redo** (work+personal) to backlog + Weekly 3, broke it into 6 sub-steps. Captured her **Monday patterns** (plan-paralysis, setup rabbit-holes, Mike calls, unused walking desk, RE daily). Broke **ALL** backlog items into sub-steps (Task Breakdowns section). Made `/focus` shortcut + root `FOCUS-PARTNER.md` (Codex-friendly) + shipped whole command set to GitHub so the helper is portable to any computer/tool. | Reset Weekly 3 + matrix; logged wk 07-06 review; ADS + all-task sub-steps; added Patterns + agent "known patterns" section; mirrored EVERYTHING (agent + state + all commands + entry-point README) to GitHub |
+| 2026-07-13 | state; her verbal Monday brain-dump | Monday new-week planning. Google Ads call CONFIRMED DONE last week (drop from focus). Added **ADS videos — vertical-format redo** (work+personal) to backlog + Weekly 3, broke it into 6 sub-steps. Captured her **Monday patterns** (plan-paralysis, setup rabbit-holes, Mike calls, unused walking desk, RE daily). Broke **ALL** backlog items into sub-steps. Added **Finance/stocks tracker**, separated **OPC business website vs mom's personal website**, confirmed **timezone = Eastern (Miami)**. Made `/focus` shortcut + root `FOCUS-PARTNER.md` (Codex-friendly) + shipped whole command set to GitHub so the helper is portable to any computer/tool. | Reset Weekly 3 + matrix; logged wk 07-06 review; ADS + all-task sub-steps; added Finance-stocks + website distinction + timezone; added Patterns + agent "known patterns" section; mirrored EVERYTHING (agent + state + all commands + entry-point README) to GitHub |
 
 Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested refinements (her call): weekly = highlights/lowlights/patterns · mid-day check-in · anchor morning review to an existing habit.
 
@@ -231,7 +238,7 @@ Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested ref
 | Daily 5-line log habit | ONGOING | her chosen system | write 5 lines by hand each day → syncs to Drive |
 | RE quiz "teach" rollout | HANDED OFF | her request | runs in her RE-study chat via the paste-in prompt (261 Qs, re-pull HEAD before each commit) |
 | Website for her mom | CHECK WITH HER | 2026-07-07 dump | ask if mom still wants it before any work |
-| Confirm timezone (Eastern?) | NOT DONE | — | ask Priscila |
+| Stocks / investing tracker | NEEDS HER DETAIL | 2026-07-13 | ask her what she wants it to do (watchlist / holdings+P&L / alerts) before touching it |
 | Read + seed first entry (Jun 29) | NOT DONE | — | read PDF, summarize into Entry Index |
 
 ## Patterns
