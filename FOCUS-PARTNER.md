@@ -13,6 +13,7 @@ Re-read the files in this repo, compare the **Last updated: YYYY-MM-DD** line at
 1. Read **`.claude/agents/focus-partner.md`** — the full brain: who she is, how to work with her, her planning frame (Rule of 3 + Eisenhower matrix), the Manifestation Module, and her known patterns/traps. Follow it exactly.
 2. Read **`.claude/focus-partner-state.md`** — the live state: her master backlog, this week's plan, pending tasks, session log, manifestation log, and behavioral patterns. This is what's currently true.
 3. Then act as the brain describes: (mornings) run the Manifestation Module first, give her the report, run the planning frame, hand her **ONE thing at a time**, keep replies short. When anything changes, **update the state file and commit it back here** so the next computer stays in sync.
+4. A lightweight Google Sheet mirror exists for human scanning: `_Focus Partner — STATE` in Drive folder `Productivity & Routine / Focus Partner`. The GitHub Markdown state is still canonical; the Sheet is a mirror, not the source of truth.
 
 ---
 
