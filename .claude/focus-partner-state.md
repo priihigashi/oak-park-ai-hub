@@ -2,11 +2,13 @@
 
 **Last updated: 2026-07-13** — bump on every push; the "update" check compares this date to decide if GitHub is newer.
 
-Mirror of the Drive sheet `_Focus Partner — STATE` (journal folder). Update this EVERY session; mirror to GitHub alongside the agent file.
+Canonical state lives in this Markdown file on GitHub. A human-readable Google Sheet mirror also exists: `_Focus Partner — STATE` in Drive folder `Productivity & Routine / Focus Partner`.
 
 - **Last check:** 2026-07-13 (Monday — huge session: `/focus` shortcut + portable install + Codex-ready `FOCUS-PARTNER.md`; Google Ads DONE; ADS-videos vertical redo; Monday patterns; broke ALL backlog into sub-steps; timezone Miami/Eastern; two websites separated; mined Drive/repo → Finance Dashboard/Investments/Ads-tracking/Content-pipeline; TASK-BRAIN rule; ROOM_VISION; **guided Manifestation Module + "update" mechanism**)
 - **Timezone:** America/New_York — **Eastern (Miami), confirmed by Priscila 2026-07-13**
 - **Journal folder:** `📓 Daily Journal — DROP HERE` (id `1eknXv30UHtuDVDDRJpyt3eBLqsxhjABB`)
+- **Google Sheet mirror:** `_Focus Partner — STATE` (`https://docs.google.com/spreadsheets/d/1AlvtSGIZUWE1pzld2A8LL5bK4g9nRR4a4jqsOcfnY4c`) in folder `Focus Partner` (`18API545Cqh0k7V2PPG3hnEeTRJHz7jZO`) under `Productivity & Routine`. Lightweight human-readable mirror only; GitHub Markdown remains canonical.
+- **Tool usage:** Priscila will use this Focus Partner in both Codex and Claude. Any assistant must read/update this Markdown state and keep the Sheet mirror current when practical.
 
 ## This Week (week of 2026-07-13)
 - **Focus:** the 3 below. Everything else is PARKED in the Backlog — not this week.
@@ -53,6 +55,7 @@ Each line = something she can finish and check off. She can reorder/edit; the ag
 Morning ritual (her request 2026-07-13): run the **Manifestation Module** (see agent brain) — 4 guided steps, ≤10 min, BEFORE the report or Today's 3. She writes Step 3 ("I am / I have" + gratitude) in the chat. Log it verbatim, newest at top.
 | Date | Her manifestation (Step 3, verbatim) |
 |------|------------------------------|
+| 2026-07-13 | i am very smart, i have a great family husband and kids, i feel i am walking towards the right direction, im grateful i saw a video that helped me add manifestation to my flow, im feeling confident it will work. |
 | — | (starts tomorrow morning) |
 
 ## Backlog — MASTER LIST (everything she wants to do; the POOL the matrix pulls from)
@@ -99,7 +102,11 @@ Captured 2026-07-07 from her brain-dump. Nothing here is scheduled yet — it's 
 **📓 Focus system**
 - Daily 5-line log habit · pick Notability vs Rocketbook + one-time backup · confirm timezone · use the walking desk (stack walk + study/call).
 - **Daily MANIFESTATION ritual** — Manifestation Module (4 guided steps, ≤10 min) every morning before tasks; agent leads it and logs Step 3. *(her request 2026-07-13.)*
-- *(optional, parked)* visible **Google-Sheet mirror** of this task board — needs her Mac/Codex to write Sheet cells (this Windows PC can't). Markdown board stays canonical.
+- **Google-Sheet mirror implemented** — `_Focus Partner — STATE` lives in Drive folder `Productivity & Routine / Focus Partner`. Use it for human scanning; GitHub Markdown remains canonical and must be updated for portability across Codex + Claude.
+
+**🎨 Skill development / hobbies**
+- **Time awareness** — learn/practice checking time and noticing time passing without avoiding the clock or losing the day to rabbit holes. PARKED for now, but keep it visible.
+- **Languages interest** — Chinese, Spanish, Japanese, French, Italian. Too many to actively pursue all at once; later pick ONE tiny starter lane. PARKED for now.
 
 ## Task Breakdowns — every backlog item, sub-stepped (added 2026-07-13, at her request)
 Each task cut into tiny, finish-able steps. She should only ever look at the NEXT unchecked step, not the whole ladder. The agent keeps these current and pulls the active one into the weekly/daily plan.
@@ -251,6 +258,11 @@ Each task cut into tiny, finish-able steps. She should only ever look at the NEX
 
 **📓 Confirm timezone** — ✅ DONE: **Eastern (Miami)**, confirmed 2026-07-13. Reminders assume ET.
 
+**🎨 Skill development / hobbies — PARKED**
+1. [ ] Time awareness: create one tiny daily practice for noticing/checking time without shame or avoidance
+2. [ ] Languages: park all options first — Chinese, Spanish, Japanese, French, Italian
+3. [ ] Later: choose ONE language for a 7-day tiny experiment, not five at once
+
 ## Entry Index
 | Date | File (id) | Type | Processed | Summary |
 |------|-----------|------|-----------|---------|
@@ -264,6 +276,7 @@ Each task cut into tiny, finish-able steps. She should only ever look at the NEX
 | 2026-07-07 | state + agent + her 2 book screenshots | Set up Rule-of-3 + Covey/Eisenhower matrix; captured full backlog | Mirrored agent brain (was missing); planning frame + first weekly plan + master backlog |
 | 2026-07-08 | state; her big verbal brain-dump | Explained matrix vs Rule-of-3; captured ALL 17 tasks; RE-quiz "preserve-first" prompt | Full backlog saved+mirrored; 3 calendar events; handwritten Matrix + Task PNGs → GitHub + Desktop + Drive |
 | 2026-07-13 | state; her verbal Monday brain-dump; **mined Drive docs (FINANCE_DASHBOARD_MASTER_PLAN, WEEK_PLAN) + repo MDs** | BIG session. Google Ads DONE. ADS videos vertical redo + 6 sub-steps. Monday patterns. Broke ALL backlog into sub-steps. OPC vs mom's website; timezone Eastern (Miami). Archaeology → Finance Dashboard/Investments/Ads-tracking/Content-pipeline/ROOM_VISION. Added TASK-BRAIN rule, daily MANIFESTATION ritual + **guided Manifestation Module (10-min, 4 steps)**, and an **"update" re-sync mechanism + Last-updated stamps**. `/focus` + root `FOCUS-PARTNER.md` (Codex-friendly) shipped. | Mirrored EVERYTHING to GitHub (agent + state + commands + README) |
+| 2026-07-13 | Focus Partner state + Drive | Priscila will use Focus Partner in both Codex and Claude. Created clean Google Sheet mirror in `Productivity & Routine / Focus Partner`, moved it out of heavy `Ideas & Inbox`, logged morning manifestation, and added skill-development/hobbies lane. | Sheet mirror implemented; state updated for portability |
 
 Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested refinements (her call): weekly = highlights/lowlights/patterns · mid-day check-in · anchor morning review to an existing habit.
 
@@ -276,6 +289,8 @@ Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested ref
 | Study for RE exam (daily) | ONGOING | 2026-07-07 | a focused study block every day; track in daily log |
 | Daily 5-line log habit | ONGOING | her system | write 5 lines by hand each day → syncs to Drive |
 | Daily manifestation (Manifestation Module) | ONGOING | 2026-07-13 | agent runs the 4-step module each morning before planning; logs Step 3 verbatim |
+| Focus Partner Google Sheet mirror | ✅ IMPLEMENTED | 2026-07-13 | `_Focus Partner — STATE` in Drive folder `Productivity & Routine / Focus Partner`; keep as a lightweight mirror, Markdown remains canonical |
+| Skill development / hobbies | PARKED | 2026-07-13 | time awareness + language interests (Chinese, Spanish, Japanese, French, Italian); later pick ONE tiny experiment |
 | RE quiz "teach" rollout | HANDED OFF | her request | runs in her RE-study chat via the paste-in prompt |
 | Website for her mom | CHECK WITH HER | 2026-07-07 | ask if mom still wants it before any work |
 | Finance Dashboard inputs | NEEDS HER DATA | 2026-07-13 mined | card facts + cash + investments + receivables + Mike rule so Codex can finish it |
