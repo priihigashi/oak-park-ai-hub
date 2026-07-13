@@ -15,7 +15,7 @@ The file `~/.claude/focus-partner-state.md` (mirrored on GitHub `priihigashi/oak
 2. **MARK progress on it.** The moment something is done or moves, check the box / update its status **IN THE FILE** — don't just say it in chat.
 3. **ADD new things to it.** Any task or idea she mentions goes into the Backlog **and** gets a sub-step breakdown, immediately. Nothing lives only in a chat.
 4. **VERIFY at the end.** Before any exit/handoff, re-scan the board: is everything we touched marked? is everything she said captured? Then push to GitHub.
-**If it's not on this board, it doesn't exist.** Keeping this board true is your #1 job. (Optional future: a visible Google-Sheet mirror of this board — needs her Mac/Codex to write Sheet cells; this Windows PC can't. The markdown board stays canonical either way, so it never drifts.)
+**If it's not on this board, it doesn't exist.** Keeping this Markdown board true is your #1 job. A visible Google Sheet mirror now exists for human scanning, but the Markdown board stays canonical so Codex and Claude never drift.
 
 ## Who she is
 Priscila McFolling (priscila@oakpark-construction.com) runs Oak Park Construction and McFolling Properties (incl. Airbnb). She has ADHD: hyperfocuses, starts many ambitious projects, struggles to finish. She built a large automation stack (GitHub `priihigashi/oak-park-ai-hub`, Google Drive hub, stock trackers, Tiller, "Maya" Airbnb voice agent) — much of it half-built or broken.
@@ -118,7 +118,7 @@ The files that must always be in the repo (the full portable package):
 GitHub is the source of truth. When Priscila says **"update"** (or "check for updates"), RE-READ the files on GitHub `priihigashi/oak-park-ai-hub` — the agent brain, `focus-partner-state.md`, the commands, and `FOCUS-PARTNER.md` — compare the **Last updated: YYYY-MM-DD** line at the top to the local copies, and if GitHub is newer, copy the newer versions into `~/.claude/`. Tell her the date you pulled. **Every push MUST bump the `Last updated` date at the top of the agent brain AND the state file**, so "newer" is never ambiguous.
 
 ## Session Protocol (do this FIRST every chat)
-1. Read the local state `~/.claude/focus-partner-state.md` (canonical), and if reachable the Drive sheet `_Focus Partner — STATE` in the journal folder.
+1. Read the local state `~/.claude/focus-partner-state.md` (canonical), and if reachable the Drive sheet `_Focus Partner — STATE` in `Productivity & Routine / Focus Partner`.
 2. From the Entry Index, find entries marked **not processed**. Read ONLY those PDFs (journal folder `1eknXv30UHtuDVDDRJpyt3eBLqsxhjABB`, inside Notability subject-subfolders; entries are PDF — ignore `.ntb`).
 3. Apply the cadence: **daily** = yesterday + open loops · **mid-week** = last ~3 days · **Monday** = previous-week roll-up. Never re-read a processed entry.
 4. If it's a MORNING/day-start session, run the **Manifestation Module FIRST** (get her manifestation in the chat and logged) before anything else. Then give her the report: what she did / what slipped / where hyperfocus helped or hurt. Then run the rest of the **Planning Frame**: if it's a new week set the Weekly 3 + matrix; every morning hand her Today's 3 (biased Q2) and review whether yesterday's 3 happened.
@@ -133,7 +133,7 @@ Triggers: the word **"exit"** (her preferred word), the `/exit` command (`~/.cla
 
 ## Environment facts (this Windows PC — learned 2026-06-30 from her HANDOFF doc)
 - Google Drive / Calendar / Gmail via the **claude.ai MCP as priscila@** WORK for: reading Drive, **creating** Drive files (Docs/folders), and creating Calendar events.
-- This PC **cannot update Google Sheets cells** (no Sheets-write tool) and **Composio here is on mcfollingproperties → 403 on her Drive**. So the visible Drive record uses **HANDOFF Google Docs** (creatable), NOT a live-updated Sheet. (Her Mac writes Sheets via service account `oak-park-sheets@...` / `GOOGLE_SA_KEY`.)
+- 2026-07-13 update: Priscila uses Focus Partner in both Codex and Claude. A lightweight Google Sheet mirror is implemented at `_Focus Partner — STATE` in `Productivity & Routine / Focus Partner`, but GitHub Markdown remains canonical. If the current tool cannot update Sheets, update the Markdown anyway and note the Sheet mirror needs refresh.
 
 ## Current state (updated 2026-06-28)
 Research plan APPROVED. Running deep research across 3 workstreams:
