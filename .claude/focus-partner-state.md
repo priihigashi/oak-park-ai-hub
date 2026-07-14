@@ -1,8 +1,8 @@
 # Focus Partner — STATE (canonical local copy)
 
-**Last updated: 2026-07-13 (rev2)** — bump on every push; the "update" check compares this date. rev2 = Claude PC enriched the Pending Tasks (specifics per row) + added the capture-specifics rule. ALL Codex work preserved: Sheet mirror, Skills/hobbies lane, Morning command center, Subscriptions/finance visibility.
+**Last updated: 2026-07-14 (rev3)** — bump on every push; the "update" check compares this date. rev3 = built the Morning command-center launcher (Windows) + weekly manifestation review + de-cluttered the repeated Sheet-mirror notes. rev2 = enriched the Pending Tasks + capture-specifics rule. ALL Codex work preserved: Sheet mirror, Skills/hobbies lane, Morning command center, Subscriptions/finance visibility.
 
-Canonical state lives in this Markdown file on GitHub. A human-readable Google Sheet mirror also exists: `_Focus Partner — STATE` in Drive folder `Productivity & Routine / Focus Partner`.
+Canonical state lives in this Markdown file on GitHub. (A human-readable Google Sheet mirror also exists — see the **Google Sheet mirror** line just below for its URL/IDs.)
 
 - **Last check:** 2026-07-13 (Monday — huge session: `/focus` shortcut + portable install + Codex-ready `FOCUS-PARTNER.md`; Google Ads DONE; ADS-videos vertical redo; Monday patterns; broke ALL backlog into sub-steps; timezone Miami/Eastern; two websites separated; mined Drive/repo → Finance Dashboard/Investments/Ads-tracking/Content-pipeline; TASK-BRAIN rule; ROOM_VISION; **guided Manifestation Module + "update" mechanism**)
 - **Timezone:** America/New_York — **Eastern (Miami), confirmed by Priscila 2026-07-13**
@@ -58,6 +58,12 @@ Morning ritual (her request 2026-07-13): run the **Manifestation Module** (see a
 | 2026-07-13 | i am very smart, i have a great family husband and kids, i feel i am walking towards the right direction, im grateful i saw a video that helped me add manifestation to my flow, im feeling confident it will work. |
 | — | (starts tomorrow morning) |
 
+### Weekly manifestation review (Sun/Mon — added 2026-07-14)
+Each week the agent skims the entries above: what recurred, what's landing vs still just words, which fear/scarcity theme showed up. Reflect ONE pattern to her and fold it into the week's plan (and Patterns if persistent).
+| Week | Themes / what recurred | Landing? | One pattern → into the plan |
+|------|------------------------|----------|-----------------------------|
+| — | (first review this coming Sun/Mon) | — | — |
+
 ## Backlog — MASTER LIST (everything she wants to do; the POOL the matrix pulls from)
 Captured 2026-07-07 from her brain-dump. Nothing here is scheduled yet — it's the full pile so nothing lives only in her head. Weekly 3 gets pulled FROM this. Every item is broken into sub-steps below (see Task Breakdowns).
 
@@ -102,8 +108,8 @@ Captured 2026-07-07 from her brain-dump. Nothing here is scheduled yet — it's 
 **📓 Focus system**
 - Daily 5-line log habit · pick Notability vs Rocketbook + one-time backup · confirm timezone · use the walking desk (stack walk + study/call).
 - **Daily MANIFESTATION ritual** — Manifestation Module (4 guided steps, ≤10 min) every morning before tasks; agent leads it and logs Step 3. *(her request 2026-07-13.)*
-- **Google-Sheet mirror implemented** — `_Focus Partner — STATE` lives in Drive folder `Productivity & Routine / Focus Partner`. Use it for human scanning; GitHub Markdown remains canonical and must be updated for portability across Codex + Claude.
-- **Morning command center / "pop up in my face" system** — required. Priscila needs the journal, Today’s 3, RE study, and money/subscriptions dashboard to appear automatically like Alexa-style reminders. 2026-07-13: updated daily 10:00 calendar event to open the Focus Partner Sheet + journal folder + money check. NEXT build layer: Mac startup/Login Item or macOS Shortcut that opens the command center when she starts work.
+- **Google-Sheet mirror** — DONE (details in the **Google Sheet mirror** reference at the top). Human scanning only; Markdown stays canonical.
+- **Morning command center / "pop up in my face" system** — required. Priscila needs the journal, Today’s 3, RE study, and money/subscriptions dashboard to appear automatically like Alexa-style reminders. 2026-07-13: updated daily 10:00 calendar event to open the Focus Partner Sheet + journal folder + money check. NEXT build layer: Mac startup/Login Item or macOS Shortcut that opens the command center when she starts work. 2026-07-14: **Windows launcher BUILT on the Claude PC** — `scripts/focus-morning.bat` (portable, in repo) + desktop "Start Focus" shortcut + daily 10:00 task "Focus Morning"; opens journal + Focus sheet + money dashboard. Remaining: Mac Login Item + iPhone Shortcut (see `scripts/MORNING-COMMAND-CENTER.md`).
 
 **🎨 Skill development / hobbies**
 - **Time awareness** — learn/practice checking time and noticing time passing without avoiding the clock or losing the day to rabbit holes. PARKED for now, but keep it visible.
@@ -260,6 +266,7 @@ Each task cut into tiny, finish-able steps. She should only ever look at the NEX
 
 **📓 Morning command center / pop-up system**
 1. [x] Update daily 10:00 calendar reminder to point to Focus Partner Sheet + journal + money check
+1b. [x] Windows launcher BUILT (Claude PC): `scripts/focus-morning.bat` + desktop "Start Focus" shortcut + daily 10:00 task "Focus Morning"
 2. [ ] Create a Mac startup layer: Login Item or macOS Shortcut opens the command center when the computer starts / work begins
 3. [ ] Decide whether to add Alexa/Siri/Reminders nudges for medicine, bedtime, brushing teeth, and work start/stop
 4. [ ] Test for 3 days: did it actually pop up enough to change behavior?
@@ -291,6 +298,7 @@ Each task cut into tiny, finish-able steps. She should only ever look at the NEX
 | 2026-07-13 | state; her verbal Monday brain-dump; **mined Drive docs (FINANCE_DASHBOARD_MASTER_PLAN, WEEK_PLAN) + repo MDs** | BIG session. Google Ads DONE. ADS videos vertical redo + 6 sub-steps. Monday patterns. Broke ALL backlog into sub-steps. OPC vs mom's website; timezone Eastern (Miami). Archaeology → Finance Dashboard/Investments/Ads-tracking/Content-pipeline/ROOM_VISION. Added TASK-BRAIN rule, daily MANIFESTATION ritual + **guided Manifestation Module (10-min, 4 steps)**, and an **"update" re-sync mechanism + Last-updated stamps**. `/focus` + root `FOCUS-PARTNER.md` (Codex-friendly) shipped. | Mirrored EVERYTHING to GitHub (agent + state + commands + README) |
 | 2026-07-13 | Focus Partner state + Drive | Priscila will use Focus Partner in both Codex and Claude. Created clean Google Sheet mirror in `Productivity & Routine / Focus Partner`, moved it out of heavy `Ideas & Inbox`, logged morning manifestation, and added skill-development/hobbies lane. | Sheet mirror implemented; state updated for portability |
 | 2026-07-13 | Focus Partner Sheet + Calendar | Priscila said manifestation/body says yes to RE study and finances in check; she needs subscriptions/spending visibility and reminders that pop up like Alexa. | Updated 10:00 daily calendar event into Morning command center; added Mac startup/open shortcut and finance/subscriptions dashboard as next system tasks |
+| 2026-07-14 | Focus Partner state + agent (re-audit) | Nothing changed since 07-13 (only an unrelated nonnegotiables-bot commit on NONNEGOTIABLES.md). Priscila asked to improve: pop-up system, deepen manifestation, de-clutter docs. | Built the Windows Morning command-center launcher (desktop "Start Focus" + daily 10:00 task "Focus Morning" + `scripts/focus-morning.bat`); added a Weekly manifestation review; de-duplicated the Sheet-mirror notes; bumped to rev3; all Codex work preserved (byte-verified). |
 
 Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested refinements (her call): weekly = highlights/lowlights/patterns · mid-day check-in · anchor morning review to an existing habit.
 
@@ -306,7 +314,7 @@ Each row must carry enough of HER specifics — exact complaint, which page/feat
 | Daily 5-line log | ONGOING | her system | 5 lines by hand each day -> scan drops in the Drive journal folder. On a bad day one line counts. |
 | Daily manifestation (Module) | ONGOING | 2026-07-13 | Run the 4-step Manifestation Module each morning BEFORE planning; log Step 3 verbatim. |
 | Focus Partner Google Sheet mirror | IMPLEMENTED (Codex) | 2026-07-13 | `_Focus Partner - STATE` in Productivity & Routine / Focus Partner. Lightweight human mirror; Markdown canonical. Note: does NOT auto-sync - update it when a tool can write Sheets, else mark stale. |
-| Morning command center / pop-up system | IN PROGRESS (Codex) | 2026-07-13 | She wants journal + Today's 3 + RE study + money/subscriptions to auto-pop like Alexa. 10:00 calendar event updated; next: Mac Login Item/Shortcut to auto-open the sheet/journal at work start. |
+| Morning command center / pop-up system | IN PROGRESS | 2026-07-13 / 07-14 | Windows layer DONE on Claude PC (Start Focus shortcut + daily 10:00 task + scripts/focus-morning.bat; opens journal+sheet+money). Remaining: Mac Login Item + iPhone Shortcut. |
 | Subscriptions/spending visibility | PRIORITY (Codex) | 2026-07-13 | Build/connect a dashboard view of subscriptions + spending + what to cut, for daily money awareness (ties to Finance Dashboard). |
 | Skill development / hobbies | PARKED | 2026-07-13 | Time awareness + languages (Chinese, Spanish, Japanese, French, Italian) - too many; later pick ONE for a 7-day tiny experiment. Keep visible, don't chase now. |
 | RE quiz "teach" rollout | HANDED OFF | her request | Runs in her RE-study chat via the paste-in prompt (261 Qs; re-pull HEAD before each commit). |
