@@ -1,14 +1,46 @@
 # Focus Partner — STATE (canonical local copy)
 
-**Last updated: 2026-07-14 (rev4)** — bump the date AND increment (revN) by 1 on every push (never reuse a rev); "update" compares by date, then by rev. rev4 = bulletproof multi-PC sync: a hard "re-pull HEAD before every commit" coordination rule (Claude + Codex never overwrite each other) + a monotonic rev counter ("update" compares date, then rev). rev3 = built the Morning command-center launcher (Windows) + weekly manifestation review + de-cluttered the repeated Sheet-mirror notes. rev2 = enriched the Pending Tasks + capture-specifics rule. ALL Codex work preserved: Sheet mirror, Skills/hobbies lane, Morning command center, Subscriptions/finance visibility.
+**Last updated: 2026-07-14 (rev6)** — bump the date AND increment (revN) by 1 on every push (never reuse a rev); "update" compares by date, then by rev. rev6 = added the Boletim Diario briefing as a 4th tab in the morning launcher + shipped Mac (scripts/focus-morning.command) & iPhone (Shortcuts) triggers. rev5 = merged Codex 2026-07-13/14 Sheet + calendar work into GitHub rev4: Library Index, 10:15 finance/stocks popup, Robinhood/Roth/Fidelity specifics, swing-trading/options safety, and manifestation photo-board project. rev4 = bulletproof multi-PC sync: re-pull HEAD before every commit + monotonic rev counter. rev3 = built the Morning command-center launcher (Windows) + weekly manifestation review + de-cluttered repeated Sheet-mirror notes. rev2 = enriched Pending Tasks + capture-specifics rule.
 
 Canonical state lives in this Markdown file on GitHub. (A human-readable Google Sheet mirror also exists — see the **Google Sheet mirror** line just below for its URL/IDs.)
 
-- **Last check:** 2026-07-13 (Monday — huge session: `/focus` shortcut + portable install + Codex-ready `FOCUS-PARTNER.md`; Google Ads DONE; ADS-videos vertical redo; Monday patterns; broke ALL backlog into sub-steps; timezone Miami/Eastern; two websites separated; mined Drive/repo → Finance Dashboard/Investments/Ads-tracking/Content-pipeline; TASK-BRAIN rule; ROOM_VISION; **guided Manifestation Module + "update" mechanism**)
+- **Last check:** 2026-07-13 (Monday — huge session: `/focus` shortcut + portable install + Codex-ready `FOCUS-PARTNER.md`; Google Ads DONE; ADS-videos vertical redo; Monday patterns; broke ALL backlog into sub-steps; timezone Miami/Eastern; two websites separated; mined Drive/repo → Finance Dashboard/Investments/Ads-tracking/Content-pipeline; TASK-BRAIN rule; ROOM_VISION; **guided Manifestation Module + "update" mechanism**; Library Index created; 10:15 finance/stocks popup added; manifestation photo-board idea captured)
 - **Timezone:** America/New_York — **Eastern (Miami), confirmed by Priscila 2026-07-13**
 - **Journal folder:** `📓 Daily Journal — DROP HERE` (id `1eknXv30UHtuDVDDRJpyt3eBLqsxhjABB`)
 - **Google Sheet mirror:** `_Focus Partner — STATE` (`https://docs.google.com/spreadsheets/d/1AlvtSGIZUWE1pzld2A8LL5bK4g9nRR4a4jqsOcfnY4c`) in folder `Focus Partner` (`18API545Cqh0k7V2PPG3hnEeTRJHz7jZO`) under `Productivity & Routine`. Lightweight human-readable mirror only; GitHub Markdown remains canonical.
 - **Tool usage:** Priscila will use this Focus Partner in both Codex and Claude. Any assistant must read/update this Markdown state and keep the Sheet mirror current when practical.
+- **Library / Index:** The Google Sheet now has a `Library Index` tab. Keep it mirrored here: every master plan, dashboard, important Drive folder, website/login portal, stock/finance sheet, handoff, and project tracker that may be needed for planning should be added to both places.
+
+## Library Index — master links for planning
+Use this as the map before searching randomly. Add new resources here when they become important.
+
+| Area | Type | Title | Link / ID | Status | Use / why |
+|------|------|-------|-----------|--------|-----------|
+| Focus system | Sheet | `_Focus Partner — STATE` | https://docs.google.com/spreadsheets/d/1AlvtSGIZUWE1pzld2A8LL5bK4g9nRR4a4jqsOcfnY4c | Active mirror | Human scanning: Today, Weekly 3, Pending, Backlog, Manifestation, Source of Truth, Library Index. |
+| Focus system | GitHub Markdown | `focus-partner-state.md` | https://github.com/priihigashi/oak-park-ai-hub/blob/main/.claude/focus-partner-state.md | Canonical | Claude/Codex source of truth. Update this so another computer/tool can continue. |
+| Focus system | Folder | Focus Partner Drive folder | https://drive.google.com/drive/folders/18API545Cqh0k7V2PPG3hnEeTRJHz7jZO | Active | Shared folder for Focus Partner state/support docs. |
+| Focus system | Folder | Daily Journal — DROP HERE | https://drive.google.com/drive/folders/1eknXv30UHtuDVDDRJpyt3eBLqsxhjABB | Active | Drop handwritten 5-line daily log scans/photos here. |
+| Finance | Doc | FINANCE_DASHBOARD_MASTER_PLAN | https://docs.google.com/document/d/1OsTy3PQEps-lKP_lS9IDapPOT6Rvv32NWBMezKWP6Mg | Master plan | Defines finance dashboard goals and the money questions it should answer. |
+| Finance | Sheet | Finance Dashboard — PRI 2026 | https://docs.google.com/spreadsheets/d/1U7n7OttHExXOmMtusu-3PuI4xBqzGz8LSiISfIMxu64 | Built; inputs needed | Main personal money dashboard. |
+| Finance | Sheet | Priscila McFolling's Tiller Spreadsheet | https://docs.google.com/spreadsheets/d/1_MPBggWbWKgnxwhm3kR7gmGjKGkzgsgZuKSjxymUjYc | Source data | Transactions, accounts, balances, subscriptions/spending source. |
+| Investing | Doc | Stock_Master_Plan | https://docs.google.com/document/d/1ljE6pOWh4bHsPPcbhEq2-1cm-46BLafmUgAj9oWC5Vs | Master plan | AI stock tracking/watchlist system plan. |
+| Investing | Sheet | Copy of Stock_Tracker_PRO_v3_FIXED2 | https://docs.google.com/spreadsheets/d/1BIn7vFU3M2ZvFbEfQtIE5-uHQNo3xUn1yxaovSZdikA | Active tracker candidate | Stock tracker with watchlist/signals/technical indicators. |
+| Investing | Sheet | Stock Tracker 2026 | https://docs.google.com/spreadsheets/d/154GxPT8dOLEjEQXwJrL-sU7H5yKaUCcawQUmzrh_XV8 | Reference | Stock watch/research workbook; points to Originals - Stock folder. |
+| Investing | Sheet | Google Finance Investment Tracker - Pri | https://docs.google.com/spreadsheets/d/11CJMSbKpleV8lZxcaG_Qcus1zOGv_ZhSahlDZ7qokuc | Reference/watchlist | Google Finance powered investment tracker/watchlist. |
+| Investing | Doc | Stock_Research_Report | https://docs.google.com/document/d/1ESsRvyDd2NR4cwi4xA5ZjfwaCRl5cXxyyXIGR5V2Jvc | Research | Resources and stack ideas for AI stock tracking/analysis. |
+| Investing | Website | Robinhood | https://robinhood.com | Needs login | Review ~$10k holdings inventory. No buy/sell without inventory and rules. |
+| Investing | Website | Fidelity | https://www.fidelity.com | Needs reactivation | Old employer account; identify account type/balance and decide leave/rollover/transfer after tax/retirement review. |
+| Oak Park | Sheet | Oak Park — Content Control | https://docs.google.com/spreadsheets/d/1C1CAZ8lSgeVLSSCYIg-D9XPJcSLHyIOh1okKtvhZZQg | Active/reference | Oak Park content control/tracking. |
+| Oak Park | Sheet | OPC Website — Build Tracker | https://docs.google.com/spreadsheets/d/1q0_v9qYDXKURo59xoS-WISFdHbZWIdc9ukdCDbdDaUQ | Reference | Oak Park Construction website build tracker. |
+| Oak Park | Doc | ROOM_VISION — Build Plan & Handoff | https://docs.google.com/document/d/1NjbadQhzsCA6NmQWq9RheUcEyxQWsGRzWFCeMY9PSvg | Confirm alive/dead | Customer-facing room/space visualization plan for website. |
+| Oak Park | Sheet | Drive Map — OPC | https://docs.google.com/spreadsheets/d/1_bl6jNHT8Jl7h8S9uoiGVLOl5fxVkpoImvwfUliE0Pk | Index | OPC Drive map/index. |
+| Content | Sheet | Flow Plans Tracker — Master Index | https://docs.google.com/spreadsheets/d/1fggy918FgPfnMQ-dzGQk2zx9uhi2_-uWXMKGW4MA47k | Existing index | Existing master index for flow plans. |
+| Content | Sheet | Project tracking - Blog and Social | https://docs.google.com/spreadsheets/d/1CrVHlIe8u1bo_1W0iU0O3WKv2JUrm0-UO76y4p5NC_c | Active/reference | Blog/social content tracking. |
+| Content | Sheet | Pipeline Fix Master Checklist — Done Current Next | https://docs.google.com/spreadsheets/d/1yh9C7KU9OlqCdHNDI9mbZ6ldqLA3bAR3uENXUh37bkQ | Reference | Content pipeline fix checklist. |
+| Content | Doc | OPC Carousel Pipeline — Audit Remediation Plan 2026-05-12 | https://docs.google.com/document/d/16ngxy_4U-KhyNXqNi7mfWAJbAfh35QDIGjEATQZCWlM | Reference | OPC carousel pipeline remediation plan. |
+| Real estate | Doc | HANDOFF_2026-07-01_real-estate-quiz-tallahassee-check | https://docs.google.com/document/d/1g3INH7MQwFgfkSeK0u5cU9K8U8iMOQqhHeq0yEpM5b0 | Reference | RE quiz / Tallahassee check handoff. |
+| Manifestation / travel | Website | Walmart Photo | https://photos3.walmart.com/ | Possible print vendor | Print photos for manifestation/travel vision board. |
+| Manifestation / travel | Project | Photo collage / vision board | No link yet | Pending | Pick travel/money/family images and put the board where Priscila sees it each morning. |
 
 ## This Week (week of 2026-07-13)
 - **Focus:** the 3 below. Everything else is PARKED in the Backlog — not this week.
@@ -59,8 +91,8 @@ Morning ritual (her request 2026-07-13): run the **Manifestation Module** (see a
 | — | (starts tomorrow morning) |
 
 ### Weekly manifestation review (Sun/Mon — added 2026-07-14)
-Each week the agent skims the entries above: what recurred, what's landing vs still just words, which fear/scarcity theme showed up. Reflect ONE pattern to her and fold it into the week's plan (and Patterns if persistent).
-| Week | Themes / what recurred | Landing? | One pattern → into the plan |
+Each week the agent skims the entries above: what recurred, what is landing vs still just words, which fear/scarcity theme showed up. Reflect ONE pattern to her and fold it into the week's plan (and Patterns if persistent).
+| Week | Themes / what recurred | Landing? | One pattern -> into the plan |
 |------|------------------------|----------|-----------------------------|
 | — | (first review this coming Sun/Mon) | — | — |
 
@@ -89,6 +121,8 @@ Captured 2026-07-07 from her brain-dump. Nothing here is scheduled yet — it's 
 - **Finance Dashboard — PRI 2026** (her personal money command center; already BUILT — "structure/design complete") — answers her 9 money questions: net position · month spend vs normal · where money went · money-in/receivables · debt by card · what's due · payoff plan · net positive? · next decision. Source = **Tiller**. Cards: Discover, Chase, BoA, Citi, Affirm (~$16k known debt). **Blocked on HER inputs** → per-card facts (APR/limit/minimum/due/statement date), Cash balance, Investments value, personal receivables, and the **Owner/Michael (Mike) classification rule**. *(Claude = read/UX only; Codex edits the sheet.)*
 - Clean the **subscriptions/expenses spreadsheet** → total spend, what to cut. *(part of the finance picture; later an app.)* Priscila said 2026-07-13 her body says "yes" to getting finances in check: she needs daily visibility into subscriptions, what she is spending, what is unnecessary, and what changed.
 - **Investments / stocks reset** — Robinhood + Fidelity 401k + crypto + Brazil/US allocation. Her words: *"5 years, no growth."* START with a one-page **inventory** (what she holds, where) before ANY reset — inventory first, not a reset plan.
+  - 2026-07-13 update from Priscila: about **$10,000 in Robinhood stocks** spread around and dropping/stuck; **Roth IRA around $700** stuck; **Fidelity old-employer account deactivated/abandoned**; she works for herself now and does not know whether to reactivate, roll over, move, or leave it. These are now explicit Pending items.
+  - Term she was reaching for: **swing trading** = holding for days/weeks, not day trading. Options/calls are parked until education + written risk limits. Rule: no impulsive trades; inventory, alerts, and rules first.
 
 **🎬 Content & Monetization**
 - **Content automation pipeline — BROKEN since ~May 28** — the auto-content system is DOWN; diagnose root cause (NB2 + Anthropic credit top-up?). Separate from making content by hand.
@@ -108,12 +142,18 @@ Captured 2026-07-07 from her brain-dump. Nothing here is scheduled yet — it's 
 **📓 Focus system**
 - Daily 5-line log habit · pick Notability vs Rocketbook + one-time backup · confirm timezone · use the walking desk (stack walk + study/call).
 - **Daily MANIFESTATION ritual** — Manifestation Module (4 guided steps, ≤10 min) every morning before tasks; agent leads it and logs Step 3. *(her request 2026-07-13.)*
-- **Google-Sheet mirror** — DONE (details in the **Google Sheet mirror** reference at the top). Human scanning only; Markdown stays canonical.
-- **Morning command center / "pop up in my face" system** — required. Priscila needs the journal, Today’s 3, RE study, and money/subscriptions dashboard to appear automatically like Alexa-style reminders. 2026-07-13: updated daily 10:00 calendar event to open the Focus Partner Sheet + journal folder + money check. NEXT build layer: Mac startup/Login Item or macOS Shortcut that opens the command center when she starts work. 2026-07-14: **Windows launcher BUILT on the Claude PC** — `scripts/focus-morning.bat` (portable, in repo) + desktop "Start Focus" shortcut + daily 10:00 task "Focus Morning"; opens journal + Focus sheet + money dashboard. Remaining: Mac Login Item + iPhone Shortcut (see `scripts/MORNING-COMMAND-CENTER.md`).
+- **Google-Sheet mirror implemented** — `_Focus Partner — STATE` lives in Drive folder `Productivity & Routine / Focus Partner`. Use it for human scanning; GitHub Markdown remains canonical and must be updated for portability across Codex + Claude.
+- **Library Index implemented** — Sheet tab `Library Index` + this Markdown section hold master plans, dashboards, folders, websites, and project trackers. Rule: when an assistant finds an important planning resource, add it to the index.
+- **Morning command center / "pop up in my face" system** — required. Priscila needs the journal, Today’s 3, RE study, and money/subscriptions dashboard to appear automatically like Alexa-style reminders. 2026-07-13: updated daily 10:00 calendar event to open the Focus Partner Sheet + journal folder + money check. NEXT build layer: Mac startup/Login Item or macOS Shortcut that opens the command center when she starts work. 2026-07-14 (rev3): Windows launcher BUILT (`scripts/focus-morning.bat` + desktop "Start Focus" + daily 10:00 task). 2026-07-14 (rev6): added the **Boletim Diario** briefing as a 4th tab; shipped the **Mac** launcher (`scripts/focus-morning.command`) + **iPhone Shortcuts** steps (see `scripts/MORNING-COMMAND-CENTER.md`).
+- **10:15 daily finance/stocks check** — calendar event created starting Tue 2026-07-14, 10:15-10:30 ET, with popups at 5 min and start. Opens Focus Partner/Library, Finance Dashboard, Tiller, and Stock Tracker; asks for one calm money action.
+- **Windows launcher:** 2026-07-14 Claude PC layer is built: `scripts/focus-morning.bat` (portable, in repo) + desktop "Start Focus" shortcut + daily 10:00 task "Focus Morning"; opens journal + Focus sheet + money dashboard. Remaining: Mac Login Item + iPhone Shortcut.
 
 **🎨 Skill development / hobbies**
 - **Time awareness** — learn/practice checking time and noticing time passing without avoiding the clock or losing the day to rabbit holes. PARKED for now, but keep it visible.
 - **Languages interest** — Chinese, Spanish, Japanese, French, Italian. Too many to actively pursue all at once; later pick ONE tiny starter lane. PARKED for now.
+
+**🌍 Manifestation / travel / money vision**
+- **Photo collage / vision board** — Priscila wants a visible board in her room, maybe around/near the TV, with photos of money/travel/family and places she has been or wants to return/go to. Possible print vendor: Walmart Photo. Purpose: morning visual cue that helps her keep facing the money/travel life she wants.
 
 ## Task Breakdowns — every backlog item, sub-stepped (added 2026-07-13, at her request)
 Each task cut into tiny, finish-able steps. She should only ever look at the NEXT unchecked step, not the whole ladder. The agent keeps these current and pulls the active one into the weekly/daily plan.
@@ -201,6 +241,20 @@ Each task cut into tiny, finish-able steps. She should only ever look at the NEX
 4. [ ] Brazil vs US: rough split
 5. [ ] Put it on ONE page → THEN decide if/what to reset (separate task)
 
+**💰 Robinhood / Roth / Fidelity review cluster** *(captured from Priscila 2026-07-13; planning + inventory first)*
+1. [ ] Robinhood: open account and list holdings + current total value (~$10,000 per Priscila)
+2. [ ] Roth IRA: identify custodian, holdings, value (~$700 per Priscila), and contribution setup
+3. [ ] Fidelity old-employer account: reactivate/login and identify account type + value
+4. [ ] Decide which questions need a retirement/tax/provider check before moving anything
+5. [ ] Make a one-page decision list: leave / roll over / transfer / restart contributions / do nothing for now
+
+**💰 Swing trading / options learning system — PARKED until rules**
+1. [ ] Pick the tracker/watchlist source from Library Index
+2. [ ] Write entry criteria, exit criteria, and stop/risk rule before any trade
+3. [ ] Set target-price alerts instead of checking obsessively
+4. [ ] Learn options/calls basics and define max loss before using real money
+5. [ ] Review with a calm checklist; no impulsive buy/sell from anxiety or excitement
+
 **🏗️ Ads tracking / dashboard (diagnose)**
 1. [ ] Check: are the ads actually running, or paused?
 2. [ ] Check: is the lead-tracking feed writing rows at all?
@@ -266,10 +320,19 @@ Each task cut into tiny, finish-able steps. She should only ever look at the NEX
 
 **📓 Morning command center / pop-up system**
 1. [x] Update daily 10:00 calendar reminder to point to Focus Partner Sheet + journal + money check
-1b. [x] Windows launcher BUILT (Claude PC): `scripts/focus-morning.bat` + desktop "Start Focus" shortcut + daily 10:00 task "Focus Morning"
-2. [ ] Create a Mac startup layer: Login Item or macOS Shortcut opens the command center when the computer starts / work begins
-3. [ ] Decide whether to add Alexa/Siri/Reminders nudges for medicine, bedtime, brushing teeth, and work start/stop
-4. [ ] Test for 3 days: did it actually pop up enough to change behavior?
+2. [x] Add daily 10:15 finance/stocks popup with Focus Partner/Library + Finance Dashboard + Tiller + Stock Tracker links
+3. [x] Windows launcher BUILT (Claude PC): `scripts/focus-morning.bat` + desktop "Start Focus" shortcut + daily 10:00 task "Focus Morning" (opens journal + Focus sheet + money dashboard + Boletim)
+4. [~] Mac launcher READY: `scripts/focus-morning.command` opens the 4 tabs; she adds it ONCE as a Login Item OR a Shortcuts automation @10:00 (steps in `scripts/MORNING-COMMAND-CENTER.md`)
+4b. [~] iPhone launcher READY: Shortcuts automation @10:00 opening the 4 links (step-by-step in `scripts/MORNING-COMMAND-CENTER.md`)
+5. [ ] Decide whether to add Alexa/Siri/Reminders nudges for medicine, bedtime, brushing teeth, and work start/stop
+6. [ ] Test for 3 days: did it actually pop up enough to change behavior?
+
+**🌍 Manifestation photo collage / vision board**
+1. [ ] Pick 10-20 photos: money feeling, travel, family, places already visited, places to return/go next
+2. [ ] Choose the physical location: bedroom/near TV/morning line of sight
+3. [ ] Print photos (Walmart Photo is one option)
+4. [ ] Make the board simple enough to finish in one sitting
+5. [ ] Put it where Priscila sees it in the morning
 
 **📓 Pick Notability vs Rocketbook**
 1. [ ] Pick ONE
@@ -298,36 +361,42 @@ Each task cut into tiny, finish-able steps. She should only ever look at the NEX
 | 2026-07-13 | state; her verbal Monday brain-dump; **mined Drive docs (FINANCE_DASHBOARD_MASTER_PLAN, WEEK_PLAN) + repo MDs** | BIG session. Google Ads DONE. ADS videos vertical redo + 6 sub-steps. Monday patterns. Broke ALL backlog into sub-steps. OPC vs mom's website; timezone Eastern (Miami). Archaeology → Finance Dashboard/Investments/Ads-tracking/Content-pipeline/ROOM_VISION. Added TASK-BRAIN rule, daily MANIFESTATION ritual + **guided Manifestation Module (10-min, 4 steps)**, and an **"update" re-sync mechanism + Last-updated stamps**. `/focus` + root `FOCUS-PARTNER.md` (Codex-friendly) shipped. | Mirrored EVERYTHING to GitHub (agent + state + commands + README) |
 | 2026-07-13 | Focus Partner state + Drive | Priscila will use Focus Partner in both Codex and Claude. Created clean Google Sheet mirror in `Productivity & Routine / Focus Partner`, moved it out of heavy `Ideas & Inbox`, logged morning manifestation, and added skill-development/hobbies lane. | Sheet mirror implemented; state updated for portability |
 | 2026-07-13 | Focus Partner Sheet + Calendar | Priscila said manifestation/body says yes to RE study and finances in check; she needs subscriptions/spending visibility and reminders that pop up like Alexa. | Updated 10:00 daily calendar event into Morning command center; added Mac startup/open shortcut and finance/subscriptions dashboard as next system tasks |
-| 2026-07-14 | Focus Partner state + agent (re-audit) | Nothing changed since 07-13 (only an unrelated nonnegotiables-bot commit on NONNEGOTIABLES.md). Priscila asked to improve: pop-up system, deepen manifestation, de-clutter docs. | Built the Windows Morning command-center launcher (desktop "Start Focus" + daily 10:00 task "Focus Morning" + `scripts/focus-morning.bat`); added a Weekly manifestation review; de-duplicated the Sheet-mirror notes; bumped to rev3; all Codex work preserved (byte-verified). |
-| 2026-07-14 | Focus Partner brain + state (rev4) | Priscila asked to bulletproof multi-PC sync (Claude + Codex across Windows + Mac). | Added a **Coordination** section to the brain (re-pull HEAD before every commit; never force-push; byte-verify after) + a **monotonic rev counter** ("update" compares date, then rev); bumped to rev4; all Codex work preserved (byte-verified). |
+| 2026-07-14 | Focus Partner state + agent (re-audit) | Nothing changed since 07-13 except unrelated `NONNEGOTIABLES.md`; Priscila asked to improve pop-up system, deepen manifestation, de-clutter docs. | Built Windows Morning command-center launcher, added Weekly manifestation review, de-duplicated Sheet-mirror notes, bumped to rev3; all Codex work preserved. |
+| 2026-07-14 | Focus Partner brain + state (rev4) | Priscila asked to bulletproof multi-PC sync (Claude + Codex across Windows + Mac). | Added coordination rule: re-pull HEAD before every commit, never force-push, byte-verify after; added monotonic rev counter; bumped to rev4. |
+| 2026-07-14 | GitHub audit + Codex merge (rev5) | GitHub rev4 was newer than local and did not yet contain Codex's latest Sheet/calendar captures: Library Index, 10:15 finance popup, Robinhood/Roth/Fidelity details, swing/options safety, and manifestation photo-board. | Merged those items into rev5 instead of overwriting rev4. Sheet + calendar were already updated; Markdown now catches up. |
+| 2026-07-14 | Focus Partner state + agent (rev6) | Coordination rule CAUGHT Codex's rev5 (Library Index + 10:15 finance popup + manifestation photo-board) before I pushed — merged onto it, nothing lost. | Added **Boletim Diario** as a 4th tab in the morning launcher; shipped **Mac** (`scripts/focus-morning.command`) + **iPhone** (Shortcuts) triggers; updated `scripts/MORNING-COMMAND-CENTER.md`; bumped to rev6; byte-verified. |
 
 Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested refinements (her call): weekly = highlights/lowlights/patterns · mid-day check-in · anchor morning review to an existing habit.
 
 ## Pending Tasks (near-term, actionable)
-Each row must carry enough of HER specifics — exact complaint, which page/feature, her frustration in her own words — that no assistant has to re-ask. If a row is still vague, the NEXT job is to get those specifics ONCE and write them here, then never ask again.
-
-| Task | Status | Source | Next action (with her specifics) |
+| Task | Status | Source | Next action |
 |------|--------|--------|-------------|
-| Google Ads rep call | done | 2026-07-07 | Meeting happened last week; closed. Don't re-plan or re-ask. |
-| ADS videos - vertical redo (Q2 this week) | IN FOCUS | 2026-07-13 | Work+personal; on hold ONLY because it lacks the vertical format - redo everything vertical. 6 sub-steps in Planning Frame; today = steps 1-2 (gather clips + lock 9:16 spec). Never drop from focus. |
-| RE-quiz fixes prompt | READY TO PASTE | 2026-07-08 | Hand her the "preserve-first" prompt for her RE-study chat: audit->checklist first, keep everything, add math/why teaching, reorder by exam frequency, no back-to-back math. |
-| Study for RE exam (daily) | ONGOING | 2026-07-07 | One focused block every day (non-negotiable); can stack on the treadmill; track in the daily log. Flag any missed day first. |
-| Daily 5-line log | ONGOING | her system | 5 lines by hand each day -> scan drops in the Drive journal folder. On a bad day one line counts. |
-| Daily manifestation (Module) | ONGOING | 2026-07-13 | Run the 4-step Manifestation Module each morning BEFORE planning; log Step 3 verbatim. |
-| Focus Partner Google Sheet mirror | IMPLEMENTED (Codex) | 2026-07-13 | `_Focus Partner - STATE` in Productivity & Routine / Focus Partner. Lightweight human mirror; Markdown canonical. Note: does NOT auto-sync - update it when a tool can write Sheets, else mark stale. |
-| Morning command center / pop-up system | IN PROGRESS | 2026-07-13 / 07-14 | Windows layer DONE on Claude PC (Start Focus shortcut + daily 10:00 task + scripts/focus-morning.bat; opens journal+sheet+money). Remaining: Mac Login Item + iPhone Shortcut. |
-| Subscriptions/spending visibility | PRIORITY (Codex) | 2026-07-13 | Build/connect a dashboard view of subscriptions + spending + what to cut, for daily money awareness (ties to Finance Dashboard). |
-| Skill development / hobbies | PARKED | 2026-07-13 | Time awareness + languages (Chinese, Spanish, Japanese, French, Italian) - too many; later pick ONE for a 7-day tiny experiment. Keep visible, don't chase now. |
-| RE quiz "teach" rollout | HANDED OFF | her request | Runs in her RE-study chat via the paste-in prompt (261 Qs; re-pull HEAD before each commit). |
-| Website for her mom | CHECK WITH HER | 2026-07-07 | FIRST text mom: does she still want it? Only then scope. Separate from the OPC business site. |
-| OPC business website - HER specific complaints | NEEDS HER SPECIFICS | 2026-07-13 | "Update website" is too vague (her words). Get her EXACT list ONCE: which pages, what's broken, what she wants changed - in her words. Record each complaint here and act page-by-page. Never collapse to "update website". |
-| Finance Dashboard inputs | NEEDS HER DATA | 2026-07-13 mined | She provides: per-card facts (APR/limit/min/due/statement) for Discover, Chase, BoA, Citi, Affirm; Cash; Investments; personal receivables; the Owner/Mike rule -> Codex fills the sheet. |
-| Investments inventory | NEEDS HER DATA | 2026-07-13 mined | One-page map of Robinhood + Fidelity 401k + crypto + Brazil/US ("5 yrs no growth") BEFORE any reset. |
-| Ads tracking broke | TO DIAGNOSE | 2026-07-13 mined | 0-lead days (June 1 & 8): check ads running vs the tracking feed writing rows; name which broke, then hand the fix off. |
-| Content pipeline broke (~May 28) | TO DIAGNOSE | 2026-07-13 mined | Auto-content DOWN; find where it stops (credits/NB2), test one piece end-to-end. |
-| ROOM_VISION scope | CONFIRM WITH HER | 2026-07-13 mined | Open the Drive build plan; her guess = customer room/design visualizer for the website; confirm what it is + alive/dead. |
-| Confirm timezone | done | - | Eastern (Miami), confirmed 2026-07-13. |
-| Read + seed first entry (Jun 29) | NOT DONE | - | Read the Jun 29 PDF, summarize into the Entry Index. |
+| Google Ads rep call | ✅ DONE | 2026-07-07 planning | meeting happened last week — closed, not pending |
+| ADS videos — vertical-format redo (Q2 this week) | IN FOCUS | 2026-07-13 | work+personal; redo everything vertical. See 6 sub-steps. Today = steps 1–2. Never drop from focus. |
+| RE-quiz fixes prompt | READY TO PASTE | 2026-07-08 | give the "preserve-first" prompt to her RE-study chat |
+| Study for RE exam (daily) | ONGOING | 2026-07-07 | a focused study block every day; track in daily log |
+| Daily 5-line log habit | ONGOING | her system | write 5 lines by hand each day → syncs to Drive |
+| Daily manifestation (Manifestation Module) | ONGOING | 2026-07-13 | agent runs the 4-step module each morning before planning; logs Step 3 verbatim |
+| Focus Partner Google Sheet mirror | ✅ IMPLEMENTED | 2026-07-13 | `_Focus Partner — STATE` in Drive folder `Productivity & Routine / Focus Partner`; keep as a lightweight mirror, Markdown remains canonical |
+| Library Index | ✅ IMPLEMENTED | 2026-07-13 | Sheet tab `Library Index` + Markdown Library Index now hold master plans, dashboards, folders, websites, and key docs |
+| Morning command center / pop-up system | IN PROGRESS | 2026-07-13 | 10:00 calendar event updated; next build Mac startup/Login Item or Shortcut to auto-open Focus Partner Sheet/journal |
+| 10:15 finance/stocks popup | ✅ ADDED | 2026-07-13 | daily 10:15-10:30 ET event starting Tue 2026-07-14; check subscriptions/spending + Robinhood/Fidelity/Roth inventory + one calm money action |
+| Subscriptions/spending visibility | PRIORITY | 2026-07-13 | create/connect dashboard view for subscriptions, spending, what to cut, and daily money awareness |
+| Skill development / hobbies | PARKED | 2026-07-13 | time awareness + language interests (Chinese, Spanish, Japanese, French, Italian); later pick ONE tiny experiment |
+| RE quiz "teach" rollout | HANDED OFF | her request | runs in her RE-study chat via the paste-in prompt |
+| Website for her mom | CHECK WITH HER | 2026-07-07 | ask if mom still wants it before any work |
+| Finance Dashboard inputs | NEEDS HER DATA | 2026-07-13 mined | card facts + cash + investments + receivables + Mike rule so Codex can finish it |
+| Investments inventory | NEEDS HER DATA | 2026-07-13 mined | one-page map of Robinhood + 401k + crypto + Brazil/US before any reset |
+| Robinhood ~$10k stocks | NEEDS INVENTORY | 2026-07-13 Priscila | list holdings + current value; no buy/sell until inventory and rules |
+| Roth IRA ~$700 | NEEDS REVIEW | 2026-07-13 Priscila | identify custodian/holdings/contribution setup |
+| Fidelity old-employer account | NEEDS REACTIVATION/DECISION | 2026-07-13 Priscila | reactivate/login; identify account type/value; decide leave/rollover/transfer after checking implications |
+| Swing trading/options idea | PARKED UNTIL RULES | 2026-07-13 Priscila | build watchlist, alerts, entry/exit/risk rules before considering trades; options/calls are high-risk |
+| Manifestation photo collage board | PENDING | 2026-07-13 Priscila | choose photos + location, print via Walmart or similar, place where she sees it in the morning |
+| Ads tracking broke | TO DIAGNOSE | 2026-07-13 mined | check ads-running vs tracking-feed; 0-row days June 1 & 8 |
+| Content pipeline broke (~May 28) | TO DIAGNOSE | 2026-07-13 mined | find where it stops (credits/NB2); test one piece end-to-end |
+| ROOM_VISION scope | CONFIRM WITH HER | 2026-07-13 mined | open the Drive build plan; confirm what it is + alive/dead |
+| Confirm timezone | ✅ DONE | — | Eastern (Miami), confirmed 2026-07-13 |
+| Read + seed first entry (Jun 29) | NOT DONE | — | read PDF, summarize into Entry Index |
 
 ## Patterns
 - **Monday plan-paralysis (her #1, told me 2026-07-13):** every Monday she plans and plans and doesn't DO; very slow start. Example: 2026-07-13 spent ~3 hrs (till 12:23pm) on a 15-min laptop/email setup and got nothing done. → keep Monday planning <5 min; force ONE tiny start.
