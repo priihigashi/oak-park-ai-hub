@@ -25,9 +25,10 @@ except Exception:
 
 CHAT_LOGS_FOLDER = "1qitnbz5_8tfZI2rnTogV1zLLLLOwFVCw"
 SPREADSHEET_ID   = "1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU"
-STATE_FILE       = ".github/agent_state/chat_log_state.json"
-CARRIES_FILE     = ".github/agent_state/carry_forwards.json"
-GITHUB_REPO      = "priihigashi/oak-park-ai-hub"
+STATE_DIR        = os.environ.get("AGENT_STATE_DIR", ".github/agent_state")
+STATE_FILE       = os.path.join(STATE_DIR, "chat_log_state.json")
+CARRIES_FILE     = os.path.join(STATE_DIR, "carry_forwards.json")
+GITHUB_REPO      = os.environ.get("AGENT_STATE_REPO", "priihigashi/priscila-workspace")
 GITHUB_TOKEN     = os.environ.get("GITHUB_TOKEN", "")
 et               = pytz.timezone("America/New_York")
 client           = None

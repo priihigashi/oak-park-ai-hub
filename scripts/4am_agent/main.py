@@ -431,8 +431,9 @@ def _resolve_all_system_alerts(token):
 
 def _record_pipeline_failure(log_pfx, error_msg, lessons, duration_s):
     """Write Steps 1-8 failure to module_failures.json so self_healer can detect it. (C2 fix)"""
-    failures_path = ".github/agent_state/module_failures.json"
-    os.makedirs(".github/agent_state", exist_ok=True)
+    state_dir = os.environ.get("AGENT_STATE_DIR", "/tmp/oak_agent_state")
+    failures_path = os.path.join(state_dir, "module_failures.json")
+    os.makedirs(state_dir, exist_ok=True)
     existing = {}
     if os.path.exists(failures_path):
         try:

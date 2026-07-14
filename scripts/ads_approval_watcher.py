@@ -2,7 +2,7 @@
 
 Runs on GitHub Actions every 6h. Scans Priscila's Gmail for the Google Ads
 API Basic Access approval email. When found:
-  1. Writes flag file .github/agent_state/ads_api_approved.json (so 4AM agent + next Claude session knows)
+  1. Writes flag file under AGENT_STATE_DIR (private/external state; not public repo)
   2. Creates a Google Calendar event tomorrow 10am with next-steps checklist
   3. Logs what was found to GitHub Actions output
 
@@ -24,7 +24,8 @@ from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-FLAG_FILE = REPO_ROOT / ".github" / "agent_state" / "ads_api_approved.json"
+STATE_DIR = Path(os.environ.get("AGENT_STATE_DIR", "/tmp/oak_agent_state"))
+FLAG_FILE = STATE_DIR / "ads_api_approved.json"
 
 # Gmail search — Google-origin email about Ads API Basic Access
 # Looks at the last 14 days so we don't miss anything if the watcher was paused

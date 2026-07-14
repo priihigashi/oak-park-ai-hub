@@ -13,7 +13,8 @@ from googleapiclient.discovery import build
 from google.oauth2.credentials import Credentials
 
 SPREADSHEET_ID = "1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU"
-CARRIES_FILE   = ".github/agent_state/carry_forwards.json"
+STATE_DIR      = os.environ.get("AGENT_STATE_DIR", "/tmp/oak_agent_state")
+CARRIES_FILE   = os.path.join(STATE_DIR, "carry_forwards.json")
 et             = pytz.timezone("America/New_York")
 STALE_DAYS     = 5
 

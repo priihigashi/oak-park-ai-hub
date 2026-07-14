@@ -29,10 +29,11 @@ except Exception as _e:
     print(f"[self_healer] _llm_fallback import failed ({_e}) — using Claude direct")
     llm_text = None
 
-FAILURES_FILE    = ".github/agent_state/module_failures.json"
-HEALED_FILE      = ".github/agent_state/healed_modules.json"
-RESEARCHED_FILE  = ".github/agent_state/researched_modules.json"
-GITHUB_REPO      = "priihigashi/oak-park-ai-hub"
+STATE_DIR        = os.environ.get("AGENT_STATE_DIR", ".github/agent_state")
+FAILURES_FILE    = os.path.join(STATE_DIR, "module_failures.json")
+HEALED_FILE      = os.path.join(STATE_DIR, "healed_modules.json")
+RESEARCHED_FILE  = os.path.join(STATE_DIR, "researched_modules.json")
+GITHUB_REPO      = os.environ.get("AGENT_STATE_REPO", "priihigashi/priscila-workspace")
 GITHUB_TOKEN     = os.environ.get("GITHUB_TOKEN", "")
 et               = pytz.timezone("America/New_York")
 client           = None

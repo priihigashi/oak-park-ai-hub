@@ -33,8 +33,9 @@ except Exception as _e:
 
 SPREADSHEET_ID        = "1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU"
 FLOW_PLANS_TRACKER_ID = "1fggy918FgPfnMQ-dzGQk2zx9uhi2_-uWXMKGW4MA47k"
-LAST_SEEN_PATH        = ".github/agent_state/last_seen.json"
-GITHUB_REPO           = "priihigashi/oak-park-ai-hub"
+STATE_DIR             = os.environ.get("AGENT_STATE_DIR", ".github/agent_state")
+LAST_SEEN_PATH        = os.path.join(STATE_DIR, "last_seen.json")
+GITHUB_REPO           = os.environ.get("AGENT_STATE_REPO", "priihigashi/priscila-workspace")
 GITHUB_TOKEN          = os.environ.get("GITHUB_TOKEN", "")
 ANTHROPIC_KEY         = os.environ.get("CLAUDE_KEY_4_CONTENT", "")
 et                    = pytz.timezone("America/New_York")

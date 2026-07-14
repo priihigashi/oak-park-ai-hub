@@ -1,7 +1,7 @@
 """
 runner.py — Module isolation wrapper for the 4AM agent.
 Every module runs through run_module() — no single failure can kill the whole run.
-Failures are written to .github/agent_state/module_failures.json for self_healer.
+Failures are written under AGENT_STATE_DIR for self_healer.
 """
 import os, time, traceback, json
 from datetime import datetime
@@ -9,7 +9,7 @@ import pytz
 
 et          = pytz.timezone("America/New_York")
 _results    = {}
-STATE_DIR   = ".github/agent_state"
+STATE_DIR   = os.environ.get("AGENT_STATE_DIR", "/tmp/oak_agent_state")
 FAILURES_FILE = f"{STATE_DIR}/module_failures.json"
 
 
