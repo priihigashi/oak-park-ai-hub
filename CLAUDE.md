@@ -2,6 +2,13 @@
 # Every Claude session reads this first. These rules are non-negotiable.
 # Shared task skills live in ~/.agents/skills/<name>/SKILL.md (symlinked into ~/.claude/skills/ and ~/.codex/skills/).
 # Codex mirror: ~/AGENTS.md. Repo source of truth: priihigashi/oak-park-ai-hub.
+#
+# ⚠️ MIRROR RULE, NON-NEGOTIABLE (added 2026-07-14): this file exists in TWO places —
+# local `~/.claude/CLAUDE.md` (what this session reads) and GitHub `priihigashi/oak-park-ai-hub/CLAUDE.md`
+# (the portable source of truth). ANY edit to either copy, in ANY session, on ANY computer,
+# MUST be pushed to GitHub and re-synced to local in the SAME session it was made — never leave
+# the two out of sync, even for one turn. Re-pull HEAD before every commit (Codex/Claude may both
+# be editing); never overwrite a newer remote copy.
 
 ## PIPELINE REFERENCE DOC — END-TO-END SYSTEM MAP
 Single source of truth for the content automation pipeline: URL drop → capture → 4AM agent → carousel build → approval → Buffer → posted.
