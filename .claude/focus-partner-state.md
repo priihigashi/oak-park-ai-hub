@@ -1,6 +1,6 @@
 # Focus Partner — STATE (canonical local copy)
 
-**Last updated: 2026-07-14 (rev9)** — bump the date AND increment (revN) by 1 on every push (never reuse a rev); "update" compares by date, then by rev. rev9 = captured the DECIDED AI-receptionist build: **Goodcall** (Starter ~$59/mo) full 7-step setup + paste-ready call script + number-wiring fix + auto-log to her Leads Tracker; added the automations health-check + the Phase 4 Google Ads conversion de-dupe (244-vs-20). rev8 = exit/handoff: pushed & byte-verified rev7, synced the Sheet (Today -> 2026-07-14 + 3 Google Ads/GA4 rows in Pending), pulled local ~/.claude to match GitHub, and wrote the HANDOFF_2026-07-14 doc. rev7 = fixed the false "can't write Sheets" rule (the googlesheets Composio connection as priscila@ is LIVE; the Sheet is read+writable from here) + Focus now keeps the Sheet mirror synced; captured the Google Ads/GA4 conversion-cleanup task from her ads chat. rev6 = added the Boletim Diario briefing as a 4th tab in the morning launcher + shipped Mac (scripts/focus-morning.command) & iPhone (Shortcuts) triggers. rev5 = merged Codex 2026-07-13/14 Sheet + calendar work into GitHub rev4: Library Index, 10:15 finance/stocks popup, Robinhood/Roth/Fidelity specifics, swing-trading/options safety, and manifestation photo-board project. rev4 = bulletproof multi-PC sync: re-pull HEAD before every commit + monotonic rev counter. rev3 = built the Morning command-center launcher (Windows) + weekly manifestation review + de-cluttered repeated Sheet-mirror notes. rev2 = enriched Pending Tasks + capture-specifics rule.
+**Last updated: 2026-07-14 (rev10)** — bump the date AND increment (revN) by 1 on every push (never reuse a rev); "update" compares by date, then by rev. rev10 = captured the Boletim **desktop pop-up** option (none exists yet; Windows Scheduled Task @10:15 auto-open recommended, or a toast) + a map of where Boletim actually lives (it's a STANDALONE project, not part of Focus); and folded Codex's **Travel/Cruise** cluster from the Sheet into canonical Markdown so it stops drifting behind, plus folded Codex's **Lead Capture & AI Receptionist** build status (DONE) + its 2026-07-07 handoff doc into the Library Index/Backlog. rev9 = captured the DECIDED AI-receptionist build: **Goodcall** (Starter ~$59/mo) full 7-step setup + paste-ready call script + number-wiring fix + auto-log to her Leads Tracker; added the automations health-check + the Phase 4 Google Ads conversion de-dupe (244-vs-20). rev8 = exit/handoff: pushed & byte-verified rev7, synced the Sheet (Today -> 2026-07-14 + 3 Google Ads/GA4 rows in Pending), pulled local ~/.claude to match GitHub, and wrote the HANDOFF_2026-07-14 doc. rev7 = fixed the false "can't write Sheets" rule (the googlesheets Composio connection as priscila@ is LIVE; the Sheet is read+writable from here) + Focus now keeps the Sheet mirror synced; captured the Google Ads/GA4 conversion-cleanup task from her ads chat. rev6 = added the Boletim Diario briefing as a 4th tab in the morning launcher + shipped Mac (scripts/focus-morning.command) & iPhone (Shortcuts) triggers. rev5 = merged Codex 2026-07-13/14 Sheet + calendar work into GitHub rev4: Library Index, 10:15 finance/stocks popup, Robinhood/Roth/Fidelity specifics, swing-trading/options safety, and manifestation photo-board project. rev4 = bulletproof multi-PC sync: re-pull HEAD before every commit + monotonic rev counter. rev3 = built the Morning command-center launcher (Windows) + weekly manifestation review + de-cluttered repeated Sheet-mirror notes. rev2 = enriched Pending Tasks + capture-specifics rule.
 
 Canonical state lives in this Markdown file on GitHub. (A human-readable Google Sheet mirror also exists — see the **Google Sheet mirror** line just below for its URL/IDs.)
 
@@ -35,8 +35,10 @@ Use this as the map before searching randomly. Add new resources here when they 
 | Oak Park | Doc | ROOM_VISION — Build Plan & Handoff | https://docs.google.com/document/d/1NjbadQhzsCA6NmQWq9RheUcEyxQWsGRzWFCeMY9PSvg | Confirm alive/dead | Customer-facing room/space visualization plan for website. |
 | Oak Park | Sheet | Drive Map — OPC | https://docs.google.com/spreadsheets/d/1_bl6jNHT8Jl7h8S9uoiGVLOl5fxVkpoImvwfUliE0Pk | Index | OPC Drive map/index. |
 | Oak Park / Ads | Folder | MARKETING ADS (shared Drive) | (get link/ID) | Active; she owns, full access | Ad project files incl. Goodcall Setup doc + Leads Tracker. Add Mike explicitly if she asks. |
-| Oak Park / Ads | Sheet | Leads Tracker (live) | (get link/ID) | Shared editor; Mike's account owns it | Every Goodcall call auto-logs here: Name · Phone · City/Area · What they need. |
+| Oak Park / Ads | Sheet | Leads Tracker (live) | (get link/ID) | Shared editor; Mike's account owns it | Every Goodcall call auto-logs here: Name · Phone · City/Area · What they need. Has a **Roadmap tab**; holds the proof report + 96-call log. |
 | Oak Park / Ads | Doc | Ads Master Plan (AI-receptionist §5) | (get link/ID) | Reference | Full Goodcall vs Rosie comparison; Goodcall recommended (auto-logs + screens job-seekers). |
+| Oak Park / Ads | Folder | Lead Capture & AI Receptionist (project folder) | (get link/ID) + Desktop link | Active | The Lead-Capture/AI-Receptionist build files; has a desktop shortcut. |
+| Oak Park / Ads | Doc | HANDOFF_2026-07-07_lead-capture-ai-receptionist | Productivity & Routine folder | Reference | Codex handoff: full Lead-Capture build status + Goodcall next steps. |
 | Content | Sheet | Flow Plans Tracker — Master Index | https://docs.google.com/spreadsheets/d/1fggy918FgPfnMQ-dzGQk2zx9uhi2_-uWXMKGW4MA47k | Existing index | Existing master index for flow plans. |
 | Content | Sheet | Project tracking - Blog and Social | https://docs.google.com/spreadsheets/d/1CrVHlIe8u1bo_1W0iU0O3WKv2JUrm0-UO76y4p5NC_c | Active/reference | Blog/social content tracking. |
 | Content | Sheet | Pipeline Fix Master Checklist — Done Current Next | https://docs.google.com/spreadsheets/d/1yh9C7KU9OlqCdHNDI9mbZ6ldqLA3bAR3uENXUh37bkQ | Reference | Content pipeline fix checklist. |
@@ -44,6 +46,9 @@ Use this as the map before searching randomly. Add new resources here when they 
 | Real estate | Doc | HANDOFF_2026-07-01_real-estate-quiz-tallahassee-check | https://docs.google.com/document/d/1g3INH7MQwFgfkSeK0u5cU9K8U8iMOQqhHeq0yEpM5b0 | Reference | RE quiz / Tallahassee check handoff. |
 | Manifestation / travel | Website | Walmart Photo | https://photos3.walmart.com/ | Possible print vendor | Print photos for manifestation/travel vision board. |
 | Manifestation / travel | Project | Photo collage / vision board | No link yet | Pending | Pick travel/money/family images and put the board where Priscila sees it each morning. |
+| Boletim | Repo doc | SKILL_boletim_diario.md (operating doc) | github.com/priihigashi/ClaudeGallery → boletim-sync/SKILL_boletim_diario.md | Reference (standalone) | What the daily boletim cloud agent reads first every run. Boletim is its own project, NOT part of Focus. |
+| Boletim | Repo doc | Boletim feedback backend README | github.com/priihigashi/ClaudeGallery → boletim-sync/README.md | Reference | The 👍👎⭐ → sheet Apps Script + deploy steps. |
+| Boletim | Skill/Memory | Local skill `boletim-diario` + memory `boletim-diario-project.md` | `.claude/skills/boletim-diario` | Reference | Lets any chat operate boletim; memory holds status/URLs/deploy gotchas. Live page: https://priihigashi.github.io/ClaudeGallery/boletim-diario.html |
 
 ## This Week (week of 2026-07-13)
 - **Focus:** the 3 below. Everything else is PARKED in the Backlog — not this week.
@@ -108,7 +113,7 @@ Captured 2026-07-07 from her brain-dump. Nothing here is scheduled yet — it's 
 **🏗️ Oak Park Construction (business)**
 - ~~Google Ads rep call — book + do~~ ✅ **DONE** (had the meeting, ~week of 2026-07-06). No longer pending.
 - **ADS videos — redo in VERTICAL format** (work + personal — keep in focus, never lose it). Currently on HOLD only because it's missing the vertical format; the plan is to redo everything in vertical. *(promoted to This Week's 3, week of 2026-07-13; broken into 6 sub-steps.)*
-- **AI receptionist — DECIDED: Goodcall** (Starter ~$59/mo) to stop missed calls (~$1,400/qtr leak). Recommended in the Ads Master Plan §5 (auto-logs every call to her Leads Tracker + screens job-seekers). Full 7-step setup + paste-ready script + number-wiring fix are in Task Breakdowns below. *(from her marketing/ads chat, 2026-07-14.)*
+- **AI receptionist — DECIDED: Goodcall** (Starter ~$59/mo) to stop missed calls (~$1,400/qtr leak). Recommended in the Ads Master Plan §5 (auto-logs every call to her Leads Tracker + screens job-seekers). Full 7-step setup + paste-ready script + number-wiring fix are in Task Breakdowns below. *(from her marketing/ads chat, 2026-07-14.)* **Surrounding Lead Capture build = DONE** (Codex, HANDOFF_2026-07-07_lead-capture-ai-receptionist): Google Ads connected · proof report + 96-call log · Leads Tracker sheet w/ Roadmap tab · "Lead Capture & AI Receptionist" project folder + desktop link · daily follow-up routine · dashboard refreshed · Goodcall researched + walkthrough started. Her open steps: sign up Goodcall + "I'm in" · confirm the test email · **hit Send on the drafted report email**.
 - Phone-number approach — decide.
 - Verify the daily lead-follow-up email actually landed — confirm the "Lead follow-up routine is LIVE" test email hit her inbox.
 - Oak Park Construction **BUSINESS website** (opc-website-v1, live) — revisit / improve. *(NOT her mom's site — different project; her mom's is under Personal.)*
@@ -138,12 +143,22 @@ Captured 2026-07-07 from her brain-dump. Nothing here is scheduled yet — it's 
 - **Product-review page (Amazon Influencer** — she's registered) — dump products she buys, honest good/bad reviews; minimalistic to start; monetize.
 
 **🖥️ Her apps (built — small steps left)**
-- **Boletim Diário** — deploy feedback backend + iPhone shortcut / Add-to-Home-Screen.
+- **Boletim Diário** — deploy feedback backend + iPhone shortcut / Add-to-Home-Screen. NEW: there is **no daily DESKTOP pop-up yet** (Windows or Mac) — option to add a **Windows Scheduled Task @10:15** that auto-opens the boletim (recommended, dead simple) OR a clickable **toast** notification; Mac = 30-sec Calendar/Shortcuts handoff. Decide auto-open vs toast + Windows-only vs Mac too. **Where Boletim lives (it's a STANDALONE project, NOT part of Focus):** repo `priihigashi/ClaudeGallery` folder `boletim-sync/` — `SKILL_boletim_diario.md` (operating doc the cloud agent reads first) + `README.md` (feedback-backend Apps Script + deploy); a local Claude skill `boletim-diario` in `.claude/skills/`; and memory `boletim-diario-project.md`. Focus only LINKS it in the morning flow; it doesn't run/own it. Caveat: the repo SKILL doc and the local skill can drift — someday pick one as source of truth.
 - **"O que eu acho"** — done; just use it (Claude adds fact-checks on demand).
 - **RE quiz** — teach rollout handed off; her "other complaints" pending.
 
 **👩‍👧 Personal / family**
 - **Mom's PERSONAL website** (totally separate from the Oak Park business site) — CHECK FIRST whether mom still wants it.
+
+**🌍 Travel / Cruise trips** *(added by Codex in the Sheet; folded into canonical 2026-07-14)*
+- **Adults birthday cruise (Aug 2026)** — 2 adults, 3-4 nt Bahamas, FL departure. Wants CALM/adults + spa, NOT party. Seasick → always midship + low deck. Finalists: MSC Aurea (adults-only Solarium+thermal ~$1,487) vs RC Wonder/Jewel (cheaper, CocoCay). Light drinker (2-3/day) → NO drink package, pay per drink. Book DIRECT with the line (not cruises.com/Expedia/Booking). Free agent: Timeless Tales / Priscila Roque (quote in Hotmail). Ruled out Carnival (party), Celebrity (GTY cabin), Virgin for family. Lives 40-60 min from ports → no flights/hotels; can grab last-minute (VacationsToGo 90-day ticker).
+- **Virgin hold #2637267 (Key West & Bimini)** — EXPIRING no-deposit courtesy hold; book or let it lapse.
+- **RC Jewel of the Seas — Sep 11 hold** — keep or release the no-deposit hold.
+- **Family Disney cruise (Nov 25, 2026)** — 2 adults + 2 kids (4 & 6). Disney Fantasy 4-night Bahamian from Port Canaveral (Very Merrytime), Castaway Cay + Lookout Cay. Quote from Timeless Tales; confirm cabin sleeps 4; compare vs MSC Kids-Sail-Free; book + insurance.
+- **Travel insurance** — MEDICAL + EVACUATION (HMO won't cover Bahamas or ship); ~$45-90/person.
+- **Gmail cruise auto-filter** — DONE: teal 🚢 Cruises label on both accounts + 13 emails labeled. LEFT (manual, integration can't create filters): Gmail search → cruise-sender query → filter icon → Apply 🚢 Cruises → Create.
+- **Weekday sailing + MSC $500 OBC (optional)** — prefers WEEKDAY sailings (calmer); check MSC "Up to $500 Onboard Credit" offer (mcfolling Gmail).
+- Cruise research report DONE (reference): Cruise_Research_Report.html on Desktop + emailed to priscila@.
 
 **📓 Focus system**
 - Daily 5-line log habit · pick Notability vs Rocketbook + one-time backup · confirm timezone · use the walking desk (stack walk + study/call).
@@ -318,10 +333,12 @@ Each task cut into tiny, finish-able steps. She should only ever look at the NEX
 4. [ ] Add your affiliate links
 5. [ ] Publish + share once
 
-**🖥️ Boletim Diário — deploy feedback**
+**🖥️ Boletim Diário — deploy feedback + desktop pop-up**
 1. [ ] (agent) deploy the feedback backend
 2. [ ] (agent) add the iPhone shortcut / Add-to-Home-Screen
 3. [ ] You: tap it once to confirm it works
+4. [ ] **Desktop pop-up (none exists yet)** — decide **auto-open** (recommended: Windows Scheduled Task @10:15 opens the boletim page) vs **toast** (clickable "☀️ Seu Boletim Diário está pronto"); and **Windows-only** vs **Mac too** (Mac = 30-sec Calendar/Shortcuts handoff). Focus can build the Windows one from this PC in ~2 min once she picks.
+   - Note: Boletim is a STANDALONE project (repo `priihigashi/ClaudeGallery` `boletim-sync/` + local skill `boletim-diario` + memory). Focus only links it in the morning flow.
 
 **🖥️ "O que eu acho"** — DONE. No steps — just use it; ask the agent to add a fact-check whenever you want.
 
@@ -386,6 +403,7 @@ Each task cut into tiny, finish-able steps. She should only ever look at the NEX
 | 2026-07-14 | audit (code + Sheet); her ads-chat action plan | Code healthy (both rev6, byte-verified). BUG: docs said "can't write Sheets" but the googlesheets Composio connection (priscila@) is LIVE + the Sheet is read/writable; Today tab was a day stale. | Fixed the Sheets-write rule + added "keep the Sheet synced" rule; captured the **Google Ads/GA4 conversion cleanup** (3 steps) into Backlog + breakdown + Pending; refreshed the Sheet; bumped to rev7; byte-verified. |
 | 2026-07-14 | exit/handoff | Pushed rev7 (commit 1771cbee) + byte-verified: state identical, agent differs only by the intended "mirror to Sheet" clause; all Codex work intact. Synced the Sheet: Today -> 2026-07-14, +3 Google Ads/GA4 rows in Pending!A28:D30. Pulled local ~/.claude to rev7. | Bumped to rev8; wrote HANDOFF_2026-07-14 doc in Productivity & Routine. |
 | 2026-07-14 | her marketing/ads chat (Goodcall build) | AI-receptionist decision is made = **Goodcall** (Starter ~$59/mo), recommended in Ads Master Plan §5. Got the full 7-step setup, the paste-ready call script (greeting + job-seeker screen + capture fields mapping to the Leads Tracker), and the number-wiring fix. Also: confirm the "Lead follow-up routine is LIVE" test email; a can-do-now automations health-check; Phase 4 Google Ads conversion de-dupe (244-vs-20). | Rewrote the AI-receptionist breakdown into the Goodcall 7-step build + script; added health-check + Phase 4 backlog lines; added 3 Library Index rows (MARKETING ADS folder, Leads Tracker, Ads Master Plan); +4 Pending rows; bumped to rev9. |
+| 2026-07-14 | her boletim chat + Sheet read | She asked what Boletim knows / where it lives + whether there is a desktop pop-up (there is NOT yet). Reading the Sheet also revealed Codex had added a whole **Travel/Cruise** cluster (Pending + Backlog tabs) that canonical Markdown was missing. | Captured the Boletim desktop-popup option + the "where Boletim lives" map (standalone: ClaudeGallery boletim-sync docs + local skill + memory; Focus only links it); folded Codex's Travel/Cruise cluster into canonical Backlog + Pending so Markdown stops drifting behind the Sheet; +3 Boletim Library Index rows; bumped to rev10. Also folded Codex's Lead-Capture/AI-Receptionist build (DONE: Google Ads connected, proof report + 96-call log, tracker+Roadmap, project folder+desktop link, daily follow-up routine, dashboard refreshed) + its 2026-07-07 handoff doc into Library Index/Backlog, and added the 'Send drafted report email' pending. |
 
 Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested refinements (her call): weekly = highlights/lowlights/patterns · mid-day check-in · anchor morning review to an existing habit.
 
@@ -415,12 +433,20 @@ Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested ref
 | Manifestation photo collage board | PENDING | 2026-07-13 Priscila | choose photos + location, print via Walmart or similar, place where she sees it in the morning |
 | Ads tracking broke | TO DIAGNOSE | 2026-07-13 mined | check ads-running vs tracking-feed; 0-row days June 1 & 8 |
 | AI receptionist — Goodcall setup | DECIDED — her move | 2026-07-14 ads chat | She signs up (Starter ~$59/mo) + says "I'm in"; Focus walks steps 2-7 with the script ready. See breakdown. |
+| Send the drafted report email | HER MOVE | 2026-07-14 lead-capture | hit Send on the report email Codex drafted for her |
 | Lead follow-up test email | CONFIRM | 2026-07-14 ads chat | check the "Lead follow-up routine is LIVE" test email landed in her inbox |
 | Automations health-check | FOCUS CAN DO NOW | 2026-07-14 ads chat | confirm the dashboard actually refreshed + the daily follow-up routine ran clean (a week passed) |
 | Google Ads Phase 4 conversion de-dupe (244-vs-20) | FOCUS CAN DO NOW | 2026-07-14 ads chat | de-dupe the messy/duplicate conversion actions so reporting is trustworthy |
 | Google Ads: confirm duplicate GA4 property | NEEDS HER | 2026-07-14 ads chat | authorize a GA connection (fast) OR check GA4 > Admin > oakpark property > Property ID = 506565672 (empty dup) vs 488744278 (good, keep) |
 | Google Ads: fix bidding signals | DO WITH HER | 2026-07-14 ads chat | Calls=Primary; GA4 generate_lead (488744278)=Primary; demote 3 Contact page-loads + Request quote to Secondary. LIVE money — click-by-click, not blind API |
 | Google Ads/GTM cleanup | AFTER STEPS 1-2 | 2026-07-14 ads chat | delete empty GA4 property 506565672 + stray GTM tag G-CNC2QMMSG8 |
+| Boletim desktop pop-up | DECIDE + BUILD | 2026-07-14 | none exists yet; Windows Scheduled Task @10:15 auto-open (recommended) or clickable toast; Mac = Calendar/Shortcuts handoff. Pick auto-open vs toast + Windows-only vs Mac |
+| Birthday cruise (Aug) — decide + BOOK | NEEDS HER DECISION | Codex/Sheet | quote from Timeless Tales (Hotmail); MSC Aurea (adults spa ~$1,487) vs RC Wonder/Jewel; book DIRECT; midship low-deck (seasick); light drinker = no drink package |
+| Virgin hold #2637267 (Key West & Bimini) | EXPIRING — DECIDE | Codex/Sheet | book it or let the no-deposit courtesy hold lapse |
+| RC Jewel of the Seas — Sep 11 hold | DECIDE | Codex/Sheet | keep or release the no-deposit hold |
+| Family Disney cruise (Nov 25) — decide + book | NEEDS HER DECISION | Codex/Sheet | 2 adults + 2 kids (4 & 6); Disney Fantasy 4-night quote; cabin sleeps 4; compare MSC Kids-Sail-Free; book + insurance |
+| Travel insurance | TO BUY | Codex/Sheet | MEDICAL + EVACUATION (HMO won't cover Bahamas/ship); ~$45-90/person |
+| Gmail cruise auto-filter | MANUAL STEP LEFT | Codex/Sheet | labels done; LEFT: Gmail search cruise-sender query → filter icon → Apply 🚢 Cruises → Create |
 | Content pipeline broke (~May 28) | TO DIAGNOSE | 2026-07-13 mined | find where it stops (credits/NB2); test one piece end-to-end |
 | ROOM_VISION scope | CONFIRM WITH HER | 2026-07-13 mined | open the Drive build plan; confirm what it is + alive/dead |
 | Confirm timezone | ✅ DONE | — | Eastern (Miami), confirmed 2026-07-13 |
