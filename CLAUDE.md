@@ -28,6 +28,13 @@ RULE: Before saying "I don't have access," check `reference_active_connections.m
 
 Full route matrix, scopes, account IDs, credentials paths, capability lists → `~/.claude/projects/-Users-priscilahigashi/memory/reference_active_connections.md`. Phase 2 J migration 2026-05-19.
 
+**GITHUB SECRETS ARE NOT INTERACTIVE-SESSION CREDENTIALS — don't confuse the two (added 2026-07-14, new-machine gap found).** `gh secret list` (or the GitHub API) can only ever return secret NAMES, never values — that's GitHub's own encryption guarantee, not a permission being withheld. Secrets like `SHEETS_TOKEN`, `GOOGLE_SA_KEY`, `PRI_OP_DRIVE_SA_KEY`, `COMPOSIO_KEY` exist in the repo and ARE real, but they are injected ONLY into GitHub Actions workflow runs (e.g. the 4AM agent) — an interactive Claude Code chat session never receives them automatically, on any machine. "The secret is in GitHub" does not mean "this session can use it."
+For an interactive session to get Google Calendar/Sheets/Drive/Composio working, it needs ONE of these, checked independently PER MACHINE/PER LOGIN (do not assume because one computer has it, another does too):
+1. The claude.ai/Claude Code Google Workspace connector added for the account this session is logged into (surfaces as deferred `mcp__claude_ai_Google_Calendar__` / `_Sheets__` / `_Drive__` tools — check via ToolSearch), OR
+2. A local OAuth credential file (e.g. `sheets_token.json`) physically present at `~/ClaudeWorkspace/Credentials/` on THIS machine — must be copied over from a machine that already has it, or minted fresh via a browser OAuth consent flow run on this machine, OR
+3. Composio connected for this specific login (check via ToolSearch for `composio`/`googlesheets`/`googlecalendar` — separate from the `COMPOSIO_KEY` GitHub secret, which again only feeds Actions runs).
+If ToolSearch returns zero results for all three on a given machine, that is a confirmed, real gap — not a search failure. Document which machines have which route working in `reference_active_connections.md` so this isn't re-discovered from scratch each time.
+
 ## PLAN-FIRST RULE (added 2026-05-18, from Anthropic Talks — Boris)
 Before any non-trivial or irreversible work, write a 3–5 line plan FIRST and show it to Priscila.
 Plan must include: (1) what I'm about to do, (2) which files/IDs/tools I'll touch, (3) what could break, (4) the success check.
