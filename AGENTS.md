@@ -46,7 +46,7 @@ Sandbox paths like `/workspace/oak-park-ai-hub` are clones that Codex creates fo
 
 | Service | Primary | Fallback |
 |---|---|---|
-| Sheets | Google Sheets API via OAuth (SHEETS_TOKEN) | Composio `GOOGLESHEETS_*` |
+| Sheets | Google Sheets API via OAuth (`SHEETS_TOKEN`; use `MCFOLLING_TOKEN` for McFolling/Airbnb-owned sheets) or Google Drive connector raw `_batch_update_spreadsheet` | Composio `GOOGLESHEETS_*` for simple values only |
 | Docs (write) | Composio `GOOGLEDOCS_UPDATE_DOCUMENT_MARKDOWN` | Python Docs API `docs.documents().batchUpdate` |
 | Drive (search/list/read) | MCP `mcp__claude_ai_Google_Drive__*` → `mcp__gdrive__search` (skip on `-32603`) | OAuth Python `supportsAllDrives=true&includeItemsFromAllDrives=true` |
 | Drive (upload bytes) | OAuth Python `googleapiclient` `MediaFileUpload` + `supportsAllDrives=True` | Raw REST `uploadType=multipart\|resumable&supportsAllDrives=true` |
@@ -61,6 +61,8 @@ Sandbox paths like `/workspace/oak-park-ai-hub` are clones that Codex creates fo
 | Vercel | MCP `mcp__vercel__*` | — |
 
 **Deferred MCP tools** (Gmail, Calendar, Drive, Canva, Vercel): load schemas via ToolSearch before calling — they fail without it.
+
+**Sheets formatting / structural edits:** never claim "the API cannot do this" just because Composio's basic Sheets wrapper is missing a field. For fonts, colors, conditional formatting, row/column sizing, data validation, formulas, filters, and any available table request, try raw Google Sheets `spreadsheets.batchUpdate` first via OAuth or the Google Drive connector `_batch_update_spreadsheet`. Only report blocked after raw batchUpdate + documented OAuth/account routes fail with the exact error.
 
 Gmail MCP can only DRAFT. To SEND, trigger `send_email.yml` via `gh workflow run`. Never tell Priscila "Gmail blocked" — there are 3 routes.
 
@@ -174,7 +176,7 @@ Check in order — if any apply, do it yourself:
 1. YouTube URL → `youtube-transcript-api` (installed)
 2. Instagram/TikTok URL → `/capture` skill
 3. Tool/connection question → `reference_active_connections.md`
-4. Spreadsheet 403 → share via OAuth token (see `reference_credentials.md`) — never ask Priscila
+4. Spreadsheet 403 → identify the owning account first, then use the matching OAuth token (`SHEETS_TOKEN` for OPC/Priscila, `MCFOLLING_TOKEN` for McFolling/Airbnb). If the file is accessible through one account but not another, do not mix tokens. If local token refresh is stale, check the GitHub secret/workflow route before asking Priscila.
 
 "Only YOU" = physical login OR content that was never provided. Nothing else.
 
@@ -244,7 +246,7 @@ Do NOT bypass (recommend N): sending emails; deleting Drive files permanently; p
 - **She says "add a column" / "fix the spreadsheet"** → do it right now, confirm with cell reference. Do NOT create a task.
 - **She says "add this to the plan"** → edit the plan doc directly, then update the Flow Plans Tracker row (`1fggy918FgPfnMQ-dzGQk2zx9uhi2_-uWXMKGW4MA47k`).
 - **Calendar event creation** → never tell her to add it manually. Try MCP → Composio → Python OAuth. Only report blocked if all 3 routes fail.
-- **Spreadsheet 403** → share via OAuth token using the service account `oak-park-sheets@gen-lang-client-0364933181.iam.gserviceaccount.com`. Never ask her to click share.
+- **Spreadsheet 403** → identify the owner/account first, then share or edit via the matching OAuth route. Use `SHEETS_TOKEN` for OPC/Priscila sheets and `MCFOLLING_TOKEN` for McFolling/Airbnb sheets. Never ask her to click share until the documented OAuth / connector / workflow routes have been tried.
 
 ## Content categories + approval flow
 
@@ -267,7 +269,7 @@ Three-step approval: idea → production → final → Buffer schedules.
 | `4am_agent.yml` | Nightly cron: scrape, classify, pattern-learn |
 | `carousel_compare.yml` | Ideogram/Recraft carousel comparison (FORMAT-005) |
 
-Trigger pattern: `~/bin/gh workflow run <name> --repo priihigashi/oak-park-ai-hub -f <key>="<value>"`. All workflows use `SHEETS_TOKEN` (never Composio) for Drive/Sheets.
+Trigger pattern: `~/bin/gh workflow run <name> --repo priihigashi/oak-park-ai-hub -f <key>="<value>"`. Workflows use OAuth secrets for Drive/Sheets (`SHEETS_TOKEN` for OPC/Priscila surfaces; `MCFOLLING_TOKEN` for McFolling/Airbnb surfaces), never Composio.
 
 ## Session exit protocol
 

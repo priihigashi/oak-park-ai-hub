@@ -13,9 +13,9 @@ RULE: Before saying "I don't have access," check `reference_active_connections.m
 
 **Composio-only exceptions** (no Cloud/MCP equivalent): (1) Google Docs writes via `GOOGLEDOCS_UPDATE_DOCUMENT_MARKDOWN` — overwrites whole doc, no markdown tables (KRM #11, #12); (2) Instagram posting.
 
-**Google services** (Sheets / Drive / Calendar / Gmail): prefer OAuth Python with `SHEETS_TOKEN` (nano Project, GCP `gen-lang-client-0364933181`) OR the deferred MCP tools `mcp__claude_ai_Google_Drive__` / `_Google_Calendar__` / `_Gmail__` (load schema via ToolSearch first — KRM #9). Always try all documented routes before reporting blocked. Drive: 3-route fallback (Drive MCP → `mcp__gdrive__search` skip-on-`-32603` → OAuth Python with `supportsAllDrives=true` — KRM #8). Calendar: `sheets_token.json` HAS calendar scope (don't say "no scope").
+**Google services** (Sheets / Drive / Calendar / Gmail): prefer OAuth Python with `SHEETS_TOKEN` (nano Project, GCP `gen-lang-client-0364933181`) OR the deferred MCP tools `mcp__claude_ai_Google_Drive__` / `_Google_Calendar__` / `_Gmail__` (load schema via ToolSearch first — KRM #9). Always try all documented routes before reporting blocked. Drive: 3-route fallback (Drive MCP → `mcp__gdrive__search` skip-on-`-32603` → OAuth Python with `supportsAllDrives=true` — KRM #8). Sheets formatting/structure: use raw `spreadsheets.batchUpdate` via OAuth or the Google Drive connector before blaming Composio limits; fontFamily, conditional formatting, sizing, validation, formulas, filters, and available table requests are not limited to Composio's basic wrapper. Calendar: `sheets_token.json` HAS calendar scope (don't say "no scope").
 **Gmail**: MCP is DRAFT-only. Real sends → GitHub Actions `send_email.yml` (uses `PRI_OP_GMAIL_APP_PASSWORD`) or local SMTP fallback (KRM #10). Filter creation: Python Gmail API with `gmail.settings.basic` + `gmail.modify` scopes (already on `sheets_token.json`).
-**McFolling/Airbnb inbox** is SEPARATE — `mcfollingproperties@gmail.com` uses `MCFOLLING_TOKEN` / `mcfolling_token.json`. Never mix with OPC token. This inbox owns the Google Ads MCC and is the Maya voice agent's context.
+**McFolling/Airbnb account** is SEPARATE — `mcfollingproperties@gmail.com` uses `MCFOLLING_TOKEN` / `mcfolling_token.json` for Gmail, Drive, Sheets, and Calendar surfaces owned by McFolling. Never mix with OPC token. This inbox owns the Google Ads MCC and is the Maya voice agent's context.
 **Google Ads**: `google-ads` MCP server, read-only (GAQL). OAuth nano Project + `GOOGLE_ADS_DEVELOPER_TOKEN`, MCC `587-071-3494` → sub-account `894-588-9168`. Mutations require Ads Scripts (JS).
 **GitHub**: `~/bin/gh` authenticated as priihigashi, repo `priihigashi/oak-park-ai-hub`. **Vercel / Canva**: deferred MCPs (`mcp__vercel__` / `mcp__claude_ai_Canva__`) — load via ToolSearch. Vercel for OPC deploy monitoring; Higashi is GitHub Pages. **Instagram**: Composio MCP only.
 
@@ -146,7 +146,7 @@ Check these in order — if any apply, DO IT YOURSELF instead:
 1. YouTube URL → run `youtube-transcript-api` (installed) — instant transcript, no download
 2. Instagram/TikTok URL → run `/capture` skill with yt-dlp + Whisper
 3. Any tool/connection question → check reference_active_connections.md first
-4. Spreadsheet access → check reference_credentials.md, share SA automatically if 403
+4. Spreadsheet access → check reference_credentials.md, identify the owning account, use `SHEETS_TOKEN` for OPC/Priscila sheets and `MCFOLLING_TOKEN` for McFolling/Airbnb sheets, share SA automatically if appropriate
 "Only YOU can do" = physical login OR content that was never provided. Nothing else.
 
 ## DRIVE — SHARED DRIVE IS DEFAULT, NEVER MY DRIVE
@@ -299,6 +299,7 @@ Full lessons live in `~/.claude/projects/-Users-priscilahigashi/memory/` plus `N
 11. Never use markdown tables in `GOOGLEDOCS_UPDATE_DOCUMENT_MARKDOWN`; use plain text labels.
 12. Never write to an existing Google Doc before reading it first; that tool overwrites the whole doc.
 13. GitHub Actions green check is not proof; inspect logs for `failed|error|401|403|skipped|unauthorized|exception` and check `🚨 Pipeline Failures`.
+14. Sheets formatting/table limits: Composio's wrapper is not the Google Sheets API. Before telling Priscila to manually change a font, table chip, conditional rule, filter, validation, or layout, try raw Sheets `batchUpdate` through OAuth or the Google Drive connector and report the exact failed request only if that route fails too.
 Step F compressed 2026-05-19; no anti-bug reminders intentionally removed.
 
 ## PIPELINE FAILURE LOG — see `/pipeline-fix` skill Section 12

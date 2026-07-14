@@ -4,7 +4,7 @@ topic_picker.py — Picks 3 topics for daily carousel creation.
 Reads Inspiration Library tab, scores by readiness, returns 2 OPC + 1 Brazil.
 Skips topics that need heavy research or have no clear angle.
 """
-import json, os, time, urllib.request, urllib.parse
+import json, os, re, time, urllib.request, urllib.parse
 
 SHEET_ID = os.environ.get("CONTENT_SHEET_ID", "1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU")
 INSPO_TAB = "📥 Inspiration Library"
@@ -77,6 +77,35 @@ def sheet_update(range_str, values):
                                 headers={"Authorization": f"Bearer {token}",
                                          "Content-Type": "application/json"})
     urllib.request.urlopen(req)
+
+
+def log_pipeline_failure(stage, error, notes=""):
+    """Append a non-fatal issue row to Pipeline Failures."""
+    try:
+        from datetime import datetime
+        token = get_token()
+        run_id = os.environ.get("GITHUB_RUN_ID", "")
+        row = [
+            datetime.utcnow().isoformat() + "Z",
+            "content_creator.yml",
+            run_id,
+            stage,
+            str(error)[:500],
+            f"https://github.com/priihigashi/oak-park-ai-hub/actions/runs/{run_id}" if run_id else "",
+            "",
+            notes,
+        ]
+        enc = urllib.parse.quote("'🚨 Pipeline Failures'!A:H", safe="!:'")
+        url = f"https://sheets.googleapis.com/v4/spreadsheets/{SHEET_ID}/values/{enc}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS"
+        payload = json.dumps({"values": [row]}).encode()
+        req = urllib.request.Request(
+            url,
+            data=payload,
+            headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+        )
+        urllib.request.urlopen(req, timeout=15)
+    except Exception as e:
+        print(f"  Pipeline failure log skipped ({stage}): {e}")
 
 
 def get_used_topics():
@@ -157,7 +186,7 @@ def insert_queue_row(topic_entry, inspo_status):
     niche = topic_entry.get("niche", "")
     status = "Approved" if (niche == "opc" or inspo_status.strip().lower() == "approved") else "Draft"
     # series_override allows per-topic routing to Verificamos / Fact-Checked / etc.
-    series = topic_entry.get("series_override") or (
+    series = topic_entry.get("format") or topic_entry.get("series_override") or (
         "Tip of the Week" if niche == "opc" else ("The Chain" if niche == "usa" else "Quem Decidiu Isso?")
     )
 
@@ -330,6 +359,32 @@ def score_topic(row, header_map, used_topics, queued_topics):
     return score, niche, topic, status
 
 
+def _is_valid_topic(text: str, niche: str) -> bool:
+    """Reject non-Latin scripts, date-only strings, and hashtag-only captions."""
+    text = (text or "").strip()
+    if len(text) < 10:
+        return False
+
+    non_latin = sum(1 for c in text if ord(c) > 0x024F)
+    if non_latin / max(len(text), 1) > 0.30:
+        return False
+
+    if re.match(
+        r"^\d{1,2}\s+(jan|feb|mar|apr|avr|abr|may|mai|jun|jul|aug|sep|oct|nov|dec)\w*\s+\d{4}\s*$",
+        text,
+        re.IGNORECASE,
+    ):
+        return False
+
+    stripped = re.sub(r"#\w+", "", text).strip()
+    if len(stripped) < 10:
+        return False
+
+    if niche == "usa" and non_latin > 0:
+        return False
+    return True
+
+
 def pick_topics(count_opc=2, count_brazil=1, count_usa=1):
     rows = sheet_get(f"'{INSPO_TAB}'")
     if len(rows) < 2:
@@ -348,6 +403,14 @@ def pick_topics(count_opc=2, count_brazil=1, count_usa=1):
     for idx, row in enumerate(rows[1:], start=2):
         score, niche, topic, inspo_status = score_topic(row, header_map, used, queued)
         if score < 0:
+            continue
+        if not _is_valid_topic(topic, niche):
+            print(f"  [topic_picker.quality_gate] rejected row {idx}: [{niche}] {topic[:80]!r}")
+            log_pipeline_failure(
+                "topic_picker.quality_gate",
+                f"Rejected invalid topic row {idx}: [{niche}] {topic[:120]}",
+                notes="non-Latin/date-only/hashtag-only topic skipped",
+            )
             continue
         brief_idx = header_map.get("brief / angle") or header_map.get("comments") or header_map.get("angle") or header_map.get("brief")
         brief_raw = row[brief_idx].strip() if brief_idx is not None and brief_idx < len(row) else ""
@@ -380,6 +443,8 @@ def pick_topics(count_opc=2, count_brazil=1, count_usa=1):
             "inspo_status": inspo_status,
             "url": row[header_map.get("url", 0)] if header_map.get("url") is not None and header_map["url"] < len(row) else "",
             "clips_needed": clips_needed_val,
+            "format": _rv("format"),
+            "template_key": _rv("template_key"),
             "series_override": _rv("series_override"),
             "fake_news_route": _rv("fake_news_route"),
             "story_id": _rv_any(("story_id", "story id", "capture_story_id", "capture story id", "resource_story_id", "source_story_id")),

@@ -86,12 +86,26 @@ except Exception:
     check_motion_static_siblings = None
     MotionStaticSiblingGateError = Exception
 
+# FORMAT-021 Phase 2 — voice/personality gate. Guarded import keeps reviewer
+# safe if the contract module is absent in an older checkout.
+try:
+    from voice_personality_gate import (
+        check_voice_personality,
+        normalize_hashtag_set,
+        VoicePersonalityGateError,
+    )
+except Exception:
+    check_voice_personality = None
+    normalize_hashtag_set = None
+    VoicePersonalityGateError = Exception
+
 # Env vars
 SHEETS_TOKEN     = os.environ.get("SHEETS_TOKEN", "")
 ALERT_EMAIL      = os.environ.get("ALERT_EMAIL", "priscila@oakpark-construction.com")
 RUN_RESULTS_JSON = os.environ.get("CONTENT_CREATOR_RUN", "[]")  # JSON array of result dicts
 REVIEW_DRIVE_FOLDERS = os.environ.get("REVIEW_DRIVE_FOLDERS", "").strip()  # CSV folder ids or links
 REVIEW_STRICT = os.environ.get("REVIEW_STRICT", "").strip().lower() in {"1", "true", "yes"}
+VOICE_GATE_ENABLED = os.environ.get("VOICE_GATE_ENABLED", "0").strip().lower() in {"1", "true", "yes", "on"}
 
 # FIX_MODE: "analyze_only" (default) = detect + email
 #          "analyze_and_fix"        = detect, auto-fix [fix_type=regenerate] issues,
@@ -211,13 +225,12 @@ def check_html_placeholders(html_path: str) -> list[str]:
             f"PLACEHOLDER sticker(s) found — real photo NOT embedded: {', '.join(set(placeholder_matches))}"
         )
 
-    # Context-image slot still has query text (not replaced with real image)
-    ctx_matches = re.findall(r'\[ IMG: ([^\]]{3,60}) \]', html)
-    if ctx_matches:
-        issues.append(
-            f"CONTEXT-IMAGE slot(s) still have placeholder text — image not sourced: "
-            + "; ".join(ctx_matches[:3])
-        )
+    # Context-image slot placeholder detection moved to _patch_html_placeholders
+    # only. That function attempts Wikimedia, then strips the placeholder span
+    # silently when no result. Flagging here would double-report and (worse)
+    # fire BEFORE the auto-fix runs, blocking strict mode on optional
+    # decorative slots. Sticker placeholders (above) still flag because
+    # named-person face is a publish blocker per NN.
 
     visible_html = _visible_html(html)
 
@@ -668,10 +681,16 @@ def _patch_html_placeholders(html_path: str, work_dir) -> tuple:
             html = html.replace(old, new, 1)
             fixes.append(f"IMG '{query[:50]}' -> Wikimedia")
         else:
-            remaining.append(
-                f"CONTEXT-IMAGE slot not auto-resolved (no Wikimedia match): "
-                f"'[ IMG: {query[:50]} ]' — source manually"
-            )
+            # 2026-06-08: context-image slots are DECORATIVE (institutions,
+            # documents, places). When Wikimedia misses, leaving the literal
+            # "[ IMG: query ]" string on the rendered slide is worse than
+            # shipping a clean text-only slide — the placeholder reads as a
+            # build artifact to viewers. Silently strip the placeholder span
+            # so the slide degrades cleanly. The named-person sticker gate
+            # below stays strict — that one IS a publish blocker (NN rule).
+            old_span = f'<span class="ctx-query">[ IMG: {query} ]</span>'
+            html = html.replace(old_span, "", 1)
+            fixes.append(f"IMG '{query[:40]}' -> stripped (no Wikimedia, decorative slot)")
 
     # Fix 2: @NAME_STICKER Brazil profile sticker slots
     # HTML pattern: <div class="sticker-placeholder">@LASTNAME_STICKER</div>
@@ -1198,6 +1217,13 @@ def _run_motion_static_gate_check(
         return []
     if not post_id:
         return []
+    # NN-M1 / NN-M5: cron prod stays MOTION_ENABLED=0. When motion is globally
+    # off, an empty motion/ folder is the expected state, not a violation. The
+    # sibling _motion_required() helper at line 569 already short-circuits the
+    # rest of the motion checks under the same flag. Keep the two gates aligned
+    # so brazil/usa explainer runs without motion_test do not fail review.
+    if os.environ.get("MOTION_ENABLED", "0") == "0":
+        return []
 
     png_dir = Path(work_dir) / post_id / "png"
     motion_dir = Path(work_dir) / post_id / "motion"
@@ -1543,6 +1569,74 @@ _NICHE_HINTS = {
     "usa": "usa", "the-chain": "usa", "history-they-left-out": "usa",
     "higashi": "higashi", "hig-": "higashi",
 }
+
+
+def _load_recent_catalog_hashtag_sets(limit: int = 5) -> list[frozenset[str]]:
+    """Read recent hashtag blocks from Project Content Catalog for recycle checks.
+
+    Non-fatal: empty list on missing token/schema. The deterministic gate still
+    runs its non-Sheets checks.
+    """
+    if not SHEETS_TOKEN or normalize_hashtag_set is None:
+        return []
+    try:
+        creds = Credentials.from_authorized_user_info(json.loads(SHEETS_TOKEN))
+        sheets = build("sheets", "v4", credentials=creds)
+        rows = sheets.spreadsheets().values().get(
+            spreadsheetId=os.environ.get("CONTENT_SHEET_ID", "1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU"),
+            range="'📸 Project Content Catalog'!A:O",
+        ).execute().get("values", [])
+    except Exception as exc:
+        print(f"  [voice-gate] catalog hashtag read skipped: {exc}")
+        return []
+    if len(rows) < 2:
+        return []
+    header = [str(h).strip().lower() for h in rows[0]]
+    candidate_cols = [
+        idx for idx, name in enumerate(header)
+        if "hashtag" in name or name in {"caption", "caption body", "notes"}
+    ]
+    if not candidate_cols:
+        candidate_cols = list(range(len(header)))
+    out: list[frozenset[str]] = []
+    for row in reversed(rows[1:]):
+        blob = " ".join(str(row[i]) for i in candidate_cols if i < len(row))
+        tags = normalize_hashtag_set(blob)
+        if tags:
+            out.append(tags)
+        if len(out) >= limit:
+            break
+    return out
+
+
+def _run_voice_gate_check(content: dict, niche: str, result: dict | None = None) -> list[str]:
+    """FORMAT-021 voice/personality gate review hook.
+
+    Flag-gated by ``VOICE_GATE_ENABLED``. Default OFF means this returns an
+    empty list and reviewer behavior is unchanged.
+    """
+    if not VOICE_GATE_ENABLED or check_voice_personality is None:
+        return []
+    if niche not in ("opc", "brazil", "usa", "news"):
+        return []
+    try:
+        merged = dict(content or {})
+        if isinstance(result, dict):
+            for key in ("caption", "in_post_hashtags", "first_comment_hashtags"):
+                if result.get(key) and not merged.get(key):
+                    merged[key] = result.get(key)
+        violations = check_voice_personality(
+            merged,
+            route=niche,
+            recent_hashtag_sets=_load_recent_catalog_hashtag_sets(5),
+        )
+    except VoicePersonalityGateError:
+        return []
+    except Exception as exc:  # pragma: no cover - defensive
+        return [f"[voice-gate] gate failed with {type(exc).__name__}: {exc}"]
+    return [
+        f"[voice-gate] {v.kind}: {v.reason}" for v in violations
+    ]
 
 
 def _infer_niche_from_folder(folder_name: str, parent_path: str = "") -> str:
@@ -2566,6 +2660,8 @@ def check_built_post(result: dict) -> dict:
             os.environ.get("WORK_DIR", "/tmp/content_creator_run"),
         )
     )
+    # FORMAT-021 Phase 2 — deterministic voice/personality gate.
+    all_issues.extend(_run_voice_gate_check(_content_dict, niche, result))
 
     # 0. Phase 5 — smart slide-plan gates (Phase 4 picker output validation).
     # Runs FIRST so a hallucinated/banned plan blocks the post before any

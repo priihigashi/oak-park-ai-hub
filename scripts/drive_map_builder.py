@@ -4,9 +4,9 @@ Drive Map Builder + Daily Scanner
 Creates and maintains Google Spreadsheets that log every folder, doc, and sheet
 across all shared drives.
 
-Creates 9 spreadsheets total:
+Creates Drive Map spreadsheets for each configured shared drive:
   - Drive Map — ALL DRIVES   (master hub, lives in Marketing)
-  - Drive Map — OPC          (only OPC items, lives in OPC drive)
+  - Drive Map — Oak Park Construction (only OPC items, lives in OPC drive)
   - Drive Map — News         (only News items, lives in News drive)
   - etc. for each shared drive
 
@@ -32,13 +32,12 @@ TOKEN_FILE = os.environ.get(
 # ── Shared drives to scan ─────────────────────────────────────────────────────
 DRIVES = {
     "0AIPzwsJD_qqzUk9PVA": "Marketing",
-    "0AJp3Phs0wIBOUk9PVA": "OPC",
+    "0AJp3Phs0wIBOUk9PVA": "Oak Park Construction",
     "0AH7_C87G0ZwgUk9PVA": "News",
     "0AF6S_f8PH2_aUk9PVA": "Stocks",
     "0ACJVarTjgmFUUk9PVA": "AI Content",
     "0AEz0NlGr3tlLUk9PVA": "UGC",
     "0AN7aea2IZzE0Uk9PVA": "Higashi Imobiliária - Claude",
-    "0AAWPgG39HXocUk9PVA": "Big Crazy Ideas",
 }
 
 # Where to create the Drive Map spreadsheet (Marketing drive root)
@@ -436,7 +435,7 @@ def main():
             state["per_drive"][drive_id] = ss_id
 
         save_state(state)
-        print(f"\n9 spreadsheets created.\n")
+        print(f"\n{len(DRIVES) + 1} spreadsheets created.\n")
 
     master_id = state.get("master")
     per_drive  = state.get("per_drive", {})

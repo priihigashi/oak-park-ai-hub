@@ -101,6 +101,13 @@ DEFAULT_AI_CASCADE = [
     PROVIDER_SDXL,
     PROVIDER_DALLE3,   # last resort — cartoonish style, not realistic
 ]
+ENV_SKIP_PROVIDERS = {
+    p.strip().lower()
+    for p in os.environ.get("IMAGE_FALLBACK_SKIP", "").split(",")
+    if p.strip()
+}
+if "gemini-3.1-flash" in ENV_SKIP_PROVIDERS:
+    ENV_SKIP_PROVIDERS.add(PROVIDER_GEMINI)
 
 
 def build_scene_lock_prompt(user_text: str, subject_hint: str = "scene", is_opc: bool = False) -> str:
@@ -683,7 +690,7 @@ def generate_ai_image(
         skip_providers: List of provider slugs to omit from cascade
                         (auto-fixer use case: skip the one already tried).
     Returns: (rel_path, provider_used) or ('', '')."""
-    skip = {p.lower() for p in (skip_providers or [])}
+    skip = ENV_SKIP_PROVIDERS | {p.lower() for p in (skip_providers or [])}
     if provider:
         cascade = [provider] if provider.lower() not in skip else []
     else:

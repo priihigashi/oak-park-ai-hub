@@ -80,6 +80,18 @@ News = face for named person OR contextual image (institution, event).
 OPC = product shot, tool, material, before-after crop, icon, diagram.
 Source: CLAUDE.md — VISUAL-EVERY-OTHER-SLIDE RULE
 
+**VOICE + PERSONALITY — LOCKED 2026-06-08**
+Content reads as Priscila editorializing, not wire-service stenography. Attribution-based with a point of view. Audience-first language: define unknown terms plainly with concrete sensory examples ("segregation wasn't 'people not mixing' — it was the LAW. Separate water fountains, train cars..."). Storytelling arc first, evidence second. Banned hooks: "Did you know...?" / "Most people don't know...". Banned structures: parallel-but-bland comparison grids, bibliography-style sources slides, recycled hashtag blocks.
+Source: CLAUDE.md — VOICE + PERSONALITY · memory feedback_personality_quality_directives.md
+
+**TEMPLATE ROTATION + VISUAL DIVERSITY — LOCKED 2026-06-08**
+Pipeline must rotate across BUILT templates per topic, never default to one for the whole cron. Built templates: OPC Tip-of-the-Week, OPC Progress, Brazil Rachadinha v2, "Quem decidiu isso?", Educational Explainer (FORMAT-021). Slide types: definition · comparison_grid · bio-card-grid · timeline · list · quote · profile · data · network · sources. Topic drives template choice. Same template shipped on consecutive cron days = bug.
+Source: CLAUDE.md — TEMPLATE ROTATION · memory feedback_personality_quality_directives.md
+
+**MULTI-FORMAT EXPLAINER OUTPUT — LOCKED 2026-06-08**
+FORMAT-021 educational explainers ship BOTH carousel AND voiceover reel (ElevenLabs + Remotion, 60–90s narration synced to slide PNGs). Carousel-only output is acceptable for OPC tip / progress / other formats; explainers default to dual-output. Phase 2 build — voiceover wiring is current open work.
+Source: CLAUDE.md — MULTI-FORMAT BY DEFAULT
+
 **NAMED-PERSON FACE RULE**
 When content names a person, their face MUST appear on that slide.
 Use `.sticker-slot` (cover/hero) or `.bio-card` (multi-person) or `.bio-initials` (no photo available).
@@ -161,6 +173,12 @@ Source: CLAUDE.md + memory feedback_opc_copy_rules.md
 **SHADOW BAN & POLITICAL CAPTION RULES**
 Attribution-only captions. No party hashtags. Stagger political posts.
 Source: memory feedback_shadow_ban_caption_rules.md + CONTENT_FORMATS.md
+
+**EDUCATIONAL EXPLAINER USA — ENGLISH BODY MANDATORY**
+Any `educational-explainer` build for niche `usa` must render English body copy.
+Do not reuse the Brazil/PT body prompt for USA explainers. The USA path may keep
+PT fields for schema compatibility, but visible body text must be English.
+Source: 2026-06-08 pipeline audit + FORMAT-021.
 
 ---
 

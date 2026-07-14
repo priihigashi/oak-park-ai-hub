@@ -62,6 +62,7 @@ INSPO_TAB     = "📥 Inspiration Library"
 QUEUE_TAB     = "📋 Content Queue"
 CATALOG_TAB   = "📸 Project Content Catalog"
 HISTORY_TAB   = "Build History"
+TEMPLATE_ROTATION_LOG_TAB = "Template Rotation Log"
 HISTORY_DEDUP_DAYS = 30
 
 ALERT_EMAIL = os.environ.get("ALERT_EMAIL", "priscila@oakpark-construction.com")
@@ -96,6 +97,7 @@ NOTE_PARSER_GATE_ENABLED = os.environ.get("NOTE_PARSER_GATE_ENABLED", "0").strip
 # Item 2.3 — Story arc retry gate. Default OFF until one controlled run verifies behavior.
 # Set ARC_GATE_ENABLED=1 in workflow env to activate the 2-attempt generation retry.
 ARC_GATE_ENABLED = os.environ.get("ARC_GATE_ENABLED", "0").strip() == "1"
+VOICE_GATE_ENABLED = os.environ.get("VOICE_GATE_ENABLED", "0").strip().lower() in ("1", "true", "yes", "on")
 # When set, all Drive uploads go to this test folder instead of normal series destinations.
 TEST_OUTPUT_FOLDER = os.environ.get("TEST_OUTPUT_FOLDER", "").strip()
 
@@ -376,7 +378,131 @@ def _weekday_template(day_idx):
     return weekday_map.get(day_idx, "tip")
 
 
-def _resolve_opc_template(topic_entry, topic, run_date):
+def _infer_template_from_history_row(row: list[str]) -> str:
+    blob = " ".join(str(x).lower() for x in row)
+    if "educational" in blob or "explainer" in blob:
+        return "educational-explainer"
+    if "progress" in blob or "before" in blob or "after" in blob:
+        return "progress"
+    if "tip of the week" in blob or "tip" in blob:
+        return "tip"
+    if "illustrated" in blob:
+        return "illustrated"
+    if "cutout" in blob:
+        return "cutout"
+    if "the chain" in blob or "quem decidiu" in blob or "rachadinha" in blob:
+        return "native"
+    return ""
+
+
+def get_recent_templates_from_history(token: str, days: int = 7) -> list[str]:
+    """Return most-recent template IDs inferred from Build History rows."""
+    import urllib.request, urllib.parse
+    from datetime import timedelta
+    try:
+        cutoff = (datetime.now(ET) - timedelta(days=days)).strftime("%Y-%m-%d")
+        enc = urllib.parse.quote(f"'{HISTORY_TAB}'!A2:G", safe="!:'")
+        url = f"https://sheets.googleapis.com/v4/spreadsheets/{SHEET_ID}/values/{enc}"
+        req = urllib.request.Request(url, headers={"Authorization": f"Bearer {token}"})
+        rows = json.loads(urllib.request.urlopen(req, timeout=10).read()).get("values", [])
+        recent: list[str] = []
+        for row in reversed(rows):
+            if not row:
+                continue
+            date_str = str(row[0]).strip()
+            if date_str and date_str < cutoff:
+                continue
+            tmpl = _infer_template_from_history_row(row)
+            if tmpl:
+                recent.append(tmpl)
+        return recent
+    except Exception as e:
+        print(f"  Template rotation: Build History read failed (non-fatal): {e}")
+        return []
+
+
+def _score_template_candidates(topic_text: str, niche: str, recent_templates: list[str]) -> dict[str, int]:
+    topic_l = (topic_text or "").lower()
+    niche = (niche or "").lower()
+    if niche == "opc":
+        candidates = {"tip": 35, "progress": 25}
+    else:
+        candidates = {
+            "native": 30,
+            "educational-explainer": 25,
+            "illustrated": 16,
+            "cutout": 14,
+        }
+
+    keyword_boosts = {
+        "progress": ("progress", "before", "after", "jobsite", "site", "project", "install", "installed", "demo", "demolition", "framing", "poured", "inspection"),
+        "tip": ("tip", "avoid", "mistake", "cost", "save", "homeowner", "choose", "when to", "how to", "why you should", "red flag"),
+        "educational-explainer": ("what is", "explainer", "explain", "definition", "concept", "policy", "law", "rule", "history", "slavery", "socialism", "capitalism", "constitution", "doctrine", "economy", "economic"),
+        "native": ("breaking", "vote", "court", "congress", "senate", "stf", "president", "minister", "claim", "said", "says", "decision"),
+        "illustrated": ("budget", "data", "map", "system", "structure", "numbers", "timeline"),
+        "cutout": ("who", "profile", "person", "leader", "candidate", "minister", "judge", "decided"),
+    }
+    for tmpl, words in keyword_boosts.items():
+        if tmpl not in candidates:
+            continue
+        hits = sum(1 for word in words if word in topic_l)
+        candidates[tmpl] += min(hits * 14, 42)
+    if "educational-explainer" in candidates and re.search(r"\bwhat is\b|\bo que (?:é|foi|significa)\b|\bexplainer\b|\bexplique\b", topic_l):
+        candidates["educational-explainer"] += 28
+
+    recent = [t for t in recent_templates if t]
+    for tmpl in list(candidates):
+        if tmpl in recent[:3]:
+            candidates[tmpl] -= 30
+        elif tmpl in recent:
+            candidates[tmpl] -= 12
+        else:
+            candidates[tmpl] += 10
+
+    return candidates
+
+
+def _pick_template_by_topic(topic_text: str, niche: str, recent_templates: list[str]) -> str:
+    """Pick a built template by topic fit + recent-template penalty."""
+    scores = _score_template_candidates(topic_text, niche, recent_templates)
+    if not scores:
+        return "tip" if niche == "opc" else "native"
+    return sorted(scores.items(), key=lambda item: (-item[1], item[0]))[0][0]
+
+
+def log_template_rotation_decision(topic: str, niche: str, chosen_template: str,
+                                   scores: dict[str, int], recent_templates: list[str]) -> None:
+    """Append one template rotation decision to Ideas & Inbox."""
+    import urllib.request, urllib.parse
+    try:
+        token = get_oauth_token()
+        ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        row = [[
+            ts,
+            topic[:180],
+            niche,
+            chosen_template or "native",
+            json.dumps(scores, sort_keys=True),
+            ", ".join(recent_templates[:12]),
+        ]]
+        enc = urllib.parse.quote(f"'{TEMPLATE_ROTATION_LOG_TAB}'!A:F", safe="!:'")
+        url = (
+            f"https://sheets.googleapis.com/v4/spreadsheets/{SHEET_ID}/values/{enc}"
+            f":append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS"
+        )
+        payload = json.dumps({"values": row}).encode()
+        req = urllib.request.Request(
+            url,
+            data=payload,
+            headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+        )
+        urllib.request.urlopen(req, timeout=10)
+        print(f"  Template Rotation Log: {niche} -> {chosen_template or 'native'}")
+    except Exception as e:
+        print(f"  Template Rotation Log write failed (non-fatal): {e}")
+
+
+def _resolve_opc_template(topic_entry, topic, run_date, recent_templates=None):
     """Choose OPC template route with deterministic rotation.
     Priority: explicit sheet override > rotation mode > default tip."""
     explicit = (topic_entry.get("template_key") or "").strip().lower()
@@ -387,15 +513,17 @@ def _resolve_opc_template(topic_entry, topic, run_date):
         return "tip"
 
     mode = TEMPLATE_ROTATION_MODE
-    if mode == "alternate":
-        return "tip"
+    if mode in ("topic", "weekday", "alternate"):
+        picked = _pick_template_by_topic(topic, "opc", list(recent_templates or []))
+        if picked in ("tip", "progress"):
+            return picked
     if mode == "weekday":
         day_idx = datetime.now(ET).weekday()
         return _weekday_template(day_idx)
     return "tip"
 
 
-def _resolve_news_template(topic_entry, niche):
+def _resolve_news_template(topic_entry, niche, topic="", recent_templates=None):
     """Brazil/USA template routing.
     Priority:
     1) explicit template_key in sheet
@@ -403,10 +531,19 @@ def _resolve_news_template(topic_entry, niche):
     3) every 3rd day, use shared template (illustrated/cutout alternating)
     """
     explicit = (topic_entry.get("template_key") or "").strip().lower()
+    fmt = (topic_entry.get("format") or "").strip().lower()
+    if explicit == "educational-explainer" or fmt == "educational-explainer":
+        return "educational-explainer"
     if explicit in ("native", "illustrated", "cutout"):
         return None if explicit == "native" else explicit
     if not TEMPLATE_ROTATION_ENABLED:
         return None
+    if topic:
+        picked = _pick_template_by_topic(topic, niche, list(recent_templates or []))
+        if picked == "native":
+            return None
+        if picked in ("educational-explainer", "illustrated", "cutout"):
+            return picked
     if TEMPLATE_ROTATION_MODE != "weekday":
         return None
     now = datetime.now(ET)
@@ -1485,6 +1622,54 @@ def _extract_arc_headlines(content: dict) -> list[str]:
     return headlines
 
 
+def _voice_retry_instruction(violations: list) -> str:
+    details = "\n".join(
+        f"- {getattr(v, 'kind', 'voice')}: {getattr(v, 'reason', str(v))}"
+        for v in violations[:6]
+    )
+    kinds = {getattr(v, "kind", "") for v in violations}
+    targeted = []
+    if "bibliography_sources" in kinds:
+        targeted.append(
+            "For the sources slide, every source line must include why it matters: "
+            "'Source — date — what this source proves or clarifies.'"
+        )
+    if "parallel_bland_grid" in kinds:
+        targeted.append(
+            "For comparison_grid, use concrete multi-word column labels and at least "
+            "3 explanatory items per column; never use one-word labels like "
+            "'Capitalismo', 'Socialismo', or 'Sovietismo' by themselves."
+        )
+    targeted_text = "\n".join(f"- {line}" for line in targeted)
+    parts = [
+        "\n\n[VOICE RETRY INSTRUCTION]\n"
+        "The previous draft violated Priscila's voice/personality rules:\n"
+        f"{details}\n\n",
+    ]
+    if targeted_text:
+        parts.append(f"{targeted_text}\n\n")
+    parts.append(
+        "Rewrite with personality, not stenography. Audience-first language. "
+        "Storytelling over fact-listing. Do not use 'Did you know', "
+        "'Most people don't know', 'Have you ever heard', or 'You won't believe'. "
+        "Avoid bibliography-only source slides; each source needs one-line context. "
+        "Avoid bland comparison grids with tiny labels. Example voice: "
+        "'Most people use these 3 words interchangeably. They mean completely different things.'"
+    )
+    return "".join(parts)
+
+
+def _run_voice_generation_gate(content: dict, niche: str) -> list:
+    if not VOICE_GATE_ENABLED or not isinstance(content, dict):
+        return []
+    try:
+        from voice_personality_gate import check_voice_personality
+        return check_voice_personality(content, route=niche)
+    except Exception as exc:
+        print(f"  [VOICE-GATE] generation check skipped: {exc}")
+        return []
+
+
 def process_one_topic(topic_entry, run_date, drive):
     topic = topic_entry["topic"]
     niche = topic_entry["niche"]
@@ -1492,6 +1677,12 @@ def process_one_topic(topic_entry, run_date, drive):
     fake_news_route = topic_entry.get("fake_news_route", "B")
     fake_news_confidence = topic_entry.get("fake_news_confidence", 0.0)
     queue_row = topic_entry.get("queue_row_idx")
+    _recent_templates = []
+    if TEMPLATE_ROTATION_ENABLED:
+        try:
+            _recent_templates = get_recent_templates_from_history(get_oauth_token(), days=7)
+        except Exception as e:
+            print(f"  Template rotation: token/read failed (non-fatal): {e}")
 
     # Confidence gate — Verificamos items below threshold go to manual review, never auto-build
     if series_override == "VERIFICAMOS" and fake_news_confidence < VERIFICAMOS_CONFIDENCE_THRESHOLD:
@@ -1509,17 +1700,17 @@ def process_one_topic(topic_entry, run_date, drive):
     slug = topic[:40].lower().replace(" ", "-").replace("'", "").replace('"', '')
     slug = "".join(c for c in slug if c.isalnum() or c == "-")
     if niche == "opc":
-        _opc_type = _resolve_opc_template(topic_entry, topic, run_date)
+        _opc_type = _resolve_opc_template(topic_entry, topic, run_date, recent_templates=_recent_templates)
         post_id = f"opc-{_opc_type}-{run_date}-{slug[:20]}"
     elif niche == "usa":
-        _tmpl = _resolve_news_template(topic_entry, niche) or "native"
+        _tmpl = _resolve_news_template(topic_entry, niche, topic=topic, recent_templates=_recent_templates) or "native"
         post_id = f"usa-{_tmpl}-{run_date}-{slug[:20]}"
     elif series_override == "VERIFICAMOS":
         post_id = f"verificamos-{run_date}-{slug[:20]}"
     elif series_override == "VERDADE PELA METADE":
         post_id = f"verdade-{run_date}-{slug[:20]}"
     else:
-        _tmpl = _resolve_news_template(topic_entry, niche) or "native"
+        _tmpl = _resolve_news_template(topic_entry, niche, topic=topic, recent_templates=_recent_templates) or "native"
         post_id = f"brazil-{_tmpl}-{run_date}-{slug[:20]}"
 
     print(f"\n{'='*60}")
@@ -1611,11 +1802,20 @@ def process_one_topic(topic_entry, run_date, drive):
     elif series_override == "VERDADE PELA METADE":
         template_key = "verdade-pela-metade"
     elif niche == "opc":
-        template_key = _resolve_opc_template(topic_entry, topic, run_date)
+        template_key = _resolve_opc_template(topic_entry, topic, run_date, recent_templates=_recent_templates)
     elif niche in ("brazil", "usa"):
-        template_key = _resolve_news_template(topic_entry, niche)
+        template_key = _resolve_news_template(topic_entry, niche, topic=topic, recent_templates=_recent_templates)
     else:
         template_key = None
+    if TEMPLATE_ROTATION_ENABLED and niche in ("opc", "brazil", "usa"):
+        _rotation_scores = _score_template_candidates(topic, niche, _recent_templates)
+        log_template_rotation_decision(
+            topic,
+            niche,
+            template_key or "native",
+            _rotation_scores,
+            _recent_templates,
+        )
     if niche in ("brazil", "usa"):
         _requested_template = (topic_entry.get("template_key") or "auto").strip().lower() or "auto"
         _resolved_template = template_key or "native"
@@ -1790,6 +1990,52 @@ def process_one_topic(topic_entry, run_date, drive):
 
     if niche in ("brazil", "usa"):
         content = _enforce_news_visual_targets(content, topic, niche)
+
+    # FORMAT-021 Phase 2 — voice/personality retry gate. Default OFF.
+    # Runs before media/render/upload so a robotic draft can be retried once
+    # without wasting image or Drive cost.
+    _voice_violations = _run_voice_generation_gate(content, niche)
+    if _voice_violations:
+        print(
+            "  [VOICE-GATE] attempt=1 violations: "
+            + "; ".join(f"{v.kind}" for v in _voice_violations[:6])
+        )
+        _retry_brief = (brief or "") + _voice_retry_instruction(_voice_violations)
+        _content_voice_retry = generate_carousel_content(
+            topic, niche, template_key, brief=_retry_brief, slide_plan=_early_plan
+        )
+        if _content_voice_retry:
+            if template_key:
+                _content_voice_retry["_template_key"] = template_key
+            if niche in ("brazil", "usa"):
+                _content_voice_retry.setdefault("_template_trace", {})
+                _content_voice_retry["_template_trace"].update({
+                    "requested": (topic_entry.get("template_key") or "auto").strip().lower() or "auto",
+                    "resolved": template_key or "native",
+                    "rotation_enabled": TEMPLATE_ROTATION_ENABLED,
+                    "rotation_mode": TEMPLATE_ROTATION_MODE,
+                })
+                _content_voice_retry["_template_key_resolved"] = template_key or "native"
+                _content_voice_retry = _enforce_news_visual_targets(_content_voice_retry, topic, niche)
+            elif niche == "opc":
+                _content_voice_retry = enforce_opc_comparison_parity(_content_voice_retry, topic, brief or "")
+                _content_voice_retry = enforce_opc_source_policy(_content_voice_retry, topic, brief or "")
+            _voice_violations_2 = _run_voice_generation_gate(_content_voice_retry, niche)
+            if not _voice_violations_2:
+                content = _content_voice_retry
+                print("  [VOICE-GATE] accepted retry — 0 violations")
+            else:
+                detail = "; ".join(f"{v.kind}: {v.reason}" for v in _voice_violations_2[:4])
+                _send_alert(
+                    f"[VOICE-GATE] '{topic[:60]}' still violates voice rules after retry:\n{detail}\n"
+                    "Fix: edit the topic/brief or loosen VOICE_GATE_ENABLED for advisory-only testing."
+                )
+                return None
+        else:
+            _send_alert(
+                f"[VOICE-GATE] '{topic[:60]}' violated voice rules and retry returned no content."
+            )
+            return None
 
     # Item 2.3 — Story arc retry gate (ARC_GATE_ENABLED=0 by default).
     # Scores narrative coherence before rendering. On score==1, retries generation once
@@ -2771,7 +3017,7 @@ def main():
                 "niche": MANUAL_NICHE,
                 "brief": resolved_brief or f"Manual run from workflow_dispatch. Template request: {t}",
                 "url": "",
-                "format": "",
+                "format": "educational-explainer" if t == "educational-explainer" else "",
                 "series_override": "DADOS OU AGENDA" if t == "dados-ou-agenda" else "",
                 "fake_news_route": "B",
                 "fake_news_confidence": 1.0,
@@ -2816,7 +3062,10 @@ def main():
     # Scored but un-approved rows → CQ Status=Draft (you flip to Approved in sheet to release)
     print("\n--- Phase A: Promoting Inspiration → Content Queue ---")
     try:
-        picks = pick_topics(count_opc=1, count_brazil=0, count_usa=0)
+        count_opc = _safe_int(os.environ.get("COUNT_OPC"), 3)
+        count_brazil = _safe_int(os.environ.get("COUNT_BRAZIL"), 2)
+        count_usa = _safe_int(os.environ.get("COUNT_USA"), 2)
+        picks = pick_topics(count_opc=count_opc, count_brazil=count_brazil, count_usa=count_usa)
         pick_counts = {"opc": 0, "brazil": 0, "usa": 0}
         for p in picks or []:
             n = (p.get("niche") or "").lower()
