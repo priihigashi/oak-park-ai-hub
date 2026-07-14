@@ -1,6 +1,6 @@
 # Focus Partner — STATE (canonical local copy)
 
-**Last updated: 2026-07-14 (rev6)** — bump the date AND increment (revN) by 1 on every push (never reuse a rev); "update" compares by date, then by rev. rev6 = added the Boletim Diario briefing as a 4th tab in the morning launcher + shipped Mac (scripts/focus-morning.command) & iPhone (Shortcuts) triggers. rev5 = merged Codex 2026-07-13/14 Sheet + calendar work into GitHub rev4: Library Index, 10:15 finance/stocks popup, Robinhood/Roth/Fidelity specifics, swing-trading/options safety, and manifestation photo-board project. rev4 = bulletproof multi-PC sync: re-pull HEAD before every commit + monotonic rev counter. rev3 = built the Morning command-center launcher (Windows) + weekly manifestation review + de-cluttered repeated Sheet-mirror notes. rev2 = enriched Pending Tasks + capture-specifics rule.
+**Last updated: 2026-07-14 (rev7)** — bump the date AND increment (revN) by 1 on every push (never reuse a rev); "update" compares by date, then by rev. rev7 = fixed the false "can't write Sheets" rule (the googlesheets Composio connection as priscila@ is LIVE; the Sheet is read+writable from here) + Focus now keeps the Sheet mirror synced; captured the Google Ads/GA4 conversion-cleanup task from her ads chat. rev6 = added the Boletim Diario briefing as a 4th tab in the morning launcher + shipped Mac (scripts/focus-morning.command) & iPhone (Shortcuts) triggers. rev5 = merged Codex 2026-07-13/14 Sheet + calendar work into GitHub rev4: Library Index, 10:15 finance/stocks popup, Robinhood/Roth/Fidelity specifics, swing-trading/options safety, and manifestation photo-board project. rev4 = bulletproof multi-PC sync: re-pull HEAD before every commit + monotonic rev counter. rev3 = built the Morning command-center launcher (Windows) + weekly manifestation review + de-cluttered repeated Sheet-mirror notes. rev2 = enriched Pending Tasks + capture-specifics rule.
 
 Canonical state lives in this Markdown file on GitHub. (A human-readable Google Sheet mirror also exists — see the **Google Sheet mirror** line just below for its URL/IDs.)
 
@@ -8,7 +8,7 @@ Canonical state lives in this Markdown file on GitHub. (A human-readable Google 
 - **Timezone:** America/New_York — **Eastern (Miami), confirmed by Priscila 2026-07-13**
 - **Journal folder:** `📓 Daily Journal — DROP HERE` (id `1eknXv30UHtuDVDDRJpyt3eBLqsxhjABB`)
 - **Google Sheet mirror:** `_Focus Partner — STATE` (`https://docs.google.com/spreadsheets/d/1AlvtSGIZUWE1pzld2A8LL5bK4g9nRR4a4jqsOcfnY4c`) in folder `Focus Partner` (`18API545Cqh0k7V2PPG3hnEeTRJHz7jZO`) under `Productivity & Routine`. Lightweight human-readable mirror only; GitHub Markdown remains canonical.
-- **Tool usage:** Priscila will use this Focus Partner in both Codex and Claude. Any assistant must read/update this Markdown state and keep the Sheet mirror current when practical.
+- **Tool usage:** Priscila will use this Focus Partner in both Codex and Claude. Any assistant must read/update this Markdown state and keep the Sheet mirror current. The Sheet IS writable from here via the `googlesheets` Composio connection (account `googlesheets_allyl-rearm` = priscila@; sheet id `1AlvtSGIZUWE1pzld2A8LL5bK4g9nRR4a4jqsOcfnY4c`) — when the Markdown changes, push the same change to the Sheet so it never goes stale.
 - **Library / Index:** The Google Sheet now has a `Library Index` tab. Keep it mirrored here: every master plan, dashboard, important Drive folder, website/login portal, stock/finance sheet, handoff, and project tracker that may be needed for planning should be added to both places.
 
 ## Library Index — master links for planning
@@ -112,6 +112,7 @@ Captured 2026-07-07 from her brain-dump. Nothing here is scheduled yet — it's 
 - Oak Park Construction **app** — exists; husband didn't adopt it; revisit later.
 - **Content / posting FOR construction** (social).
 - **Ads tracking / dashboard** — some days logged ZERO leads (e.g. June 1 & 8): tracking broke, or ads paused? Diagnose. *(separate from the ADS videos creative above.)*
+- **Google Ads / GA4 conversion cleanup** — fix the bidding signal so ad money steers to REAL leads (calls + form submits), then remove a duplicate GA4 property + a stray GTM tag. *(from her ads chat, 2026-07-14; broken into 3 steps below.)*
 - **ROOM_VISION** — a customer-facing tool for the website (her guess: lets website customers **visualize a room/space/design**). Build plan exists in her Drive. CONFIRM exact scope + whether it's still alive.
 
 **🏠 McFolling Properties / Airbnb**
@@ -261,6 +262,11 @@ Each task cut into tiny, finish-able steps. She should only ever look at the NEX
 3. [ ] Name which of the two broke
 4. [ ] Hand the fix to a Claude/Codex chat
 
+**🏗️ Google Ads / GA4 conversion cleanup** *(LIVE ad-money change — do Step 2 WITH her, click-by-click, never blind API)*
+1. [ ] Confirm the mystery GA4 property is the EMPTY duplicate `506565672` (NOT the good `488744278` / "MGC Account", which IS linked to Ads). Fast: authorize a Google Analytics connection and read it; OR manual: GA4 > Admin > "oakpark-construction.com" property > Property Settings > check Property ID = 506565672.
+2. [ ] Fix bidding signals (Google Ads > Goals > Conversions): set **Calls from ads = Primary** (already recording); set **GA4 generate_lead (property 488744278) = Primary** (unhide it — rarely fires, but a real form submit then counts); demote the **3 page-load Contact conversions + Request quote to Secondary** (stay visible, stop steering bids). LIVE money — do it with her watching.
+3. [ ] Cleanup (only after 1-2): delete empty property `506565672` + the stray Tag Manager tag `G-CNC2QMMSG8`.
+
 **🏗️ ROOM_VISION (confirm before building)**
 1. [ ] Open the ROOM_VISION build plan in Drive
 2. [ ] Say in one line what it does for website customers
@@ -365,6 +371,7 @@ Each task cut into tiny, finish-able steps. She should only ever look at the NEX
 | 2026-07-14 | Focus Partner brain + state (rev4) | Priscila asked to bulletproof multi-PC sync (Claude + Codex across Windows + Mac). | Added coordination rule: re-pull HEAD before every commit, never force-push, byte-verify after; added monotonic rev counter; bumped to rev4. |
 | 2026-07-14 | GitHub audit + Codex merge (rev5) | GitHub rev4 was newer than local and did not yet contain Codex's latest Sheet/calendar captures: Library Index, 10:15 finance popup, Robinhood/Roth/Fidelity details, swing/options safety, and manifestation photo-board. | Merged those items into rev5 instead of overwriting rev4. Sheet + calendar were already updated; Markdown now catches up. |
 | 2026-07-14 | Focus Partner state + agent (rev6) | Coordination rule CAUGHT Codex's rev5 (Library Index + 10:15 finance popup + manifestation photo-board) before I pushed — merged onto it, nothing lost. | Added **Boletim Diario** as a 4th tab in the morning launcher; shipped **Mac** (`scripts/focus-morning.command`) + **iPhone** (Shortcuts) triggers; updated `scripts/MORNING-COMMAND-CENTER.md`; bumped to rev6; byte-verified. |
+| 2026-07-14 | audit (code + Sheet); her ads-chat action plan | Code healthy (both rev6, byte-verified). BUG: docs said "can't write Sheets" but the googlesheets Composio connection (priscila@) is LIVE + the Sheet is read/writable; Today tab was a day stale. | Fixed the Sheets-write rule + added "keep the Sheet synced" rule; captured the **Google Ads/GA4 conversion cleanup** (3 steps) into Backlog + breakdown + Pending; refreshed the Sheet; bumped to rev7; byte-verified. |
 
 Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested refinements (her call): weekly = highlights/lowlights/patterns · mid-day check-in · anchor morning review to an existing habit.
 
@@ -393,6 +400,9 @@ Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested ref
 | Swing trading/options idea | PARKED UNTIL RULES | 2026-07-13 Priscila | build watchlist, alerts, entry/exit/risk rules before considering trades; options/calls are high-risk |
 | Manifestation photo collage board | PENDING | 2026-07-13 Priscila | choose photos + location, print via Walmart or similar, place where she sees it in the morning |
 | Ads tracking broke | TO DIAGNOSE | 2026-07-13 mined | check ads-running vs tracking-feed; 0-row days June 1 & 8 |
+| Google Ads: confirm duplicate GA4 property | NEEDS HER | 2026-07-14 ads chat | authorize a GA connection (fast) OR check GA4 > Admin > oakpark property > Property ID = 506565672 (empty dup) vs 488744278 (good, keep) |
+| Google Ads: fix bidding signals | DO WITH HER | 2026-07-14 ads chat | Calls=Primary; GA4 generate_lead (488744278)=Primary; demote 3 Contact page-loads + Request quote to Secondary. LIVE money — click-by-click, not blind API |
+| Google Ads/GTM cleanup | AFTER STEPS 1-2 | 2026-07-14 ads chat | delete empty GA4 property 506565672 + stray GTM tag G-CNC2QMMSG8 |
 | Content pipeline broke (~May 28) | TO DIAGNOSE | 2026-07-13 mined | find where it stops (credits/NB2); test one piece end-to-end |
 | ROOM_VISION scope | CONFIRM WITH HER | 2026-07-13 mined | open the Drive build plan; confirm what it is + alive/dead |
 | Confirm timezone | ✅ DONE | — | Eastern (Miami), confirmed 2026-07-13 |
