@@ -1,6 +1,6 @@
 # Focus Partner — STATE (canonical local copy)
 
-**Last updated: 2026-07-13** — bump on every push; the "update" check compares this date to decide if GitHub is newer.
+**Last updated: 2026-07-13 (rev2)** — bump on every push; the "update" check compares this date. rev2 = Claude PC enriched the Pending Tasks (specifics per row) + added the capture-specifics rule. ALL Codex work preserved: Sheet mirror, Skills/hobbies lane, Morning command center, Subscriptions/finance visibility.
 
 Canonical state lives in this Markdown file on GitHub. A human-readable Google Sheet mirror also exists: `_Focus Partner — STATE` in Drive folder `Productivity & Routine / Focus Partner`.
 
@@ -295,27 +295,30 @@ Each task cut into tiny, finish-able steps. She should only ever look at the NEX
 Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested refinements (her call): weekly = highlights/lowlights/patterns · mid-day check-in · anchor morning review to an existing habit.
 
 ## Pending Tasks (near-term, actionable)
-| Task | Status | Source | Next action |
+Each row must carry enough of HER specifics — exact complaint, which page/feature, her frustration in her own words — that no assistant has to re-ask. If a row is still vague, the NEXT job is to get those specifics ONCE and write them here, then never ask again.
+
+| Task | Status | Source | Next action (with her specifics) |
 |------|--------|--------|-------------|
-| Google Ads rep call | ✅ DONE | 2026-07-07 planning | meeting happened last week — closed, not pending |
-| ADS videos — vertical-format redo (Q2 this week) | IN FOCUS | 2026-07-13 | work+personal; redo everything vertical. See 6 sub-steps. Today = steps 1–2. Never drop from focus. |
-| RE-quiz fixes prompt | READY TO PASTE | 2026-07-08 | give the "preserve-first" prompt to her RE-study chat |
-| Study for RE exam (daily) | ONGOING | 2026-07-07 | a focused study block every day; track in daily log |
-| Daily 5-line log habit | ONGOING | her system | write 5 lines by hand each day → syncs to Drive |
-| Daily manifestation (Manifestation Module) | ONGOING | 2026-07-13 | agent runs the 4-step module each morning before planning; logs Step 3 verbatim |
-| Focus Partner Google Sheet mirror | ✅ IMPLEMENTED | 2026-07-13 | `_Focus Partner — STATE` in Drive folder `Productivity & Routine / Focus Partner`; keep as a lightweight mirror, Markdown remains canonical |
-| Morning command center / pop-up system | IN PROGRESS | 2026-07-13 | 10:00 calendar event updated; next build Mac startup/Login Item or Shortcut to auto-open Focus Partner Sheet/journal |
-| Subscriptions/spending visibility | PRIORITY | 2026-07-13 | create/connect dashboard view for subscriptions, spending, what to cut, and daily money awareness |
-| Skill development / hobbies | PARKED | 2026-07-13 | time awareness + language interests (Chinese, Spanish, Japanese, French, Italian); later pick ONE tiny experiment |
-| RE quiz "teach" rollout | HANDED OFF | her request | runs in her RE-study chat via the paste-in prompt |
-| Website for her mom | CHECK WITH HER | 2026-07-07 | ask if mom still wants it before any work |
-| Finance Dashboard inputs | NEEDS HER DATA | 2026-07-13 mined | card facts + cash + investments + receivables + Mike rule so Codex can finish it |
-| Investments inventory | NEEDS HER DATA | 2026-07-13 mined | one-page map of Robinhood + 401k + crypto + Brazil/US before any reset |
-| Ads tracking broke | TO DIAGNOSE | 2026-07-13 mined | check ads-running vs tracking-feed; 0-row days June 1 & 8 |
-| Content pipeline broke (~May 28) | TO DIAGNOSE | 2026-07-13 mined | find where it stops (credits/NB2); test one piece end-to-end |
-| ROOM_VISION scope | CONFIRM WITH HER | 2026-07-13 mined | open the Drive build plan; confirm what it is + alive/dead |
-| Confirm timezone | ✅ DONE | — | Eastern (Miami), confirmed 2026-07-13 |
-| Read + seed first entry (Jun 29) | NOT DONE | — | read PDF, summarize into Entry Index |
+| Google Ads rep call | done | 2026-07-07 | Meeting happened last week; closed. Don't re-plan or re-ask. |
+| ADS videos - vertical redo (Q2 this week) | IN FOCUS | 2026-07-13 | Work+personal; on hold ONLY because it lacks the vertical format - redo everything vertical. 6 sub-steps in Planning Frame; today = steps 1-2 (gather clips + lock 9:16 spec). Never drop from focus. |
+| RE-quiz fixes prompt | READY TO PASTE | 2026-07-08 | Hand her the "preserve-first" prompt for her RE-study chat: audit->checklist first, keep everything, add math/why teaching, reorder by exam frequency, no back-to-back math. |
+| Study for RE exam (daily) | ONGOING | 2026-07-07 | One focused block every day (non-negotiable); can stack on the treadmill; track in the daily log. Flag any missed day first. |
+| Daily 5-line log | ONGOING | her system | 5 lines by hand each day -> scan drops in the Drive journal folder. On a bad day one line counts. |
+| Daily manifestation (Module) | ONGOING | 2026-07-13 | Run the 4-step Manifestation Module each morning BEFORE planning; log Step 3 verbatim. |
+| Focus Partner Google Sheet mirror | IMPLEMENTED (Codex) | 2026-07-13 | `_Focus Partner - STATE` in Productivity & Routine / Focus Partner. Lightweight human mirror; Markdown canonical. Note: does NOT auto-sync - update it when a tool can write Sheets, else mark stale. |
+| Morning command center / pop-up system | IN PROGRESS (Codex) | 2026-07-13 | She wants journal + Today's 3 + RE study + money/subscriptions to auto-pop like Alexa. 10:00 calendar event updated; next: Mac Login Item/Shortcut to auto-open the sheet/journal at work start. |
+| Subscriptions/spending visibility | PRIORITY (Codex) | 2026-07-13 | Build/connect a dashboard view of subscriptions + spending + what to cut, for daily money awareness (ties to Finance Dashboard). |
+| Skill development / hobbies | PARKED | 2026-07-13 | Time awareness + languages (Chinese, Spanish, Japanese, French, Italian) - too many; later pick ONE for a 7-day tiny experiment. Keep visible, don't chase now. |
+| RE quiz "teach" rollout | HANDED OFF | her request | Runs in her RE-study chat via the paste-in prompt (261 Qs; re-pull HEAD before each commit). |
+| Website for her mom | CHECK WITH HER | 2026-07-07 | FIRST text mom: does she still want it? Only then scope. Separate from the OPC business site. |
+| OPC business website - HER specific complaints | NEEDS HER SPECIFICS | 2026-07-13 | "Update website" is too vague (her words). Get her EXACT list ONCE: which pages, what's broken, what she wants changed - in her words. Record each complaint here and act page-by-page. Never collapse to "update website". |
+| Finance Dashboard inputs | NEEDS HER DATA | 2026-07-13 mined | She provides: per-card facts (APR/limit/min/due/statement) for Discover, Chase, BoA, Citi, Affirm; Cash; Investments; personal receivables; the Owner/Mike rule -> Codex fills the sheet. |
+| Investments inventory | NEEDS HER DATA | 2026-07-13 mined | One-page map of Robinhood + Fidelity 401k + crypto + Brazil/US ("5 yrs no growth") BEFORE any reset. |
+| Ads tracking broke | TO DIAGNOSE | 2026-07-13 mined | 0-lead days (June 1 & 8): check ads running vs the tracking feed writing rows; name which broke, then hand the fix off. |
+| Content pipeline broke (~May 28) | TO DIAGNOSE | 2026-07-13 mined | Auto-content DOWN; find where it stops (credits/NB2), test one piece end-to-end. |
+| ROOM_VISION scope | CONFIRM WITH HER | 2026-07-13 mined | Open the Drive build plan; her guess = customer room/design visualizer for the website; confirm what it is + alive/dead. |
+| Confirm timezone | done | - | Eastern (Miami), confirmed 2026-07-13. |
+| Read + seed first entry (Jun 29) | NOT DONE | - | Read the Jun 29 PDF, summarize into the Entry Index. |
 
 ## Patterns
 - **Monday plan-paralysis (her #1, told me 2026-07-13):** every Monday she plans and plans and doesn't DO; very slow start. Example: 2026-07-13 spent ~3 hrs (till 12:23pm) on a 15-min laptop/email setup and got nothing done. → keep Monday planning <5 min; force ONE tiny start.
