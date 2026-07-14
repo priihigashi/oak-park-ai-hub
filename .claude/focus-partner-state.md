@@ -1,6 +1,6 @@
 # Focus Partner — STATE (canonical local copy)
 
-**Last updated: 2026-07-14 (rev8)** — bump the date AND increment (revN) by 1 on every push (never reuse a rev); "update" compares by date, then by rev. rev8 = exit/handoff: pushed & byte-verified rev7, synced the Sheet (Today -> 2026-07-14 + 3 Google Ads/GA4 rows in Pending), pulled local ~/.claude to match GitHub, and wrote the HANDOFF_2026-07-14 doc. rev7 = fixed the false "can't write Sheets" rule (the googlesheets Composio connection as priscila@ is LIVE; the Sheet is read+writable from here) + Focus now keeps the Sheet mirror synced; captured the Google Ads/GA4 conversion-cleanup task from her ads chat. rev6 = added the Boletim Diario briefing as a 4th tab in the morning launcher + shipped Mac (scripts/focus-morning.command) & iPhone (Shortcuts) triggers. rev5 = merged Codex 2026-07-13/14 Sheet + calendar work into GitHub rev4: Library Index, 10:15 finance/stocks popup, Robinhood/Roth/Fidelity specifics, swing-trading/options safety, and manifestation photo-board project. rev4 = bulletproof multi-PC sync: re-pull HEAD before every commit + monotonic rev counter. rev3 = built the Morning command-center launcher (Windows) + weekly manifestation review + de-cluttered repeated Sheet-mirror notes. rev2 = enriched Pending Tasks + capture-specifics rule.
+**Last updated: 2026-07-14 (rev9)** — bump the date AND increment (revN) by 1 on every push (never reuse a rev); "update" compares by date, then by rev. rev9 = captured the DECIDED AI-receptionist build: **Goodcall** (Starter ~$59/mo) full 7-step setup + paste-ready call script + number-wiring fix + auto-log to her Leads Tracker; added the automations health-check + the Phase 4 Google Ads conversion de-dupe (244-vs-20). rev8 = exit/handoff: pushed & byte-verified rev7, synced the Sheet (Today -> 2026-07-14 + 3 Google Ads/GA4 rows in Pending), pulled local ~/.claude to match GitHub, and wrote the HANDOFF_2026-07-14 doc. rev7 = fixed the false "can't write Sheets" rule (the googlesheets Composio connection as priscila@ is LIVE; the Sheet is read+writable from here) + Focus now keeps the Sheet mirror synced; captured the Google Ads/GA4 conversion-cleanup task from her ads chat. rev6 = added the Boletim Diario briefing as a 4th tab in the morning launcher + shipped Mac (scripts/focus-morning.command) & iPhone (Shortcuts) triggers. rev5 = merged Codex 2026-07-13/14 Sheet + calendar work into GitHub rev4: Library Index, 10:15 finance/stocks popup, Robinhood/Roth/Fidelity specifics, swing-trading/options safety, and manifestation photo-board project. rev4 = bulletproof multi-PC sync: re-pull HEAD before every commit + monotonic rev counter. rev3 = built the Morning command-center launcher (Windows) + weekly manifestation review + de-cluttered repeated Sheet-mirror notes. rev2 = enriched Pending Tasks + capture-specifics rule.
 
 Canonical state lives in this Markdown file on GitHub. (A human-readable Google Sheet mirror also exists — see the **Google Sheet mirror** line just below for its URL/IDs.)
 
@@ -34,6 +34,9 @@ Use this as the map before searching randomly. Add new resources here when they 
 | Oak Park | Sheet | OPC Website — Build Tracker | https://docs.google.com/spreadsheets/d/1q0_v9qYDXKURo59xoS-WISFdHbZWIdc9ukdCDbdDaUQ | Reference | Oak Park Construction website build tracker. |
 | Oak Park | Doc | ROOM_VISION — Build Plan & Handoff | https://docs.google.com/document/d/1NjbadQhzsCA6NmQWq9RheUcEyxQWsGRzWFCeMY9PSvg | Confirm alive/dead | Customer-facing room/space visualization plan for website. |
 | Oak Park | Sheet | Drive Map — OPC | https://docs.google.com/spreadsheets/d/1_bl6jNHT8Jl7h8S9uoiGVLOl5fxVkpoImvwfUliE0Pk | Index | OPC Drive map/index. |
+| Oak Park / Ads | Folder | MARKETING ADS (shared Drive) | (get link/ID) | Active; she owns, full access | Ad project files incl. Goodcall Setup doc + Leads Tracker. Add Mike explicitly if she asks. |
+| Oak Park / Ads | Sheet | Leads Tracker (live) | (get link/ID) | Shared editor; Mike's account owns it | Every Goodcall call auto-logs here: Name · Phone · City/Area · What they need. |
+| Oak Park / Ads | Doc | Ads Master Plan (AI-receptionist §5) | (get link/ID) | Reference | Full Goodcall vs Rosie comparison; Goodcall recommended (auto-logs + screens job-seekers). |
 | Content | Sheet | Flow Plans Tracker — Master Index | https://docs.google.com/spreadsheets/d/1fggy918FgPfnMQ-dzGQk2zx9uhi2_-uWXMKGW4MA47k | Existing index | Existing master index for flow plans. |
 | Content | Sheet | Project tracking - Blog and Social | https://docs.google.com/spreadsheets/d/1CrVHlIe8u1bo_1W0iU0O3WKv2JUrm0-UO76y4p5NC_c | Active/reference | Blog/social content tracking. |
 | Content | Sheet | Pipeline Fix Master Checklist — Done Current Next | https://docs.google.com/spreadsheets/d/1yh9C7KU9OlqCdHNDI9mbZ6ldqLA3bAR3uENXUh37bkQ | Reference | Content pipeline fix checklist. |
@@ -105,13 +108,15 @@ Captured 2026-07-07 from her brain-dump. Nothing here is scheduled yet — it's 
 **🏗️ Oak Park Construction (business)**
 - ~~Google Ads rep call — book + do~~ ✅ **DONE** (had the meeting, ~week of 2026-07-06). No longer pending.
 - **ADS videos — redo in VERTICAL format** (work + personal — keep in focus, never lose it). Currently on HOLD only because it's missing the vertical format; the plan is to redo everything in vertical. *(promoted to This Week's 3, week of 2026-07-13; broken into 6 sub-steps.)*
-- AI receptionist decision (Goodcall vs Rosie) — stop missed calls (~$1,400/qtr leak).
+- **AI receptionist — DECIDED: Goodcall** (Starter ~$59/mo) to stop missed calls (~$1,400/qtr leak). Recommended in the Ads Master Plan §5 (auto-logs every call to her Leads Tracker + screens job-seekers). Full 7-step setup + paste-ready script + number-wiring fix are in Task Breakdowns below. *(from her marketing/ads chat, 2026-07-14.)*
 - Phone-number approach — decide.
-- Verify the daily lead-follow-up email actually landed.
+- Verify the daily lead-follow-up email actually landed — confirm the "Lead follow-up routine is LIVE" test email hit her inbox.
 - Oak Park Construction **BUSINESS website** (opc-website-v1, live) — revisit / improve. *(NOT her mom's site — different project; her mom's is under Personal.)*
 - Oak Park Construction **app** — exists; husband didn't adopt it; revisit later.
 - **Content / posting FOR construction** (social).
 - **Ads tracking / dashboard** — some days logged ZERO leads (e.g. June 1 & 8): tracking broke, or ads paused? Diagnose. *(separate from the ADS videos creative above.)*
+- **Automations health-check** — a week on, confirm the dashboard actually refreshed AND the daily follow-up routine has been running clean. *(Focus can do this without her; from ads chat 2026-07-14.)*
+- **Phase 4 — Google Ads conversion de-dupe (244-vs-20)** — clean up the messy/duplicate conversion actions so reporting is trustworthy. *(relates to the GA4 cleanup below; from ads chat 2026-07-14.)*
 - **Google Ads / GA4 conversion cleanup** — fix the bidding signal so ad money steers to REAL leads (calls + form submits), then remove a duplicate GA4 property + a stray GTM tag. *(from her ads chat, 2026-07-14; broken into 3 steps below.)*
 - **ROOM_VISION** — a customer-facing tool for the website (her guess: lets website customers **visualize a room/space/design**). Build plan exists in her Drive. CONFIRM exact scope + whether it's still alive.
 
@@ -167,13 +172,20 @@ Each task cut into tiny, finish-able steps. She should only ever look at the NEX
 
 **🏗️ ADS videos → vertical redo** — see the 6 sub-steps in the Planning Frame (this week's active item).
 
-**🏗️ AI receptionist (Goodcall vs Rosie)**
-1. [ ] List your must-haves (answer calls, take a message, hours, budget)
-2. [ ] 15 min: skim Goodcall — features + price
-3. [ ] 15 min: skim Rosie — features + price
-4. [ ] Pick one (or ask the agent for a one-page compare on a plate)
-5. [ ] Sign up + set the greeting / call-forwarding
-6. [ ] Test it — call your own number
+**🎧 AI receptionist — Goodcall setup (DECIDED; Starter ~$59/mo)** — she signs up (outside service, needs her card); Focus preps every paste and walks it ONE step at a time. Never a blank page. The 7 steps (who does each):
+1. [ ] **Sign up** at goodcall.com → Start free trial → pick **Starter (~$59/mo)**. *(She does it; she says "I'm in" when the account exists.)*
+2. [ ] **Enter business info** — name, services, service area, hours. *(She types; Focus gives the exact text.)*
+3. [ ] **Paste the AI script** — greeting + job-seeker screen + what to collect. *(Focus gives it → she pastes. Script saved below.)*
+4. [ ] **Set the call flow** — ring **Mike first** → AI answers if no pickup / after-hours. *(She sets it; Focus guides.)*
+5. [ ] **Connect Goodcall → Google Sheets (Leads Tracker)** so every call auto-logs. *(Together.)*
+6. [ ] **Number wiring** — use **Goodcall's number as the permanent ad / GBP number** (the clean fix for the "saved wrong number" problem). *(She decides; Focus advises.)*
+7. [ ] **Test call + confirm it logs** to the Leads Tracker sheet. *(Together.)*
+   - **Paste-ready Step 3 script (tailored to her):**
+     - *Greeting:* "Thanks for calling Oak Park Construction! I can help get your project started. First — are you looking for a quote on a project, or are you calling about something else?"
+     - *If they want a quote (real customer):* collect → name · best callback number · project type (stucco, remodel, new construction, concrete/foundation, addition) · city · timeline. Then: "Perfect — Mike will call you right back today. Anything else you'd like him to know?"
+     - *If they mention a job / working / hiring (job-seeker):* "Got it — we handle hiring separately, not through this line, so I won't take up your time here. Thanks for your interest!" → log as **'Not a lead — job seeker'**.
+     - *Always capture:* Name · Phone · City/Area · What they need — these map 1:1 to the Leads Tracker columns.
+   - Optional: save this as a **"Goodcall Setup"** doc in the MARKETING ADS project folder so it's there while she signs up.
 
 **🏗️ Phone-number decision**
 1. [ ] Write the options (keep current / new tracking number / port)
@@ -373,6 +385,7 @@ Each task cut into tiny, finish-able steps. She should only ever look at the NEX
 | 2026-07-14 | Focus Partner state + agent (rev6) | Coordination rule CAUGHT Codex's rev5 (Library Index + 10:15 finance popup + manifestation photo-board) before I pushed — merged onto it, nothing lost. | Added **Boletim Diario** as a 4th tab in the morning launcher; shipped **Mac** (`scripts/focus-morning.command`) + **iPhone** (Shortcuts) triggers; updated `scripts/MORNING-COMMAND-CENTER.md`; bumped to rev6; byte-verified. |
 | 2026-07-14 | audit (code + Sheet); her ads-chat action plan | Code healthy (both rev6, byte-verified). BUG: docs said "can't write Sheets" but the googlesheets Composio connection (priscila@) is LIVE + the Sheet is read/writable; Today tab was a day stale. | Fixed the Sheets-write rule + added "keep the Sheet synced" rule; captured the **Google Ads/GA4 conversion cleanup** (3 steps) into Backlog + breakdown + Pending; refreshed the Sheet; bumped to rev7; byte-verified. |
 | 2026-07-14 | exit/handoff | Pushed rev7 (commit 1771cbee) + byte-verified: state identical, agent differs only by the intended "mirror to Sheet" clause; all Codex work intact. Synced the Sheet: Today -> 2026-07-14, +3 Google Ads/GA4 rows in Pending!A28:D30. Pulled local ~/.claude to rev7. | Bumped to rev8; wrote HANDOFF_2026-07-14 doc in Productivity & Routine. |
+| 2026-07-14 | her marketing/ads chat (Goodcall build) | AI-receptionist decision is made = **Goodcall** (Starter ~$59/mo), recommended in Ads Master Plan §5. Got the full 7-step setup, the paste-ready call script (greeting + job-seeker screen + capture fields mapping to the Leads Tracker), and the number-wiring fix. Also: confirm the "Lead follow-up routine is LIVE" test email; a can-do-now automations health-check; Phase 4 Google Ads conversion de-dupe (244-vs-20). | Rewrote the AI-receptionist breakdown into the Goodcall 7-step build + script; added health-check + Phase 4 backlog lines; added 3 Library Index rows (MARKETING ADS folder, Leads Tracker, Ads Master Plan); +4 Pending rows; bumped to rev9. |
 
 Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested refinements (her call): weekly = highlights/lowlights/patterns · mid-day check-in · anchor morning review to an existing habit.
 
@@ -401,6 +414,10 @@ Ideas doc: `Focus Partner — Research & Ideas` in journal folder. Suggested ref
 | Swing trading/options idea | PARKED UNTIL RULES | 2026-07-13 Priscila | build watchlist, alerts, entry/exit/risk rules before considering trades; options/calls are high-risk |
 | Manifestation photo collage board | PENDING | 2026-07-13 Priscila | choose photos + location, print via Walmart or similar, place where she sees it in the morning |
 | Ads tracking broke | TO DIAGNOSE | 2026-07-13 mined | check ads-running vs tracking-feed; 0-row days June 1 & 8 |
+| AI receptionist — Goodcall setup | DECIDED — her move | 2026-07-14 ads chat | She signs up (Starter ~$59/mo) + says "I'm in"; Focus walks steps 2-7 with the script ready. See breakdown. |
+| Lead follow-up test email | CONFIRM | 2026-07-14 ads chat | check the "Lead follow-up routine is LIVE" test email landed in her inbox |
+| Automations health-check | FOCUS CAN DO NOW | 2026-07-14 ads chat | confirm the dashboard actually refreshed + the daily follow-up routine ran clean (a week passed) |
+| Google Ads Phase 4 conversion de-dupe (244-vs-20) | FOCUS CAN DO NOW | 2026-07-14 ads chat | de-dupe the messy/duplicate conversion actions so reporting is trustworthy |
 | Google Ads: confirm duplicate GA4 property | NEEDS HER | 2026-07-14 ads chat | authorize a GA connection (fast) OR check GA4 > Admin > oakpark property > Property ID = 506565672 (empty dup) vs 488744278 (good, keep) |
 | Google Ads: fix bidding signals | DO WITH HER | 2026-07-14 ads chat | Calls=Primary; GA4 generate_lead (488744278)=Primary; demote 3 Contact page-loads + Request quote to Secondary. LIVE money — click-by-click, not blind API |
 | Google Ads/GTM cleanup | AFTER STEPS 1-2 | 2026-07-14 ads chat | delete empty GA4 property 506565672 + stray GTM tag G-CNC2QMMSG8 |
