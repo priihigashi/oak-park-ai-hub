@@ -135,6 +135,9 @@ print("=" * 72)
 
 def classify_inbox(query, label, name):
     """Apply label to inbox messages. Don't archive — stays in inbox until she reads."""
+    if not query:
+        print(f"  [{name}] skipped; env var not configured")
+        return 0
     threads = search_threads(f'in:inbox {query}')
     msg_ids = []
     for t in threads:
@@ -145,20 +148,23 @@ def classify_inbox(query, label, name):
     print(f"  [{name}] tagged {len(msg_ids)} msgs (kept in inbox)")
     return len(msg_ids)
 
-# Mom (prihigashi.m) — Personal
-classify_inbox('from:prihigashi.m@gmail.com', L_PERSONAL, 'Mom (prihigashi.m)')
-# Sister (Alexandra)
-classify_inbox('from:alexandrahigashi2101@gmail.com', L_PERSONAL, 'Sister (Alexandra)')
+def from_env_email(env_name):
+    value = os.environ.get(env_name, "").strip()
+    return f"from:{value}" if value else ""
+
+
+# Personal senders — configured via GitHub Secrets / env vars, never hardcoded.
+classify_inbox(from_env_email("PRI_MOM_EMAIL"), L_PERSONAL, 'Mom')
+classify_inbox(from_env_email("PRI_SISTER_EMAIL"), L_PERSONAL, 'Sister')
 # Health insurance providers
 classify_inbox('from:(bcbsil.com OR eclinicalmail.com)', L_HEALTH, 'Health/Insurance')
 # Schools / kids stuff (school readiness, swim coupons, focus portal)
 classify_inbox('from:(focusmail.focus-sis.com OR SwimCoupon@broward.org) OR subject:("School Readiness" OR "Swim Coupon" OR "swim central")', L_KIDS, 'Kids/School')
-# McFolling Properties forwards (mostly kids/school content based on what we see)
-classify_inbox('from:mcfollingproperties@gmail.com subject:("School Readiness" OR "Swim" OR "School Readiness Application")', L_KIDS, 'McFolling fwd → kids')
-# Other McFolling forwards (Samsung receipt, business) → Mike work (he runs the property mgmt biz)
-classify_inbox('from:mcfollingproperties@gmail.com -subject:("School Readiness" OR "Swim")', L_MIKE_WORK, 'McFolling fwd → Mike work')
-# Michael directly
-classify_inbox('from:michael.mcfolling@gmail.com', L_MIKE_WORK, 'Michael direct')
+mcfolling_from = from_env_email("MCFOLLING_EMAIL")
+michael_from = from_env_email("PRI_MICHAEL_EMAIL")
+classify_inbox(f'{mcfolling_from} subject:("School Readiness" OR "Swim" OR "School Readiness Application")' if mcfolling_from else '', L_KIDS, 'McFolling fwd → kids')
+classify_inbox(f'{mcfolling_from} -subject:("School Readiness" OR "Swim")' if mcfolling_from else '', L_MIKE_WORK, 'McFolling fwd → Mike work')
+classify_inbox(michael_from, L_MIKE_WORK, 'Michael direct')
 
 # CMS Marketplace appeals — health/insurance
 classify_inbox('from:MarketplaceAppealsCenter@cms.hhs.gov', L_HEALTH, 'CMS Marketplace appeal')

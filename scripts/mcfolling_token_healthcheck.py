@@ -32,7 +32,7 @@ from google.auth.transport.requests import Request
 
 # (env var name, human label, required?)
 TOKENS = [
-    ("MCFOLLING_TOKEN", "McFolling (mcfollingproperties@gmail.com)", True),
+    ("MCFOLLING_TOKEN", "McFolling inbox", True),
     ("SHEETS_TOKEN", "Priscila/OPC + Google Ads dashboard", False),
 ]
 

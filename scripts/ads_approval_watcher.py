@@ -8,8 +8,8 @@ API Basic Access approval email. When found:
 
 Dedupe: if flag file already exists, exits silently.
 
-Email source: approval comes to mcfollingproperties@gmail.com, which must have
-a forward rule to priscila@oakpark-construction.com. See CLAUDE.md.
+Email source: approval comes to the MCC owner inbox configured by
+MCFOLLING_EMAIL / MCFOLLING_TOKEN. See private CLAUDE.md.
 """
 
 import os
@@ -94,16 +94,16 @@ def _creds_from_env(var_name: str) -> Credentials | None:
 def load_inboxes() -> list[tuple[str, Credentials]]:
     """Return [(label, creds), ...] for every inbox we have a token for.
 
-    priscila@oakpark-construction.com via SHEETS_TOKEN (for forwarded copies)
-    mcfollingproperties@gmail.com  via MCFOLLING_TOKEN (primary — MCC owner)
+    OPC inbox via SHEETS_TOKEN (for forwarded copies)
+    MCC owner inbox via MCFOLLING_TOKEN (primary)
     """
     inboxes = []
     priscila_creds = _creds_from_env("SHEETS_TOKEN")
     if priscila_creds:
-        inboxes.append(("priscila@oakpark-construction.com", priscila_creds))
+        inboxes.append((os.environ.get("PRI_OP_EMAIL", "OPC inbox"), priscila_creds))
     mcf_creds = _creds_from_env("MCFOLLING_TOKEN")
     if mcf_creds:
-        inboxes.append(("mcfollingproperties@gmail.com", mcf_creds))
+        inboxes.append((os.environ.get("MCFOLLING_EMAIL", "MCC owner inbox"), mcf_creds))
     if not inboxes:
         print("ERROR: Neither SHEETS_TOKEN nor MCFOLLING_TOKEN is set.", file=sys.stderr)
         sys.exit(1)

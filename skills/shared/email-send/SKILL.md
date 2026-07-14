@@ -55,7 +55,7 @@ with smtplib.SMTP_SSL('smtp.gmail.com', 465) as s:
 - Full working example: `~/.claude/scripts/eod_checker.py` (uses Gmail API build route, same pattern)
 
 ## McFolling inbox (Airbnb / Maya)
-- Account: mcfollingproperties@gmail.com
+- Account: configured by `MCFOLLING_EMAIL`
 - Local token: `~/ClaudeWorkspace/Credentials/mcfolling_token.json`
 - GitHub secret: `MCFOLLING_TOKEN`
 - Has `gmail.send` scope — use Gmail API directly for this inbox

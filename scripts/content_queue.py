@@ -213,7 +213,7 @@ Photos available:
 PRIVACY RULE — STRICTLY ENFORCE:
 - NEVER write a street address, house number, or specific address in any caption or hook
 - Use ONLY city names: Pompano Beach, Fort Lauderdale, Plantation, Miami, Broward County, South Florida
-- WRONG: "At 1270 Harbor Ct..." | RIGHT: "In Pompano Beach..."
+- WRONG: "At [street address]..." | RIGHT: "In Pompano Beach..."
 - WRONG: "This Harbor Ct project..." | RIGHT: "This Pompano Beach project..."
 - If the project name is a street address, refer to it only by city
 
