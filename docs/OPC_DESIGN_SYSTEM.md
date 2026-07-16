@@ -34,7 +34,7 @@ Registry: `docs/templates/template_registry.json` · catalog w/ good_for/bad_for
 | Template | Purpose | Good for |
 |---|---|---|
 | `opc_progress.html` (+ `opc_progress_media`) | **proof** | before/after, project showcase, field update — 3 variants: v1 dark / v2 cream / v3 lime-on-dark; has before/after split-panel component |
-| `opc_tip.html` | 5-slide Tip of the Week (FORMAT-010) | product/education tips |
+| `opc_tip.html` | 5-slide Tip of the Week (pipeline key `tip`; ⚠️ NOT registered in CONTENT_FORMATS — the registry's FORMAT-010 is a Brazil format; don't use FORMAT-010 for OPC tips until reconciled) | product/education tips |
 | `opc_base.html` | dark hero cover | covers |
 | `opc_statement.html` | quote/myth | contrarian statements |
 | `opc_four_card_grid.html` | X-vs-Y compare | comparisons |
@@ -44,7 +44,7 @@ Registry: `docs/templates/template_registry.json` · catalog w/ good_for/bad_for
 
 ## Slide structure spines
 - **Progress/Proof (before-after)**: cover → stage → done (use split-panel for before/after) → what's next → credits
-- **Tip (FORMAT-010)**: hook (<10 words, 1 of 5 hook types) → cost/stat (one big number) → teach/list (name the mistake explicitly) → apply (Mike's first-person voice) → sources + save-CTA
+- **Tip (pipeline key `tip`)**: hook (<10 words, 1 of 5 hook types) → cost/stat (one big number) → teach/list (name the mistake explicitly) → apply (Mike's first-person voice) → sources + save-CTA
 
 ## Copy rules
 Plain contractor voice (Mike's voice for tips) · no promises, no fake stats, no invented names/addresses/dates/crew · hook <10 words · caption 150-200 chars + hashtags (max 30).
@@ -75,4 +75,5 @@ Also: `PIPELINE_REGISTRY.md` (active templates map) · `skills/shared/template-c
 - Don't fabricate crew names, project IDs, street addresses, or dates to fill template sample fields.
 
 ## Changelog
+- 2026-07-16 (validation): fresh-session test PASSED — agent given only "make a tip carousel about rebar" self-loaded skill → design system → catalog → template → CONTENT_FORMATS → prior builds, produced on-brand prep, zero drift. Flags it raised: FORMAT-010 numbering conflict (fixed above), topic overlap with `v1_foundation-reinforcement...` (bump slug at build time).
 - 2026-07-16: created from live audit (repo templates + opc-website tokens + Drive folder mapping). First consumer: addition before/after post (3 variants rendered from opc_progress).
