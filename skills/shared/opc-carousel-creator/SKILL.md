@@ -12,7 +12,7 @@ description: Create an on-brand Oak Park Construction Instagram post/carousel (b
 1. `docs/OPC_DESIGN_SYSTEM.md` in `priihigashi/oak-park-ai-hub` (fetch via `~/bin/gh api` if repo not local) — tokens, fonts, layout rules, template list, folder routing
 2. `scripts/content_creator/opc_template_catalog.json` — pick the template by purpose/good_for (progress/proof → `opc_progress.html`; tips → `opc_tip.html`; never invent a layout)
 3. CONTENT_FORMATS Drive doc `1XqXSyJC_iHMTrmMxpM5ZR7S-WQxz19HhDJO1HomdncM` — check if a registered FORMAT applies
-4. The target Drive folder (Proof Posts `1R4p51rUyGSfgf5VMgFKjQVXl5A399_QI` / Carousel `16P2JN74JAAW3HKnmNqPGPrAq7N5jDNii`) — prior builds for version numbering (`vN_proof-<slug>`)
+4. The target Drive folder — in the **Marketing SHARED drive** (`0AIPzwsJD_qqzUk9PVA`) → Content → (Proof Posts `1R4p51rUyGSfgf5VMgFKjQVXl5A399_QI` / Carousel `16P2JN74JAAW3HKnmNqPGPrAq7N5jDNii` / Manual Posts `1NoWWdL9s9mIoevloioCceUKFnW6ncRFa`); never My Drive, always supportsAllDrives=true — prior builds for version numbering (`vN_proof-<slug>`)
 
 ## Workflow
 1. **Intake**: photos (which is before/after?) + one-line description. Category: Talking Head (→ video pipeline, not this skill) / Progress-Before-After / Product Tip.
