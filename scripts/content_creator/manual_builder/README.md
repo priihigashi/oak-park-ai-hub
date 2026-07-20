@@ -52,4 +52,10 @@ For quick OPC posts made in a chat (not the automated pipeline). Load the `/opc-
 
 ## Don't rebuild — call these
 - Skill `/opc-carousel-creator` (design-system-first) · reviewer `/opc-carousel-reviewer` · agent `opc-content-creator`.
-- Notes: keep the **font mix lean** (Anton + one support face; mono/serif sparingly). Make **surgical edits only** — change exactly what's asked.
+## Content rules (from Priscila — apply every OPC post)
+- **Surgical edits only** — change exactly what's asked, nothing adjacent.
+- **Lean font mix** — Anton + one support face; mono/serif sparingly.
+- **Final slide:** put the **service areas — "Broward · Palm Beach · Miami-Dade" — ABOVE the license line** (`LIC · CBC1263425`).
+- **Small changes = update the carousel slide only** (that's the reference). **No need to rebuild the whole reel every time** — the reel is heavy; only rebuild it when the change actually matters to the video.
+- Reel ships **silent** — she adds trending audio in-app (cinematic build-up vibe; look for the ↗ trending arrow).
+- Accuracy: never claim a stage is done when it isn't (e.g. "in progress" not "poured/formed").
