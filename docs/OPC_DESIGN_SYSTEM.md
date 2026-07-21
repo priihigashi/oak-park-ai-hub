@@ -69,11 +69,61 @@ HTML → PNG via **Playwright/headless Chromium** (`python3 -m playwright`, inst
 1. This doc  2. `opc_template_catalog.json` (pick template)  3. CONTENT_FORMATS Drive doc `1XqXSyJC_iHMTrmMxpM5ZR7S-WQxz19HhDJO1HomdncM` (format match)  4. Prior builds in the target Drive folder (version numbering)
 Also: `PIPELINE_REGISTRY.md` (active templates map) · `skills/shared/template-carousel/SKILL.md` · `IMAGE_QUALITY_RULES.md` (photo sourcing cascade; named-person face rule).
 
+## Before/After Proof Post — Full Build Guide (3 variants)
+
+Use this guide every time a real project proof post is needed. Requires a human to provide the source photos first.
+
+### Photo requirements
+- Minimum 4 project photos (before × 1–2, during × 1, after × 1–2) — or exactly 2 for a pure before/after cover with no stage slide
+- Source folder in Drive: `Proof Posts/vN_proof-<slug>/originals_used/`
+- Strip EXIF/GPS before upload: `PIL.Image.open(path).save(path)` (re-save = strip)
+- Portrait orientation required; landscape crops must be re-cropped to 4:5 before use
+
+### Slide structure for proof posts (5-slide spine)
+1. **Cover** — hook headline (<10 words), hero after-photo full-bleed
+2. **Stage / challenge** — what the job was, one key stat or scope detail
+3. **Done** — before/after split-panel (`opc_progress.html` split-panel component) — most impactful slide
+4. **What's next / CTA** — short copy + save prompt
+5. **Credits** — `@oakparkconstruction · LIC # CBC1263425`
+
+### 3 mandatory variants (render all 3, Priscila picks one)
+| Variant | Template call | Background | Accent | When to use |
+|---|---|---|---|---|
+| v1 dark | `opc_progress.html?variant=dark` | `#0A0A0A` obsidian | lime `#CBCC10` brackets + numbers | dramatic interiors, night shots, high-contrast projects |
+| v2 cream | `opc_progress.html?variant=cream` | `#F0EBE3` cream | obsidian type + lime accent | bright exteriors, pool/patio, daytime light |
+| v3 lime-on-dark | `opc_progress.html?variant=lime` | `#0A0A0A` + large lime headline block | cream body type | bold statement, stucco/concrete color work |
+
+### Rendering steps (deterministic only — no AI image generation)
+1. Confirm source photos are in `originals_used/` subfolder and EXIF-stripped
+2. Run `export_slides.js` via GitHub Actions (`workflow_dispatch`) or local Playwright:
+   `node export_slides.js --template opc_progress.html --variant dark,cream,lime --out vN_proof-<slug>/png/`
+3. Output PNGs go to Drive `Proof Posts/vN_proof-<slug>/png/`
+4. DO NOT share/schedule any PNG without Priscila visual review first
+5. Enhanced edits (if any): `enhanced/` subfolder; originals stay in `png/`
+
+### Naming convention
+`proof-<project-slug>-v<N>-<variant>.png` — e.g. `proof-stucco-miami-v1-dark.png`
+
+### After review
+- Approved variant → move to `Manual Posts/` or schedule via Buffer
+- Caption: 150–200 chars + up to 30 hashtags; Mike's first-person voice; no invented details
+
+## Agent + skill references
+- Claude agent definition: `claude-config/agents/opc-content-creator.md` (copy to `~/.claude/agents/` to activate)
+- OPC carousel creator skill: `skills/shared/opc-carousel-creator/`
+- OPC carousel reviewer skill: `skills/shared/opc-carousel-reviewer/`
+- Codex awareness: `AGENTS.md` in repo root (Codex reads this at every session start)
+
 ## Never do this again (real failures)
 - **2026-07-16 navy/orange incident**: a session invented a navy `#102A43` / orange `#E87722` "brand" from nothing instead of reading this system. Rejected on sight. If you don't know the brand — STOP and read this doc; never improvise colors.
 - Don't ship dashed "PHOTO" placeholder slots in a real post — fill every image slot or remove the slide.
 - Don't fabricate crew names, project IDs, street addresses, or dates to fill template sample fields.
+- **Before any 3-variant render**: confirm real source photos exist in `originals_used/` — never ship a render with placeholder images as a deliverable for Priscila to review.
+- **A fresh session must load this doc first** — do not skip directly to rendering or template editing without reading the brand tokens and template list above.
+- **Do not publish/upload without Priscila approval** — even after a technically correct render, visual review is required. Render → share for review → approval → post.
+- **Do not use FORMAT-010 for OPC tips** — FORMAT-010 is a Brazil niche format. OPC tips use `opc_tip.html` with the `tip` pipeline key; check CONTENT_FORMATS before assigning any FORMAT-ID to OPC content.
 
 ## Changelog
+- 2026-07-21 (daily-advancer): added Before/After Proof Post full build guide (photo requirements, 3-variant table, render steps, naming convention, after-review flow), agent/skill references, and 4 new bad-output blockers based on 2026-07-17 audit flags.
 - 2026-07-16 (validation): fresh-session test PASSED — agent given only "make a tip carousel about rebar" self-loaded skill → design system → catalog → template → CONTENT_FORMATS → prior builds, produced on-brand prep, zero drift. Flags it raised: FORMAT-010 numbering conflict (fixed above), topic overlap with `v1_foundation-reinforcement...` (bump slug at build time).
 - 2026-07-16: created from live audit (repo templates + opc-website tokens + Drive folder mapping). First consumer: addition before/after post (3 variants rendered from opc_progress).
