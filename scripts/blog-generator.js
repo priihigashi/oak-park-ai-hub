@@ -554,6 +554,7 @@ async function uploadImageToWordPress(imageInfo, filename = 'featured-image.jpg'
     body: buffer,
   });
   if (!uploadRes.ok) { console.log('Image upload failed, skipping.'); return null; }
+  await assertJsonResponse(uploadRes, `POST /wp-json/wp/v2/media`);
   const media = await uploadRes.json();
   console.log(`Image uploaded: ${filename} → media ID ${media.id}`);
   return { id: media.id, url: media.source_url, alt: imageInfo.alt };
@@ -578,6 +579,22 @@ async function resolveInlineImages(html) {
   return result;
 }
 
+// ─── WordPress content-type guard ─────────────────────────────────────────────
+// Throws a descriptive error when WP returns HTML (wrong URL, redirect, expired
+// app password) instead of the cryptic SyntaxError from .json().
+async function assertJsonResponse(response, context) {
+  const ct = response.headers.get('content-type') || '';
+  if (ct.includes('text/html')) {
+    const preview = (await response.text()).slice(0, 300).replace(/\s+/g, ' ');
+    throw new Error(
+      `WordPress returned HTML instead of JSON at ${context}.\n` +
+      `  WP_URL="${WP_URL}" | WP_USERNAME="${WP_USERNAME}" | app-password set=${!!WP_APP_PASSWORD}\n` +
+      `  Common causes: wrong WP_URL, expired app password, 301 redirect, maintenance mode.\n` +
+      `  HTML preview: ${preview}`
+    );
+  }
+}
+
 // ─── Step 5: Post to WordPress as Draft ──────────────────────────────────────
 async function postToWordPress(post, featuredMediaId, wpCategoryId, wpStatus = 'draft') {
   console.log(`Posting to WordPress as ${wpStatus}...`);
@@ -596,6 +613,7 @@ async function postToWordPress(post, featuredMediaId, wpCategoryId, wpStatus = '
     body: JSON.stringify(body),
   });
   if (!response.ok) throw new Error(`WordPress API error ${response.status}: ${await response.text()}`);
+  await assertJsonResponse(response, `POST /wp-json/wp/v2/posts`);
   const result = await response.json();
   console.log(`Draft created! ID: ${result.id}`);
   return {
