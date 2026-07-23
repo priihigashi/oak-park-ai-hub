@@ -1,0 +1,262 @@
+# pipeline-control/pipelines.yaml
+# Registry of ALL workflows that call paid LLM APIs (Anthropic + OpenAI).
+#
+# Created: 2026-07-23 by Daily Advancer (automated) per EMAIL_OPS Addendum v7
+# Source doc: Drive 1jCYyvRjaPa5O_PxmeE9_k5pmlGdyBKHTT8SKrVjrlhU
+# Last updated: 2026-07-23
+#
+# PURPOSE — authoritative source for:
+#   - Inbox Operator: NEVER enable paused workflows; verify dispatch chains; check budgets first
+#   - Claude/Codex sessions: check here before triggering any workflow
+#   - Priscila: reference for Phase 0 remaining actions + re-enable order
+#
+# HOW TO PAUSE A WORKFLOW (Priscila only):
+#   gh workflow disable <workflow-filename.yml> --repo priihigashi/oak-park-ai-hub
+# HOW TO RE-ENABLE:
+#   gh workflow enable <workflow-filename.yml> --repo priihigashi/oak-park-ai-hub
+
+meta:
+  last_updated: "2026-07-23"
+  version: "1.0"
+  wp0_completed: "2026-07-23 — cron dedup + 4AM dispatch gate (see wp0_status below)"
+  wp0_remaining: "pause 5 workflows + add budgets + kill switch (Priscila-only actions)"
+  add_credits: false  # DO NOT top up until WP-3 complete — Addendum v7
+
+# ============================================================
+# TIER 1 — HIGH COST: Sonnet/Opus, frequent runs
+# These are the primary credit consumers.
+# ============================================================
+pipelines:
+
+  - id: capture_pipeline
+    workflow: .github/workflows/capture_pipeline.yml
+    triggered_by:
+      - "capture_queue.yml (scheduled — 1x/day after WP-0)"
+      - "scheduled_capture_poll.yml (scheduled — 2x/day after WP-0)"
+      - "manual workflow_dispatch"
+    description: >
+      Main capture pipeline. Downloads video/article, transcribes, builds content brief.
+      Not on a cron itself — dispatched by the two queue workflows below.
+    model_primary: "claude-sonnet-4-6 (carousel_builder.py:817)"
+    model_fallback: "claude-haiku-4-5-20251001 → OpenAI cascade (llm_router.py)"
+    llm_calls_per_run: "2–5 Sonnet calls per URL captured"
+    daily_runs_pre_wp0: 8  # 4 pairs via 4 crons confirmed Jul 23
+    daily_runs_post_wp0: 3  # 2 from scheduled_capture_poll + 1 from capture_queue
+    paused: false
+    wp0_note: "Schedule reduced; daily cap enforcement is config (max_urls=2/run) not hard code."
+
+  - id: capture_queue
+    workflow: .github/workflows/capture_queue.yml
+    schedule:
+      cron: "0 11 * * *"  # 6 AM EDT / 7 AM EST
+      wp0_change: "WAS 2 crons (DST pair 11+12 UTC, both fired daily). NOW 1 cron. Fixed 2026-07-23 at lines 15-18."
+    description: "Processes capture queue — dispatches capture_pipeline per pending URL (default max 2/run)"
+    model_primary: "(via capture_pipeline)"
+    dispatch_chain: capture_pipeline
+    paused: false
+    wp0_status: FIXED
+
+  - id: scheduled_capture_poll
+    workflow: .github/workflows/scheduled_capture_poll.yml
+    schedule:
+      crons:
+        - "0 12 * * *"  # 8 AM EDT / 9 AM EST
+        - "0 17 * * *"  # 1 PM EDT / 2 PM EST
+      wp0_change: "WAS 4 crons (2 DST pairs: 12/13+17/18 UTC, all fired daily). NOW 2. Fixed 2026-07-23 at lines 5-10."
+    description: "Polls capture queue and dispatches capture_pipeline for pending items"
+    model_primary: "(via capture_pipeline)"
+    dispatch_chain: capture_pipeline
+    paused: false
+    wp0_status: FIXED
+
+  - id: photo_catalog
+    workflow: .github/workflows/photo-catalog.yml
+    schedule:
+      cron: "35 23 * * *"  # 7:35 PM ET daily
+    description: "Daily scan of OPC Drive photos — Opus vision to label/catalog new photos"
+    script: scripts/photo_catalog_cloud.py
+    model_primary: "claude-opus-4-6 (photo_catalog_cloud.py:201) — EXPENSIVE"
+    model_fallback: "claude-haiku-4-5-20251001 (photo_catalog_cloud.py:334)"
+    llm_calls_per_run: "1 Opus vision call per NEW photo in Drive"
+    paused: false
+    wp0_status: ACTIVE_RECOMMENDED_PAUSE
+    only_you_action: "gh workflow disable photo-catalog.yml"
+
+  - id: higashi_photo_catalog
+    workflow: .github/workflows/higashi_photo_catalog.yml
+    schedule:
+      cron: "15 9 * * *"  # 5:15 AM ET daily
+    description: "Daily scan of Higashi Drive photos — Haiku vision, up to 100 photos/run"
+    script: scripts/higashi_photo_catalog_cloud.py
+    model_primary: "claude-haiku-4-5-20251001 (higashi_photo_catalog_cloud.py:207)"
+    llm_calls_per_run: "up to 100 Haiku vision calls per run"
+    paused: false
+    wp0_status: ACTIVE_RECOMMENDED_PAUSE
+    only_you_action: "gh workflow disable higashi_photo_catalog.yml"
+
+  - id: research
+    workflow: .github/workflows/research.yml
+    schedule:
+      cron: "15 11 */2 * *"  # 7:15 AM ET every 2 days
+    description: "Content research — YouTube/web ideas feed for blog + social posts"
+    script: scripts/research.js
+    model_primary: "claude-sonnet-4-5 (research.js:219)"
+    model_fallback: "gpt-4o-mini (research.js:279)"
+    paused: false
+    wp0_status: ACTIVE_RECOMMENDED_PAUSE
+    only_you_action: "gh workflow disable research.yml"
+
+  - id: fill_missing
+    workflow: .github/workflows/fill-missing.yml
+    schedule:
+      cron: "0 17 * * *"  # 1 PM ET daily (same hour as scheduled_capture_poll second run!)
+    description: "Fills missing metadata fields in Content Queue using LLM"
+    script: scripts/fill-missing.js
+    model_primary: "claude-sonnet-4-5 (fill-missing.js:219)"
+    model_fallback: "gpt-4o-mini (fill-missing.js:279)"
+    llm_calls_per_run: "~8 Sonnet calls per run (estimate from Addendum v7)"
+    paused: false
+    wp0_status: ACTIVE_RECOMMENDED_PAUSE
+    only_you_action: "gh workflow disable fill-missing.yml"
+    schedule_conflict: "Runs at same UTC hour (17:00) as scheduled_capture_poll second cron — competes for credits"
+
+  - id: pipeline_self_heal
+    workflow: .github/workflows/pipeline_self_heal.yml
+    schedule:
+      cron: "0 */5 * * *"  # every 5 hours (was every 2h; cost-cut 2026-05-07)
+    description: "Auto-resolves pipeline failures — runs orchestrator.py against pending failures"
+    script: scripts/self_heal/orchestrator.py
+    model_primary: "claude-sonnet (via orchestrator — confirmed from workflow context)"
+    llm_calls_per_run: "1+ Sonnet calls per pending failure; runs 5x/day = up to 5+ Sonnet calls/day"
+    paused: false
+    wp0_status: ACTIVE_RECOMMENDED_PAUSE
+    only_you_action: "gh workflow disable pipeline_self_heal.yml"
+
+  - id: 4am_agent
+    workflow: .github/workflows/4am_agent.yml
+    schedule:
+      cron: "0 8 */2 * *"  # every other day, 4 AM ET
+    description: "4AM pattern learner + topic finder + YouTube research. Previously auto-dispatched content_creator."
+    model_primary: "claude-sonnet (via pattern_learner.py + youtube research)"
+    dispatch_chain_pre_wp0: "could auto-dispatch content_creator.yml on every scheduled run"
+    dispatch_chain_post_wp0: "content_creator dispatch gated: only fires on workflow_dispatch with retry_content_creator=true"
+    paused: false
+    wp0_status: GATED
+    wp0_note: "Dispatch gate confirmed at 4am_agent.yml lines 100-104. Scheduled runs no longer auto-trigger content_creator."
+    only_you_action: "gh workflow disable 4am_agent.yml  # optional since dispatch is gated"
+
+# ============================================================
+# TIER 2 — PAUSED / DISABLED
+# ============================================================
+
+  - id: content_creator
+    workflow: .github/workflows/content_creator.yml
+    schedule: "PAUSED — schedule commented out since 2026-06-26 (Priscila decision)"
+    description: "Main autonomous carousel builder — paused for content creator rebuild (story-flow quality)"
+    model_primary: "claude-sonnet-4-6 (carousel_builder.py:817)"
+    model_fallback: "claude-haiku-4-5-20251001 → OpenAI cascade"
+    paused: true
+    wp0_status: PAUSED
+    resume_when: "After content creator rebuild (story-flow method) complete AND WP-0 done + credits verified"
+
+  - id: build_carousels
+    workflow: .github/workflows/build-carousels.yml
+    schedule: "PAUSED — paused per 2026-06-26 content automation pause"
+    paused: true
+    wp0_status: PAUSED
+
+  - id: blog_generator
+    workflow: .github/workflows/blog-generator.yml
+    schedule: "PAUSED — paused per 2026-06-26 content automation pause"
+    paused: true
+    wp0_status: PAUSED
+
+  - id: daily_content_processor
+    workflow: .github/workflows/daily-content-processor.yml
+    schedule: "PAUSED — paused per 2026-06-26 content automation pause"
+    paused: true
+    wp0_status: PAUSED
+
+# ============================================================
+# TIER 3 — LOW / ZERO COST (safe to keep running)
+# ============================================================
+
+  - id: approval_check
+    workflow: .github/workflows/approval_check.yml
+    description: "Checks approval status of scheduled posts — near-zero Anthropic spend"
+    model_primary: "none / minimal"
+    paused: false
+    wp0_status: KEEP
+
+  - id: credit_monitor
+    workflow: .github/workflows/credit_monitor.yml
+    description: "Monitors Anthropic credit balance — tiny spend; should convert to state-change alerts (WP-B)"
+    paused: false
+    wp0_status: "KEEP — but convert to state-change only alerts in WP-B to cut email volume"
+
+  - id: ads_pulse
+    workflow: .github/workflows/ads_pulse.yml
+    description: "Google Ads pulse checks — no Anthropic calls"
+    paused: false
+    wp0_status: KEEP
+
+  - id: send_email
+    workflow: .github/workflows/send_email.yml
+    description: "Outbound email via Gmail — no LLM calls"
+    paused: false
+    wp0_status: KEEP
+
+# ============================================================
+# INBOX OPERATOR HARD RULES (from Addendum v7)
+# ============================================================
+inbox_operator_rules:
+  - "NEVER enable a paused_workflows entry without WP-0 complete + Priscila sign-off"
+  - "NEVER add Anthropic credits or enable auto-reload until after WP-3"
+  - "NEVER assume a green last-run means no model call — check dispatch_chain"
+  - "NEVER trigger capture/content pipelines as part of inbox cleanup"
+  - "Add-credits: Priscila-only manual action AFTER WP-0 complete"
+  - "Inbox triage runs in no-paid-Anthropic mode (labels/archive = no API credits)"
+  - "Verify dispatch_chain before recommending any manual workflow trigger"
+  - "Flag any workflow with ACTIVE_RECOMMENDED_PAUSE status as pending review in every session"
+
+# ============================================================
+# WP-0 STATUS (Phase 0 — stop the bleeding)
+# ============================================================
+wp0_status:
+  completed_2026_07_23:
+    - file: ".github/workflows/capture_queue.yml"
+      lines: "15-18"
+      change: "2 DST-pair crons → 1 cron. Was 2 runs/day (doubled documented budget). Now 1 run/day."
+    - file: ".github/workflows/scheduled_capture_poll.yml"
+      lines: "5-10"
+      change: "4 DST-pair crons → 2 crons. Was 4 runs/day (4 capture_pipeline dispatches). Now 2/day."
+    - file: ".github/workflows/4am_agent.yml"
+      lines: "100-104"
+      change: "content_creator dispatch gated. Was auto on every scheduled run. Now manual flag only."
+
+  pending_only_you:
+    - action: "Review actual API usage"
+      url: "https://console.anthropic.com/settings/usage"
+      why: "Confirm how much was spent before WP-0 and current rate after"
+    - action: "gh workflow disable photo-catalog.yml"
+      cost_risk: "claude-opus-4-6 per photo — most expensive single-item call"
+    - action: "gh workflow disable higashi_photo_catalog.yml"
+      cost_risk: "up to 100 haiku-vision calls/day"
+    - action: "gh workflow disable research.yml"
+      cost_risk: "sonnet every 2 days"
+    - action: "gh workflow disable fill-missing.yml"
+      cost_risk: "~8 sonnet calls/day"
+    - action: "gh workflow disable pipeline_self_heal.yml"
+      cost_risk: "sonnet 5x/day whenever failures exist"
+    - action: "Add per-run + daily Anthropic budget limits in API console"
+      url: "https://console.anthropic.com/settings/limits"
+    - action: "Add global kill switch env var before re-enabling anything"
+      note: "Create GitHub Actions variable PIPELINE_ENABLED=false; each workflow checks it"
+    - action: "Add small fixed credit (not auto-reload); observe 24-48h; re-enable one workflow at a time"
+      note: "Order to re-enable: approval_check, credit_monitor, 4am_agent, research, fill_missing, capture_queue, self_heal, photo_catalog, higashi_catalog"
+
+  next_phases:
+    wp1: "Create pipeline-control/pipelines.yaml (this file) ✅ DONE"
+    wp2: "Cost controls: per-run + daily budgets + global kill switch"
+    wp3: "Inbox operator build (email-ops/ directory)"
+    wp4: "Controlled credit test: small fixed amount, observe, re-enable one at a time"
