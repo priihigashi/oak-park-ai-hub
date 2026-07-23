@@ -12,9 +12,10 @@ name: Capture Queue Processor
 
 on:
   # Re-enabled 2026-05-05 at 2 URLs/day (was 5) — safe now that Opus→Sonnet ($0.30/URL vs $2-4).
+  # WP-0 2026-07-23: single cron. The DST pair fired BOTH crons every day (2 runs/day,
+  # double the documented budget). One schedule; accepts 1h seasonal drift (6 AM EDT / 7 AM EST).
   schedule:
-    - cron: "0 11 * * *"   # 6 AM EDT (Mar–Nov)
-    - cron: "0 12 * * *"   # 7 AM EST (Nov–Mar) — DST safety
+    - cron: "0 11 * * *"   # 6 AM EDT / 7 AM EST
   workflow_dispatch:
     inputs:
       max_per_run:

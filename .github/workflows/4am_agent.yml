@@ -4,6 +4,12 @@ on:
   schedule:
     - cron: "0 8 */2 * *"   # every other day 4 AM ET (cost cut from daily — 2026-05-07)
   workflow_dispatch:
+    inputs:
+      retry_content_creator:
+        description: "Also re-dispatch content_creator.yml if its last run failed (WP-0: no longer automatic — scheduled runs never dispatch it)"
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: write
@@ -91,6 +97,11 @@ jobs:
           printf '%s' "$CLAUDE_MD_CONTENT" > ~/.claude/CLAUDE.md
 
       - name: Retry content_creator if last run failed
+        # WP-0 2026-07-23: gated. Previously ran on EVERY scheduled 4AM run and re-dispatched
+        # content_creator.yml whenever the last run failed, was cancelled, OR head SHA changed
+        # (i.e. after any commit) — a hidden Anthropic-spend multiplier. Now fires only on
+        # manual dispatch with retry_content_creator=true.
+        if: github.event_name == 'workflow_dispatch' && inputs.retry_content_creator == true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
