@@ -2,11 +2,12 @@ name: Scheduled Capture Poll
 
 on:
   schedule:
-    # 2x daily: 8 AM + 1 PM ET (both DST variants — daily cap dedupes seasonal pair)
+    # WP-0 2026-07-23: 2 crons, was 4. All four DST-variant crons fired daily and the
+    # sheet-status daily cap does NOT dedupe (processed rows leave "Queued" status and
+    # stop counting — verified 8 dispatches on 2026-07-23 vs documented limit 4).
+    # Hard ceiling now: 2 runs/day x max_dispatch 2 = 4. Real dispatch-count cap → WP-2.
     - cron: "0 12 * * *"   # 8 AM EDT / 9 AM EST
-    - cron: "0 13 * * *"   # 8 AM EST / 9 AM EDT
     - cron: "0 17 * * *"   # 1 PM EDT / 2 PM EST
-    - cron: "0 18 * * *"   # 1 PM EST / 2 PM EDT
   workflow_dispatch:
     inputs:
       max_dispatch:
