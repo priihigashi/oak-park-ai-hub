@@ -276,6 +276,27 @@ def search_term_rows(raw_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return rows
 
 
+def landing_page_rows(raw_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    rows = []
+    for row in raw_rows:
+        view = row.get("landingPageView", {})
+        metrics = row.get("metrics", {})
+        cost = micros_to_dollars(metrics.get("costMicros"))
+        conversions = number(metrics.get("conversions"))
+        rows.append(
+            {
+                "final_url": view.get("unexpandedFinalUrl"),
+                "impressions": int(number(metrics.get("impressions"))),
+                "clicks": int(number(metrics.get("clicks"))),
+                "cost": round(cost, 2),
+                "conversions": conversions,
+                "all_conversions": number(metrics.get("allConversions")),
+                "average_cpc": round(micros_to_dollars(metrics.get("averageCpc")), 2),
+            }
+        )
+    return rows
+
+
 def summarize(campaigns: list[dict[str, Any]]) -> dict[str, Any]:
     total_cost = sum(row["cost"] for row in campaigns)
     total_clicks = sum(row["clicks"] for row in campaigns)
@@ -416,6 +437,22 @@ def build_report(payload: dict[str, Any]) -> str:
             ],
         ),
         "",
+        "## Landing Pages By Spend",
+        "",
+        markdown_table(
+            payload.get("landing_pages", []),
+            [
+                "final_url",
+                "impressions",
+                "clicks",
+                "cost",
+                "conversions",
+                "all_conversions",
+                "average_cpc",
+            ],
+            limit=20,
+        ),
+        "",
         "## Watch List",
         "",
     ]
@@ -533,9 +570,26 @@ def main() -> int:
         LIMIT 500
     """
 
+    landing_page_query = f"""
+        SELECT
+          landing_page_view.unexpanded_final_url,
+          metrics.impressions,
+          metrics.clicks,
+          metrics.cost_micros,
+          metrics.conversions,
+          metrics.all_conversions,
+          metrics.average_cpc
+        FROM landing_page_view
+        WHERE {where_date}
+          AND metrics.impressions > 0
+        ORDER BY metrics.cost_micros DESC
+        LIMIT 50
+    """
+
     campaigns = campaign_rows(ads_search(config, campaign_query))
     ad_groups = ad_group_rows(ads_search(config, ad_group_query))
     search_terms = search_term_rows(ads_search(config, search_term_query))
+    landing_pages = landing_page_rows(ads_search(config, landing_page_query))
 
     payload = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -546,6 +600,7 @@ def main() -> int:
         "campaigns": campaigns,
         "ad_groups": ad_groups,
         "search_terms": search_terms,
+        "landing_pages": landing_pages,
     }
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
