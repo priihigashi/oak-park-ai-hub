@@ -148,6 +148,29 @@ def _ads_search(
     return rows
 
 
+def date_clause(date_range: str) -> tuple[str, str]:
+    """Return (GAQL where-fragment, human label) for the date range.
+
+    Accepts either a Google Ads named range (e.g. LAST_30_DAYS) or explicit
+    dates as BETWEEN:YYYY-MM-DD:YYYY-MM-DD — the latter needs no workflow
+    changes because it rides the existing date_range input.
+    """
+    if date_range.upper().startswith("BETWEEN:"):
+        parts = date_range.split(":")
+        if len(parts) != 3:
+            raise RuntimeError(
+                "Explicit range must be BETWEEN:YYYY-MM-DD:YYYY-MM-DD, got: " + date_range
+            )
+        start, end = parts[1].strip(), parts[2].strip()
+        for value in (start, end):
+            datetime.strptime(value, "%Y-%m-%d")
+        return (
+            f"segments.date BETWEEN '{start}' AND '{end}'",
+            f"{start}..{end}",
+        )
+    return (f"segments.date DURING {date_range}", date_range)
+
+
 def micros_to_dollars(value: Any) -> float:
     if value in (None, ""):
         return 0.0
@@ -230,6 +253,8 @@ def search_term_rows(raw_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
         ad_group = row.get("adGroup", {})
         term = row.get("searchTermView", {})
         metrics = row.get("metrics", {})
+        segments = row.get("segments", {})
+        keyword = segments.get("keyword", {}) or {}
         cost = micros_to_dollars(metrics.get("costMicros"))
         conversions = number(metrics.get("conversions"))
         rows.append(
@@ -237,10 +262,13 @@ def search_term_rows(raw_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "campaign_name": campaign.get("name"),
                 "ad_group_name": ad_group.get("name"),
                 "search_term": term.get("searchTerm"),
+                "matched_keyword": (keyword.get("info") or {}).get("text"),
+                "match_type": segments.get("searchTermMatchType"),
                 "impressions": int(number(metrics.get("impressions"))),
                 "clicks": int(number(metrics.get("clicks"))),
                 "cost": round(cost, 2),
                 "conversions": conversions,
+                "all_conversions": number(metrics.get("allConversions")),
                 "ctr": number(metrics.get("ctr")),
                 "average_cpc": round(micros_to_dollars(metrics.get("averageCpc")), 2),
             }
@@ -266,12 +294,29 @@ def summarize(campaigns: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def find_waste(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    return [
-        row
-        for row in rows
-        if row.get("cost", 0) >= 10 and row.get("clicks", 0) >= 3 and not row.get("conversions")
-    ][:10]
+def find_waste(
+    rows: list[dict[str, Any]], date_label: str = "", limit: int = 10
+) -> list[dict[str, Any]]:
+    flagged = []
+    for row in rows:
+        cost = row.get("cost", 0)
+        clicks = row.get("clicks", 0)
+        if not (cost >= 10 and clicks >= 3 and not row.get("conversions")):
+            continue
+        all_conv = row.get("all_conversions")
+        all_conv_note = (
+            f", all_conv {all_conv:g}" if all_conv is not None else ""
+        )
+        window = f" over {date_label}" if date_label else ""
+        flagged.append(
+            {
+                **row,
+                "waste_reason": (
+                    f"${cost:.2f} / {clicks} clicks / 0 conv{all_conv_note}{window}"
+                ),
+            }
+        )
+    return flagged[:limit]
 
 
 def markdown_table(rows: list[dict[str, Any]], columns: list[str], limit: int = 10) -> str:
@@ -298,8 +343,9 @@ def build_report(payload: dict[str, Any]) -> str:
     campaigns = payload["campaigns"]
     ad_groups = payload["ad_groups"]
     search_terms = payload["search_terms"]
-    waste_campaigns = find_waste(campaigns)
-    waste_terms = find_waste(search_terms)
+    date_label = payload["date_range"]
+    waste_campaigns = find_waste(campaigns, date_label)
+    waste_terms = find_waste(search_terms, date_label, limit=25)
 
     lines = [
         "# Oak Park Construction Google Ads Report",
@@ -360,9 +406,12 @@ def build_report(payload: dict[str, Any]) -> str:
                 "campaign_name",
                 "ad_group_name",
                 "search_term",
+                "matched_keyword",
+                "match_type",
                 "clicks",
                 "cost",
                 "conversions",
+                "all_conversions",
                 "average_cpc",
             ],
         ),
@@ -393,7 +442,17 @@ def build_report(payload: dict[str, Any]) -> str:
                 "",
                 markdown_table(
                     waste_terms,
-                    ["campaign_name", "ad_group_name", "search_term", "clicks", "cost", "average_cpc"],
+                    [
+                        "campaign_name",
+                        "ad_group_name",
+                        "search_term",
+                        "matched_keyword",
+                        "match_type",
+                        "clicks",
+                        "cost",
+                        "waste_reason",
+                    ],
+                    limit=25,
                 ),
                 "",
             ]
@@ -417,6 +476,7 @@ def build_report(payload: dict[str, Any]) -> str:
 def main() -> int:
     config = load_config()
     date_range = os.environ.get("GOOGLE_ADS_DATE_RANGE", "LAST_30_DAYS").strip()
+    where_date, date_label = date_clause(date_range)
 
     campaign_query = f"""
         SELECT
@@ -431,7 +491,7 @@ def main() -> int:
           metrics.average_cpc,
           metrics.search_impression_share
         FROM campaign
-        WHERE segments.date DURING {date_range}
+        WHERE {where_date}
         ORDER BY metrics.cost_micros DESC
         LIMIT 50
     """
@@ -448,7 +508,7 @@ def main() -> int:
           metrics.ctr,
           metrics.average_cpc
         FROM ad_group
-        WHERE segments.date DURING {date_range}
+        WHERE {where_date}
         ORDER BY metrics.cost_micros DESC
         LIMIT 50
     """
@@ -457,17 +517,20 @@ def main() -> int:
           campaign.name,
           ad_group.name,
           search_term_view.search_term,
+          segments.keyword.info.text,
+          segments.search_term_match_type,
           metrics.impressions,
           metrics.clicks,
           metrics.cost_micros,
           metrics.conversions,
+          metrics.all_conversions,
           metrics.ctr,
           metrics.average_cpc
         FROM search_term_view
-        WHERE segments.date DURING {date_range}
+        WHERE {where_date}
           AND metrics.impressions > 0
         ORDER BY metrics.cost_micros DESC
-        LIMIT 100
+        LIMIT 500
     """
 
     campaigns = campaign_rows(ads_search(config, campaign_query))
@@ -478,7 +541,7 @@ def main() -> int:
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "customer_id": config.customer_id,
         "login_customer_id": config.login_customer_id,
-        "date_range": date_range,
+        "date_range": date_label,
         "summary": summarize(campaigns),
         "campaigns": campaigns,
         "ad_groups": ad_groups,
@@ -487,8 +550,9 @@ def main() -> int:
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    json_path = OUTPUT_DIR / f"ads_report_{today}.json"
-    md_path = OUTPUT_DIR / f"ads_report_{today}.md"
+    range_slug = "".join(c if c.isalnum() else "_" for c in date_label).strip("_")
+    json_path = OUTPUT_DIR / f"ads_report_{today}_{range_slug}.json"
+    md_path = OUTPUT_DIR / f"ads_report_{today}_{range_slug}.md"
     json_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
     md_path.write_text(build_report(payload), encoding="utf-8")
 
