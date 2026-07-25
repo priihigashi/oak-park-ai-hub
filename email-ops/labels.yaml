@@ -1,0 +1,66 @@
+# email-ops/labels.yaml — Gmail Label Registry
+# Account: priscila@oakpark-construction.com
+# Created: 2026-07-25 from EMAIL_OPS_MASTER_PLAN v5 + Addendum v7
+#
+# IMPORTANT: Label IDs drift — always resolve via Gmail API at runtime.
+# Only Label_31 and Label_32 are confirmed from Addendum v7 (2026-07-23).
+# All others: verify via mcp__Gmail__list_labels before writing filters.
+
+workflow_labels:
+  # These are the 3 core workflow labels. All others are category labels.
+  - name: "⚡ Action Items"
+    label_id: null        # exists — resolve at runtime
+    inbox_visible: true
+    purpose: "Priscila must act on this thread"
+    create_if_missing: false  # already exists
+
+  - name: "↩️ Needs Reply"
+    label_id: "Label_32"  # confirmed from Addendum v7 2026-07-23
+    inbox_visible: true
+    purpose: "A human is waiting for Priscila's reply"
+    create_if_missing: false  # confirmed existing
+
+  - name: "⏳ Waiting"
+    label_id: "Label_31"  # confirmed from Addendum v7 2026-07-23
+    inbox_visible: false  # archived — reviewed weekly by label
+    purpose: "Priscila acted; waiting on someone else"
+    create_if_missing: false  # confirmed existing
+
+automation_labels:
+  # Category / routing labels — never skip-inbox on real human mail.
+  - name: "🚨 Automation Errors"
+    purpose: "Pipeline failures, quota exceeded, Mac restart repeats"
+    skip_inbox: true
+
+  - name: "Reports"
+    purpose: "Weekly Pipeline Report, Inspiration Library, Focus audits (no-change)"
+    skip_inbox: true
+    exception: "OPC Ads Weekly stays in inbox until reviewed"
+
+  - name: "🤖 Automation/Daily Digests"
+    purpose: "Calendar Optimized, Daily Advancer (from mcfollingproperties@gmail.com)"
+    skip_inbox: true
+
+  - name: "🤖 Automation/Pending Approval"
+    purpose: "Approval reminders — archive once project-level task is logged"
+    skip_inbox: true
+
+  - name: "🔬 Promos & News"
+    purpose: "analytics-noreply, Reader Revenue onboarding (not Google Pay / security)"
+    skip_inbox: true
+
+  - name: "THUMBTACK"
+    purpose: "Thumbtack promos (verify real pro replies are NOT caught)"
+    skip_inbox: true
+
+  - name: "[ALERTS] Quota - Auto-archived"
+    label_id: "Label_23"
+    purpose: "Empty legacy label — proves earlier auto-archive intent; inspect actual filter list before touching"
+    note: "Empty label ≠ working filter. Check filter list directly."
+
+label_consolidation_deferred:
+  reason: "Pipeline scripts write to current label names — must update scripts in the same change"
+  deferred_items:
+    - Ads trio (consolidate → single Ads label)
+    - Kids pair
+    - Docs pair

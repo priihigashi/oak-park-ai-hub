@@ -1,0 +1,140 @@
+# email-ops/filters.yaml — Pre-Approved Gmail Filters
+# Account: priscila@oakpark-construction.com
+# Created: 2026-07-25 from EMAIL_OPS_MASTER_PLAN v5
+#
+# Filters listed here are pre-approved to apply in apply-approved / morning-zero mode.
+# Each filter: skip inbox + apply label + mark read (unless noted).
+#
+# BEFORE applying any filter:
+#   1. Verify the exact from/subject match against a real thread in the inbox
+#   2. Confirm the label ID via mcp__Gmail__list_labels (IDs rotate)
+#   3. Do NOT apply filter #5 (Mac restart) until restart task is logged in Inbox tab
+#   4. A wrong filter can hide real human mail — when unsure, run audit mode first
+#
+# Gmail filter syntax docs: https://support.google.com/mail/answer/7190
+
+filters:
+  - id: 1
+    name: "Quota Exceeded — self-generated repeats"
+    matches:
+      subject_contains: "QUOTA_EXCEEDED"
+      from_own_automation: true  # from mcfollingproperties@gmail.com or priscila@ pipelines
+    action:
+      skip_inbox: true
+      label: "🚨 Automation Errors"
+      mark_read: true
+    status: pre_approved
+    caution: null
+
+  - id: 2
+    name: "Quota Resolved — self-generated"
+    matches:
+      subject_contains: "Quota RESOLVED"
+      from_own_automation: true
+    action:
+      skip_inbox: true
+      label: "🚨 Automation Errors"
+      mark_read: true
+    status: pre_approved
+    caution: null
+
+  - id: 3
+    name: "Official Anthropic mail — STAY VISIBLE"
+    matches:
+      from_domain: "mail.anthropic.com"
+    action:
+      skip_inbox: false   # must stay in inbox
+      mark_read: false
+    status: pre_approved
+    caution: "NEVER skip inbox or archive — billing and access notices must be seen"
+
+  - id: 4
+    name: "Focus audit — no-change runs"
+    matches:
+      subject_contains: "Focus audit"
+      body_indicates_no_change: true
+    action:
+      skip_inbox: true
+      label: "Reports"
+      mark_read: true
+    status: pre_approved
+    caution: "Only match no-change audits — if Focus audit shows a new exception, keep in inbox"
+
+  - id: 5
+    name: "Mac restart failure — repeat alerts"
+    matches:
+      subject_contains_any: ["Mac restart", "5AM restart failed"]
+    action:
+      skip_inbox: true
+      label: "🚨 Automation Errors"
+      mark_read: true
+    status: conditional  # ACTIVATE ONLY after restart task is logged in Inbox tab
+    caution: "DO NOT activate until the one-off Mac restart task is logged in the Inbox tab. A new failure = a new task, not an archive."
+
+  - id: 6
+    name: "Calendar Optimized / Daily Advancer — from mcfollingproperties@"
+    matches:
+      from: "mcfollingproperties@gmail.com"
+      subject_contains_any: ["Calendar Optimized", "Daily Advancer"]
+    action:
+      skip_inbox: true
+      label: "🤖 Automation/Daily Digests"
+      mark_read: true
+    status: pre_approved
+    caution: null
+
+  - id: 7
+    name: "Weekly Pipeline Report / Inspiration Library"
+    matches:
+      subject_contains_any: ["Weekly Pipeline Report", "Inspiration Library"]
+    action:
+      skip_inbox: true
+      label: "Reports"
+      mark_read: true
+    status: pre_approved
+    caution: "OPC Ads Weekly is NOT included here — it stays in inbox until Priscila reviews it, then archives same morning"
+
+  - id: 8
+    name: "Thumbtack promos"
+    matches:
+      from_thumbtack_promo: true  # verify exact sender pattern against a real promo thread
+    action:
+      skip_inbox: true
+      label: "THUMBTACK"
+      mark_read: true
+    status: pre_approved_with_verification
+    caution: "MUST verify that real Thumbtack pro leads/replies are NOT matched before applying. Test filter against at least one promo + one real message."
+
+  - id: 9
+    name: "Analytics noreply / Reader Revenue onboarding"
+    matches:
+      from_contains_any:
+        - "analytics-noreply@"
+        - "reader-revenue-noreply@"
+        - "noreply@readerrevenue"
+    action:
+      skip_inbox: true
+      label: "🔬 Promos & News"
+      mark_read: true
+    status: pre_approved
+    caution: "Google Pay / payment / security mail must NOT be caught by this filter. Verify the match pattern is narrow."
+
+  - id: 10
+    name: "Approval reminder automation"
+    matches:
+      subject_contains: "Approval Reminder"
+      from_own_automation: true
+    action:
+      skip_inbox: true
+      label: "🤖 Automation/Pending Approval"
+      mark_read: true
+    status: conditional
+    caution: "Archive only once the single project-level task is logged in the Inbox tab for the content backlog. Not before."
+
+never_create_filters_for:
+  - "Official Anthropic billing/access/security mail — always stays in inbox"
+  - "Security or account-change notices from any provider"
+  - "OPC Ads Weekly (until Priscila reviews it each week)"
+  - "Active lead / active client threads"
+  - "Unknown senders with attachments"
+  - "Medical / school unresolved threads"

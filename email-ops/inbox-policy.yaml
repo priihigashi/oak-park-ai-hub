@@ -1,0 +1,108 @@
+# Oak Park Inbox Policy — Structured Rules
+# Source: EMAIL_OPS_MASTER_PLAN v5 (Drive doc 1lf0NJQlkFhHDZb5ldr0YVGKgBdFXj5L2T3MCo23dlds)
+# Transcribed: 2026-07-25
+# Account: priscila@oakpark-construction.com
+
+goal: "Inbox 0-10 after morning check; hard cap 30. Remote-first."
+
+inbox_rule:
+  keep_if_any:
+    - human_needs_reply: true
+    - concrete_action_required: true
+    - new_lead_or_active_client: true
+    - new_unresolved_system_failure: true
+    - security_billing_deadline_verification: true
+  else: label_and_archive  # never delete
+
+workflow_labels:
+  - name: "⚡ Action Items"
+    inbox: true
+    purpose: "Priscila must act"
+    note: "exists — verify ID at runtime"
+  - name: "↩️ Needs Reply"
+    inbox: true
+    purpose: "Human awaiting reply from Priscila"
+    note: "create if missing"
+  - name: "⏳ Waiting"
+    inbox: false  # archived
+    purpose: "Priscila acted, waiting on others"
+    review: weekly
+    note: "create if missing"
+
+default_mode: audit  # never apply-approved without explicit prior approval
+
+morning_routine:
+  steps:
+    - label: "⚡ Action Items"
+      action: "Do <5-min items now; archive on completion"
+    - label: "↩️ Needs Reply"
+      action: "Reply; move awaited-reply to ⏳ Waiting + archive"
+    - over_5_min:
+        action: "One Inbox-tab row; archive the email"
+    - weekly:
+        action: "Sweep ⏳ Waiting — follow up or close"
+    - final:
+        action: "Label + archive leftovers → target 0-10"
+
+task_rules:
+  destination_sheet: "1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU"
+  destination_tab: "📥 Inbox"
+  one_task_per_issue: true
+  read_thread_in_full_before_logging: true
+  no_tasks_from:
+    - reports
+    - receipts
+    - confirmations
+    - promos
+    - duplicates
+  calendar_events_only_for_real_dates: true
+
+pre_approved_filters:
+  - id: 1
+    matches: {subject_contains: "QUOTA_EXCEEDED", from_own_automation: true}
+    action: {skip_inbox: true, label: "🚨 Automation Errors", mark_read: true}
+  - id: 2
+    matches: {subject_contains: "Quota RESOLVED", from_own_automation: true}
+    action: {skip_inbox: true, label: "🚨 Automation Errors", mark_read: true}
+  - id: 3
+    matches: {from_domain: "mail.anthropic.com", subjects: ["billing", "access"]}
+    action: {skip_inbox: false}  # STAY VISIBLE — never archive
+    note: "Official Anthropic mail must never be auto-archived"
+  - id: 4
+    matches: {subject_contains: "Focus audit", body_no_change: true}
+    action: {skip_inbox: true, label: "Reports", mark_read: true}
+  - id: 5
+    matches: {subject_contains: "Mac restart", is_repeat: true}
+    action: {skip_inbox: true, label: "🚨 Automation Errors", mark_read: true}
+    condition: "activate ONLY after restart task is logged in Inbox tab"
+  - id: 6
+    matches:
+      from: "mcfollingproperties@gmail.com"
+      subject_contains_any: ["Calendar Optimized", "Daily Advancer"]
+    action: {skip_inbox: true, label: "🤖 Automation/Daily Digests", mark_read: true}
+  - id: 7
+    matches: {subject_contains_any: ["Weekly Pipeline Report", "Inspiration Library"]}
+    action: {skip_inbox: true, label: "Reports", mark_read: true}
+    exception: "OPC Ads Weekly: stays in inbox until Priscila reviews, then archives same morning"
+  - id: 8
+    matches: {from_thumbtack_promo: true}
+    action: {skip_inbox: true, label: "THUMBTACK", mark_read: true}
+    caution: "verify real pro replies are NOT caught by this filter before applying"
+  - id: 9
+    matches: {from_contains_any: ["analytics-noreply@", "Reader Revenue onboarding"]}
+    action: {skip_inbox: true, label: "🔬 Promos & News", mark_read: true}
+    exception: "Google Pay / security mail NOT in this filter — review individually"
+  - id: 10
+    matches: {is_approval_reminder_automation: true}
+    action: {skip_inbox: true, label: "🤖 Automation/Pending Approval", mark_read: true}
+    condition: "archive once the single project-level task is logged"
+
+never_auto_archive:
+  - "See protected-senders.yaml for full list"
+  - Official Anthropic account mail (billing, access, security)
+  - Security or account-change notices (any provider)
+  - Legal documents
+  - Active leads and active client threads
+  - Unknown senders with attachments
+  - Unresolved medical or school threads
+  - OPC Ads Weekly (until reviewed)

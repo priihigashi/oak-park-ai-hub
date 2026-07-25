@@ -1,0 +1,61 @@
+# Oak Park — Protected Senders & Thread Types
+# Never auto-archive these. Read individually; surface to Priscila if action needed.
+# Source: EMAIL_OPS_MASTER_PLAN v5 · Transcribed 2026-07-25
+# Account: priscila@oakpark-construction.com
+
+# Rule: if a thread matches ANY entry below, it stays in the inbox until Priscila
+# explicitly archives it or a human-labeled task is logged for it.
+
+protected_domains:
+  - mail.anthropic.com          # Anthropic billing, access, security — NEVER archive
+  - accounts.google.com         # Google account security / 2FA changes
+  - no-reply@accounts.google.com
+  - security-noreply@accounts.google.com
+
+protected_subject_patterns:
+  - "security alert"
+  - "sign-in attempt"
+  - "your account"
+  - "suspicious activity"
+  - "password changed"
+  - "two-factor"
+  - "verification code"
+  - "payment failed"
+  - "invoice"
+  - "legal notice"
+  - "demand letter"
+  - "court"
+  - "settlement"
+  - "CRECI"                     # real estate licensing (Higashi site / mom)
+
+protected_categories:
+  - New leads (unknown senders asking about OPC services)
+  - Active client threads (any thread where a client is in the To/Cc)
+  - Threads with unknown senders who have attachments
+  - Healthcare.gov — plan-selection and enrollment deadlines
+  - School-related (Step Up for Students, Education Station, Soma Medical, Mia)
+  - Medical threads unresolved (Soma Medical imaging, Mia)
+  - Gastroenterologist follow-up (Mike)
+  - OakWillow order 84007 (unshipped — watch for resolution)
+  - Any thread that only Priscila can resolve (requires physical action or login)
+
+only_priscila_actions:
+  # These stay in inbox until done. Log one task row per issue; never archive prematurely.
+  - item: "Anthropic API — DO NOT top up credits yet. First: review usage at console.anthropic.com/settings/usage, then disable 5 ACTIVE_RECOMMENDED_PAUSE workflows, add budget limits + global kill switch per pipeline-control/pipelines.yaml WP-0. Auto-reload stays OFF."
+    ref: "pipeline-control/pipelines.yaml wp0_status.pending_only_you"
+  - item: "Mac admin password (5AM restart failure)"
+  - item: "yt-dlp cookies refresh (bi-weekly)"
+  - item: "Healthcare.gov plan selection"
+  - item: "Call Paula Feghhi — Portuguese tutor"
+    phone: "650-804-3321"
+  - item: "Step Up For Students email verification mismatch"
+  - item: "Reply to Mike re gastroenterologist"
+  - item: "Soma Medical — confirm Mia's corrected imaging orders"
+  - item: "Education Station overcharge ($235 vs $200/week)"
+  - item: "OakWillow order 84007 — unshipped"
+  - item: "Google Ads passkey — verify first before acting"
+  - item: "Reader Revenue Manager decision"
+  - item: "vtext.com SMS bounce fix"
+
+# Changelog
+# 2026-07-25: created from EMAIL_OPS_MASTER_PLAN v5 task-candidates and never-auto-archive sections
