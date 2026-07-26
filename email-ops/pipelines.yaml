@@ -1,0 +1,159 @@
+# email-ops/pipelines.yaml — Pipeline → Email Subject Map
+# Account: priscila@oakpark-construction.com
+# Created: 2026-07-26 by Daily Advancer
+# Source: pipeline-control/pipelines.yaml + EMAIL_OPS_MASTER_PLAN v5 + filter observation
+#
+# PURPOSE: Authoritative map of WHICH pipeline/workflow sends WHICH emails.
+# USE BEFORE editing any pipeline: editing a pipeline can change or break email routing.
+# The inbox operator uses this to route emails to the correct label WITHOUT touching pipelines.
+#
+# Pipeline registry (LLM costs + pause state): pipeline-control/pipelines.yaml
+# Gmail filter definitions: email-ops/filters.yaml
+
+meta:
+  last_updated: "2026-07-26"
+  note: "Verify each entry against the actual workflow send_email.yml calls before applying filters."
+
+# ─────────────────────────────────────────
+# AUTOMATION DIGEST EMAILS
+# Sent from: mcfollingproperties@gmail.com (the session dispatch account)
+# Filter: #6 in filters.yaml → 🤖 Automation/Daily Digests
+# ─────────────────────────────────────────
+automation_digests:
+  - pipeline: daily_advancer
+    workflow: "(Claude Code scheduled task — not a GitHub Actions workflow)"
+    from: "mcfollingproperties@gmail.com"
+    subject_pattern: "Daily Advancer — YYYY-MM-DD — N items"
+    inbox_filter: 6
+    label: "🤖 Automation/Daily Digests"
+    note: "This is the Daily Project Advancer task. Fires daily via Claude Code schedule."
+
+  - pipeline: calendar_optimizer
+    workflow: "(Claude Code or GitHub Actions cron)"
+    from: "mcfollingproperties@gmail.com"
+    subject_pattern: "Calendar Optimized"
+    inbox_filter: 6
+    label: "🤖 Automation/Daily Digests"
+    note: "Calendar audit + merge summary."
+
+# ─────────────────────────────────────────
+# AUTOMATION ERROR / ALERT EMAILS
+# Filter: #1 or #2 in filters.yaml → 🚨 Automation Errors
+# ─────────────────────────────────────────
+automation_errors:
+  - pipeline: credit_monitor
+    workflow: ".github/workflows/credit_monitor.yml"
+    from: "priscila@oakpark-construction.com or mcfollingproperties@gmail.com"
+    subject_patterns:
+      - "QUOTA_EXCEEDED"
+      - "Quota RESOLVED"
+      - "Credit balance low"
+    inbox_filter: "1 or 2"
+    label: "🚨 Automation Errors"
+    wp0_note: "Convert to state-change-only alerts in WP-B to cut volume."
+
+  - pipeline: pipeline_self_heal
+    workflow: ".github/workflows/pipeline_self_heal.yml"
+    from: "mcfollingproperties@gmail.com or GitHub Actions"
+    subject_patterns:
+      - "Pipeline failure"
+      - "Self-heal report"
+      - "Orchestrator run"
+    inbox_filter: "(no current filter — evaluate case by case)"
+    label: "🚨 Automation Errors"
+    note: "New failures may need a task. Repeat failures of a known issue: archive."
+    wp0_status: ACTIVE_RECOMMENDED_PAUSE
+
+  - pipeline: 4am_agent
+    workflow: ".github/workflows/4am_agent.yml"
+    from: "mcfollingproperties@gmail.com or GitHub Actions"
+    subject_patterns:
+      - "4AM agent report"
+      - "Pattern learner"
+      - "4AM error"
+    inbox_filter: "(no current filter — archive manually or add filter once pattern confirmed)"
+    label: "🤖 Automation/Daily Digests or 🚨 Automation Errors (error case)"
+
+# ─────────────────────────────────────────
+# REPORT EMAILS
+# Filter: #7 in filters.yaml → Reports
+# ─────────────────────────────────────────
+reports:
+  - pipeline: weekly_pipeline_report
+    workflow: "(unknown — likely send_email.yml dispatch from analytics script)"
+    subject_pattern: "Weekly Pipeline Report"
+    inbox_filter: 7
+    label: "Reports"
+    note: "Weekly summary. No task needed unless it surfaces a new unresolved failure."
+
+  - pipeline: inspiration_library
+    workflow: "(4am_agent or research.yml)"
+    subject_pattern: "Inspiration Library"
+    inbox_filter: 7
+    label: "Reports"
+    note: "Weekly content inspiration batch. No task needed."
+
+  - pipeline: opc_ads_weekly
+    workflow: ".github/workflows/ads_pulse.yml (likely)"
+    subject_pattern: "OPC Ads Weekly"
+    inbox_filter: "NONE — stays in inbox until Priscila reviews"
+    label: "(applied manually after review)"
+    note: "EXCEPTION to filter #7. Priscila reviews every week, then archives same morning."
+
+# ─────────────────────────────────────────
+# APPROVAL REMINDER EMAILS
+# Filter: #10 in filters.yaml → 🤖 Automation/Pending Approval
+# ─────────────────────────────────────────
+approval:
+  - pipeline: approval_check
+    workflow: ".github/workflows/approval_check.yml"
+    from: "mcfollingproperties@gmail.com or GitHub Actions"
+    subject_pattern: "Approval Reminder"
+    inbox_filter: 10
+    label: "🤖 Automation/Pending Approval"
+    note: "Archive only AFTER the project-level task is logged in the Inbox tab. Not before."
+
+# ─────────────────────────────────────────
+# OUTBOUND-ONLY (sends emails, does not receive)
+# ─────────────────────────────────────────
+outbound_only:
+  - pipeline: send_email
+    workflow: ".github/workflows/send_email.yml"
+    direction: outbound
+    note: "No LLM calls. Sends triggered emails to priscila@oakpark-construction.com. No inbox routing needed."
+
+# ─────────────────────────────────────────
+# PIPELINES WITH NO CONFIRMED EMAIL OUTPUT
+# These may or may not send emails — verify before adding filters
+# ─────────────────────────────────────────
+unconfirmed_email_output:
+  - pipeline: capture_pipeline
+    workflow: ".github/workflows/capture_pipeline.yml"
+    note: "May send failure alerts if a URL fails. No confirmed regular subject pattern. Verify in workflow source."
+
+  - pipeline: fill_missing
+    workflow: ".github/workflows/fill-missing.yml"
+    note: "Failure alerts possible. No confirmed regular subject pattern."
+    wp0_status: ACTIVE_RECOMMENDED_PAUSE
+
+  - pipeline: photo_catalog
+    workflow: ".github/workflows/photo-catalog.yml"
+    note: "Possible error alerts. No confirmed regular subject pattern."
+    wp0_status: ACTIVE_RECOMMENDED_PAUSE
+
+  - pipeline: higashi_photo_catalog
+    workflow: ".github/workflows/higashi_photo_catalog.yml"
+    note: "Possible error alerts."
+    wp0_status: ACTIVE_RECOMMENDED_PAUSE
+
+  - pipeline: blog_generator
+    workflow: ".github/workflows/blog-generator.yml"
+    status: PAUSED
+    note: "Paused since 2026-06-26. No active emails."
+
+# ─────────────────────────────────────────
+# PROTECTED SENDERS (must never be filtered)
+# ─────────────────────────────────────────
+protected_from_pipeline_filters:
+  - "mail.anthropic.com — official billing/access/security mail"
+  - "See email-ops/protected-senders.yaml for full list"

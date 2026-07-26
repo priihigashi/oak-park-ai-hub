@@ -1,0 +1,127 @@
+# email-ops/task-routing.yaml — When to Create a Task vs Archive
+# Account: priscila@oakpark-construction.com
+# Created: 2026-07-26 by Daily Advancer
+# Source: EMAIL_OPS_MASTER_PLAN v5 + OPERATOR.md
+#
+# PURPOSE: Machine-readable rules for the inbox operator deciding what becomes a task.
+# RULE: One unresolved issue = ONE task row in Ideas & Inbox 📥 Inbox tab, regardless of email count.
+# Read thread IN FULL before logging. Summaries are not enough.
+
+task_destination:
+  spreadsheet_id: "1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU"
+  tab: "📥 Inbox"
+  fields:
+    date_added: "today (YYYY-MM-DD)"
+    type: "✅ Task"
+    title: "concise description of what must happen"
+    url_or_path: "link to the email thread or relevant doc if applicable"
+    niche: "OPC | McFolling | General | Higashi | etc."
+    how_useful: "1–5 urgency score"
+    priority: "🔴 High | 🟡 Medium | 🟢 Low | ⏸ Parked"
+    status: "🆕 New"
+    topic: "specific subject of the issue"
+
+# ─────────────────────────────────────────
+# ALWAYS CREATE A TASK — inbox stays open
+# ─────────────────────────────────────────
+always_task:
+  - category: only_you_items
+    label: "⚡ Action Items"
+    inbox: true
+    examples:
+      - "Anthropic API credits / auto-reload (console.anthropic.com)"
+      - "Mac admin password (5AM restart job)"
+      - "yt-dlp cookies refresh (~bi-weekly)"
+      - "Healthcare.gov plan selection"
+      - "Call Paula Feghhi (Portuguese tutor) 650-804-3321"
+      - "Step Up For Students email verification mismatch"
+    dedup_rule: "If task already exists and is unresolved — do NOT log a second row. Add a note to existing row instead."
+
+  - category: new_unresolved_system_failure
+    label: "⚡ Action Items"
+    inbox: true
+    condition: "failure is NEW (not a repeat of an already-logged known issue)"
+    examples:
+      - "GitHub Actions workflow failing for the first time"
+      - "New pipeline error type not previously seen"
+      - "Credit balance alert that is a genuine state change"
+    repeat_rule: "A second email about the same known failure = no new task. Archive via filter #5 or manually."
+
+  - category: human_reply_needed
+    label: "↩️ Needs Reply"
+    inbox: true
+    examples:
+      - "Client or lead asking a question"
+      - "Real person awaiting Priscila's response"
+    exclude: "auto-generated replies, approvals from own pipelines, forwarded newsletters"
+
+  - category: new_lead_or_active_client
+    label: "⚡ Action Items"
+    inbox: true
+    examples:
+      - "New quote request from any channel"
+      - "Active OPC or McFolling client with an open job"
+    note: "Tag niche = OPC or McFolling accordingly"
+
+  - category: security_billing_deadline
+    label: "⚡ Action Items"
+    inbox: true
+    examples:
+      - "Account security alert (password change, 2FA, unknown login)"
+      - "Billing overcharge or dispute"
+      - "IRS / legal / compliance deadline"
+    note: "Official Anthropic mail is protected — see protected-senders.yaml"
+
+# ─────────────────────────────────────────
+# ROUTE TO WAITING — after Priscila acted
+# ─────────────────────────────────────────
+route_to_waiting:
+  - category: waiting_on_others
+    label: "⏳ Waiting"
+    inbox: false  # archive
+    review_cadence: weekly
+    examples:
+      - "Sent a reply to a vendor — awaiting response"
+      - "Submitted an insurance claim — awaiting adjudication"
+      - "Approved a contractor quote — awaiting start date"
+
+# ─────────────────────────────────────────
+# NO TASK — label + archive only
+# ─────────────────────────────────────────
+no_task:
+  - category: automation_noise_known
+    action: archive_with_label
+    examples:
+      - "Repeat QUOTA_EXCEEDED from own pipelines → 🚨 Automation Errors"
+      - "Quota RESOLVED notices → 🚨 Automation Errors"
+      - "No-change Focus audit → Reports"
+      - "Daily Advancer / Calendar Optimized reports → 🤖 Automation/Daily Digests"
+      - "Weekly Pipeline Report → Reports"
+      - "Approval reminder (after project task already logged) → 🤖 Automation/Pending Approval"
+
+  - category: marketing_promos
+    action: archive_with_label
+    examples:
+      - "Thumbtack promotions → THUMBTACK"
+      - "Google Analytics noreply → 🔬 Promos & News"
+      - "Reader Revenue onboarding → 🔬 Promos & News"
+
+  - category: receipts_and_confirmations
+    action: archive_with_label
+    examples:
+      - "Purchase receipts"
+      - "Booking confirmations"
+      - "Subscription renewal notices (no action needed)"
+
+  - category: duplicate_threads
+    action: archive_no_label
+    note: "If a task already exists for this issue, read the thread to check for new info, then archive."
+
+# ─────────────────────────────────────────
+# TASK COUNT GUARD
+# ─────────────────────────────────────────
+task_count_guard:
+  rule: "Before logging any task, search the Inbox tab for the same issue. Only log if no open row exists."
+  dedup_key: "Issue title + niche + open status. Same words + same project = same task."
+  max_new_tasks_per_audit_run: 10
+  note: "If more than 10 new tasks surface in a single session, pause and flag to Priscila — it means the inbox has deep backlog, not routine noise."
