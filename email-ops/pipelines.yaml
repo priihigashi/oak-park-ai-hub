@@ -111,7 +111,7 @@ approval:
     subject_pattern: "Approval Reminder"
     inbox_filter: 10
     label: "🤖 Automation/Pending Approval"
-    note: "Archive only AFTER the project-level task is logged in the Inbox tab. Not before."
+    note: "Archive only AFTER the project-level task is logged in Focus Pending. Not before."
 
 # ─────────────────────────────────────────
 # OUTBOUND-ONLY (sends emails, does not receive)

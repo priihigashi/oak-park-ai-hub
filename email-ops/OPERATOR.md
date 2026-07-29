@@ -87,8 +87,10 @@ Read `protected-senders.yaml` for the current list. Summary:
 ## Task rules
 
 - One unresolved issue = **one task row**, regardless of how many emails reference it.
-- Tasks go to the **📥 Inbox tab** of Ideas & Inbox spreadsheet (`1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU`).
+- Actionable work goes to **Focus → Pending** (`_Focus Partner — STATE`, `1AlvtSGIZUWE1pzld2A8LL5bK4g9nRR4a4jqsOcfnY4c`).
+- The **📥 Inbox** tab is reserved for content references, someday ideas and low-priority inspiration — never as a fallback task queue.
 - Calendar events: ONLY for real dates / appointments — never for reports, receipts, or promos.
+- If Focus cannot be written, keep the email visibly labeled and report the failure. Do not silently create an Inbox row or archive the email.
 - No tasks from: reports, receipts, confirmations, promos, duplicates.
 - Read every candidate thread IN FULL before logging a task. Summaries are not enough.
 
@@ -98,7 +100,7 @@ Read `protected-senders.yaml` for the current list. Summary:
 
 1. ⚡ **Action Items**: do items that take <5 min now; archive on completion.
 2. ↩️ **Needs Reply**: reply, move awaited-reply threads to ⏳ Waiting + archive.
-3. **Over-5-min work** → one Inbox-tab row, archive the email.
+3. **Over-5-min work** → one Focus Pending task; archive only after the task write is verified.
 4. **Weekly sweep**: ⏳ Waiting label — follow up or close.
 5. **Label + archive** leftovers → target 0–10.
 

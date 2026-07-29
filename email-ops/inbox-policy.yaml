@@ -38,15 +38,18 @@ morning_routine:
     - label: "↩️ Needs Reply"
       action: "Reply; move awaited-reply to ⏳ Waiting + archive"
     - over_5_min:
-        action: "One Inbox-tab row; archive the email"
+        action: "One Focus Pending task; archive only after the Focus write is verified"
     - weekly:
         action: "Sweep ⏳ Waiting — follow up or close"
     - final:
         action: "Label + archive leftovers → target 0-10"
 
 task_rules:
-  destination_sheet: "1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU"
-  destination_tab: "📥 Inbox"
+  destination_sheet: "1AlvtSGIZUWE1pzld2A8LL5bK4g9nRR4a4jqsOcfnY4c"
+  destination_tab: "Pending"
+  destination_system: "Focus — primary work/task queue"
+  focus_write_failure: "Keep the email visibly labeled and report the failed Focus write; never silently create an Inbox task."
+  inbox_is_reserved_for: "content references, someday ideas and low-priority inspiration only"
   one_task_per_issue: true
   read_thread_in_full_before_logging: true
   no_tasks_from:
@@ -74,7 +77,7 @@ pre_approved_filters:
   - id: 5
     matches: {subject_contains: "Mac restart", is_repeat: true}
     action: {skip_inbox: true, label: "🚨 Automation Errors", mark_read: true}
-    condition: "activate ONLY after restart task is logged in Inbox tab"
+    condition: "activate ONLY after restart task is logged in Focus Pending"
   - id: 6
     matches:
       from: "mcfollingproperties@gmail.com"
