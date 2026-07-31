@@ -1,0 +1,277 @@
+# oak-park-ai-hub — Ruff C901 Complexity Baseline
+# Generated: 2026-07-31 | Ruff 0.15.8 | Threshold: 10
+# Command: ruff check scripts/ --select C901
+# Policy: CODE-QUALITY GATES in priihigashi/priscila-workspace CLAUDE.md
+
+Total violations: 150
+Files affected: 46
+Total Python files scanned: 169
+
+CRITICAL (>40): 8 functions
+HIGH (21-40):   15 functions
+MEDIUM (11-20): 127 functions
+
+## Policy rules
+- No new function may exceed 10 without a documented exception.
+- Existing over-threshold functions may not INCREASE in complexity.
+- This baseline is the reference. Any function not listed here that fails = new violation.
+
+## All violations, sorted by complexity (descending)
+
+### scripts/content_creator/main.py
+  L1488  process_one_topic: complexity=185  [CRITICAL]
+### scripts/content_creator/carousel_builder.py
+  L3591  fetch_all_media: complexity=90  [CRITICAL]
+### scripts/content_creator/carousel_reviewer.py
+  L199  check_html_placeholders: complexity=69  [CRITICAL]
+### scripts/content_creator/note_parser.py
+  L370  _parse_rule_based: complexity=68  [CRITICAL]
+### scripts/content_creator/fix_existing_images.py
+  L166  fix_version_folder: complexity=58  [CRITICAL]
+### scripts/capture/capture_pipeline.py
+  L4449  main: complexity=48  [CRITICAL]
+### scripts/content_creator/carousel_builder.py
+  L6677  _build_brazil_html: complexity=43  [CRITICAL]
+### scripts/content_creator/main.py
+  L2701  main: complexity=42  [CRITICAL]
+### scripts/self_heal/orchestrator.py
+  L1263  main: complexity=36  [HIGH]
+### scripts/content_creator/carousel_reviewer.py
+  L2543  check_built_post: complexity=36  [HIGH]
+  L1557  check_drive_folder: complexity=32  [HIGH]
+### scripts/youtube_research.py
+  L897  run: complexity=31  [HIGH]
+### scripts/content_creator/approval_handler.py
+  L1791  process_replies: complexity=31  [HIGH]
+  L1228  re_render_post: complexity=29  [HIGH]
+### scripts/content_creator/carousel_builder.py
+  L5706  build_opc_from_slide_plan: complexity=28  [HIGH]
+  L4235  fetch_template_aware_media: complexity=28  [HIGH]
+  L2053  generate_opc_per_template_content: complexity=28  [HIGH]
+### scripts/capture/capture_pipeline.py
+  L2952  run_news: complexity=27  [HIGH]
+### scripts/4am_agent/self_healer.py
+  L455  run: complexity=27  [HIGH]
+### scripts/content_creator/opc_proof_post.py
+  L916  run_phase2: complexity=23  [HIGH]
+### scripts/research/person_evidence_runner.py
+  L727  run_person_evidence_mining: complexity=22  [HIGH]
+### scripts/content_creator/carousel_reviewer.py
+  L2400  check_slide_plan: complexity=22  [HIGH]
+### scripts/capture/resource_router.py
+  L568  execute_resource_jobs: complexity=22  [HIGH]
+### scripts/research/transcription.py
+  L264  _apify_yt_whisper: complexity=20  [MEDIUM]
+### scripts/content_creator/carousel_reviewer.py
+  L2774  send_review_email: complexity=20  [MEDIUM]
+  L2268  check_standalone_content: complexity=20  [MEDIUM]
+### scripts/content_creator/carousel_builder.py
+  L7571  _build_the_case_html: complexity=20  [MEDIUM]
+  L434  enforce_opc_comparison_parity: complexity=20  [MEDIUM]
+### scripts/capture/capture_queue_processor.py
+  L270  main: complexity=20  [MEDIUM]
+### scripts/capture/capture_pipeline.py
+  L3651  save_to_news_folder: complexity=20  [MEDIUM]
+### scripts/4am_agent/main.py
+  L300  _check_system_alerts: complexity=20  [MEDIUM]
+### scripts/content_creator/opc_template_chooser.py
+  L823  plan_carousel_slides: complexity=19  [MEDIUM]
+### scripts/content_creator/carousel_reviewer.py
+  L1254  _check_provenance: complexity=19  [MEDIUM]
+### scripts/ads_dashboard.py
+  L359  build_mom_insight: complexity=19  [MEDIUM]
+### scripts/4am_agent/main.py
+  L50  main: complexity=19  [MEDIUM]
+### scripts/inspiration_scraper_cloud.py
+  L373  scrape_youtube: complexity=18  [MEDIUM]
+### scripts/daily_content_processor.py
+  L396  main: complexity=18  [MEDIUM]
+### scripts/content_creator/topic_picker.py
+  L333  pick_topics: complexity=18  [MEDIUM]
+  L262  score_topic: complexity=18  [MEDIUM]
+### scripts/content_creator/motion_sources.py
+  L790  tier_giphy: complexity=18  [MEDIUM]
+### scripts/content_creator/image_providers.py
+  L422  _nb2: complexity=18  [MEDIUM]
+### scripts/capture/capture_pipeline.py
+  L1011  download_audio: complexity=18  [MEDIUM]
+### scripts/youtube_research.py
+  L223  _try_apify_youtube_audio: complexity=17  [MEDIUM]
+### scripts/self_heal/orchestrator.py
+  L734  _tolerant_json_loads: complexity=17  [MEDIUM]
+### scripts/content_creator/opc_proof_post.py
+  L1378  main: complexity=17  [MEDIUM]
+### scripts/content_creator/carousel_builder.py
+  L8062  visual_audit: complexity=17  [MEDIUM]
+  L4360  fetch_clips: complexity=17  [MEDIUM]
+  L1413  generate_carousel_content: complexity=17  [MEDIUM]
+### scripts/capture/capture_pipeline.py
+  L3531  save_to_content_hub: complexity=17  [MEDIUM]
+### scripts/content_creator/photo_matcher.py
+  L242  match_opc_photo_candidates: complexity=16  [MEDIUM]
+### scripts/content_creator/main.py
+  L649  _enforce_news_visual_targets: complexity=16  [MEDIUM]
+  L264  _validate_media_images: complexity=16  [MEDIUM]
+### scripts/content_creator/carousel_reviewer.py
+  L2922  main: complexity=16  [MEDIUM]
+### scripts/capture/capture_pipeline.py
+  L849  _try_yt_dlp_slides: complexity=16  [MEDIUM]
+### scripts/capture/article_screenshot.py
+  L92  screenshot_article: complexity=16  [MEDIUM]
+### scripts/self_heal/orchestrator.py
+  L325  pick_task: complexity=15  [MEDIUM]
+### scripts/research/candidate_collectors.py
+  L494  _ig_via_apify: complexity=15  [MEDIUM]
+### scripts/photo_catalog_cloud.py
+  L168  describe_image: complexity=15  [MEDIUM]
+### scripts/content_creator/opc_template_chooser.py
+  L1000  main: complexity=15  [MEDIUM]
+### scripts/content_creator/motion_sources.py
+  L900  _trim_to_relevant_window: complexity=15  [MEDIUM]
+  L225  tier_clip_collections: complexity=15  [MEDIUM]
+### scripts/content_creator/carousel_reviewer.py
+  L1462  _check_image_relevance_drive: complexity=15  [MEDIUM]
+### scripts/content_creator/carousel_builder.py
+  L4462  build_motion_html: complexity=15  [MEDIUM]
+  L1231  _web_research: complexity=15  [MEDIUM]
+### scripts/capture/capture_pipeline.py
+  L2658  preflight_check: complexity=15  [MEDIUM]
+### scripts/build_carousel_cloud.py
+  L1128  main: complexity=15  [MEDIUM]
+### scripts/research/transcription.py
+  L485  _ig_audio_one_attempt: complexity=14  [MEDIUM]
+### scripts/research/manifest_renderer.py
+  L49  audit_pre_render: complexity=14  [MEDIUM]
+### scripts/research/face_match.py
+  L181  delete_after_run: complexity=14  [MEDIUM]
+### scripts/research/_apify_smoke.py
+  L144  smoke_test: complexity=14  [MEDIUM]
+### scripts/opc_media_sorter.py
+  L485  main: complexity=14  [MEDIUM]
+### scripts/content_creator/prompt_builder.py
+  L211  extract_slide_texts: complexity=14  [MEDIUM]
+### scripts/content_creator/image_providers.py
+  L497  regenerate_from_feedback: complexity=14  [MEDIUM]
+### scripts/content_creator/carousel_reviewer.py
+  L1394  check_resource_images_local: complexity=14  [MEDIUM]
+  L970  _flatten_text_from_content: complexity=14  [MEDIUM]
+### scripts/content_creator/carousel_builder.py
+  L7991  generate_image_suggestions: complexity=14  [MEDIUM]
+  L4108  _fetch_youtube_clip_apify: complexity=14  [MEDIUM]
+  L3264  _remove_background_with_inference_sh: complexity=14  [MEDIUM]
+  L555  repair_opc_content: complexity=14  [MEDIUM]
+### scripts/content_creator/approval_handler.py
+  L541  _handle_sh104_reply: complexity=14  [MEDIUM]
+### scripts/capture/capture_pipeline.py
+  L3977  run_opc: complexity=14  [MEDIUM]
+  L1116  download_video: complexity=14  [MEDIUM]
+  L670  _try_apify_youtube_download: complexity=14  [MEDIUM]
+### scripts/4am_agent/self_healer.py
+  L365  _autonomous_solve: complexity=14  [MEDIUM]
+### scripts/research/llm_router.py
+  L69  llm_json: complexity=13  [MEDIUM]
+### scripts/research/candidate_collectors.py
+  L439  _ig_via_username: complexity=13  [MEDIUM]
+### scripts/drive_map_builder.py
+  L404  main: complexity=13  [MEDIUM]
+### scripts/content_tracker.py
+  L372  update_status_by_niche: complexity=13  [MEDIUM]
+### scripts/content_creator/motion_sources.py
+  L1047  find_supporting_clips: complexity=13  [MEDIUM]
+### scripts/content_creator/main.py
+  L178  _flush_alerts: complexity=13  [MEDIUM]
+### scripts/content_creator/carousel_builder.py
+  L6471  _build_news_shared_template_html: complexity=13  [MEDIUM]
+  L1915  _derive_standalone_from_tip: complexity=13  [MEDIUM]
+### scripts/content/content_auditor.py
+  L569  mark_audit_failed_requeue: complexity=13  [MEDIUM]
+### scripts/capture/capture_pipeline.py
+  L1567  _fetch_carousel_slides_apify_post: complexity=13  [MEDIUM]
+  L421  fetch_reel_metadata: complexity=13  [MEDIUM]
+### scripts/research/transcription.py
+  L402  _extract_ig_media_url: complexity=12  [MEDIUM]
+### scripts/research/candidate_collectors.py
+  L573  _ig_via_web_search: complexity=12  [MEDIUM]
+### scripts/content_tracker.py
+  L280  update_news_in_production: complexity=12  [MEDIUM]
+  L189  update_in_production: complexity=12  [MEDIUM]
+### scripts/content_creator/vision_validator.py
+  L69  validate_image_bytes: complexity=12  [MEDIUM]
+### scripts/content_creator/topic_picker.py
+  L147  insert_queue_row: complexity=12  [MEDIUM]
+### scripts/content_creator/opc_template_chooser.py
+  L357  score_templates: complexity=12  [MEDIUM]
+### scripts/content_creator/opc_proof_post.py
+  L1248  run_phase4: complexity=12  [MEDIUM]
+### scripts/content_creator/news_source_dual_gate.py
+  L142  check_news_source_dual_gate: complexity=12  [MEDIUM]
+### scripts/content_creator/main.py
+  L1350  _animate_cover_kling: complexity=12  [MEDIUM]
+### scripts/content_creator/image_providers.py
+  L245  fetch_wikimedia: complexity=12  [MEDIUM]
+### scripts/content_creator/carousel_builder.py
+  L1680  _apply_opc_hook_answer_contract: complexity=12  [MEDIUM]
+### scripts/content/content_auditor.py
+  L377  call_haiku: complexity=12  [MEDIUM]
+  L268  extract_content_brief: complexity=12  [MEDIUM]
+### scripts/capture/scheduled_capture_poll.py
+  L216  main: complexity=12  [MEDIUM]
+### scripts/capture/capture_pipeline.py
+  L4386  _startup_diagnostics: complexity=12  [MEDIUM]
+  L4248  run_unrouted: complexity=12  [MEDIUM]
+  L3382  generate_content_brief: complexity=12  [MEDIUM]
+  L3251  research_from_notes: complexity=12  [MEDIUM]
+  L2280  update_inspiration_library: complexity=12  [MEDIUM]
+  L782  _try_pytubefix_download: complexity=12  [MEDIUM]
+### scripts/youtube_research.py
+  L150  _ytdlp_whisper_fallback: complexity=11  [MEDIUM]
+### scripts/research/person_evidence_runner.py
+  L528  _update_inspiration_library: complexity=11  [MEDIUM]
+  L370  _write_clip_collections: complexity=11  [MEDIUM]
+### scripts/research/candidate_collectors.py
+  L946  _tt_via_apify: complexity=11  [MEDIUM]
+  L267  _item_has_video_media: complexity=11  [MEDIUM]
+### scripts/process_approved_cloud.py
+  L70  main: complexity=11  [MEDIUM]
+### scripts/photo_catalog_cloud.py
+  L354  generate_ideas_from_catalog: complexity=11  [MEDIUM]
+### scripts/content_queue.py
+  L172  generate_content: complexity=11  [MEDIUM]
+### scripts/content_creator/topic_picker.py
+  L100  queue_contains: complexity=11  [MEDIUM]
+### scripts/content_creator/motion_sources.py
+  L651  tier_archive_org: complexity=11  [MEDIUM]
+  L441  tier_apify_youtube: complexity=11  [MEDIUM]
+### scripts/content_creator/main.py
+  L2604  run_motion_only: complexity=11  [MEDIUM]
+  L1108  render_carousel_reel_remotion: complexity=11  [MEDIUM]
+  L1013  render_motion_remotion: complexity=11  [MEDIUM]
+### scripts/content_creator/carousel_reviewer.py
+  L2350  _check_bundle_slide_plan: complexity=11  [MEDIUM]
+  L2049  score_storytelling: complexity=11  [MEDIUM]
+  L738  _rerender_and_upload: complexity=11  [MEDIUM]
+### scripts/content_creator/carousel_builder.py
+  L4943  build_html: complexity=11  [MEDIUM]
+  L3530  _download_drive_photo: complexity=11  [MEDIUM]
+  L2870  _fetch_person_photo: complexity=11  [MEDIUM]
+  L309  _vision_accept: complexity=11  [MEDIUM]
+### scripts/content_creator/approval_handler.py
+  L1194  _restore_unchanged_pngs: complexity=11  [MEDIUM]
+### scripts/capture/video_downloader.py
+  L467  search_youtube: complexity=11  [MEDIUM]
+### scripts/capture/capture_pipeline.py
+  L4175  detect_project: complexity=11  [MEDIUM]
+  L3859  create_content_workspace: complexity=11  [MEDIUM]
+  L2366  _auto_promote_capture_to_content_queue: complexity=11  [MEDIUM]
+  L1747  _try_vision_fallback: complexity=11  [MEDIUM]
+  L1644  _try_embed_scrape: complexity=11  [MEDIUM]
+### scripts/capture/_llm_fallback.py
+  L274  llm_vision: complexity=11  [MEDIUM]
+  L116  llm_text: complexity=11  [MEDIUM]
+### scripts/build_carousel_cloud.py
+  L823  build_with_openai_layout: complexity=11  [MEDIUM]
+  L703  build_with_nano_banana_layout: complexity=11  [MEDIUM]
+### scripts/4am_agent/sheets_writer.py
+  L281  save_scraped_to_inspiration_library: complexity=11  [MEDIUM]
+### scripts/4am_agent/scraper.py
+  L355  scrape_all_targets: complexity=11  [MEDIUM]

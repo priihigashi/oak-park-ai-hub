@@ -1,0 +1,12 @@
+# ruff.toml — oak-park-ai-hub code quality gates
+# Policy: priihigashi/priscila-workspace CLAUDE.md → CODE-QUALITY GATES
+# Ruff version pinned: 0.15.8
+# Baseline recorded: 2026-07-31 (150 violations, 46 files)
+# Rule: no new function may exceed complexity 10 without a documented exception.
+# Existing over-threshold functions are grandfathered — do not increase their complexity.
+
+[lint]
+select = ["C901"]
+
+[lint.mccabe]
+max-complexity = 10
