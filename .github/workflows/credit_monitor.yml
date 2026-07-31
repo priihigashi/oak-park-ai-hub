@@ -47,8 +47,8 @@ jobs:
           if [ "${{ github.event.inputs.primary_only }}" = "true" ]; then
             FLAGS="--primary-only"
           fi
-          python scripts/self_heal/credit_monitor.py $FLAGS
-          EXIT=$?
+          EXIT=0
+          python scripts/self_heal/credit_monitor.py $FLAGS || EXIT=$?
           if   [ $EXIT -eq 0 ]; then echo "status=ok"       >> $GITHUB_OUTPUT
           elif [ $EXIT -eq 1 ]; then echo "status=degraded"  >> $GITHUB_OUTPUT
           else                        echo "status=all_down"  >> $GITHUB_OUTPUT
