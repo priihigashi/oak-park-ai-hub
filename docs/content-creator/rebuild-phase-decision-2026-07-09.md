@@ -1,5 +1,25 @@
 # Content Creator Rebuild — Phase 1 vs Phase 2 Decision Brief
-**Date:** 2026-07-09 | **Status:** Decision ready | **Drafted by:** Daily Advancer
+**Date:** 2026-07-09 | **Status:** Phase 1 carousel_reviewer gaps COMPLETE — pipeline dry-run pending restart decision | **Drafted by:** Daily Advancer
+
+---
+
+## Status Update — 2026-08-02 (Daily Advancer)
+
+Per carousel-reviewer-gap-audit-2026-07-29.md: ALL 4 Phase 1 carousel_reviewer.py gaps are fixed.
+
+- GAP 1 (image validation local+Drive paths) — FIXED
+- GAP 2 (FIX_MODE wired to auto_fix_drive_folder) — FIXED
+- GAP 3 (Pillow fallback guard) — FIXED
+- GAP 4 (legacy subfolder layout fallback) — FIXED
+
+Additionally, classifier.py (Phase 1 Task 2 from phase1-action-brief-2026-07-20.md) exists and is implemented.
+
+Remaining before Phase 2 can start:
+- Action 2: Run OPC talking-head dry-run end-to-end — blocked on pipeline restart decision (Priscila)
+- Action 3: Draft Wealth/Power deck HTML template — can be done now
+- Action 4: Pick first Brazil Wealth/Power topic — Priscila's decision
+
+See pipeline-restart-decision-2026-08-02.md for consolidated restart brief.
 
 ---
 
