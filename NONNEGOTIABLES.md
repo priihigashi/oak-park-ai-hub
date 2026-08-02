@@ -4,7 +4,7 @@
 > Any change that removes or breaks a locked rule requires an explicit note in the commit message.
 > Auto-updated nightly by `scripts/nonnegotiables_updater.py`.
 
-_Last updated: 2026-08-01 (auto-updated by nonnegotiables_updater.py)_
+_Last updated: 2026-08-02 (auto-updated by nonnegotiables_updater.py)_
 
 ---
 
