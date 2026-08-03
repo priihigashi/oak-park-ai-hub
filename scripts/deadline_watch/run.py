@@ -38,11 +38,20 @@ def _notify(candidate: dict) -> None:
 def main() -> int:
     now = datetime.now().astimezone()
     allowed = _allowed()
-    messages = gmail_messages() + outlook_messages()
+    messages = []
+    mailboxes_ok = []
+    mailbox_errors = {}
+    for mailbox, reader in (("opc_gmail", gmail_messages), ("hotmail", outlook_messages)):
+        try:
+            messages.extend(reader())
+            mailboxes_ok.append(mailbox)
+        except Exception as exc:
+            mailbox_errors[mailbox] = f"{type(exc).__name__}: {exc}"
     candidates = [candidate for message in messages if (candidate := classify(message, allowed, now.date()))]
     output = {
-        "checked_at": now.isoformat(timespec="seconds"), "mailboxes_ok": ["opc_gmail", "hotmail"],
-        "messages_checked": len(messages), "candidates": [asdict(item) for item in candidates],
+        "checked_at": now.isoformat(timespec="seconds"), "mailboxes_ok": mailboxes_ok,
+        "mailbox_errors": mailbox_errors, "messages_checked": len(messages),
+        "candidates": [asdict(item) for item in candidates],
     }
     output_path = Path(os.environ.get("DEADLINE_OUTPUT", "deadline-watch-output.json"))
     output_path.write_text(json.dumps(output, default=str, indent=2) + "\n", encoding="utf-8")
@@ -50,6 +59,8 @@ def main() -> int:
         for candidate in output["candidates"]:
             _notify(candidate)
     print(json.dumps({"checked_at": output["checked_at"], "messages_checked": len(messages), "candidate_count": len(candidates)}))
+    if mailbox_errors:
+        raise RuntimeError("mailbox check failed: " + ", ".join(sorted(mailbox_errors)))
     return 0
 
 
@@ -59,4 +70,3 @@ if __name__ == "__main__":
     except Exception as exc:
         print(f"DEADLINE WATCH FAILED: {exc}", file=sys.stderr)
         raise
-
