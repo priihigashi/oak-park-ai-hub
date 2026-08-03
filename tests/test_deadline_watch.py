@@ -1,7 +1,9 @@
 from datetime import date, datetime, timezone
 import unittest
+from unittest.mock import patch
 
 from scripts.deadline_watch.core import Message, classify, extract_dates, sender_allowed
+from scripts.deadline_watch.providers import outlook_messages
 
 
 ALLOWED = ("sufs.org", "stepupforstudents.org", "fldoe.org", "espreschool@outlook.com")
@@ -58,6 +60,21 @@ class DeadlineWatchTests(unittest.TestCase):
         other = classify(message("Deadline", "August 15, 2026", message_id="m2"), ALLOWED, date(2026, 8, 3))
         self.assertEqual(first.alert_id, repeat.alert_id)
         self.assertNotEqual(first.alert_id, other.alert_id)
+
+    @patch("scripts.deadline_watch.providers._query_outlook")
+    def test_outlook_queries_inbox_and_junk_for_exact_senders(self, query):
+        query.return_value = []
+        env = {
+            "COMPOSIO_KEY": "test-key",
+            "DEADLINE_OUTLOOK_ALIAS": "outlook_dairy-tonjon",
+            "DEADLINE_ALLOWED_SENDERS_JSON": '["no-reply@sufs.org", "sufs.org"]',
+        }
+        with patch.dict("os.environ", env, clear=False):
+            self.assertEqual(outlook_messages(), [])
+        self.assertEqual(
+            [call.args[2:] for call in query.call_args_list],
+            [("inbox", "no-reply@sufs.org"), ("junkemail", "no-reply@sufs.org")],
+        )
 
 
 if __name__ == "__main__":

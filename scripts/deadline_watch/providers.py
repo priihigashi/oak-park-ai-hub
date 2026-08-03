@@ -5,7 +5,6 @@ from __future__ import annotations
 import base64
 import json
 import os
-import urllib.parse
 import urllib.request
 from datetime import datetime
 from email.utils import parsedate_to_datetime
@@ -49,12 +48,6 @@ def gmail_messages(hours: int = 36) -> list[Message]:
     return results
 
 
-def _request(url: str, api_key: str) -> dict:
-    request = urllib.request.Request(url, headers={"x-api-key": api_key, "Accept": "application/json"})
-    with urllib.request.urlopen(request, timeout=30) as response:
-        return json.load(response)
-
-
 def _post(url: str, api_key: str, payload: dict) -> dict:
     request = urllib.request.Request(
         url, data=json.dumps(payload).encode(), method="POST",
@@ -64,32 +57,39 @@ def _post(url: str, api_key: str, payload: dict) -> dict:
         return json.load(response)
 
 
-def _outlook_account(api_key: str, alias: str) -> str:
-    query = urllib.parse.urlencode({"toolkit_slugs": "outlook", "statuses": "ACTIVE"})
-    data = _request(f"https://backend.composio.dev/api/v3.1/connected_accounts?{query}", api_key)
-    accounts = data.get("items", data.get("connected_accounts", []))
-    matches = [a for a in accounts if a.get("id") == alias or a.get("alias") == alias]
-    if len(matches) != 1:
-        raise RuntimeError(f"expected one active Outlook account for alias; found {len(matches)}")
-    return matches[0]["id"]
+def _query_outlook(api_key: str, account_id: str, folder: str, sender: str) -> list[dict]:
+    payload = {
+        "connected_account_id": account_id,
+        "arguments": {
+            "folder": folder,
+            "filter": f"from/emailAddress/address eq '{sender}'",
+            "select": ["id", "subject", "receivedDateTime", "isRead", "from", "bodyPreview", "webLink"],
+            "top": 100,
+        },
+    }
+    data = _post(
+        "https://backend.composio.dev/api/v3.1/tools/execute/OUTLOOK_QUERY_EMAILS?toolkit_versions=latest",
+        api_key,
+        payload,
+    )
+    if data.get("successful") is False:
+        raise RuntimeError(f"OUTLOOK_QUERY_EMAILS failed: {data.get('error', 'unknown error')}")
+    result = data.get("data", data)
+    if isinstance(result, dict) and isinstance(result.get("data"), dict):
+        result = result["data"]
+    return result.get("value", result.get("messages", [])) if isinstance(result, dict) else result
 
 
 def outlook_messages(hours: int = 36) -> list[Message]:
     api_key = os.environ["COMPOSIO_KEY"]
-    account_id = _outlook_account(api_key, os.environ["DEADLINE_OUTLOOK_ALIAS"])
-    payload = {
-        "connected_account_id": account_id,
-        "endpoint": "/v1.0/me/messages",
-        "method": "GET",
-        "parameters": [
-            {"name": "$top", "value": "100", "in": "query"},
-            {"name": "$select", "value": "id,subject,from,receivedDateTime,bodyPreview,webLink", "in": "query"},
-            {"name": "$orderby", "value": "receivedDateTime desc", "in": "query"},
-        ],
-    }
-    data = _post("https://backend.composio.dev/api/v3.1/tools/execute/proxy", api_key, payload)
-    upstream = data.get("data", data)
-    items = upstream.get("value", upstream.get("data", {}).get("value", []))
+    account_id = os.environ["DEADLINE_OUTLOOK_ALIAS"]
+    senders = [item.lower() for item in json.loads(os.environ["DEADLINE_ALLOWED_SENDERS_JSON"]) if "@" in item]
+    if not senders:
+        raise RuntimeError("Outlook requires at least one exact sender address")
+    items = []
+    for folder in ("inbox", "junkemail"):
+        for sender in senders:
+            items.extend(_query_outlook(api_key, account_id, folder, sender))
     messages = []
     for item in items:
         sender = item.get("from", {}).get("emailAddress", {}).get("address", "")
@@ -100,4 +100,3 @@ def outlook_messages(hours: int = 36) -> list[Message]:
             source_url=item.get("webLink", ""),
         ))
     return messages
-

@@ -8,8 +8,11 @@ It does not send, forward, label, archive, delete, reply, or create calendar eve
 The public repository intentionally does not contain private mailbox identities or school/medical sender lists.
 Configure these GitHub repository secrets:
 
-- `DEADLINE_OUTLOOK_ALIAS`: the verified active Composio Outlook account alias.
-- `DEADLINE_ALLOWED_SENDERS_JSON`: a JSON list of exact addresses or domains.
+- `DEADLINE_OUTLOOK_ALIAS`: the verified active Composio Outlook connected-account ID.
+- `DEADLINE_ALLOWED_SENDERS_JSON`: a JSON list of exact addresses or domains. Outlook queries use exact addresses only because sender `contains()` filters are unsupported; Gmail may also use domain rules.
+
+The Hotmail adapter uses `OUTLOOK_QUERY_EMAILS` separately for `inbox` and `junkemail`.
+Do not replace it with `OUTLOOK_SEARCH_MESSAGES`, which does not support consumer Hotmail accounts.
 
 The workflow reuses existing `SHEETS_TOKEN`, `COMPOSIO_KEY`, and `NTFY_TOPIC` secrets.
 Keep repository variable `DEADLINE_NOTIFY_ENABLED=false` throughout shadow observation.
