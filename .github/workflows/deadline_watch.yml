@@ -1,10 +1,6 @@
 name: Deadline Safety Net (read-only shadow)
 
 on:
-  # Temporary pre-merge integration trigger; remove after this shadow run.
-  push:
-    branches: [codex/deadline-safety-net]
-    paths: ['.github/workflows/deadline_watch.yml', 'scripts/deadline_watch/**']
   workflow_dispatch:
     inputs:
       notify:
