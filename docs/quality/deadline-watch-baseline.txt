@@ -1,0 +1,7 @@
+Deadline safety net complexity baseline
+Generated: 2026-08-03
+Scope: scripts/deadline_watch and tests/test_deadline_watch.py
+Threshold: 10
+
+Functions over threshold: 0
+
