@@ -1,0 +1,60 @@
+# email-ops/escalation.yaml — Human Approval Gates
+# Source: EMAIL_OPS_MASTER_PLAN v5 + Addendum v6 (Drive doc 1vn3bLk4oAfcOfky-rgTqBD_gdmO90Vv5Ac8zGs4_GK8)
+# Account: priscila@oakpark-construction.com
+# Created: 2026-08-04 by Daily Advancer
+#
+# Rule: when in doubt, fail CLOSED. Never silently skip — log and surface.
+# Default mode is always audit. apply-approved requires prior explicit approval.
+
+always_require_human_approval:
+  - description: "Any filter creation or deletion"
+    reason: "A wrong filter can permanently hide real mail"
+    action: "Propose the filter in review mode; wait for approval before apply-approved"
+  - description: "Any label rename or deletion"
+    reason: "Pipeline scripts reference label names; renaming breaks automation"
+    action: "Surface the rename + list affected pipelines; human must confirm both sides change together"
+  - description: "Archiving any thread from a protected sender"
+    reason: "Protected senders include active clients, legal, billing, security notices"
+    action: "Halt, log the sender, surface to Priscila — never auto-archive"
+  - description: "Logging a task row to the 📥 Inbox tab"
+    reason: "Task rows are permanent records; wrong rows create noise"
+    action: "Only log tasks in apply-approved mode with explicit intent. One unresolved issue = one task."
+  - description: "Marking a thread as handled that contains an unknown sender with an attachment"
+    reason: "Unknown + attachment = potential security/legal item"
+    action: "Surface to Priscila; do not archive, label, or mark read"
+  - description: "Any action in execute-archive mode"
+    reason: "Archiving is reversible but disruptive if wrong"
+    action: "Require prior review-mode approval on the specific thread set"
+  - description: "Any send/reply action (mode not yet built)"
+    reason: "Sending on behalf of Priscila has external impact"
+    action: "Mode send/reply is blocked until explicitly built and approved"
+
+fail_closed_conditions:
+  # If any of these occur, stop and report — do not proceed
+  - "Sender matches a protected-senders.yaml entry"
+  - "Thread subject contains: invoice, contract, agreement, legal, court, subpoena, NDA, LOI"
+  - "Thread is from an unknown sender AND has an attachment"
+  - "Confidence score for classification is below 0.75 (when scoring is active)"
+  - "Requested action conflicts with inbox-policy.yaml inbox_rule"
+  - "Mode is apply-approved but no prior review approval exists in the current session"
+  - "Any pipeline flagged ACTIVE_RECOMMENDED_PAUSE in pipeline-control/pipelines.yaml — do not add new filters for it; surface to Priscila"
+
+conflicts:
+  resolution: "More protective rule always wins."
+  examples:
+    - conflict: "Filter matches a sender in protected-senders.yaml"
+      resolution: "protected-senders.yaml wins — no filter applied"
+    - conflict: "Thread matches both an archiving rule and the inbox rule (concrete action needed)"
+      resolution: "Inbox rule wins — thread stays in inbox"
+    - conflict: "Two label rules both match a thread"
+      resolution: "Apply both labels; do not archive until human confirms which wins"
+
+confidence_thresholds:
+  auto_apply_min: 0.90   # Only auto-apply in morning-zero mode at this confidence or above
+  surface_for_review: 0.75  # Below this: always surface to Priscila, never apply silently
+  reject: 0.0  # Below surface_for_review: log as uncertain, take no action
+
+logging:
+  every_fail_closed_event: true    # Log every time a fail-closed condition triggers
+  every_protected_sender_hit: true # Log every time a protected sender blocks an action
+  log_destination: "email-ops/change-log.md (append) + Ideas & Inbox 📥 Inbox tab if action-required"

@@ -1,0 +1,72 @@
+# email-ops/rollback.yaml — Rollback Schema + Restoration Procedure
+# Source: EMAIL_OPS_MASTER_PLAN v5 + Addendum v6 (Drive doc 1vn3bLk4oAfcOfky-rgTqBD_gdmO90Vv5Ac8zGs4_GK8)
+# Account: priscila@oakpark-construction.com
+# Created: 2026-08-04 by Daily Advancer
+#
+# Every action in apply-approved / morning-zero mode MUST produce a rollback record.
+# Rollback records live in email-ops/change-log.md as appended YAML blocks.
+# Restorations are performed by reading the record and inverting the action via Gmail API.
+
+rollback_record_schema:
+  # Required fields for every logged action
+  fields:
+    run_id:
+      type: string
+      description: "Unique ID for this triage session (e.g. 2026-08-04T14:32:00Z)"
+    action_type:
+      type: enum
+      values: [add_label, remove_label, archive, create_filter, delete_filter, log_task]
+    thread_id:
+      type: string
+      description: "Gmail thread ID (e.g. 193abc...). Stable for the lifetime of the thread."
+    message_ids:
+      type: list[string]
+      description: "All Gmail message IDs in this thread that were modified"
+    prior_state:
+      labels_before: list[string]   # Label IDs present before the action
+      in_inbox_before: boolean      # true = was in inbox (INBOX label present)
+    action_taken:
+      labels_added: list[string]    # Label IDs added
+      labels_removed: list[string]  # Label IDs removed (INBOX = archived)
+    timestamp_utc: string  # ISO 8601
+    session_note: string   # Brief reason for the action (max 120 chars)
+
+restore_procedure:
+  # To undo an action for a specific thread_id from a run:
+  steps:
+    - "1. Read the rollback record from email-ops/change-log.md for the run_id"
+    - "2. For each thread_id: call Gmail API threads.modify with addLabelIds=prior_state.labels_before, removeLabelIds=action_taken.labels_added"
+    - "3. If in_inbox_before was true: add INBOX label back (un-archive)"
+    - "4. Append a RESTORE record to change-log.md with the same format, action_type: restore"
+  notes:
+    - "Restoration always uses thread_id, not message_id, to catch newly-added replies"
+    - "Deleted filters cannot be auto-restored — re-create from filters.yaml definition"
+    - "Task rows logged to Ideas & Inbox must be manually removed by Priscila"
+
+bulk_restore:
+  # To undo an entire run (run_id):
+  steps:
+    - "1. Find all rollback records with matching run_id in change-log.md"
+    - "2. Process each thread in reverse order (last action first)"
+    - "3. Apply restore_procedure for each"
+    - "4. Log one BULK_RESTORE record covering the run_id"
+
+retention:
+  rollback_records_kept_for_days: 90
+  after_retention: "Mark records EXPIRED; do not delete — archived history"
+
+example_rollback_record: |
+  ---
+  # ROLLBACK RECORD — 2026-08-04T14:32:00Z
+  run_id: "2026-08-04T14:32:00Z"
+  action_type: archive
+  thread_id: "193abc456def7890"
+  message_ids: ["193abc456def7891", "193abc456def7892"]
+  prior_state:
+    labels_before: ["Label_32", "INBOX"]
+    in_inbox_before: true
+  action_taken:
+    labels_added: ["Label_22"]
+    labels_removed: ["INBOX"]
+  timestamp_utc: "2026-08-04T14:32:01Z"
+  session_note: "morning-zero: automation digest, no action required"
