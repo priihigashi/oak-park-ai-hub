@@ -355,6 +355,23 @@ jobs:
             --workflow content_creator.yml \
             --status "${{ job.status }}"
 
+      # Added 2026-08-05. Without this, the five red scheduled runs between
+      # 2026-06-13 and 2026-06-25 left ZERO rows in the 🚨 Pipeline Failures
+      # tab, so session-start's "scan the tab" check reported clean while the
+      # content pipeline was dead. continue-on-error so it can never mask the
+      # real failure.
+      - name: Log failure to 🚨 Pipeline Failures
+        if: failure()
+        continue-on-error: true
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: |
+          python scripts/log_workflow_failure.py \
+            --workflow "content_creator.yml" \
+            --stage "create-content" \
+            --error "job failed — see run log for the failing step" \
+            --note "auto-logged by if:failure() step"
+
       - name: Alert on failure
         if: failure()
         uses: actions/github-script@v7
