@@ -3527,6 +3527,80 @@ def _generate_replicate_sdxl(prompt, work_dir, filename):
     )
 
 
+def _looks_like_image_bytes(path) -> bool:
+    """True only if the bytes on disk actually start with an image signature.
+
+    Found 2026-08-05: Drive's anonymous `/uc?export=download` endpoint answers
+    **200 OK with an HTML error page** when a file is missing or not public.
+    That page is comfortably larger than the old 2000-byte size floor below, so
+    it was accepted as a photo and written out as `.jpg`. Run 28161948295
+    (2026-06-25) shipped 10 such files; the strict carousel reviewer correctly
+    called all 10 "corrupt or unreadable" and failed the workflow — which is
+    what put the whole content pipeline red and led to the crons being paused.
+
+    Deliberately dependency-free (magic bytes only) so this gate still works
+    when Pillow is missing; the caller layers a Pillow decode on top when it is
+    importable.
+    """
+    try:
+        with open(path, "rb") as fh:
+            head = fh.read(32)
+    except Exception:
+        return False
+    if not head:
+        return False
+    for sig in (b"\xff\xd8\xff",            # JPEG
+                b"\x89PNG\r\n\x1a\n",       # PNG
+                b"GIF87a", b"GIF89a",       # GIF
+                b"BM",                      # BMP
+                b"II*\x00", b"MM\x00*"):    # TIFF
+        if head.startswith(sig):
+            return True
+    if head[:4] == b"RIFF" and head[8:12] == b"WEBP":
+        return True
+    if head[4:8] == b"ftyp":                # HEIC / HEIF / AVIF
+        return True
+    return False
+
+
+def _accept_downloaded_photo(dest_path) -> bool:
+    """Size floor + real-image check. Removes the file when it fails."""
+    try:
+        if os.path.getsize(dest_path) < 2000:
+            os.remove(dest_path)
+            return False
+    except Exception:
+        return False
+    if not _looks_like_image_bytes(dest_path):
+        with open(dest_path, "rb") as fh:
+            _head = fh.read(16)
+        print(f"  _download_drive_photo: rejected non-image payload "
+              f"({os.path.basename(dest_path)}, first bytes {_head!r}) — "
+              f"almost certainly a Drive HTML error page, not a photo")
+        os.remove(dest_path)
+        return False
+    # Second, stricter gate when Pillow is available. Never let a MISSING
+    # Pillow reject a file that already passed the magic-byte check.
+    try:
+        from PIL import Image  # type: ignore
+    except Exception:
+        print("  _download_drive_photo: Pillow unavailable — accepted on "
+              "magic-byte check only (decode not verified)")
+        return True
+    try:
+        with Image.open(dest_path) as _im:
+            _im.verify()
+        return True
+    except Exception as _pil_e:
+        print(f"  _download_drive_photo: rejected undecodable image "
+              f"({os.path.basename(dest_path)}): {_pil_e}")
+        try:
+            os.remove(dest_path)
+        except Exception:
+            pass
+        return False
+
+
 def _download_drive_photo(drive_url, dest_path):
     """Download a photo from a Drive viewer URL to dest_path. Returns dest_path or ''.
 
@@ -3568,19 +3642,20 @@ def _download_drive_photo(drive_url, dest_path):
                     _, done = _downloader.next_chunk()
                 with open(dest_path, "wb") as f:
                     f.write(_buf.getvalue())
-                if os.path.getsize(dest_path) >= 2000:
+                if _accept_downloaded_photo(dest_path):
                     return dest_path
-                os.remove(dest_path)
             except Exception as _api_e:
                 print(f"  _download_drive_photo API error: {_api_e}")
 
-        # Fallback: anonymous URL (only works for publicly shared files)
+        # Fallback: anonymous URL (only works for publicly shared files).
+        # This endpoint returns 200 + an HTML error page for private/missing
+        # files, so the payload must be validated as a real image, not merely
+        # measured — see _accept_downloaded_photo.
         download_url = f"https://drive.google.com/uc?id={file_id}&export=download"
         req = urllib.request.Request(download_url, headers={"User-Agent": "Mozilla/5.0"})
         with urllib.request.urlopen(req, timeout=20) as r, open(dest_path, "wb") as f:
             f.write(r.read())
-        if os.path.getsize(dest_path) < 2000:
-            os.remove(dest_path)
+        if not _accept_downloaded_photo(dest_path):
             return ""
         return dest_path
     except Exception as e:
