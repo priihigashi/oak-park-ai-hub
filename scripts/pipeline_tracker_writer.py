@@ -50,7 +50,13 @@ def _get_creds():
         client_secret=data.get("client_secret"),
         scopes=data.get("scopes") or ["https://www.googleapis.com/auth/spreadsheets"],
     )
-    if creds.expired and creds.refresh_token:
+    # STALE-TOKEN CLASS BUG (found 2026-08-05): `expiry` is not passed to
+    # Credentials(...) above, and google-auth documents "Credentials with expiry
+    # set to None is considered to never expire" — so creds.expired is
+    # permanently False and this refresh never fired. The access token baked
+    # into SHEETS_TOKEN was reused forever and 401'd once it aged out (~1h).
+    # Refresh whenever a refresh_token is available.
+    if creds.refresh_token:
         creds.refresh(Request())
     return creds
 
