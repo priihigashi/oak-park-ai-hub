@@ -4,11 +4,14 @@
 
 Turns the JS/TS Quality Gate from *"CI that reports red"* into an actual gate.
 
-As of 2026-08-11 `main` is `protected: false` with zero rulesets and zero required
-status checks — so a PR can be merged while `ESLint complexity` or `Remotion typecheck`
-is failing, and `main` can be pushed to directly. This ruleset closes that.
+**Live status, 2026-08-11:** ruleset `20720805` is active on `main`, requires
+`ESLint complexity` + `Remotion typecheck`, and has `bypass_actors: []`.
+A deliberately failing probe PR was blocked from merge, so the gate is proven to
+bind rather than merely display red.
 
-### Apply it
+### Apply / inspect / rollback
+
+Apply the version-controlled ruleset only if no active copy exists:
 
 ```bash
 gh api -X POST repos/priihigashi/oak-park-ai-hub/rulesets \
@@ -21,70 +24,99 @@ Verify:
 gh api repos/priihigashi/oak-park-ai-hub/rulesets --jq '.[] | "\(.id) \(.name) \(.enforcement)"'
 ```
 
-To update an existing ruleset instead of creating a duplicate, use its id:
+Update an existing ruleset:
 
 ```bash
 gh api -X PUT repos/priihigashi/oak-park-ai-hub/rulesets/<ID> \
   --input .github/rulesets/main-require-quality-gate.json
 ```
 
-To roll back:
+Rollback only for an explicit emergency decision:
 
 ```bash
-gh api -X DELETE repos/priihigashi/oak-park-ai-hub/rulesets/<ID>
+gh api -X PUT repos/priihigashi/oak-park-ai-hub/rulesets/20720805 \
+  -f enforcement=disabled
 ```
 
 ### What it does
 
 | Rule | Effect |
 |---|---|
-| `required_status_checks` | `ESLint complexity` and `Remotion typecheck` must pass before merge |
+| `required_status_checks` | `ESLint complexity` and `Remotion typecheck` must pass before a PR can merge |
 | `deletion` | `main` cannot be deleted |
 | `non_fast_forward` | no force-pushing `main` |
 
-### ⚠️ Bypass — corrected 2026-08-11 after applying it for real
+### Bypass findings — measured, not inferred
 
-An earlier version of this file prescribed `{"actor_id": 15368, "actor_type":
-"Integration"}` to exempt GitHub Actions. **That does not work on this repo.**
-The API rejects it:
+An earlier config prescribed the GitHub Actions integration as a bypass actor.
+The API rejected it on this user-owned repository:
 
 ```
 422 Validation Failed
 Actor GitHub Actions integration must be part of the ruleset source or owner organization
 ```
 
-`priihigashi/oak-park-ai-hub` is **user-owned, not org-owned**, so `Integration`
-bypass actors are unavailable. Only `RepositoryRole` actors validate here
-(tested: `5` admin and `4` write both accept; `enforcement: "evaluate"` is also
-rejected — it requires Enterprise).
+`RepositoryRole` actors do validate, but using a write/admin role as a bypass
+would also exempt human/agent writers. That defeats the purpose of the gate, so
+**do not add a bypass actor**. `enforcement: "evaluate"` was also rejected here;
+it requires Enterprise.
 
-### The unresolved consequence — read before relying on this
+Ruleset required-status-checks also apply to direct pushes. This was verified by
+an admin direct push to `main`, which GitHub rejected with:
 
-`required_status_checks` in a ruleset applies to **direct pushes as well as
-merges**. Verified empirically: a direct push to `main` was rejected with
-*"2 of 2 required status checks are expected"*, even as a repository admin.
+```
+2 of 2 required status checks are expected
+```
 
-Three workflows push straight to `main` via `secrets.GITHUB_TOKEN`:
+### What DOES NOT work — do not rebuild it
 
-| Workflow | Schedule | Pushes |
-|---|---|---|
-| `nonnegotiables.yml` | daily 02:00 ET | `NONNEGOTIABLES.md` — commits most nights |
-| `ads_pulse.yml` | Mondays 08:00 ET | `docs/dashboard/*.html` |
-| `ads_approval_watcher.yml` | every 6h | `.github/agent_state/ads_api_approved.json` (only on state change) |
+The temporary-ref/prevalidated-SHA design from PR #239 was falsified after
+merge. The experiment pushed a commit to a temporary branch, obtained
+`success` for **both required checks on that exact SHA**, then attempted to push
+that same SHA to `main`. The ruleset still rejected the direct push with:
 
-### 🔴 ONE MANUAL SETTING IS STILL REQUIRED — the bots fail until you flip it
+```
+2 of 2 required status checks are expected
+```
 
-Everything below is built, merged and tested. It does **not yet work end to end**,
-for one reason found by the self-test:
+Classic branch-protection troubleshooting guidance about pre-existing status
+checks does not describe this repository-ruleset push behavior. PR #241 replaced
+that design. The current helper name `push_prevalidated_main.sh` is historical;
+**read its implementation, not the old name** — it now opens and merges a PR.
+
+### The working design — bots go through a PR
+
+`scripts/ci/push_prevalidated_main.sh` now does:
+
+```
+commit locally
+  -> push to bot/<label>-<run_id>
+  -> open PR against main
+  -> pull_request event runs the required gate
+  -> wait for BOTH named checks on the exact PR head SHA
+  -> merge the PR only when both are success
+  -> delete the temporary bot branch
+```
+
+This route was proven from a laptop/admin principal with PR #240. The helper
+itself then received an in-runner self-test because the real workflows use
+`GITHUB_TOKEN`, which is a different and weaker principal.
+
+### 🔴 ONE MANUAL REPOSITORY SETTING IS STILL REQUIRED
+
+The in-runner self-test correctly failed with:
 
 ```
 pull request create failed: GraphQL:
 GitHub Actions is not permitted to create or approve pull requests (createPullRequest)
 ```
 
-`repos/priihigashi/oak-park-ai-hub/actions/permissions/workflow` currently reports
-`can_approve_pull_request_reviews: false`. That toggle also governs *creating*
-PRs, so the helper cannot open one from inside a runner. Fix it with either:
+The repository Actions setting currently reports
+`can_approve_pull_request_reviews: false`. Despite its name, that setting also
+governs PR creation by GitHub Actions. Until it is enabled, the three automated
+writers fail **loudly** instead of silently claiming success.
+
+Enable it with:
 
 ```bash
 gh api -X PUT repos/priihigashi/oak-park-ai-hub/actions/permissions/workflow \
@@ -92,83 +124,55 @@ gh api -X PUT repos/priihigashi/oak-park-ai-hub/actions/permissions/workflow \
   -F can_approve_pull_request_reviews=true
 ```
 
-or the UI: **Settings → Actions → General → Workflow permissions →
-"Allow GitHub Actions to create and approve pull requests"**.
+or in the UI:
 
-Then prove it, don't assume it:
+**Settings → Actions → General → Workflow permissions →
+“Allow GitHub Actions to create and approve pull requests”.**
+
+Then prove the runner path instead of assuming it:
 
 ```bash
 gh workflow run bot_route_selftest.yml
 gh run watch "$(gh run list --workflow=bot_route_selftest.yml --limit 1 --json databaseId --jq '.[0].databaseId')"
 ```
 
-A green run means a real commit reached `main` through the gate using
-`GITHUB_TOKEN`. Delete `bot_route_selftest.yml` after it passes once.
+A green run means a real `GITHUB_TOKEN` bot commit reached `main` through a PR
+and the required gate. Delete `bot_route_selftest.yml` after that one successful
+proof.
 
-**Until that setting is flipped, all three bots fail** — loudly, which is the
-correct behaviour and a deliberate change (the false all-clear was fixed in
-#239). `nonnegotiables.yml` is the first to hit it, at 02:00 ET.
+### Automated writers that depend on this route
 
-If you want them working before you get to this, the temporary fallback is to
-disable the ruleset — never to add a bypass actor:
+| Workflow | Schedule | Writes |
+|---|---|---|
+| `nonnegotiables.yml` | daily 02:00 America/New_York | `NONNEGOTIABLES.md` |
+| `ads_pulse.yml` | Mondays 08:00 ET | `docs/dashboard/*.html` |
+| `ads_approval_watcher.yml` | every 6h | `.github/agent_state/ads_api_approved.json` only on state change |
 
-```bash
-gh api -X PUT repos/priihigashi/oak-park-ai-hub/rulesets/20720805 -f enforcement=disabled
-```
+All three must use `contents: write` + `pull-requests: write` and the shared
+helper. The old false-all-clear paths were corrected: a failed commit/push/PR
+must make the workflow red; “nothing to commit” is the only benign no-op.
 
----
-
-### ✅ The design (PR #239, corrected in #241) — bots pass through the gate
-
-The write-role bypass was **rejected as a solution**: it would exempt every human
-writer as well, in a repo where agent sessions hold write and admin tokens — the
-exact actors the gate exists to constrain. `bypass_actors` stays `[]`.
-
-Instead all three workflows call `scripts/ci/push_prevalidated_main.sh`:
-
-```
-commit locally
-  -> push exact SHA to bot/<label>-<run_id>
-  -> workflow_dispatch quality-js.yml --ref that branch
-  -> wait for the run whose head_sha == that exact SHA
-  -> assert EACH required check name is success on that SHA
-  -> push the same SHA to main
-  -> delete the temp branch
-```
-
-GitHub accepts the final push because the commit already carries passing checks.
-If `main` moved while waiting, the helper rebases and **revalidates** — check
-results never carry across SHAs. It never force-pushes `main`.
-
-`quality-js.yml` therefore needs its `workflow_dispatch` trigger. That is the
-mechanism, not a convenience: a push made with `GITHUB_TOKEN` does not trigger a
-workflow, but `workflow_dispatch` invoked with `GITHUB_TOKEN` does. Remove that
-trigger and all three bots break.
-
-So the invariant now holds in both directions:
-
-> humans don't bypass the gate, bots don't bypass the gate, and automation still works.
-
-**Do not add a bypass actor to "fix" a failing bot.** A failing bot means its
-commit did not pass the gate — which is the gate working.
-
-### Proof the gate binds (run 2026-08-11)
+### Proof the human gate binds
 
 A throwaway PR with one deliberately over-threshold function produced
-`ESLint complexity: fail` → PR state `MERGEABLE / BLOCKED` → `gh pr merge`
-refused with *"the base branch policy prohibits the merge"*, offering `--admin`
-as the only override. Red check now blocks a merge rather than merely displaying
-red. Probe branch and PR deleted; `main` never received the file.
+`ESLint complexity: fail` → PR `BLOCKED` → `gh pr merge` refused with
+*"the base branch policy prohibits the merge"*. The probe branch was deleted and
+`main` never received the file.
 
-### Why the path filters had to go first
+### Why `quality-js.yml` has no `paths:` filter
 
-`quality-js.yml` previously had `paths:` filters. A required status check that is
-skipped by a path filter never reports a conclusion — GitHub shows it as
-*"Expected — waiting for status"* and the PR can never merge. PR #235 removed the
-filters for this reason. **Do not re-add them while these checks are required.**
+A required check that is skipped by a workflow-level path filter never reports a
+conclusion. GitHub can leave the PR at *"Expected — waiting for status"*
+indefinitely. PR #235 removed those filters before the checks became required.
+**Do not re-add them while these contexts are required.**
 
-### Check the context names still match
+### Keep context names synchronized
 
-The `context` values must equal the job `name:` fields in `quality-js.yml`
-(`ESLint complexity`, `Remotion typecheck`). Renaming a job without updating this
-file leaves a required check that never reports — the same deadlock.
+The ruleset `context` values must exactly equal the job `name:` values in
+`quality-js.yml`:
+
+- `ESLint complexity`
+- `Remotion typecheck`
+
+Renaming a job without updating the ruleset leaves a required context that never
+reports and can deadlock every PR.
