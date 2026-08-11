@@ -1,0 +1,15 @@
+[tool.ruff]
+# Complexity-only quality gate. The tool version is pinned in requirements-dev.txt.
+exclude = [
+    ".git",
+    ".ruff_cache",
+    ".venv",
+    "node_modules",
+    "skills/shared/remotion-best-practices/rules/assets",
+]
+
+[tool.ruff.lint]
+select = ["C901"]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10

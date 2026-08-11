@@ -1,0 +1,12 @@
+{
+  "name": "oak-park-ai-hub-quality-gates",
+  "private": true,
+  "packageManager": "pnpm@11.9.0",
+  "scripts": {
+    "quality:js": "eslint scripts --ext .js,.mjs,.cjs,.ts,.tsx"
+  },
+  "devDependencies": {
+    "eslint": "10.4.0",
+    "typescript-eslint": "8.65.0"
+  }
+}
