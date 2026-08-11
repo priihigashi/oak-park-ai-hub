@@ -13,11 +13,12 @@ import re
 import shutil
 import subprocess
 import tempfile
-import uuid
 from pathlib import Path
 from typing import Optional
 
 from .contracts import MediaAsset, Scene
+from .stable_ids import asset_id as stable_asset_id
+from .stable_ids import keyframe_name, scene_id
 
 
 _SCENE_THRESHOLD = 0.30   # FFmpeg scene-change score (0.0–1.0); raise to merge short cuts
@@ -67,20 +68,29 @@ def detect_scenes(
     return pairs or [(0.0, round(duration, 3))]
 
 
-def extract_keyframe(video_path: str, timestamp: float, output_dir: Path) -> str:
+def extract_keyframe(
+    video_path: str,
+    timestamp: float,
+    output_dir: Path,
+    *,
+    filename: Optional[str] = None,
+) -> str:
     """
     Seek to `timestamp` seconds in the video and save one frame as PNG.
     Returns the absolute path to the PNG.
     """
     output_dir.mkdir(parents=True, exist_ok=True)
-    out_path = output_dir / f"{uuid.uuid4().hex}.png"
+    if filename is None:
+        fallback_id = stable_asset_id(f"file:{Path(video_path).resolve()}")
+        filename = keyframe_name(fallback_id, timestamp)
+    out_path = output_dir / filename
     cmd = [
         "ffmpeg", "-hide_banner", "-loglevel", "error",
         "-ss", str(timestamp),
         "-i", video_path,
         "-vframes", "1",
         "-q:v", "2",
-        str(out_path),
+        "-y", str(out_path),
     ]
     subprocess.run(cmd, check=True, timeout=60)
     return str(out_path)
@@ -181,12 +191,23 @@ def extract_scenes(
     scenes: list[Scene] = []
 
     for start, end in pairs:
+        stable_scene_id = scene_id(
+            asset.asset_id,
+            start,
+            end,
+            media_version=asset.checksum,
+        )
         kf_ts = start + (end - start) * _KEYFRAME_OFFSET
         keyframe_paths: list[str] = []
         quality: dict = {}
 
         try:
-            kf_path = extract_keyframe(asset.path, kf_ts, keyframe_dir)
+            kf_path = extract_keyframe(
+                asset.path,
+                kf_ts,
+                keyframe_dir,
+                filename=keyframe_name(stable_scene_id, kf_ts),
+            )
             keyframe_paths = [kf_path]
             quality = _quality_signals(kf_path)
         except Exception:
@@ -202,7 +223,7 @@ def extract_scenes(
                 pass
 
         scenes.append(Scene(
-            scene_id=str(uuid.uuid4()),
+            scene_id=stable_scene_id,
             asset_id=asset.asset_id,
             start_time=start,
             end_time=end,
