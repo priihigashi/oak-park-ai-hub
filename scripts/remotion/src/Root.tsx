@@ -1,5 +1,5 @@
 import React from "react";
-import { Composition, registerRoot } from "remotion";
+import { Composition, registerRoot, staticFile } from "remotion";
 import { NewsReel, NewsReelProps } from "./NewsReel";
 import { CarouselMotion, CarouselMotionProps } from "./CarouselMotion";
 import { CarouselReel, CarouselReelProps } from "./CarouselReel";
@@ -11,7 +11,9 @@ import {
 
 // Default props for development previews — overridden by --props in CI render
 const defaultProps: NewsReelProps = {
-  videoSrc: "./public/source_clip.mp4",
+  // NewsReel passes videoSrc straight to <OffthreadVideo src>, so it needs a
+  // resolvable URL — staticFile() provides one. Production overrides via --props.
+  videoSrc: staticFile("source_clip.mp4"),
   videoStartFrame: 0,
   proofSlides: [
     {
@@ -33,7 +35,8 @@ const defaultProps: NewsReelProps = {
 // CarouselMotion default props — overridden by --props in CI render.
 // 1080x1350 matches Instagram carousel slide dimensions; 150 frames @ 30fps = 5s loop.
 const carouselDefaultProps: CarouselMotionProps = {
-  posterPng: "./public/poster_placeholder.png",
+  // staticFile() resolves relative to public/ — a "./public/" prefix double-nests and throws.
+  posterPng: "poster_placeholder.png",
   clipSrc: undefined,
   hookText: undefined,
   accentColor: "#F4C430",

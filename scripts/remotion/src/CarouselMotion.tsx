@@ -27,12 +27,12 @@ import {
  * Duration: fixed at 150 frames @ 30fps = 5 seconds (matches Playwright loop).
  */
 
-export interface CarouselMotionProps {
+export type CarouselMotionProps = {
   posterPng: string;
   clipSrc?: string;
   hookText?: string;
   accentColor?: string;
-}
+};
 
 const W = 1080;
 const H = 1350;
