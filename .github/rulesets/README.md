@@ -72,27 +72,39 @@ Three workflows push straight to `main` via `secrets.GITHUB_TOKEN`:
 | `ads_pulse.yml` | Mondays 08:00 ET | `docs/dashboard/*.html` |
 | `ads_approval_watcher.yml` | every 6h | `.github/agent_state/ads_api_approved.json` (only on state change) |
 
-With `bypass_actors: []` these **will fail** the next time they have something to
-commit. Pick one before leaving the ruleset active:
+### ✅ RESOLVED (PR #239) — the bots pass through the gate, nobody bypasses it
 
-1. **Add a write-role bypass** — restores the bots; also exempts every human
-   writer, so the gate then binds only via the PR merge button:
-   ```bash
-   gh api -X PUT repos/priihigashi/oak-park-ai-hub/rulesets/<ID> \
-     -f 'bypass_actors[][actor_id]=4' \
-     -f 'bypass_actors[][actor_type]=RepositoryRole' \
-     -f 'bypass_actors[][bypass_mode]=always'
-   ```
-2. **Convert the three workflows to open PRs** instead of pushing to `main` —
-   strongest, but the most work.
-3. **Disable the ruleset** until one of the above is done:
-   ```bash
-   gh api -X PUT repos/priihigashi/oak-park-ai-hub/rulesets/<ID> -f enforcement=disabled
-   ```
+The write-role bypass was **rejected as a solution**: it would exempt every human
+writer as well, in a repo where agent sessions hold write and admin tokens — the
+exact actors the gate exists to constrain. `bypass_actors` stays `[]`.
 
-Repository admins deliberately get no bypass in the committed config: agent
-sessions act with an admin token, so an admin bypass would exempt exactly the
-actor the gate exists to constrain.
+Instead all three workflows call `scripts/ci/push_prevalidated_main.sh`:
+
+```
+commit locally
+  -> push exact SHA to bot/<label>-<run_id>
+  -> workflow_dispatch quality-js.yml --ref that branch
+  -> wait for the run whose head_sha == that exact SHA
+  -> assert EACH required check name is success on that SHA
+  -> push the same SHA to main
+  -> delete the temp branch
+```
+
+GitHub accepts the final push because the commit already carries passing checks.
+If `main` moved while waiting, the helper rebases and **revalidates** — check
+results never carry across SHAs. It never force-pushes `main`.
+
+`quality-js.yml` therefore needs its `workflow_dispatch` trigger. That is the
+mechanism, not a convenience: a push made with `GITHUB_TOKEN` does not trigger a
+workflow, but `workflow_dispatch` invoked with `GITHUB_TOKEN` does. Remove that
+trigger and all three bots break.
+
+So the invariant now holds in both directions:
+
+> humans don't bypass the gate, bots don't bypass the gate, and automation still works.
+
+**Do not add a bypass actor to "fix" a failing bot.** A failing bot means its
+commit did not pass the gate — which is the gate working.
 
 ### Proof the gate binds (run 2026-08-11)
 

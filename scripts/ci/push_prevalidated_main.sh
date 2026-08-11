@@ -5,61 +5,75 @@
 #
 # WHY THIS EXISTS
 # ---------------
-# Ruleset 20720805 requires "ESLint complexity" and "Remotion typecheck" on main,
-# with bypass_actors: []. Ruleset required-status-checks apply to DIRECT PUSHES,
-# not just merges — a bot pushing straight to main is rejected with
+# Ruleset 20720805 requires "ESLint complexity" and "Remotion typecheck" on main
+# with bypass_actors: []. Those checks apply to DIRECT PUSHES, not just merges —
+# a bot pushing straight to main is rejected with
 # "2 of 2 required status checks are expected".
 #
-# GitHub does accept a push whose commit ALREADY has the required checks passing.
-# So instead of bypassing the gate, bots pass through it:
+# WHAT DOES NOT WORK (tested 2026-08-11, do not retry)
+# ----------------------------------------------------
+# "Push the commit to a temp ref, get the checks green on that exact SHA, then
+# push the same SHA to main" — the model suggested by GitHub's branch-protection
+# troubleshooting docs — DOES NOT work under a ruleset. Verified end to end:
+# both required check runs reported `success` on the exact SHA (confirmed via
+# /commits/{sha}/check-runs), and the push to main was STILL rejected with
+# "2 of 2 required status checks are expected". Ruleset push evaluation does not
+# honour pre-existing check runs the way classic branch protection does.
+#
+# WHAT DOES WORK
+# --------------
+# A pull request merge. The merge API evaluates the ruleset and permits the merge
+# once the required checks pass on the PR head — proven repeatedly today.
+# So bots open a PR and merge it:
 #
 #   commit locally
-#     -> push that exact commit to a temporary bot/* branch
-#     -> workflow_dispatch quality-js.yml against that branch
-#     -> wait for the run, then verify the check runs on the EXACT SHA
-#     -> push the same green SHA to main
-#     -> delete the temporary branch
+#     -> push to bot/<label>-<run_id>
+#     -> open a PR against main (the `pull_request` trigger runs the gate; no
+#        dispatch needed, because the PR event is not the GITHUB_TOKEN-push case)
+#     -> wait for BOTH required checks to conclude on the PR head SHA
+#     -> merge via the API; delete the branch
 #
-# workflow_dispatch is required: a push made with GITHUB_TOKEN deliberately does
-# NOT trigger another workflow, but workflow_dispatch invoked with GITHUB_TOKEN
-# does create a run.
+# The bot therefore faces exactly the gate a human faces. Nobody bypasses it.
 #
 # USAGE
 #   scripts/ci/push_prevalidated_main.sh <label>
 #
 #   Call it with the commit ALREADY created on the local checkout of main.
-#   <label> is a short slug used in the temp branch name (e.g. "nonnegotiables").
+#   <label> is a short slug used in the branch name (e.g. "nonnegotiables").
 #
 # REQUIREMENTS in the calling workflow
 #   permissions:
-#     contents: write
-#     actions:  write        # <- required to dispatch quality-js.yml
+#     contents:      write
+#     pull-requests: write     # <- required to open and merge the PR
 #   env:
 #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #
 # EXIT CODES
 #   0  commit is on main (or there was nothing to push)
-#   1  validation failed, timed out, or the push was rejected — CALLER MUST FAIL
+#   1  the gate failed, timed out, or the merge was refused — CALLER MUST FAIL
 #
 set -euo pipefail
 
 LABEL="${1:?usage: push_prevalidated_main.sh <label>}"
 REPO="${GITHUB_REPOSITORY:-priihigashi/oak-park-ai-hub}"
 RUN_ID="${GITHUB_RUN_ID:-manual$$}"
-GATE_WORKFLOW="quality-js.yml"
 REQUIRED_CHECKS=("ESLint complexity" "Remotion typecheck")
 POLL_SECONDS="${POLL_SECONDS:-15}"
-MAX_WAIT_SECONDS="${MAX_WAIT_SECONDS:-900}"   # 15 min; the gate normally runs in ~25s
-MAX_REBASE_ATTEMPTS=2
+MAX_WAIT_SECONDS="${MAX_WAIT_SECONDS:-900}"   # gate runs in ~25s; queueing can add minutes
 
 BOT_BRANCH="bot/${LABEL}-${RUN_ID}"
+PR_URL=""
 
 log()  { printf '[prevalidated-push] %s\n' "$*"; }
 fail() { printf '[prevalidated-push] ERROR: %s\n' "$*" >&2; exit 1; }
 
 cleanup() {
-  # Best-effort delete of the temp ref. Never mask the real exit code.
-  git push origin --delete "$BOT_BRANCH" >/dev/null 2>&1 || true
+  # Best-effort. Never mask the real exit code.
+  if [ -n "$PR_URL" ]; then
+    gh pr close "$PR_URL" --repo "$REPO" --delete-branch >/dev/null 2>&1 || true
+  else
+    git push origin --delete "$BOT_BRANCH" >/dev/null 2>&1 || true
+  fi
 }
 trap cleanup EXIT
 
@@ -74,75 +88,63 @@ if [ "$LOCAL_SHA" = "$REMOTE_SHA" ]; then
 fi
 
 if ! git merge-base --is-ancestor "$REMOTE_SHA" "$LOCAL_SHA"; then
-  fail "HEAD is not a descendant of origin/main. Rebase before calling this."
+  log "HEAD is not a descendant of origin/main — rebasing."
+  git rebase origin/main || fail "rebase onto origin/main failed — manual intervention needed"
 fi
 
-# --- validate one SHA through the gate --------------------------------------
-validate_sha() {
-  local sha="$1"
+# --- 1. Push the branch and open the PR -------------------------------------
+SHA="$(git rev-parse HEAD)"
+log "pushing $SHA to $BOT_BRANCH"
+git push --force origin "HEAD:refs/heads/${BOT_BRANCH}" \
+  || fail "could not push $BOT_BRANCH"
 
-  log "pushing $sha to $BOT_BRANCH for validation"
-  git push --force origin "${sha}:refs/heads/${BOT_BRANCH}" \
-    || fail "could not push temporary branch $BOT_BRANCH"
+TITLE="$(git log -1 --pretty=%s)"
+log "opening PR for $BOT_BRANCH"
+PR_URL="$(gh pr create --repo "$REPO" --base main --head "$BOT_BRANCH" \
+    --title "$TITLE" \
+    --body "Automated commit from \`${LABEL}\` (run ${RUN_ID}), routed through the quality gate by \`scripts/ci/push_prevalidated_main.sh\`.
 
-  log "dispatching $GATE_WORKFLOW against $BOT_BRANCH"
-  gh workflow run "$GATE_WORKFLOW" --repo "$REPO" --ref "$BOT_BRANCH" \
-    || fail "could not dispatch $GATE_WORKFLOW (is 'actions: write' set?)"
+main is protected by ruleset 20720805 with \`bypass_actors: []\`, so automation cannot push directly. It opens a PR and faces the same required checks a human does.")" \
+  || fail "could not open PR (is 'pull-requests: write' set?)"
+log "PR: $PR_URL"
 
-  local waited=0
-  local conclusion=""
-  while [ "$waited" -lt "$MAX_WAIT_SECONDS" ]; do
-    sleep "$POLL_SECONDS"
-    waited=$(( waited + POLL_SECONDS ))
+# --- 2. Wait for the required checks on the PR head -------------------------
+waited=0
+while [ "$waited" -lt "$MAX_WAIT_SECONDS" ]; do
+  HEAD_SHA="$(gh pr view "$PR_URL" --repo "$REPO" --json headRefOid --jq .headRefOid)"
 
-    # Only consider runs whose head_sha is EXACTLY the commit we are landing.
-    # Results from any other SHA are worthless here.
-    conclusion="$(gh run list --repo "$REPO" --workflow "$GATE_WORKFLOW" \
-        --branch "$BOT_BRANCH" --limit 10 \
-        --json headSha,status,conclusion \
-        --jq "[.[] | select(.headSha==\"$sha\" and .status==\"completed\")][0].conclusion // \"\"")"
+  # Assert each required check BY NAME on the exact head SHA. A green run is not
+  # the same claim as "every required context passed".
+  checks="$(gh api "repos/${REPO}/commits/${HEAD_SHA}/check-runs" --paginate \
+      --jq '.check_runs[] | select(.status=="completed") | "\(.name)=\(.conclusion)"' 2>/dev/null || true)"
 
-    [ -n "$conclusion" ] && break
-    log "  waiting for gate run on $sha (${waited}s)"
-  done
-
-  [ -n "$conclusion" ] || fail "gate did not complete within ${MAX_WAIT_SECONDS}s for $sha"
-  [ "$conclusion" = "success" ] || fail "gate concluded '$conclusion' for $sha — refusing to push"
-
-  # Belt and braces: assert each REQUIRED check individually, by name, on this SHA.
-  # A green workflow run is not the same claim as "every required context passed".
-  local checks
-  checks="$(gh api "repos/${REPO}/commits/${sha}/check-runs" --paginate \
-      --jq '.check_runs[] | "\(.name)=\(.conclusion)"')"
-
-  local c
+  all_green=1
   for c in "${REQUIRED_CHECKS[@]}"; do
-    if ! grep -Fxq "${c}=success" <<<"$checks"; then
-      log "check runs present on $sha:"
-      printf '  %s\n' $checks
-      fail "required check '$c' is not success on $sha"
-    fi
-    log "  verified: $c = success on $sha"
+    grep -Fxq "${c}=success" <<<"$checks" || all_green=0
   done
-}
 
-# --- 1..N. validate, then push; rebase and revalidate if main moved ----------
-attempt=1
-while [ "$attempt" -le "$MAX_REBASE_ATTEMPTS" ]; do
-  SHA="$(git rev-parse HEAD)"
-  validate_sha "$SHA"
-
-  log "pushing validated $SHA to main (attempt $attempt)"
-  if git push origin "HEAD:main"; then
-    log "SUCCESS — $SHA is on main, validated by the same gate humans face."
-    exit 0
+  if [ "$all_green" -eq 1 ]; then
+    for c in "${REQUIRED_CHECKS[@]}"; do log "  verified: $c = success on $HEAD_SHA"; done
+    break
   fi
 
-  log "push rejected — main likely moved. Rebasing and revalidating the NEW sha."
-  log "(check results do not carry across SHAs, so this must re-run the gate.)"
-  git fetch origin main --quiet
-  git rebase origin/main || fail "rebase onto origin/main failed — manual intervention needed"
-  attempt=$(( attempt + 1 ))
+  # Fail fast on a definitive red rather than burning the full timeout.
+  if grep -qE '=(failure|timed_out|cancelled)$' <<<"$checks"; then
+    log "check runs on $HEAD_SHA:"; printf '  %s\n' $checks
+    fail "a required check concluded red — refusing to merge"
+  fi
+
+  sleep "$POLL_SECONDS"
+  waited=$(( waited + POLL_SECONDS ))
+  log "  waiting for the gate on $HEAD_SHA (${waited}s)"
 done
 
-fail "could not land commit on main after ${MAX_REBASE_ATTEMPTS} attempts"
+[ "$waited" -lt "$MAX_WAIT_SECONDS" ] || fail "gate did not conclude within ${MAX_WAIT_SECONDS}s"
+
+# --- 3. Merge -----------------------------------------------------------------
+log "merging $PR_URL"
+gh pr merge "$PR_URL" --repo "$REPO" --merge --delete-branch \
+  || fail "merge refused — the ruleset rejected it despite green checks"
+
+PR_URL=""   # merged and branch deleted; nothing for cleanup() to close
+log "SUCCESS — landed on main through the same gate humans face."
