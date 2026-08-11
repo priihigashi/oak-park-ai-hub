@@ -121,10 +121,15 @@ class TestBaselineCoverage(unittest.TestCase):
     BASELINE = Path(__file__).with_name("baseline_log_workflow_failure.txt")
 
     def _current_ids(self) -> set:
-        loader = unittest.defaultTestLoader
-        suite = loader.discover(start_dir=str(Path(__file__).parent),
-                                pattern="test_log_workflow_failure.py",
-                                top_level_dir=str(Path(__file__).resolve().parents[1]))
+        """Load from THIS module directly rather than by discovery.
+
+        discover() resolves against a start dir and a top-level dir, so its
+        result depends on where the runner was invoked from -- the same guard
+        would enumerate different ids under `python -m unittest tests/x.py` and
+        under a pytest rootdir. loadTestsFromModule takes the already-imported
+        module object and cannot drift with the working directory.
+        """
+        module = sys.modules[__name__]
         ids = set()
 
         def walk(s):
@@ -134,8 +139,17 @@ class TestBaselineCoverage(unittest.TestCase):
                 else:
                     ids.add(x.id())
 
-        walk(suite)
+        walk(unittest.defaultTestLoader.loadTestsFromModule(module))
         return ids
+
+    def test_the_guard_cannot_pass_by_finding_nothing(self):
+        """A collector that returns an empty set would make the subset check
+        vacuously true for an empty baseline, and would be the quiet way this
+        guard stops working. Assert it sees a plausible suite."""
+        current = self._current_ids()
+        self.assertGreaterEqual(len(current), 25, "id collection returned too few tests")
+        self.assertIn(f"{__name__}.TestBaselineCoverage.test_no_baseline_test_disappeared",
+                      current)
 
     def test_no_baseline_test_disappeared(self):
         self.assertTrue(self.BASELINE.exists(), f"missing manifest {self.BASELINE}")
