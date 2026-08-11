@@ -18,6 +18,10 @@ on:
       - "scripts/log_workflow_failure.py"
       - "scripts/content_creator/**"
       - "tests/test_log_workflow_failure.py"
+      # The coverage manifest must trigger the job too. Without this a PR
+      # that edits ONLY the manifest -- the exact way someone makes a
+      # disappearance failure go away -- would not run the guard.
+      - "tests/baseline_log_workflow_failure.txt"
       - "tests/test_drive_photo_payload_gate.py"
       - ".github/workflows/content_pipeline_validation.yml"
   push:
@@ -50,6 +54,8 @@ jobs:
 
       - name: Failure-logger tests
         run: python -m unittest tests/test_log_workflow_failure.py -v
+        # Same invocation the baseline manifest was generated with, so the
+        # recorded ids match the ids the guard compares against.
 
       - name: Drive photo payload gate tests
         run: python -m unittest tests/test_drive_photo_payload_gate.py -v

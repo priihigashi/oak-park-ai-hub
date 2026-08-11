@@ -24,6 +24,7 @@ removed (KRM #16).
 
 from __future__ import annotations
 
+import json
 import sys
 import unittest
 from pathlib import Path
@@ -103,6 +104,94 @@ class TestRunAttemptKey(unittest.TestCase):
         with mock.patch.object(lwf, "_read_range", return_value=rows):
             self.assertTrue(lwf._already_logged("tok", "281:1", "create-content"))
             self.assertFalse(lwf._already_logged("tok", "281:2", "create-content"))
+
+
+class TestBaselineCoverage(unittest.TestCase):
+    """A renamed or deleted test reduces coverage with no signal at all -- the
+    count can even stay identical across a rename. This compares against a
+    committed manifest of fully qualified ids.
+
+    What it does NOT do: protect its own integrity. A change that deletes a test
+    AND its manifest line passes, as does one deleting this guard. It is a
+    tripwire against accidental loss -- a rename, a bad merge, a refactor that
+    drops a class -- not a control against deliberate removal, which is visible
+    in the diff of a committed file and is what review is for.
+    """
+
+    BASELINE = Path(__file__).with_name("baseline_log_workflow_failure.txt")
+
+    def _current_ids(self) -> set:
+        loader = unittest.defaultTestLoader
+        suite = loader.discover(start_dir=str(Path(__file__).parent),
+                                pattern="test_log_workflow_failure.py",
+                                top_level_dir=str(Path(__file__).resolve().parents[1]))
+        ids = set()
+
+        def walk(s):
+            for x in s:
+                if isinstance(x, unittest.TestSuite):
+                    walk(x)
+                else:
+                    ids.add(x.id())
+
+        walk(suite)
+        return ids
+
+    def test_no_baseline_test_disappeared(self):
+        self.assertTrue(self.BASELINE.exists(), f"missing manifest {self.BASELINE}")
+        baseline = {ln.strip() for ln in self.BASELINE.read_text().splitlines() if ln.strip()}
+        missing = sorted(baseline - self._current_ids())
+        self.assertEqual(missing, [], "tests present in the baseline have vanished: "
+                                      + ", ".join(missing))
+
+
+class TestAttemptEndToEnd(unittest.TestCase):
+    """Exercises the real env -> row path. The unit tests above call
+    _already_logged with keys already built, so they stayed green when run_key()
+    was reverted to the bare run id. This one goes red, because it reads
+    GITHUB_RUN_ATTEMPT the way GitHub actually supplies it."""
+
+    def _row_written(self, attempt: str, existing: list) -> list:
+        captured = {}
+
+        class FakeResp:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *a):
+                return False
+
+            def read(self):
+                return b'{"updates":{"updatedRange":"x!A9:H9"}}'
+
+        def fake_urlopen(req, timeout=None):
+            captured["row"] = json.loads(req.data.decode())["values"][0]
+            return FakeResp()
+
+        env = {"GITHUB_RUN_ID": "281", "GITHUB_RUN_ATTEMPT": attempt,
+               "GITHUB_REPOSITORY": "priihigashi/oak-park-ai-hub"}
+        with mock.patch.dict("os.environ", env, clear=True), \
+             mock.patch.object(lwf, "_access_token", return_value="tok"), \
+             mock.patch.object(lwf, "_header_ok", return_value=True), \
+             mock.patch.object(lwf, "_read_range", return_value=existing), \
+             mock.patch.object(lwf, "_readback_matches", return_value=True), \
+             mock.patch.object(lwf.urllib.request, "urlopen", fake_urlopen):
+            lwf.append_failure("content_creator.yml", "create-content", "boom")
+        return captured.get("row", [])
+
+    def test_the_stored_run_id_column_carries_the_attempt(self):
+        row = self._row_written("2", existing=[])
+        self.assertEqual(row[2], "281:2")
+
+    def test_attempt_2_is_written_even_though_attempt_1_is_already_in_the_tab(self):
+        """The regression: a re-run of a failing stage must not vanish."""
+        row = self._row_written("2", existing=[["281:1", "create-content"]])
+        self.assertEqual(row[2], "281:2", "attempt 2 was swallowed as a duplicate")
+
+    def test_a_second_failure_step_within_one_attempt_still_dedups(self):
+        """The duplicate the guard exists for is still caught."""
+        row = self._row_written("1", existing=[["281:1", "create-content"]])
+        self.assertEqual(row, [], "same-attempt duplicate should not have been written")
 
 
 class TestRawNotUserEntered(unittest.TestCase):
