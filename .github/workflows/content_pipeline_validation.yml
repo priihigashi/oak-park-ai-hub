@@ -1,0 +1,72 @@
+name: Content pipeline validation
+
+# C1 restores the content pipeline after it failed five consecutive scheduled
+# runs without one of them reaching the Pipeline Failures tab. The fixes are
+# guards: reject Drive HTML pages posing as photos, refresh a stale token, and
+# log a failure honestly. Guards that nothing exercises rot silently, and PR
+# #230 had no checks at all -- so the branch that fixes a false all-clear was
+# itself unverified.
+#
+# Deliberately narrow: only the two suites that cover the C1 changes. The wider
+# tests/ tree has modules needing pytest and pytz that are not installed here,
+# and dragging those in would make this gate red for reasons unrelated to the
+# pipeline.
+
+on:
+  pull_request:
+    paths:
+      - "scripts/log_workflow_failure.py"
+      - "scripts/content_creator/**"
+      - "tests/test_log_workflow_failure.py"
+      - "tests/test_drive_photo_payload_gate.py"
+      - ".github/workflows/content_pipeline_validation.yml"
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install test dependencies
+        # Pillow only -- the photo gate decodes real image bytes rather than
+        # trusting a file extension, so it cannot be tested without it.
+        run: python -m pip install "Pillow==10.4.0"
+
+      - name: Compile
+        run: python -m compileall -q scripts/log_workflow_failure.py scripts/content_creator
+
+      - name: Failure-logger tests
+        run: python -m unittest tests/test_log_workflow_failure.py -v
+
+      - name: Drive photo payload gate tests
+        run: python -m unittest tests/test_drive_photo_payload_gate.py -v
+
+      - name: The failure logger appends with RAW, not USER_ENTERED
+        # Guards the specific regression: USER_ENTERED lets an error string
+        # beginning "=" be stored as a formula instead of as text.
+        #
+        # Matches the PARAMETER, not the bare word -- the first version of this
+        # step grepped for "USER_ENTERED" and went red on the source comment
+        # explaining why USER_ENTERED is wrong. A guard that fires on its own
+        # documentation trains people to ignore it.
+        run: |
+          if grep -n "valueInputOption=USER_ENTERED" scripts/log_workflow_failure.py; then
+            echo "::error::log_workflow_failure.py must append with RAW, not USER_ENTERED"
+            exit 1
+          fi
+          grep -q "valueInputOption=RAW" scripts/log_workflow_failure.py \
+            || { echo "::error::no RAW append found — did the append URL change?"; exit 1; }
+          echo "confirmed: appends with RAW"

@@ -101,35 +101,61 @@ def _header_ok(token: str) -> bool:
     return False
 
 
-def _already_logged(token: str, run_id: str, stage: str) -> bool:
-    """Idempotency: (RUN_ID, STAGE) is the natural key for one failure.
+def run_key() -> str:
+    """The identity of one ATTEMPT, not one run.
 
-    `if: failure()` steps get re-run on retry, and a re-run reuses GITHUB_RUN_ID.
-    Without this, one flapping workflow buries the tab in duplicates of itself.
+    GITHUB_RUN_ID stays constant when a workflow is re-run; GitHub exposes
+    GITHUB_RUN_ATTEMPT precisely because each re-run is a distinct attempt,
+    counting from 1. Keying dedup on RUN_ID alone therefore throws away real
+    evidence: attempt 1 fails today, you re-run tomorrow, attempt 2 fails the
+    same way, and the logger says "already logged — skipping duplicate".
+
+    Storing `<run_id>:<attempt>` in the existing RUN_ID column keeps every
+    attempt distinct with no sheet migration and no new column.
     """
-    if not run_id:
+    rid = os.environ.get("GITHUB_RUN_ID", "")
+    if not rid:
+        return ""
+    return f"{rid}:{os.environ.get('GITHUB_RUN_ATTEMPT', '1')}"
+
+
+def _already_logged(token: str, key: str, stage: str) -> bool:
+    """Idempotency: (RUN_ID:ATTEMPT, STAGE) is the natural key for one failure.
+
+    Two `if: failure()` steps inside the SAME attempt still dedup, which is the
+    duplicate this guard exists to stop. A separate re-run does not.
+    """
+    if not key:
         return False
     rows = _read_range(token, f"{FAILURES_TAB}!C2:D")
-    return any(len(r) >= 2 and r[0].strip() == run_id and r[1].strip() == stage
+    return any(len(r) >= 2 and r[0].strip() == key and r[1].strip() == stage
                for r in rows)
 
 
-def _readback_matches(token: str, updated: str, expected_run_id: str) -> bool:
-    """Confirm the row is really in the tab. An append receipt is not evidence."""
+def _readback_matches(token: str, updated: str, expected_key: str) -> bool:
+    """Confirm the row is really in the tab. An append receipt is not evidence.
+
+    Compared exactly, not by substring: `"123" in "1234:1"` is true, so a
+    substring test would accept a DIFFERENT run's row as proof that this one
+    landed -- a readback that can pass on the wrong row is not a readback.
+    """
     if not updated:
         return False
     rows = _read_range(token, updated)
-    return any(expected_run_id in (r[2] if len(r) > 2 else "") for r in rows)
+    return any((r[2].strip() if len(r) > 2 else "") == expected_key for r in rows)
 
 
 def append_failure(workflow: str, stage: str, error: str, note: str = "") -> bool:
     run_id = os.environ.get("GITHUB_RUN_ID", "")
+    key = run_key()
     repo = os.environ.get("GITHUB_REPOSITORY", "priihigashi/oak-park-ai-hub")
+    # The URL takes the bare run id -- GitHub's run page has no per-attempt path
+    # in this form -- while the stored key carries the attempt.
     run_url = f"https://github.com/{repo}/actions/runs/{run_id}" if run_id else ""
     row = [
         datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
         workflow,
-        run_id or "—",
+        key or "—",
         stage,
         (error or "job failed — see run log")[:500],
         run_url,
@@ -141,14 +167,18 @@ def append_failure(workflow: str, stage: str, error: str, note: str = "") -> boo
         return False
     if not _header_ok(token):
         return False
-    if _already_logged(token, run_id, stage):
-        print(f"[log_workflow_failure] already logged for run {run_id} / "
+    if _already_logged(token, key, stage):
+        print(f"[log_workflow_failure] already logged for {key} / "
               f"stage {stage} — skipping duplicate")
         return True
     tab = urllib.parse.quote(FAILURES_TAB, safe="")
+    # RAW, never USER_ENTERED. USER_ENTERED parses values the way typing into
+    # the UI does, so an error string beginning "=" becomes a formula and an
+    # error beginning "+" or "-" can be coerced or rejected outright. The ERROR
+    # column carries arbitrary exception text; it must be stored, not evaluated.
     url = (f"https://sheets.googleapis.com/v4/spreadsheets/{FAILURES_SHEET_ID}"
            f"/values/{tab}!A:H:append"
-           f"?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS")
+           f"?valueInputOption=RAW&insertDataOption=INSERT_ROWS")
     req = urllib.request.Request(
         url, data=json.dumps({"values": [row]}).encode(), method="POST",
         headers={"Authorization": f"Bearer {token}",
@@ -164,9 +194,9 @@ def append_failure(workflow: str, stage: str, error: str, note: str = "") -> boo
         return False
     # KRM #15: the append receipt is the tool reporting itself healthy. Read the
     # row back out of the sheet before believing it.
-    if not _readback_matches(token, updated, run_id or "—"):
+    if not _readback_matches(token, updated, key or "—"):
         print(f"[log_workflow_failure] READBACK FAILED: {updated} does not "
-              f"contain run {run_id} — treat this failure as UNLOGGED",
+              f"contain {key or '—'} — treat this failure as UNLOGGED",
               file=sys.stderr)
         return False
     return True

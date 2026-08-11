@@ -8,6 +8,13 @@ could still lie:
      every field into the wrong place, which looks logged but is not.
   2. No read-back -- the append receipt was trusted as proof (KRM #15).
   3. Retries reuse GITHUB_RUN_ID, so a flapping workflow duplicates itself.
+  3b. ...but keying on RUN_ID alone then DISCARDS re-run attempts, which is the
+     opposite failure: attempt 2 of the same stage is silently dropped as a
+     duplicate. GITHUB_RUN_ATTEMPT distinguishes them.
+  5. valueInputOption=USER_ENTERED lets an error string starting "=" be stored
+     as a formula rather than as text.
+  6. The read-back matched by substring, so "123" was accepted as proof for a
+     row reading "1234:1" -- a different run entirely.
   4. When logging failed, nothing said so -- the exact false all-clear this
      script exists to end.
 
@@ -72,6 +79,68 @@ class TestIdempotency(unittest.TestCase):
             self.assertFalse(lwf._already_logged("tok", "", "create-content"))
 
 
+class TestRunAttemptKey(unittest.TestCase):
+    """GITHUB_RUN_ID is constant across re-runs; GITHUB_RUN_ATTEMPT is not.
+    Keying on the run alone throws away every attempt after the first."""
+
+    def test_attempt_is_part_of_the_key(self):
+        with mock.patch.dict("os.environ", {"GITHUB_RUN_ID": "281", "GITHUB_RUN_ATTEMPT": "2"}):
+            self.assertEqual(lwf.run_key(), "281:2")
+
+    def test_attempt_defaults_to_1_when_github_omits_it(self):
+        env = {"GITHUB_RUN_ID": "281"}
+        with mock.patch.dict("os.environ", env, clear=True):
+            self.assertEqual(lwf.run_key(), "281:1")
+
+    def test_no_run_id_means_no_key(self):
+        with mock.patch.dict("os.environ", {}, clear=True):
+            self.assertEqual(lwf.run_key(), "")
+
+    def test_a_rerun_of_the_same_stage_is_not_swallowed_as_a_duplicate(self):
+        """The regression this exists to catch: attempt 1 already logged, and
+        attempt 2 of the SAME stage must still be recorded."""
+        rows = [["281:1", "create-content"]]
+        with mock.patch.object(lwf, "_read_range", return_value=rows):
+            self.assertTrue(lwf._already_logged("tok", "281:1", "create-content"))
+            self.assertFalse(lwf._already_logged("tok", "281:2", "create-content"))
+
+
+class TestRawNotUserEntered(unittest.TestCase):
+    """An error string is data. USER_ENTERED evaluates it like UI typing, so a
+    traceback beginning with "=" becomes a spreadsheet formula."""
+
+    def _captured_url(self) -> str:
+        seen = {}
+
+        class FakeResp:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *a):
+                return False
+
+            def read(self):
+                return b'{"updates":{"updatedRange":"\'x\'!A9:H9"}}'
+
+        def fake_urlopen(req, timeout=None):
+            seen["url"] = req.full_url
+            return FakeResp()
+
+        with mock.patch.object(lwf, "_access_token", return_value="tok"), \
+             mock.patch.object(lwf, "_header_ok", return_value=True), \
+             mock.patch.object(lwf, "_already_logged", return_value=False), \
+             mock.patch.object(lwf, "_readback_matches", return_value=True), \
+             mock.patch.object(lwf.urllib.request, "urlopen", fake_urlopen):
+            lwf.append_failure("content_creator.yml", "create-content", "=1+2")
+        return seen.get("url", "")
+
+    def test_the_append_requests_raw(self):
+        self.assertIn("valueInputOption=RAW", self._captured_url())
+
+    def test_user_entered_is_gone(self):
+        self.assertNotIn("USER_ENTERED", self._captured_url())
+
+
 class TestReadback(unittest.TestCase):
     def test_row_present_passes(self):
         rows = [["2026-08-11T00:00:00Z", "content_creator.yml", "555", "stage"]]
@@ -90,6 +159,18 @@ class TestReadback(unittest.TestCase):
 
     def test_no_updated_range_fails(self):
         self.assertFalse(lwf._readback_matches("tok", "", "555"))
+
+    def test_a_substring_match_is_not_accepted_as_proof(self):
+        """`"281:1" in "281:11"` is true. A read-back that can pass on another
+        run's row is not a read-back."""
+        rows = [["ts", "wf", "281:11", "stage"]]
+        with mock.patch.object(lwf, "_read_range", return_value=rows):
+            self.assertFalse(lwf._readback_matches("tok", "'x'!A9:H9", "281:1"))
+
+    def test_surrounding_whitespace_still_matches(self):
+        rows = [["ts", "wf", "  281:1  ", "stage"]]
+        with mock.patch.object(lwf, "_read_range", return_value=rows):
+            self.assertTrue(lwf._readback_matches("tok", "'x'!A9:H9", "281:1"))
 
 
 class TestAppendRefusesOnDrift(unittest.TestCase):
