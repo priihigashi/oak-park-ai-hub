@@ -11,7 +11,7 @@ on:
 
 permissions:
   contents: write             # needed to commit the flag file
-  actions: write              # required to dispatch quality-js.yml (see scripts/ci/push_prevalidated_main.sh)
+  pull-requests: write   # helper opens+merges a PR (see scripts/ci/push_prevalidated_main.sh)
 
 jobs:
   watch:

@@ -7,7 +7,7 @@ on:
 
 permissions:
   contents: write
-  actions: write   # required to dispatch quality-js.yml (see scripts/ci/push_prevalidated_main.sh)
+  pull-requests: write   # helper opens+merges a PR (see scripts/ci/push_prevalidated_main.sh)
 
 jobs:
   refresh:

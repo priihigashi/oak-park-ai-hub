@@ -19,7 +19,7 @@ jobs:
     timeout-minutes: 25
     permissions:
       contents: write
-      actions: write        # required to dispatch quality-js.yml on the bot branch
+      pull-requests: write   # helper opens+merges a PR (see scripts/ci/push_prevalidated_main.sh)
 
     steps:
       - uses: actions/checkout@v4
