@@ -30,10 +30,10 @@ export interface CarouselReelSlide {
   accentColor?: string;
 }
 
-export interface CarouselReelProps {
+export type CarouselReelProps = {
   slides: CarouselReelSlide[];
   slideDurationFrames?: number;
-}
+};
 
 const W = 1080;
 const H = 1920;

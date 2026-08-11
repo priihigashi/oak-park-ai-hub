@@ -1,0 +1,79 @@
+name: JS/TS Quality Gate
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/**'
+      - 'eslint.config.mjs'
+      - 'eslint-suppressions.json'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/quality-js.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'scripts/**'
+      - 'eslint.config.mjs'
+      - 'eslint-suppressions.json'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/quality-js.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-js-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  complexity:
+    name: ESLint complexity
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.9.0
+          run_install: false
+
+      - name: Set up Node 24 LTS
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install quality dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Enforce JS/TS complexity
+        run: pnpm quality:js
+
+  remotion-typecheck:
+    name: Remotion typecheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Node 24 LTS
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: scripts/remotion/package-lock.json
+
+      - name: Install locked Remotion dependencies
+        working-directory: scripts/remotion
+        run: npm ci --include=dev
+
+      - name: Typecheck Remotion
+        working-directory: scripts/remotion
+        run: npm run typecheck
