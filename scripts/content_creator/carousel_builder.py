@@ -3544,7 +3544,7 @@ def _looks_like_image_bytes(path) -> bool:
     """
     try:
         with open(path, "rb") as fh:
-            head = fh.read(32)
+            head = fh.read(64)
     except Exception:
         return False
     if not head:
@@ -3558,9 +3558,40 @@ def _looks_like_image_bytes(path) -> bool:
             return True
     if head[:4] == b"RIFF" and head[8:12] == b"WEBP":
         return True
-    if head[4:8] == b"ftyp":                # HEIC / HEIF / AVIF
+    return _iso_bmff_is_image(head)         # HEIC / HEIF / AVIF, brand-checked
+
+
+# Still-image brands inside the ISO Base Media File Format container.
+# Everything else in that container (mp41/mp42/isom/qt/3gp/M4V) is VIDEO.
+_ISO_IMAGE_BRANDS = frozenset({
+    b"heic", b"heix", b"heim", b"heis",     # HEIC image + image sequence
+    b"hevc", b"hevx", b"hevm", b"hevs",     # HEVC-coded image sequences
+    b"mif1", b"msf1",                       # HEIF generic image / sequence
+    b"avif", b"avis",                       # AVIF image / sequence
+})
+
+
+def _iso_bmff_is_image(head: bytes) -> bool:
+    """True only when an ftyp box declares a still-image brand.
+
+    Hardening on top of afc5e08 (2026-08-11). The original gate accepted any
+    file whose bytes 4:8 are `ftyp`, but that marks the ISO Base Media File
+    Format container generally -- which is also MP4, MOV and 3GP. A video
+    dropped into the photo path would therefore have passed the "is this really
+    an image" check and been written out as a `.jpg`, which is the exact class
+    of bug afc5e08 exists to stop.
+
+    Checks the major brand at bytes 8:12, then the compatible-brand list that
+    follows at offset 16, because some encoders put the still-image brand only
+    in the compatible list.
+    """
+    if head[4:8] != b"ftyp":
+        return False
+    if head[8:12] in _ISO_IMAGE_BRANDS:
         return True
-    return False
+    box_len = int.from_bytes(head[0:4], "big") if len(head) >= 4 else 0
+    end = box_len if 16 <= box_len <= len(head) else len(head)
+    return any(head[i:i + 4] in _ISO_IMAGE_BRANDS for i in range(16, max(16, end - 3), 4))
 
 
 def _accept_downloaded_photo(dest_path) -> bool:

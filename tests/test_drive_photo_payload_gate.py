@@ -113,3 +113,63 @@ class TestAcceptDownloadedPhoto(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+def _ftyp(major: bytes, compatible: bytes = b"", pad: int = 4096) -> bytes:
+    """Build a structurally real ISO-BMFF ftyp header.
+
+    Layout: [4-byte box length][b'ftyp'][4-byte major brand]
+            [4-byte minor version][compatible brands...]
+    """
+    body = major + b"\x00\x00\x00\x00" + compatible
+    box = (8 + len(body)).to_bytes(4, "big") + b"ftyp" + body
+    return box + b"\x00" * pad
+
+
+class TestIsoBmffBrandGate(unittest.TestCase):
+    """Hardening on afc5e08 (2026-08-11).
+
+    The original gate accepted ANY file whose bytes 4:8 are `ftyp`. That marks
+    the ISO Base Media container in general — which is also MP4, MOV and 3GP.
+    `test_mp4_video_is_rejected` MUST fail if that blanket accept is restored;
+    it is the falsifying case for this whole class of bug.
+    """
+
+    def _check(self, payload: bytes) -> bool:
+        with tempfile.TemporaryDirectory() as tmp:
+            p = os.path.join(tmp, "candidate.jpg")
+            with open(p, "wb") as fh:
+                fh.write(payload)
+            return _looks_like_image_bytes(p)
+
+    # --- the cases that must be REJECTED (these go red without the fix) ---
+
+    def test_mp4_video_is_rejected(self):
+        self.assertFalse(self._check(_ftyp(b"mp42", b"mp41isom")))
+
+    def test_quicktime_movie_is_rejected(self):
+        self.assertFalse(self._check(_ftyp(b"qt  ")))
+
+    def test_generic_isom_container_is_rejected(self):
+        self.assertFalse(self._check(_ftyp(b"isom", b"iso2avc1mp41")))
+
+    def test_3gp_video_is_rejected(self):
+        self.assertFalse(self._check(_ftyp(b"3gp5")))
+
+    # --- the cases that must still be ACCEPTED ---
+
+    def test_heic_is_accepted(self):
+        self.assertTrue(self._check(_ftyp(b"heic", b"mif1heic")))
+
+    def test_avif_is_accepted(self):
+        self.assertTrue(self._check(_ftyp(b"avif", b"mif1miaf")))
+
+    def test_heif_mif1_is_accepted(self):
+        self.assertTrue(self._check(_ftyp(b"mif1")))
+
+    def test_image_brand_only_in_compatible_list_is_accepted(self):
+        """Some encoders put the still-image brand only in the compatible list."""
+        self.assertTrue(self._check(_ftyp(b"mif1", b"heic")))
+
+    def test_truncated_ftyp_does_not_crash(self):
+        self.assertFalse(self._check(b"\x00\x00\x00\x18ftyp"))

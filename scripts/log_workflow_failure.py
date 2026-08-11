@@ -71,6 +71,57 @@ def _access_token() -> str:
         return json.loads(r.read())["access_token"]
 
 
+def _read_range(token: str, a1: str) -> list[list[str]]:
+    """GET one range. Returns [] on any failure rather than raising."""
+    tab_range = urllib.parse.quote(a1, safe="")
+    url = (f"https://sheets.googleapis.com/v4/spreadsheets/{FAILURES_SHEET_ID}"
+           f"/values/{tab_range}")
+    req = urllib.request.Request(url, headers={"Authorization": f"Bearer {token}"})
+    try:
+        with urllib.request.urlopen(req, timeout=20) as r:
+            return json.loads(r.read()).get("values", []) or []
+    except Exception as exc:
+        print(f"[log_workflow_failure] read {a1} failed: {exc}", file=sys.stderr)
+        return []
+
+
+def _header_ok(token: str) -> bool:
+    """Refuse to write when the tab's columns have drifted.
+
+    EXPECTED_HEADER was declared in the original fix but never checked, so a
+    renamed or reordered column would have silently written every field into the
+    wrong place -- worse than not logging, because it looks logged.
+    """
+    rows = _read_range(token, f"{FAILURES_TAB}!A1:H1")
+    actual = [c.strip() for c in (rows[0] if rows else [])]
+    if actual[:len(EXPECTED_HEADER)] == EXPECTED_HEADER:
+        return True
+    print(f"[log_workflow_failure] HEADER DRIFT: expected {EXPECTED_HEADER}, "
+          f"found {actual} — refusing to write", file=sys.stderr)
+    return False
+
+
+def _already_logged(token: str, run_id: str, stage: str) -> bool:
+    """Idempotency: (RUN_ID, STAGE) is the natural key for one failure.
+
+    `if: failure()` steps get re-run on retry, and a re-run reuses GITHUB_RUN_ID.
+    Without this, one flapping workflow buries the tab in duplicates of itself.
+    """
+    if not run_id:
+        return False
+    rows = _read_range(token, f"{FAILURES_TAB}!C2:D")
+    return any(len(r) >= 2 and r[0].strip() == run_id and r[1].strip() == stage
+               for r in rows)
+
+
+def _readback_matches(token: str, updated: str, expected_run_id: str) -> bool:
+    """Confirm the row is really in the tab. An append receipt is not evidence."""
+    if not updated:
+        return False
+    rows = _read_range(token, updated)
+    return any(expected_run_id in (r[2] if len(r) > 2 else "") for r in rows)
+
+
 def append_failure(workflow: str, stage: str, error: str, note: str = "") -> bool:
     run_id = os.environ.get("GITHUB_RUN_ID", "")
     repo = os.environ.get("GITHUB_REPOSITORY", "priihigashi/oak-park-ai-hub")
@@ -88,6 +139,12 @@ def append_failure(workflow: str, stage: str, error: str, note: str = "") -> boo
     token = _access_token()
     if not token:
         return False
+    if not _header_ok(token):
+        return False
+    if _already_logged(token, run_id, stage):
+        print(f"[log_workflow_failure] already logged for run {run_id} / "
+              f"stage {stage} — skipping duplicate")
+        return True
     tab = urllib.parse.quote(FAILURES_TAB, safe="")
     url = (f"https://sheets.googleapis.com/v4/spreadsheets/{FAILURES_SHEET_ID}"
            f"/values/{tab}!A:H:append"
@@ -105,6 +162,13 @@ def append_failure(workflow: str, stage: str, error: str, note: str = "") -> boo
         print(f"[log_workflow_failure] WARNING: row landed in {updated}, "
               f"not '{FAILURES_TAB}'", file=sys.stderr)
         return False
+    # KRM #15: the append receipt is the tool reporting itself healthy. Read the
+    # row back out of the sheet before believing it.
+    if not _readback_matches(token, updated, run_id or "—"):
+        print(f"[log_workflow_failure] READBACK FAILED: {updated} does not "
+              f"contain run {run_id} — treat this failure as UNLOGGED",
+              file=sys.stderr)
+        return False
     return True
 
 
@@ -115,10 +179,19 @@ def main() -> int:
     ap.add_argument("--error", default="")
     ap.add_argument("--note", default="")
     args = ap.parse_args()
+    logged = False
     try:
-        append_failure(args.workflow, args.stage, args.error, args.note)
+        logged = append_failure(args.workflow, args.stage, args.error, args.note)
     except Exception as exc:  # best-effort: never mask the real job failure
         print(f"[log_workflow_failure] non-fatal: {exc}", file=sys.stderr)
+    # The logger failing silently is what produced the false all-clear this file
+    # exists to end. Still exit 0 (the job is already red for its own reason),
+    # but emit a greppable marker so a log scan and the watchdog can both see
+    # that this failure never reached the tab.
+    if not logged:
+        print("::warning title=Pipeline failure NOT logged::"
+              f"LOG_FAILURE_UNLOGGED workflow={args.workflow} stage={args.stage} "
+              f"run={os.environ.get('GITHUB_RUN_ID', '?')}", file=sys.stderr)
     return 0  # always 0 — the job is already failing for its own reason
 
 
