@@ -10,11 +10,11 @@ from __future__ import annotations
 import hashlib
 import json
 import subprocess
-import uuid
 from pathlib import Path
 from typing import Optional
 
 from .contracts import MediaAsset
+from .stable_ids import asset_id as stable_asset_id
 
 
 def _sha256(path: Path, chunk: int = 1 << 20) -> str:
@@ -103,7 +103,9 @@ def extract(
     checksum = _sha256(path)
 
     return MediaAsset(
-        asset_id=asset_id or str(uuid.uuid4()),
+        # A path is the folder indexer's source identity. Photos and other
+        # adapters should pass their own durable source ID explicitly.
+        asset_id=asset_id or stable_asset_id(f"file:{path}"),
         path=str(path),
         source=source,
         owner=owner,
