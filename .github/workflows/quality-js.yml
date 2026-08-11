@@ -1,24 +1,17 @@
 name: JS/TS Quality Gate
 
+# NO `paths:` FILTER — deliberate, do not re-add.
+# These two jobs are REQUIRED status checks on `main`. A required check that is
+# skipped by a path filter never reports a conclusion, so GitHub leaves it
+# "Expected — waiting for status" and the PR can never merge. A docs-only PR
+# would be blocked forever. Both jobs finish in ~20s, so running them on every
+# PR is far cheaper than the deadlock.
+# See: https://docs.github.com/en/actions/how-tos/manage-workflow-runs/skip-workflow-runs
 on:
   pull_request:
-    paths:
-      - 'scripts/**'
-      - 'eslint.config.mjs'
-      - 'eslint-suppressions.json'
-      - 'package.json'
-      - 'pnpm-lock.yaml'
-      - '.github/workflows/quality-js.yml'
   push:
     branches:
       - main
-    paths:
-      - 'scripts/**'
-      - 'eslint.config.mjs'
-      - 'eslint-suppressions.json'
-      - 'package.json'
-      - 'pnpm-lock.yaml'
-      - '.github/workflows/quality-js.yml'
 
 permissions:
   contents: read
