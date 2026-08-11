@@ -42,19 +42,65 @@ gh api -X DELETE repos/priihigashi/oak-park-ai-hub/rulesets/<ID>
 | `deletion` | `main` cannot be deleted |
 | `non_fast_forward` | no force-pushing `main` |
 
-### The bypass is deliberate — do not remove it
+### ⚠️ Bypass — corrected 2026-08-11 after applying it for real
 
-`actor_id: 15368` is the **GitHub Actions** integration. Three workflows commit
-directly to `main` using `secrets.GITHUB_TOKEN`, and all three break without this:
+An earlier version of this file prescribed `{"actor_id": 15368, "actor_type":
+"Integration"}` to exempt GitHub Actions. **That does not work on this repo.**
+The API rejects it:
 
-- `nonnegotiables.yml` — the nightly 4AM `nonnegotiables-bot` update
-- `ads_pulse.yml` — refreshes `docs/dashboard/*.html`
-- `ads_approval_watcher.yml` — writes `.github/agent_state/ads_api_approved.json`
+```
+422 Validation Failed
+Actor GitHub Actions integration must be part of the ruleset source or owner organization
+```
 
-Repository admins are **not** given a bypass, on purpose. Multiple agent sessions
-act with an admin token; an admin bypass would make the gate toothless for exactly
-the actor it exists to constrain. If you are genuinely stuck, set `enforcement` to
-`"evaluate"` or `"disabled"` and re-apply, rather than adding an admin bypass.
+`priihigashi/oak-park-ai-hub` is **user-owned, not org-owned**, so `Integration`
+bypass actors are unavailable. Only `RepositoryRole` actors validate here
+(tested: `5` admin and `4` write both accept; `enforcement: "evaluate"` is also
+rejected — it requires Enterprise).
+
+### The unresolved consequence — read before relying on this
+
+`required_status_checks` in a ruleset applies to **direct pushes as well as
+merges**. Verified empirically: a direct push to `main` was rejected with
+*"2 of 2 required status checks are expected"*, even as a repository admin.
+
+Three workflows push straight to `main` via `secrets.GITHUB_TOKEN`:
+
+| Workflow | Schedule | Pushes |
+|---|---|---|
+| `nonnegotiables.yml` | daily 02:00 ET | `NONNEGOTIABLES.md` — commits most nights |
+| `ads_pulse.yml` | Mondays 08:00 ET | `docs/dashboard/*.html` |
+| `ads_approval_watcher.yml` | every 6h | `.github/agent_state/ads_api_approved.json` (only on state change) |
+
+With `bypass_actors: []` these **will fail** the next time they have something to
+commit. Pick one before leaving the ruleset active:
+
+1. **Add a write-role bypass** — restores the bots; also exempts every human
+   writer, so the gate then binds only via the PR merge button:
+   ```bash
+   gh api -X PUT repos/priihigashi/oak-park-ai-hub/rulesets/<ID> \
+     -f 'bypass_actors[][actor_id]=4' \
+     -f 'bypass_actors[][actor_type]=RepositoryRole' \
+     -f 'bypass_actors[][bypass_mode]=always'
+   ```
+2. **Convert the three workflows to open PRs** instead of pushing to `main` —
+   strongest, but the most work.
+3. **Disable the ruleset** until one of the above is done:
+   ```bash
+   gh api -X PUT repos/priihigashi/oak-park-ai-hub/rulesets/<ID> -f enforcement=disabled
+   ```
+
+Repository admins deliberately get no bypass in the committed config: agent
+sessions act with an admin token, so an admin bypass would exempt exactly the
+actor the gate exists to constrain.
+
+### Proof the gate binds (run 2026-08-11)
+
+A throwaway PR with one deliberately over-threshold function produced
+`ESLint complexity: fail` → PR state `MERGEABLE / BLOCKED` → `gh pr merge`
+refused with *"the base branch policy prohibits the merge"*, offering `--admin`
+as the only override. Red check now blocks a merge rather than merely displaying
+red. Probe branch and PR deleted; `main` never received the file.
 
 ### Why the path filters had to go first
 
