@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  actions: write   # required to dispatch quality-js.yml (see scripts/ci/push_prevalidated_main.sh)
 
 jobs:
   refresh:
@@ -15,6 +16,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0   # full history: push_prevalidated_main.sh may rebase onto a moved main
 
       - uses: actions/setup-python@v5
         with:
@@ -35,12 +37,21 @@ jobs:
         run: python scripts/ads_dashboard.py
 
       - name: Commit updated dashboard
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -euo pipefail
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add docs/dashboard/index.html docs/dashboard/dark.html
-          git diff --staged --quiet || git commit -m "chore: refresh ads dashboard $(date -u +%Y-%m-%d)"
-          git push
+          if git diff --staged --quiet; then
+            echo "Dashboard unchanged — nothing to commit."
+            exit 0
+          fi
+          git commit -m "chore: refresh ads dashboard $(date -u +%Y-%m-%d)"
+          # main is protected by ruleset 20720805 with no bypass actors, so a
+          # direct `git push` is rejected. Land through the gate instead.
+          bash scripts/ci/push_prevalidated_main.sh ads-pulse
 
       - name: Email alert on failure
         if: failure()

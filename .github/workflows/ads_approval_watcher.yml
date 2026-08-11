@@ -11,6 +11,7 @@ on:
 
 permissions:
   contents: write             # needed to commit the flag file
+  actions: write              # required to dispatch quality-js.yml (see scripts/ci/push_prevalidated_main.sh)
 
 jobs:
   watch:
@@ -21,6 +22,8 @@ jobs:
       calendar_link: ${{ steps.check.outputs.calendar_link }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history: push_prevalidated_main.sh may rebase onto a moved main
 
       - name: Install dependencies
         run: pip install --quiet google-auth google-auth-httplib2 google-api-python-client
@@ -34,12 +37,21 @@ jobs:
 
       - name: Commit flag file if approval detected
         if: steps.check.outputs.approved == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -euo pipefail
           git config user.name  "ads-approval-watcher"
           git config user.email "bot@oak-park-ai-hub.local"
           git add .github/agent_state/ads_api_approved.json
-          git commit -m "Ads API Basic Access approved — flag written" || echo "Nothing to commit"
-          git push
+          if git diff --staged --quiet; then
+            echo "Flag file unchanged — nothing to commit."
+            exit 0
+          fi
+          git commit -m "Ads API Basic Access approved — flag written"
+          # main is protected by ruleset 20720805 with no bypass actors, so a
+          # direct `git push` is rejected. Land through the gate instead.
+          bash scripts/ci/push_prevalidated_main.sh ads-approval
 
   notify:
     needs: watch

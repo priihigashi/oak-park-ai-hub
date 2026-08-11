@@ -186,14 +186,40 @@ def _update_datestamp():
 
 
 def _git_commit(count):
-    try:
-        subprocess.run(["git", "add", "NONNEGOTIABLES.md"], cwd=REPO_ROOT, check=True)
-        msg = f"chore: nonnegotiables_updater — {count} new candidate(s) extracted {datetime.now(ET).strftime('%Y-%m-%d')}"
-        subprocess.run(["git", "commit", "-m", msg], cwd=REPO_ROOT, check=True)
-        subprocess.run(["git", "push", "origin", "main"], cwd=REPO_ROOT, check=True)
-        print(f"  Committed + pushed NONNEGOTIABLES.md ({count} new rules)")
-    except subprocess.CalledProcessError as e:
-        print(f"  Git commit skipped or failed: {e}")
+    """Commit NONNEGOTIABLES.md and land it on main through the quality gate.
+
+    Raises on failure — DO NOT swallow. Until 2026-08-11 this caught
+    CalledProcessError, printed "Git commit skipped or failed" and returned
+    normally, so a rejected push produced a GREEN workflow with NONNEGOTIABLES.md
+    silently not updated. That false all-clear became reachable the moment
+    ruleset 20720805 started rejecting direct pushes to main.
+    """
+    subprocess.run(["git", "add", "NONNEGOTIABLES.md"], cwd=REPO_ROOT, check=True)
+
+    msg = (
+        f"chore: nonnegotiables_updater — {count} new candidate(s) extracted "
+        f"{datetime.now(ET).strftime('%Y-%m-%d')}"
+    )
+    commit = subprocess.run(
+        ["git", "commit", "-m", msg], cwd=REPO_ROOT,
+        capture_output=True, text=True,
+    )
+    if commit.returncode != 0:
+        # "nothing to commit" is the one benign non-zero exit here.
+        combined = (commit.stdout or "") + (commit.stderr or "")
+        if "nothing to commit" in combined:
+            print("  Nothing to commit — NONNEGOTIABLES.md unchanged.")
+            return
+        raise subprocess.CalledProcessError(
+            commit.returncode, commit.args, commit.stdout, commit.stderr
+        )
+
+    # main is protected by ruleset 20720805 with no bypass actors, so a direct
+    # push is rejected. Route through the gate instead: temp branch -> dispatch
+    # quality-js.yml -> verify the checks on this exact SHA -> push the same SHA.
+    helper = REPO_ROOT / "scripts" / "ci" / "push_prevalidated_main.sh"
+    subprocess.run(["bash", str(helper), "nonnegotiables"], cwd=REPO_ROOT, check=True)
+    print(f"  Committed + pushed NONNEGOTIABLES.md ({count} new rules)")
 
 
 def main():
