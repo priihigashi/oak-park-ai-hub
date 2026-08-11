@@ -595,6 +595,35 @@ async function assertJsonResponse(response, context) {
   }
 }
 
+// ─── WP pre-flight: fail fast before spending LLM credits ────────────────────
+// Returns immediately with a clear diagnostic if credentials or URL are wrong.
+async function checkWordPressCredentials() {
+  if (!WP_URL || !WP_USERNAME || !WP_APP_PASSWORD) {
+    throw new Error('Missing WordPress credentials: WP_URL, WP_USERNAME, or WP_APP_PASSWORD not set.');
+  }
+  const credentials = Buffer.from(`${WP_USERNAME}:${WP_APP_PASSWORD}`).toString('base64');
+  const res = await fetch(`${WP_URL}/wp-json/wp/v2/users/me`, {
+    headers: { Authorization: `Basic ${credentials}` },
+  });
+  const ct = res.headers.get('content-type') || '';
+  if (ct.includes('text/html')) {
+    const preview = (await res.text()).slice(0, 200).replace(/\s+/g, ' ');
+    throw new Error(
+      `WordPress pre-flight FAILED — returned HTML instead of JSON.\n` +
+      `  WP_URL="${WP_URL}" | HTTP status=${res.status}\n` +
+      `  Common causes: WP_URL uses http:// (should be https://), expired app password, wrong username.\n` +
+      `  Fix: WP Admin → Users → Profile → Application Passwords → revoke old + generate new → update WP_APP_PASSWORD secret.\n` +
+      `  HTML preview: ${preview}`
+    );
+  }
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`WordPress pre-flight FAILED — HTTP ${res.status}: ${body.slice(0, 200)}`);
+  }
+  const data = await res.json();
+  console.log(`WordPress credentials OK — authenticated as "${data.name}" (${data.slug}).`);
+}
+
 // ─── Step 5: Post to WordPress as Draft ──────────────────────────────────────
 async function postToWordPress(post, featuredMediaId, wpCategoryId, wpStatus = 'draft') {
   console.log(`Posting to WordPress as ${wpStatus}...`);
@@ -627,6 +656,9 @@ async function postToWordPress(post, featuredMediaId, wpCategoryId, wpStatus = '
 // ─── Main ─────────────────────────────────────────────────────────────────────
 (async () => {
   try {
+    // 0. Validate WordPress credentials before any LLM work
+    await checkWordPressCredentials();
+
     // 1. Determine topic source: manual → sheet (Approved) → fallback random
     let topic, sheetData;
 
