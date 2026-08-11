@@ -1,0 +1,41 @@
+# TEMPORARY — self-test for scripts/ci/push_prevalidated_main.sh.
+#
+# Proves the bot route works with GITHUB_TOKEN specifically. The route was first
+# verified from a laptop using a personal admin token, which is a WEAKER claim:
+# GITHUB_TOKEN is a different, more limited principal, and it is what the three
+# real bots actually use.
+#
+# Writes a timestamp to .github/agent_state/bot_route_selftest.txt and lands it
+# on main through the PR route. DELETE THIS WORKFLOW once it has passed once.
+name: Bot Route Self-Test (temporary)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  selftest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Make a real change and land it through the gate
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git config user.name  "bot-route-selftest"
+          git config user.email "actions@github.com"
+          mkdir -p .github/agent_state
+          echo "bot route self-test — run ${GITHUB_RUN_ID} — $(date -u +%FT%TZ)" \
+            > .github/agent_state/bot_route_selftest.txt
+          git add .github/agent_state/bot_route_selftest.txt
+          git commit -m "test: bot route self-test (run ${GITHUB_RUN_ID})"
+          bash scripts/ci/push_prevalidated_main.sh selftest
