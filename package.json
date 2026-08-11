@@ -2,8 +2,13 @@
   "name": "oak-park-ai-hub-quality-gates",
   "private": true,
   "packageManager": "pnpm@11.9.0",
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
-    "quality:js": "eslint scripts --ext .js,.mjs,.cjs,.ts,.tsx"
+    "quality:js": "eslint scripts --ext .js,.mjs,.cjs,.ts,.tsx",
+    "quality:js:baseline": "eslint scripts --ext .js,.mjs,.cjs,.ts,.tsx --fix --suppress-rule complexity",
+    "quality:js:prune": "eslint scripts --ext .js,.mjs,.cjs,.ts,.tsx --prune-suppressions"
   },
   "devDependencies": {
     "eslint": "10.4.0",

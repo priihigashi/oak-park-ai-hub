@@ -1,0 +1,37 @@
+{
+  "scripts/blog-generator.js": {
+    "complexity": {
+      "count": 7
+    }
+  },
+  "scripts/fill-missing.js": {
+    "complexity": {
+      "count": 1
+    }
+  },
+  "scripts/gsc-sync.js": {
+    "complexity": {
+      "count": 1
+    }
+  },
+  "scripts/remotion/export_slides.js": {
+    "complexity": {
+      "count": 1
+    }
+  },
+  "scripts/remotion/src/EvidenceCompilation.tsx": {
+    "complexity": {
+      "count": 1
+    }
+  },
+  "scripts/remotion/src/NewsReel.tsx": {
+    "complexity": {
+      "count": 1
+    }
+  },
+  "scripts/research.js": {
+    "complexity": {
+      "count": 4
+    }
+  }
+}

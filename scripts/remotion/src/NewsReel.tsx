@@ -25,7 +25,7 @@ export interface CaptionEntry {
   text: string;
 }
 
-export interface NewsReelProps {
+export type NewsReelProps = {
   videoSrc: string;
   videoStartFrame?: number;
   proofSlides: ProofSlide[];

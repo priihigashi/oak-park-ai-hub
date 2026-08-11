@@ -80,7 +80,7 @@ export interface EvidenceSegment {
   sources?: { url: string; platform: string }[];
 }
 
-export interface EvidenceCompilationProps {
+export type EvidenceCompilationProps = {
   schema_version?: number;
   composition_id?: string;
   format?: string;
