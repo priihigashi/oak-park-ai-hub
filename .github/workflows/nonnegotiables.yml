@@ -2,21 +2,30 @@ name: Nonnegotiables Updater
 
 on:
   schedule:
-    # 2:00 AM ET daily (before inventory at 3 AM, before 4AM agent at 4 AM)
-    - cron: '0 7 * * *'
+    # 2:00 AM ET daily (before inventory at 3 AM, before 4AM agent at 4 AM).
+    # `timezone:` makes this DST-safe. The previous `cron: '0 7 * * *'` had no
+    # timezone, so it ran at 07:00 UTC = 03:00 EDT in summer — an hour later than
+    # the comment claimed, and it would have drifted to 02:00 only in winter.
+    - cron: '0 2 * * *'
+      timezone: America/New_York
   workflow_dispatch:
 
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    # Raised from 10: the updater now waits on a quality-gate run before it can
+    # land on main (see scripts/ci/push_prevalidated_main.sh). The gate itself
+    # takes ~25s, but queueing can add minutes.
+    timeout-minutes: 25
     permissions:
       contents: write
+      actions: write        # required to dispatch quality-js.yml on the bot branch
 
     steps:
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0   # full history: push_prevalidated_main.sh may rebase onto a moved main
 
       - uses: actions/setup-python@v5
         with:
@@ -38,6 +47,9 @@ jobs:
           GIT_AUTHOR_EMAIL: actions@github.com
           GIT_COMMITTER_NAME: nonnegotiables-bot
           GIT_COMMITTER_EMAIL: actions@github.com
+          # push_prevalidated_main.sh shells out to `gh` to dispatch the quality
+          # gate and read its check runs — without GH_TOKEN it cannot authenticate.
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python3 scripts/nonnegotiables_updater.py
 
       - name: Alert on failure

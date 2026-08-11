@@ -7,11 +7,21 @@ name: JS/TS Quality Gate
 # would be blocked forever. Both jobs finish in ~20s, so running them on every
 # PR is far cheaper than the deadlock.
 # See: https://docs.github.com/en/actions/how-tos/manage-workflow-runs/skip-workflow-runs
+#
+# workflow_dispatch is REQUIRED, not optional convenience. Automated writers
+# (nonnegotiables, ads_pulse, ads_approval_watcher) cannot push directly to main
+# under ruleset 20720805 — required checks apply to pushes and there is no bypass.
+# They instead push to a temporary bot/* branch and dispatch this workflow against
+# it, so the commit carries passing checks before it reaches main. A push made with
+# GITHUB_TOKEN does not trigger a workflow, but workflow_dispatch does — which is
+# why this trigger is the mechanism, and removing it breaks all three bots.
+# See scripts/ci/push_prevalidated_main.sh
 on:
   pull_request:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 permissions:
   contents: read
