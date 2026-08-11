@@ -72,7 +72,53 @@ Three workflows push straight to `main` via `secrets.GITHUB_TOKEN`:
 | `ads_pulse.yml` | Mondays 08:00 ET | `docs/dashboard/*.html` |
 | `ads_approval_watcher.yml` | every 6h | `.github/agent_state/ads_api_approved.json` (only on state change) |
 
-### ✅ RESOLVED (PR #239) — the bots pass through the gate, nobody bypasses it
+### 🔴 ONE MANUAL SETTING IS STILL REQUIRED — the bots fail until you flip it
+
+Everything below is built, merged and tested. It does **not yet work end to end**,
+for one reason found by the self-test:
+
+```
+pull request create failed: GraphQL:
+GitHub Actions is not permitted to create or approve pull requests (createPullRequest)
+```
+
+`repos/priihigashi/oak-park-ai-hub/actions/permissions/workflow` currently reports
+`can_approve_pull_request_reviews: false`. That toggle also governs *creating*
+PRs, so the helper cannot open one from inside a runner. Fix it with either:
+
+```bash
+gh api -X PUT repos/priihigashi/oak-park-ai-hub/actions/permissions/workflow \
+  -F default_workflow_permissions=write \
+  -F can_approve_pull_request_reviews=true
+```
+
+or the UI: **Settings → Actions → General → Workflow permissions →
+"Allow GitHub Actions to create and approve pull requests"**.
+
+Then prove it, don't assume it:
+
+```bash
+gh workflow run bot_route_selftest.yml
+gh run watch "$(gh run list --workflow=bot_route_selftest.yml --limit 1 --json databaseId --jq '.[0].databaseId')"
+```
+
+A green run means a real commit reached `main` through the gate using
+`GITHUB_TOKEN`. Delete `bot_route_selftest.yml` after it passes once.
+
+**Until that setting is flipped, all three bots fail** — loudly, which is the
+correct behaviour and a deliberate change (the false all-clear was fixed in
+#239). `nonnegotiables.yml` is the first to hit it, at 02:00 ET.
+
+If you want them working before you get to this, the temporary fallback is to
+disable the ruleset — never to add a bypass actor:
+
+```bash
+gh api -X PUT repos/priihigashi/oak-park-ai-hub/rulesets/20720805 -f enforcement=disabled
+```
+
+---
+
+### ✅ The design (PR #239, corrected in #241) — bots pass through the gate
 
 The write-role bypass was **rejected as a solution**: it would exempt every human
 writer as well, in a repo where agent sessions hold write and admin tokens — the
