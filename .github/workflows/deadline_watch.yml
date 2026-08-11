@@ -1,0 +1,57 @@
+name: Deadline Safety Net (read-only shadow)
+
+on:
+  workflow_dispatch:
+    inputs:
+      notify:
+        description: Send minimal ntfy alerts after a successful read
+        type: boolean
+        default: false
+  schedule:
+    - cron: '17 */3 * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deadline-safety-net
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install read-only mailbox dependencies
+        run: pip install --quiet google-api-python-client google-auth google-auth-httplib2
+      - name: Read both mailboxes and detect candidate deadlines
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          COMPOSIO_KEY: ${{ secrets.COMPOSIO_KEY }}
+          DEADLINE_OUTLOOK_ALIAS: ${{ secrets.DEADLINE_OUTLOOK_ALIAS }}
+          DEADLINE_ALLOWED_SENDERS_JSON: ${{ secrets.DEADLINE_ALLOWED_SENDERS_JSON }}
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          DEADLINE_NOTIFY: ${{ ((github.event_name == 'workflow_dispatch' && inputs.notify) || vars.DEADLINE_NOTIFY_ENABLED == 'true') && '1' || '0' }}
+        run: python -m scripts.deadline_watch.run
+      - name: Preserve heartbeat and candidate report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deadline-watch-${{ github.run_id }}
+          path: deadline-watch-output.json
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Alert if either mailbox could not be checked
+        if: failure()
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+        run: |
+          curl --fail-with-body --silent --show-error \
+            -H 'Title: Deadline safety net FAILED' \
+            -H 'Tags: rotating_light' \
+            -d 'One or both deadline mailboxes were not checked. Open the failed GitHub Actions run.' \
+            "https://ntfy.sh/${NTFY_TOPIC}"

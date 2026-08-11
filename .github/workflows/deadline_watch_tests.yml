@@ -1,0 +1,23 @@
+name: Deadline Safety Net Tests
+
+on:
+  push:
+    paths: ['scripts/deadline_watch/**', 'tests/test_deadline_watch.py', '.github/workflows/deadline_watch*.yml', 'pyproject.toml']
+  pull_request:
+    paths: ['scripts/deadline_watch/**', 'tests/test_deadline_watch.py', '.github/workflows/deadline_watch*.yml', 'pyproject.toml']
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install --quiet ruff==0.11.0
+      - run: python -m unittest tests.test_deadline_watch -v
+      - run: ruff check scripts/deadline_watch tests/test_deadline_watch.py
