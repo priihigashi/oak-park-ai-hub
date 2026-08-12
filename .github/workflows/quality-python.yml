@@ -1,0 +1,43 @@
+# Python complexity no-regression gate.
+#
+# Deliberately NOT `ruff check` on its own: the repo carries 150 pre-existing
+# C901 findings, so a plain gate would be red on day one and get switched off.
+# Ruff has no native bulk-suppression equivalent, and baselining with 150 inline
+# `# noqa: C901` comments would mean editing 150 live functions — the
+# behaviour-adjacent refactor CLAUDE.md rule 5 forbids.
+#
+# So this enforces the SAME guarantee as the JS gate and no more: per-file
+# violation counts may not increase. It does NOT protect an individual function
+# from getting worse. See docs/QUALITY_GATE_ENFORCEMENT.md.
+#
+# NOT a required status check yet — that is a repo-settings change
+# (ruleset 20720805) and is listed as pending. It reports red on PRs today.
+name: Python Complexity Gate
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  complexity:
+    name: Python complexity
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install ruff (version pinned in requirements-dev.txt)
+        run: pip install -r requirements-dev.txt
+
+      - name: Enforce Python complexity no-regression
+        run: python3 scripts/ci/python_complexity_gate.py
