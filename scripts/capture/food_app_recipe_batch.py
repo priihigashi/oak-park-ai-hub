@@ -29,6 +29,7 @@ import re
 import sys
 import tempfile
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -49,6 +50,7 @@ OUT_DIR.mkdir(parents=True, exist_ok=True)
 APIFY_BASE = "https://api.apify.com/v2"
 APIFY_KEY = os.getenv("APIFY_API_KEY", "")
 MAX_RECIPES = int(os.getenv("FOOD_APP_MAX_RECIPES", "0") or "0")  # 0 = all
+METADATA_BATCH_SIZE = int(os.getenv("FOOD_APP_METADATA_BATCH_SIZE", "5") or "5")
 
 RECIPE_MARKERS = (
     "project: food app",
@@ -111,13 +113,14 @@ def _metadata_from_item(item: dict[str, Any]) -> dict[str, Any]:
 
 
 def fetch_metadata_batch(urls: list[str]) -> dict[str, dict[str, Any]]:
-    """Fetch Instagram captions/credits in one Apify actor run.
+    """Fetch Instagram captions/credits efficiently for a small chunk.
 
-    Falls back to the production per-URL metadata helper for any item missing from
-    the batch result. This minimizes Apify actor startup overhead while preserving
-    the already-tested fallback chain.
+    Apify gets one batch run with a bounded three-minute wait. Any missing items
+    then use the already-tested production helper concurrently instead of making
+    the whole batch wait on 28 sequential actor runs.
     """
     by_code: dict[str, dict[str, Any]] = {}
+    run_id = ""
     if APIFY_KEY and urls:
         try:
             direct = [norm_url(u) for u in urls]
@@ -133,8 +136,8 @@ def fetch_metadata_batch(urls: list[str]) -> dict[str, dict[str, Any]]:
             resp.raise_for_status()
             run_id = resp.json()["data"]["id"]
             status = "RUNNING"
-            for _ in range(72):  # up to 6 minutes
-                time.sleep(5)
+            for _ in range(18):  # max ~3 minutes, matching production helper
+                time.sleep(10)
                 sr = requests.get(
                     f"{APIFY_BASE}/actor-runs/{run_id}",
                     params={"token": APIFY_KEY}, timeout=20,
@@ -143,32 +146,43 @@ def fetch_metadata_batch(urls: list[str]) -> dict[str, dict[str, Any]]:
                 status = sr.json()["data"]["status"]
                 if status in {"SUCCEEDED", "FAILED", "ABORTED", "TIMED-OUT"}:
                     break
-            if status == "SUCCEEDED":
-                items = requests.get(
-                    f"{APIFY_BASE}/actor-runs/{run_id}/dataset/items",
-                    params={"token": APIFY_KEY, "format": "json", "limit": len(direct) + 10},
-                    timeout=45,
-                ).json()
-                for item in items:
-                    md = _metadata_from_item(item)
-                    code = md["short_code"] or shortcode(md["raw_url"])
-                    if code:
-                        by_code[code] = md
-            else:
-                print(f"[food-app] Apify batch ended {status}; will use per-URL fallback")
+            # Read whatever the run produced even if it hit our local wait ceiling.
+            items = requests.get(
+                f"{APIFY_BASE}/actor-runs/{run_id}/dataset/items",
+                params={"token": APIFY_KEY, "format": "json", "limit": len(direct) + 10},
+                timeout=45,
+            ).json()
+            for item in items:
+                md = _metadata_from_item(item)
+                code = md["short_code"] or shortcode(md["raw_url"])
+                if code:
+                    by_code[code] = md
+            if status not in {"SUCCEEDED", "FAILED", "ABORTED", "TIMED-OUT"}:
+                # Stop a still-running actor before falling back so it does not keep burning units.
+                try:
+                    requests.post(
+                        f"{APIFY_BASE}/actor-runs/{run_id}/abort",
+                        params={"token": APIFY_KEY}, timeout=20,
+                    )
+                except Exception:
+                    pass
         except Exception as exc:
-            print(f"[food-app] Apify batch failed: {exc}; will use per-URL fallback")
+            print(f"[food-app] Apify chunk failed: {exc}; using concurrent fallback")
 
-    for url in urls:
-        code = shortcode(url)
-        if code in by_code:
-            continue
-        try:
-            md = cp.fetch_reel_metadata(url)
-        except Exception as exc:
-            print(f"[food-app] metadata fallback failed for {code}: {exc}")
-            md = {}
-        by_code[code] = md or {}
+    missing = [u for u in urls if shortcode(u) not in by_code]
+    if missing:
+        def _fallback(url: str):
+            try:
+                return url, cp.fetch_reel_metadata(url) or {}
+            except Exception as exc:
+                print(f"[food-app] metadata fallback failed for {shortcode(url)}: {exc}")
+                return url, {}
+
+        with ThreadPoolExecutor(max_workers=min(4, len(missing))) as pool:
+            futures = [pool.submit(_fallback, u) for u in missing]
+            for fut in as_completed(futures):
+                url, md = fut.result()
+                by_code[shortcode(url)] = md
     return by_code
 
 
@@ -301,7 +315,7 @@ def ensure_ingest_sheet(gc):
     return ws
 
 
-def upsert_ingest(ws, queue_row: int, url: str, metadata: dict[str, Any], recipe: dict[str, Any], transcript: str, used_audio: bool):
+def upsert_ingest(ws, ingest_index: dict[str, int], queue_row: int, url: str, metadata: dict[str, Any], recipe: dict[str, Any], transcript: str, used_audio: bool):
     creator = metadata.get("creator_handle", "") or metadata.get("creator_name", "")
     status = "NEEDS REVIEW" if recipe.get("needs_human_review") or recipe.get("uncertainties") else "READY TO IMPORT"
     record = [
@@ -320,32 +334,34 @@ def upsert_ingest(ws, queue_row: int, url: str, metadata: dict[str, Any], recipe
         json.dumps(recipe.get("uncertainties", []), ensure_ascii=False),
         json.dumps(recipe, ensure_ascii=False), now_iso(),
     ]
-    existing = ws.get_all_values()
-    target_row = None
-    for idx, row in enumerate(existing[1:], start=2):
-        if row and str(row[0]).strip() == str(queue_row):
-            target_row = idx
-            break
+    target_row = ingest_index.get(str(queue_row))
     if target_row:
         ws.update(f"A{target_row}:Y{target_row}", [record], value_input_option="RAW")
     else:
         ws.append_row(record, value_input_option="RAW")
+        ingest_index[str(queue_row)] = len(ingest_index) + 2
     return status
 
 
 def update_queue_row(queue_ws, queue_row: int, success: bool, status: str = "", error: str = ""):
-    # Canonicalize every identified recipe to Food App so the generic daily router never sends it to News/OPC.
-    queue_ws.update_acell(f"H{queue_row}", "food app")
+    # One batch request per row: preserves unrelated cells while preventing the
+    # generic daily router from ever treating a recipe as News/OPC.
+    updates = [{"range": f"H{queue_row}", "values": [["food app"]]}]
     if success:
-        queue_ws.update_acell(f"D{queue_row}", True)
-        queue_ws.update_acell(f"F{queue_row}", "Food APP — recipe staged")
-        queue_ws.update_acell(f"G{queue_row}", TRACKER_URL)
-        queue_ws.update_acell(f"K{queue_row}", "Needs Review" if status == "NEEDS REVIEW" else "Ready to Import")
+        updates.extend([
+            {"range": f"D{queue_row}", "values": [[True]]},
+            {"range": f"F{queue_row}", "values": [["Food APP — recipe staged"]]},
+            {"range": f"G{queue_row}", "values": [[TRACKER_URL]]},
+            {"range": f"K{queue_row}", "values": [["Needs Review" if status == "NEEDS REVIEW" else "Ready to Import"]]},
+        ])
     else:
-        queue_ws.update_acell(f"D{queue_row}", False)
-        queue_ws.update_acell(f"F{queue_row}", "⚠️ Food recipe extraction failed")
-        queue_ws.update_acell(f"G{queue_row}", (error or "unknown error")[:400])
-        queue_ws.update_acell(f"K{queue_row}", "Needs Research")
+        updates.extend([
+            {"range": f"D{queue_row}", "values": [[False]]},
+            {"range": f"F{queue_row}", "values": [["⚠️ Food recipe extraction failed"]]},
+            {"range": f"G{queue_row}", "values": [[(error or "unknown error")[:400]]},
+            {"range": f"K{queue_row}", "values": [["Needs Research"]]},
+        ])
+    queue_ws.batch_update(updates, value_input_option="USER_ENTERED")
 
 
 def main() -> int:
@@ -354,6 +370,8 @@ def main() -> int:
         raise RuntimeError("Google Sheets authentication unavailable")
     queue_ws = gc.open_by_key(IDEAS_INBOX_ID).worksheet(QUEUE_TAB)
     ingest_ws = ensure_ingest_sheet(gc)
+    existing_ingest = ingest_ws.get_all_values()
+    ingest_index = {str(r[0]).strip(): idx for idx, r in enumerate(existing_ingest[1:], start=2) if r and str(r[0]).strip()}
 
     rows = queue_ws.get_all_values()
     candidates: list[dict[str, Any]] = []
@@ -379,46 +397,50 @@ def main() -> int:
     if not candidates:
         return 0
 
-    metadata_map = fetch_metadata_batch([c["url"] for c in candidates])
     summary = {"started_at": now_iso(), "candidate_count": len(candidates), "success": [], "failed": []}
 
-    for n, cand in enumerate(candidates, start=1):
-        row_num, url, note = cand["row"], cand["url"], cand["note"]
-        code = shortcode(url)
-        md = metadata_map.get(code, {}) or {}
-        print(f"\n[food-app] {n}/{len(candidates)} row {row_num} {code}")
-        try:
-            prelim = run_llm(note, url, md, transcript="")
-            transcript = transcribe_if_needed(url, md, prelim)
-            recipe = run_llm(note, url, md, transcript=transcript) if transcript else prelim
-            # If audio was required but unavailable, keep uncertainty explicit.
-            if prelim.get("needs_audio") and not transcript:
-                recipe.setdefault("uncertainties", []).append("Audio/visual details were requested but transcription was unavailable; verify against the reel before final publication.")
-                recipe["needs_human_review"] = True
-                recipe["confidence"] = "low" if not md.get("caption") else recipe.get("confidence", "medium")
-            validation = validate_recipe(recipe)
-            if validation:
-                recipe.setdefault("uncertainties", []).extend(validation)
-                recipe["needs_human_review"] = True
-            recipe["source"] = {
-                "queue_row": row_num,
-                "url": url,
-                "creator_handle": md.get("creator_handle", ""),
-                "creator_name": md.get("creator_name", ""),
-                "caption": md.get("caption", ""),
-                "transcript": transcript,
-                "capture_note": note,
-            }
-            out_path = OUT_DIR / f"row_{row_num}_{code}.json"
-            out_path.write_text(json.dumps(recipe, ensure_ascii=False, indent=2), encoding="utf-8")
-            status = upsert_ingest(ingest_ws, row_num, url, md, recipe, transcript, bool(transcript))
-            update_queue_row(queue_ws, row_num, True, status=status)
-            summary["success"].append({"row": row_num, "url": url, "title": recipe.get("title_en") or recipe.get("title_pt"), "status": status})
-            print(f"[food-app] staged: {recipe.get('title_en') or recipe.get('title_pt') or code} [{status}]")
-        except Exception as exc:
-            update_queue_row(queue_ws, row_num, False, error=str(exc))
-            summary["failed"].append({"row": row_num, "url": url, "error": str(exc)})
-            print(f"[food-app] FAILED row {row_num}: {exc}")
+    for chunk_start in range(0, len(candidates), METADATA_BATCH_SIZE):
+        chunk = candidates[chunk_start:chunk_start + METADATA_BATCH_SIZE]
+        print(f"[food-app] metadata chunk {chunk_start + 1}-{chunk_start + len(chunk)} of {len(candidates)}")
+        metadata_map = fetch_metadata_batch([c["url"] for c in chunk])
+
+        for offset, cand in enumerate(chunk, start=1):
+            n = chunk_start + offset
+            row_num, url, note = cand["row"], cand["url"], cand["note"]
+            code = shortcode(url)
+            md = metadata_map.get(code, {}) or {}
+            print(f"\n[food-app] {n}/{len(candidates)} row {row_num} {code}")
+            try:
+                prelim = run_llm(note, url, md, transcript="")
+                transcript = transcribe_if_needed(url, md, prelim)
+                recipe = run_llm(note, url, md, transcript=transcript) if transcript else prelim
+                if prelim.get("needs_audio") and not transcript:
+                    recipe.setdefault("uncertainties", []).append("Audio/visual details were requested but transcription was unavailable; verify against the reel before final publication.")
+                    recipe["needs_human_review"] = True
+                    recipe["confidence"] = "low" if not md.get("caption") else recipe.get("confidence", "medium")
+                validation = validate_recipe(recipe)
+                if validation:
+                    recipe.setdefault("uncertainties", []).extend(validation)
+                    recipe["needs_human_review"] = True
+                recipe["source"] = {
+                    "queue_row": row_num,
+                    "url": url,
+                    "creator_handle": md.get("creator_handle", ""),
+                    "creator_name": md.get("creator_name", ""),
+                    "caption": md.get("caption", ""),
+                    "transcript": transcript,
+                    "capture_note": note,
+                }
+                out_path = OUT_DIR / f"row_{row_num}_{code}.json"
+                out_path.write_text(json.dumps(recipe, ensure_ascii=False, indent=2), encoding="utf-8")
+                status = upsert_ingest(ingest_ws, ingest_index, row_num, url, md, recipe, transcript, bool(transcript))
+                update_queue_row(queue_ws, row_num, True, status=status)
+                summary["success"].append({"row": row_num, "url": url, "title": recipe.get("title_en") or recipe.get("title_pt"), "status": status})
+                print(f"[food-app] staged: {recipe.get('title_en') or recipe.get('title_pt') or code} [{status}]")
+            except Exception as exc:
+                update_queue_row(queue_ws, row_num, False, error=str(exc))
+                summary["failed"].append({"row": row_num, "url": url, "error": str(exc)})
+                print(f"[food-app] FAILED row {row_num}: {exc}")
 
     summary["finished_at"] = now_iso()
     (OUT_DIR / "batch_summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
