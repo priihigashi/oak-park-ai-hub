@@ -1,0 +1,63 @@
+name: Build Food App Pages v2
+
+on:
+  push:
+    branches:
+      - chatgpt/food-app-pages-v2
+    paths:
+      - 'scripts/capture/food_app_publish_pages.py'
+      - '.github/workflows/food_app_build_pages_v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: chatgpt/food-app-pages-v2
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install dependencies
+        run: pip install requests pillow
+      - name: Download vetted image candidates
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          rm -rf /tmp/food-app-frame-candidates /tmp/food-app-source-images
+          mkdir -p /tmp/food-app-frame-candidates /tmp/food-app-source-images
+          gh run download 31754232691 --repo priihigashi/oak-park-ai-hub --name food-app-frame-candidates --dir /tmp/food-app-frame-candidates
+          gh run download 31754056099 --repo priihigashi/oak-park-ai-hub --name food-app-source-images --dir /tmp/food-app-source-images
+      - name: Build static Food App
+        run: python scripts/capture/food_app_publish_pages.py
+      - name: Validate build
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f docs/food-app/index.html
+          test -f docs/food-app/assets/page-DwBm2Rih.js
+          test "$(find docs/food-app/images -type f -name '*.webp' | wc -l)" -eq 16
+          grep -q 'no-dough-chicken-coxinha' docs/food-app/assets/page-DwBm2Rih.js
+          grep -q 'cheddar-onion-beef-flatbread' docs/food-app/assets/page-DwBm2Rih.js
+          node --check docs/food-app/assets/page-DwBm2Rih.js
+      - name: Commit generated static site to working branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'Food App Builder'
+          git config user.email 'actions@users.noreply.github.com'
+          git add docs/food-app
+          if git diff --cached --quiet; then
+            echo 'No generated changes to commit.'
+            exit 0
+          fi
+          git commit -m 'Publish Food App v2 static build'
+          git push origin HEAD:chatgpt/food-app-pages-v2
