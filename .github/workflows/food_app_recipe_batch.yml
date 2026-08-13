@@ -1,0 +1,66 @@
+name: Food App Recipe Ingestion
+
+on:
+  workflow_dispatch:
+    inputs:
+      max_recipes:
+        description: "0 = process all pending recipe captures"
+        required: false
+        default: "0"
+        type: string
+  push:
+    branches: [main]
+    paths:
+      - "scripts/capture/food_app_recipe_batch.py"
+      - ".github/workflows/food_app_recipe_batch.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: food-app-recipe-ingestion
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+
+      - name: Install dependencies
+        run: |
+          pip install \
+            yt-dlp instaloader openai anthropic google-generativeai faster-whisper \
+            gspread google-auth google-api-python-client python-dotenv requests \
+            youtube-transcript-api pytubefix
+
+      - name: Extract and stage Food App recipes
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          CLAUDE_KEY_4_CONTENT: ${{ secrets.CLAUDE_KEY_4_CONTENT }}
+          APIFY_API_KEY: ${{ secrets.APIFY_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          SUPADATA_API_KEY: ${{ secrets.PRI_OP_SUPADATA_API_KEY || secrets.SUPADATA_API_KEY }}
+          PRI_OP_IG_COOKIES: ${{ secrets.PRI_OP_IG_COOKIES }}
+          FOOD_APP_MAX_RECIPES: ${{ inputs.max_recipes || '0' }}
+        run: python scripts/capture/food_app_recipe_batch.py
+
+      - name: Upload structured recipe payloads
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: food-app-recipes-${{ github.run_id }}
+          path: transcripts/food_app/
+          retention-days: 30
