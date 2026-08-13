@@ -2,7 +2,9 @@ name: Food App Fetch Recipe Images
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - chatgpt/food-app-image-generation
     paths:
       - 'scripts/capture/food_app_fetch_recipe_images.py'
       - '.github/workflows/food_app_fetch_recipe_images.yml'
