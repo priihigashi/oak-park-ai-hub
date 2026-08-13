@@ -1,0 +1,34 @@
+name: Food App Fetch HOLD Metadata
+
+on:
+  push:
+    branches:
+      - chatgpt/food-app-metadata-recovery
+    paths:
+      - 'scripts/capture/food_app_fetch_hold_metadata.py'
+      - '.github/workflows/food_app_fetch_hold_metadata.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: pip install requests
+      - name: Fetch hold captions and transcripts
+        env:
+          APIFY_API_KEY: ${{ secrets.APIFY_API_KEY }}
+        run: python scripts/capture/food_app_fetch_hold_metadata.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: food-app-hold-metadata
+          path: food-app-hold-metadata/
+          retention-days: 30
