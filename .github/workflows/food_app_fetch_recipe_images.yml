@@ -1,0 +1,35 @@
+name: Food App Fetch Recipe Images
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/capture/food_app_fetch_recipe_images.py'
+      - '.github/workflows/food_app_fetch_recipe_images.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fetch-images:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install dependencies
+        run: pip install requests pillow
+      - name: Fetch and normalize source covers
+        env:
+          APIFY_API_KEY: ${{ secrets.APIFY_API_KEY }}
+        run: python scripts/capture/food_app_fetch_recipe_images.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: food-app-source-images
+          path: food-app-source-images/
+          retention-days: 30
