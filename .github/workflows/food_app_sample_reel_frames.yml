@@ -1,0 +1,39 @@
+name: Food App Sample Reel Frames
+
+on:
+  push:
+    branches:
+      - chatgpt/food-app-image-generation
+    paths:
+      - 'scripts/capture/food_app_sample_reel_frames.py'
+      - '.github/workflows/food_app_sample_reel_frames.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sample:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          pip install requests pillow
+      - name: Sample frames
+        env:
+          APIFY_API_KEY: ${{ secrets.APIFY_API_KEY }}
+        run: python scripts/capture/food_app_sample_reel_frames.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: food-app-frame-candidates
+          path: food-app-frame-candidates/
+          retention-days: 30
