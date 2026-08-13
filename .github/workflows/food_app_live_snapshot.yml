@@ -1,0 +1,48 @@
+name: Food App Live Snapshot
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/food_app_live_snapshot.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Snapshot personal recipe site
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p snapshot
+          curl --fail --location --silent --show-error \
+            'https://priscila-mike-recipes.priih.chatgpt.site/' \
+            -o snapshot/index.html
+          python - <<'PY'
+          import re, pathlib
+          html = pathlib.Path('snapshot/index.html').read_text(encoding='utf-8', errors='ignore')
+          urls = sorted(set(re.findall(r'(?:src|href)=["\']([^"\']+\.(?:js|css)(?:\?[^"\']*)?)["\']', html)))
+          pathlib.Path('snapshot/assets.txt').write_text('\n'.join(urls), encoding='utf-8')
+          print(f'Found {len(urls)} JS/CSS assets')
+          PY
+          while IFS= read -r asset; do
+            [ -z "$asset" ] && continue
+            case "$asset" in
+              http*) url="$asset" ;;
+              /*) url="https://priscila-mike-recipes.priih.chatgpt.site$asset" ;;
+              *) url="https://priscila-mike-recipes.priih.chatgpt.site/$asset" ;;
+            esac
+            name=$(printf '%s' "$asset" | sed 's/[?#].*$//' | tr '/' '_' | sed 's/^_//')
+            curl --fail --location --silent --show-error "$url" -o "snapshot/$name" || true
+          done < snapshot/assets.txt
+          wc -c snapshot/* || true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: food-app-live-snapshot
+          path: snapshot/
+          retention-days: 7
