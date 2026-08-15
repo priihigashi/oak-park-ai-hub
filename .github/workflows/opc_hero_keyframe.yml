@@ -1,0 +1,198 @@
+name: OPC Hero Keyframe (Replicate)
+
+# Generates OPC website hero keyframes on Replicate and uploads to Drive.
+# Deliberately takes RAW JSON for the model input so parameters can be tuned
+# per-run without editing this file. Set probe_only=true to print a model's
+# input schema instead of generating (costs nothing).
+#
+# Plan: OPC_WEBSITE_HERO_ROUND1_STILL_KEYFRAMES_PLAN
+# Parent brief: OPC_WEBSITE_3D_BLUEPRINT_TRANSFORM_FULL_CODEX_BRIEF
+
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: 'Replicate model slug (owner/name)'
+        required: true
+        default: 'bytedance/seedream-5-pro'
+        type: string
+      input_json:
+        description: 'Raw JSON for the model input object'
+        required: true
+        default: '{"prompt":"test","aspect_ratio":"21:9","size":"2K"}'
+        type: string
+      filename:
+        description: 'Output filename without extension'
+        required: true
+        default: 'opc_hero_A5_v1'
+        type: string
+      drive_folder_id:
+        description: 'Drive folder ID for the output'
+        required: false
+        default: ''
+        type: string
+      probe_only:
+        description: 'Print the model input schema and exit without generating'
+        required: false
+        default: 'false'
+        type: choice
+        options: ['false','true']
+
+jobs:
+  keyframe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Probe model schema
+        if: inputs.probe_only == 'true'
+        env:
+          PRI_OP_REPLICATE_API_KEY: ${{ secrets.PRI_OP_REPLICATE_API_KEY }}
+          MODEL: ${{ inputs.model }}
+        run: |
+          pip install -q requests
+          python3 << 'PYEOF'
+          import os, requests
+          h = {"Authorization": f"Bearer {os.environ['PRI_OP_REPLICATE_API_KEY']}"}
+          slug = os.environ['MODEL'].strip()
+          r = requests.get(f"https://api.replicate.com/v1/models/{slug}", headers=h, timeout=60)
+          print(f"===== {slug} :: HTTP {r.status_code} =====")
+          if r.status_code != 200:
+              print(r.text[:800]); raise SystemExit(1)
+          ver = r.json().get('latest_version') or {}
+          schemas = (ver.get('openapi_schema') or {}).get('components', {}).get('schemas', {})
+          inp = schemas.get('Input', {})
+          print(f"version: {ver.get('id')}")
+          print(f"required: {inp.get('required')}")
+          for name, spec in (inp.get('properties') or {}).items():
+              print(f"  - {name}: type={spec.get('type')} default={spec.get('default')!r} "
+                    f"enum={spec.get('enum')} allOf={spec.get('allOf')} desc={str(spec.get('description'))[:120]}")
+          for k, v in schemas.items():
+              if k not in ('Input','Output') and isinstance(v, dict) and v.get('enum'):
+                  print(f"  [enum {k}]: {v['enum']}")
+          PYEOF
+
+      - name: Generate
+        if: inputs.probe_only != 'true'
+        id: gen
+        env:
+          PRI_OP_REPLICATE_API_KEY: ${{ secrets.PRI_OP_REPLICATE_API_KEY }}
+          MODEL: ${{ inputs.model }}
+          INPUT_JSON: ${{ inputs.input_json }}
+          FILENAME: ${{ inputs.filename }}
+        run: |
+          pip install -q requests
+          python3 << 'PYEOF'
+          import os, json, requests, time, sys, subprocess
+
+          key = os.environ['PRI_OP_REPLICATE_API_KEY']
+          headers = {"Authorization": f"Bearer {key}", "Content-Type": "application/json", "Prefer": "wait"}
+          slug = os.environ['MODEL'].strip()
+          fn = os.environ['FILENAME']
+
+          try:
+              model_input = json.loads(os.environ['INPUT_JSON'])
+          except json.JSONDecodeError as e:
+              print(f"ERROR: input_json is not valid JSON — {e}")
+              sys.exit(1)
+
+          print(f"Model: {slug}")
+          print(f"Input: {json.dumps(model_input, indent=2)}")
+
+          resp = requests.post(
+              f"https://api.replicate.com/v1/models/{slug}/predictions",
+              json={"input": model_input}, headers=headers, timeout=180
+          )
+          print(f"HTTP {resp.status_code}")
+          if resp.status_code >= 400:
+              # A 422 lists the valid params — print it, that is how we learn the schema.
+              print(resp.text[:2000])
+              sys.exit(1)
+
+          data = resp.json()
+          pred_id = data.get('id')
+          print(f"Prediction: {pred_id} | status={data.get('status')}")
+
+          image_url = None
+          if data.get('status') == 'succeeded':
+              out = data.get('output')
+              image_url = out[0] if isinstance(out, list) else out
+          else:
+              for i in range(40):
+                  time.sleep(10)
+                  p = requests.get(f"https://api.replicate.com/v1/predictions/{pred_id}", headers=headers, timeout=30)
+                  pd = p.json(); st = pd.get('status')
+                  print(f"Poll {i+1}: {st}")
+                  if st == 'succeeded':
+                      out = pd.get('output')
+                      image_url = out[0] if isinstance(out, list) else out
+                      break
+                  if st in ('failed','canceled'):
+                      print(f"FAILED: {pd.get('error')}")
+                      sys.exit(1)
+
+          if not image_url:
+              print("ERROR: no image URL after polling")
+              sys.exit(1)
+
+          print(f"Image URL: {image_url}")
+          # Download immediately — Replicate CDN URLs expire (~1 hour)
+          r = subprocess.run(['curl','-sL','-o',f'/tmp/{fn}.png', image_url], capture_output=True)
+          if r.returncode != 0 or os.path.getsize(f'/tmp/{fn}.png') < 10000:
+              print("ERROR: download failed or file too small")
+              sys.exit(1)
+          print(f"Downloaded /tmp/{fn}.png ({os.path.getsize(f'/tmp/{fn}.png')} bytes)")
+
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:
+              f.write(f"image_url={image_url}\n")
+          PYEOF
+
+      - name: Upload to Google Drive
+        if: inputs.probe_only != 'true' && steps.gen.outcome == 'success' && inputs.drive_folder_id != ''
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          DRIVE_FOLDER_ID: ${{ inputs.drive_folder_id }}
+          FILENAME: ${{ inputs.filename }}
+        run: |
+          pip install -q google-auth google-auth-oauthlib google-api-python-client
+          python3 << 'PYEOF'
+          import os, json, sys
+          from google.oauth2.credentials import Credentials
+          from google.auth.transport.requests import Request
+          from googleapiclient.discovery import build
+          from googleapiclient.http import MediaFileUpload
+
+          td = json.loads(os.environ['SHEETS_TOKEN'])
+          creds = Credentials(
+              token=td.get('token'), refresh_token=td.get('refresh_token'),
+              token_uri=td.get('token_uri','https://oauth2.googleapis.com/token'),
+              client_id=td.get('client_id'), client_secret=td.get('client_secret'),
+              scopes=td.get('scopes'))
+          if not creds.valid:
+              creds.refresh(Request())
+
+          drive = build('drive','v3',credentials=creds)
+          name = os.environ['FILENAME'] + '.png'
+          res = drive.files().create(
+              body={'name': name, 'parents':[os.environ['DRIVE_FOLDER_ID']]},
+              media_body=MediaFileUpload(f"/tmp/{name}", mimetype='image/png'),
+              supportsAllDrives=True, fields='id,name,webViewLink').execute()
+          if not res.get('id'):
+              print("ERROR: Drive upload returned no file ID"); sys.exit(1)
+          print(f"Saved: {res['name']}")
+          print(f"Link: {res['webViewLink']}")
+          PYEOF
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "## OPC Hero Keyframe"
+            echo "- **Model:** ${{ inputs.model }}"
+            echo "- **File:** ${{ inputs.filename }}.png"
+            echo "- **Probe only:** ${{ inputs.probe_only }}"
+            echo "- **Drive folder:** ${{ inputs.drive_folder_id }}"
+            echo "- **Image URL:** ${{ steps.gen.outputs.image_url }}"
+            echo '- **Input JSON:**'
+            echo '```json'
+            echo '${{ inputs.input_json }}'
+            echo '```'
+          } >> $GITHUB_STEP_SUMMARY
