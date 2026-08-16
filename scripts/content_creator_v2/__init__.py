@@ -3,3 +3,4 @@
 # Sprint 1: ffprobe.py, catalog.py
 # Sprint 2: scene_extractor.py
 # Sprint 3 (step 4): embedder.py, search.py
+# Sprint 4 (step 5): script_assistant.py
