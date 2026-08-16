@@ -1,0 +1,101 @@
+name: Drive Archive Files
+
+on:
+  workflow_dispatch:
+    inputs:
+      folder_id:
+        description: 'Drive folder to tidy'
+        required: true
+        type: string
+      archive_name:
+        description: 'Name of the archive subfolder'
+        required: false
+        default: '_Archive'
+        type: string
+      keep:
+        description: 'Comma-separated filenames to KEEP in place'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Archive
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          FOLDER_ID: ${{ inputs.folder_id }}
+          ARCHIVE_NAME: ${{ inputs.archive_name }}
+          KEEP: ${{ inputs.keep }}
+        run: |
+          pip install -q google-auth google-auth-oauthlib google-api-python-client
+          python3 << 'PYEOF'
+          import os, json
+          from google.oauth2.credentials import Credentials
+          from google.auth.transport.requests import Request
+          from googleapiclient.discovery import build
+
+          td = json.loads(os.environ['SHEETS_TOKEN'])
+          creds = Credentials(token=td.get('token'), refresh_token=td.get('refresh_token'),
+              token_uri=td.get('token_uri','https://oauth2.googleapis.com/token'),
+              client_id=td.get('client_id'), client_secret=td.get('client_secret'),
+              scopes=td.get('scopes'))
+          if not creds.valid:
+              creds.refresh(Request())
+          drive = build('drive','v3',credentials=creds)
+
+          folder = os.environ['FOLDER_ID']
+          keep = {k.strip() for k in os.environ['KEEP'].split(',') if k.strip()}
+          arch_name = os.environ['ARCHIVE_NAME']
+
+          # find or create the archive subfolder
+          q = (f"'{folder}' in parents and name = '{arch_name}' "
+               "and mimeType = 'application/vnd.google-apps.folder' and trashed = false")
+          found = drive.files().list(q=q, fields='files(id,name)', supportsAllDrives=True,
+                                     includeItemsFromAllDrives=True).execute().get('files', [])
+          if found:
+              arch_id = found[0]['id']
+              print(f"archive folder exists: {arch_id}")
+          else:
+              arch_id = drive.files().create(
+                  body={'name': arch_name, 'mimeType': 'application/vnd.google-apps.folder',
+                        'parents': [folder]},
+                  fields='id', supportsAllDrives=True).execute()['id']
+              print(f"created archive folder: {arch_id}")
+
+          # page through everything in the folder
+          files, token = [], None
+          while True:
+              resp = drive.files().list(
+                  q=f"'{folder}' in parents and trashed = false",
+                  fields='nextPageToken, files(id,name,mimeType)', pageSize=200,
+                  pageToken=token, supportsAllDrives=True,
+                  includeItemsFromAllDrives=True).execute()
+              files.extend(resp.get('files', []))
+              token = resp.get('nextPageToken')
+              if not token:
+                  break
+
+          moved = kept = 0
+          for f in files:
+              if f['mimeType'] == 'application/vnd.google-apps.folder':
+                  continue
+              if f['name'] in keep:
+                  print(f"KEEP    {f['name']}")
+                  kept += 1
+                  continue
+              drive.files().update(fileId=f['id'], addParents=arch_id,
+                                   removeParents=folder, fields='id',
+                                   supportsAllDrives=True).execute()
+              print(f"ARCHIVE {f['name']}")
+              moved += 1
+
+          print(f"\nkept {kept}, archived {moved}")
+          PYEOF
