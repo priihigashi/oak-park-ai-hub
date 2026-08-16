@@ -155,9 +155,16 @@ jobs:
               with open('/tmp/refs.json') as f:
                   refs = json.load(f)
               if refs:
-                  key = 'input_images' if slug.startswith('openai/') else 'image_input'
-                  model_input.setdefault(key, refs)
-                  print(f"attached {len(refs)} reference image(s) as '{key}'")
+                  if slug.startswith('openai/'):
+                      model_input.setdefault('input_images', refs)
+                      print(f"attached {len(refs)} reference image(s) as 'input_images'")
+                  elif 'kontext' in slug:
+                      # kontext takes a single image to edit, not an array
+                      model_input.setdefault('input_image', refs[0])
+                      print("attached 1 reference image as 'input_image' (kontext edit)")
+                  else:
+                      model_input.setdefault('image_input', refs)
+                      print(f"attached {len(refs)} reference image(s) as 'image_input'")
 
           print(f"Model: {slug}")
           def _safe(k2, v2):
@@ -165,6 +172,8 @@ jobs:
                   return '***'
               if k2 in ('image_input','input_images'):
                   return f"<{len(v2)} reference image(s)>"
+              if k2 == 'input_image':
+                  return "<1 reference image>"
               return v2
           print(f"Input: {json.dumps({k2: _safe(k2, v2) for k2, v2 in model_input.items()}, indent=2)}")
 
