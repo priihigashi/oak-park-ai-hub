@@ -75,6 +75,7 @@ jobs:
         id: gen
         env:
           PRI_OP_REPLICATE_API_KEY: ${{ secrets.PRI_OP_REPLICATE_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           MODEL: ${{ inputs.model }}
           INPUT_JSON: ${{ inputs.input_json }}
           FILENAME: ${{ inputs.filename }}
@@ -94,8 +95,17 @@ jobs:
               print(f"ERROR: input_json is not valid JSON — {e}")
               sys.exit(1)
 
+          # openai/* models on Replicate are bring-your-own-key. Inject from the
+          # repo secret so the key never appears in workflow inputs or logs.
+          if slug.startswith('openai/') and not model_input.get('openai_api_key'):
+              k = os.environ.get('OPENAI_API_KEY')
+              if not k:
+                  print("ERROR: model needs openai_api_key but OPENAI_API_KEY secret is empty")
+                  sys.exit(1)
+              model_input['openai_api_key'] = k
+
           print(f"Model: {slug}")
-          print(f"Input: {json.dumps(model_input, indent=2)}")
+          print(f"Input: {json.dumps({k2: ('***' if k2=='openai_api_key' else v2) for k2, v2 in model_input.items()}, indent=2)}")
 
           resp = requests.post(
               f"https://api.replicate.com/v1/models/{slug}/predictions",
