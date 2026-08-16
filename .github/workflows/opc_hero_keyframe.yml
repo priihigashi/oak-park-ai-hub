@@ -31,6 +31,11 @@ on:
         required: false
         default: ''
         type: string
+      reference_drive_ids:
+        description: 'Comma-separated Drive file IDs to use as reference images'
+        required: false
+        default: ''
+        type: string
       probe_only:
         description: 'Print the model input schema and exit without generating'
         required: false
@@ -70,6 +75,47 @@ jobs:
                   print(f"  [enum {k}]: {v['enum']}")
           PYEOF
 
+      - name: Fetch reference images from Drive
+        if: inputs.probe_only != 'true' && inputs.reference_drive_ids != ''
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          REF_IDS: ${{ inputs.reference_drive_ids }}
+        run: |
+          pip install -q google-auth google-auth-oauthlib google-api-python-client
+          python3 << 'PYEOF'
+          import os, json, base64, io, sys
+          from google.oauth2.credentials import Credentials
+          from google.auth.transport.requests import Request
+          from googleapiclient.discovery import build
+          from googleapiclient.http import MediaIoBaseDownload
+
+          td = json.loads(os.environ['SHEETS_TOKEN'])
+          creds = Credentials(token=td.get('token'), refresh_token=td.get('refresh_token'),
+              token_uri=td.get('token_uri','https://oauth2.googleapis.com/token'),
+              client_id=td.get('client_id'), client_secret=td.get('client_secret'),
+              scopes=td.get('scopes'))
+          if not creds.valid:
+              creds.refresh(Request())
+          drive = build('drive','v3',credentials=creds)
+
+          uris = []
+          for fid in [x.strip() for x in os.environ['REF_IDS'].split(',') if x.strip()]:
+              meta = drive.files().get(fileId=fid, fields='name,mimeType', supportsAllDrives=True).execute()
+              buf = io.BytesIO()
+              dl = MediaIoBaseDownload(buf, drive.files().get_media(fileId=fid, supportsAllDrives=True))
+              done = False
+              while not done:
+                  _, done = dl.next_chunk()
+              raw = buf.getvalue()
+              mime = meta.get('mimeType','image/png')
+              uris.append(f"data:{mime};base64," + base64.b64encode(raw).decode())
+              print(f"reference: {meta.get('name')} ({len(raw)} bytes)")
+
+          with open('/tmp/refs.json','w') as f:
+              json.dump(uris, f)
+          print(f"prepared {len(uris)} reference image(s)")
+          PYEOF
+
       - name: Generate
         if: inputs.probe_only != 'true'
         id: gen
@@ -104,8 +150,23 @@ jobs:
                   sys.exit(1)
               model_input['openai_api_key'] = k
 
+          # Attach Drive-sourced reference images as data URIs, if any were fetched.
+          if os.path.exists('/tmp/refs.json'):
+              with open('/tmp/refs.json') as f:
+                  refs = json.load(f)
+              if refs:
+                  key = 'input_images' if slug.startswith('openai/') else 'image_input'
+                  model_input.setdefault(key, refs)
+                  print(f"attached {len(refs)} reference image(s) as '{key}'")
+
           print(f"Model: {slug}")
-          print(f"Input: {json.dumps({k2: ('***' if k2=='openai_api_key' else v2) for k2, v2 in model_input.items()}, indent=2)}")
+          def _safe(k2, v2):
+              if k2 == 'openai_api_key':
+                  return '***'
+              if k2 in ('image_input','input_images'):
+                  return f"<{len(v2)} reference image(s)>"
+              return v2
+          print(f"Input: {json.dumps({k2: _safe(k2, v2) for k2, v2 in model_input.items()}, indent=2)}")
 
           resp = requests.post(
               f"https://api.replicate.com/v1/models/{slug}/predictions",
