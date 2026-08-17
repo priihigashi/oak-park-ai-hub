@@ -1,0 +1,32 @@
+name: Food App Hosted Preview Smoke Test
+
+on:
+  push:
+    branches:
+      - chatgpt/food-app-preview-smoke
+    paths:
+      - '.github/workflows/food_app_preview_smoke.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Verify hosted HTML Preview in headless Chrome
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL='https://htmlpreview.github.io/?https://github.com/priihigashi/oak-park-ai-hub/blob/main/docs/food-app/index.html'
+          command -v google-chrome >/dev/null
+          google-chrome --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
+            --virtual-time-budget=15000 --dump-dom "$URL" > /tmp/food-app-dom.html
+          grep -q 'New Captures' /tmp/food-app-dom.html
+          grep -q 'Comfort / Cheat Day' /tmp/food-app-dom.html
+          grep -q 'Lab Support' /tmp/food-app-dom.html
+          grep -q 'Coxinha sem Massa' /tmp/food-app-dom.html
+          grep -q 'General nutrition education only' /tmp/food-app-dom.html
+          grep -q '65 complete recipes' /tmp/food-app-dom.html
+          echo 'HOSTED_PREVIEW_OK'
