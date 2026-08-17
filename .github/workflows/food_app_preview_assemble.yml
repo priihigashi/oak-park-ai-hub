@@ -36,8 +36,8 @@ jobs:
           git rm .github/workflows/food_app_preview_assemble.yml
           git config user.name 'Food App Release Bot'
           git config user.email 'actions@users.noreply.github.com'
-          git add -A docs/food-app tmp/food-app .github/workflows/food_app_preview_assemble.yml
+          git add -A
           git commit -m 'Add audited Food App review build'
           git push origin HEAD:chatgpt/food-app-update-preview
 
-# assembly trigger v3 — replace review-only image folder atomically
+# assembly trigger v4 — cleanup-safe staging
