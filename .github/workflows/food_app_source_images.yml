@@ -1,4 +1,4 @@
-name: Food App Source Images
+name: Food App Release Images
 
 on:
   push:
@@ -11,50 +11,66 @@ permissions:
   contents: read
 
 jobs:
-  recover:
+  generate:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     steps:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install tools
-        run: |
-          pip install -q yt-dlp
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq ffmpeg
-      - name: Recover representative dish frames
+      - name: Install OpenAI SDK
+        run: pip install -q 'openai>=1.0.0'
+      - name: Generate consistent Food App photography
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         shell: bash
         run: |
-          set -euo pipefail
-          mkdir -p images videos
-          urls=(
-            'moist-fit-chocolate-cake|https://www.instagram.com/reel/DdAar_jRdMN/'
-            'beef-roast-vegetables-mushrooms|https://www.instagram.com/reel/DQmoBSiDDC7/'
-            'viral-caramelized-onion-pasta|https://www.instagram.com/reel/DV8V7e9kqHl/'
-            'strawberry-protein-mousse|https://www.instagram.com/reel/DSdC6S4EKJl/'
-            'street-corn-sweet-potato-bowl|https://www.instagram.com/reel/DRmzm-oE3ot/'
-            'beef-vegetable-soup|https://www.instagram.com/reel/DQf0bBgEycQ/'
-            'cheddar-mcmelt-style-beef|https://www.instagram.com/reel/DYkDSqtgcL4/'
-            'crispy-air-fryer-chicken|https://www.instagram.com/reel/DNYUqYxEZv9/'
-          )
-          for item in "${urls[@]}"; do
-            slug=${item%%|*}
-            url=${item#*|}
-            echo "== $slug =="
-            yt-dlp --no-warnings --skip-download --write-thumbnail --convert-thumbnails webp -o "images/${slug}.%(ext)s" "$url" || true
-            if [ ! -f "images/${slug}.webp" ]; then
-              yt-dlp --no-warnings -f 'best[height<=720]/best' -o "videos/${slug}.%(ext)s" "$url" || true
-              file=$(find videos -maxdepth 1 -type f -name "${slug}.*" | head -1 || true)
-              if [ -n "$file" ]; then
-                ffmpeg -y -sseof -3 -i "$file" -frames:v 1 -vf 'scale=1200:-2' "images/${slug}.webp" >/dev/null 2>&1 || true
-              fi
-            fi
-          done
-          ls -lh images || true
+          python - <<'PY'
+          import base64, os, time
+          from pathlib import Path
+          from openai import OpenAI
+
+          client = OpenAI()
+          out = Path('images')
+          out.mkdir(exist_ok=True)
+          base = ('Editorial food photography for a private recipe app. Single finished dish only. '
+                  'Photorealistic, appetizing but natural, neutral stoneware, warm soft restaurant daylight, '
+                  'shallow depth of field, realistic portions and texture. No text, no logo, no people, no packaging, no UI. ')
+          prompts = {
+            'massless-coxinha': 'Brazilian coxinha sem massa: teardrop croquettes made from seasoned shredded chicken mixed with requeijao or cream cheese, breaded and fried deep golden and crisp; one cut open showing creamy chicken filling.',
+            'italian-scraps-pizza': 'Rustic pizza made from an old-bread crust, tomato sauce, melted mozzarella, Parmesan, oregano and a few thin sausage slices; irregular crisp golden edges on a wooden board.',
+            'brazilian-chicken-esfiha': 'Folded Brazilian esfiha made from a thin flatbread wrapper, shredded chicken and melted mozzarella, edges sealed with light requeijao, brushed with egg yolk, baked golden and sprinkled with sesame; one cut open.',
+            'banana-neapolitan-nice-cream': 'Three-layer banana nice cream in a clear shallow glass dish: creamy banana, pink strawberry-banana and dark cocoa-banana layers, smooth frozen texture, a few fresh strawberry slices.',
+            'lighter-cheddar-mcmelt-burger': 'Lighter Cheddar McMelt-style burger: lean beef patty, glossy cheddar-ricotta cream, deeply caramelized onions, dark Australian-style bun; sauce visibly melting.',
+            'ginger-soy-chicken-marinade': 'Ginger-soy marinated chicken pieces cooked until caramelized golden-brown with ginger, garlic, black pepper and scallion flecks; simple plate with scallions and lime wedges.',
+            'zucchini-carrot-pancakes': 'Savory zucchini pancakes folded or stacked with a ground-beef, carrot and tomato-passata filling; tender golden pancake edges and vegetable flecks.',
+            'airy-protein-dessert': 'Very light chilled high-protein mousse-pudding made from whipped pasteurized egg whites, skim milk powder, skim milk and a little condensed milk; pale cream soft peaks in a small glass bowl.',
+            'moist-fit-chocolate-cake': 'Moist lighter chocolate snack cake with cocoa, sliced to show a tender dark chocolate crumb and a simple glossy cocoa finish.',
+            'beef-roast-vegetables-mushrooms': 'Tender sliced beef roast with browned mushrooms, onions and mixed roasted vegetables, glossy pan juices, hearty home-style dinner plating.',
+            'viral-caramelized-onion-pasta': 'Rich caramelized-onion pasta: glossy strands or short pasta coated in deeply browned sweet onions and savory sauce, finished simply with herbs and a light cheese grate; indulgent comfort-food look.',
+            'strawberry-protein-mousse': 'Creamy strawberry protein mousse made from strawberries, nonfat yogurt, gelatin and whey, pale pink airy texture in a glass cup, topped with fresh strawberry slices.',
+            'street-corn-sweet-potato-bowl': 'High-protein street-corn sweet potato bowl with roasted sweet potato, seasoned lean beef, charred corn, creamy Greek-yogurt style sauce, lime, herbs and a little cheese, colorful composed bowl.',
+            'beef-vegetable-soup': 'Brazilian-style pressure-cooker beef and vegetable soup with tender beef chunks, vegetables and pasta in a rich golden broth, cozy deep bowl with fresh herbs.',
+            'cheddar-mcmelt-style-beef': 'Cheddar McMelt-style lean beef patty topped with a silky melted cheddar-and-skim-milk sauce and caramelized onions, plated without fast-food branding.',
+            'crispy-air-fryer-chicken': 'Crispy air-fryer chicken pieces with a golden seasoned crust, served with a bright lemon-garlic sauce on the side, juicy interior visible in one cut piece.'
+          }
+          for slug, detail in prompts.items():
+              print('Generating', slug, flush=True)
+              result = client.images.generate(
+                  model='gpt-image-1.5',
+                  prompt=base + detail,
+                  size='1536x1024',
+                  quality='medium',
+                  output_format='webp',
+              )
+              data = result.data[0].b64_json
+              (out / f'{slug}.webp').write_bytes(base64.b64decode(data))
+              time.sleep(1)
+          print('Generated', len(prompts), 'images')
+          PY
       - uses: actions/upload-artifact@v4
         with:
-          name: food-app-source-images
+          name: food-app-release-images
           path: images/*.webp
-          if-no-files-found: warn
+          if-no-files-found: error
           retention-days: 7
