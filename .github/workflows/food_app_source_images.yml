@@ -2,10 +2,10 @@ name: Food App Source Images
 
 on:
   push:
-    branches:
-      - chatgpt/food-app-image-recovery
+    branches: [main]
     paths:
       - '.github/workflows/food_app_source_images.yml'
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -28,37 +28,30 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p images videos
-          cat > recipes.tsv <<'EOF'
-          moist-fit-chocolate-cake	https://www.instagram.com/reel/DdAar_jRdMN/?igsh=MWk3YnF2bjdoaXR6Mg==
-          beef-roast-vegetables-mushrooms	https://www.instagram.com/reel/DQmoBSiDDC7/?igsh=MWVvMXEwZHI1b3Zkaw==
-          viral-caramelized-onion-pasta	https://www.instagram.com/reel/DV8V7e9kqHl/?igsh=MXJvN2VxN2Q5bDQ5OQ==
-          strawberry-protein-mousse	https://www.instagram.com/reel/DSdC6S4EKJl/?igsh=MXZhd2t1YzZ0NG5wZQ==
-          street-corn-sweet-potato-bowl	https://www.instagram.com/reel/DRmzm-oE3ot/?igsh=MTF0NjNqN2h2MG13dg==
-          beef-vegetable-soup	https://www.instagram.com/reel/DQf0bBgEycQ/?igsh=MXByOXg2Z3R4bGEzOA==
-          cheddar-mcmelt-style-beef	https://www.instagram.com/reel/DYkDSqtgcL4/?igsh=MW1uOXFhZ2pjNTgyeQ==
-          crispy-air-fryer-chicken	https://www.instagram.com/reel/DNYUqYxEZv9/?igsh=MWd3aDF3dmN0dmk4cA==
-          EOF
-          while IFS=$'\t' read -r slug url; do
-            [ -z "$slug" ] && continue
+          urls=(
+            'moist-fit-chocolate-cake|https://www.instagram.com/reel/DdAar_jRdMN/'
+            'beef-roast-vegetables-mushrooms|https://www.instagram.com/reel/DQmoBSiDDC7/'
+            'viral-caramelized-onion-pasta|https://www.instagram.com/reel/DV8V7e9kqHl/'
+            'strawberry-protein-mousse|https://www.instagram.com/reel/DSdC6S4EKJl/'
+            'street-corn-sweet-potato-bowl|https://www.instagram.com/reel/DRmzm-oE3ot/'
+            'beef-vegetable-soup|https://www.instagram.com/reel/DQf0bBgEycQ/'
+            'cheddar-mcmelt-style-beef|https://www.instagram.com/reel/DYkDSqtgcL4/'
+            'crispy-air-fryer-chicken|https://www.instagram.com/reel/DNYUqYxEZv9/'
+          )
+          for item in "${urls[@]}"; do
+            slug=${item%%|*}
+            url=${item#*|}
             echo "== $slug =="
             yt-dlp --no-warnings --skip-download --write-thumbnail --convert-thumbnails webp -o "images/${slug}.%(ext)s" "$url" || true
             if [ ! -f "images/${slug}.webp" ]; then
               yt-dlp --no-warnings -f 'best[height<=720]/best' -o "videos/${slug}.%(ext)s" "$url" || true
-              file=$(ls videos/${slug}.* 2>/dev/null | head -1 || true)
+              file=$(find videos -maxdepth 1 -type f -name "${slug}.*" | head -1 || true)
               if [ -n "$file" ]; then
-                dur=$(ffprobe -v error -show_entries format=duration -of default=nw=1:nk=1 "$file" || echo 10)
-                ts=$(python - <<PY
-try:
- d=float('$dur')
- print(max(0.5,d*0.82))
-except: print(5)
-PY
-)
-                ffmpeg -y -ss "$ts" -i "$file" -frames:v 1 -vf 'scale=1200:-2' "images/${slug}.webp" >/dev/null 2>&1 || true
+                ffmpeg -y -sseof -3 -i "$file" -frames:v 1 -vf 'scale=1200:-2' "images/${slug}.webp" >/dev/null 2>&1 || true
               fi
             fi
-          done < recipes.tsv
-          ls -lh images
+          done
+          ls -lh images || true
       - uses: actions/upload-artifact@v4
         with:
           name: food-app-source-images
