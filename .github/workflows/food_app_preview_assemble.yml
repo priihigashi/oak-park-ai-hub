@@ -38,3 +38,5 @@ jobs:
           git add docs/food-app
           git commit -m 'Add audited Food App review build'
           git push origin HEAD:chatgpt/food-app-update-preview
+
+# assembly trigger v2 — includes all five encoded HTML chunks
