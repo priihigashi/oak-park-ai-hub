@@ -1,0 +1,40 @@
+name: Assemble Food App Review Build
+
+on:
+  push:
+    branches:
+      - chatgpt/food-app-update-preview
+    paths:
+      - '.github/workflows/food_app_preview_assemble.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: chatgpt/food-app-update-preview
+      - name: Assemble audited HTML and release images
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p docs/food-app/images
+          cat tmp/food-app/index.b64.part* | base64 -d | gzip -d > docs/food-app/index.html
+          gh run download 32042014462 --repo "$GITHUB_REPOSITORY" -n food-app-release-images -D docs/food-app/images
+          test "$(find docs/food-app/images -maxdepth 1 -name '*.webp' | wc -l)" -eq 16
+          grep -q '65 complete recipes' docs/food-app/index.html || grep -q 'recipes.length' docs/food-app/index.html
+          grep -q 'Comfort / Cheat Day' docs/food-app/index.html
+          grep -q 'General nutrition education only' docs/food-app/index.html
+          rm -rf tmp/food-app
+          git rm .github/workflows/food_app_preview_assemble.yml
+          git config user.name 'Food App Release Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add docs/food-app
+          git commit -m 'Add audited Food App review build'
+          git push origin HEAD:chatgpt/food-app-update-preview
