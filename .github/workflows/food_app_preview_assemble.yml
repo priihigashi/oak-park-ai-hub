@@ -24,6 +24,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
+          rm -rf docs/food-app/images
           mkdir -p docs/food-app/images
           cat tmp/food-app/index.b64.part* | base64 -d | gzip -d > docs/food-app/index.html
           gh run download 32042014462 --repo "$GITHUB_REPOSITORY" -n food-app-release-images -D docs/food-app/images
@@ -35,8 +36,8 @@ jobs:
           git rm .github/workflows/food_app_preview_assemble.yml
           git config user.name 'Food App Release Bot'
           git config user.email 'actions@users.noreply.github.com'
-          git add docs/food-app
+          git add -A docs/food-app tmp/food-app .github/workflows/food_app_preview_assemble.yml
           git commit -m 'Add audited Food App review build'
           git push origin HEAD:chatgpt/food-app-update-preview
 
-# assembly trigger v2 — includes all five encoded HTML chunks
+# assembly trigger v3 — replace review-only image folder atomically
