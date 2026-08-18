@@ -1,8 +1,36 @@
 # Pipeline Registry — Single Source of Truth
-# oak-park-ai-hub · updated 2026-05-01
+# oak-park-ai-hub · updated 2026-08-18
 # Every template, format, and pipeline stage is listed here.
 # Before adding a new template or format: add a row here first.
 # Before running the pipeline: verify the template key matches an ACTIVE row.
+
+---
+
+## INSPIRATION REFERENCE GOVERNANCE — 2026-08-18
+
+Canonical searchable reference index:
+- Spreadsheet: **Ideas & Inbox** `1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU`
+- Tab: **📥 Inspiration Library** (sheetId `1694604172`)
+
+Processing intake:
+- **📲 Capture Queue** (sheetId `124307869`)
+
+These are complementary:
+- Capture Queue = work needing media processing, transcription, frame/audio/duration/creator verification.
+- Inspiration Library = durable searchable index of references Priscila intentionally wants available for reuse.
+- A reference may be present in both. Never force a template/design/audio reference into only the processing queue.
+
+When the user identifies a URL as template/design/visual/font/typography/sound/audio/caption/motion/editing inspiration, upsert the normalized URL into Inspiration Library immediately. Preserve the user's raw reason for liking it. If analysis is still needed, also queue capture work; when processing finishes, enrich the same Inspiration Library row rather than appending a duplicate.
+
+Reusable-reference fields:
+`Visual Template?`, `Font / Typography?`, `Sound / Audio?`, `Caption Style?`, `Motion / Editing?`, `Duration Bucket`, `Exact Duration (sec)`, `Best Placement`, `Style Tags`, `Template Scope`, `Reference Status`, `Track Creator / Account?`.
+
+The five inspiration-type fields are independent Yes/No/Unknown values. Do not guess exact duration, creator/account, font name or audio title when inaccessible.
+
+Reference lifecycle:
+`Link only` → `Needs frame capture` → `Frames captured` → `Analyzed` → `Template built`.
+
+Drive stores screenshots, extracted frames, transcripts/audio references and built template assets. Inspiration Library is the index future content/template agents search before creating a new treatment.
 
 ---
 
@@ -39,6 +67,8 @@
 4. Named person on any slide → face required (bio-card or sticker-slot).
    No face = reviewer flags HIGH.
 
+5. Before inventing a new visual/editing treatment, search 📥 Inspiration Library for relevant saved references. A saved reference does not become a new FORMAT unless it is analyzed and genuinely reusable as a production structure.
+
 ---
 
 ## POST-READY CHECKLIST (reviewer enforces all)
@@ -55,6 +85,11 @@ A carousel is POST-READY only when:
 ---
 
 ## PIPELINE STAGE MAP
+
+stage 0 — inspiration/reference intake
+  /capture or the active content agent detects user-stated template/design/font/sound/caption/motion inspiration
+  Normalize/dedupe source URL → upsert 📥 Inspiration Library immediately
+  If screenshots/transcript/audio/duration/creator analysis is needed → also add/keep 📲 Capture Queue
 
 stage 1 — topic_picker.py
   Reads Inspiration Library + Content Queue
@@ -79,6 +114,7 @@ stage 4 — main.py upload
   Upload png/ + motion/ + resources/ + caption.txt to Drive version folder
   Create story Google Doc in Drive
   write_inspo_status() — update Inspiration Library row
+  If an inspiration reference produced a durable reusable implementation, link the output back to the same row and advance Reference Status only to the achieved state
 
 stage 5 — email_preview.py
   Send preview email with Drive link + thumbnail + caption
@@ -94,9 +130,11 @@ None identified yet. Add here when a template is retired.
 
 ## ADDING A NEW TEMPLATE
 
-1. Add a row to ACTIVE TEMPLATES above
-2. Add the builder function to carousel_builder.py
-3. Add routing to generate_carousel_content() and build_html()
-4. Add reviewer checks if the template has unique structural rules
-5. Add a row to the Templates Registry tab in Spreadsheet Hub (1qDbO6JQX0cKbZ9rHjiM7a4U_p7OOddZ3k3Sp30JJoqo)
-6. Test with a manual run before enabling in the daily pipeline
+1. Search 📥 Inspiration Library and existing template assets first; reuse/extend when appropriate.
+2. Add a row to ACTIVE TEMPLATES above.
+3. Add the builder function to carousel_builder.py.
+4. Add routing to generate_carousel_content() and build_html().
+5. Add reviewer checks if the template has unique structural rules.
+6. Add a row to the Templates Registry tab in Spreadsheet Hub (1qDbO6JQX0cKbZ9rHjiM7a4U_p7OOddZ3k3Sp30JJoqo).
+7. Test with a manual run before enabling in the daily pipeline.
+8. If the template came from a saved Inspiration Library reference, link the durable implementation back to that row and set `Reference Status = Template built` only after the implementation exists.
