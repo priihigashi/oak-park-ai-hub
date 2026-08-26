@@ -1,0 +1,119 @@
+name: TEMP — Ads Toolchain Repair Probe
+
+on:
+  push:
+    branches:
+      - fix/google-ads-reporting-truth-2026-08-26
+    paths:
+      - '.github/workflows/ads_toolchain_repair_probe.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ads-config-live:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install google-ads
+      - name: Read live campaign config and completed-day spend
+        env:
+          GOOGLE_ADS_DEVELOPER_TOKEN: ${{ secrets.GOOGLE_ADS_DEVELOPER_TOKEN }}
+          GOOGLE_ADS_CLIENT_ID: ${{ secrets.GOOGLE_ADS_CLIENT_ID }}
+          GOOGLE_ADS_CLIENT_SECRET: ${{ secrets.GOOGLE_ADS_CLIENT_SECRET }}
+          GOOGLE_ADS_REFRESH_TOKEN: ${{ secrets.GOOGLE_ADS_REFRESH_TOKEN }}
+        run: |
+          python - <<'PY'
+          import os
+          from google.ads.googleads.client import GoogleAdsClient
+          cfg = {
+            'developer_token': os.environ['GOOGLE_ADS_DEVELOPER_TOKEN'],
+            'client_id': os.environ['GOOGLE_ADS_CLIENT_ID'],
+            'client_secret': os.environ['GOOGLE_ADS_CLIENT_SECRET'],
+            'refresh_token': os.environ['GOOGLE_ADS_REFRESH_TOKEN'],
+            'use_proto_plus': True,
+          }
+          client = GoogleAdsClient.load_from_dict(cfg)
+          svc = client.get_service('GoogleAdsService')
+          customer = '8945889168'
+          q1 = '''
+          SELECT campaign.id, campaign.name, campaign.status,
+                 campaign.advertising_channel_type,
+                 campaign.bidding_strategy_type,
+                 campaign_budget.amount_micros
+          FROM campaign
+          WHERE campaign.status != 'REMOVED'
+          ORDER BY campaign.id
+          '''
+          print('LIVE_CONFIG_BEGIN')
+          for row in svc.search(customer_id=customer, query=q1):
+            print(f"campaign={row.campaign.id}|name={row.campaign.name}|status={row.campaign.status.name}|channel={row.campaign.advertising_channel_type.name}|bid={row.campaign.bidding_strategy_type.name}|budget_usd={row.campaign_budget.amount_micros/1_000_000:.2f}")
+          print('LIVE_CONFIG_END')
+          q2 = '''
+          SELECT metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.conversions
+          FROM customer
+          WHERE segments.date BETWEEN '2026-08-01' AND '2026-08-25'
+          '''
+          rows = list(svc.search(customer_id=customer, query=q2))
+          if not rows:
+            print('AUG_COMPLETED_DAYS|rows=0')
+          else:
+            r=rows[0]
+            print(f"AUG_COMPLETED_DAYS|impressions={r.metrics.impressions}|clicks={r.metrics.clicks}|cost_usd={r.metrics.cost_micros/1_000_000:.2f}|conversions={r.metrics.conversions:.2f}")
+          PY
+
+  gsc-fail-loud-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Run repaired GSC sync and preserve evidence
+        env:
+          GOOGLE_SHEET_ID: ${{ secrets.CONTENT_SHEET_ID }}
+          GOOGLE_SA_KEY: ${{ secrets.GOOGLE_SA_KEY }}
+          GSC_SITE_URL: ${{ secrets.GSC_SITE_URL }}
+        run: node scripts/gsc-sync.js
+
+  weekly-report-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run repaired Weekly Report
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          CONTENT_SHEET_ID: ${{ secrets.CONTENT_SHEET_ID }}
+          PRI_OP_GMAIL_APP_PASSWORD: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
+          WEEKLY_REPORTS_FOLDER_ID: '1gETNHiEtbkjYRimJOccDR9zssWSM4vNM'
+          NOTIFY_EMAIL: 'priscila@oakpark-construction.com'
+        run: python scripts/weekly_report.py
+
+  ads-pulse-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install google-ads
+      - name: Run repaired Ads reporting pulse sink check
+        env:
+          GOOGLE_ADS_DEVELOPER_TOKEN: ${{ secrets.GOOGLE_ADS_DEVELOPER_TOKEN }}
+          GOOGLE_ADS_CLIENT_ID: ${{ secrets.GOOGLE_ADS_CLIENT_ID }}
+          GOOGLE_ADS_CLIENT_SECRET: ${{ secrets.GOOGLE_ADS_CLIENT_SECRET }}
+          GOOGLE_ADS_REFRESH_TOKEN: ${{ secrets.GOOGLE_ADS_REFRESH_TOKEN }}
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          OPC_ADS_SHEET_ID: ${{ secrets.OPC_ADS_SHEET_ID }}
+        run: |
+          set -euo pipefail
+          python scripts/ads_dashboard.py 2>&1 | tee /tmp/ads-pulse.log
+          if grep -Eiq 'Ads sheet write failed|Traceback|unauthorized|\b401\b|\b403\b|permission denied|exception' /tmp/ads-pulse.log; then exit 1; fi
+          grep -Fq 'Ads sheet updated:' /tmp/ads-pulse.log
