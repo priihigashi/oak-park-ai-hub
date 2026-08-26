@@ -29,7 +29,35 @@ jobs:
           PRI_OP_GMAIL_APP_PASSWORD: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
           WEEKLY_REPORTS_FOLDER_ID:  "1gETNHiEtbkjYRimJOccDR9zssWSM4vNM"
           NOTIFY_EMAIL:              "priscila@oakpark-construction.com"
-        run: python scripts/weekly_report.py
+        run: |
+          set -uo pipefail
+          set +e
+          python scripts/weekly_report.py 2>&1 | tee /tmp/weekly-report.log
+          script_status=${PIPESTATUS[0]}
+          set -e
+
+          # Data-source or delivery failures must make the workflow red. A report
+          # that successfully surfaces unresolved pipeline failures is a valid
+          # report and must not be classified as a generator failure.
+          if grep -Eiq 'WARN: could not read|WARN: Drive upload failed|email not sent|Traceback|unauthorized|\b401\b|\b403\b|permission denied' /tmp/weekly-report.log; then
+            echo 'ERROR: Weekly Report contains a source/read/delivery failure.' >&2
+            exit 1
+          fi
+          if ! grep -Fq 'Report saved:' /tmp/weekly-report.log; then
+            echo 'ERROR: Weekly Report did not prove a Drive save.' >&2
+            exit 1
+          fi
+          if ! grep -Fq 'Email sent to' /tmp/weekly-report.log; then
+            echo 'ERROR: Weekly Report did not prove email delivery.' >&2
+            exit 1
+          fi
+
+          if [ "$script_status" -ne 0 ] && ! grep -Eq 'WARN: [0-9]+ unresolved pipeline failure\(s\)' /tmp/weekly-report.log; then
+            echo "ERROR: weekly_report.py exited $script_status for an unclassified reason." >&2
+            exit "$script_status"
+          fi
+
+          echo 'Weekly Report generated, saved, and delivered successfully.'
 
       - name: Notify failure
         if: failure()
@@ -40,6 +68,6 @@ jobs:
               owner: context.repo.owner,
               repo:  context.repo.repo,
               title: `❌ Weekly Report failed — ${new Date().toLocaleDateString('en-US', {timeZone:'America/New_York'})}`,
-              body:  `The weekly report generator failed.\n[View run](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`,
+              body:  `The weekly report generator failed.\n[View run](${context.serverUrl}/${context.serverUrl ? context.repo.owner : context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`,
               labels: ["automation", "bug"],
             });
