@@ -5,10 +5,10 @@ weekly_report.py
 Weekly content pipeline summary email.
 Runs every Monday 9AM ET via weekly-report.yml.
 
-Reads:
-  - Oak Park — Content Control: 🎬 In Production
-  - Ideas & Inbox: 🚨 Pipeline Failures
-  - Ideas & Inbox: 📥 Inspiration Library
+Reads the live Ideas & Inbox workbook configured by CONTENT_SHEET_ID:
+  - 📋 Content Queue
+  - 🚨 Pipeline Failures
+  - 📥 Inspiration Library
 
 Saves HTML report to WEEKLY_REPORTS_FOLDER_ID in Drive.
 Emails to NOTIFY_EMAIL via SMTP (PRI_OP_GMAIL_APP_PASSWORD).
@@ -30,7 +30,7 @@ WEEKLY_REPORTS_FOLDER = os.getenv("WEEKLY_REPORTS_FOLDER_ID", "1gETNHiEtbkjYRimJ
 NOTIFY_EMAIL          = os.getenv("NOTIFY_EMAIL", "priscila@oakpark-construction.com")
 FROM_EMAIL            = "priscila@oakpark-construction.com"
 
-CONTENT_QUEUE_TAB      = "🎬 In Production"
+CONTENT_QUEUE_TAB      = "📋 Content Queue"
 PIPELINE_FAILURES_TAB  = "🚨 Pipeline Failures"
 INSPIRATION_LIB_TAB    = "📥 Inspiration Library"
 
@@ -41,10 +41,10 @@ def _access_token() -> str:
         raise RuntimeError("SHEETS_TOKEN env var not set")
     td = json.loads(raw)
     body = urllib.parse.urlencode({
-        "client_id":     td["client_id"],
+        "client_id": td["client_id"],
         "client_secret": td["client_secret"],
         "refresh_token": td["refresh_token"],
-        "grant_type":    "refresh_token",
+        "grant_type": "refresh_token",
     }).encode()
     resp = json.loads(urllib.request.urlopen(
         urllib.request.Request("https://oauth2.googleapis.com/token", body)
@@ -76,9 +76,9 @@ def _content_stats(rows: list) -> dict:
         return {"by_status": {}, "new_this_week": 0}
     headers = rows[0]
     status_col = _col(headers, "status")
-    date_col   = _col(headers, "date")
+    date_col = _col(headers, "date")
     if status_col < 0:
-        raise RuntimeError("🎬 In Production has no Status column")
+        raise RuntimeError("📋 Content Queue has no Status column")
     week_ago = datetime.now(timezone.utc) - timedelta(days=7)
     totals: dict = {}
     new_this_week = 0
@@ -104,16 +104,16 @@ def _pipeline_failures(rows: list) -> list:
         return []
     headers = rows[0]
     resolved_col = _col(headers, "resolved")
-    stage_col    = _col(headers, "stage")
-    error_col    = _col(headers, "error")
-    date_col     = _col(headers, "date")
+    stage_col = _col(headers, "stage")
+    error_col = _col(headers, "error")
+    date_col = _col(headers, "date")
     unresolved = []
     for row in rows[1:]:
         if resolved_col >= 0 and len(row) > resolved_col and row[resolved_col].strip():
             continue
         stage = row[stage_col] if stage_col >= 0 and len(row) > stage_col else "?"
         error = row[error_col] if error_col >= 0 and len(row) > error_col else "?"
-        date  = row[date_col]  if date_col  >= 0 and len(row) > date_col  else "?"
+        date = row[date_col] if date_col >= 0 and len(row) > date_col else "?"
         unresolved.append({"stage": stage, "error": error[:120], "date": date})
     return unresolved
 
@@ -131,7 +131,7 @@ def _inspiration_blank_count(rows: list) -> int:
 
 def _build_html(stats: dict, failures: list, blank_g: int, week_str: str) -> str:
     by_status = stats.get("by_status", {})
-    new_week  = stats.get("new_this_week", 0)
+    new_week = stats.get("new_this_week", 0)
     status_rows = ""
     for status, count in sorted(by_status.items(), key=lambda x: -x[1]):
         color = "#d4edda" if "posted" in status.lower() else \
@@ -162,28 +162,18 @@ def _build_html(stats: dict, failures: list, blank_g: int, week_str: str) -> str
 <html><body style="font-family:Arial,sans-serif;color:#333;max-width:700px;margin:0 auto">
 <h2 style="color:#1c1409">&#x1F4CA; Weekly Pipeline Report &#x2014; {week_str}</h2>
 <h3>Content Pipeline</h3>
-<p>New production items this week: <b>{new_week}</b> | Inspiration Library backlog (blank G): <b>{blank_g}</b></p>
+<p>New queue items this week: <b>{new_week}</b> | Inspiration Library backlog (blank G): <b>{blank_g}</b></p>
 <table style="border-collapse:collapse;width:100%">
-  <thead style="background:#1c1409;color:#f0e8d6">
-    <tr><th style="padding:8px;text-align:left">Status</th><th style="padding:8px;text-align:right">Count</th></tr>
-  </thead>
+  <thead style="background:#1c1409;color:#f0e8d6"><tr><th style="padding:8px;text-align:left">Status</th><th style="padding:8px;text-align:right">Count</th></tr></thead>
   <tbody>{status_rows}</tbody>
 </table>
 <h3 style="margin-top:24px">Pipeline Failures (unresolved)</h3>
 <table style="border-collapse:collapse;width:100%">
-  <thead style="background:#c00;color:#fff">
-    <tr>
-      <th style="padding:8px;text-align:left">Date</th>
-      <th style="padding:8px;text-align:left">Stage</th>
-      <th style="padding:8px;text-align:left">Error</th>
-    </tr>
-  </thead>
+  <thead style="background:#c00;color:#fff"><tr><th style="padding:8px;text-align:left">Date</th><th style="padding:8px;text-align:left">Stage</th><th style="padding:8px;text-align:left">Error</th></tr></thead>
   <tbody>{fail_rows}</tbody>
 </table>
 <p style="margin-top:24px;font-size:12px;color:#888">
-  <a href="https://docs.google.com/spreadsheets/d/1C1CAZ8lSgeVLSSCYIg-D9XPJcSLHyIOh1okKtvhZZQg">Content Control</a> ·
-  <a href="https://docs.google.com/spreadsheets/d/1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU">Ideas &amp; Inbox</a> ·
-  Generated by weekly-report.yml
+  <a href="https://docs.google.com/spreadsheets/d/1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU">Ideas &amp; Inbox</a> · Generated by weekly-report.yml
 </p>
 </body></html>
 """
@@ -204,8 +194,7 @@ def _save_to_drive(token: str, html_content: str, filename: str):
         b"--" + b + b"--\r\n"
     )
     req = urllib.request.Request(
-        "https://www.googleapis.com/upload/drive/v3/files"
-        "?uploadType=multipart&supportsAllDrives=true",
+        "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&supportsAllDrives=true",
         data=body,
         headers={
             "Authorization": f"Bearer {token}",
@@ -229,8 +218,8 @@ def _send_email(subject: str, html_body: str) -> None:
         raise RuntimeError("PRI_OP_GMAIL_APP_PASSWORD not set — email not sent")
     msg = MIMEMultipart("alternative")
     msg["Subject"] = subject
-    msg["From"]    = FROM_EMAIL
-    msg["To"]      = NOTIFY_EMAIL
+    msg["From"] = FROM_EMAIL
+    msg["To"] = NOTIFY_EMAIL
     msg.attach(MIMEText(html_body, "html"))
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as s:
         s.login(FROM_EMAIL, pwd)
@@ -241,22 +230,21 @@ def _send_email(subject: str, html_body: str) -> None:
 def main() -> None:
     if not CONTENT_SHEET_ID:
         raise RuntimeError("CONTENT_SHEET_ID env var not set")
-    token    = _access_token()
+    token = _access_token()
     week_str = datetime.now(timezone.utc).strftime("Week of %Y-%m-%d")
-    cq_rows  = _sheet_values(token, CONTENT_SHEET_ID, CONTENT_QUEUE_TAB)
-    pf_rows  = _sheet_values(token, IDEAS_SHEET_ID, PIPELINE_FAILURES_TAB)
+    cq_rows = _sheet_values(token, CONTENT_SHEET_ID, CONTENT_QUEUE_TAB)
+    pf_rows = _sheet_values(token, IDEAS_SHEET_ID, PIPELINE_FAILURES_TAB)
     lib_rows = _sheet_values(token, IDEAS_SHEET_ID, INSPIRATION_LIB_TAB)
-    stats    = _content_stats(cq_rows)
+    stats = _content_stats(cq_rows)
     failures = _pipeline_failures(pf_rows)
-    blank_g  = _inspiration_blank_count(lib_rows)
-    html     = _build_html(stats, failures, blank_g, week_str)
+    blank_g = _inspiration_blank_count(lib_rows)
+    html = _build_html(stats, failures, blank_g, week_str)
     filename = f"Weekly_Report_{datetime.now(timezone.utc).strftime('%Y-%m-%d')}.html"
     drive_url = _save_to_drive(token, html, filename)
     print(f"Report saved: {drive_url}")
     _send_email(f"📊 Weekly Pipeline Report — {week_str}", html)
     if failures:
         print(f"WARN: {len(failures)} unresolved pipeline failure(s)")
-        # Unresolved rows are a report finding, not a report-generator failure.
 
 
 if __name__ == "__main__":
