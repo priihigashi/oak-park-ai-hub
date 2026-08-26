@@ -12,39 +12,92 @@ permissions:
   contents: read
 
 jobs:
-  gsc-fail-loud-test:
+  weekly-report-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-      - name: Run repaired GSC sync using production secret
-        env:
-          GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
-          GOOGLE_SA_KEY: ${{ secrets.GOOGLE_SA_KEY }}
-          GSC_SITE_URL: ${{ secrets.GSC_SITE_URL }}
-        run: node scripts/gsc-sync.js
-
-  weekly-target-diagnostic:
-    runs-on: ubuntu-latest
-    steps:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Print only spreadsheet metadata and tab titles for CONTENT_SHEET_ID
+      - name: Run repaired Weekly Report end-to-end
         env:
           SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
           CONTENT_SHEET_ID: ${{ secrets.CONTENT_SHEET_ID }}
+          PRI_OP_GMAIL_APP_PASSWORD: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
+          WEEKLY_REPORTS_FOLDER_ID: '1gETNHiEtbkjYRimJOccDR9zssWSM4vNM'
+          NOTIFY_EMAIL: 'priscila@oakpark-construction.com'
+        run: python scripts/weekly_report.py
+
+  private-ads-evidence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install google-ads
+      - name: Pull historical Ads evidence into private Sheets sink
+        env:
+          GOOGLE_ADS_DEVELOPER_TOKEN: ${{ secrets.GOOGLE_ADS_DEVELOPER_TOKEN }}
+          GOOGLE_ADS_CLIENT_ID: ${{ secrets.GOOGLE_ADS_CLIENT_ID }}
+          GOOGLE_ADS_CLIENT_SECRET: ${{ secrets.GOOGLE_ADS_CLIENT_SECRET }}
+          GOOGLE_ADS_REFRESH_TOKEN: ${{ secrets.GOOGLE_ADS_REFRESH_TOKEN }}
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          OPC_ADS_SHEET_ID: ${{ secrets.OPC_ADS_SHEET_ID }}
         run: |
           python - <<'PY'
           import json, os, urllib.parse, urllib.request
+          from google.ads.googleads.client import GoogleAdsClient
+
+          customer='8945889168'
+          start='2026-07-01'; end='2026-07-25'
+          cfg={'developer_token':os.environ['GOOGLE_ADS_DEVELOPER_TOKEN'],'client_id':os.environ['GOOGLE_ADS_CLIENT_ID'],'client_secret':os.environ['GOOGLE_ADS_CLIENT_SECRET'],'refresh_token':os.environ['GOOGLE_ADS_REFRESH_TOKEN'],'use_proto_plus':True}
+          client=GoogleAdsClient.load_from_dict(cfg)
+          svc=client.get_service('GoogleAdsService')
+
+          sections=[]
+          queries=[
+            ('SEARCH_TERMS', '''SELECT campaign.name, ad_group.name, search_term_view.search_term, segments.search_term_match_type, metrics.clicks, metrics.cost_micros, metrics.conversions FROM search_term_view WHERE segments.date BETWEEN '2026-07-01' AND '2026-07-25' AND metrics.impressions > 0 ORDER BY metrics.cost_micros DESC'''),
+            ('LANDING_PAGES', '''SELECT campaign.name, landing_page_view.unexpanded_final_url, metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.conversions FROM landing_page_view WHERE segments.date BETWEEN '2026-07-01' AND '2026-07-25' AND metrics.impressions > 0 ORDER BY metrics.cost_micros DESC'''),
+            ('DEVICE', '''SELECT campaign.name, segments.device, metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.conversions FROM campaign WHERE segments.date BETWEEN '2026-07-01' AND '2026-07-25' AND metrics.impressions > 0 ORDER BY metrics.cost_micros DESC'''),
+            ('HOUR', '''SELECT campaign.name, segments.hour, metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.conversions FROM campaign WHERE segments.date BETWEEN '2026-07-01' AND '2026-07-25' AND metrics.impressions > 0 ORDER BY segments.hour'''),
+            ('WEEKDAY', '''SELECT campaign.name, segments.day_of_week, metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.conversions FROM campaign WHERE segments.date BETWEEN '2026-07-01' AND '2026-07-25' AND metrics.impressions > 0 ORDER BY segments.day_of_week'''),
+          ]
+          counts={}
+          for label,q in queries:
+            rows=list(svc.search(customer_id=customer,query=q)); counts[label]=len(rows)
+            sections.append([label,'window',start,end])
+            if label=='SEARCH_TERMS':
+              sections.append(['campaign','ad_group','search_term','match_type','clicks','spend_usd','reported_conversions'])
+              for r in rows: sections.append([r.campaign.name,r.ad_group.name,r.search_term_view.search_term,r.segments.search_term_match_type.name,r.metrics.clicks,round(r.metrics.cost_micros/1e6,2),float(r.metrics.conversions)])
+            elif label=='LANDING_PAGES':
+              sections.append(['campaign','unexpanded_final_url','impressions','clicks','spend_usd','reported_conversions'])
+              for r in rows: sections.append([r.campaign.name,r.landing_page_view.unexpanded_final_url,r.metrics.impressions,r.metrics.clicks,round(r.metrics.cost_micros/1e6,2),float(r.metrics.conversions)])
+            elif label=='DEVICE':
+              sections.append(['campaign','device','impressions','clicks','spend_usd','reported_conversions'])
+              for r in rows: sections.append([r.campaign.name,r.segments.device.name,r.metrics.impressions,r.metrics.clicks,round(r.metrics.cost_micros/1e6,2),float(r.metrics.conversions)])
+            elif label=='HOUR':
+              sections.append(['campaign','hour','impressions','clicks','spend_usd','reported_conversions'])
+              for r in rows: sections.append([r.campaign.name,r.segments.hour,r.metrics.impressions,r.metrics.clicks,round(r.metrics.cost_micros/1e6,2),float(r.metrics.conversions)])
+            else:
+              sections.append(['campaign','day_of_week','impressions','clicks','spend_usd','reported_conversions'])
+              for r in rows: sections.append([r.campaign.name,r.segments.day_of_week.name,r.metrics.impressions,r.metrics.clicks,round(r.metrics.cost_micros/1e6,2),float(r.metrics.conversions)])
+            sections.append([])
+
           td=json.loads(os.environ['SHEETS_TOKEN'])
           body=urllib.parse.urlencode({'client_id':td['client_id'],'client_secret':td['client_secret'],'refresh_token':td['refresh_token'],'grant_type':'refresh_token'}).encode()
-          token=json.loads(urllib.request.urlopen(urllib.request.Request('https://oauth2.googleapis.com/token', body)).read())['access_token']
-          sid=os.environ['CONTENT_SHEET_ID']
-          url=f'https://sheets.googleapis.com/v4/spreadsheets/{sid}?fields=properties.title,sheets.properties.title'
-          data=json.loads(urllib.request.urlopen(urllib.request.Request(url,headers={'Authorization':f'Bearer {token}'})).read())
-          print('SPREADSHEET_TITLE='+data.get('properties',{}).get('title',''))
-          for s in data.get('sheets',[]): print('TAB='+s.get('properties',{}).get('title',''))
+          token=json.loads(urllib.request.urlopen(urllib.request.Request('https://oauth2.googleapis.com/token',body)).read())['access_token']
+          sid=os.environ['OPC_ADS_SHEET_ID']; tab='Ads Audit Evidence 2026-08-26'
+          meta_url=f'https://sheets.googleapis.com/v4/spreadsheets/{sid}?fields=sheets.properties'
+          meta=json.loads(urllib.request.urlopen(urllib.request.Request(meta_url,headers={'Authorization':f'Bearer {token}'})).read())
+          existing=next((s['properties'] for s in meta.get('sheets',[]) if s['properties']['title']==tab),None)
+          if not existing:
+            req=urllib.request.Request(f'https://sheets.googleapis.com/v4/spreadsheets/{sid}:batchUpdate',data=json.dumps({'requests':[{'addSheet':{'properties':{'title':tab}}}]}).encode(),headers={'Authorization':f'Bearer {token}','Content-Type':'application/json'})
+            urllib.request.urlopen(req).read()
+          clear=urllib.request.Request(f"https://sheets.googleapis.com/v4/spreadsheets/{sid}/values/{urllib.parse.quote(tab+'!A:Z',safe='!')}:clear",data=b'{}',headers={'Authorization':f'Bearer {token}','Content-Type':'application/json'},method='POST')
+          urllib.request.urlopen(clear).read()
+          values={'range':f"'{tab}'!A1",'majorDimension':'ROWS','values':sections}
+          put=urllib.request.Request(f'https://sheets.googleapis.com/v4/spreadsheets/{sid}/values/{urllib.parse.quote(chr(39)+tab+chr(39)+"!A1",safe="!'")}?valueInputOption=RAW',data=json.dumps(values).encode(),headers={'Authorization':f'Bearer {token}','Content-Type':'application/json'},method='PUT')
+          urllib.request.urlopen(put).read()
+          print('PRIVATE_AUDIT_SINK_UPDATED|'+'|'.join(f'{k}={v}' for k,v in counts.items()))
           PY
