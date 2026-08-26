@@ -71,14 +71,15 @@ async function readSheet(token) {
     `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}/values/Content%20Ideas!A:AA`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
-  if (!res.ok) throw new Error(`Sheet read failed: ${await res.text()}`);
+  if (!res.ok) throw new Error(`Sheet read failed: ${res.status} ${await res.text()}`);
   const data = await res.json();
   return data.values || [];
 }
 
 async function fetchGSCData(token, pageUrl) {
-  // Normalize URL — GSC is sensitive about trailing slashes and exact match
-  const url = pageUrl.trim().replace(/\?.*$/, ''); // strip query params like ?p=123 (draft URLs)
+  // Normalize URL — GSC is sensitive about trailing slashes and exact match.
+  // IMPORTANT: only a successful 200 response with no rows means genuine no-data.
+  const url = pageUrl.trim().replace(/\?.*$/, '');
   if (!url || url.includes('wp-admin') || url.includes('?p=')) return null;
 
   const res = await fetch(
@@ -107,20 +108,18 @@ async function fetchGSCData(token, pageUrl) {
 
   if (!res.ok) {
     const err = await res.text();
-    // 403 usually means page hasn't appeared in search yet — not an error worth throwing
-    if (res.status === 403 || res.status === 400) return null;
     throw new Error(`GSC API error ${res.status}: ${err}`);
   }
 
   const data = await res.json();
   const row = data.rows?.[0];
-  if (!row) return null; // page hasn't appeared in search yet
+  if (!row) return null; // genuine no-data: successful API response, zero rows
 
   return {
     impressions: row.impressions || 0,
     clicks: row.clicks || 0,
     position: row.position ? Math.round(row.position * 10) / 10 : 0,
-    ctr: row.ctr ? Math.round(row.ctr * 10000) / 100 : 0, // as percentage
+    ctr: row.ctr ? Math.round(row.ctr * 10000) / 100 : 0,
   };
 }
 
@@ -141,36 +140,36 @@ async function updateSheetRow(token, sheetRow, gscData) {
       body: JSON.stringify({ valueInputOption: 'USER_ENTERED', data: updates }),
     }
   );
-  if (!res.ok) throw new Error(`Row update failed: ${await res.text()}`);
+  if (!res.ok) throw new Error(`Row update failed: ${res.status} ${await res.text()}`);
 }
 
 async function ensureGSCHeaders(token, rows) {
   const header = rows[0] || [];
   if (header[COL_IMPRESSIONS]) return; // already set
 
-  // Expand sheet columns to fit AB (col 28) if needed
+  // Expand sheet columns to fit AB (col 28) if needed.
   const metaRes = await fetch(
     `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}?fields=sheets.properties`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
-  if (metaRes.ok) {
-    const meta = await metaRes.json();
-    const sheet = meta.sheets?.find(s => s.properties.title === 'Content Ideas');
-    if (sheet) {
-      const currentCols = sheet.properties.gridProperties.columnCount;
-      if (currentCols < 28) {
-        await fetch(
-          `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}:batchUpdate`,
-          {
-            method: 'POST',
-            headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              requests: [{ appendDimension: { sheetId: sheet.properties.sheetId, dimension: 'COLUMNS', length: 28 - currentCols + 2 } }],
-            }),
-          }
-        );
-        console.log('Sheet columns expanded to fit GSC columns.');
-      }
+  if (!metaRes.ok) throw new Error(`Sheet metadata read failed: ${metaRes.status} ${await metaRes.text()}`);
+  const meta = await metaRes.json();
+  const sheet = meta.sheets?.find(s => s.properties.title === 'Content Ideas');
+  if (sheet) {
+    const currentCols = sheet.properties.gridProperties.columnCount;
+    if (currentCols < 28) {
+      const expandRes = await fetch(
+        `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}:batchUpdate`,
+        {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            requests: [{ appendDimension: { sheetId: sheet.properties.sheetId, dimension: 'COLUMNS', length: 28 - currentCols + 2 } }],
+          }),
+        }
+      );
+      if (!expandRes.ok) throw new Error(`Sheet column expansion failed: ${expandRes.status} ${await expandRes.text()}`);
+      console.log('Sheet columns expanded to fit GSC columns.');
     }
   }
 
@@ -182,7 +181,7 @@ async function ensureGSCHeaders(token, rows) {
     { range: `Content Ideas!${colLetter(COL_CTR)}1`,         values: [['GSC CTR']] },
     { range: `Content Ideas!${colLetter(COL_GSC_UPDATED)}1`, values: [['GSC Last Updated']] },
   ];
-  await fetch(
+  const headerRes = await fetch(
     `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}/values:batchUpdate`,
     {
       method: 'POST',
@@ -190,18 +189,17 @@ async function ensureGSCHeaders(token, rows) {
       body: JSON.stringify({ valueInputOption: 'USER_ENTERED', data: updates }),
     }
   );
+  if (!headerRes.ok) throw new Error(`GSC header update failed: ${headerRes.status} ${await headerRes.text()}`);
   console.log('GSC column headers added to sheet.');
 }
 
 (async () => {
   try {
     if (!GOOGLE_SHEET_ID || !GOOGLE_SA_KEY) {
-      console.log('No Google Sheet credentials. Exiting.');
-      process.exit(0);
+      throw new Error('Missing Google Sheet credentials (GOOGLE_SHEET_ID / GOOGLE_SA_KEY).');
     }
     if (!GSC_SITE_URL) {
-      console.log('GSC_SITE_URL not set. Add it as a GitHub secret. Exiting.');
-      process.exit(0);
+      throw new Error('GSC_SITE_URL not set. Add it as a GitHub secret.');
     }
 
     const saKey = JSON.parse(Buffer.from(GOOGLE_SA_KEY, 'base64').toString('utf8'));
@@ -211,7 +209,7 @@ async function ensureGSCHeaders(token, rows) {
     const allRows = await readSheet(token);
     await ensureGSCHeaders(token, allRows);
 
-    // Find rows that have a real published URL (not draft wp-admin links)
+    // Find rows that have a real published URL (not draft wp-admin links).
     const toCheck = allRows.slice(1)
       .map((row, i) => ({ row, sheetRow: i + 2 }))
       .filter(({ row }) => {
@@ -230,6 +228,7 @@ async function ensureGSCHeaders(token, rows) {
 
     console.log(`Checking ${toCheck.length} URLs in Google Search Console...`);
     let updated = 0;
+    let genuineNoData = 0;
 
     for (const { row, sheetRow } of toCheck) {
       const url = row[COL_BLOG_URL].trim();
@@ -240,11 +239,12 @@ async function ensureGSCHeaders(token, rows) {
         console.log(`    → ${gscData.impressions} impressions, ${gscData.clicks} clicks, pos ${gscData.position}`);
         updated++;
       } else {
-        console.log(`    → No data yet (page may not be indexed)`);
+        genuineNoData++;
+        console.log('    → No data (API 200 with zero rows)');
       }
     }
 
-    console.log(`\n✓ Done. Updated GSC data for ${updated}/${toCheck.length} rows.`);
+    console.log(`\n✓ Done. Updated GSC data for ${updated}/${toCheck.length} rows; genuine no-data ${genuineNoData}.`);
 
   } catch (err) {
     console.error('Error:', err.message);
