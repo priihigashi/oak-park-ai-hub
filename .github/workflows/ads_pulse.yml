@@ -1,4 +1,4 @@
-name: OPC Ads Dashboard — Weekly Refresh
+name: OPC Ads Reporting Pulse — Weekly Refresh
 
 on:
   schedule:
@@ -6,17 +6,13 @@ on:
   workflow_dispatch:         # Manual trigger anytime
 
 permissions:
-  contents: write
-  pull-requests: write   # helper opens+merges a PR (see scripts/ci/push_prevalidated_main.sh)
+  contents: read
 
 jobs:
   refresh:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0   # full history: push_prevalidated_main.sh may rebase onto a moved main
 
       - uses: actions/setup-python@v5
         with:
@@ -25,33 +21,29 @@ jobs:
       - name: Install dependencies
         run: pip install google-ads
 
-      - name: Refresh dashboard
+      - name: Refresh Ads reporting data (Sheets only)
         env:
           GOOGLE_ADS_DEVELOPER_TOKEN: ${{ secrets.GOOGLE_ADS_DEVELOPER_TOKEN }}
           GOOGLE_ADS_CLIENT_ID:       ${{ secrets.GOOGLE_ADS_CLIENT_ID }}
           GOOGLE_ADS_CLIENT_SECRET:   ${{ secrets.GOOGLE_ADS_CLIENT_SECRET }}
           GOOGLE_ADS_REFRESH_TOKEN:   ${{ secrets.GOOGLE_ADS_REFRESH_TOKEN }}
-          PRI_OP_GMAIL_APP_PASSWORD:  ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
           SHEETS_TOKEN:               ${{ secrets.SHEETS_TOKEN }}
           OPC_ADS_SHEET_ID:           ${{ secrets.OPC_ADS_SHEET_ID }}
-        run: python scripts/ads_dashboard.py
-
-      - name: Commit updated dashboard
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          git config user.name  "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs/dashboard/index.html docs/dashboard/dark.html
-          if git diff --staged --quiet; then
-            echo "Dashboard unchanged — nothing to commit."
-            exit 0
+          python scripts/ads_dashboard.py 2>&1 | tee /tmp/ads-pulse.log
+
+          # The public dashboard files were intentionally removed in the privacy
+          # migration. This workflow now updates only the private reporting sink
+          # (Sheets) until FP-0179 chooses the private dashboard home.
+          if grep -Eiq 'Ads sheet write failed|Traceback|unauthorized|\b401\b|\b403\b|permission denied|exception' /tmp/ads-pulse.log; then
+            echo 'ERROR: Ads reporting pulse logged a data/write failure.' >&2
+            exit 1
           fi
-          git commit -m "chore: refresh ads dashboard $(date -u +%Y-%m-%d)"
-          # main is protected by ruleset 20720805 with no bypass actors, so a
-          # direct `git push` is rejected. Land through the gate instead.
-          bash scripts/ci/push_prevalidated_main.sh ads-pulse
+          if ! grep -Fq 'Ads sheet updated:' /tmp/ads-pulse.log; then
+            echo 'ERROR: Ads reporting pulse did not prove that the Sheets sink was updated.' >&2
+            exit 1
+          fi
 
       - name: Email alert on failure
         if: failure()
