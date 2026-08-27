@@ -1,0 +1,45 @@
+name: Sheet Append Row
+
+# Generic one-row append to any Google Sheet tab.
+# Composio-independent write route — uses the SHEETS_TOKEN secret already in this repo.
+# Append only. Never clears or overwrites.
+
+on:
+  workflow_dispatch:
+    inputs:
+      sheet_id:
+        description: Spreadsheet ID
+        required: true
+      tab:
+        description: Tab name (exact)
+        required: true
+      values:
+        description: Cell values, one per line
+        required: true
+        type: string
+
+jobs:
+  append:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Append row
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          SHEET_ID: ${{ inputs.sheet_id }}
+          TAB: ${{ inputs.tab }}
+          VALUES: ${{ inputs.values }}
+        run: |
+          python3 - <<'PY'
+          import os, subprocess, sys
+          vals = [l for l in os.environ["VALUES"].split("\n") if l.strip() != ""]
+          sys.exit(subprocess.call([
+              "python3", "scripts/sheet_append_row.py",
+              "--sheet-id", os.environ["SHEET_ID"],
+              "--tab", os.environ["TAB"],
+              "--values", *vals,
+          ]))
+          PY
