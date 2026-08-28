@@ -105,6 +105,19 @@ def get_rows_to_schedule(token) -> list:
     def ci(name):
         return next((i for i, h in enumerate(header) if name.lower() in h.lower()), None)
 
+    # GUARD (2026-08-28): this function gates every row on an "ok to schedule" column.
+    # v() returns "" for a column that does not exist, so a MISSING column silently
+    # skipped 100% of rows while the workflow still exited 0 and reported success.
+    # That is exactly the failure class of KRM #13 (a green check is not proof) and
+    # #16 (an acceptance test must be able to fail in the case it exists to catch).
+    # Discovered after 29 finished posts sat unscheduled for 141 days.
+    if ci("ok to schedule") is None:
+        raise RuntimeError(
+            "Content Queue has no 'ok to schedule' column — every row would be "
+            "silently skipped. Add the column to the tab, or change this gate. "
+            f"Headers seen: {header}"
+        )
+
     result = []
     for idx, row in enumerate(rows[1:], start=2):
         def v(col):
@@ -124,6 +137,8 @@ def get_rows_to_schedule(token) -> list:
             "drive_link": v("drive folder path"),
             "status_col": col_letter((ci("status") or 9) + 1),
         })
+    print(f"[schedule_posts] {len(rows)-1} queue rows read, "
+          f"{len(result)} marked 'ok to schedule' = Yes")
     return result
 
 # ── Drive helpers ──────────────────────────────────────────────────────────────
