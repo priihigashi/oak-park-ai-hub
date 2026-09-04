@@ -18,10 +18,17 @@ name: Capture Pipeline v2
 #                    "verify who this person is" or "check presidential statements"
 #      • credits   → Check this box to fetch the creator's name/handle
 #                    for caption attribution
+#      • mode      → "capture" (default) = the full pipeline below.
+#                    "transcribe_only"   = "just tell me what this video says".
+#                    Still downloads, transcribes and saves the Drive outputs,
+#                    but files NOTHING: no Inspiration Library row, no Calendar
+#                    brief, no Ideas Queue row, no Inbox task, no Book Tracker
+#                    row, no topic-scraper or evidence-mining dispatch, and the
+#                    Capture Queue row is left untouched.
 #
 #   3. Click "Run workflow"
 #
-# What happens next (automatic):
+# What happens next (automatic, mode = capture):
 #   → Downloads the reel audio
 #   → Transcribes with Whisper
 #   → Classifies niche via Claude
