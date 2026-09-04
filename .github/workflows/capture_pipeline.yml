@@ -66,6 +66,14 @@ on:
         required: false
         type: boolean
         default: false
+      mode:
+        description: "capture = full pipeline (default). transcribe_only = transcript + frames only, no Inspiration Library row, no Calendar brief."
+        required: false
+        default: "capture"
+        type: choice
+        options:
+          - capture
+          - transcribe_only
       url2:
         description: "Optional second URL (companion clip — e.g. show clip for last slide)"
         required: false
@@ -153,6 +161,10 @@ jobs:
 
           if [ "${{ inputs.credits }}" = "true" ]; then
             CMD="$CMD --credits"
+          fi
+
+          if [ "${{ inputs.mode }}" = "transcribe_only" ]; then
+            CMD="$CMD --transcribe-only"
           fi
 
           if [ -n "${{ inputs.url2 }}" ]; then
