@@ -50,10 +50,80 @@ def test_default_is_false():
     raise AssertionError("TRANSCRIBE_ONLY global not defined")
 
 
+# Every function that files something into the content system. Audited 2026-09-04:
+# the first two were the original PR; the rest were found by grepping for sheet
+# appends, tracker writes and downstream workflow dispatches.
+GUARDED_WRITERS = (
+    "update_inspiration_library",     # 📥 Inspiration Library row (+ Content Queue promote)
+    "create_calendar_task",           # Google Calendar content brief
+    "update_book_tracker",            # Book Tracker "Stories" row
+    "_write_manual_tasks_to_inbox",   # 📥 Inbox rows
+    "_trigger_topic_scraper",         # dispatches topic_scraper.yml (~$0.50 + its own calendar tasks)
+    "_mark_queue_processed",          # would silently consume a queued capture
+)
+
+
 def test_both_side_effects_are_guarded():
     """The two content-system writes must short-circuit in transcribe-only mode."""
     for name in ("update_inspiration_library", "create_calendar_task"):
         assert _guards_on_transcribe_only(_func(name)), f"{name} is not guarded"
+
+
+def test_all_content_system_writes_are_guarded():
+    """Not just the two the PR started with — every filing path."""
+    for name in GUARDED_WRITERS:
+        assert _guards_on_transcribe_only(_func(name)), f"{name} is not guarded"
+
+
+def _funcs_containing(needle):
+    src = SRC.read_text()
+    lines = src.splitlines()
+    out = []
+    for node in ast.walk(_tree()):
+        if isinstance(node, ast.FunctionDef):
+            seg = "\n".join(lines[node.lineno - 1:node.end_lineno])
+            if needle in seg:
+                out.append((node.name, seg))
+    return out
+
+
+def test_ideas_queue_appends_are_guarded():
+    """The 💡 Ideas Queue append hides inside two Drive-shaped functions
+    (create_content_workspace, save_to_news_folder). Both must respect the flag."""
+    found = _funcs_containing("\\U0001f4a1 Ideas Queue")
+    assert found, "Ideas Queue append not found — did the tab constant move?"
+    for name, seg in found:
+        assert "TRANSCRIBE_ONLY" in seg, f"{name} appends to Ideas Queue without checking the flag"
+
+
+def _smallest_try_containing(needle):
+    """Tightest enclosing try/except block, so the assertion cannot be satisfied by
+    an unrelated TRANSCRIBE_ONLY elsewhere in the same (very long) function."""
+    lines = SRC.read_text().splitlines()
+    best = None
+    for node in ast.walk(_tree()):
+        if isinstance(node, ast.Try):
+            seg = "\n".join(lines[node.lineno - 1:node.end_lineno])
+            if needle in seg and (best is None or len(seg) < len(best)):
+                best = seg
+    return best
+
+
+def test_downstream_dispatch_hooks_are_guarded():
+    """These two hooks run in SEPARATE processes where the module global cannot
+    reach — they have to be stopped at the dispatch boundary, inside main()."""
+    for needle in ("person_evidence_dispatcher", "resource_router import"):
+        seg = _smallest_try_containing(needle)
+        assert seg, f"{needle} hook not found"
+        assert "TRANSCRIBE_ONLY" in seg, f"{needle} dispatched without checking the flag"
+
+
+def test_completion_emails_do_not_claim_unwritten_rows():
+    """The completion email must not say a row was added when the flag skipped it."""
+    src = SRC.read_text()
+    for lie in ('f"Inspiration Library: row added',
+                'f"Sheets: row added to Inspiration Library'):
+        assert lie not in src, f"completion email still claims unconditionally: {lie}"
 
 
 def test_transcription_is_NOT_guarded():
