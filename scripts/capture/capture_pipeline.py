@@ -2215,6 +2215,9 @@ def create_drive_doc(title: str, content: str, folder_id: str) -> str:
 # ─── SHEETS ───────────────────────────────────────────────────────────────────
 
 def update_book_tracker(story_id, url, doc_url, analysis, notes):
+    if TRANSCRIBE_ONLY:
+        print("  SKIP Book Tracker: --transcribe-only")
+        return
     gc = get_sheets_client()
     if not gc:
         return
@@ -2475,6 +2478,9 @@ def _mark_queue_processed(url: str):
     Called at the end of every run_* function so manual captures don't get re-run by
     the daily queue processor. Non-fatal — never blocks pipeline completion.
     """
+    if TRANSCRIBE_ONLY:
+        print("  SKIP Capture Queue mark-processed: --transcribe-only")
+        return
     import urllib.request as _ur
     import urllib.parse as _up
     raw = os.getenv("SHEETS_TOKEN", "")
@@ -3178,7 +3184,7 @@ def run_news(args, transcript, video_path: str = "", srt_content: str = "", crea
             f"Content brief (EN+PT): {brief_doc_url or 'check Drive'}\n"
             f"Video in Drive: {video_drive_url or 'not uploaded — check GitHub artifact'}\n"
             f"SRT captions: {'generated and uploaded' if srt_content else 'not generated (audio issue)'}\n"
-            f"Inspiration Library: row added\n\n"
+            f"Inspiration Library: {'SKIPPED (--transcribe-only)' if TRANSCRIBE_ONLY else 'row added'}\n\n"
             f"Next step: trigger render-video.yml with story_id={args.story_id} to build the FORMAT-001 reel.\n\n"
             f"Transcript preview:\n{transcript[:400]}"
         ),
@@ -3222,6 +3228,9 @@ def _trigger_topic_scraper(classification, niche="Brazil"):
     Daily cap: max 1 run per UTC day across all captures. Cost-cut 2026-05-07
     because each scraper run = ~10 reels × Whisper × Claude (~$0.50/run).
     """
+    if TRANSCRIBE_ONLY:
+        print("  SKIP topic scraper dispatch: --transcribe-only")
+        return
     import urllib.request
     token = os.getenv("GITHUB_TOKEN", "")
     if not token:
@@ -3370,6 +3379,9 @@ This will be embedded directly into a content brief. Be direct and factual."""
 
 def _write_manual_tasks_to_inbox(manual_tasks: list, story_id: str, url: str):
     """Write tasks Claude cannot automate to 📥 Inbox tab for human follow-up."""
+    if TRANSCRIBE_ONLY:
+        print("  SKIP Inbox manual tasks: --transcribe-only")
+        return
     if not manual_tasks:
         return
     gc = get_sheets_client()
@@ -3838,7 +3850,11 @@ def save_to_news_folder(story_id: str, url: str, transcript: str, classification
             print(f"  WARNING PT doc: {e}")
 
         # 7. Log to Ideas Queue (same pattern as content_workspace)
-        gc = get_sheets_client()
+        if TRANSCRIBE_ONLY:
+            print("  SKIP Ideas Queue: --transcribe-only")
+            gc = None
+        else:
+            gc = get_sheets_client()
         if gc:
             try:
                 sh = gc.open_by_key(CONTENT_QUEUE_ID)
@@ -3959,7 +3975,11 @@ def create_content_workspace(story_id: str, title: str, transcript: str,
         print(f"  WARNING PT doc creation: {e}")
 
     # 5. Log to Ideas Queue tab in Content Queue spreadsheet
-    gc = get_sheets_client()
+    if TRANSCRIBE_ONLY:
+        print("  SKIP Ideas Queue: --transcribe-only")
+        gc = None
+    else:
+        gc = get_sheets_client()
     if gc:
         try:
             sh = gc.open_by_key(CONTENT_QUEUE_ID)
@@ -4126,7 +4146,7 @@ def run_opc(args, transcript, video_path: str = "", metadata: dict = None, srt_c
             f"{video_note}\n"
             f"{video_retry_note}"
             f"SRT captions: {'saved to Content Hub' if srt_content else 'not generated'}\n"
-            f"Sheets: row added to Inspiration Library\n\n"
+            f"Sheets: {'SKIPPED (--transcribe-only)' if TRANSCRIBE_ONLY else 'row added to Inspiration Library'}\n\n"
             f"Source: {args.url}\n"
             f"Niche: {niche}\n"
             f"Transcript preview:\n{transcript[:400]}"
@@ -4763,15 +4783,22 @@ def main():
     # Non-blocking: any failure here logs to 🚨 Pipeline Failures but does NOT
     # break the normal capture above.
     try:
-        from person_evidence_dispatcher import maybe_dispatch_from_capture
-        _evidence_status = maybe_dispatch_from_capture(
-            notes=getattr(args, "notes", "") or "",
-            seed_url=args.url,
-            niche=args.project,
-            caption=(metadata or {}).get("caption", ""),
-            transcript=transcript or "",
-            creator_name=(metadata or {}).get("creator_name", ""),
-        )
+        if TRANSCRIBE_ONLY:
+            # Dispatches video-research.yml, a SEPARATE process that appends
+            # Clip Collections + Content Queue rows. The module global cannot
+            # reach it, so the boundary is guarded here instead.
+            print("\n[SH-104] SKIP evidence-mining dispatch: --transcribe-only")
+            _evidence_status = {"triggered": False, "reason": "transcribe_only"}
+        else:
+            from person_evidence_dispatcher import maybe_dispatch_from_capture
+            _evidence_status = maybe_dispatch_from_capture(
+                notes=getattr(args, "notes", "") or "",
+                seed_url=args.url,
+                niche=args.project,
+                caption=(metadata or {}).get("caption", ""),
+                transcript=transcript or "",
+                creator_name=(metadata or {}).get("creator_name", ""),
+            )
         if _evidence_status.get("triggered"):
             print(f"\n[SH-104] evidence-mining status: {_evidence_status}")
     except Exception as _e_em:
@@ -4782,20 +4809,26 @@ def main():
     # Non-blocking: any failure here logs but does NOT break the normal capture.
     # Skipped automatically when notes have no URLs and no research keywords.
     try:
-        from resource_router import route_and_execute as _route_and_execute
-        _notes = getattr(args, "notes", "") or ""
-        _story_id = getattr(args, "story_id", "") or ""
-        _resource_status = _route_and_execute(
-            story_id=_story_id,
-            project=args.project,
-            notes=_notes,
-            transcript=transcript or "",
-            seed_url=args.url,
-            output_dir="transcripts",
-            use_llm=False,
-            send_emails=True,
-            clips_dir=TRANSCRIPTS_DIR / "resources" / "clips",
-        )
+        if TRANSCRIBE_ONLY:
+            # Downloads b-roll, creates Drive folders and emails clip candidates —
+            # content production, not transcription.
+            print("\n[resource_router] SKIP: --transcribe-only")
+            _resource_status = {"jobs": []}
+        else:
+            from resource_router import route_and_execute as _route_and_execute
+            _notes = getattr(args, "notes", "") or ""
+            _story_id = getattr(args, "story_id", "") or ""
+            _resource_status = _route_and_execute(
+                story_id=_story_id,
+                project=args.project,
+                notes=_notes,
+                transcript=transcript or "",
+                seed_url=args.url,
+                output_dir="transcripts",
+                use_llm=False,
+                send_emails=True,
+                clips_dir=TRANSCRIPTS_DIR / "resources" / "clips",
+            )
         _jobs_count = len(_resource_status.get("jobs", []))
         if _jobs_count:
             _exec = _resource_status.get("execution") or {}
