@@ -4487,9 +4487,12 @@ def main():
     parser.add_argument("--story-id", default=None)
     parser.add_argument("--notes", default="")
     parser.add_argument("--transcribe-only", action="store_true",
-                        help="Transcribe and save raw outputs only. Skips the Inspiration "
-                             "Library row and the Calendar brief. Used by /transcribe-comment "
-                             "when she only wants to know what a video says.")
+                        help="Transcribe and save raw outputs only. Skips EVERY content-system "
+                             "write: Inspiration Library row, Calendar brief, Ideas Queue row, "
+                             "Inbox tasks, Book Tracker row, topic-scraper and evidence-mining "
+                             "dispatch, b-roll routing, and the Capture Queue mark-processed. "
+                             "Used by /transcribe-comment when she only wants to know what a "
+                             "video says.")
     parser.add_argument("--credits", action="store_true",
                         help="Fetch creator info via Apify for caption attribution")
     parser.add_argument("--url2", default="",
@@ -4503,7 +4506,10 @@ def main():
     global TRANSCRIBE_ONLY
     TRANSCRIBE_ONLY = bool(getattr(args, "transcribe_only", False))
     if TRANSCRIBE_ONLY:
-        print("MODE: transcribe-only — no Inspiration Library row, no Calendar brief")
+        print("MODE: transcribe-only — transcript, frames and Drive output only. Files "
+              "NOTHING: no Inspiration Library row, no Calendar brief, no Ideas Queue row, "
+              "no Inbox task, no Book Tracker row, no topic-scraper or evidence-mining "
+              "dispatch, no b-roll routing, and the Capture Queue row is left untouched.")
 
     # Normalize legacy project names → canonical names.
     # Brazil and USA are DISTINCT projects with DIFFERENT Drive folders (routing.py).
@@ -4788,7 +4794,8 @@ def main():
             # Clip Collections + Content Queue rows. The module global cannot
             # reach it, so the boundary is guarded here instead.
             print("\n[SH-104] SKIP evidence-mining dispatch: --transcribe-only")
-            _evidence_status = {"triggered": False, "reason": "transcribe_only"}
+            _evidence_status = {"triggered": False, "dispatched": False,
+                                "reason": "transcribe_only"}
         else:
             from person_evidence_dispatcher import maybe_dispatch_from_capture
             _evidence_status = maybe_dispatch_from_capture(
