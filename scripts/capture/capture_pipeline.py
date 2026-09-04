@@ -164,6 +164,7 @@ def _write_ig_cookies_file() -> str:
         f.write(IG_COOKIES_RAW)
     return path
 
+TRANSCRIBE_ONLY = False  # --transcribe-only: skip content-system writes (SH-mode, 2026-09-04)
 _YT_COOKIES_PATH = ""   # lazily populated
 _IG_COOKIES_PATH = ""   # lazily populated
 _YT_COOKIE_FAILURE = False  # set True when yt-dlp hits bot-detection
@@ -2285,6 +2286,9 @@ def update_inspiration_library(url, transcript, classification, hub_url="", doc_
     D=URL, E=Creator/Account, F=Content Type, G=Description, H=Transcription,
     I=Original Caption, J=Visual Hook, K=Hook Type, L=Views, M+= unchanged.
     """
+    if TRANSCRIBE_ONLY:
+        print("  SKIP Inspiration Library: --transcribe-only")
+        return
     gc = get_sheets_client()
     if not gc:
         return
@@ -2426,6 +2430,9 @@ def _auto_promote_capture_to_content_queue(url: str, classification: dict,
 # ─── CALENDAR ─────────────────────────────────────────────────────────────────
 
 def create_calendar_task(story_id, project, url, doc_url, preview, notes, hub_url=""):
+    if TRANSCRIBE_ONLY:
+        print("  SKIP Calendar task: --transcribe-only")
+        return
     cal = get_calendar_service()
     if not cal:
         return
@@ -4459,6 +4466,10 @@ def main():
                              "Falls back to 'unrouted' if confidence < 0.70.")
     parser.add_argument("--story-id", default=None)
     parser.add_argument("--notes", default="")
+    parser.add_argument("--transcribe-only", action="store_true",
+                        help="Transcribe and save raw outputs only. Skips the Inspiration "
+                             "Library row and the Calendar brief. Used by /transcribe-comment "
+                             "when she only wants to know what a video says.")
     parser.add_argument("--credits", action="store_true",
                         help="Fetch creator info via Apify for caption attribution")
     parser.add_argument("--url2", default="",
@@ -4469,6 +4480,10 @@ def main():
                         help="SH-014: comma-separated niches for fan-out (e.g. 'brazil,usa'). "
                              "Download + transcribe once, then route to each. Overrides --project when set.")
     args = parser.parse_args()
+    global TRANSCRIBE_ONLY
+    TRANSCRIBE_ONLY = bool(getattr(args, "transcribe_only", False))
+    if TRANSCRIBE_ONLY:
+        print("MODE: transcribe-only — no Inspiration Library row, no Calendar brief")
 
     # Normalize legacy project names → canonical names.
     # Brazil and USA are DISTINCT projects with DIFFERENT Drive folders (routing.py).
