@@ -8,7 +8,7 @@
 # BEFORE applying any filter:
 #   1. Verify the exact from/subject match against a real thread in the inbox
 #   2. Confirm the label ID via mcp__Gmail__list_labels (IDs rotate)
-#   3. Do NOT apply filter #5 (Mac restart) until restart task is logged in Inbox tab
+#   3. Do NOT apply filter #5 (Mac restart) until restart task is logged in Focus Pending
 #   4. A wrong filter can hide real human mail — when unsure, run audit mode first
 #
 # Gmail filter syntax docs: https://support.google.com/mail/answer/7190
@@ -68,8 +68,8 @@ filters:
       skip_inbox: true
       label: "🚨 Automation Errors"
       mark_read: true
-    status: conditional  # ACTIVATE ONLY after restart task is logged in Inbox tab
-    caution: "DO NOT activate until the one-off Mac restart task is logged in the Inbox tab. A new failure = a new task, not an archive."
+    status: conditional  # ACTIVATE ONLY after restart task is logged in Focus Pending
+    caution: "DO NOT activate until the one-off Mac restart task is logged in Focus Pending. A new failure = a new task, not an archive."
 
   - id: 6
     name: "Calendar Optimized / Daily Advancer — from mcfollingproperties@"
@@ -129,7 +129,7 @@ filters:
       label: "🤖 Automation/Pending Approval"
       mark_read: true
     status: conditional
-    caution: "Archive only once the single project-level task is logged in the Inbox tab for the content backlog. Not before."
+    caution: "Archive only once the single project-level task is logged in Focus Pending for the content backlog. Not before."
 
 never_create_filters_for:
   - "Official Anthropic billing/access/security mail — always stays in inbox"

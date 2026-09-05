@@ -4,12 +4,15 @@
 # Source: EMAIL_OPS_MASTER_PLAN v5 + OPERATOR.md
 #
 # PURPOSE: Machine-readable rules for the inbox operator deciding what becomes a task.
-# RULE: One unresolved issue = ONE task row in Ideas & Inbox 📥 Inbox tab, regardless of email count.
+# RULE: One unresolved issue = ONE task row in Focus Pending, regardless of email count.
 # Read thread IN FULL before logging. Summaries are not enough.
 
 task_destination:
-  spreadsheet_id: "1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU"
-  tab: "📥 Inbox"
+  spreadsheet_id: "1AlvtSGIZUWE1pzld2A8LL5bK4g9nRR4a4jqsOcfnY4c"
+  tab: "Pending"
+  system_of_record: "Focus Pending is the primary work queue."
+  access_failure:
+    action: "Do not create an Inbox task as a fallback. Keep the email visibly labeled and report that Focus write access failed."
   fields:
     date_added: "today (YYYY-MM-DD)"
     type: "✅ Task"
@@ -21,8 +24,14 @@ task_destination:
     status: "🆕 New"
     topic: "specific subject of the issue"
 
+content_reference_destination:
+  spreadsheet_id: "1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU"
+  tab: "📥 Inbox"
+  use_only_for: "content references, someday ideas and low-priority inspiration that Priscila is not planning to work on soon"
+  never_use_for: "actionable work, replies, deadlines, active projects or email follow-ups"
+
 # ─────────────────────────────────────────
-# ALWAYS CREATE A TASK — inbox stays open
+# ALWAYS CREATE A TASK — keep the email visible until the Focus task is verified
 # ─────────────────────────────────────────
 always_task:
   - category: only_you_items
@@ -121,7 +130,7 @@ no_task:
 # TASK COUNT GUARD
 # ─────────────────────────────────────────
 task_count_guard:
-  rule: "Before logging any task, search the Inbox tab for the same issue. Only log if no open row exists."
+  rule: "Before logging any task, search Focus Pending for the same issue. Only log if no open row exists."
   dedup_key: "Issue title + niche + open status. Same words + same project = same task."
   max_new_tasks_per_audit_run: 10
   note: "If more than 10 new tasks surface in a single session, pause and flag to Priscila — it means the inbox has deep backlog, not routine noise."

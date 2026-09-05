@@ -12,7 +12,7 @@
 1. Run `audit` mode: count threads, categorize, flag uncertain ones.
 2. Process **⚡ Action Items** — do items that take <5 min now; archive on completion.
 3. Process **↩️ Needs Reply** — reply, then move to **⏳ Waiting** + archive.
-4. Any item that takes >5 min → log ONE task row in Ideas & Inbox 📥 Inbox tab, then archive the email.
+4. Any item that takes >5 min → log ONE task in Focus Pending, verify the write, then archive the email.
 5. Label + archive everything else per `filters.yaml` rules.
 6. Target: 0–10 threads remaining (hard cap: 30).
 
@@ -49,9 +49,9 @@
 
 **Only the FIRST occurrence creates a task. Repeats get archived.**
 
-1. Check the Ideas & Inbox 📥 Inbox tab — does an open task for this failure already exist?
+1. Check Focus Pending — does an open task for this failure already exist?
    - YES → Read the new email for any new information. Add a note if useful. Archive the email. Do not create a second task.
-   - NO → Create one task row. Apply label **⚡ Action Items**. Keep in inbox until resolved.
+   - NO → Create one Focus Pending task. Apply label **⚡ Action Items**. Keep the email visible until the Focus write is verified.
 2. If the failure is from a pipeline flagged `ACTIVE_RECOMMENDED_PAUSE` in `pipeline-control/pipelines.yaml` → add to the existing WP-0 follow-up task, do not open a new task.
 
 ---
@@ -60,7 +60,7 @@
 
 1. List all threads labeled **⏳ Waiting**.
 2. For each: check if the awaited action has happened.
-   - Resolved → archive and close the task in Ideas & Inbox.
+   - Resolved → archive and close the task in Focus.
    - Still waiting → leave as-is or nudge if overdue.
    - Dropped → archive + mark task Done with note "dropped / not actioned".
 
@@ -81,6 +81,7 @@
 
 If a thread doesn't clearly match any category:
 - Default to **keep in inbox** and flag for Priscila in the audit report.
+- If a Focus write fails, keep the email visibly labeled, report the failure and do not substitute an Inbox task.
 - State exactly: what the email is, why it's uncertain, and the two most likely actions.
 - Do NOT archive uncertain threads during `morning-zero` — only automation-noise threads are safe to auto-archive.
 
@@ -101,4 +102,4 @@ If a thread doesn't clearly match any category:
 | Change log | `email-ops/change-log.md` |
 | Master pipeline registry (LLM costs) | `pipeline-control/pipelines.yaml` |
 | Human-readable master plan | Drive doc `1lf0NJQlkFhHDZb5ldr0YVGKgBdFXj5L2T3MCo23dlds` |
-| Task destination sheet | Spreadsheet `1IrFrCNGVIF7cvAr9cIuAXvCtUR_-eQN1mdCpHXpfbcU`, tab 📥 Inbox |
+| Task destination sheet | Spreadsheet `1AlvtSGIZUWE1pzld2A8LL5bK4g9nRR4a4jqsOcfnY4c`, tab Pending |

@@ -40,7 +40,7 @@ protected_categories:
   - Any thread that only Priscila can resolve (requires physical action or login)
 
 only_priscila_actions:
-  # These stay in inbox until done. Log one task row per issue; never archive prematurely.
+  # These stay in inbox until done. Log one Focus Pending task per issue; never archive prematurely.
   - item: "Anthropic API — DO NOT top up credits yet. First: review usage at console.anthropic.com/settings/usage, then disable 5 ACTIVE_RECOMMENDED_PAUSE workflows, add budget limits + global kill switch per pipeline-control/pipelines.yaml WP-0. Auto-reload stays OFF."
     ref: "pipeline-control/pipelines.yaml wp0_status.pending_only_you"
   - item: "Mac admin password (5AM restart failure)"
