@@ -4,7 +4,7 @@ schedule_posts.py — Oak Park Construction Post Scheduler
 Runs daily at 9PM ET via GitHub Actions.
 
 Reads Content Queue tab — columns matched by header name:
-  L = ok to schedule      → "Yes" to process this row
+  K = Status              → "Approved" to process this row (source of truth)
   M = Suggested Post Date → YYYY-MM-DD
   N = suggested time      → "7:00 PM" or "19:00"
   O = Platform            → Instagram / TikTok / Instagram, TikTok
@@ -12,11 +12,11 @@ Reads Content Queue tab — columns matched by header name:
   AB = Drive Folder Link  → Google Drive folder with slide JPGs
 
 Flow:
-  1. Read rows where "ok to schedule" = "Yes"
+  1. Read rows where Status = "Approved"
   2. Resolve post datetime (skip if > 60 min away)
   3. Make Drive slide images public, collect URLs
   4. Schedule via Buffer API
-  5. Update sheet: J=Scheduled, L=Scheduled
+  5. Update sheet: Status → Scheduled (which makes the row ineligible next run)
 
 Env vars:
   SHEETS_TOKEN       — Google OAuth token JSON
@@ -102,15 +102,44 @@ def get_rows_to_schedule(token) -> list:
     if len(rows) < 2:
         return []
     header = [h.strip() for h in rows[0]]
+
+    # ── Header matching (fixed 2026-08-28) ────────────────────────────────────
+    # The old ci() used substring matching: `name.lower() in h.lower()`.
+    # ci("status") therefore resolved to "Date Status Changed" (col J) BEFORE
+    # "Status" (col K), so this script wrote "Scheduled" into the WRONG COLUMN.
+    # Exact match first, substring only as an explicit fallback.
     def ci(name):
-        return next((i for i, h in enumerate(header) if name.lower() in h.lower()), None)
+        n = name.strip().lower()
+        for i, h in enumerate(header):
+            if h.strip().lower() == n:
+                return i
+        return next((i for i, h in enumerate(header) if n in h.lower()), None)
+
+    # ── The scheduling gate (fixed 2026-08-28) ────────────────────────────────
+    # This used to read:  if v("ok to schedule").lower() != "yes": continue
+    # That column was DELETED in commit e83f9ff ("Status is source of truth"),
+    # but the gate was left behind. v() returns "" for a missing column, so
+    # "" != "yes" skipped 100% of rows — every night, while the workflow still
+    # exited 0 and reported success. 29 finished posts sat unscheduled for 141
+    # days as a result. Honour the documented intent: Status IS the gate.
+    status_i = ci("status")
+    if status_i is None:
+        raise RuntimeError(
+            "Content Queue has no 'Status' column — the scheduling gate cannot "
+            f"be evaluated and every row would be skipped. Headers seen: {header}"
+        )
+
+    ELIGIBLE = "approved"
 
     result = []
     for idx, row in enumerate(rows[1:], start=2):
         def v(col):
             i = ci(col)
             return row[i].strip() if i is not None and len(row) > i else ""
-        if v("ok to schedule").lower() != "yes":
+        # Only Approved rows schedule. After a successful Buffer call the row is
+        # set to "Scheduled" below, which makes it ineligible on the next run —
+        # that is what prevents the same post going out night after night.
+        if v("status").lower() != ELIGIBLE:
             continue
         result.append({
             "row":        idx,
@@ -122,8 +151,10 @@ def get_rows_to_schedule(token) -> list:
             "post_date":  v("suggested post date"),
             "post_time":  v("suggested time"),
             "drive_link": v("drive folder path"),
-            "status_col": col_letter((ci("status") or 9) + 1),
+            "status_col": col_letter(status_i + 1),
         })
+    print(f"[schedule_posts] {len(rows) - 1} queue rows read, "
+          f"{len(result)} with Status='Approved' eligible to schedule")
     return result
 
 # ── Drive helpers ──────────────────────────────────────────────────────────────
@@ -268,7 +299,7 @@ def main():
     rows  = get_rows_to_schedule(token)
 
     if not rows:
-        print("✅ No posts with 'ok to schedule' = Yes — nothing to do.")
+        print("✅ No posts with Status='Approved' — nothing to schedule.")
         return
 
     print(f"   Found {len(rows)} post(s) to process\n")
