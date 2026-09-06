@@ -21,7 +21,7 @@ jobs:
       subject: ${{ steps.check.outputs.subject }}
       calendar_link: ${{ steps.check.outputs.calendar_link }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0   # full history: push_prevalidated_main.sh may rebase onto a moved main
 
