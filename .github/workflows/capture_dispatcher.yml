@@ -74,7 +74,7 @@ jobs:
 
       - name: Reject if no URL
         if: steps.cmd.outputs.command == 'capture' && steps.parse.outputs.url == ''
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             await github.rest.issues.createComment({
@@ -105,7 +105,7 @@ jobs:
 
       - name: Acknowledge on the comment thread
         if: steps.cmd.outputs.command == 'capture' && steps.parse.outputs.url != ''
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         env:
           URL: ${{ steps.parse.outputs.url }}
           PROJECT: ${{ steps.parse.outputs.project }}
@@ -150,7 +150,7 @@ jobs:
 
       - name: Reject if series missing name or description
         if: steps.cmd.outputs.command == 'series' && (steps.parse_series.outputs.name == '' || steps.parse_series.outputs.description == '')
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             await github.rest.issues.createComment({
@@ -179,7 +179,7 @@ jobs:
 
       - name: Acknowledge series dispatch
         if: steps.cmd.outputs.command == 'series' && steps.parse_series.outputs.name != '' && steps.parse_series.outputs.description != ''
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         env:
           S_NAME:  ${{ steps.parse_series.outputs.name }}
           S_NICHE: ${{ steps.parse_series.outputs.niche }}
