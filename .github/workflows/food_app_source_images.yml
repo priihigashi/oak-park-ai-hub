@@ -68,7 +68,7 @@ jobs:
               time.sleep(1)
           print('Generated', len(prompts), 'images')
           PY
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: food-app-release-images
           path: images/*.webp
