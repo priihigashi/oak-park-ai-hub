@@ -1,0 +1,6 @@
+# Security-sensitive automation ownership
+# Changes to GitHub Actions workflows and dependency automation should always
+# surface to the repository owner for review.
+/.github/workflows/ @priihigashi
+/.github/dependabot.yml @priihigashi
+/.github/CODEOWNERS @priihigashi
