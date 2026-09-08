@@ -411,11 +411,27 @@ def main():
         print("Use --init (first run) or --scan (daily update)")
         sys.exit(1)
 
+    if args.init and args.scan:
+        print("ERROR: --init and --scan are mutually exclusive.")
+        sys.exit(1)
+
     sheets_svc, drive_svc = get_services()
     state = load_state()
 
     # ── INIT: create all spreadsheets ────────────────────────────────────────
     if args.init:
+        # Guard: --init creates a NEW spreadsheet suite unconditionally. Running it
+        # when state already exists orphans the live maps and splits every link that
+        # points at them. Refuse, and print what already exists.
+        if state.get("master") or state.get("per_drive"):
+            print("ERROR: state already contains spreadsheet IDs - refusing to recreate.")
+            print(f"  master: {state.get('master')}")
+            for _did, _sid in (state.get("per_drive") or {}).items():
+                print(f"  {DRIVES.get(_did, _did)}: {_sid}")
+            print("Run --scan instead. Recovery is intentionally unsupported here:")
+            print("do not delete or replace state without a verified migration plan.")
+            sys.exit(1)
+
         print("Creating spreadsheets...")
         # Master hub (all drives) → lives in Marketing
         master_id = create_spreadsheet(
