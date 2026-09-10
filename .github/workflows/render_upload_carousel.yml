@@ -1,0 +1,106 @@
+name: Render Upload Carousel (one-off)
+
+on:
+  workflow_dispatch:
+    inputs:
+      html_b64:
+        description: 'Base64-encoded carousel HTML source'
+        required: true
+      drive_folder_id:
+        description: 'Destination Google Drive folder ID (shared drive)'
+        required: true
+      slug:
+        description: 'Slug for filenames'
+        required: true
+        default: 'carousel'
+
+jobs:
+  render_upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install deps
+        run: |
+          pip install google-auth google-api-python-client playwright
+          playwright install chromium --with-deps
+
+      - name: Decode HTML
+        run: |
+          echo "${{ github.event.inputs.html_b64 }}" | base64 -d > /tmp/source.html
+
+      - name: Render slides
+        run: |
+          cat > /tmp/render.py << 'PYEOF'
+          from playwright.sync_api import sync_playwright
+          import pathlib
+          OUT = pathlib.Path("/tmp/png")
+          OUT.mkdir(exist_ok=True)
+          with sync_playwright() as p:
+              browser = p.chromium.launch()
+              page = browser.new_page(viewport={"width": 1400, "height": 1800})
+              page.goto("file:///tmp/source.html")
+              page.wait_for_timeout(800)
+              slides = page.query_selector_all(".slide")
+              print(f"found {len(slides)} slides")
+              for i, slide in enumerate(slides, start=1):
+                  slide.evaluate("""(el) => {
+                      el.style.width = '1080px';
+                      el.style.height = '1350px';
+                      el.style.position = 'fixed';
+                      el.style.left = '0px';
+                      el.style.top = '0px';
+                      el.style.zIndex = '9999';
+                  }""")
+                  page.wait_for_timeout(120)
+                  out_path = OUT / f"slide_{i:02d}.png"
+                  slide.screenshot(path=str(out_path))
+                  print("saved", out_path)
+                  slide.evaluate("""(el) => {
+                      el.style.position = '';
+                      el.style.left = '';
+                      el.style.top = '';
+                      el.style.zIndex = '';
+                      el.style.width = '';
+                      el.style.height = '';
+                  }""")
+              browser.close()
+          PYEOF
+          python3 /tmp/render.py
+
+      - name: Upload to Drive
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          DRIVE_FOLDER_ID: ${{ github.event.inputs.drive_folder_id }}
+          SLUG: ${{ github.event.inputs.slug }}
+        run: |
+          cat > /tmp/upload.py << 'PYEOF'
+          import os, json, glob
+          from google.oauth2.credentials import Credentials
+          from googleapiclient.discovery import build
+          from googleapiclient.http import MediaFileUpload
+
+          creds = Credentials.from_authorized_user_info(json.loads(os.environ["SHEETS_TOKEN"]))
+          drive = build("drive", "v3", credentials=creds)
+          folder_id = os.environ["DRIVE_FOLDER_ID"]
+          slug = os.environ["SLUG"]
+
+          uploaded = []
+          for path in sorted(glob.glob("/tmp/png/*.png")):
+              name = os.path.basename(path)
+              media = MediaFileUpload(path, mimetype="image/png")
+              file = drive.files().create(
+                  body={"name": name, "parents": [folder_id]},
+                  media_body=media,
+                  supportsAllDrives=True,
+                  fields="id,name,size,parents",
+              ).execute()
+              print("uploaded", file)
+              uploaded.append(file)
+
+          print(json.dumps(uploaded, indent=2))
+          PYEOF
+          python3 /tmp/upload.py
