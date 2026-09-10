@@ -519,7 +519,11 @@ def _describe_image_haiku(file_id: str) -> str:
             client_id=td.get("client_id"), client_secret=td.get("client_secret"),
             scopes=td.get("scopes") or ["https://www.googleapis.com/auth/drive.readonly"],
         )
-        if creds.expired and creds.refresh_token:
+        # STALE-TOKEN CLASS BUG (found 2026-08-05): no `expiry` is passed above,
+        # and google-auth treats expiry=None as "never expires", so creds.expired
+        # was permanently False and this refresh never ran — the access token in
+        # SHEETS_TOKEN was reused until it 401'd. Refresh when we can.
+        if creds.refresh_token:
             creds.refresh(Request())
         drive = build("drive", "v3", credentials=creds)
 

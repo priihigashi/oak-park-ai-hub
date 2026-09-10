@@ -439,7 +439,10 @@ def run_weekly_catalog_audit():
             client_id=data.get("client_id"), client_secret=data.get("client_secret"),
             scopes=["https://www.googleapis.com/auth/spreadsheets"],
         )
-        if creds.expired and creds.refresh_token:
+        # STALE-TOKEN CLASS BUG (found 2026-08-05): no `expiry` is passed above,
+        # and google-auth treats expiry=None as "never expires", so creds.expired
+        # was permanently False and this refresh never ran. Refresh when we can.
+        if creds.refresh_token:
             creds.refresh(Request())
         sheet_svc = build("sheets", "v4", credentials=creds)
         stale = audit_stale_catalog_rows(sheet_svc,
