@@ -1,7 +1,12 @@
+---
+name: pipeline-fix
+description: Continue the Oak Park content-pipeline repair workflow from the canonical tracker and detail docs. Use when Priscila explicitly invokes /pipeline-fix for a pipeline repair session.
+disable-model-invocation: true
+argument-hint: "[SH-ID or scope]"
+---
+
 # SKILL: pipeline-fix
 # Reads at session start. Report status immediately. No re-explaining needed.
-
----
 
 ## SESSION START — DO THIS FIRST (sync-up protocol)
 
