@@ -59,7 +59,7 @@ jobs:
 
       - name: Upload structured recipe payloads
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: food-app-recipes-${{ github.run_id }}
           path: transcripts/food_app/
