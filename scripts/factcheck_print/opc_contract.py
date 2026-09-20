@@ -141,72 +141,91 @@ def photo_eligible(row: dict[str, str]) -> bool:
             and not any(x in all_text for x in ("quarantin", "light wood kitchen", "day-to-dusk", "twilight", "synthetic")))
 
 
-def validate(spec: dict[str, Any], root: Path | None = None, aliases: Iterable[str] = ()) -> dict[str, Any]:
-    """Strict public-output schema plus independently populated media provenance."""
-    errors: list[str] = []
-    if spec.get("project") != "opc" or spec.get("language") != "en":
-        errors.append("project/language must be opc/en")
-    if spec.get("status") != STATUS or spec.get("approved") is not False:
-        errors.append("approval gate missing")
+def slide_text(card: dict) -> str:
+    return " ".join(str(card.get(k, "")) for k in ("headline", "body", "badge"))
+
+
+def check_copy(card: dict, i: int) -> list[str]:
+    text = slide_text(card)
+    checks = [
+        (card.get("id") == i and card.get("layout") in LAYOUTS, "invalid sequence/layout"),
+        (len(words(card.get("headline"))) <= MAX_HEADLINE_WORDS and len(plain(card.get("headline"))) <= 70, "headline too long"),
+        (len(words(text)) <= MAX_SLIDE_WORDS and len(plain(card.get("body"))) <= 180, "text too dense"),
+        (card.get("badge", "") in ("", "Confirmed", "Needs context"), "inappropriate badge"),
+        (plain(text) == re.sub(r"\s+", " ", text).strip() and not FORBIDDEN.search(text), "markup or Portuguese copy"),
+    ]
+    return [f"slide {i}: {message}" for ok, message in checks if not ok]
+
+
+def check_sources(card: dict, sources: dict, root: Path | None, middle: bool) -> list[str]:
+    errors = []
+    if middle and not card.get("source_ids"):
+        errors.append("missing factual source")
+    for sid in card.get("source_ids", []):
+        source = sources.get(sid, {})
+        if not source.get("observed_in_search") or not source.get("screenshot"):
+            errors.append("source not researched and captured")
+        if root and source.get("screenshot"):
+            try:
+                safe_relative(root, source["screenshot"])
+            except GateError:
+                errors.append("missing proof screenshot")
+    return errors
+
+
+def check_asset(asset: dict, root: Path | None, proof: bool) -> list[str]:
+    errors = []
+    if not asset.get("sha256") or not asset.get("path"):
+        errors.append("missing materialized visual")
+    if asset.get("kind") not in ("ai_illustration", "opc_photo", "licensed_photo"):
+        errors.append("unknown visual provenance")
+    if asset.get("kind") == "ai_illustration" and asset.get("model") not in MODELS:
+        errors.append("unapproved image model")
+    if proof and (asset.get("kind") != "opc_photo" or asset.get("identity_verified") is not True):
+        errors.append("synthetic/unverified project proof")
+    if root and asset.get("path"):
+        try:
+            path = safe_relative(root, asset["path"])
+            if digest_file(path) != asset.get("sha256"):
+                errors.append("asset digest mismatch")
+        except GateError:
+            errors.append("asset cannot be read")
+    return errors
+
+
+def check_deck(spec: dict, aliases: Iterable[str]) -> list[str]:
     cards = spec.get("slides", [])
-    if not 5 <= len(cards) <= MAX_SLIDES:
-        errors.append("feed must contain 5-8 slides")
+    text = " ".join(str(spec.get(k, "")) for k in ("title", "caption", "hashtags"))
+    text += " " + " ".join(slide_text(c) for c in cards)
+    has_ai = any(a.get("kind") == "ai_illustration" for a in spec.get("assets", []))
+    checks = [
+        (spec.get("project") == "opc" and spec.get("language") == "en", "project/language must be opc/en"),
+        (spec.get("status") == STATUS and spec.get("approved") is False, "approval gate missing"),
+        (5 <= len(cards) <= MAX_SLIDES, "feed must contain 5-8 slides"),
+        (spec.get("kind") in ("education", "project_proof"), "unknown content kind"),
+        (not has_ai or AI_DISCLOSURE in spec.get("caption", ""), "AI disclosure absent"),
+        (not named_competitor(text, aliases), "competitor leaked into public-facing text"),
+        (not FORBIDDEN.search(text) and not PROMISES.search(text), "OPC voice/language/promise violation"),
+        (spec.get("editorial_review", {}).get("passed") is True, "editorial/coherence review not passed"),
+    ]
+    return [message for ok, message in checks if not ok]
+
+
+def validate(spec: dict[str, Any], root: Path | None = None, aliases: Iterable[str] = ()) -> dict[str, Any]:
+    """Runtime supplies provenance; model output may not attest its own assets."""
+    errors = check_deck(spec, aliases)
+    cards = spec.get("slides", [])
     sources = {s.get("id"): s for s in spec.get("sources", [])}
     assets = {a.get("key"): a for a in spec.get("assets", [])}
     if len(assets) != len(spec.get("assets", [])) or len(sources) != len(spec.get("sources", [])):
         errors.append("duplicate source/asset identifiers")
-    public_text = " ".join(str(spec.get(k, "")) for k in ("title", "caption", "hashtags"))
-    has_ai = False
     for i, card in enumerate(cards, 1):
-        text = " ".join(str(card.get(k, "")) for k in ("headline", "body", "badge"))
-        public_text += " " + text
-        if card.get("id") != i or card.get("layout") not in LAYOUTS:
-            errors.append(f"slide {i}: invalid sequence/layout")
-        if len(words(card.get("headline"))) > MAX_HEADLINE_WORDS or len(plain(card.get("headline"))) > 70:
-            errors.append(f"slide {i}: headline too long")
-        if len(words(text)) > MAX_SLIDE_WORDS or len(plain(card.get("body"))) > 180:
-            errors.append(f"slide {i}: text too dense")
-        if card.get("badge", "") not in ("", "Confirmed", "Needs context"):
-            errors.append(f"slide {i}: inappropriate badge")
-        if plain(text) != re.sub(r"\s+", " ", text).strip() or FORBIDDEN.search(text):
-            errors.append(f"slide {i}: markup or Portuguese copy")
-        if i not in (1, len(cards)) and not card.get("source_ids"):
-            errors.append(f"slide {i}: missing factual source")
-        for sid in card.get("source_ids", []):
-            source = sources.get(sid, {})
-            if not source.get("observed_in_search") or not source.get("screenshot"):
-                errors.append(f"slide {i}: source not researched and captured")
-            if root and source.get("screenshot"):
-                try:
-                    safe_relative(root, source["screenshot"])
-                except GateError:
-                    errors.append(f"slide {i}: missing proof screenshot")
-        asset = assets.get(card.get("visual_key"), {})
-        if not asset or not asset.get("sha256") or not asset.get("path"):
-            errors.append(f"slide {i}: missing materialized visual")
-        has_ai |= asset.get("kind") == "ai_illustration"
-        if asset.get("kind") == "ai_illustration" and asset.get("model") not in MODELS:
-            errors.append(f"slide {i}: unapproved image model")
-        if spec.get("kind") == "project_proof" and (asset.get("kind") != "opc_photo" or asset.get("identity_verified") is not True):
-            errors.append(f"slide {i}: synthetic/unverified project proof")
-        if root and asset.get("path"):
-            try:
-                p = safe_relative(root, asset["path"])
-                if digest_file(p) != asset.get("sha256"):
-                    errors.append(f"slide {i}: asset digest mismatch")
-            except GateError:
-                errors.append(f"slide {i}: asset cannot be read")
-    if has_ai and AI_DISCLOSURE not in spec.get("caption", ""):
-        errors.append("AI disclosure absent")
-    if named_competitor(public_text, aliases):
-        errors.append("competitor leaked into public-facing text")
-    if FORBIDDEN.search(public_text) or PROMISES.search(public_text):
-        errors.append("OPC voice/language/promise violation")
-    if not spec.get("editorial_review", {}).get("passed"):
-        errors.append("editorial/coherence review not passed")
+        errors.extend(check_copy(card, i))
+        errors.extend(check_sources(card, sources, root, i not in (1, len(cards))))
+        errors.extend(check_asset(assets.get(card.get("visual_key"), {}), root, spec.get("kind") == "project_proof"))
     if errors:
         raise GateError("; ".join(dict.fromkeys(errors)))
-    return {"passed": True, "slide_count": len(cards), "max_words": max(len(words(c.get("headline", "") + " " + c.get("body", "") + " " + c.get("badge", ""))) for c in cards), "approved": False}
+    return {"passed": True, "slide_count": len(cards), "max_words": max(len(words(slide_text(c))) for c in cards), "approved": False}
 
 
 def audit_legacy(spec: dict[str, Any]) -> dict[str, Any]:
