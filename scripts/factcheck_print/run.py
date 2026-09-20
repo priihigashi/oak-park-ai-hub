@@ -132,8 +132,13 @@ Use web search (Portuguese queries first). Find the article(s) that confirm it. 
 def review(spec_cards, transcript):
     txt = json.dumps([{k: c.get(k) for k in ("id", "hd", "chk", "badge")} for c in spec_cards if c["type"] == "claim"], ensure_ascii=False)
     out = claude(STANCE, f"""Second-pass review, 'am I looking at half the story'. Video transcript:\n{transcript[:9000]}\n\nCARDS:\n{txt}\n
-For each card: is a true claim wrongly softened, is unwarranted balance added, is a proof point of the speaker missing that you KNOW from the searched evidence? Return JSON only:
-{{"fixes": [{{"id": <card id>, "chk_pt": "improved text or null", "chk_en": "improved text or null", "why": "one line"}}], "notes_for_priscila": "max 3 lines"}}""", max_tokens=3000)
+PASS 1, per card: is a true claim wrongly softened, is unwarranted balance added, is a proof point of the speaker missing that you KNOW from the searched evidence?
+PASS 2, STORY COHERENCE (the deck must read as ONE connected story, never disconnected cards): read all cards top to bottom as one paragraph.
+ - Does the deck lead with the LINK between the people/events (not with background)? Does each card need the one before it, or could two swap places without anything breaking?
+ - Does the last card answer what the first card raised? Is any card understandable only if you remember the video?
+ - Where would a hostile reader say "that does not follow" or "that is stronger than the evidence"? Fix the text (chk_pt/chk_en); if the ORDER is wrong say so in notes_for_priscila.
+Return JSON only:
+{{"fixes": [{{"id": <card id>, "chk_pt": "improved text or null", "chk_en": "improved text or null", "why": "one line"}}], "notes_for_priscila": "max 3 lines, include any order/coherence problem"}}""", max_tokens=3000)
     return jload(out)
 
 
