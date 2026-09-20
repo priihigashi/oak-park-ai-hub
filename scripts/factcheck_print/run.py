@@ -35,7 +35,34 @@ STANCE = """You are a fact-checker for a Brazilian news brand. RULES, non-negoti
 9. Never write 'we did not find' inside card text."""
 
 
+OPENAI_MODEL = os.getenv("FACTCHECK_OPENAI_MODEL", "gpt-5")
+ENGINE = os.getenv("FC_ENGINE", "auto")  # auto | claude | openai (workflow input "engine")
+
+
+def openai_call(system, user, web=False, max_tokens=6000):
+    from openai import OpenAI
+    c = OpenAI(api_key=os.getenv("OPENAI_API_KEY", ""))
+    kw = dict(model=OPENAI_MODEL, instructions=system, input=user, max_output_tokens=max_tokens)
+    if web:
+        kw["tools"] = [{"type": "web_search"}]
+    return c.responses.create(**kw).output_text
+
+
 def claude(system, user, web=False, max_tokens=6000, uses=8):
+    """Model call. FC_ENGINE=openai -> ChatGPT only; claude -> Claude only; auto -> Claude, ChatGPT if Claude fails."""
+    if ENGINE == "openai":
+        print("  engine: openai")
+        return openai_call(system, user, web, max_tokens)
+    try:
+        return claude_anthropic(system, user, web, max_tokens, uses)
+    except RuntimeError:
+        if ENGINE != "auto":
+            raise
+        print("  Claude failed, falling back to OpenAI")
+        return openai_call(system, user, web, max_tokens)
+
+
+def claude_anthropic(system, user, web=False, max_tokens=6000, uses=8):
     import anthropic
     c = anthropic.Anthropic(api_key=KEY)
     kw = dict(model=MODEL, max_tokens=max_tokens, system=system, messages=[{"role": "user", "content": user}])

@@ -28,6 +28,12 @@ on:
         default: "brazil"
         type: choice
         options: [brazil, usa, opc]
+      engine:
+        description: "Which AI writes the research + cards: auto = Claude, falls back to ChatGPT if Claude fails; claude = Claude only; openai = ChatGPT only"
+        required: false
+        default: "auto"
+        type: choice
+        options: [auto, claude, openai]
   issues:
     types: [opened]
 
@@ -70,6 +76,7 @@ jobs:
           IN_URL: ${{ inputs.url }}
           IN_NOTES: ${{ inputs.notes }}
           IN_PROJECT: ${{ inputs.project }}
+          IN_ENGINE: ${{ inputs.engine }}
           ISSUE_TITLE: ${{ github.event.issue.title }}
           ISSUE_BODY: ${{ github.event.issue.body }}
         run: |
@@ -79,14 +86,18 @@ jobs:
               url = os.environ["ISSUE_TITLE"].split(":", 1)[1].strip()
               notes = os.environ.get("ISSUE_BODY", "") or ""
               project = "brazil"
+              engine = "auto"
           else:
               url, notes, project = os.environ["IN_URL"], os.environ.get("IN_NOTES", ""), os.environ.get("IN_PROJECT", "brazil")
+              engine = os.environ.get("IN_ENGINE", "auto")
           if any(c in url + project for c in "\r\n") or not re.fullmatch(r"https://(www\.|m\.|vm\.)?(instagram\.com|tiktok\.com|youtube\.com|youtu\.be)/\S*", url):
               raise SystemExit("URL must be a single-line https Instagram/TikTok/YouTube link")
           if project not in ("brazil", "usa", "opc"):
               raise SystemExit("bad project")
+          if engine not in ("auto", "claude", "openai"):
+              raise SystemExit("bad engine")
           with open(os.environ["GITHUB_ENV"], "a") as f:   # single-line values only; notes go through a file, never GITHUB_ENV
-              f.write(f"FC_URL={url}\nFC_PROJECT={project}\nFC_NOTES_FILE=fc_notes.txt\n")
+              f.write(f"FC_URL={url}\nFC_PROJECT={project}\nFC_NOTES_FILE=fc_notes.txt\nFC_ENGINE={engine}\n")
           open("fc_notes.txt", "w", encoding="utf-8").write(notes[:4000])
           PY
 
@@ -110,6 +121,7 @@ jobs:
 
       - name: 2. Research, screenshots, deck, PNGs, Drive, email
         env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           CLAUDE_KEY_4_CONTENT: ${{ secrets.CLAUDE_KEY_4_CONTENT }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
