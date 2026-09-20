@@ -165,6 +165,10 @@ def review(spec: dict, root: Path) -> Path:
     player=''
     if video:
         player=f'<video controls autoplay muted playsinline preload="metadata" src="{data_uri(safe_relative(root,video["file"]),"video/mp4")}"></video>'
+    elif spec.get('source_url'):
+        player=('<p class="status">SOURCE VIDEO FILE UNAVAILABLE</p><p>No playable source file or 60-second cut was produced. '
+                'The original transcript and newly checked sources support the feed. '
+                f'<a href="{esc(spec["source_url"],quote=True)}" target="_blank" rel="noopener noreferrer">Open the original source video</a>.</p>')
     parts=[f'<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
            f'<title>{esc(spec["title"])} — OPC review</title><style>{REVIEW_CSS}</style><main>'
            f'<p class="status">READY FOR PRISCILA REVIEW · NOT APPROVED · NOT PUBLISHED</p><h1>{esc(spec["title"])}</h1>'

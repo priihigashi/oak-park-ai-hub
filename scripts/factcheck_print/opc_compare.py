@@ -1,8 +1,8 @@
-"""Exactly two owner-authorized engine builds. No automatic rerun/merge/publish.
+"""Resume the two original engine tests only after zero-generation receipts.
 
-Both builds precede filing so a second comparison is not mistaken for a new
-content request. Existing row 428 is an explicit rebuild authorization. Capture
-and the four images are reused only after the first build validates their hashes.
+The original pair stopped in capture, before any text/image generation. Their
+private failures are preserved. This source-bound transcript fallback does NOT
+claim a playable source video or a successful 60-second cut.
 """
 from argparse import Namespace
 import json
@@ -17,12 +17,14 @@ def arguments(engine: str) -> Namespace:
     return Namespace(project='opc',url='https://www.youtube.com/watch?v=UsPEjMxywsY',idea='',discover=False,
         engine=engine,image_model='google/nano-banana-pro',notes='Repair the source-linked countertop test. Original English OPC material education, not a rebuttal.',
         notes_file='',out='opc-live-'+engine,rebuild_row=428,static_only=False,
-        run_key='pr300-validation-20260920-'+engine,kind='education',project_group='',reuse_assets='',reuse_capture='')
+        run_key='pr300-validation-20260920-transcript-resume-'+engine,kind='education',project_group='',reuse_assets='',reuse_capture='')
 
 
 def build_one(a, previous: str = '') -> dict:
     if previous:
-        a.reuse_assets=previous;a.reuse_capture=previous
+        a.reuse_assets=previous
+        prior=json.loads((Path(previous)/'cards.json').read_text())
+        if prior.get('video',{}):a.reuse_capture=previous
     store,root,folder=prepare(a)
     try:
         spec=build(a,store,root,folder)
@@ -35,6 +37,13 @@ def build_one(a, previous: str = '') -> dict:
 
 
 def main() -> None:
+    from opc_capture_cache import verify_zero_generation
+    from opc_store import Store
+    import os
+    store=Store()
+    for engine in ('claude','openai'):
+        verify_zero_generation(store,'pr300-validation-20260920-'+engine)
+    os.environ['OPC_REUSE_FAILED_CAPTURE']='1'
     states=[];previous=''
     for engine in ('claude','openai'):
         try:

@@ -17,7 +17,8 @@ sys.path.insert(0,str(HERE.parent))
 
 from opc_contract import AI_DISCLOSURE, GateError, MODELS, STATUS, check_copy, digest_file, named_competitor, plain, validate, safe_relative
 from opc_llm import Model
-from opc_media import ReplicateImages, capture, cut_video, sanitize_photo
+from opc_media import ReplicateImages, sanitize_photo
+from opc_capture_cache import capture, cut_video
 from opc_network import screenshot_candidates
 from opc_render import export, review
 from opc_store import Store, CONTROL, CONTROL_TAB
@@ -186,6 +187,7 @@ def finalize_spec(a, raw: dict, sources: list, assets: list, editorial: dict, vi
           'caption':caption,'hashtags':plain(raw.get('hashtags')),'slides':slides,
           'sources':[{k:s[k] for k in ('id','name','url','screenshot','observed_in_search','heading') if k in s} for s in sources],'assets':assets,
           'editorial_review':editorial,'video':video,'source_url':a.url,'template':'opc_tip / FORMAT-030 visual PRINT',
+          'reference_media_status':'playable_file' if video else 'source_link_only' if a.url else 'not_applicable',
           'motion':{'requested':not a.static_only,'status':'static_fallback','reason':'No owned motion clip supplied; Ken Burns and fabricated job footage are not used.'}}
     if named_competitor(json.dumps(spec,ensure_ascii=False),aliases):raise GateError('Competitor in output data')
     return spec
@@ -193,10 +195,11 @@ def finalize_spec(a, raw: dict, sources: list, assets: list, editorial: dict, vi
 
 def notify(spec: dict, folder: dict, receipt: dict, root: Path) -> None:
     from run import email
+    reference_note='Source video file: available in private review.' if spec.get('video') else 'SOURCE VIDEO FILE UNAVAILABLE: no playable file or 60-second cut is claimed; real transcript and source link retained.'
     body=(f'OPC visual carousel is built, NOT APPROVED.\n\nReview and resources: {folder["webViewLink"]}\n'
           f'Cards: {len(spec["slides"])}. Three visual variants use the same assets.\n'
           f'Tracker readback: {receipt["content_row"]}\nFlow Plans readback: {receipt["flow_row"]}\n'
-          'The source video is in the private review, not republished as an OPC clip.\n'
+          f'{reference_note}\n'
           'Motion: static fallback because no owned clip was supplied.\n'
           'Automated editorial pass used a separate request on the same provider; not an independent Council approval.\n'
           'Nothing was scheduled, published or approved. Usage and technical checks are in resources/.')
@@ -236,12 +239,17 @@ def build(a, store: Store, root: Path, folder: dict) -> dict:
         a.photo_notes=[{'key':f'A{i}', 'phase':x['Phase'], 'description':x['Alt-text Draft']} for i,x in enumerate(rows[:4],1)]
     captured=captured_input(a,root)
     plan=identify(model,a,captured,store)
+    save(root/'resources/topic-plan.json',plan)
     aliases=[plain(x) for x in plan.get('source_company_aliases',[])]
     if store.duplicates(plan['title'],plan['keywords'],a.url,a.rebuild_row):raise GateError('Topic already exists; rebuild must be explicitly linked')
     video=cut_video(captured,plan.get('keep_segment_indices',[]),root) if captured else None
-    findings=research(model,plan);sources,evidence=gather_evidence(model,findings,root)
+    findings=research(model,plan)
+    save(root/'resources/research-results.json',findings)
+    sources,evidence=gather_evidence(model,findings,root)
     draft=write_feed(model,plan,evidence,a)
+    save(root/'resources/feed-draft.json',draft)
     editorial=approve_editorial(model,draft,evidence,aliases)
+    save(root/'resources/editorial-review.json',editorial)
     assets=make_assets(a,draft,root,store,provider)
     spec=finalize_spec(a,draft,sources,assets,editorial,video,aliases)
     gate=validate(spec,root,aliases);save(root/'cards.json',spec);save(root/'resources/content-gates.json',gate)
@@ -287,7 +295,6 @@ def run(a) -> dict:
 def main() -> None:
     try:
         result=run(options())
-        # No private folder links, prompts, transcripts, or credentials in public Actions logs.
         print(json.dumps({k:v for k,v in result.items() if k!='folder'}))
     except Exception as exc:
         print(f'OPC BLOCKED ({type(exc).__name__}). No approval/publication; inspect the private run receipt.')
