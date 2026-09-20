@@ -217,6 +217,138 @@ def email(subject, body, attach=()):
         s.login("priscila@oakpark-construction.com", pw); s.send_message(m)
 
 
+def research_claim(n, cl, tr, gaps):
+    """One claim -> validated research dict or None (gap recorded). 'unconfirmed' never becomes a card."""
+    try:
+        r = research(cl, tr)
+    except Exception as e:
+        gaps.append(f"claim {n}: research failed ({e})")
+        return None
+    if r.get("status") not in ("confirmed", "partly", "false"):
+        gaps.append(f"claim {n} [{r.get('status')}]: {cl['quote'][:90]} | searched: {r.get('searched', '')}")
+        return None
+    if r["status"] == "false":
+        gaps.append(f"claim {n} [false]: {cl['quote'][:90]} | searched: {r.get('searched', '')}")
+    return r
+
+
+def shoot_first(srcs, wd, key, gaps, n):
+    """Screenshot the first source that renders. Returns the source used (first source if none rendered)."""
+    for sr in srcs[:3]:
+        png = wd / "shots" / f"{key}.png"
+        if shoot(sr["url"], png):
+            to_card_jpg(png, wd / "shots" / f"{key}.jpg")
+            return sr, True
+    gaps.append(f"claim {n}: screenshot failed for all sources {[x['url'] for x in srcs[:3]]}")
+    return srcs[0], False
+
+
+def claim_cards(r, cl, cid, key, main, srcs):
+    """The claim card + its proof card (all model text sanitised)."""
+    badge = {"confirmed": "confirmed", "partly": "partly", "false": "false"}[r["status"]]
+    others = [clean_html(x["name"]) for x in srcs if x["url"] != main["url"]][:3]
+    claim = {"type": "claim", "id": cid, "badge": badge, "eb": {"pt": "A alegação", "en": "The claim"},
+             "hd": {"pt": clean_html(r["hd_pt"]), "en": clean_html(r.get("hd_en") or r["hd_pt"])},
+             "say": {"pt": "“" + clean_html(cl["quote"]).strip("“\" ") + "”", "en": ""},
+             "chk": {"pt": clean_html(r["chk_pt"]), "en": clean_html(r.get("chk_en") or r["chk_pt"])}}
+    proof = {"type": "proof", "id": cid + 1, "key": key,
+             "src": {"name": clean_html(main.get("name", "")), "date": clean_html(main.get("date", "")), "full": main["url"]},
+             "also": {"pt": "Também: " + " · ".join(others), "en": "Also: " + " · ".join(others)} if others else None}
+    return claim, proof
+
+
+def build_cards(plan, tr, wd, gaps):
+    cards = [{"type": "open", "id": 1, "hd": {"pt": plan["hook_pt"], "en": plan["hook_en"]}}]
+    sources, shots, cid = [], {}, 2
+    for n, cl in enumerate(plan["claims"], 1):
+        print(f"[{n}/{len(plan['claims'])}] {cl['quote'][:70]}")
+        r = research_claim(n, cl, tr, gaps)
+        srcs = [x for x in ((r or {}).get("sources") or []) if isinstance(x, dict) and safe_url(x.get("url"))]
+        if not srcs:
+            gaps.append(f"claim {n}: no usable https source") if r else None
+            continue
+        key = f"s{n}"
+        main, ok = shoot_first(srcs, wd, key, gaps, n)
+        shots[key] = f"shots/{key}.jpg" if ok else ""
+        try:
+            cards.extend(claim_cards(r, cl, cid, key, main, srcs))
+        except KeyError as e:
+            gaps.append(f"claim {n}: model reply missing field {e}")
+            continue
+        sources.extend({"name": x.get("name", ""), "date": x.get("date", ""), "url": x["url"], "title": x.get("title")} for x in srcs)
+        cid += 2
+    return cards, sources, shots
+
+
+def apply_review(cards, tr, gaps):
+    """Second pass ('am I showing half the story'); returns the notes for Priscila."""
+    try:
+        rv = review(cards, tr)
+    except Exception as e:
+        gaps.append(f"review pass failed: {e}")
+        return ""
+    by_id = {c["id"]: c for c in cards if c["type"] == "claim"}
+    for f in rv.get("fixes", []):
+        c = by_id.get(f.get("id"))
+        if not c:
+            continue
+        for lang in ("pt", "en"):
+            if f.get(f"chk_{lang}"):
+                c["chk"][lang] = clean_html(f[f"chk_{lang}"])
+    return rv.get("notes_for_priscila", "")
+
+
+def fetch_video(url, wd, gaps):
+    """Download + compress the original so card 1 can PLAY it. None if it fails (card 1 stays a placeholder)."""
+    try:
+        import capture_pipeline as cp
+        vp = cp.download_video(url, tempfile.mkdtemp())
+        if not vp:
+            raise RuntimeError("no video file returned")
+        dst = wd / "media" / "original.mp4"
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", vp, "-vf", "scale=540:-2", "-c:v", "libx264", "-crf", "31",
+                        "-preset", "medium", "-maxrate", "600k", "-bufsize", "1200k", "-c:a", "aac", "-b:a", "48k",
+                        "-movflags", "+faststart", str(dst)], check=True)
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "1", "-i", str(dst), "-frames:v", "1", "-q:v", "4",
+                        str(wd / "media" / "poster.jpg")])
+        return {"file": "media/original.mp4", "poster": "media/poster.jpg"}
+    except Exception as e:
+        gaps.append(f"video download/compress failed (card 1 stays a placeholder): {str(e)[:120]}")
+        return None
+
+
+def next_version(svc, parent):
+    files = svc.files().list(q=f"'{parent}' in parents and trashed=false", fields="files(name)", pageSize=1000,
+                             supportsAllDrives=True, includeItemsFromAllDrives=True).execute().get("files", [])
+    return 1 + len([f for f in files if re.match(r"v\d+_", f["name"])])
+
+
+def publish_drive(project, spec, wd, pngs):
+    """Upload deck/cards/PNGs/resources to <niche carousel folder>/vN_<slug>_print. Returns the folder link."""
+    from routing import get_route
+    parent = get_route(project)["carousel_folder_id"]
+    svc = drive_service()
+    slug = re.sub(r"[^a-z0-9]+", "_", spec["title"].lower()).strip("_")[:40] or "checagem"
+    root = mkfolder(svc, f"v{next_version(svc, parent)}_{slug}_print", parent)
+    upload(svc, wd / "deck.html", root["id"])
+    upload(svc, wd / "cards.json", root["id"])
+    png_f, res = mkfolder(svc, "png", root["id"]), mkfolder(svc, "resources", root["id"])
+    for p in pngs:
+        upload(svc, p, png_f["id"])
+    for p in list((wd / "media").glob("*")) + list((wd / "shots").glob("*.jpg")):
+        upload(svc, p, res["id"])
+    return root["webViewLink"]
+
+
+def result_email(a, spec, link, notes_p, gaps, n_png):
+    body = (f"Fact-check deck ready (transcribe-comment-create-print).\n\nVideo: {a.url}\nDrive folder: {link}\n"
+            f"Cards: {len(spec['cards'])} | PNGs: {n_png}\n\n"
+            f"To review: open a Claude chat and say: /transcribe-comment-create-print review {link}\n\n"
+            f"NOTES FROM THE SECOND PASS:\n{notes_p or '-'}\n\nGAPS (not on the cards):\n" + ("\n".join("- " + g for g in gaps) or "- none") +
+            f"\n\nRun: https://github.com/{os.getenv('GITHUB_REPOSITORY', '')}/actions/runs/{os.getenv('GITHUB_RUN_ID', '')}")
+    email(f"Fact-check deck: {spec['title']}", body, sorted((pathlib.Path(a.out) / "png").glob("*.png"))[:6])
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--url", required=True)
@@ -230,118 +362,31 @@ def main():
         a.notes = pathlib.Path(a.notes_file).read_text(encoding="utf-8")[:4000]
     if not KEY:
         raise SystemExit("no Claude key (CLAUDE_KEY_4_CONTENT / ANTHROPIC_API_KEY)")
-    wd = pathlib.Path(a.out); wd.mkdir(parents=True, exist_ok=True)
-    (wd / "shots").mkdir(exist_ok=True); (wd / "media").mkdir(exist_ok=True)
+    wd = pathlib.Path(a.out)
+    (wd / "shots").mkdir(parents=True, exist_ok=True)
+    (wd / "media").mkdir(exist_ok=True)
 
-    tr = latest_transcript()
-    print("transcript chars:", len(tr))
+    tr, gaps = latest_transcript(), []
     plan = extract_claims(tr, a.notes)
-    print("claims:", len(plan["claims"]))
-
-    cards, sources, shots, gaps = [{"type": "open", "id": 1, "hd": {"pt": plan["hook_pt"], "en": plan["hook_en"]}}], [], {}, []
-    cid = 2
-    for n, cl in enumerate(plan["claims"], 1):
-        print(f"[{n}/{len(plan['claims'])}] {cl['quote'][:70]}")
-        try:
-            r = research(cl, tr)
-        except Exception as e:
-            gaps.append(f"claim {n}: research failed ({e})"); continue
-        if r["status"] in ("unconfirmed", "false"):
-            gaps.append(f"claim {n} [{r['status']}]: {cl['quote'][:90]} | searched: {r.get('searched', '')}")
-            if r["status"] == "unconfirmed":
-                continue  # unproven never becomes a card
-        srcs = [x for x in (r.get("sources") or []) if isinstance(x, dict) and safe_url(x.get("url"))]
-        if not srcs:
-            gaps.append(f"claim {n}: no usable https source"); continue
-        try:
-            key = f"s{n}"
-            ok, main = False, srcs[0]
-            for sr in srcs[:3]:
-                png = wd / "shots" / f"{key}.png"
-                if shoot(sr["url"], png):
-                    to_card_jpg(png, wd / "shots" / f"{key}.jpg"); ok, main = True, sr; break
-            if not ok:
-                gaps.append(f"claim {n}: screenshot failed for all sources {[x['url'] for x in srcs[:3]]}")
-            shots[key] = f"shots/{key}.jpg" if ok else ""
-            badge = {"confirmed": "confirmed", "partly": "partly", "false": "false"}[r["status"]]
-            cards.append({"type": "claim", "id": cid, "badge": badge,
-                          "eb": {"pt": "A alegação", "en": "The claim"},
-                          "hd": {"pt": clean_html(r["hd_pt"]), "en": clean_html(r.get("hd_en") or r["hd_pt"])},
-                          "say": {"pt": "“" + clean_html(cl["quote"]).strip("“”\" ") + "”", "en": ""},
-                          "chk": {"pt": clean_html(r["chk_pt"]), "en": clean_html(r.get("chk_en") or r["chk_pt"])}})
-            others = [x["name"] for x in srcs if x["url"] != main["url"]][:3]
-            cards.append({"type": "proof", "id": cid + 1, "key": key, "src": {"name": clean_html(main.get("name", "")), "date": clean_html(main.get("date", "")), "full": main["url"]},
-                          "also": {"pt": "Também: " + " · ".join(clean_html(o) for o in others), "en": "Also: " + " · ".join(clean_html(o) for o in others)} if others else None})
-            for sr in srcs:
-                sources.append({"name": sr.get("name", ""), "date": sr.get("date", ""), "url": sr["url"], "title": sr.get("title")})
-            cid += 2
-        except KeyError as e:
-            gaps.append(f"claim {n}: model reply missing field {e}")
-
-    # second pass: half-the-story review
-    notes_p = ""
-    try:
-        rv = review(cards, tr)
-        for f in rv.get("fixes", []):
-            for c in cards:
-                if c["type"] == "claim" and c["id"] == f.get("id"):
-                    if f.get("chk_pt"): c["chk"]["pt"] = clean_html(f["chk_pt"])
-                    if f.get("chk_en"): c["chk"]["en"] = clean_html(f["chk_en"])
-        notes_p = rv.get("notes_for_priscila", "")
-    except Exception as e:
-        gaps.append(f"review pass failed: {e}")
-
-    # the original video, playable in card 1
-    video = None
-    try:
-        import capture_pipeline as cp
-        tmp = tempfile.mkdtemp()
-        vp = cp.download_video(a.url, tmp)
-        if vp:
-            dst = wd / "media" / "original.mp4"
-            subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", vp, "-vf", "scale=540:-2", "-c:v", "libx264", "-crf", "31", "-preset", "medium",
-                            "-maxrate", "600k", "-bufsize", "1200k", "-c:a", "aac", "-b:a", "48k", "-movflags", "+faststart", str(dst)], check=True)
-            subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "1", "-i", str(dst), "-frames:v", "1", "-q:v", "4", str(wd / "media" / "poster.jpg")])
-            video = {"file": "media/original.mp4", "poster": "media/poster.jpg"}
-    except Exception as e:
-        gaps.append(f"video download/compress failed (card 1 stays a placeholder): {str(e)[:120]}")
-
-    today = datetime.now().strftime("%d/%m/%Y")
+    print("transcript chars:", len(tr), "| claims:", len(plan["claims"]))
+    cards, sources, shots = build_cards(plan, tr, wd, gaps)
+    notes_p = apply_review(cards, tr, gaps)
+    video = fetch_video(a.url, wd, gaps)
     spec = {"title": plan.get("title") or "Checagem", "hook": {"pt": plan["hook_pt"], "en": plan["hook_en"]}, "video_url": a.url,
-            "meta": {"date": today, "run": os.getenv("GITHUB_RUN_ID", "local")}, "sources": sources, "video": video, "shots": shots,
-            "cards": cards, "caption": {"pt": "", "en": ""}, "gaps": gaps}
+            "meta": {"date": datetime.now().strftime("%d/%m/%Y"), "run": os.getenv("GITHUB_RUN_ID", "local")},
+            "sources": sources, "video": video, "shots": shots, "cards": cards, "caption": {"pt": "", "en": ""}, "gaps": gaps}
     (wd / "cards.json").write_text(json.dumps(spec, ensure_ascii=False, indent=1), encoding="utf-8")
-    deck = render_deck.render(spec, wd)
-    pngs = render_deck.export_pngs(deck, wd / "png")
-    print("cards:", len(cards), "pngs:", len(pngs), "gaps:", len(gaps))
+    pngs = render_deck.export_pngs(render_deck.render(spec, wd), wd / "png")
 
     link, drive_failed = "(Drive upload skipped)", False
     if not a.no_drive:
         try:
-            from routing import get_route
-            parent = get_route(a.project)["carousel_folder_id"]
-            svc = drive_service()
-            slug = re.sub(r"[^a-z0-9]+", "_", spec["title"].lower()).strip("_")[:40] or "checagem"
-            n = 1 + len([f for f in svc.files().list(q=f"'{parent}' in parents and trashed=false and name contains 'v'", fields="files(name)", pageSize=1000,
-                                                     supportsAllDrives=True, includeItemsFromAllDrives=True).execute().get("files", []) if re.match(r"v\d+_", f["name"])])
-            root = mkfolder(svc, f"v{n}_{slug}_print", parent)
-            upload(svc, wd / "deck.html", root["id"]); upload(svc, wd / "cards.json", root["id"])
-            png_f = mkfolder(svc, "png", root["id"])
-            for p in pngs: upload(svc, p, png_f["id"])
-            res = mkfolder(svc, "resources", root["id"])
-            for p in (wd / "media").glob("*"): upload(svc, p, res["id"])
-            for p in (wd / "shots").glob("*.jpg"): upload(svc, p, res["id"])
-            link = root["webViewLink"]
+            link = publish_drive(a.project, spec, wd, pngs)
         except Exception as e:
-            link = f"(Drive upload FAILED: {e})"
+            link, drive_failed = f"(Drive upload FAILED: {e})", True
             gaps.append("Drive upload FAILED")
-            drive_failed = True
-    body = (f"Fact-check deck ready (transcribe-comment-create-print).\n\nVideo: {a.url}\nDrive folder: {link}\nCards: {len(cards)} | PNGs: {len(pngs)}\n\n"
-            f"To review: open a Claude chat and say: /transcribe-comment-create-print review {link}\n\n"
-            f"NOTES FROM THE SECOND PASS:\n{notes_p or '-'}\n\nGAPS (not on the cards):\n" + ("\n".join("- " + g for g in gaps) or "- none") +
-            f"\n\nRun: https://github.com/{os.getenv('GITHUB_REPOSITORY', '')}/actions/runs/{os.getenv('GITHUB_RUN_ID', '')}")
-    email(f"Fact-check deck: {spec['title']}", body, pngs[:6])
-    print(f"done: {len(cards)} cards, {len(pngs)} PNGs, {len(gaps)} gaps, drive_failed={drive_failed}")  # body (notes, link) stays out of the public log
+    result_email(a, spec, link, notes_p, gaps, len(pngs))
+    print(f"done: {len(cards)} cards, {len(pngs)} PNGs, {len(gaps)} gaps, drive_failed={drive_failed}")  # notes/link stay out of the public log
     if drive_failed:
         sys.exit(1)
 

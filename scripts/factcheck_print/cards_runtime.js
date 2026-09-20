@@ -9,12 +9,17 @@ function proofCard(c, L) {
   return `<div class="eb ok">${T(c.eb, L) || (L === 'pt' ? 'A reportagem' : 'The article')}</div>${imgs}
     <div class="cap"><span class="nm">${s.name} · ${s.date}</span> <span class="lk">${s.full}${c.extra ? ' — ' + c.extra : ''}</span>${also}</div>`;
 }
+const BADGES = { confirmed: ['✅ CONFIRMADO', '✅ CONFIRMED'], partly: ['🟡 EM PARTE', '🟡 PARTLY'], false: ['❌ FALSO', '❌ FALSE'] };
+const badgeText = (c, L) => (BADGES[c.badge] || BADGES.confirmed)[L === 'pt' ? 0 : 1];
 function claimCard(c, L) {
-  const badge = c.badge === 'partly' ? (L === 'pt' ? '🟡 EM PARTE' : '🟡 PARTLY') : c.badge === 'false' ? (L === 'pt' ? '❌ FALSO' : '❌ FALSE') : (L === 'pt' ? '✅ CONFIRMADO' : '✅ CONFIRMED');
-  return `<div class="ebr"><div class="eb" style="margin:0">${T(c.eb, L) || (L === 'pt' ? 'A alegação' : 'The claim')}</div><div class="cf">${badge}</div></div>
-    <div class="hd${T(c.hd, L).length > 40 ? ' sm' : ''}">${T(c.hd, L)}</div>
-    ${c.say ? `<p class="say">${T(c.say, L)}</p>` : ''}<p class="chk">${T(c.chk, L)}</p>
-    <div class="foot">${L === 'pt' ? 'Fonte na próxima página' : 'Source on the next card'} &rarr;</div>`;
+  const hd = T(c.hd, L);
+  const eb = T(c.eb, L) || (L === 'pt' ? 'A alegação' : 'The claim');
+  const say = c.say ? `<p class="say">${T(c.say, L)}</p>` : '';
+  const foot = L === 'pt' ? 'Fonte na próxima página' : 'Source on the next card';
+  return `<div class="ebr"><div class="eb" style="margin:0">${eb}</div><div class="cf">${badgeText(c, L)}</div></div>
+    <div class="hd${hd.length > 40 ? ' sm' : ''}">${hd}</div>
+    ${say}<p class="chk">${T(c.chk, L)}</p>
+    <div class="foot">${foot} &rarr;</div>`;
 }
 function openCard(c, L) {
   const v = DECK.video && DECK.video.file
