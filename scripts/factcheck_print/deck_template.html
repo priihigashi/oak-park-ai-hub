@@ -1,0 +1,156 @@
+<title>__TITLE__</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+:root{
+  --bg:#F4F1EB; --panel:#fff; --ink:#15181D; --muted:#5C6672; --rule:#D9D3C7;
+  --deep:#11161C; --bone:#EFEAE0; --dim:#8C97A3; --hair:#252E38;
+  --ok:#2F7A4E; --okb:#7CC698; --warn:#A87C1E; --warnb:#E3BE68; --acc:#B4502C; --accb:#E59273;
+  --disp:'Archivo',system-ui,sans-serif; --serif:'Source Serif 4',Georgia,serif; --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0D1116;--panel:#151C24;--ink:#EDE7DB;--muted:#93A0AD;--rule:#27313C;}}
+:root[data-theme="dark"]{--bg:#0D1116;--panel:#151C24;--ink:#EDE7DB;--muted:#93A0AD;--rule:#27313C;}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--serif);margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px 110px}
+.prov{font-family:var(--mono);font-size:11px;letter-spacing:.05em;color:var(--muted);text-transform:uppercase;
+  border-bottom:1px solid var(--rule);padding:18px 0 13px;margin-bottom:30px;display:flex;flex-wrap:wrap;gap:6px 16px}
+.prov b{color:var(--ink);font-weight:600}
+h1{font-family:var(--disp);font-weight:800;font-size:clamp(31px,5.4vw,52px);line-height:1.03;margin:0 0 10px;letter-spacing:-.02em;text-wrap:balance}
+.sub{font-size:clamp(16px,2.2vw,20px);color:var(--muted);max-width:64ch;line-height:1.5;margin:0 0 20px}
+.pill{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  padding:6px 13px;border-radius:4px;border:1px solid var(--warn);color:var(--warn);margin-bottom:26px;font-weight:600}
+.src{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:19px 21px;margin-bottom:28px}
+.src h3{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 12px;font-weight:600}
+.src ul{margin:0;padding:0;list-style:none;display:grid;gap:9px;font-size:15px}
+.src a{color:var(--ink);border-bottom:1.5px solid var(--acc);text-decoration:none}
+.src .lbl{font-family:var(--mono);font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:2px}
+.lang{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:var(--bg);padding:13px 0 14px;
+  border-bottom:1px solid var(--rule);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.lang button{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;padding:9px 19px;border-radius:4px;
+  border:1px solid var(--rule);background:transparent;color:var(--muted);cursor:pointer;font-weight:600}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.lang .note{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-left:auto}
+.deck{display:grid;gap:30px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));margin-top:30px}
+.unit{display:flex;flex-direction:column}
+.slide{aspect-ratio:4/5;background:var(--deep);color:var(--bone);border-radius:6px;overflow:hidden;container-type:inline-size;
+  position:relative;box-shadow:0 1px 2px rgba(0,0,0,.14),0 10px 30px rgba(0,0,0,.15)}
+.pad{position:absolute;inset:0;padding:6.6cqw 6.2cqw 5.6cqw;display:flex;flex-direction:column}
+.eb{font-family:var(--mono);font-size:2.6cqw;letter-spacing:.16em;text-transform:uppercase;color:var(--warnb);font-weight:600;margin-bottom:2.4cqw}
+.cf{display:inline-block;font-family:var(--mono);font-size:2.6cqw;font-weight:600;letter-spacing:.1em;padding:1cqw 2.4cqw;border-radius:3px;background:rgba(47,122,78,.22);color:var(--okb);border:1px solid var(--ok);margin:0}.ebr{display:flex;align-items:center;justify-content:space-between;margin-bottom:3cqw}.pad>.ebr+.hd{margin-top:0}.eb.ok{color:var(--okb)} .eb.acc{color:var(--accb)}
+.hd{font-family:var(--disp);font-weight:800;font-size:6cqw;line-height:1.08;letter-spacing:-.02em;margin:0 0 3cqw;text-wrap:balance}
+.hd.sm{font-size:5cqw}
+.say{font-family:var(--serif);font-style:italic;font-size:3.7cqw;line-height:1.42;color:#CFC8BB;
+  border-left:.7cqw solid var(--hair);padding:.4cqw 0 .4cqw 3cqw;margin:0 0 3.4cqw}
+.chk{font-family:var(--serif);font-size:3.6cqw;line-height:1.44;color:#D5CEC2;margin:0}
+.chk b{color:var(--bone);font-weight:600}
+.y{color:var(--warnb);font-weight:600}.y2{color:var(--warnb);font-weight:800;font-size:1.06em}.rd{color:#FF6B5E;font-weight:600}
+.proof .shot.half{margin-bottom:1.6cqw}.proof .shot.half img{object-fit:contain;object-position:top center}.proof .cap .al{color:var(--bone)}
+.vth{position:relative;flex:1;min-height:0;background:#000;border-radius:4px;overflow:hidden;margin-bottom:3cqw}.vth img{width:100%;height:100%;object-fit:cover;display:block;opacity:.85}.vth .pl{position:absolute;left:50%;top:50%;width:14cqw;height:14cqw;margin:-7cqw 0 0 -7cqw;border-radius:50%;border:.8cqw solid #fff;background:rgba(0,0,0,.35)}.vth .pl:after{content:'';position:absolute;left:5.2cqw;top:3.4cqw;border-left:5cqw solid #fff;border-top:3.6cqw solid transparent;border-bottom:3.6cqw solid transparent}
+.vph.vv{padding:0;border:none;background:#000;overflow:hidden;display:block}.vph video{width:100%;height:100%;object-fit:contain;display:block;background:#000}.vth iframe{width:100%;height:100%;border:0;display:block}.vth{cursor:pointer}
+.vph{flex:1;min-height:0;margin-bottom:4cqw;border:2px dashed var(--hair);border-radius:2cqw;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3cqw;background:rgba(127,127,127,.08);font-family:var(--mono);letter-spacing:.2em;color:var(--dim);font-size:3cqw}.play{width:14cqw;height:14cqw;border-radius:50%;border:.7cqw solid var(--dim);position:relative}.play:after{content:'';position:absolute;left:5.4cqw;top:3.6cqw;border-left:5cqw solid var(--dim);border-top:3.4cqw solid transparent;border-bottom:3.4cqw solid transparent}.foot.swipe{font-size:3cqw;text-align:right;color:var(--warnb)}
+.foot{margin-top:auto;padding-top:2.4cqw;border-top:1px solid var(--hair);font-family:var(--mono);font-size:2.4cqw;color:var(--dim);line-height:1.45}
+.vp{display:inline-block;font-family:var(--mono);font-size:2.5cqw;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  padding:1.2cqw 2.5cqw;border-radius:3px;margin-bottom:2.8cqw}
+.vp.ok{background:rgba(47,122,78,.22);color:var(--okb);border:1px solid var(--ok)}
+.vp.warn{background:rgba(168,124,30,.2);color:var(--warnb);border:1px solid var(--warn)}
+/* proof card */
+.proof .pad{padding:4.6cqw 4.6cqw 4.4cqw}
+.proof .shot{flex:1;border-radius:4px;overflow:hidden;background:#fff;display:flex;align-items:flex-start;justify-content:center;margin-bottom:3cqw}
+.proof .shot img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+.proof .cap{font-family:var(--mono);font-size:2.5cqw;line-height:1.5;color:var(--bone)}
+.proof .cap .nm{color:var(--okb);font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.proof .cap .lk{display:inline;color:var(--dim);word-break:break-all}.proof .cap{margin-top:.9cqw}
+.defs>div{padding:2.2cqw 0;border-top:1px solid var(--hair)}
+.defs>div:first-child{border-top:none;padding-top:.5cqw}
+.defs .k{font-family:var(--mono);font-size:2.6cqw;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--warnb);display:block;margin-bottom:1cqw}
+.defs .t{font-family:var(--serif);font-size:3.5cqw;line-height:1.38;color:#D5CEC2}
+.defs .t b{color:var(--bone);font-weight:600}
+.arrow{position:absolute;right:5.2cqw;bottom:4.4cqw;font-family:var(--disp);font-size:4.2cqw;color:var(--dim)}
+.ctl{padding:13px 2px 0}
+.btns{display:flex;gap:7px;margin-bottom:8px}
+.btns button{flex:1;font-family:var(--mono);font-size:11px;padding:8px 4px;border-radius:4px;border:1px solid var(--rule);background:transparent;color:var(--muted);cursor:pointer}
+.btns button[aria-pressed="true"]:first-child{background:var(--ok);border-color:var(--ok);color:#fff}
+.btns button[aria-pressed="true"]:last-child{background:var(--acc);border-color:var(--acc);color:#fff}
+.ctl textarea{width:100%;box-sizing:border-box;font-family:var(--serif);font-size:13.5px;padding:8px 10px;border-radius:4px;
+  border:1px solid var(--rule);background:var(--panel);color:var(--ink);resize:vertical;min-height:34px}
+.unit.k .slide{outline:2.5px solid var(--ok)} .unit.r .slide{outline:2.5px solid var(--acc)}
+h2.sec{font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600;
+  margin:52px 0 16px;padding-bottom:10px;border-bottom:1px solid var(--rule)}
+.cap-box{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:21px 23px;font-size:16px;line-height:1.6;white-space:pre-wrap}
+.tags{font-family:var(--mono);font-size:12.5px;color:var(--muted);margin-top:13px;line-height:1.7}
+details{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:15px 19px;margin-top:16px}
+summary{cursor:pointer;font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);font-weight:600}
+details .in{margin-top:14px;font-size:15px;line-height:1.6}
+details .in li{margin-bottom:8px}
+pre.out{font-family:var(--mono);font-size:12.5px;white-space:pre-wrap;background:var(--bg);border:1px solid var(--rule);border-radius:4px;padding:13px;margin-top:11px;line-height:1.6}
+.copy{font-family:var(--mono);font-size:11.5px;padding:9px 17px;border-radius:4px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);cursor:pointer;margin-top:11px}
+[hidden]{display:none!important}
+</style>
+
+<div class="wrap">
+__HEAD__
+
+  <div class="lang">
+    <button id="bPT" aria-pressed="true" onclick="setLang('pt')">Português</button>
+    <button id="bEN" aria-pressed="false" onclick="setLang('en')">English</button>
+    <span class="note" id="ln">Post em PT. EN para revisão.</span>
+  </div>
+
+  <div class="deck" id="deck"></div>
+
+  __TAIL__
+
+  <details id="sbPT"><summary>📥 Manda sua revisão de volta</summary>
+    <div class="in"><p style="margin-top:0">Marca Manter ou Refazer em qualquer card, escreve uma observação se quiser, e cola no chat. Pode mandar pela metade.</p>
+      <pre class="out" id="outPT">nada marcado ainda</pre>
+      <button class="copy" onclick="copyOut('pt')">📋 Copiar minhas respostas</button></div></details>
+  <details id="sbEN" hidden><summary>📥 Send your review back</summary>
+    <div class="in"><p style="margin-top:0">Tap Keep or Redo on any card, add a note, paste it into the chat. Half-done is fine.</p>
+      <pre class="out" id="outEN">nothing marked yet</pre>
+      <button class="copy" onclick="copyOut('en')">📋 Copy my answers</button></div></details>
+</div>
+
+<script>
+const DECK = __DECK_JSON__;
+__CARDS_JS__
+
+const state={pt:{},en:{}}; let LANG='pt';
+try{const s=localStorage.getItem('vid-lang'); if(s==='pt'||s==='en') LANG=s;}catch(e){}
+if(location.hash==='#en') LANG='en'; if(location.hash==='#pt') LANG='pt';
+function render(){
+  document.getElementById('deck').innerHTML=CARDS.map((c,i)=>{
+    const st=state[LANG][c.id]||{}, last=(i===CARDS.length-1);
+    const kL=LANG==='pt'?'👍 Manter':'👍 Keep', rL=LANG==='pt'?'🔁 Refazer':'🔁 Redo';
+    const ph=LANG==='pt'?'observação (opcional)':'note (optional)';
+    return `<div class="unit ${st.v==='KEEP'?'k':st.v==='REDO'?'r':''}" id="u${c.id}">
+      <div class="slide${c.proof?' proof':''}"><div class="pad">${c.render(LANG)}</div>${last||c.proof?'':'<span class="arrow">&rarr;</span>'}</div>
+      <div class="ctl"><div class="btns">
+        <button aria-pressed="${st.v==='KEEP'}" onclick="mark(${c.id},'KEEP')">${kL}</button>
+        <button aria-pressed="${st.v==='REDO'}" onclick="mark(${c.id},'REDO')">${rL}</button>
+      </div><textarea placeholder="${ph}" oninput="note(${c.id},this.value)">${st.n||''}</textarea></div></div>`;}).join('');
+}
+function playYT(el,id){el.onclick=null;el.style.cursor='default';el.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&rel=0&playsinline=1" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>';}
+function mark(n,v){const c=state[LANG][n]||{}; c.v=(c.v===v)?null:v; state[LANG][n]=c; save(); out();
+  const u=document.getElementById('u'+n); if(!u) return; u.className='unit '+(c.v==='KEEP'?'k':c.v==='REDO'?'r':'');
+  const bs=u.querySelectorAll('.btns button'); bs[0].setAttribute('aria-pressed',c.v==='KEEP'); bs[1].setAttribute('aria-pressed',c.v==='REDO');}
+function note(n,v){const c=state[LANG][n]||{}; c.n=v; state[LANG][n]=c; save(); out();}
+function save(){try{localStorage.setItem('vid-state',JSON.stringify(state));}catch(e){}}
+function out(){['pt','en'].forEach(L=>{const rows=[];
+  CARDS.forEach(c=>{const s=state[L][c.id]||{}; if(!s.v&&!(s.n||'').trim())return;
+    rows.push(`VID-${L}-${c.id}: ${s.v||'(sem nota)'}${(s.n||'').trim()?' · '+s.n.trim():''}`);});
+  const el=document.getElementById('out'+L.toUpperCase());
+  if(el) el.textContent=rows.length?rows.join('\\n'):(L==='pt'?'nada marcado ainda':'nothing marked yet');});}
+function copyOut(L){const el=document.getElementById('out'+L.toUpperCase()); const b=event.target;
+  navigator.clipboard.writeText(el.textContent).then(()=>{const o=b.textContent;
+    b.textContent=L==='pt'?'✓ Copiado':'✓ Copied'; setTimeout(()=>b.textContent=o,1600);});}
+function setLang(L){LANG=L; try{localStorage.setItem('vid-lang',L);}catch(e){}
+  document.getElementById('bPT').setAttribute('aria-pressed',L==='pt');
+  document.getElementById('bEN').setAttribute('aria-pressed',L==='en');
+  document.querySelectorAll('[data-lang]').forEach(el=>{el.hidden=(el.getAttribute('data-lang')!==L);});
+  document.getElementById('sbPT').hidden=(L!=='pt'); document.getElementById('sbEN').hidden=(L!=='en');
+  document.getElementById('ln').textContent=L==='pt'?'Post em PT. EN para revisão.':'Post is PT. EN for review.';
+  render(); out();}
+try{const s=localStorage.getItem('vid-state'); if(s){const p=JSON.parse(s); if(p.pt)state.pt=p.pt; if(p.en)state.en=p.en;}}catch(e){}
+setLang(LANG);
+</script>
