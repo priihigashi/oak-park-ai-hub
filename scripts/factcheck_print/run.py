@@ -42,8 +42,15 @@ def claude(system, user, web=False, max_tokens=6000, uses=8):
         kw["tools"] = [{"type": "web_search_20250305", "name": "web_search", "max_uses": uses}]
     for attempt in range(3):
         try:
-            r = c.messages.create(**kw)
-            return "".join(b.text for b in r.content if getattr(b, "type", "") == "text")
+            msgs = list(kw["messages"])
+            text = ""
+            for _ in range(6):  # server-side web search may return pause_turn: resend to continue
+                r = c.messages.create(**{**kw, "messages": msgs})
+                text += "".join(b.text for b in r.content if getattr(b, "type", "") == "text")
+                if getattr(r, "stop_reason", "") != "pause_turn":
+                    return text
+                msgs = msgs + [{"role": "assistant", "content": r.content}]
+            return text
         except Exception as e:  # rate limit / overload
             print(f"  claude retry {attempt + 1}: {str(e)[:120]}")
             time.sleep(20 * (attempt + 1))
@@ -53,8 +60,46 @@ def claude(system, user, web=False, max_tokens=6000, uses=8):
 def jload(text):
     m = re.search(r"```(?:json)?\s*(.*?)```", text, re.S)
     s = m.group(1) if m else text
-    a, b = min([i for i in (s.find("{"), s.find("[")) if i >= 0] or [0]), max(s.rfind("}"), s.rfind("]"))
-    return json.loads(s[a:b + 1])
+    dec = json.JSONDecoder()
+    for opener in "{[":  # objects first (every reply we ask for is an object); skips prose citations like "[1]"
+        for i, ch in enumerate(s):
+            if ch == opener:
+                try:
+                    return dec.raw_decode(s[i:])[0]
+                except ValueError:
+                    continue
+    raise ValueError("no JSON in model reply")
+
+
+ALLOWED = re.compile(r"</?(b|i|br)\s*/?>|<span class=\"y2\">|</span>")
+
+
+def clean_html(t):
+    """Model text -> only <b>, <i>, <br>, <span class="y2"> survive; everything else is escaped."""
+    t = t or ""
+    out, pos = [], 0
+    for m in re.finditer(r"<[^>]*>", t):
+        out.append(t[pos:m.start()].replace("<", "&lt;"))
+        out.append(m.group(0) if ALLOWED.fullmatch(m.group(0)) else m.group(0).replace("<", "&lt;").replace(">", "&gt;"))
+        pos = m.end()
+    out.append(t[pos:].replace("<", "&lt;"))
+    return "".join(out)
+
+
+def safe_url(u):
+    import ipaddress, socket
+    from urllib.parse import urlparse
+    p = urlparse(u or "")
+    if p.scheme != "https" or not p.hostname:
+        return False
+    try:
+        for info in socket.getaddrinfo(p.hostname, 443):
+            ip = ipaddress.ip_address(info[4][0])
+            if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved:
+                return False
+    except Exception:
+        return False
+    return True
 
 
 def latest_transcript():
@@ -94,6 +139,8 @@ For each card: is a true claim wrongly softened, is unwarranted balance added, i
 
 def shoot(url, path):
     from playwright.sync_api import sync_playwright
+    if not safe_url(url):
+        print("  refusing non-https / private URL:", url[:80]); return False
     with sync_playwright() as pw:
         b = pw.chromium.launch()
         pg = b.new_page(viewport={"width": 760, "height": 1800}, device_scale_factor=3, user_agent=UA_MOBILE, is_mobile=True, has_touch=True)
@@ -159,7 +206,7 @@ def email(subject, body, attach=()):
     from email.message import EmailMessage
     pw = os.getenv("PRI_OP_GMAIL_APP_PASSWORD", "")
     if not pw:
-        print("SKIP email: no PRI_OP_GMAIL_APP_PASSWORD"); return
+        raise RuntimeError("no PRI_OP_GMAIL_APP_PASSWORD: cannot email the result")
     m = EmailMessage()
     m["Subject"], m["From"], m["To"] = subject, "priscila@oakpark-construction.com", "priscila@oakpark-construction.com"
     m.set_content(body)
@@ -174,10 +221,13 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--url", required=True)
     ap.add_argument("--notes", default="")
+    ap.add_argument("--notes-file", default="")
     ap.add_argument("--project", default="brazil")
     ap.add_argument("--out", default="factcheck_out")
     ap.add_argument("--no-drive", action="store_true")
     a = ap.parse_args()
+    if a.notes_file and pathlib.Path(a.notes_file).exists():
+        a.notes = pathlib.Path(a.notes_file).read_text(encoding="utf-8")[:4000]
     if not KEY:
         raise SystemExit("no Claude key (CLAUDE_KEY_4_CONTENT / ANTHROPIC_API_KEY)")
     wd = pathlib.Path(a.out); wd.mkdir(parents=True, exist_ok=True)
@@ -200,28 +250,33 @@ def main():
             gaps.append(f"claim {n} [{r['status']}]: {cl['quote'][:90]} | searched: {r.get('searched', '')}")
             if r["status"] == "unconfirmed":
                 continue  # unproven never becomes a card
-        srcs = r.get("sources") or []
+        srcs = [x for x in (r.get("sources") or []) if isinstance(x, dict) and safe_url(x.get("url"))]
         if not srcs:
-            gaps.append(f"claim {n}: no source"); continue
-        key = f"s{n}"
-        ok = False
-        for s in srcs[:3]:
-            png = wd / "shots" / f"{key}.png"
-            if shoot(s["url"], png):
-                to_card_jpg(png, wd / "shots" / f"{key}.jpg"); ok, main = True, s; break
-        if not ok:
-            gaps.append(f"claim {n}: screenshot failed for all sources {[s['url'] for s in srcs[:3]]}"); main = srcs[0]
-        shots[key] = f"shots/{key}.jpg" if ok else ""
-        cards.append({"type": "claim", "id": cid, "badge": "partly" if r["status"] == "partly" else "confirmed",
-                      "eb": {"pt": r.get("eb_pt", "A alegação"), "en": r.get("eb_en", "The claim")},
-                      "hd": {"pt": r["hd_pt"], "en": r["hd_en"]}, "say": {"pt": "“" + cl["quote"].strip("“”\" ") + "”", "en": ""},
-                      "chk": {"pt": r["chk_pt"], "en": r["chk_en"]}})
-        others = [s["name"] for s in srcs if s["url"] != main["url"]][:3]
-        cards.append({"type": "proof", "id": cid + 1, "key": key, "src": {"name": main["name"], "date": main.get("date", ""), "full": main["url"]},
-                      "also": {"pt": "Também: " + " · ".join(others), "en": "Also: " + " · ".join(others)} if others else None})
-        for s in srcs:
-            sources.append({"name": s["name"], "date": s.get("date", ""), "url": s["url"], "title": s.get("title")})
-        cid += 2
+            gaps.append(f"claim {n}: no usable https source"); continue
+        try:
+            key = f"s{n}"
+            ok, main = False, srcs[0]
+            for sr in srcs[:3]:
+                png = wd / "shots" / f"{key}.png"
+                if shoot(sr["url"], png):
+                    to_card_jpg(png, wd / "shots" / f"{key}.jpg"); ok, main = True, sr; break
+            if not ok:
+                gaps.append(f"claim {n}: screenshot failed for all sources {[x['url'] for x in srcs[:3]]}")
+            shots[key] = f"shots/{key}.jpg" if ok else ""
+            badge = {"confirmed": "confirmed", "partly": "partly", "false": "false"}[r["status"]]
+            cards.append({"type": "claim", "id": cid, "badge": badge,
+                          "eb": {"pt": "A alegação", "en": "The claim"},
+                          "hd": {"pt": clean_html(r["hd_pt"]), "en": clean_html(r.get("hd_en") or r["hd_pt"])},
+                          "say": {"pt": "“" + clean_html(cl["quote"]).strip("“”\" ") + "”", "en": ""},
+                          "chk": {"pt": clean_html(r["chk_pt"]), "en": clean_html(r.get("chk_en") or r["chk_pt"])}})
+            others = [x["name"] for x in srcs if x["url"] != main["url"]][:3]
+            cards.append({"type": "proof", "id": cid + 1, "key": key, "src": {"name": clean_html(main.get("name", "")), "date": clean_html(main.get("date", "")), "full": main["url"]},
+                          "also": {"pt": "Também: " + " · ".join(clean_html(o) for o in others), "en": "Also: " + " · ".join(clean_html(o) for o in others)} if others else None})
+            for sr in srcs:
+                sources.append({"name": sr.get("name", ""), "date": sr.get("date", ""), "url": sr["url"], "title": sr.get("title")})
+            cid += 2
+        except KeyError as e:
+            gaps.append(f"claim {n}: model reply missing field {e}")
 
     # second pass: half-the-story review
     notes_p = ""
@@ -230,8 +285,8 @@ def main():
         for f in rv.get("fixes", []):
             for c in cards:
                 if c["type"] == "claim" and c["id"] == f.get("id"):
-                    if f.get("chk_pt"): c["chk"]["pt"] = f["chk_pt"]
-                    if f.get("chk_en"): c["chk"]["en"] = f["chk_en"]
+                    if f.get("chk_pt"): c["chk"]["pt"] = clean_html(f["chk_pt"])
+                    if f.get("chk_en"): c["chk"]["en"] = clean_html(f["chk_en"])
         notes_p = rv.get("notes_for_priscila", "")
     except Exception as e:
         gaps.append(f"review pass failed: {e}")
@@ -260,14 +315,14 @@ def main():
     pngs = render_deck.export_pngs(deck, wd / "png")
     print("cards:", len(cards), "pngs:", len(pngs), "gaps:", len(gaps))
 
-    link = "(Drive upload skipped)"
+    link, drive_failed = "(Drive upload skipped)", False
     if not a.no_drive:
         try:
             from routing import get_route
             parent = get_route(a.project)["carousel_folder_id"]
             svc = drive_service()
             slug = re.sub(r"[^a-z0-9]+", "_", spec["title"].lower()).strip("_")[:40] or "checagem"
-            n = 1 + len([f for f in svc.files().list(q=f"'{parent}' in parents and trashed=false and name contains 'v'", fields="files(name)",
+            n = 1 + len([f for f in svc.files().list(q=f"'{parent}' in parents and trashed=false and name contains 'v'", fields="files(name)", pageSize=1000,
                                                      supportsAllDrives=True, includeItemsFromAllDrives=True).execute().get("files", []) if re.match(r"v\d+_", f["name"])])
             root = mkfolder(svc, f"v{n}_{slug}_print", parent)
             upload(svc, wd / "deck.html", root["id"]); upload(svc, wd / "cards.json", root["id"])
@@ -279,14 +334,15 @@ def main():
             link = root["webViewLink"]
         except Exception as e:
             link = f"(Drive upload FAILED: {e})"
-            gaps.append("drive upload failed")
+            gaps.append("Drive upload FAILED")
+            drive_failed = True
     body = (f"Fact-check deck ready (transcribe-comment-create-print).\n\nVideo: {a.url}\nDrive folder: {link}\nCards: {len(cards)} | PNGs: {len(pngs)}\n\n"
             f"To review: open a Claude chat and say: /transcribe-comment-create-print review {link}\n\n"
             f"NOTES FROM THE SECOND PASS:\n{notes_p or '-'}\n\nGAPS (not on the cards):\n" + ("\n".join("- " + g for g in gaps) or "- none") +
             f"\n\nRun: https://github.com/{os.getenv('GITHUB_REPOSITORY', '')}/actions/runs/{os.getenv('GITHUB_RUN_ID', '')}")
     email(f"Fact-check deck: {spec['title']}", body, pngs[:6])
-    print(body)
-    if any("FAILED" in g or "failed" in g for g in gaps if "Drive" in g):
+    print(f"done: {len(cards)} cards, {len(pngs)} PNGs, {len(gaps)} gaps, drive_failed={drive_failed}")  # body (notes, link) stays out of the public log
+    if drive_failed:
         sys.exit(1)
 
 

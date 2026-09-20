@@ -15,8 +15,12 @@ def _b64(p):
 def render(spec: dict, workdir: pathlib.Path) -> pathlib.Path:
     tpl = (HERE / "deck_template.html").read_text(encoding="utf-8")
     shots = {k: _b64(workdir / v) for k, v in (spec.get("shots") or {}).items() if (workdir / v).exists()}
-    deck = {"shots": shots, "video": spec.get("video"), "cards": spec["cards"]}
-    esc = lambda s: (s or "").replace("&", "&amp;").replace("<", "&lt;")
+    video = spec.get("video")
+    if video and video.get("poster") and (workdir / video["poster"]).exists():
+        video = {**video, "poster": _b64(workdir / video["poster"])}
+    deck = {"shots": shots, "video": video, "cards": spec["cards"]}
+    esc = lambda s: (s or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
+    href = lambda u: esc(u) if str(u).startswith("https://") else "#"
     meta = spec.get("meta", {})
     head = (f'<div class="prov"><span>Pipeline: <b>transcribe-comment-create-print</b></span>'
             f'<span>{esc(meta.get("date", ""))}</span><span>{esc(meta.get("run", ""))}</span></div>\n'
@@ -24,9 +28,9 @@ def render(spec: dict, workdir: pathlib.Path) -> pathlib.Path:
             f'  <p class="sub" data-lang="pt">{esc(spec["hook"]["pt"])}</p><p class="sub" data-lang="en" hidden>{esc(spec["hook"]["en"])}</p>\n'
             f'  <span class="pill" data-lang="pt">Aguardando aprovação</span><span class="pill" data-lang="en" hidden>Pending approval</span>\n'
             f'  <div class="src"><h3 data-lang="pt">Vídeo original e fontes</h3><h3 data-lang="en" hidden>Original video and sources</h3><ul>\n'
-            f'   <li><span class="lbl">Vídeo checado</span><a href="{spec["video_url"]}" target="_blank" rel="noopener">{esc(spec["video_url"])}</a></li>\n' +
+            f'   <li><span class="lbl">Vídeo checado</span><a href="{href(spec["video_url"])}" target="_blank" rel="noopener">{esc(spec["video_url"])}</a></li>\n' +
             "".join(f'   <li><span class="lbl">{esc(s["name"])}, {esc(s.get("date", ""))}</span>'
-                    f'<a href="{s["url"]}" target="_blank" rel="noopener">{esc(s.get("title") or s["url"])}</a></li>\n' for s in spec.get("sources", [])) +
+                    f'<a href="{href(s["url"])}" target="_blank" rel="noopener">{esc(s.get("title") or s["url"])}</a></li>\n' for s in spec.get("sources", [])) +
             '  </ul></div>')
     cap = spec.get("caption", {})
     tail = ('<h2 class="sec" data-lang="pt">Legenda, pronta para postar</h2><h2 class="sec" data-lang="en" hidden>Caption, ready to post</h2>\n'

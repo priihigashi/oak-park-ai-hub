@@ -81,11 +81,13 @@ jobs:
               project = "brazil"
           else:
               url, notes, project = os.environ["IN_URL"], os.environ.get("IN_NOTES", ""), os.environ.get("IN_PROJECT", "brazil")
-          if not re.match(r"^https://(www\.)?(instagram\.com|tiktok\.com|vm\.tiktok\.com|youtube\.com|youtu\.be)/", url):
-              raise SystemExit("URL must be an https Instagram/TikTok/YouTube link")
-          with open(os.environ["GITHUB_ENV"], "a") as f:
-              f.write(f"FC_URL={url}\nFC_PROJECT={project}\n")
-              f.write("FC_NOTES<<EOF_NOTES\n" + notes.replace("EOF_NOTES", "") + "\nEOF_NOTES\n")
+          if any(c in url + project for c in "\r\n") or not re.fullmatch(r"https://(www\.|m\.|vm\.)?(instagram\.com|tiktok\.com|youtube\.com|youtu\.be)/\S*", url):
+              raise SystemExit("URL must be a single-line https Instagram/TikTok/YouTube link")
+          if project not in ("brazil", "usa", "opc"):
+              raise SystemExit("bad project")
+          with open(os.environ["GITHUB_ENV"], "a") as f:   # single-line values only; notes go through a file, never GITHUB_ENV
+              f.write(f"FC_URL={url}\nFC_PROJECT={project}\nFC_NOTES_FILE=fc_notes.txt\n")
+          open("fc_notes.txt", "w", encoding="utf-8").write(notes[:4000])
           PY
 
       - name: 1. Capture (download + transcribe only, files nothing in the content system)
@@ -104,7 +106,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          python scripts/capture/capture_pipeline.py "$FC_URL" --project "$FC_PROJECT" --transcribe-only ${FC_NOTES:+--notes "$FC_NOTES"}
+          python scripts/capture/capture_pipeline.py "$FC_URL" --project "$FC_PROJECT" --transcribe-only --notes="$(cat "$FC_NOTES_FILE")"
 
       - name: 2. Research, screenshots, deck, PNGs, Drive, email
         env:
@@ -117,17 +119,20 @@ jobs:
           APIFY_API_KEY: ${{ secrets.APIFY_API_KEY }}
         run: |
           set -euo pipefail
-          python scripts/factcheck_print/run.py --url "$FC_URL" --project "$FC_PROJECT" --notes "$FC_NOTES" --out factcheck_out
+          python scripts/factcheck_print/run.py --url "$FC_URL" --project "$FC_PROJECT" --notes-file "$FC_NOTES_FILE" --out factcheck_out
 
-      - name: Keep the outputs for 14 days (backup if Drive failed)
-        if: always()
+      # Public repo: artifacts are downloadable by any GitHub user. Drive + email are the real copy; this is only a 3-day
+      # fallback if the run FAILED, and it excludes the third-party video and the raw transcripts.
+      - name: Fallback copy of the cards if the run failed (3 days)
+        if: failure()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: factcheck-${{ github.run_id }}
           path: |
-            factcheck_out/
-            transcripts/
-          retention-days: 14
+            factcheck_out/cards.json
+            factcheck_out/png/
+          retention-days: 3
+          if-no-files-found: ignore
 
       - name: Comment on the issue (issue trigger only)
         if: always() && github.event_name == 'issues'
