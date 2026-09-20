@@ -122,6 +122,7 @@ jobs:
       - name: 2. Research, screenshots, deck, PNGs, Drive, email
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          CLAUDE_KEY_PROJECT: ${{ env.FC_PROJECT == 'opc' && secrets.CLAUDE_KEY_OPC || secrets.CLAUDE_KEY_NEWS }}
           CLAUDE_KEY_4_CONTENT: ${{ secrets.CLAUDE_KEY_4_CONTENT }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}

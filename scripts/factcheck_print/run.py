@@ -19,7 +19,8 @@ import fit_video  # noqa: E402
 import render_deck  # noqa: E402
 
 MODEL = os.getenv("FACTCHECK_MODEL", "claude-sonnet-4-6")
-KEY = os.getenv("CLAUDE_KEY_4_CONTENT") or os.getenv("ANTHROPIC_API_KEY", "")
+# Per-project key (workflow picks CLAUDE_KEY_OPC for opc, CLAUDE_KEY_NEWS for brazil/usa) so spend is tracked apart; old keys are the fallback.
+KEY = os.getenv("CLAUDE_KEY_PROJECT") or os.getenv("CLAUDE_KEY_4_CONTENT") or os.getenv("ANTHROPIC_API_KEY", "")
 UA_MOBILE = ("Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 "
              "(KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1")
 
