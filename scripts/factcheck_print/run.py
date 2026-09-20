@@ -19,7 +19,8 @@ import fit_video  # noqa: E402
 import render_deck  # noqa: E402
 
 MODEL = os.getenv("FACTCHECK_MODEL", "claude-sonnet-4-6")
-KEY = os.getenv("CLAUDE_KEY_4_CONTENT") or os.getenv("ANTHROPIC_API_KEY", "")
+# Per-project key (workflow picks CLAUDE_KEY_OPC for opc, CLAUDE_KEY_NEWS for brazil/usa) so spend is tracked apart; old keys are the fallback.
+KEY = os.getenv("CLAUDE_KEY_PROJECT") or os.getenv("CLAUDE_KEY_4_CONTENT") or os.getenv("ANTHROPIC_API_KEY", "")
 UA_MOBILE = ("Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 "
              "(KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1")
 
@@ -35,7 +36,34 @@ STANCE = """You are a fact-checker for a Brazilian news brand. RULES, non-negoti
 9. Never write 'we did not find' inside card text."""
 
 
+OPENAI_MODEL = os.getenv("FACTCHECK_OPENAI_MODEL", "gpt-5")
+ENGINE = os.getenv("FC_ENGINE", "auto")  # auto | claude | openai (workflow input "engine")
+
+
+def openai_call(system, user, web=False, max_tokens=6000):
+    from openai import OpenAI
+    c = OpenAI(api_key=os.getenv("OPENAI_API_KEY", ""))
+    kw = dict(model=OPENAI_MODEL, instructions=system, input=user, max_output_tokens=max_tokens)
+    if web:
+        kw["tools"] = [{"type": "web_search"}]
+    return c.responses.create(**kw).output_text
+
+
 def claude(system, user, web=False, max_tokens=6000, uses=8):
+    """Model call. FC_ENGINE=openai -> ChatGPT only; claude -> Claude only; auto -> Claude, ChatGPT if Claude fails."""
+    if ENGINE == "openai":
+        print("  engine: openai")
+        return openai_call(system, user, web, max_tokens)
+    try:
+        return claude_anthropic(system, user, web, max_tokens, uses)
+    except RuntimeError:
+        if ENGINE != "auto":
+            raise
+        print("  Claude failed, falling back to OpenAI")
+        return openai_call(system, user, web, max_tokens)
+
+
+def claude_anthropic(system, user, web=False, max_tokens=6000, uses=8):
     import anthropic
     c = anthropic.Anthropic(api_key=KEY)
     kw = dict(model=MODEL, max_tokens=max_tokens, system=system, messages=[{"role": "user", "content": user}])
