@@ -15,6 +15,7 @@ REPO = HERE.parent.parent
 sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(REPO / "scripts"))
 sys.path.insert(0, str(REPO / "scripts" / "capture"))
+import fit_video  # noqa: E402
 import render_deck  # noqa: E402
 
 MODEL = os.getenv("FACTCHECK_MODEL", "claude-sonnet-4-6")
@@ -303,7 +304,7 @@ def apply_review(cards, tr, gaps):
     return rv.get("notes_for_priscila", "")
 
 
-def fetch_video(url, wd, gaps):
+def fetch_video(url, wd, gaps, claims=None):
     """Download + compress the original so card 1 can PLAY it. None if it fails (card 1 stays a placeholder)."""
     try:
         import capture_pipeline as cp
@@ -311,9 +312,15 @@ def fetch_video(url, wd, gaps):
         if not vp:
             raise RuntimeError("no video file returned")
         dst = wd / "media" / "original.mp4"
+        full = wd / "media" / "original_full.mp4"  # full-length copy stays in Drive resources; card 1 plays the <=60 s cut
         subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", vp, "-vf", "scale=540:-2", "-c:v", "libx264", "-crf", "31",
                         "-preset", "medium", "-maxrate", "600k", "-bufsize", "1200k", "-c:a", "aac", "-b:a", "48k",
-                        "-movflags", "+faststart", str(dst)], check=True)
+                        "-movflags", "+faststart", str(full)], check=True)
+        info = fit_video.fit_to_limit(full, dst, claims or [], lambda q: claude(STANCE, q, max_tokens=1500))
+        if not info["fitted"]:
+            shutil.copy(full, dst)
+        else:
+            gaps.append(f"video cut for the 60 s limit: {info['duration_in']:.0f}s -> {info['duration_out']:.0f}s at {info['speed']}x (full copy in resources/)")
         subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "1", "-i", str(dst), "-frames:v", "1", "-q:v", "4",
                         str(wd / "media" / "poster.jpg")])
         return {"file": "media/original.mp4", "poster": "media/poster.jpg"}
@@ -376,7 +383,7 @@ def main():
     print("transcript chars:", len(tr), "| claims:", len(plan["claims"]))
     cards, sources, shots = build_cards(plan, tr, wd, gaps)
     notes_p = apply_review(cards, tr, gaps)
-    video = fetch_video(a.url, wd, gaps)
+    video = fetch_video(a.url, wd, gaps, [c['quote'] for c in plan['claims']])
     spec = {"title": plan.get("title") or "Checagem", "hook": {"pt": plan["hook_pt"], "en": plan["hook_en"]}, "video_url": a.url,
             "meta": {"date": datetime.now().strftime("%d/%m/%Y"), "run": os.getenv("GITHUB_RUN_ID", "local")},
             "sources": sources, "video": video, "shots": shots, "cards": cards, "caption": {"pt": "", "en": ""}, "gaps": gaps}
