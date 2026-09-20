@@ -449,7 +449,7 @@ def dispatch_capture_pipeline():
             "ref": "main",
             "inputs": {
                 "url": reel["url"],
-                "project": "content",
+                "project": "auto",
                 "story_id": "",
                 "notes": reel["notes"],
                 "credits": "true",

@@ -148,7 +148,7 @@ def _dispatch(url: str, project: str) -> tuple[bool, str]:
 
 
 def _project_for(niche: str) -> str:
-    return NICHE_TO_PROJECT.get((niche or "").strip().lower(), "content")
+    return NICHE_TO_PROJECT.get((niche or "").strip().lower(), "auto")
 
 
 def _write_status(svc, tab: str, row: int, status: str, note: str, col_pos: dict):
