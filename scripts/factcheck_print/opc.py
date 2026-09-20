@@ -195,7 +195,9 @@ def finalize_spec(a, raw: dict, sources: list, assets: list, editorial: dict, vi
 
 def notify(spec: dict, folder: dict, receipt: dict, root: Path) -> None:
     from run import email
-    reference_note='Source video file: available in private review.' if spec.get('video') else 'SOURCE VIDEO FILE UNAVAILABLE: no playable file or 60-second cut is claimed; real transcript and source link retained.'
+    reference_note=('Source video file: available in private review.' if spec.get('video') else
+                    'SOURCE VIDEO FILE UNAVAILABLE: no playable file or 60-second cut is claimed.' if spec.get('source_url') else
+                    'Idea-based post: source video and transcription do not apply.')
     body=(f'OPC visual carousel is built, NOT APPROVED.\n\nReview and resources: {folder["webViewLink"]}\n'
           f'Cards: {len(spec["slides"])}. Three visual variants use the same assets.\n'
           f'Tracker readback: {receipt["content_row"]}\nFlow Plans readback: {receipt["flow_row"]}\n'
@@ -248,7 +250,9 @@ def build(a, store: Store, root: Path, folder: dict) -> dict:
     sources,evidence=gather_evidence(model,findings,root)
     draft=write_feed(model,plan,evidence,a)
     save(root/'resources/feed-draft.json',draft)
-    editorial=approve_editorial(model,draft,evidence,aliases)
+    from opc_editorial import review_or_repair
+    draft,editorial=review_or_repair(model,draft,evidence,aliases,root/'resources')
+    save(root/'resources/feed-draft.json',draft)
     save(root/'resources/editorial-review.json',editorial)
     assets=make_assets(a,draft,root,store,provider)
     spec=finalize_spec(a,draft,sources,assets,editorial,video,aliases)

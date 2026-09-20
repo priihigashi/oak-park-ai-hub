@@ -20,10 +20,11 @@ from opc_contract import GateError, MODELS, MAX_IMAGES, digest_file
 from opc_network import download
 
 STYLE = ('A photograph, not a render. Realistic 35mm documentary photography, honest material texture and small imperfections. '
-         'One dominant soft window light, neutral white balance. No text, letters, numbers, labels, signage or logos. '
+         'One dominant coherent light source appropriate to the specified scene; natural color treatment. No text, letters, numbers, labels, signage or logos. '
          'No people. Keep the subject centred, generous clean headroom. ')
-WORLD = ('The same warm contemporary South Florida kitchen workshop: ivory cabinetry, light oak details, '
-         'soft daylight from camera left, quiet uncluttered setting. Match look only, not previous content. ')
+WORLD = ('A consistent contemporary South Florida home aesthetic: warm neutral surfaces and light oak accents. '
+         'Use the actual room, material, objects and lighting requested in the subject, not an unrelated kitchen. '
+         'Quiet uncluttered composition. Match photographic treatment only, not previous content. ')
 
 
 def probe(path: Path) -> dict:
@@ -39,7 +40,6 @@ def sanitize_photo(source: Path, target: Path) -> None:
     with Image.open(source) as opened:
         im = ImageOps.exif_transpose(opened).convert('RGB')
         im.thumbnail((1440, 1440))
-        # A new image drops EXIF, GPS and other source metadata.
         clean = Image.new('RGB', im.size)
         clean.paste(im)
         clean.save(target, 'JPEG', quality=90)
@@ -61,7 +61,6 @@ def _download_source(url: str, tmp: str) -> tuple[str, list[dict]]:
     attempts = []
     for name, route in routes:
         try:
-            # Existing helpers print raw source titles/URLs. Do not emit them publicly.
             with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
                 source = route(url, tmp)
             media = probe(Path(source)) if source else {}

@@ -169,10 +169,11 @@ def review(spec: dict, root: Path) -> Path:
         player=('<p class="status">SOURCE VIDEO FILE UNAVAILABLE</p><p>No playable source file or 60-second cut was produced. '
                 'The original transcript and newly checked sources support the feed. '
                 f'<a href="{esc(spec["source_url"],quote=True)}" target="_blank" rel="noopener noreferrer">Open the original source video</a>.</p>')
+    reference_note='Source video is a private research reference, not the public OPC cover.' if spec.get('source_url') else 'Idea-based post. No source video or transcription was requested.'
     parts=[f'<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
            f'<title>{esc(spec["title"])} — OPC review</title><style>{REVIEW_CSS}</style><main>'
            f'<p class="status">READY FOR PRISCILA REVIEW · NOT APPROVED · NOT PUBLISHED</p><h1>{esc(spec["title"])}</h1>'
-           f'{player}<p>Source video is a private research reference, not the public OPC cover.</p>'
+           f'{player}<p>{reference_note}</p>'
            '<nav>'+''.join(f'<button data-theme="{t}" class="{"active" if t=="dark" else ""}">{t.title()}</button>' for t in THEMES)+'</nav>']
     for theme in THEMES:
         parts.append(f'<section class="deck" data-deck="{theme}" {"" if theme=="dark" else "hidden"}>')
