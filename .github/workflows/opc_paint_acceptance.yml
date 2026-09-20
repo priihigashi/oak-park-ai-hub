@@ -1,0 +1,64 @@
+name: OPC paint idea acceptance (owner-triggered)
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+    paths:
+      - 'scripts/factcheck_print/opc*'
+      - 'tests/test_opc_print*'
+      - '.github/workflows/opc_paint_acceptance.yml'
+permissions:
+  contents: read
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - run: pip install requests pillow
+      - run: python -m unittest discover -s tests -p 'test_opc_print*.py' -v
+  authorized-paint-test:
+    needs: regression
+    if: >-
+      github.event.action == 'labeled' &&
+      github.event.label.name == 'opc-paint-test-20260920' &&
+      github.event.pull_request.number == 300 &&
+      github.actor == 'priihigashi' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'fix/opc-print-ready-20260920'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    concurrency:
+      group: opc-print-filing
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - name: Install existing OPC runtime dependencies
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+          pip install yt-dlp openai anthropic google-generativeai faster-whisper gspread google-auth google-api-python-client python-dotenv requests youtube-transcript-api instaloader pytubefix playwright pillow
+          python -m playwright install chromium --with-deps
+      - name: One authorized idea-mode run; four images maximum; private outputs only
+        env:
+          CLAUDE_KEY_OPC: ${{ secrets.CLAUDE_KEY_OPC }}
+          PRI_OP_REPLICATE_API_KEY: ${{ secrets.PRI_OP_REPLICATE_API_KEY }}
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          PRI_OP_GMAIL_APP_PASSWORD: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
+        run: |
+          python scripts/factcheck_print/opc.py \
+            --project opc --engine claude \
+            --image-model google/nano-banana-pro \
+            --idea 'Why your paint color looks different at home' \
+            --notes 'Original OPC homeowner education. Prefer five or six cards with under 25 words each. Narrow scope: natural light, artificial light, sheen, and testing a movable sample in the actual room. Use primary manufacturer guidance from Benjamin Moore and Sherwin-Williams; no contractor competitor sources, invented prices, promises, or first-person project claims. Images are conceptual illustrations, not exact paint color matches, not actual OPC jobs. No brand-specific paint shade names or color codes in images. Do not invent before/after results. Idea-mode test: no source video was supplied, so do not claim transcription or video validation.' \
+            --out opc-paint-test --run-key pr300-paint-idea-20260920
