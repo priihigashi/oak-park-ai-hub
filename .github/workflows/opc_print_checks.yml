@@ -1,6 +1,7 @@
-name: OPC PRINT contracts (no paid APIs)
+name: OPC PRINT quality checks and owner-gated validation
 on:
   pull_request:
+    types: [opened, synchronize, reopened, labeled]
     paths:
       - 'scripts/factcheck_print/opc*'
       - 'scripts/factcheck_print/resolve_inputs.py'
@@ -10,7 +11,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: opc-print-checks-${{ github.event.pull_request.number }}
+  group: opc-print-checks-${{ github.event.pull_request.number }}-${{ github.event.action == 'labeled' && github.event.label.name || 'checks' }}
   cancel-in-progress: true
 jobs:
   contract:
@@ -23,6 +24,8 @@ jobs:
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
           python-version: '3.11'
+      - name: Test dependencies
+        run: pip install requests pillow
       - name: Contract regression tests (synthetic fixtures only)
         run: python -m unittest discover -s tests -p 'test_opc_print*.py' -v
       - name: Public-source inspection bundle (no credentials or media)
@@ -41,3 +44,68 @@ jobs:
           name: opc-public-source
           path: opc-public-source.zip
           retention-days: 1
+  browser:
+    if: github.event.action != 'labeled'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - run: |
+          sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+          pip install pillow playwright
+          python -m playwright install chromium --with-deps
+      - name: Registered fonts, all variants, mobile feedback and video
+        run: python scripts/factcheck_print/opc_browser_smoke.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: success()
+        with:
+          name: opc-synthetic-browser-evidence
+          path: |
+            opc-browser-fixture/png/
+            opc-browser-fixture/mobile-review.png
+            opc-browser-fixture/browser-smoke.json
+            opc-browser-fixture/resources/browser-checks.json
+          retention-days: 3
+  authorized-live-comparison:
+    if: >-
+      github.event.action == 'labeled' &&
+      github.event.label.name == 'opc-print-validation-20260920' &&
+      github.event.pull_request.number == 300 &&
+      github.actor == 'priihigashi' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'fix/opc-print-ready-20260920'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    concurrency:
+      group: opc-print-filing
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - name: Install capture and rendering dependencies
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+          pip install yt-dlp openai anthropic google-generativeai faster-whisper gspread google-auth google-api-python-client python-dotenv requests youtube-transcript-api instaloader pytubefix playwright pillow
+          python -m playwright install chromium --with-deps
+      - name: Two owner-authorized engine tests; private output only
+        env:
+          CLAUDE_KEY_OPC: ${{ secrets.CLAUDE_KEY_OPC }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          PRI_OP_REPLICATE_API_KEY: ${{ secrets.PRI_OP_REPLICATE_API_KEY }}
+          PRI_OP_YT_COOKIES: ${{ secrets.PRI_OP_YT_COOKIES }}
+          PRI_OP_IG_COOKIES: ${{ secrets.PRI_OP_IG_COOKIES }}
+          APIFY_API_KEY: ${{ secrets.APIFY_API_KEY }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          PRI_OP_GMAIL_APP_PASSWORD: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
+        run: python scripts/factcheck_print/opc_compare.py
