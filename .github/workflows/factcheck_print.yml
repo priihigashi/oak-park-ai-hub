@@ -1,0 +1,159 @@
+name: Fact-check PRINT deck (claim card + article screenshot card)
+
+# ─── HOW TO USE (phone or computer) ───────────────────────────────────────
+# A) GitHub app / browser → oak-park-ai-hub → Actions → "Fact-check PRINT deck" → Run workflow → paste the video link.
+# B) Open a GitHub Issue on this repo (as priihigashi) titled:  factcheck: <video link>   (body = optional notes).
+#    Works from the GitHub mobile app, or from any chat/shortcut that can create an issue.
+# C) Claude Code / Codex / any agent with the gh CLI:
+#      gh workflow run factcheck_print.yml -R priihigashi/oak-park-ai-hub -f url='<link>' -f notes='<optional>'
+# Result: PNG per card + deck.html + cards.json in Drive (News > Brazil > Carousel > vN_<slug>_print) and an email to Priscila.
+# Review step: open any Claude chat → "/transcribe-comment-create-print review <Drive folder link>".
+# Spec of the format and rules: priihigashi/priscila-workspace → .agents/skills/transcribe-comment-create-print/SKILL.md
+# ──────────────────────────────────────────────────────────────────────────
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "Video link (Instagram, TikTok or YouTube)"
+        required: true
+        type: string
+      notes:
+        description: "Optional extra context / what to focus on"
+        required: false
+        default: ""
+        type: string
+      project:
+        description: "Niche folder for the output (brazil = News/Brazil/Carousel)"
+        required: false
+        default: "brazil"
+        type: choice
+        options: [brazil, usa, opc]
+  issues:
+    types: [opened]
+
+concurrency:
+  group: factcheck-print-${{ github.event.issue.number || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  factcheck:
+    # Only Priscila's own issues may trigger it (public repo: anyone can open an issue, so this gate protects the API budget).
+    if: github.event_name == 'workflow_dispatch' || (github.event.issue.user.login == 'priihigashi' && startsWith(github.event.issue.title, 'factcheck:'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      issues: write
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install system + python deps
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+          pip install yt-dlp openai anthropic google-generativeai faster-whisper gspread google-auth google-api-python-client \
+                      python-dotenv requests youtube-transcript-api instaloader pytubefix playwright pillow
+          python -m playwright install chromium --with-deps
+
+      - name: Resolve inputs (data, never shell source)
+        env:
+          EVT: ${{ github.event_name }}
+          IN_URL: ${{ inputs.url }}
+          IN_NOTES: ${{ inputs.notes }}
+          IN_PROJECT: ${{ inputs.project }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          python3 - <<'PY'
+          import os, re
+          if os.environ["EVT"] == "issues":
+              url = os.environ["ISSUE_TITLE"].split(":", 1)[1].strip()
+              notes = os.environ.get("ISSUE_BODY", "") or ""
+              project = "brazil"
+          else:
+              url, notes, project = os.environ["IN_URL"], os.environ.get("IN_NOTES", ""), os.environ.get("IN_PROJECT", "brazil")
+          if any(c in url + project for c in "\r\n") or not re.fullmatch(r"https://(www\.|m\.|vm\.)?(instagram\.com|tiktok\.com|youtube\.com|youtu\.be)/\S*", url):
+              raise SystemExit("URL must be a single-line https Instagram/TikTok/YouTube link")
+          if project not in ("brazil", "usa", "opc"):
+              raise SystemExit("bad project")
+          with open(os.environ["GITHUB_ENV"], "a") as f:   # single-line values only; notes go through a file, never GITHUB_ENV
+              f.write(f"FC_URL={url}\nFC_PROJECT={project}\nFC_NOTES_FILE=fc_notes.txt\n")
+          open("fc_notes.txt", "w", encoding="utf-8").write(notes[:4000])
+          PY
+
+      - name: 1. Capture (download + transcribe only, files nothing in the content system)
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          CLAUDE_KEY_4_CONTENT: ${{ secrets.CLAUDE_KEY_4_CONTENT }}
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          APIFY_API_KEY: ${{ secrets.APIFY_API_KEY }}
+          SERP_API_KEY: ${{ secrets.SERP_API_KEY }}
+          SUPADATA_API_KEY: ${{ secrets.PRI_OP_SUPADATA_API_KEY || secrets.SUPADATA_API_KEY }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PRI_OP_GMAIL_APP_PASSWORD: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
+          PRI_OP_YT_COOKIES: ${{ secrets.PRI_OP_YT_COOKIES }}
+          PRI_OP_IG_COOKIES: ${{ secrets.PRI_OP_IG_COOKIES }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python scripts/capture/capture_pipeline.py "$FC_URL" --project "$FC_PROJECT" --transcribe-only --notes="$(cat "$FC_NOTES_FILE")"
+
+      - name: 2. Research, screenshots, deck, PNGs, Drive, email
+        env:
+          CLAUDE_KEY_4_CONTENT: ${{ secrets.CLAUDE_KEY_4_CONTENT }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          PRI_OP_GMAIL_APP_PASSWORD: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
+          PRI_OP_YT_COOKIES: ${{ secrets.PRI_OP_YT_COOKIES }}
+          PRI_OP_IG_COOKIES: ${{ secrets.PRI_OP_IG_COOKIES }}
+          APIFY_API_KEY: ${{ secrets.APIFY_API_KEY }}
+        run: |
+          set -euo pipefail
+          python scripts/factcheck_print/run.py --url "$FC_URL" --project "$FC_PROJECT" --notes-file "$FC_NOTES_FILE" --out factcheck_out
+
+      # Public repo: artifacts are downloadable by any GitHub user. Drive + email are the real copy; this is only a 3-day
+      # fallback if the run FAILED, and it excludes the third-party video and the raw transcripts.
+      - name: Fallback copy of the cards if the run failed (3 days)
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: factcheck-${{ github.run_id }}
+          path: |
+            factcheck_out/cards.json
+            factcheck_out/png/
+          retention-days: 3
+          if-no-files-found: ignore
+
+      - name: Comment on the issue (issue trigger only)
+        if: always() && github.event_name == 'issues'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          STATUS: ${{ job.status }}
+        run: |
+          gh issue comment "${{ github.event.issue.number }}" --body "Fact-check run finished: $STATUS. Details + Drive link were emailed. Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      - name: Failure email
+        if: failure()
+        uses: dawidd6/action-send-mail@4226df7daafa6fc901a43789c49bf7ab309066e7 # v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: priscila@oakpark-construction.com
+          password: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
+          to: priscila@oakpark-construction.com
+          from: Oak Park AI <priscila@oakpark-construction.com>
+          subject: "FACT-CHECK PRINT FAILED"
+          body: |
+            The fact-check deck run failed.
+            Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
