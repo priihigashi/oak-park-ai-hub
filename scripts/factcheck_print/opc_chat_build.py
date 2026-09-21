@@ -19,7 +19,6 @@ HERE=Path(__file__).resolve().parent
 sys.path.insert(0,str(HERE.parent/'capture'))
 sys.path.insert(0,str(HERE.parent))
 
-from googleapiclient.http import MediaIoBaseDownload
 from opc_contract import GateError, STATUS, check_copy, canonical_url, digest_file, plain, validate
 from opc_media import ReplicateImages
 from opc_network import screenshot_source
@@ -45,6 +44,7 @@ def args():
 
 
 def download_spec(store:Store,file_id:str,target:Path)->dict:
+    from googleapiclient.http import MediaIoBaseDownload
     if not re.fullmatch(r"[A-Za-z0-9_-]{20,100}",file_id):
         raise GateError("Invalid private chat spec id")
     meta=store.drive.files().get(fileId=file_id,fields="id,name,parents,size,md5Checksum,mimeType,appProperties",supportsAllDrives=True).execute()
