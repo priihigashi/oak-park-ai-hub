@@ -28,13 +28,22 @@ def main():
         page.set_content(pagefile.read_text(),wait_until='load')
         page.wait_for_function('document.querySelector("video").readyState>=2')
         page.evaluate('window.testVideo=document.querySelector("video");window.testVideo.currentTime=1;window.testVideo.pause()')
-        page.locator('[data-theme="cream"]').click()
+        page.locator('nav button[data-theme="cream"]').click()
+        note=page.locator('[data-deck="cream"] [data-note]').first
+        note.fill('Live review note from browser smoke')
+        page.wait_for_function("document.getElementById('review-output').textContent.includes('Live review note from browser smoke')")
+        before_choice=page.locator('#review-output').inner_text()
+        if 'NOTE ONLY' not in before_choice or 'CARD 1' not in before_choice:
+            raise RuntimeError('Typed note did not appear immediately with card info before Keep/Redo')
         page.locator('[data-deck="cream"] [data-choice="keep"]').first.click()
+        after_choice=page.locator('#review-output').inner_text()
+        if 'Decision: KEEP' not in after_choice:
+            raise RuntimeError('Keep decision did not update organized review text')
         same=page.evaluate('window.testVideo===document.querySelector("video")&&Math.abs(window.testVideo.currentTime-1)<0.2')
         if not same:raise RuntimeError('Feedback/theme switch replaced or restarted the video')
         if page.evaluate('document.documentElement.scrollWidth>innerWidth+1'):raise RuntimeError('Mobile horizontal overflow')
         page.screenshot(path=str(root/'mobile-review.png'),full_page=False)
-        result={'synthetic_only':True,'fonts_and_15_pngs_checked':True,'mobile_width':390,'video_preserved_after_feedback':same}
+        result={'synthetic_only':True,'fonts_and_15_pngs_checked':True,'mobile_width':390,'live_note_updates_summary':True,'note_only_contains_card_info':True,'keep_updates_decision':True,'video_preserved_after_feedback':same}
         (root/'browser-smoke.json').write_text(json.dumps(result,indent=2));print(json.dumps(result));b.close()
 
 if __name__=='__main__':main()
