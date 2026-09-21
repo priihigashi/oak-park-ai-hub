@@ -107,10 +107,17 @@ Return {"title":"short English topic","caption":"150-200 characters before discl
 Create 5-8 cards: hook, 3-5 sequential useful points, one save/decision close. Every middle card has a
 supporting source_id supplied in the evidence. No quotes, raw markup, competitor names, debunk badges,
 promises, generic filler, invented prices, or claims about completed OPC work. Explain trade words briefly.
-Make exactly 4 visually DISTINCT material close-ups or practical scenes, but in the same photographic style.
-Every card references one of those visuals. Never ask the image model to write text, draw charts or invent
-before/after results. Use a trivet or material sample, not a damaging test presented as a real experiment.
-Sources will appear outside the core copy. The caption must not describe illustrations as OPC's own project.'''
+Create 3-4 visually DISTINCT assets in one photographic world. Plan each card by VISUAL JOB first:
+what must the viewer see to understand this specific point? Every visual subject must state camera position,
+perspective/angle, lighting behavior, foreground/midground/background, and the teaching purpose. Use a varied
+camera grammar when useful (eye-level, three-quarter, low/high angle, close detail, foreground obstruction),
+but never choose an angle just for style when it hides the teaching point. Never reuse the same visual key on
+consecutive cards unless the repeated composition intentionally demonstrates one changed variable; mark such a
+slide intentional_reuse=true. For a lighting card, show a controlled same-room/same-wall comparison across
+sunny daylight, overcast daylight and evening artificial light. For sheen, show matte vs higher-reflectance
+surfaces. For sample testing, show the process/board/brush rather than pretending an AI-created swatch is an
+exact real paint color. Never ask the image model to write text, draw fake data charts or invent before/after
+results. Sources will appear outside the core copy. The caption must not describe illustrations as OPC's own project.'''
 
 
 def write_feed(model: Model, plan: dict, evidence: list, a) -> dict:
@@ -179,9 +186,11 @@ def finalize_spec(a, raw: dict, sources: list, assets: list, editorial: dict, vi
     for i,card in enumerate(raw['slides'],1):
         slides.append({'id':i,'layout':card.get('layout','point'),'headline':plain(card.get('headline')),
                        'body':plain(card.get('body')),'source_ids':card.get('source_ids',[]),
-                       'visual_key':card.get('visual_key'),'visual_description':plain(card.get('visual_description'))})
+                       'visual_key':card.get('visual_key'),'visual_description':plain(card.get('visual_description')),
+                       'intentional_reuse':bool(card.get('intentional_reuse',False))})
     caption=plain(raw.get('caption'))
-    if any(x['kind']=='ai_illustration' for x in assets):caption+=' '+AI_DISCLOSURE
+    # Keep AI provenance in cards.json/assets and private review metadata. Public caption only needs
+    # truthful project claims; platform-required AI labeling, if any, is handled at publish time.
     caption+=' Sources: '+', '.join(dict.fromkeys(s['name'] for s in sources))+'.'
     spec={'project':'opc','language':'en','kind':a.kind,'status':STATUS,'approved':False,'title':plain(raw.get('title')),
           'caption':caption,'hashtags':plain(raw.get('hashtags')),'slides':slides,
