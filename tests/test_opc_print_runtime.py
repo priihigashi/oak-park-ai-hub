@@ -26,6 +26,13 @@ class Inputs(unittest.TestCase):
     def test_opc_link(self):
         x=inputs.resolve({'EVT':'issues','ISSUE_AUTHOR':'priihigashi','ISSUE_TITLE':'opc-print: https://youtu.be/abcdefghijk'})
         self.assertEqual((x['project'],x['mode']),('opc','link'))
+    def test_opc_private_chat_spec(self):
+        spec='1UJJPeilZ5deMFn4eca2J1KX4RhP3Sbdy'
+        x=inputs.resolve({'EVT':'issues','ISSUE_AUTHOR':'priihigashi','ISSUE_TITLE':'opc-chat: '+spec})
+        self.assertEqual((x['project'],x['mode'],x['chat_spec_id']),('opc','chat_spec',spec))
+    def test_invalid_chat_spec_blocked(self):
+        with self.assertRaises(ValueError):
+            inputs.resolve({'EVT':'issues','ISSUE_AUTHOR':'priihigashi','ISSUE_TITLE':'opc-chat: ../../secret'})
     def test_legacy_news_unchanged(self):
         x=inputs.resolve({'EVT':'issues','ISSUE_AUTHOR':'priihigashi','ISSUE_TITLE':'factcheck: https://youtu.be/abcdefghijk'})
         self.assertEqual(x['project'],'brazil')
