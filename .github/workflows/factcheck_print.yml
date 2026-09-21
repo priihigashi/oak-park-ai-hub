@@ -2,7 +2,7 @@ name: Fact-check PRINT deck (claim card + article screenshot card)
 
 # ─── HOW TO USE (phone or computer) ───────────────────────────────────────
 # A) GitHub app / browser → oak-park-ai-hub → Actions → "Fact-check PRINT deck" → Run workflow → paste the video link.
-# B) Owner issue: factcheck: <video link> for News, opc-print: <video link or idea> for OPC.
+# B) Owner issue: factcheck: <video link> for News; opc-print: <video link or idea> for OPC; opc-chat: <private Drive spec id> for ChatGPT-assisted OPC.
 # C) Claude Code / Codex / any agent with the gh CLI:
 #      gh workflow run factcheck_print.yml -R priihigashi/oak-park-ai-hub -f project=opc -f url='<link>'
 # OPC output is a short visual feed plus a separate private PRINT evidence/review pack.
@@ -57,13 +57,13 @@ on:
     types: [opened]
 
 concurrency:
-  group: ${{ (inputs.project == 'opc' || startsWith(github.event.issue.title, 'opc-print:')) && 'opc-print-filing' || format('factcheck-print-{0}', github.event.issue.number || github.run_id) }}
+  group: ${{ (inputs.project == 'opc' || (startsWith(github.event.issue.title, 'opc-print:') || startsWith(github.event.issue.title, 'opc-chat:'))) && 'opc-print-filing' || format('factcheck-print-{0}', github.event.issue.number || github.run_id) }}
   cancel-in-progress: false
 
 jobs:
   factcheck:
     # Public issue entrypoint is owner-only to protect API budgets.
-    if: github.event_name == 'workflow_dispatch' || (github.event.issue.user.login == 'priihigashi' && (startsWith(github.event.issue.title, 'factcheck:') || startsWith(github.event.issue.title, 'opc-print:')))
+    if: github.event_name == 'workflow_dispatch' || (github.event.issue.user.login == 'priihigashi' && (startsWith(github.event.issue.title, 'factcheck:') || startsWith(github.event.issue.title, 'opc-print:') || startsWith(github.event.issue.title, 'opc-chat:')))
     runs-on: ubuntu-latest
     timeout-minutes: 60
     permissions:
@@ -120,7 +120,17 @@ jobs:
         run: |
           set -euo pipefail
           python scripts/capture/capture_pipeline.py "$FC_URL" --project "$FC_PROJECT" --transcribe-only --notes="$(cat "$FC_NOTES_FILE")"
-      - name: 2. Research, screenshots, deck, PNGs, Drive, email
+      - name: 2A. OPC private ChatGPT spec — audit/build/render/file, no text-model credential
+        if: env.FC_PROJECT == 'opc' && env.FC_MODE == 'chat_spec'
+        env:
+          PRI_OP_REPLICATE_API_KEY: ${{ secrets.PRI_OP_REPLICATE_API_KEY }}
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: |
+          set -euo pipefail
+          python scripts/factcheck_print/opc_chat_build.py --spec-drive-id "$FC_CHAT_SPEC_ID" --out factcheck_out
+
+      - name: 2B. Research, screenshots, deck, PNGs, Drive, email
+        if: env.FC_MODE != 'chat_spec'
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           CLAUDE_KEY_OPC: ${{ secrets.CLAUDE_KEY_OPC }}
