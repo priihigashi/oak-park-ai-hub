@@ -65,6 +65,7 @@ class Contracts(unittest.TestCase):
         self.assertTrue(m.validate(s)['passed'])
     def test_consecutive_visual_reuse_requires_intent(self):
         s=fixture()
+        for i in range(1,len(s['slides'])): s['slides'][i]['intentional_reuse']=False
         with self.assertRaisesRegex(m.GateError,'consecutive visual reuse'): m.validate(s)
         for i in range(1,len(s['slides'])): s['slides'][i]['intentional_reuse']=True
         self.assertTrue(m.validate(s)['passed'])
