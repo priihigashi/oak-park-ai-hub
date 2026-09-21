@@ -169,3 +169,32 @@ jobs:
           PRI_OP_REPLICATE_API_KEY: ${{ secrets.PRI_OP_REPLICATE_API_KEY }}
           SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
         run: python scripts/factcheck_print/opc_owner_paint_revision.py
+
+  authorized-review-js-fix:
+    needs: regression
+    if: >-
+      github.event.action == 'labeled' &&
+      github.event.label.name == 'opc-paint-review-js-fix-20260921' &&
+      github.event.pull_request.number == 300 &&
+      github.actor == 'priihigashi' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'fix/opc-print-ready-20260920'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: opc-print-filing
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - name: Install Drive runtime only
+        run: pip install google-api-python-client google-auth requests pillow python-dotenv
+      - name: Replace only v372 review.html
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: python scripts/factcheck_print/opc_fix_v372_review.py
