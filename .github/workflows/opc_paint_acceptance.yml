@@ -334,7 +334,137 @@ jobs:
           PY
           )"
           test -n "$REVIEW_URL"
-          gh pr comment 300 --body "OPC private review ready: $REVIEW_URL"$'\n\n'"Built, NOT approved or published."
+          gh pr comment 300 --body "OPC private review ready: $REVIEW_URL"
+      - name: Remove reusable queue label
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X DELETE "repos/${{ github.repository }}/issues/300/labels/opc-chat-queue" >/dev/null 2>&1 || true
+
+  authorized-link-queue:
+    needs: regression
+    if: >-
+      github.event.action == 'labeled' &&
+      github.event.label.name == 'opc-link-queue' &&
+      github.event.pull_request.number == 300 &&
+      github.actor == 'priihigashi' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'fix/opc-print-ready-20260920'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    concurrency:
+      group: opc-print-filing
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - name: Install source-video OPC runtime
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+          pip install yt-dlp openai anthropic google-generativeai faster-whisper gspread google-auth google-api-python-client python-dotenv requests youtube-transcript-api instaloader pytubefix playwright pillow
+          python -m playwright install chromium --with-deps
+      - name: Capture/transcribe/research/build exactly one private video request
+        env:
+          CLAUDE_KEY_OPC: ${{ secrets.CLAUDE_KEY_OPC }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          PRI_OP_REPLICATE_API_KEY: ${{ secrets.PRI_OP_REPLICATE_API_KEY }}
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          PRI_OP_GMAIL_APP_PASSWORD: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
+          PRI_OP_YT_COOKIES: ${{ secrets.PRI_OP_YT_COOKIES }}
+          PRI_OP_IG_COOKIES: ${{ secrets.PRI_OP_IG_COOKIES }}
+          APIFY_API_KEY: ${{ secrets.APIFY_API_KEY }}
+        run: python scripts/factcheck_print/opc_chat_queue.py --mode link
+      - name: Return review site on PR
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          REVIEW_URL="$(python - <<'PY'
+          import json
+          print(json.load(open('opc_result.json')).get('review_url',''))
+          PY
+          )"
+          test -n "$REVIEW_URL"
+          gh pr comment 300 --body "OPC private video-derived review ready: $REVIEW_URL"
+      - name: Remove reusable queue label
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X DELETE "repos/${{ github.repository }}/issues/300/labels/opc-link-queue" >/dev/null 2>&1 || true
+\n\n'"Built, NOT approved or published." || echo "PR comment unavailable; review URL is already filed in Drive/Sheets."
+      - name: Remove reusable queue label
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X DELETE "repos/${{ github.repository }}/issues/300/labels/opc-chat-queue" >/dev/null 2>&1 || true
+
+  authorized-link-queue:
+    needs: regression
+    if: >-
+      github.event.action == 'labeled' &&
+      github.event.label.name == 'opc-link-queue' &&
+      github.event.pull_request.number == 300 &&
+      github.actor == 'priihigashi' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'fix/opc-print-ready-20260920'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    concurrency:
+      group: opc-print-filing
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - name: Install source-video OPC runtime
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+          pip install yt-dlp openai anthropic google-generativeai faster-whisper gspread google-auth google-api-python-client python-dotenv requests youtube-transcript-api instaloader pytubefix playwright pillow
+          python -m playwright install chromium --with-deps
+      - name: Capture/transcribe/research/build exactly one private video request
+        env:
+          CLAUDE_KEY_OPC: ${{ secrets.CLAUDE_KEY_OPC }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          PRI_OP_REPLICATE_API_KEY: ${{ secrets.PRI_OP_REPLICATE_API_KEY }}
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          PRI_OP_GMAIL_APP_PASSWORD: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
+          PRI_OP_YT_COOKIES: ${{ secrets.PRI_OP_YT_COOKIES }}
+          PRI_OP_IG_COOKIES: ${{ secrets.PRI_OP_IG_COOKIES }}
+          APIFY_API_KEY: ${{ secrets.APIFY_API_KEY }}
+        run: python scripts/factcheck_print/opc_chat_queue.py --mode link
+      - name: Return review site on PR
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          REVIEW_URL="$(python - <<'PY'
+          import json
+          print(json.load(open('opc_result.json')).get('review_url',''))
+          PY
+          )"
+          test -n "$REVIEW_URL"
+          gh pr comment 300 --body "OPC private video-derived review ready: $REVIEW_URL"$'\n\n'"Built, NOT approved or published."
+      - name: Remove reusable queue label
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X DELETE "repos/${{ github.repository }}/issues/300/labels/opc-link-queue" >/dev/null 2>&1 || true
+\n\n'"Built, NOT approved or published." || echo "PR comment unavailable; review URL is already filed in Drive/Sheets."
+      - name: Remove reusable queue label
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X DELETE "repos/${{ github.repository }}/issues/300/labels/opc-link-queue" >/dev/null 2>&1 || true
+\n\n'"Built, NOT approved or published." || echo "PR comment unavailable; review URL is already filed in Drive/Sheets."
       - name: Remove reusable queue label
         if: always()
         env:
