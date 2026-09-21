@@ -22,15 +22,20 @@ def issue_input(env: dict) -> dict:
     if env.get('ISSUE_AUTHOR')!='priihigashi':
         raise ValueError('Only the owner may start a paid issue-triggered run')
     title=env.get('ISSUE_TITLE','')
-    if not title.startswith(('opc-print:','factcheck:')):
+    if not title.startswith(('opc-print:','opc-chat:','factcheck:')):
         raise ValueError('Unrecognized trigger prefix')
-    project='opc' if title.startswith('opc-print:') else 'brazil'
     payload=title.split(':',1)[1].strip()
+    if title.startswith('opc-chat:'):
+        if not re.fullmatch(r'[A-Za-z0-9_-]{20,100}',payload):
+            raise ValueError('Invalid private OPC chat spec id')
+        return {'url':'','idea':'','notes':env.get('ISSUE_BODY','') or '',
+                'project':'opc','engine':'auto','discover':False,'chat_spec_id':payload}
+    project='opc' if title.startswith('opc-print:') else 'brazil'
     url=payload if project!='opc' or video_url(payload) else ''
     idea='' if url else payload
     discover=idea.lower() in ('find an idea','find idea','procure uma ideia')
     return {'url':url,'idea':'' if discover else idea,'notes':env.get('ISSUE_BODY','') or '',
-            'project':project,'engine':'auto','discover':discover}
+            'project':project,'engine':'auto','discover':discover,'chat_spec_id':''}
 
 
 def validate_input(data: dict) -> None:
@@ -40,23 +45,28 @@ def validate_input(data: dict) -> None:
         raise ValueError('Use a single-line HTTPS video-platform URL')
     if data['project']!='opc' and not data['url']:
         raise ValueError('News requires a video URL')
-    if not data['url'] and not data['idea'] and not data['discover']:
-        raise ValueError('Supply a video link, an idea, or the find-idea option')
+    chat_spec=data.get('chat_spec_id','')
+    if chat_spec and (data['project']!='opc' or not re.fullmatch(r'[A-Za-z0-9_-]{20,100}',chat_spec)):
+        raise ValueError('Invalid private OPC chat spec')
+    if not data['url'] and not data['idea'] and not data['discover'] and not chat_spec:
+        raise ValueError('Supply a video link, an idea, the find-idea option, or a private OPC chat spec')
 
 
 def resolve(env: dict) -> dict:
     data={'url':env.get('IN_URL','').strip(),'idea':env.get('IN_IDEA','').strip(),
           'notes':env.get('IN_NOTES',''),'project':env.get('IN_PROJECT') or 'brazil',
-          'engine':env.get('IN_ENGINE') or 'auto','discover':env.get('IN_DISCOVER','').lower()=='true'}
+          'engine':env.get('IN_ENGINE') or 'auto','discover':env.get('IN_DISCOVER','').lower()=='true',
+          'chat_spec_id':env.get('IN_CHAT_SPEC_ID','').strip()}
     if env.get('EVT')=='issues':data=issue_input(env)
     validate_input(data)
     model=env.get('IN_IMAGE_MODEL') or 'google/nano-banana-pro'
     if model not in IMAGE_MODELS:raise ValueError('Unsupported image model')
     rebuild=env.get('IN_REBUILD_ROW') or '0'
     if not re.fullmatch(r'\d{1,5}',rebuild):raise ValueError('Invalid rebuild row')
+    mode='chat_spec' if data.get('chat_spec_id') else 'link' if data['url'] else 'idea' if data['idea'] else 'discover'
     return {**data,'idea':data['idea'][:1000],'notes':data['notes'][:4000],
-            'mode':'link' if data['url'] else 'idea' if data['idea'] else 'discover',
-            'image_model':model,'rebuild_row':int(rebuild),'static_only':env.get('IN_STATIC_ONLY','').lower()=='true'}
+            'mode':mode,'image_model':model,'rebuild_row':int(rebuild),
+            'static_only':env.get('IN_STATIC_ONLY','').lower()=='true'}
 
 
 def main() -> None:
@@ -65,6 +75,7 @@ def main() -> None:
     Path('fc_notes.txt').write_text(data['notes'],encoding='utf-8')
     with open(os.environ['GITHUB_ENV'],'a',encoding='utf-8') as f:
         for key,value in {'FC_URL':data['url'],'FC_PROJECT':data['project'],'FC_ENGINE':data['engine'],
+                          'FC_MODE':data['mode'],'FC_CHAT_SPEC_ID':data.get('chat_spec_id',''),
                           'FC_NOTES_FILE':'fc_notes.txt','FC_INPUT_FILE':'fc_inputs.json'}.items():
             if '\n' in str(value) or '\r' in str(value):raise ValueError('Multiline environment value blocked')
             f.write(f'{key}={value}\n')
