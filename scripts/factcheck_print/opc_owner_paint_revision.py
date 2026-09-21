@@ -11,8 +11,6 @@ import json
 from pathlib import Path
 from types import SimpleNamespace
 
-from googleapiclient.http import MediaIoBaseDownload
-
 from opc_contract import GateError, STATUS, digest_file, tracker_row, validate
 from opc_media import ReplicateImages
 from opc_render import export, review
@@ -32,6 +30,7 @@ def save(path: Path, value) -> None:
 
 
 def download_bytes(store: Store, file_id: str, target: Path) -> None:
+    from googleapiclient.http import MediaIoBaseDownload
     meta = store.drive.files().get(
         fileId=file_id, fields="id,name,size,md5Checksum,mimeType", supportsAllDrives=True
     ).execute()
