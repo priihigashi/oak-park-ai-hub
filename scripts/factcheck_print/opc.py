@@ -279,7 +279,9 @@ def file_built(a, store: Store, root: Path, folder: dict, spec: dict) -> dict:
     resources=next(f for f in store.list_children(folder['id']) if f['name']=='resources')
     store.upsert_run_file(root/'resources/filing-receipt.json',resources['id'])
     notify(spec,folder,receipt,root);store.finish(folder,'BUILT_NOT_APPROVED')
-    return {'status':'built_not_approved','folder':folder,'receipt':receipt,'cards':len(spec['slides']),'engine':spec['editorial_review']['provider']}
+    return {'status':'built_not_approved','folder':folder,'receipt':receipt,'cards':len(spec['slides']),
+            'engine':spec['editorial_review']['provider'],'review_url':links['review.html'],
+            'folder_url':folder['webViewLink']}
 
 
 def retain_failure(exc: Exception, store: Store, root: Path, folder: dict) -> None:
@@ -308,8 +310,11 @@ def run(a) -> dict:
 def main() -> None:
     try:
         result=run(options())
-        print(json.dumps({k:v for k,v in result.items() if k!='folder'}))
+        public_result={k:v for k,v in result.items() if k!='folder'}
+        Path('opc_result.json').write_text(json.dumps(public_result,ensure_ascii=False,indent=2),encoding='utf-8')
+        print(json.dumps(public_result))
     except Exception as exc:
+        Path('opc_result.json').write_text(json.dumps({'status':'blocked_not_approved','error_type':type(exc).__name__,'approved':False,'published':False},indent=2),encoding='utf-8')
         print(f'OPC BLOCKED ({type(exc).__name__}). No approval/publication; inspect the private run receipt.')
         raise SystemExit(1) from None
 
