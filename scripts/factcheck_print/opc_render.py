@@ -188,15 +188,16 @@ function showTheme(theme){
 document.addEventListener('input',e=>{if(e.target&&e.target.matches('[data-note]'))renderReview();});
 document.addEventListener('change',e=>{if(e.target&&e.target.matches('[data-note]'))renderReview();});
 document.addEventListener('keyup',e=>{if(e.target&&e.target.matches('[data-note]'))renderReview();});
+function setChoice(button){
+ const card=button.closest('.card');if(!card)return;
+ const next=card.dataset.choice===button.dataset.choice?'':button.dataset.choice;
+ card.dataset.choice=next;
+ card.querySelectorAll('[data-choice]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.choice===next)));
+ renderReview();
+}
+window.setOPCReviewChoice=setChoice;
 document.addEventListener('click',e=>{
- const theme=e.target.closest&&e.target.closest('[data-theme]');if(theme){showTheme(theme.dataset.theme);return;}
- const choice=e.target.closest&&e.target.closest('[data-choice]');if(choice){
-   const card=choice.closest('.card');
-   const next=card.dataset.choice===choice.dataset.choice?'':choice.dataset.choice;
-   card.dataset.choice=next;
-   card.querySelectorAll('[data-choice]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.choice===next)));
-   renderReview();
- }
+ const theme=e.target.closest&&e.target.closest('[data-theme]');if(theme)showTheme(theme.dataset.theme);
 });
 async function copyReview(){
  const text=renderReview();const out=document.getElementById('review-output');const button=document.getElementById('copy-review');
@@ -231,7 +232,7 @@ def review(spec: dict, root: Path) -> Path:
         for c in spec['slides']:
             key=f'{theme}-{c["id"]}';png=root/'png'/theme/f'card_{c["id"]:02d}.png'
             parts.append(f'<article class="card" data-review-id="{key}" data-theme="{theme}" data-card-num="{c["id"]}" data-headline="{esc(c["headline"],quote=True)}" data-body="{esc(c["body"],quote=True)}"><img alt="{esc(c["headline"])}" src="{data_uri(png,"image/png")}">'
-                f'<div class="choices"><button data-card="{key}" data-choice="keep">Keep</button><button data-card="{key}" data-choice="redo">Redo</button></div>'
+                f'<div class="choices"><button data-card="{key}" data-choice="keep" onclick="window.setOPCReviewChoice&&window.setOPCReviewChoice(this)">Keep</button><button data-card="{key}" data-choice="redo" onclick="window.setOPCReviewChoice&&window.setOPCReviewChoice(this)">Redo</button></div>'
                 f'<textarea data-note="{key}" oninput="window.refreshOPCReview&&window.refreshOPCReview()" placeholder="What should change?"></textarea></article>')
         parts.append('</section>')
     parts.append('<h2>Caption</h2><div class="caption">'+esc(spec['caption']+'\n\n'+spec.get('hashtags',''))+'</div>'
