@@ -151,7 +151,7 @@ function collectReview(){
    const note=card.querySelector('[data-note]');
    const pressed=card.querySelector('[data-choice][aria-pressed="true"]');
    const comment=note?note.value:'';
-   const choice=pressed?pressed.dataset.choice:'';
+   const choice=card.dataset.choice||(pressed?pressed.dataset.choice:'');
    if(!clean(comment)&&!choice)return;
    rows.push({id,theme:card.dataset.theme||'',num:card.dataset.cardNum||'',headline:card.dataset.headline||'',body:card.dataset.body||'',choice,comment});
  });
@@ -175,7 +175,8 @@ function restoreReview(){
  saved.cards.forEach(r=>{
    const card=document.querySelector(`.card[data-review-id="${r.id}"]`);if(!card)return;
    const note=card.querySelector('[data-note]');if(note)note.value=r.comment||'';
-   card.querySelectorAll('[data-choice]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.choice===r.choice)));
+   card.dataset.choice=r.choice||'';
+   card.querySelectorAll('[data-choice]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.choice===card.dataset.choice)));
  });
 }
 function showTheme(theme){
@@ -190,9 +191,10 @@ document.addEventListener('keyup',e=>{if(e.target&&e.target.matches('[data-note]
 document.addEventListener('click',e=>{
  const theme=e.target.closest&&e.target.closest('[data-theme]');if(theme){showTheme(theme.dataset.theme);return;}
  const choice=e.target.closest&&e.target.closest('[data-choice]');if(choice){
-   const card=choice.closest('.card');const was=choice.getAttribute('aria-pressed')==='true';
-   card.querySelectorAll('[data-choice]').forEach(b=>b.setAttribute('aria-pressed','false'));
-   if(!was)choice.setAttribute('aria-pressed','true');
+   const card=choice.closest('.card');
+   const next=card.dataset.choice===choice.dataset.choice?'':choice.dataset.choice;
+   card.dataset.choice=next;
+   card.querySelectorAll('[data-choice]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.choice===next)));
    renderReview();
  }
 });
