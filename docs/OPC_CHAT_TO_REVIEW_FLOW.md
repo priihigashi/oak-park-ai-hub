@@ -41,6 +41,13 @@ The issue body may contain non-sensitive instructions only. Do not place private
 
 On success the workflow must comment the private Drive review URL back to the issue so ChatGPT can return it to Priscila.
 
+### Before PR #300 is merged
+The default-branch issue trigger is not active yet. ChatGPT uses the private Drive intake folder plus owner-only PR labels on #300:
+- audited topic spec: private file title `READY — OPC CHAT — <topic>` → label `opc-chat-queue`
+- talking-video request: private file title `READY — OPC LINK — <topic>` → label `opc-link-queue`
+
+Each queue accepts exactly one READY private item, removes its reusable label after the run, and returns only the private review URL on the PR. The topic queue receives no Claude/OpenAI credentials. The video queue receives the existing bounded capture/research credentials because transcription and verification are required. After PR #300 is merged, prefer the normal `opc-chat:` / `opc-print:` issue entrypoint instead of the temporary PR-label queue.
+
 ## Audit gates before READY FOR PRISCILA REVIEW
 - Source/claim mapping is explicit.
 - Unsupported specificity is blocked.
