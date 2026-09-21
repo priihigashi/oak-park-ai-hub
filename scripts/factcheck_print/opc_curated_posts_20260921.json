@@ -149,14 +149,14 @@
     },
     {
       "slug": "grout-tile",
-      "title": "Why Grout Changes Your Tile",
+      "title": "Why Tile Looks Different at Home",
       "keywords": [
-        "grout",
         "tile",
-        "color"
+        "grout",
+        "lighting"
       ],
-      "caption": "Grout is part of the design, not just the gap. Color, contrast, joint width, and lighting can change how the same tile installation reads.",
-      "hashtags": "#TileDesign #GroutColor #RemodelTips #SouthFloridaHomes #OakParkConstruction",
+      "caption": "Tile should be judged in your room, not by itself. Lighting, grout, and nearby finishes can change the final look, so compare the whole combination before you commit.",
+      "hashtags": "#TileTips #GroutColor #RemodelTips #SouthFloridaHomes #OakParkConstruction",
       "sources": [
         {
           "id": "T1",
@@ -166,8 +166,8 @@
             {
               "url": "https://www.daltile.com/tile-therapy/articles/how-to-choose-the-right-grout-color-for-tile",
               "required": [
-                "Matching Grout",
-                "Contrasting Grout",
+                "Matching Grout for a Seamless Look",
+                "Contrasting Grout for Added Definition",
                 "Grout width matters",
                 "lighting"
               ]
@@ -176,28 +176,14 @@
         },
         {
           "id": "T2",
-          "name": "LATICRETE",
-          "heading": "Tile Design Details: Color Coordination",
+          "name": "Daltile",
+          "heading": "Complimentary Design Services",
           "candidates": [
             {
-              "url": "https://www.laticrete.com/en/blog/2025/december/an-eye-on-detail-color-coordination",
+              "url": "https://www.daltile.com/complimentary-design-services",
               "required": [
-                "similar to the color of the tile",
-                "contrasting color"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "T3",
-          "name": "LATICRETE",
-          "heading": "Color Selector",
-          "candidates": [
-            {
-              "url": "https://www.laticrete.com/en/our-products/color-selector",
-              "required": [
-                "lighting",
-                "test area"
+                "Take home free tile samples",
+                "your own space and lighting"
               ]
             }
           ]
@@ -207,83 +193,81 @@
         {
           "id": 1,
           "layout": "cover",
-          "headline": "Same tile. Different grout.",
-          "body": "Grout can blend into the tile or make every edge and pattern stand out.",
+          "headline": "Tile changes in context.",
+          "body": "Lighting, grout, and nearby finishes can change how a tile installation reads in the room.",
           "source_ids": [
             "T1",
             "T2"
           ],
           "visual_key": "A1",
-          "visual_description": "Controlled split comparison of the same neutral tile with matching grout on one side and contrasting grout on the other."
+          "visual_description": "Current upscale generic tiled room showing the finished material in context."
         },
         {
           "id": 2,
           "layout": "point",
-          "headline": "Matching grout softens the grid.",
-          "body": "A similar grout color creates a more continuous surface and keeps the tile pattern quieter.",
+          "headline": "Take the sample home.",
+          "body": "View tile in your own space and lighting before you decide.",
           "source_ids": [
-            "T1",
             "T2"
           ],
           "visual_key": "A2",
-          "visual_description": "Close detail of neutral tile with closely matching grout, emphasizing a calm continuous surface."
+          "visual_description": "Homeowner hands holding an unbranded tile sample beside real room finishes in natural light."
         },
         {
           "id": 3,
-          "layout": "point",
-          "headline": "Contrast outlines every piece.",
-          "body": "A lighter or darker grout traces each tile and makes the layout more noticeable.",
+          "layout": "compare",
+          "headline": "Grout can blend or define.",
+          "body": "Matching grout softens the pattern. Contrasting grout makes the tile layout stand out.",
           "source_ids": [
-            "T1",
-            "T2"
+            "T1"
           ],
           "visual_key": "A3",
-          "visual_description": "Low three-quarter detail of the same style neutral tile with clearly contrasting grout that emphasizes each tile edge."
+          "visual_description": "Controlled same-tile comparison with tone-on-tone grout versus contrasting grout."
         },
         {
           "id": 4,
           "layout": "compare",
-          "headline": "Joint width changes emphasis.",
-          "body": "Narrow grout lines look subtler; wider lines make the grid and pattern more prominent.",
+          "headline": "Check grout in your lighting.",
+          "body": "Natural and artificial light can shift how grout color appears next to your tile.",
           "source_ids": [
             "T1"
           ],
           "visual_key": "A4",
-          "visual_description": "Two small sample boards with the same tile and grout color but visibly narrow versus wider grout joints."
+          "visual_description": "Controlled same tile-and-grout sample under window daylight and warm artificial light."
         },
         {
           "id": 5,
           "layout": "close",
-          "headline": "Test the whole combination.",
-          "body": "Tile finish, grout color, joint width, and room lighting all affect the final look. Sample before installing.",
+          "headline": "Judge the whole combination.",
+          "body": "Compare tile with grout, paint, cabinets, and other nearby finishes before you commit.",
           "source_ids": [
             "T1",
-            "T3"
+            "T2"
           ],
           "visual_key": "A5",
-          "visual_description": "Material-selection scene with tile, two grout options, and a small test board positioned where daylight and room light can be evaluated."
+          "visual_description": "Distinct overhead materials board combining tile, grout, paint, cabinet, and countertop samples."
         }
       ],
       "visuals": [
         {
           "key": "A1",
-          "subject": "Controlled side-by-side photographic comparison of the SAME clean off-white rectangular tile layout, same camera and framing. Left half uses grout very close to the tile color so the field blends; right half uses medium charcoal grout so every tile edge is outlined. No text, labels, logos or brand-specific product. Teaching purpose: show how grout changes the visual reading of identical tile."
+          "subject": "Eye-level wide documentary photograph of a contemporary South Florida bathroom with a clean generic light-neutral porcelain tile installation, current well-kept vanity, modern fixtures, warm wood accents, and realistic daylight. Tile should look plausible and unbranded, with visible grout joints but no product-specific pattern or exact manufacturer identity. No text or labels. Teaching purpose: show that tile is experienced as part of a whole finished room."
         },
         {
           "key": "A2",
-          "subject": "Tight eye-level material photograph of a clean neutral ceramic tile wall with grout closely matching the tile color. The joints remain visible on inspection but the overall surface reads calm and continuous. Soft natural side light, no fixtures, no text or logos. Teaching purpose: show the blending effect of matching grout."
+          "subject": "Close three-quarter documentary photograph of hands holding a single plain unbranded light-neutral tile sample inside a contemporary home near a window, beside a cabinet edge and neutral countertop material. Natural daylight, realistic ceramic or porcelain texture, no showroom signs, product labels, brand names, or text. Teaching purpose: demonstrate taking a tile sample into the actual room and viewing it with real surrounding finishes."
         },
         {
           "key": "A3",
-          "subject": "Low three-quarter close photograph of a clean neutral rectangular tile wall using distinctly darker contrasting grout. The grout clearly outlines each tile and makes the running-bond layout prominent. Directional natural light creates realistic surface texture. No text or logos. Teaching purpose: show how contrast emphasizes layout."
+          "subject": "Controlled two-panel close-detail photograph of the IDENTICAL simple rectangular light-neutral tile pattern under the same neutral light and same camera angle. Left panel: grout closely matches the tile, producing a quieter blended grid. Right panel: noticeably darker contrasting grout outlines each tile and makes the layout more prominent. Tile geometry and exposure remain fixed. No text, labels, brands, or exact product claim. Teaching purpose: clearly show grout blending versus defining the pattern."
         },
         {
           "key": "A4",
-          "subject": "Overhead documentary photograph of TWO separate small tile mock-up boards on a light worktable. Both use the same neutral square tile and same mid-tone grout; the left mock-up has very narrow grout joints and the right mock-up has visibly wider grout joints. No text, labels, rulers, numbers or logos. Teaching purpose: show that joint width changes how strong the grid appears."
+          "subject": "Controlled two-panel photograph of the IDENTICAL small generic tile-and-grout test panel from the exact same camera position. Left: natural window daylight. Right: warm evening artificial lamp light. Tile, grout, spacing, camera, and surroundings remain fixed; only lighting changes. No labels, text, brands, or exact grout-color claim. Teaching purpose: show how lighting changes the perceived tile-and-grout color relationship."
         },
         {
           "key": "A5",
-          "subject": "Bird's-eye material-selection scene on a clean worktable: several neutral tile pieces, two small unlabeled grout sample swatches, and a compact mock-up board. Soft daylight enters from one side while a simple warm task lamp illuminates the opposite edge. No text, logos or brand identifiers. Teaching purpose: show evaluating tile, grout, joint spacing, and lighting together before installation."
+          "subject": "Bird's-eye overhead documentary photograph of a clean light-oak design table with an unbranded tile sample, two plain grout sample strips, a blank paint sample board, a warm wood cabinet sample, and a neutral stone countertop sample arranged together. Soft side daylight, realistic materials, no text, labels, logos, color names, or product codes. Teaching purpose: summarize judging tile as part of the full material combination before installation."
         }
       ]
     }
