@@ -19,11 +19,11 @@ from PIL import Image, ImageOps
 from opc_contract import GateError, MODELS, MAX_IMAGES, digest_file
 from opc_network import download
 
-STYLE = ('A photograph, not a render. Realistic 35mm documentary photography, honest material texture and small imperfections. '
-         'One dominant coherent light source appropriate to the specified scene; natural color treatment. No text, letters, numbers, labels, signage or logos. '
-         'No people. Keep the subject centred, generous clean headroom. ')
-WORLD = ('A consistent contemporary South Florida home aesthetic: warm neutral surfaces and light oak accents. '
-         'Use the actual room, material, objects and lighting requested in the subject, not an unrelated kitchen. '
+STYLE = ('A photograph, not a render. Realistic documentary photography, honest material texture and small imperfections. '
+         'Lighting must physically match the requested scene. If the subject explicitly requests a controlled comparison, keep camera/room/material constant and change only the requested lighting or finish variable across panels. '
+         'No text, letters, numbers, labels, signage or logos. Avoid identifiable people; a hand/tool may appear only when needed to demonstrate a real process. ')
+WORLD = ('A consistent contemporary South Florida home aesthetic: current, well-kept furnishings, warm neutral surfaces and light oak accents. '
+         'Avoid visibly worn or dated staging unless the subject requires it. Use the actual room, material, objects, camera geometry and lighting requested in the subject, not an unrelated kitchen. '
          'Quiet uncluttered composition. Match photographic treatment only, not previous content. ')
 
 
