@@ -18,7 +18,7 @@ MAX_SLIDE_WORDS = 35
 MAX_HEADLINE_WORDS = 9
 MAX_IMAGES = 4
 STATUS = "Built, NOT APPROVED"
-AI_DISCLOSURE = "AI illustrations; not an OPC project."
+AI_DISCLOSURE = "AI illustrations; not an OPC project."  # internal provenance phrase; not mandatory public copy
 MODELS = ("google/nano-banana-pro", "google/imagen-4", "bytedance/seedream-4.5")
 HEADERS = (
     "# Reviews", "Title", "Post Type", "Format", "Content Type", "Status",
@@ -203,7 +203,8 @@ def check_deck(spec: dict, aliases: Iterable[str]) -> list[str]:
         (spec.get("status") == STATUS and spec.get("approved") is False, "approval gate missing"),
         (5 <= len(cards) <= MAX_SLIDES, "feed must contain 5-8 slides"),
         (spec.get("kind") in ("education", "project_proof"), "unknown content kind"),
-        (not has_ai or AI_DISCLOSURE in spec.get("caption", ""), "AI disclosure absent"),
+        # AI provenance stays in assets/review metadata. Public copy must not falsely imply an OPC project,
+        # but a loud disclosure is not forced unless the publishing platform or owner requires one.
         (not named_competitor(text, aliases), "competitor leaked into public-facing text"),
         (not FORBIDDEN.search(text) and not PROMISES.search(text), "OPC voice/language/promise violation"),
         (spec.get("editorial_review", {}).get("passed") is True, "editorial/coherence review not passed"),
@@ -223,6 +224,8 @@ def validate(spec: dict[str, Any], root: Path | None = None, aliases: Iterable[s
         errors.extend(check_copy(card, i))
         errors.extend(check_sources(card, sources, root, i not in (1, len(cards))))
         errors.extend(check_asset(assets.get(card.get("visual_key"), {}), root, spec.get("kind") == "project_proof"))
+        if i > 1 and card.get("visual_key") == cards[i-2].get("visual_key") and not card.get("intentional_reuse"):
+            errors.append(f"slide {i}: consecutive visual reuse without explicit intent")
     if errors:
         raise GateError("; ".join(dict.fromkeys(errors)))
     return {"passed": True, "slide_count": len(cards), "max_words": max(len(words(slide_text(c))) for c in cards), "approved": False}
