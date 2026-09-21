@@ -154,7 +154,7 @@ function cardText(id){
 function output(){const rows=[];
  Object.keys(feedback.cards).sort().forEach(id=>{const s=feedback.cards[id]||{};const m=cardText(id);if(!s.choice&&!String(s.note||'').trim())return;
   rows.push(`=== ${m.theme.toUpperCase()} · CARD ${m.num} ===\n${m.headline}\nCurrent text: ${m.body}\nDecision: ${(s.choice||'NOTE ONLY').toUpperCase()}\nMy comment: ${String(s.note||'').trim()||'(none)'}`)});
- const el=document.getElementById('review-output'); if(el) el.textContent=rows.length?rows.join('\n\n'):'No review notes yet.';
+ const el=document.getElementById('review-output'); if(el) el.textContent=rows.length?rows.join('\\n\\n'):'No review notes yet.';
 }
 document.querySelectorAll('[data-theme]').forEach(b=>b.addEventListener('click',()=>{
  feedback.variant=b.dataset.theme; save();
