@@ -43,15 +43,16 @@ def args():
     return ap.parse_args()
 
 
-def download_spec(store:Store,file_id:str,target:Path)->dict:
+def google_doc_text(document:dict)->str:
+    parts=[]
+    for item in document.get("body",{}).get("content",[]):
+        for element in item.get("paragraph",{}).get("elements",[]):
+            parts.append(element.get("textRun",{}).get("content",""))
+    return "".join(parts).strip()
+
+
+def download_raw_spec(store:Store,file_id:str,target:Path,meta:dict)->None:
     from googleapiclient.http import MediaIoBaseDownload
-    if not re.fullmatch(r"[A-Za-z0-9_-]{20,100}",file_id):
-        raise GateError("Invalid private chat spec id")
-    meta=store.drive.files().get(fileId=file_id,fields="id,name,parents,size,md5Checksum,mimeType,appProperties",supportsAllDrives=True).execute()
-    if meta.get("parents") != [CHAT_INTAKE_PARENT]:
-        raise GateError("Chat spec is not in the verified private intake folder")
-    if int(meta.get("size",0))<50 or int(meta.get("size",0))>MAX_SPEC_BYTES:
-        raise GateError("Chat spec size is outside the bounded intake limit")
     request=store.drive.files().get_media(fileId=file_id,supportsAllDrives=True)
     target.parent.mkdir(parents=True,exist_ok=True)
     with target.open("wb") as stream:
@@ -59,10 +60,30 @@ def download_spec(store:Store,file_id:str,target:Path)->dict:
         while not done:_,done=dl.next_chunk()
     if meta.get("md5Checksum") and hashlib.md5(target.read_bytes()).hexdigest()!=meta["md5Checksum"]:
         raise GateError("Chat spec checksum mismatch")
-    try:data=json.loads(target.read_text(encoding="utf-8"))
-    except Exception as exc:raise GateError("Chat spec is not valid JSON") from exc
-    return data
 
+
+def download_spec(store:Store,file_id:str,target:Path)->dict:
+    if not re.fullmatch(r"[A-Za-z0-9_-]{20,100}",file_id):
+        raise GateError("Invalid private chat spec id")
+    fields="id,name,parents,size,md5Checksum,mimeType,appProperties"
+    meta=store.drive.files().get(fileId=file_id,fields=fields,supportsAllDrives=True).execute()
+    if meta.get("parents") != [CHAT_INTAKE_PARENT]:
+        raise GateError("Chat spec is not in the verified private intake folder")
+    if meta.get("mimeType")=="application/vnd.google-apps.document":
+        text=google_doc_text(store.docs.documents().get(documentId=file_id).execute())
+        target.parent.mkdir(parents=True,exist_ok=True)
+        target.write_text(text,encoding="utf-8")
+    else:
+        size=int(meta.get("size",0))
+        if size<50 or size>MAX_SPEC_BYTES:
+            raise GateError("Chat spec size is outside the bounded intake limit")
+        download_raw_spec(store,file_id,target,meta)
+    if not 50<=target.stat().st_size<=MAX_SPEC_BYTES:
+        raise GateError("Chat spec content is outside the bounded intake limit")
+    try:
+        return json.loads(target.read_text(encoding="utf-8"))
+    except Exception as exc:
+        raise GateError("Chat spec is not valid JSON") from exc
 
 def audit_header(p:dict)->None:
     if p.get("version")!=1 or p.get("project")!="opc" or p.get("kind","education")!="education":
