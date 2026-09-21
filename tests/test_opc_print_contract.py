@@ -13,13 +13,14 @@ sp.loader.exec_module(m)
 
 def fixture():
     return {'project':'opc','language':'en','status':m.STATUS,'approved':False,'kind':'education',
-            'title':'Choosing a countertop','caption':'Save these material tips. '+m.AI_DISCLOSURE,
+            'title':'Choosing a countertop','caption':'Save these material tips.',
             'hashtags':'#KitchenRemodel', 'editorial_review':{'passed':True},
             'sources':[{'id':'S1','url':'https://example.org/care','observed_in_search':True,'screenshot':'resources/source.jpg'}],
             'assets':[{'key':'A1','kind':'ai_illustration','model':m.MODELS[0],'path':'resources/material.jpg','sha256':'test'}],
             'slides':[{'id':i,'layout':'cover' if i==1 else 'close' if i==5 else 'point',
                        'headline':'Check the care guide','body':'Match the surface to your daily routine.',
-                       'source_ids':[] if i in (1,5) else ['S1'],'visual_key':'A1'} for i in range(1,6)]}
+                       'source_ids':[] if i in (1,5) else ['S1'],'visual_key':'A1',
+                       'intentional_reuse': True if i>1 else False} for i in range(1,6)]}
 
 
 class Contracts(unittest.TestCase):
@@ -59,7 +60,14 @@ class Contracts(unittest.TestCase):
     def test_no_silent_alternate_model(self):
         s=fixture();s['assets'][0]['model']='unapproved/model'
         with self.assertRaisesRegex(m.GateError,'model'): m.validate(s)
-    def test_caption_disclosure(self): self.reject('caption','Save this.')
+    def test_public_ai_disclosure_not_required(self):
+        s=fixture();s['caption']='Save this.'
+        self.assertTrue(m.validate(s)['passed'])
+    def test_consecutive_visual_reuse_requires_intent(self):
+        s=fixture()
+        with self.assertRaisesRegex(m.GateError,'consecutive visual reuse'): m.validate(s)
+        for i in range(1,len(s['slides'])): s['slides'][i]['intentional_reuse']=True
+        self.assertTrue(m.validate(s)['passed'])
     def test_raw_model_code(self):
         s=fixture();s['slides'][1]['body']='Care &lt;cite index="1"&gt;guide&lt;/cite&gt;'
         with self.assertRaises(m.GateError): m.validate(s)
