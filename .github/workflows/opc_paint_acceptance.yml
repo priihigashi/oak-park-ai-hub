@@ -26,7 +26,7 @@ jobs:
     needs: regression
     if: >-
       github.event.action == 'labeled' &&
-      github.event.label.name == 'opc-paint-v2-20260920' &&
+      github.event.label.name == 'opc-paint-final-20260920' &&
       github.event.pull_request.number == 300 &&
       github.actor == 'priihigashi' &&
       github.event.pull_request.head.repo.full_name == github.repository &&
@@ -49,7 +49,7 @@ jobs:
           sudo apt-get update -qq && sudo apt-get install -y ffmpeg
           pip install yt-dlp openai anthropic google-generativeai faster-whisper gspread google-auth google-api-python-client python-dotenv requests youtube-transcript-api instaloader pytubefix playwright pillow
           python -m playwright install chromium --with-deps
-      - name: One authorized idea-mode run; four images maximum; private outputs only
+      - name: One authorized idea-mode run; five images maximum; private outputs only
         env:
           CLAUDE_KEY_OPC: ${{ secrets.CLAUDE_KEY_OPC }}
           PRI_OP_REPLICATE_API_KEY: ${{ secrets.PRI_OP_REPLICATE_API_KEY }}
@@ -61,8 +61,8 @@ jobs:
             --image-model google/nano-banana-pro \
             --rebuild-row 429 \
             --idea 'Why your paint color looks different at home' \
-            --notes 'OWNER REVIEW V2. Six-card visual education. Card 1: keep a contemporary South Florida room but furnishings must look current/well-kept, not worn. Card 2 is the main teaching visual: controlled same neutral wall/room, same camera position, visibly different sunny daylight vs overcast daylight vs evening artificial light; conceptual, no exact brand color claim. Card 3 artificial lamp/room-lighting detail is supporting, not a near-duplicate hero. Card 4 matte vs higher-sheen reflectivity comparison is a strong keep. Card 5 show the real sampling PROCESS (foam board/brush or movable sample method) without presenting an AI-created swatch as an exact paint color. Card 6 must have its own distinct closing/checklist composition, not reuse Card 5. No consecutive duplicate visual keys unless a controlled comparison requires it. Use primary manufacturer guidance from Benjamin Moore and Sherwin-Williams; no contractor competitor sources, invented prices, promises, first-person project claims, brand shade names/codes, or fake before/after. Public carousel/caption must not add loud AI boilerplate; internal provenance remains in cards.json. Idea mode: no source video/transcription claim.' \
-            --out opc-paint-v2 --run-key pr300-paint-v2-20260920
+            --notes 'OWNER REVIEW FINAL. Prefer exactly five cards with five distinct visual jobs. Fold the lamp/artificial-light point into Card 2's lighting comparison instead of giving it a repetitive standalone card. Card 1: keep a contemporary South Florida room but furnishings must look current/well-kept, not worn. Card 2 is the main teaching visual: controlled same neutral wall/room, same camera position, visibly different sunny daylight vs overcast daylight vs evening artificial light; conceptual, no exact brand color claim. Card 3 artificial lamp/room-lighting detail is supporting, not a near-duplicate hero. Card 4 matte vs higher-sheen reflectivity comparison is a strong keep. Card 5 show the real sampling PROCESS (foam board/brush or movable sample method) without presenting an AI-created swatch as an exact paint color. Card 6 must have its own distinct closing/checklist composition, not reuse Card 5. No consecutive duplicate visual keys unless a controlled comparison requires it. Use primary manufacturer guidance from Benjamin Moore and Sherwin-Williams; no contractor competitor sources, invented prices, promises, first-person project claims, brand shade names/codes, or fake before/after. Public carousel/caption must not add loud AI boilerplate; internal provenance remains in cards.json. Idea mode: no source video/transcription claim.' \
+            --out opc-paint-final --run-key pr300-paint-final-20260920
   authorized-editorial-resume:
     needs: regression
     if: >-
