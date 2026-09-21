@@ -111,7 +111,10 @@ def _get_oauth_creds():
         client_secret=token_data.get("client_secret"),
         scopes=token_data.get("scopes", []),
     )
-    if creds.expired and creds.refresh_token:
+    # STALE-TOKEN CLASS BUG (found 2026-08-05): no `expiry` is passed above, and
+    # google-auth treats expiry=None as "never expires", so creds.expired was
+    # permanently False and this refresh never ran. Refresh when we can.
+    if creds.refresh_token:
         creds.refresh(Request())
     return creds
 

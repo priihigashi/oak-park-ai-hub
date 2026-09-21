@@ -29,7 +29,12 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install google-auth google-auth-httplib2
+        # `requests` is required: credit_monitor.py imports
+        # google.auth.transport.requests, which raises ImportError without it.
+        # Without this the "Credit Blocks" audit row is silently never written
+        # (observed 2026-08-05 run 30985353589). content_creator.yml already
+        # installs requests; this workflow was the only caller missing it.
+        run: pip install google-auth google-auth-httplib2 requests
 
       - name: Run credit monitor
         id: run
