@@ -64,7 +64,7 @@ def download_spec(store:Store,file_id:str,target:Path)->dict:
     return data
 
 
-def audit_payload(p:dict)->None:
+def audit_header(p:dict)->None:
     if p.get("version")!=1 or p.get("project")!="opc" or p.get("kind","education")!="education":
         raise GateError("Unsupported chat spec version/project/kind")
     audit=p.get("audit") or {}
@@ -74,33 +74,60 @@ def audit_payload(p:dict)->None:
     keywords=p.get("keywords") or []
     if len(keywords)!=3 or len({plain(x).casefold() for x in keywords})!=3:
         raise GateError("Chat spec requires exactly three distinct dedupe keywords")
-    slides=p.get("slides") or [];visuals=p.get("visuals") or [];sources=p.get("sources") or []
+
+
+def audit_shape(p:dict)->tuple[list,list,list]:
+    slides=p.get("slides") or []
+    visuals=p.get("visuals") or []
+    sources=p.get("sources") or []
     if len(slides)!=5 or len(visuals)!=5 or not 2<=len(sources)<=4:
         raise GateError("Chat spec requires exactly five slides/visuals and 2-4 sources")
     if [v.get("key") for v in visuals]!=["A1","A2","A3","A4","A5"]:
         raise GateError("Chat visual keys must be A1-A5 exactly")
-    if [s.get("id") for s in slides]!=[1,2,3,4,5] or [s.get("visual_key") for s in slides]!=["A1","A2","A3","A4","A5"]:
+    slide_ids=[s.get("id") for s in slides]
+    visual_keys=[s.get("visual_key") for s in slides]
+    if slide_ids!=[1,2,3,4,5] or visual_keys!=["A1","A2","A3","A4","A5"]:
         raise GateError("Each chat slide must have its own sequential visual job")
+    return slides,visuals,sources
+
+
+def audit_sources(sources:list[dict],source_url:str)->set[str]:
     source_ids={s.get("id") for s in sources}
     if len(source_ids)!=len(sources) or None in source_ids:
         raise GateError("Duplicate/missing source ids")
+    for source in sources:
+        if not source.get("name") or not source.get("url"):
+            raise GateError("Source name/url required")
+        canonical_url(source["url"])
+    if source_url:
+        canonical_url(source_url)
+    return source_ids
+
+
+def audit_slides(slides:list[dict],source_ids:set[str])->None:
     for i,slide in enumerate(slides,1):
         errs=check_copy(slide,i)
-        if errs:raise GateError("; ".join(errs))
+        if errs:
+            raise GateError("; ".join(errs))
         if i not in (1,5) and not slide.get("source_ids"):
             raise GateError(f"slide {i}: factual source required")
-        if any(x not in source_ids for x in slide.get("source_ids",[])):
+        if set(slide.get("source_ids",[]))-source_ids:
             raise GateError(f"slide {i}: unknown source id")
-    public=" ".join([str(p.get("title","")),str(p.get("caption","")),str(p.get("hashtags",""))]+
-                    [str(x.get("headline",""))+" "+str(x.get("body","")) for x in slides])
-    if SHADE_CODE.search(public):
-        raise GateError("Brand-specific paint shade code is not allowed in generic homeowner education")
-    for s in sources:
-        if not s.get("name") or not s.get("url"):
-            raise GateError("Source name/url required")
-        canonical_url(s["url"])
-    if p.get("source_url"):canonical_url(p["source_url"])
 
+
+def audit_public_copy(p:dict,slides:list[dict])->None:
+    parts=[str(p.get("title","")),str(p.get("caption","")),str(p.get("hashtags",""))]
+    parts.extend(str(x.get("headline",""))+" "+str(x.get("body","")) for x in slides)
+    if SHADE_CODE.search(" ".join(parts)):
+        raise GateError("Brand-specific paint shade code is not allowed in generic homeowner education")
+
+
+def audit_payload(p:dict)->None:
+    audit_header(p)
+    slides,_,sources=audit_shape(p)
+    source_ids=audit_sources(sources,p.get("source_url",""))
+    audit_slides(slides,source_ids)
+    audit_public_copy(p,slides)
 
 def capture_sources(p:dict,root:Path)->list[dict]:
     out=[]
