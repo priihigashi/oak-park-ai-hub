@@ -16,7 +16,7 @@ from urllib.parse import parse_qs, urlparse, urlunparse
 MAX_SLIDES = 8
 MAX_SLIDE_WORDS = 35
 MAX_HEADLINE_WORDS = 9
-MAX_IMAGES = 4
+MAX_IMAGES = 5
 STATUS = "Built, NOT APPROVED"
 AI_DISCLOSURE = "AI illustrations; not an OPC project."  # internal provenance phrase; not mandatory public copy
 MODELS = ("google/nano-banana-pro", "google/imagen-4", "bytedance/seedream-4.5")
