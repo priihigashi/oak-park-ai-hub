@@ -1,0 +1,275 @@
+{
+  "version": 1,
+  "generated_for": "OPC curated homeowner education",
+  "date": "2026-09-21",
+  "posts": [
+    {
+      "slug": "white-paint",
+      "title": "Why White Paints Look Different",
+      "keywords": [
+        "white",
+        "paint",
+        "undertones"
+      ],
+      "caption": "White is not one color. Undertones, room light, and nearby finishes can change how a white reads, so compare a few options in your own space before you commit.",
+      "hashtags": "#WhitePaint #PaintingTips #HomeRenovation #SouthFloridaHomes #OakParkConstruction",
+      "sources": [
+        {
+          "id": "W1",
+          "name": "Benjamin Moore",
+          "heading": "How to Choose the Best White Paint",
+          "candidates": [
+            {
+              "url": "https://www.benjaminmoore.com/en-us/designers/designer-inspiration/inside-design/kristine-paige-how-to-choose-white-paint",
+              "required": [
+                "natural light",
+                "other items in the room"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "W2",
+          "name": "Sherwin-Williams",
+          "heading": "White Paint Colors",
+          "candidates": [
+            {
+              "url": "https://www.sherwin-williams.com/en-us/color/color-family/white-paint-colors",
+              "required": [
+                "undertones",
+                "lighting in your home"
+              ]
+            },
+            {
+              "url": "https://www.sherwin-williams.com/en-us/color/color-family/white-paint-colors/tab/warm-whites",
+              "required": [
+                "undertones",
+                "lighting in your home"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "W3",
+          "name": "Benjamin Moore",
+          "heading": "Tips on How to Sample Paint Colors",
+          "candidates": [
+            {
+              "url": "https://www.benjaminmoore.com/en-us/interior-exterior-paints-stains/how-to-advice/painting-101/choosing-paint-samples",
+              "required": [
+                "sample",
+                "lighting"
+              ]
+            }
+          ]
+        }
+      ],
+      "slides": [
+        {
+          "id": 1,
+          "layout": "cover",
+          "headline": "White is not just white.",
+          "body": "Warm and cool undertones can make two white paints feel very different in the same room.",
+          "source_ids": [
+            "W2"
+          ],
+          "visual_key": "A1",
+          "visual_description": "Three generic white sample panels with subtly warm, neutral, and cool undertones shown together in one current South Florida room."
+        },
+        {
+          "id": 2,
+          "layout": "compare",
+          "headline": "Light pulls undertones forward.",
+          "body": "Natural and artificial light can make the same white read warmer or cooler throughout the day.",
+          "source_ids": [
+            "W1",
+            "W2"
+          ],
+          "visual_key": "A2",
+          "visual_description": "Controlled close comparison of the same generic white sample under soft window daylight and warm evening lamp light."
+        },
+        {
+          "id": 3,
+          "layout": "point",
+          "headline": "Your finishes matter too.",
+          "body": "Floors, cabinets, fabrics, and other colors can change which white feels balanced in the room.",
+          "source_ids": [
+            "W1"
+          ],
+          "visual_key": "A3",
+          "visual_description": "Overhead material flat-lay pairing a generic white sample with light oak, cool stone, cream textile, and blue-gray cabinetry samples."
+        },
+        {
+          "id": 4,
+          "layout": "point",
+          "headline": "Compare whites side by side.",
+          "body": "Put several white samples together so differences in undertone and brightness are easier to see.",
+          "source_ids": [
+            "W2",
+            "W3"
+          ],
+          "visual_key": "A4",
+          "visual_description": "Bird's-eye arrangement of several unlabeled white sample boards layered side by side on a clean work surface."
+        },
+        {
+          "id": 5,
+          "layout": "close",
+          "headline": "Test them in your room.",
+          "body": "View your finalists around the space and under the lighting you actually use before you commit.",
+          "source_ids": [
+            "W1",
+            "W3"
+          ],
+          "visual_key": "A5",
+          "visual_description": "Wide room view with several generic white sample boards placed on different walls near a window and a lit lamp, showing an in-room comparison process."
+        }
+      ],
+      "visuals": [
+        {
+          "key": "A1",
+          "subject": "Eye-level editorial photograph of a current, well-kept contemporary South Florida living room with warm light oak and clean modern furniture. Three large unlabeled white paint sample panels lean side by side against the same wall, one subtly warm, one neutral, one subtly cool. They are generic concept samples, not manufacturer colors. Natural daylight, no text, labels, logos, numbers or people. Teaching purpose: show that 'white' contains visible nuance."
+        },
+        {
+          "key": "A2",
+          "subject": "Tight controlled diptych-style photograph of the SAME generic white foam-core sample and same neutral wall, same camera position. Left half illuminated by soft natural window daylight; right half illuminated by a warm evening interior lamp. Only the lighting condition changes. No text, labels, logos or brand color claims. Teaching purpose: show how room light can shift the appearance of one white."
+        },
+        {
+          "key": "A3",
+          "subject": "Bird's-eye documentary flat-lay on a clean light-oak design table: one plain generic white paint sample board centered beside a warm light-oak flooring piece, a cool gray stone sample, a soft cream textile, and a muted blue-gray cabinetry sample. Distinct material textures, no labels or logos. Teaching purpose: show that surrounding finishes must be considered with white paint."
+        },
+        {
+          "key": "A4",
+          "subject": "Overhead close photograph of five unlabeled white sample boards partially layered like a fan on a neutral work surface. The whites have subtle but visible warm, neutral, and cool undertone differences while remaining realistic. A simple unbranded brush sits off to one side. No text, codes, labels or logos. Teaching purpose: compare whites directly side by side."
+        },
+        {
+          "key": "A5",
+          "subject": "Wide three-quarter photograph of a contemporary South Florida room with two walls and a large window. Several plain unlabeled white sample boards are temporarily placed on different walls, with natural daylight from the window and one simple interior lamp switched on. Current clean furnishings, no people, no text or logos. Teaching purpose: show testing finalist whites around the actual room under real lighting."
+        }
+      ]
+    },
+    {
+      "slug": "grout-tile",
+      "title": "Why Tile Looks Different at Home",
+      "keywords": [
+        "tile",
+        "grout",
+        "lighting"
+      ],
+      "caption": "Tile should be judged in your room, not by itself. Lighting, grout, and nearby finishes can change the final look, so compare the whole combination before you commit.",
+      "hashtags": "#TileTips #GroutColor #RemodelTips #SouthFloridaHomes #OakParkConstruction",
+      "sources": [
+        {
+          "id": "T1",
+          "name": "Daltile",
+          "heading": "How to Choose the Right Grout Color for Your Tile",
+          "candidates": [
+            {
+              "url": "https://www.daltile.com/tile-therapy/articles/how-to-choose-the-right-grout-color-for-tile",
+              "required": [
+                "Matching Grout for a Seamless Look",
+                "Contrasting Grout for Added Definition",
+                "Grout width matters",
+                "lighting"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "T2",
+          "name": "Daltile",
+          "heading": "Complimentary Design Services",
+          "candidates": [
+            {
+              "url": "https://www.daltile.com/complimentary-design-services",
+              "required": [
+                "Take home free tile samples",
+                "your own space and lighting"
+              ]
+            }
+          ]
+        }
+      ],
+      "slides": [
+        {
+          "id": 1,
+          "layout": "cover",
+          "headline": "Tile changes in context.",
+          "body": "Lighting, grout, and nearby finishes can change how a tile installation reads in the room.",
+          "source_ids": [
+            "T1",
+            "T2"
+          ],
+          "visual_key": "A1",
+          "visual_description": "Current upscale generic tiled room showing the finished material in context."
+        },
+        {
+          "id": 2,
+          "layout": "point",
+          "headline": "Take the sample home.",
+          "body": "View tile in your own space and lighting before you decide.",
+          "source_ids": [
+            "T2"
+          ],
+          "visual_key": "A2",
+          "visual_description": "Homeowner hands holding an unbranded tile sample beside real room finishes in natural light."
+        },
+        {
+          "id": 3,
+          "layout": "compare",
+          "headline": "Grout can blend or define.",
+          "body": "Matching grout softens the pattern. Contrasting grout makes the tile layout stand out.",
+          "source_ids": [
+            "T1"
+          ],
+          "visual_key": "A3",
+          "visual_description": "Controlled same-tile comparison with tone-on-tone grout versus contrasting grout."
+        },
+        {
+          "id": 4,
+          "layout": "compare",
+          "headline": "Check grout in your lighting.",
+          "body": "Natural and artificial light can shift how grout color appears next to your tile.",
+          "source_ids": [
+            "T1"
+          ],
+          "visual_key": "A4",
+          "visual_description": "Controlled same tile-and-grout sample under window daylight and warm artificial light."
+        },
+        {
+          "id": 5,
+          "layout": "close",
+          "headline": "Judge the whole combination.",
+          "body": "Compare tile with grout, paint, cabinets, and other nearby finishes before you commit.",
+          "source_ids": [
+            "T1",
+            "T2"
+          ],
+          "visual_key": "A5",
+          "visual_description": "Distinct overhead materials board combining tile, grout, paint, cabinet, and countertop samples."
+        }
+      ],
+      "visuals": [
+        {
+          "key": "A1",
+          "subject": "Eye-level wide documentary photograph of a contemporary South Florida bathroom with a clean generic light-neutral porcelain tile installation, current well-kept vanity, modern fixtures, warm wood accents, and realistic daylight. Tile should look plausible and unbranded, with visible grout joints but no product-specific pattern or exact manufacturer identity. No text or labels. Teaching purpose: show that tile is experienced as part of a whole finished room."
+        },
+        {
+          "key": "A2",
+          "subject": "Close three-quarter documentary photograph of hands holding a single plain unbranded light-neutral tile sample inside a contemporary home near a window, beside a cabinet edge and neutral countertop material. Natural daylight, realistic ceramic or porcelain texture, no showroom signs, product labels, brand names, or text. Teaching purpose: demonstrate taking a tile sample into the actual room and viewing it with real surrounding finishes."
+        },
+        {
+          "key": "A3",
+          "subject": "Controlled two-panel close-detail photograph of the IDENTICAL simple rectangular light-neutral tile pattern under the same neutral light and same camera angle. Left panel: grout closely matches the tile, producing a quieter blended grid. Right panel: noticeably darker contrasting grout outlines each tile and makes the layout more prominent. Tile geometry and exposure remain fixed. No text, labels, brands, or exact product claim. Teaching purpose: clearly show grout blending versus defining the pattern."
+        },
+        {
+          "key": "A4",
+          "subject": "Controlled two-panel photograph of the IDENTICAL small generic tile-and-grout test panel from the exact same camera position. Left: natural window daylight. Right: warm evening artificial lamp light. Tile, grout, spacing, camera, and surroundings remain fixed; only lighting changes. No labels, text, brands, or exact grout-color claim. Teaching purpose: show how lighting changes the perceived tile-and-grout color relationship."
+        },
+        {
+          "key": "A5",
+          "subject": "Bird's-eye overhead documentary photograph of a clean light-oak design table with an unbranded tile sample, two plain grout sample strips, a blank paint sample board, a warm wood cabinet sample, and a neutral stone countertop sample arranged together. Soft side daylight, realistic materials, no text, labels, logos, color names, or product codes. Teaching purpose: summarize judging tile as part of the full material combination before installation."
+        }
+      ]
+    }
+  ]
+}

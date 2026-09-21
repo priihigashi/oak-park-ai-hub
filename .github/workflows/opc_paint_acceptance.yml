@@ -1,0 +1,528 @@
+name: OPC paint idea acceptance (owner-triggered)
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+    paths:
+      - 'scripts/factcheck_print/opc*'
+      - 'tests/test_opc_print*'
+      - '.github/workflows/opc_paint_acceptance.yml'
+permissions:
+  contents: read
+  issues: write
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - run: pip install requests pillow
+      - run: python -m unittest discover -s tests -p 'test_opc_print*.py' -v
+  authorized-paint-test:
+    needs: regression
+    if: >-
+      github.event.action == 'labeled' &&
+      github.event.label.name == 'opc-paint-final-20260920' &&
+      github.event.pull_request.number == 300 &&
+      github.actor == 'priihigashi' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'fix/opc-print-ready-20260920'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    concurrency:
+      group: opc-print-filing
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - name: Install existing OPC runtime dependencies
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+          pip install yt-dlp openai anthropic google-generativeai faster-whisper gspread google-auth google-api-python-client python-dotenv requests youtube-transcript-api instaloader pytubefix playwright pillow
+          python -m playwright install chromium --with-deps
+      - name: One authorized idea-mode run; five images maximum; private outputs only
+        env:
+          CLAUDE_KEY_OPC: ${{ secrets.CLAUDE_KEY_OPC }}
+          PRI_OP_REPLICATE_API_KEY: ${{ secrets.PRI_OP_REPLICATE_API_KEY }}
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          PRI_OP_GMAIL_APP_PASSWORD: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
+        run: |
+          python scripts/factcheck_print/opc.py \
+            --project opc --engine claude \
+            --image-model google/nano-banana-pro \
+            --rebuild-row 429 \
+            --idea 'Why your paint color looks different at home' \
+            --notes 'OWNER REVIEW FINAL. Prefer exactly five cards with five distinct visual jobs. Fold the lamp/artificial-light point into Card 2 lighting comparison instead of giving it a repetitive standalone card. Card 1: keep a contemporary South Florida room but furnishings must look current/well-kept, not worn. Card 2 is the main teaching visual: controlled same neutral wall/room, same camera position, visibly different sunny daylight vs overcast daylight vs evening artificial light; conceptual, no exact brand color claim. Card 3 artificial lamp/room-lighting detail is supporting, not a near-duplicate hero. Card 4 matte vs higher-sheen reflectivity comparison is a strong keep. Card 5 show the real sampling PROCESS (foam board/brush or movable sample method) without presenting an AI-created swatch as an exact paint color. Card 6 must have its own distinct closing/checklist composition, not reuse Card 5. No consecutive duplicate visual keys unless a controlled comparison requires it. Use primary manufacturer guidance from Benjamin Moore and Sherwin-Williams; no contractor competitor sources, invented prices, promises, first-person project claims, brand shade names/codes, or fake before/after. Public carousel/caption must not add loud AI boilerplate; internal provenance remains in cards.json. Idea mode: no source video/transcription claim.' \
+            --out opc-paint-final --run-key pr300-paint-final-20260920
+  authorized-editorial-resume:
+    needs: regression
+    if: >-
+      github.event.action == 'labeled' &&
+      github.event.label.name == 'opc-paint-resume-20260920' &&
+      github.event.pull_request.number == 300 &&
+      github.actor == 'priihigashi' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'fix/opc-print-ready-20260920'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    concurrency:
+      group: opc-print-filing
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - name: Install existing OPC runtime dependencies
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+          pip install yt-dlp openai anthropic google-generativeai faster-whisper gspread google-auth google-api-python-client python-dotenv requests youtube-transcript-api instaloader pytubefix playwright pillow
+          python -m playwright install chromium --with-deps
+      - name: Resume saved evidence and draft; never replay capture or research
+        env:
+          CLAUDE_KEY_OPC: ${{ secrets.CLAUDE_KEY_OPC }}
+          PRI_OP_REPLICATE_API_KEY: ${{ secrets.PRI_OP_REPLICATE_API_KEY }}
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          PRI_OP_GMAIL_APP_PASSWORD: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
+        run: |
+          python scripts/factcheck_print/opc_resume_editorial.py \
+            --folder-id 1T_2e8JHybyo7Qd59xW_v2_6SsIU44ZAo \
+            --run-key pr300-paint-idea-20260920
+  authorized-assisted-media:
+    needs: regression
+    if: >-
+      github.event.action == 'labeled' &&
+      github.event.label.name == 'opc-paint-assisted-20260920' &&
+      github.event.pull_request.number == 300 &&
+      github.actor == 'priihigashi' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'fix/opc-print-ready-20260920'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    concurrency:
+      group: opc-print-filing
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - name: Install existing OPC runtime dependencies
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+          pip install yt-dlp openai anthropic google-generativeai faster-whisper gspread google-auth google-api-python-client python-dotenv requests youtube-transcript-api instaloader pytubefix playwright pillow
+          python -m playwright install chromium --with-deps
+      - name: Assisted media and filing test; no text API calls
+        env:
+          PRI_OP_REPLICATE_API_KEY: ${{ secrets.PRI_OP_REPLICATE_API_KEY }}
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          PRI_OP_GMAIL_APP_PASSWORD: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
+        run: |
+          python scripts/factcheck_print/opc_assisted_acceptance.py \
+            --folder-id 1T_2e8JHybyo7Qd59xW_v2_6SsIU44ZAo \
+            --run-key pr300-paint-idea-20260920 \
+            --spec-sha256 ff1d8eb2ea6ff25916e731a1fc69392728308de3728b407f121c824cc50b2bd7
+
+  authorized-owner-revision:
+    needs: regression
+    if: >-
+      github.event.action == 'labeled' &&
+      github.event.label.name == 'opc-paint-owner-revision-20260921' &&
+      github.event.pull_request.number == 300 &&
+      github.actor == 'priihigashi' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'fix/opc-print-ready-20260920'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    concurrency:
+      group: opc-print-filing
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - name: Install owner-revision runtime
+        run: |
+          pip install google-api-python-client google-auth requests playwright pillow python-dotenv
+          python -m playwright install chromium --with-deps
+      - name: Owner revision — zero text API calls, four image requests maximum
+        env:
+          PRI_OP_REPLICATE_API_KEY: ${{ secrets.PRI_OP_REPLICATE_API_KEY }}
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: python scripts/factcheck_print/opc_owner_paint_revision.py
+
+  authorized-review-js-fix:
+    needs: regression
+    if: >-
+      github.event.action == 'labeled' &&
+      github.event.label.name == 'opc-paint-review-js-fix-20260921' &&
+      github.event.pull_request.number == 300 &&
+      github.actor == 'priihigashi' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'fix/opc-print-ready-20260920'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: opc-print-filing
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - name: Install Drive runtime only
+        run: pip install google-api-python-client google-auth requests pillow python-dotenv
+      - name: Replace only v372 review.html
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: python scripts/factcheck_print/opc_fix_v372_review.py
+
+  authorized-curated-two-posts:
+    needs: regression
+    if: >-
+      github.event.action == 'labeled' &&
+      github.event.label.name == 'opc-curated-two-posts-20260921' &&
+      github.event.pull_request.number == 300 &&
+      github.actor == 'priihigashi' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'fix/opc-print-ready-20260920'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    concurrency:
+      group: opc-print-filing
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - name: Install curated OPC runtime
+        run: |
+          pip install google-api-python-client google-auth requests playwright pillow python-dotenv
+          python -m playwright install chromium --with-deps
+      - name: Build two curated posts — zero text API, resumable image checkpoints
+        env:
+          PRI_OP_REPLICATE_API_KEY: ${{ secrets.PRI_OP_REPLICATE_API_KEY }}
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: python scripts/factcheck_print/opc_curated_batch.py
+
+  authorized-refresh-v372-live-review:
+    needs: regression
+    if: >-
+      github.event.action == 'labeled' &&
+      github.event.label.name == 'opc-refresh-v372-review-20260921' &&
+      github.event.pull_request.number == 300 &&
+      github.actor == 'priihigashi' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'fix/opc-print-ready-20260920'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    concurrency:
+      group: opc-print-filing
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - name: Install review refresh runtime
+        run: |
+          pip install google-api-python-client google-auth requests playwright pillow python-dotenv
+          python -m playwright install chromium --with-deps
+      - name: Rebuild v372 review wrapper only
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: python scripts/factcheck_print/opc_refresh_v372_review.py
+
+  authorized-v372-review-ui:
+    needs: regression
+    if: >-
+      github.event.action == 'labeled' &&
+      github.event.label.name == 'opc-v372-review-ui-20260921' &&
+      github.event.pull_request.number == 300 &&
+      github.actor == 'priihigashi' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'fix/opc-print-ready-20260920'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: opc-print-filing
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - name: Install Drive runtime only
+        run: pip install google-api-python-client google-auth requests pillow python-dotenv
+      - name: Rebuild existing v372 review UI only
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: python scripts/factcheck_print/opc_rebuild_v372_review.py
+
+  authorized-chat-queue:
+    needs: regression
+    if: >-
+      github.event.action == 'labeled' &&
+      github.event.label.name == 'opc-chat-queue' &&
+      github.event.pull_request.number == 300 &&
+      github.actor == 'priihigashi' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'fix/opc-print-ready-20260920'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    concurrency:
+      group: opc-print-filing
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - name: Install private-topic runtime
+        run: |
+          pip install google-api-python-client google-auth requests playwright pillow python-dotenv
+          python -m playwright install chromium --with-deps
+      - name: Build exactly one private audited ChatGPT spec
+        env:
+          PRI_OP_REPLICATE_API_KEY: ${{ secrets.PRI_OP_REPLICATE_API_KEY }}
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: python scripts/factcheck_print/opc_chat_queue.py --mode chat
+      - name: Return review site on PR
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          REVIEW_URL="$(python - <<'PY'
+          import json
+          print(json.load(open('opc_result.json')).get('review_url',''))
+          PY
+          )"
+          test -n "$REVIEW_URL"
+          gh pr comment 300 --body "OPC private review ready: $REVIEW_URL"
+      - name: Remove reusable queue label
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X DELETE "repos/${{ github.repository }}/issues/300/labels/opc-chat-queue" >/dev/null 2>&1 || true
+
+  authorized-link-queue:
+    needs: regression
+    if: >-
+      github.event.action == 'labeled' &&
+      github.event.label.name == 'opc-link-queue' &&
+      github.event.pull_request.number == 300 &&
+      github.actor == 'priihigashi' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'fix/opc-print-ready-20260920'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    concurrency:
+      group: opc-print-filing
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - name: Install source-video OPC runtime
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+          pip install yt-dlp openai anthropic google-generativeai faster-whisper gspread google-auth google-api-python-client python-dotenv requests youtube-transcript-api instaloader pytubefix playwright pillow
+          python -m playwright install chromium --with-deps
+      - name: Capture/transcribe/research/build exactly one private video request
+        env:
+          CLAUDE_KEY_OPC: ${{ secrets.CLAUDE_KEY_OPC }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          PRI_OP_REPLICATE_API_KEY: ${{ secrets.PRI_OP_REPLICATE_API_KEY }}
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          PRI_OP_GMAIL_APP_PASSWORD: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
+          PRI_OP_YT_COOKIES: ${{ secrets.PRI_OP_YT_COOKIES }}
+          PRI_OP_IG_COOKIES: ${{ secrets.PRI_OP_IG_COOKIES }}
+          APIFY_API_KEY: ${{ secrets.APIFY_API_KEY }}
+        run: python scripts/factcheck_print/opc_chat_queue.py --mode link
+      - name: Return review site on PR
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          REVIEW_URL="$(python - <<'PY'
+          import json
+          print(json.load(open('opc_result.json')).get('review_url',''))
+          PY
+          )"
+          test -n "$REVIEW_URL"
+          gh pr comment 300 --body "OPC private video-derived review ready: $REVIEW_URL"
+      - name: Remove reusable queue label
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X DELETE "repos/${{ github.repository }}/issues/300/labels/opc-link-queue" >/dev/null 2>&1 || true
+\n\n'"Built, NOT approved or published." || echo "PR comment unavailable; review URL is already filed in Drive/Sheets."
+      - name: Remove reusable queue label
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X DELETE "repos/${{ github.repository }}/issues/300/labels/opc-chat-queue" >/dev/null 2>&1 || true
+
+  authorized-link-queue:
+    needs: regression
+    if: >-
+      github.event.action == 'labeled' &&
+      github.event.label.name == 'opc-link-queue' &&
+      github.event.pull_request.number == 300 &&
+      github.actor == 'priihigashi' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'fix/opc-print-ready-20260920'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    concurrency:
+      group: opc-print-filing
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - name: Install source-video OPC runtime
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+          pip install yt-dlp openai anthropic google-generativeai faster-whisper gspread google-auth google-api-python-client python-dotenv requests youtube-transcript-api instaloader pytubefix playwright pillow
+          python -m playwright install chromium --with-deps
+      - name: Capture/transcribe/research/build exactly one private video request
+        env:
+          CLAUDE_KEY_OPC: ${{ secrets.CLAUDE_KEY_OPC }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          PRI_OP_REPLICATE_API_KEY: ${{ secrets.PRI_OP_REPLICATE_API_KEY }}
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          PRI_OP_GMAIL_APP_PASSWORD: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
+          PRI_OP_YT_COOKIES: ${{ secrets.PRI_OP_YT_COOKIES }}
+          PRI_OP_IG_COOKIES: ${{ secrets.PRI_OP_IG_COOKIES }}
+          APIFY_API_KEY: ${{ secrets.APIFY_API_KEY }}
+        run: python scripts/factcheck_print/opc_chat_queue.py --mode link
+      - name: Return review site on PR
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          REVIEW_URL="$(python - <<'PY'
+          import json
+          print(json.load(open('opc_result.json')).get('review_url',''))
+          PY
+          )"
+          test -n "$REVIEW_URL"
+          gh pr comment 300 --body "OPC private video-derived review ready: $REVIEW_URL"$'\n\n'"Built, NOT approved or published."
+      - name: Remove reusable queue label
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X DELETE "repos/${{ github.repository }}/issues/300/labels/opc-link-queue" >/dev/null 2>&1 || true
+\n\n'"Built, NOT approved or published." || echo "PR comment unavailable; review URL is already filed in Drive/Sheets."
+      - name: Remove reusable queue label
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X DELETE "repos/${{ github.repository }}/issues/300/labels/opc-link-queue" >/dev/null 2>&1 || true
+\n\n'"Built, NOT approved or published." || echo "PR comment unavailable; review URL is already filed in Drive/Sheets."
+      - name: Remove reusable queue label
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X DELETE "repos/${{ github.repository }}/issues/300/labels/opc-chat-queue" >/dev/null 2>&1 || true
+
+  authorized-link-queue:
+    needs: regression
+    if: >-
+      github.event.action == 'labeled' &&
+      github.event.label.name == 'opc-link-queue' &&
+      github.event.pull_request.number == 300 &&
+      github.actor == 'priihigashi' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.head.ref == 'fix/opc-print-ready-20260920'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    concurrency:
+      group: opc-print-filing
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - name: Install source-video OPC runtime
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+          pip install yt-dlp openai anthropic google-generativeai faster-whisper gspread google-auth google-api-python-client python-dotenv requests youtube-transcript-api instaloader pytubefix playwright pillow
+          python -m playwright install chromium --with-deps
+      - name: Capture/transcribe/research/build exactly one private video request
+        env:
+          CLAUDE_KEY_OPC: ${{ secrets.CLAUDE_KEY_OPC }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          PRI_OP_REPLICATE_API_KEY: ${{ secrets.PRI_OP_REPLICATE_API_KEY }}
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          PRI_OP_GMAIL_APP_PASSWORD: ${{ secrets.PRI_OP_GMAIL_APP_PASSWORD }}
+          PRI_OP_YT_COOKIES: ${{ secrets.PRI_OP_YT_COOKIES }}
+          PRI_OP_IG_COOKIES: ${{ secrets.PRI_OP_IG_COOKIES }}
+          APIFY_API_KEY: ${{ secrets.APIFY_API_KEY }}
+        run: python scripts/factcheck_print/opc_chat_queue.py --mode link
+      - name: Return review site on PR
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          REVIEW_URL="$(python - <<'PY'
+          import json
+          print(json.load(open('opc_result.json')).get('review_url',''))
+          PY
+          )"
+          test -n "$REVIEW_URL"
+          gh pr comment 300 --body "OPC private video-derived review ready: $REVIEW_URL"$'\n\n'"Built, NOT approved or published."
+      - name: Remove reusable queue label
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X DELETE "repos/${{ github.repository }}/issues/300/labels/opc-link-queue" >/dev/null 2>&1 || true
