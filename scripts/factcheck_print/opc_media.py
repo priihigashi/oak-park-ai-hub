@@ -158,7 +158,7 @@ class ReplicateImages:
         (self.root/'resources/image-usage.json').write_text(json.dumps(self.records,indent=2),encoding='utf-8')
 
     def generate(self, key: str, subject: str, anchor: Path | None = None) -> dict:
-        if not re.fullmatch(r'A[1-4]',key) or len(self.records) >= self.max_images:
+        if not re.fullmatch(r'A[1-5]',key) or len(self.records) >= self.max_images:
             raise GateError('Image limit reached or invalid asset key')
         record = {'key':key,'model':self.model,'status':'request_started','estimated_usd':None,
                   'cost_note':'Provider invoice not returned by prediction API; count recorded, amount unknown'}
