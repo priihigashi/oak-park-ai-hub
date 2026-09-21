@@ -58,7 +58,10 @@ def mark(store:Store,item:dict,state:str)->None:
 
 
 def run_chat(item:dict)->None:
-    cmd=[sys.executable,str(HERE/"opc_chat_build.py"),"--spec-drive-id",item["id"],"--out","factcheck_out"]
+    if "SELF-AUDIT-VISUAL-FIX" in item.get("name",""):
+        cmd=[sys.executable,str(HERE/"opc_self_audit_queue.py")]
+    else:
+        cmd=[sys.executable,str(HERE/"opc_chat_build.py"),"--spec-drive-id",item["id"],"--out","factcheck_out"]
     subprocess.run(cmd,check=True)
 
 
