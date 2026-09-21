@@ -149,11 +149,11 @@ function cardText(id){
  const [theme,num]=id.split('-');
  const deck=document.querySelector(`[data-deck="${theme}"]`);
  const cards=[...deck.querySelectorAll('.card')]; const card=cards[Number(num)-1];
- return {theme,num,headline:card?.querySelector('img')?.alt||'',note:card?.querySelector('textarea')?.value||''};
+ return {theme,num,headline:card?.dataset.headline||'',body:card?.dataset.body||'',note:card?.querySelector('textarea')?.value||''};
 }
 function output(){const rows=[];
  Object.keys(feedback.cards).sort().forEach(id=>{const s=feedback.cards[id]||{};const m=cardText(id);if(!s.choice&&!String(s.note||'').trim())return;
-  rows.push(`=== ${m.theme.toUpperCase()} · CARD ${m.num} ===\n${m.headline}\nDecision: ${(s.choice||'NOTE ONLY').toUpperCase()}\nMy comment: ${String(s.note||'').trim()||'(none)'}`)});
+  rows.push(`=== ${m.theme.toUpperCase()} · CARD ${m.num} ===\n${m.headline}\nCurrent text: ${m.body}\nDecision: ${(s.choice||'NOTE ONLY').toUpperCase()}\nMy comment: ${String(s.note||'').trim()||'(none)'}`)});
  const el=document.getElementById('review-output'); if(el) el.textContent=rows.length?rows.join('\n\n'):'No review notes yet.';
 }
 document.querySelectorAll('[data-theme]').forEach(b=>b.addEventListener('click',()=>{
@@ -170,6 +170,9 @@ document.querySelectorAll('[data-note]').forEach(t=>{
  const v=feedback.cards[t.dataset.note]; if(v?.note)t.value=v.note;
  t.addEventListener('input',()=>{const x=feedback.cards[t.dataset.note]||{};x.note=t.value;feedback.cards[t.dataset.note]=x;save();output();});
 });
+document.querySelectorAll('[data-choice]').forEach(b=>{const v=feedback.cards[b.dataset.card]||{};b.setAttribute('aria-pressed',String(v.choice===b.dataset.choice));});
+document.querySelectorAll('[data-deck]').forEach(d=>d.hidden=d.dataset.deck!==feedback.variant);
+document.querySelectorAll('[data-theme]').forEach(x=>x.classList.toggle('active',x.dataset.theme===feedback.variant));
 async function copyReview(){output();const el=document.getElementById('review-output');const text=el.textContent;const b=document.getElementById('copy-review');
  try{await navigator.clipboard.writeText(text);b.textContent='✓ Copied';setTimeout(()=>b.textContent='Copy my review',1600)}catch(e){
   const r=document.createRange();r.selectNodeContents(el);const s=window.getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Selected — press ⌘C';
@@ -199,7 +202,7 @@ def review(spec: dict, root: Path) -> Path:
         parts.append(f'<section class="deck" data-deck="{theme}" {"" if theme=="dark" else "hidden"}>')
         for c in spec['slides']:
             key=f'{theme}-{c["id"]}';png=root/'png'/theme/f'card_{c["id"]:02d}.png'
-            parts.append(f'<article class="card"><img alt="{esc(c["headline"])}" src="{data_uri(png,"image/png")}">'
+            parts.append(f'<article class="card" data-headline="{esc(c["headline"],quote=True)}" data-body="{esc(c["body"],quote=True)}"><img alt="{esc(c["headline"])}" src="{data_uri(png,"image/png")}">'
                 f'<div class="choices"><button data-card="{key}" data-choice="keep">Keep</button><button data-card="{key}" data-choice="redo">Redo</button></div>'
                 f'<textarea data-note="{key}" placeholder="What should change?"></textarea></article>')
         parts.append('</section>')
