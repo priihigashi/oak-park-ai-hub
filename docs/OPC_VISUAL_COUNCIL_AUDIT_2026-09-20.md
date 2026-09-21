@@ -45,5 +45,7 @@ Status: implementation review on PR #300 branch only. No merge, publication or o
 - Review page keeps owner approval false and supports copy-to-chat.
 - Actual v2 output must still be visually inspected; green CI alone is not owner approval.
 
-## Council note
-This is a Council-style reconciliation using the project's stored Council/reviewer rules and prior design contracts. No separately callable O Conselho/AIOX service was exposed in this ChatGPT session, so this report must not be represented as an independent external Council execution.
+## Council method applied
+The stored **O CONSELHO — OPC Website Launch — Verdict + Method Log (2026-08-25)** was used as the governance rubric: establish ground truth first, inspect actual code rather than trusting prose, attack new findings adversarially, run the zero-dependency test tier, preserve owner-recorded requirements, and never close a visual task from code evidence alone.
+
+This session does **not** have a separately callable O Conselho/AIOX execution service, so this is not a new two-seat blind Council run. It is an implementation audit applying the existing Council method and owner requirements. Final visual closure still belongs to Priscila.
