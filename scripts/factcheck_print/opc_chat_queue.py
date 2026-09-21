@@ -62,15 +62,20 @@ def run_chat(item:dict)->None:
     subprocess.run(cmd,check=True)
 
 
-def run_link(store:Store,item:dict)->None:
-    with tempfile.TemporaryDirectory() as tmp:
-        data=download_spec(store,item["id"],Path(tmp)/"link-request.json")
+def link_request(data:dict)->tuple[str,str]:
     if data.get("version")!=1 or data.get("project")!="opc":
         raise GateError("Unsupported private OPC link request")
     url=str(data.get("source_url","")).strip()
     notes=str(data.get("notes",""))[:4000]
     if not video_url(url):
         raise GateError("Private OPC link request must contain a supported HTTPS video URL")
+    return url,notes
+
+
+def run_link(store:Store,item:dict)->None:
+    with tempfile.TemporaryDirectory() as tmp:
+        data=download_spec(store,item["id"],Path(tmp)/"link-request.json")
+    url,notes=link_request(data)
     cmd=[sys.executable,str(HERE/"opc.py"),"--project","opc","--url",url,"--notes",notes,
          "--out","factcheck_out","--run-key",f"chat-link-{item['id']}"]
     subprocess.run(cmd,check=True)
