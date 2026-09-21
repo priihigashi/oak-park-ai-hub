@@ -18,12 +18,12 @@ not an independent Council or owner approval.'''
 
 REPAIR = '''Repair the supplied OPC draft using the actual excerpts and review issues.
 Return the SAME JSON schema with title, caption, hashtags, slides, visuals. Do not rewrite
-or invent source evidence. Use 5-6 slides. Headlines 3-7 words; total headline+body <=25
+or invent source evidence. Use 5 slides by default; use 6 only when the sixth point adds a genuinely different teaching job. Headlines 3-7 words; total headline+body <=25
 words and body <=150 characters. Each middle slide needs the exact supporting source_ids.
 Keep one simple useful point per slide. Remove technical jargon rather than expanding it.
 Remove unsupported numbers, time periods, absolutes, guarantees and invented sponsorship.
 The audience needs a practical homeowner tip, not a scientific lecture or debunk.
-Use three or four sequential visuals A1-A4, every one directly relevant to its assigned slides.
+Use four or five sequential visuals A1-A5, every one directly relevant to its assigned slides. Prefer a five-card deck with five distinct visual jobs when the topic supports it.
 A visual must answer: "what does this card need to SHOW to teach the point?" Prefer room,
 controlled comparison, material detail, and practical sample-testing scenes. Never reuse the
 same key on consecutive cards unless intentional_reuse=true and the repetition is necessary to
