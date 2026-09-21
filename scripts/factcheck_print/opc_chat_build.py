@@ -163,25 +163,42 @@ def capture_sources(p:dict,root:Path)->list[dict]:
 
 
 def generate_assets(p:dict,root:Path,model:str)->list[dict]:
-    chain=p.get("image_models") or [model]
+    # Affordable default for generic OPC scenes. A private spec can explicitly
+    # promote Nano Banana Pro when reference editing/consistency justifies it.
+    chain=p.get("image_models") or [
+        "bytedance/seedream-4.5",
+        "google/nano-banana-2-lite",
+        "google/imagen-4-fast",
+    ]
     if not isinstance(chain,list) or not 1<=len(chain)<=3 or len(set(chain))!=len(chain):
         raise GateError("image_models must contain 1-3 distinct approved Replicate models")
     if any(m not in __import__("opc_contract").MODELS for m in chain):
         raise GateError("Unsupported image fallback model")
     provider=ReplicateImages(chain[0],root,max_images=15)
     assets=[]
+    disabled=set()
+    circuit=[]
     for visual in p["visuals"]:
         failures=[]
         for candidate in chain:
+            if candidate in disabled:
+                failures.append({"model":candidate,"status":"skipped_after_prior_failure"})
+                continue
             provider.switch_model(candidate)
             try:
                 assets.append(provider.generate(visual["key"],plain(visual["subject"]),None))
                 break
             except GateError as exc:
-                failures.append({"model":candidate,"error":str(exc)[:180]})
+                failures.append({"model":candidate,"status":"failed","error":str(exc)[:180]})
+                # One provider/model failure opens a per-run circuit breaker so
+                # five cards do not pay for the same known-bad route repeatedly.
+                disabled.add(candidate)
+                circuit.append({"model":candidate,"disabled_after":visual["key"]})
         else:
             save(root/"resources"/f"{visual['key']}-image-failures.json",failures)
+            save(root/"resources"/"image-circuit-breakers.json",circuit)
             raise GateError(f"All declared image routes failed for {visual['key']}")
+    save(root/"resources"/"image-circuit-breakers.json",circuit)
     return assets
 
 
