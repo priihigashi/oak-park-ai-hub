@@ -157,7 +157,22 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           STATUS: ${{ job.status }}
         run: |
-          gh issue comment "${{ github.event.issue.number }}" --body "Fact-check run finished: $STATUS. Successful outputs are in Drive; on failure inspect the run and owner email. Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          REVIEW_URL=""
+          if [ "$FC_PROJECT" = "opc" ] && [ -f opc_result.json ]; then
+            REVIEW_URL="$(python - <<'PY'
+          import json
+          try:
+              print(json.load(open('opc_result.json')).get('review_url',''))
+          except Exception:
+              print('')
+          PY
+          )"
+          fi
+          if [ -n "$REVIEW_URL" ]; then
+            gh issue comment "${{ github.event.issue.number }}" --body "OPC review ready: $REVIEW_URL\n\nStatus: built, NOT approved or published. Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          else
+            gh issue comment "${{ github.event.issue.number }}" --body "Content run finished: $STATUS. No ready review URL was produced; inspect the run/private receipt. Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          fi
       - name: Failure email
         if: failure()
         uses: dawidd6/action-send-mail@4226df7daafa6fc901a43789c49bf7ab309066e7 # v3
