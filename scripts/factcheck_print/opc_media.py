@@ -179,7 +179,8 @@ class ReplicateImages:
                 break
             time.sleep(3)
             prediction = self._request('GET',f"/predictions/{prediction['id']}")
-        record.update(status=prediction['status'], metrics=prediction.get('metrics',{}));self._save()
+        record.update(status=prediction['status'], metrics=prediction.get('metrics',{}),
+                      provider_error=(str(prediction.get('error'))[:300] if prediction.get('error') else None));self._save()
         if prediction['status'] != 'succeeded':
             raise GateError('Replicate image did not complete; no silent provider/model fallback')
         outputs = prediction.get('output')
