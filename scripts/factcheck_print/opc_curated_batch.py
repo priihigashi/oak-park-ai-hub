@@ -298,7 +298,7 @@ def build_one(post: dict, store: Store) -> dict:
     if existing:
         folder = existing
     else:
-        if store.duplicates(post["title"], post["keywords"]):
+        if store.duplicates(post["title"], post["keywords"], ""):
             raise GateError(f"Duplicate topic already exists: {post['title']}")
         folder = store.start_run(post["title"], key)
     root = Path("opc-curated") / post["slug"]
