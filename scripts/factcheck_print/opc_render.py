@@ -141,44 +141,70 @@ textarea{width:100%;min-height:60px;background:#191919;color:#fff;border:1px sol
 @media(max-width:680px){main{padding:14px}.deck{grid-template-columns:1fr}button{padding:10px 12px}}
 '''
 REVIEW_JS='''
-const KEY='opc-review-v2';
-const feedback={version:2,approved:false,cards:{},variant:'dark'};
-try{const saved=JSON.parse(localStorage.getItem(KEY)||'null');if(saved&&saved.cards){Object.assign(feedback,saved)}}catch(e){}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(feedback))}catch(e){}}
-function cardText(id){
- const [theme,num]=id.split('-');
- const deck=document.querySelector(`[data-deck="${theme}"]`);
- const cards=[...deck.querySelectorAll('.card')]; const card=cards[Number(num)-1];
- return {theme,num,headline:card?.dataset.headline||'',body:card?.dataset.body||'',note:card?.querySelector('textarea')?.value||''};
+const KEY='opc-review-v3';
+const state={version:3,approved:false,variant:'dark'};
+function clean(v){return String(v||'').trim();}
+function collectReview(){
+ const rows=[];
+ document.querySelectorAll('.card[data-review-id]').forEach(card=>{
+   const id=card.dataset.reviewId;
+   const note=card.querySelector('[data-note]');
+   const pressed=card.querySelector('[data-choice][aria-pressed="true"]');
+   const comment=note?note.value:'';
+   const choice=pressed?pressed.dataset.choice:'';
+   if(!clean(comment)&&!choice)return;
+   rows.push({id,theme:card.dataset.theme||'',num:card.dataset.cardNum||'',headline:card.dataset.headline||'',body:card.dataset.body||'',choice,comment});
+ });
+ return rows;
 }
-function output(){const rows=[];
- Object.keys(feedback.cards).sort().forEach(id=>{const s=feedback.cards[id]||{};const m=cardText(id);if(!s.choice&&!String(s.note||'').trim())return;
-  rows.push(`=== ${m.theme.toUpperCase()} · CARD ${m.num} ===\n${m.headline}\nCurrent text: ${m.body}\nDecision: ${(s.choice||'NOTE ONLY').toUpperCase()}\nMy comment: ${String(s.note||'').trim()||'(none)'}`)});
- const el=document.getElementById('review-output'); if(el) el.textContent=rows.length?rows.join('\\n\\n'):'No review notes yet.';
+function saveReview(rows){
+ try{localStorage.setItem(KEY,JSON.stringify({version:3,approved:false,variant:state.variant,cards:rows}));}catch(e){}
 }
-document.querySelectorAll('[data-theme]').forEach(b=>b.addEventListener('click',()=>{
- feedback.variant=b.dataset.theme; save();
- document.querySelectorAll('[data-deck]').forEach(d=>d.hidden=d.dataset.deck!==feedback.variant);
- document.querySelectorAll('[data-theme]').forEach(x=>x.classList.toggle('active',x===b));
-}));
-document.querySelectorAll('[data-choice]').forEach(b=>b.addEventListener('click',()=>{
- const id=b.dataset.card; const v=feedback.cards[id]||{}; v.choice=(v.choice===b.dataset.choice)?'':b.dataset.choice; feedback.cards[id]=v;
- b.parentNode.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b && !!v.choice)));
- save();output();
-}));
-document.querySelectorAll('[data-note]').forEach(t=>{
- const v=feedback.cards[t.dataset.note]; if(v?.note)t.value=v.note;
- t.addEventListener('input',()=>{const x=feedback.cards[t.dataset.note]||{};x.note=t.value;feedback.cards[t.dataset.note]=x;save();output();});
+function renderReview(){
+ const rows=collectReview();
+ const text=rows.map(r=>`=== ${r.theme.toUpperCase()} · CARD ${r.num} ===\n${r.headline}\nCurrent text: ${r.body}\nDecision: ${(r.choice||'NOTE ONLY').toUpperCase()}\nMy comment: ${clean(r.comment)||'(none)'}`).join('\\n\\n');
+ const out=document.getElementById('review-output');
+ if(out)out.textContent=text||'No review notes yet.';
+ saveReview(rows);
+ return text;
+}
+function restoreReview(){
+ let saved=null;try{saved=JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){}
+ if(!saved||!Array.isArray(saved.cards))return;
+ if(saved.variant)state.variant=saved.variant;
+ saved.cards.forEach(r=>{
+   const card=document.querySelector(`.card[data-review-id="${r.id}"]`);if(!card)return;
+   const note=card.querySelector('[data-note]');if(note)note.value=r.comment||'';
+   card.querySelectorAll('[data-choice]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.choice===r.choice)));
+ });
+}
+function showTheme(theme){
+ state.variant=theme;
+ document.querySelectorAll('[data-deck]').forEach(d=>d.hidden=d.dataset.deck!==theme);
+ document.querySelectorAll('[data-theme]').forEach(b=>b.classList.toggle('active',b.dataset.theme===theme));
+ renderReview();
+}
+document.addEventListener('input',e=>{if(e.target&&e.target.matches('[data-note]'))renderReview();});
+document.addEventListener('change',e=>{if(e.target&&e.target.matches('[data-note]'))renderReview();});
+document.addEventListener('keyup',e=>{if(e.target&&e.target.matches('[data-note]'))renderReview();});
+document.addEventListener('click',e=>{
+ const theme=e.target.closest&&e.target.closest('[data-theme]');if(theme){showTheme(theme.dataset.theme);return;}
+ const choice=e.target.closest&&e.target.closest('[data-choice]');if(choice){
+   const card=choice.closest('.card');const was=choice.getAttribute('aria-pressed')==='true';
+   card.querySelectorAll('[data-choice]').forEach(b=>b.setAttribute('aria-pressed','false'));
+   if(!was)choice.setAttribute('aria-pressed','true');
+   renderReview();
+ }
 });
-document.querySelectorAll('[data-choice]').forEach(b=>{const v=feedback.cards[b.dataset.card]||{};b.setAttribute('aria-pressed',String(v.choice===b.dataset.choice));});
-document.querySelectorAll('[data-deck]').forEach(d=>d.hidden=d.dataset.deck!==feedback.variant);
-document.querySelectorAll('[data-theme]').forEach(x=>x.classList.toggle('active',x.dataset.theme===feedback.variant));
-async function copyReview(){output();const el=document.getElementById('review-output');const text=el.textContent;const b=document.getElementById('copy-review');
- try{await navigator.clipboard.writeText(text);b.textContent='✓ Copied';setTimeout(()=>b.textContent='Copy my review',1600)}catch(e){
-  const r=document.createRange();r.selectNodeContents(el);const s=window.getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Selected — press ⌘C';
- }}
+async function copyReview(){
+ const text=renderReview();const out=document.getElementById('review-output');const button=document.getElementById('copy-review');
+ if(!text){button.textContent='Add a note first';setTimeout(()=>button.textContent='Copy my review',1600);return;}
+ try{await navigator.clipboard.writeText(text);button.textContent='✓ Copied';setTimeout(()=>button.textContent='Copy my review',1600);}
+ catch(e){const range=document.createRange();range.selectNodeContents(out);const sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);button.textContent='Selected — press Copy';}
+}
+window.refreshOPCReview=renderReview;
+restoreReview();showTheme(state.variant||'dark');
 document.getElementById('copy-review').addEventListener('click',copyReview);
-output();
 '''
 
 
@@ -202,9 +228,9 @@ def review(spec: dict, root: Path) -> Path:
         parts.append(f'<section class="deck" data-deck="{theme}" {"" if theme=="dark" else "hidden"}>')
         for c in spec['slides']:
             key=f'{theme}-{c["id"]}';png=root/'png'/theme/f'card_{c["id"]:02d}.png'
-            parts.append(f'<article class="card" data-headline="{esc(c["headline"],quote=True)}" data-body="{esc(c["body"],quote=True)}"><img alt="{esc(c["headline"])}" src="{data_uri(png,"image/png")}">'
+            parts.append(f'<article class="card" data-review-id="{key}" data-theme="{theme}" data-card-num="{c["id"]}" data-headline="{esc(c["headline"],quote=True)}" data-body="{esc(c["body"],quote=True)}"><img alt="{esc(c["headline"])}" src="{data_uri(png,"image/png")}">'
                 f'<div class="choices"><button data-card="{key}" data-choice="keep">Keep</button><button data-card="{key}" data-choice="redo">Redo</button></div>'
-                f'<textarea data-note="{key}" placeholder="What should change?"></textarea></article>')
+                f'<textarea data-note="{key}" oninput="window.refreshOPCReview&&window.refreshOPCReview()" placeholder="What should change?"></textarea></article>')
         parts.append('</section>')
     parts.append('<h2>Caption</h2><div class="caption">'+esc(spec['caption']+'\n\n'+spec.get('hashtags',''))+'</div>'
                  '<details open><summary>Send your review back</summary><p>Your notes autosave in this browser. You can write a note without choosing Keep/Redo.</p>'
