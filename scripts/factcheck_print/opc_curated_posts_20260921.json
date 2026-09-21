@@ -176,14 +176,14 @@
         },
         {
           "id": "T2",
-          "name": "CUSTOM Building Products",
-          "heading": "Grout Color Selector",
+          "name": "LATICRETE",
+          "heading": "Tile Design Details: Color Coordination",
           "candidates": [
             {
-              "url": "https://www.custombuildingproducts.com/grout-color-selector",
+              "url": "https://www.laticrete.com/en/blog/2025/december/an-eye-on-detail-color-coordination",
               "required": [
-                "blend in with or stand out from the tiles",
-                "uniform, monolithic look"
+                "similar to the color of the tile",
+                "contrasting color"
               ]
             }
           ]
