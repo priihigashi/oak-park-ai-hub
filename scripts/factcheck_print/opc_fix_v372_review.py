@@ -29,8 +29,8 @@ def main():
     if not isinstance(raw,bytes) or hashlib.md5(raw).hexdigest()!=meta.get("md5Checksum"):
         raise GateError("review.html download checksum mismatch")
     text=raw.decode("utf-8")
-    broken="rows.length?rows.join('\\n\\n'):'No review notes yet.';"  # runtime contains literal newlines
-    fixed="rows.length?rows.join('\\\\n\\\\n'):'No review notes yet.';"
+    broken="rows.length?rows.join('\n\n'):'No review notes yet.';"  # runtime contains literal newlines
+    fixed="rows.length?rows.join('\\n\\n'):'No review notes yet.';"
     if text.count(broken)!=1:
         raise GateError("expected exactly one broken copy-review join")
     repaired=text.replace(broken,fixed)
