@@ -9,7 +9,12 @@ from datetime import datetime, timezone
 import hashlib
 import json
 from pathlib import Path
+import sys
 from types import SimpleNamespace
+
+HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE.parent / 'capture'))
+sys.path.insert(0, str(HERE.parent))
 
 from opc_contract import GateError, STATUS, digest_file, tracker_row, validate
 from opc_media import ReplicateImages
