@@ -163,10 +163,25 @@ def capture_sources(p:dict,root:Path)->list[dict]:
 
 
 def generate_assets(p:dict,root:Path,model:str)->list[dict]:
-    provider=ReplicateImages(model,root,max_images=5)
+    chain=p.get("image_models") or [model]
+    if not isinstance(chain,list) or not 1<=len(chain)<=3 or len(set(chain))!=len(chain):
+        raise GateError("image_models must contain 1-3 distinct approved Replicate models")
+    if any(m not in __import__("opc_contract").MODELS for m in chain):
+        raise GateError("Unsupported image fallback model")
+    provider=ReplicateImages(chain[0],root,max_images=15)
     assets=[]
     for visual in p["visuals"]:
-        assets.append(provider.generate(visual["key"],plain(visual["subject"]),None))
+        failures=[]
+        for candidate in chain:
+            provider.switch_model(candidate)
+            try:
+                assets.append(provider.generate(visual["key"],plain(visual["subject"]),None))
+                break
+            except GateError as exc:
+                failures.append({"model":candidate,"error":str(exc)[:180]})
+        else:
+            save(root/"resources"/f"{visual['key']}-image-failures.json",failures)
+            raise GateError(f"All declared image routes failed for {visual['key']}")
     return assets
 
 
@@ -205,8 +220,9 @@ def main()->None:
         (root/"motion/README.md").write_text("Static private owner review; no publication claim.\n",encoding="utf-8")
         store.rename_run(folder,spec["title"])
         links=store.upload_tree(root,folder)
+        usage=json.loads((root/"resources/image-usage.json").read_text(encoding="utf-8")) if (root/"resources/image-usage.json").exists() else []
         receipt={"content_row":store.file_row(spec,folder,links),"flow_row":store.flow_row(spec,folder,links),
-                 "build_mode":"chat_assisted_no_text_model","text_api_calls":0,"image_requests":5,
+                 "build_mode":"chat_assisted_no_text_model","text_api_calls":0,"image_requests":len(usage),
                  "approved":False,"published":False,"review_url":links["review.html"],"folder_url":folder["webViewLink"]}
         save(root/"resources/filing-receipt.json",receipt)
         resources=next(x for x in store.list_children(folder["id"]) if x["name"]=="resources")
@@ -215,7 +231,7 @@ def main()->None:
                                    fields="id,appProperties",supportsAllDrives=True).execute()
         store.finish(folder,"BUILT_NOT_APPROVED")
         result={"status":"built_not_approved","title":spec["title"],"review_url":links["review.html"],
-                "folder_url":folder["webViewLink"],"cards":5,"text_api_calls":0,"image_requests":5,
+                "folder_url":folder["webViewLink"],"cards":5,"text_api_calls":0,"image_requests":len(usage),
                 "approved":False,"published":False}
         Path("opc_result.json").write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding="utf-8")
         print(json.dumps(result))
