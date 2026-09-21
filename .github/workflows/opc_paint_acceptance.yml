@@ -26,7 +26,7 @@ jobs:
     needs: regression
     if: >-
       github.event.action == 'labeled' &&
-      github.event.label.name == 'opc-paint-test-20260920' &&
+      github.event.label.name == 'opc-paint-v2-20260920' &&
       github.event.pull_request.number == 300 &&
       github.actor == 'priihigashi' &&
       github.event.pull_request.head.repo.full_name == github.repository &&
@@ -60,8 +60,8 @@ jobs:
             --project opc --engine claude \
             --image-model google/nano-banana-pro \
             --idea 'Why your paint color looks different at home' \
-            --notes 'Original OPC homeowner education. Prefer five or six cards with under 25 words each. Narrow scope: natural light, artificial light, sheen, and testing a movable sample in the actual room. Use primary manufacturer guidance from Benjamin Moore and Sherwin-Williams; no contractor competitor sources, invented prices, promises, or first-person project claims. Images are conceptual illustrations, not exact paint color matches, not actual OPC jobs. No brand-specific paint shade names or color codes in images. Do not invent before/after results. Idea-mode test: no source video was supplied, so do not claim transcription or video validation.' \
-            --out opc-paint-test --run-key pr300-paint-idea-20260920
+            --notes 'OWNER REVIEW V2. Six-card visual education. Card 1: keep a contemporary South Florida room but furnishings must look current/well-kept, not worn. Card 2 is the main teaching visual: controlled same neutral wall/room, same camera position, visibly different sunny daylight vs overcast daylight vs evening artificial light; conceptual, no exact brand color claim. Card 3 artificial lamp/room-lighting detail is supporting, not a near-duplicate hero. Card 4 matte vs higher-sheen reflectivity comparison is a strong keep. Card 5 show the real sampling PROCESS (foam board/brush or movable sample method) without presenting an AI-created swatch as an exact paint color. Card 6 must have its own distinct closing/checklist composition, not reuse Card 5. No consecutive duplicate visual keys unless a controlled comparison requires it. Use primary manufacturer guidance from Benjamin Moore and Sherwin-Williams; no contractor competitor sources, invented prices, promises, first-person project claims, brand shade names/codes, or fake before/after. Public carousel/caption must not add loud AI boilerplate; internal provenance remains in cards.json. Idea mode: no source video/transcription claim.' \
+            --out opc-paint-v2 --run-key pr300-paint-v2-20260920
   authorized-editorial-resume:
     needs: regression
     if: >-
