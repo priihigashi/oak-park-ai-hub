@@ -7,7 +7,9 @@ from opc_contract import GateError, check_copy, words
 
 REVIEW = '''Review this OPC draft against the ACTUAL source excerpts, not the researcher's
 summaries. Check all factual claims, English, coherent sequence, each image-to-copy mapping,
-and source_ids. Generic instructions to inspect one's own sample are editorial advice;
+visual diversity, whether each visual actually teaches the card's point, and source_ids.
+Reject consecutive duplicate imagery unless the repetition itself demonstrates a controlled comparison.
+Generic instructions to inspect one's own sample are editorial advice;
 precise time periods, technical claims or performance claims need direct evidence.
 No invented sponsor, #ad, purchase, personal experience, project, price or competitor names.
 Return {"passed":true|false,"issues":["specific actionable problems"],"english":true|false}.
@@ -21,11 +23,17 @@ words and body <=150 characters. Each middle slide needs the exact supporting so
 Keep one simple useful point per slide. Remove technical jargon rather than expanding it.
 Remove unsupported numbers, time periods, absolutes, guarantees and invented sponsorship.
 The audience needs a practical homeowner tip, not a scientific lecture or debunk.
-Use exactly four sequential visuals A1-A4, every one directly relevant to its assigned
-slides. Prefer room, detail, material sample and practical sample-testing scenes.
-No compass diagrams, charts, text, logos, labels, brand-specific shade codes, exact color
-match promises, or unverified before/after. All images are conceptual illustrations,
-not experiments or OPC projects. Close with a useful save/decision takeaway.
+Use three or four sequential visuals A1-A4, every one directly relevant to its assigned slides.
+A visual must answer: "what does this card need to SHOW to teach the point?" Prefer room,
+controlled comparison, material detail, and practical sample-testing scenes. Never reuse the
+same key on consecutive cards unless intentional_reuse=true and the repetition is necessary to
+show a controlled change. For lighting claims, favor the same neutral wall/room under clearly
+different conditions (sunny/overcast/evening artificial light), not another generic room shot.
+For finish claims, show surface reflectivity. For sampling advice, show the sampling PROCESS;
+do not invent or imply an exact brand paint-color match. No compass diagrams, charts with fake
+data, text, logos, labels, brand-specific shade codes, exact color-match promises, or unverified
+before/after. AI scenes may illustrate generic environments but never claim completed OPC work.
+Close with a visually distinct save/decision takeaway.
 The caption must not include #ad or imply sponsorship without explicit verified support.'''
 
 
