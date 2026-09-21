@@ -123,16 +123,25 @@ def cut_video(captured: dict, indices: list[int], root: Path) -> dict:
 
 
 class ReplicateImages:
+    MAX_REQUESTS = MAX_IMAGES * 3
     def __init__(self, model: str, root: Path, max_images: int = MAX_IMAGES):
-        if model not in MODELS or not 1 <= max_images <= MAX_IMAGES:
-            raise GateError('Unsupported image model or image budget')
+        if model not in MODELS or not 1 <= max_images <= self.MAX_REQUESTS:
+            raise GateError('Unsupported image model or image request budget')
         key = os.getenv('PRI_OP_REPLICATE_API_KEY')
         if not key:
             raise GateError('Existing PRI_OP_REPLICATE_API_KEY is unavailable')
         self.model, self.root, self.max_images = model, root, max_images
         self.headers = {'Authorization': f'Bearer {key}', 'Content-Type': 'application/json'}
-        self.records = []
+        usage=root/'resources/image-usage.json'
+        try:self.records=json.loads(usage.read_text(encoding='utf-8')) if usage.exists() else []
+        except Exception:self.records=[]
         self.schema = self._request('GET',f'/models/{model}')['latest_version']['openapi_schema']['components']['schemas']['Input']
+
+    def switch_model(self, model: str) -> None:
+        if model not in MODELS:
+            raise GateError('Unsupported fallback image model')
+        self.model=model
+        self.schema=self._request('GET',f'/models/{model}')['latest_version']['openapi_schema']['components']['schemas']['Input']
 
     def _request(self, method: str, path: str, **kw) -> dict:
         if not re.fullmatch(r'/(?:models/[\w.-]+/[\w.-]+(?:/predictions)?|predictions/[\w-]+)', path):
