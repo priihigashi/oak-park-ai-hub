@@ -62,7 +62,7 @@ def card_html(card: dict, spec: dict, root: Path, theme: str) -> str:
     names=' · '.join(sources[s]['name'] for s in card.get('source_ids',[]))
     if len(names)>85:
         names=' · '.join(card.get('source_ids',[]))+' · Sources in review pack'
-    note='<div class="image-note">AI illustration</div>' if asset['kind']=='ai_illustration' else ''
+    note=''  # provenance is retained in cards.json/private review metadata, not stamped on the consumer card
     last=card['id']==len(spec['slides'])
     label='SAVE FOR YOUR REMODEL' if last else 'MATERIAL NOTES' if spec['kind']=='education' else 'PROJECT NOTES'
     return (f'<section class="slide {THEMES[theme]}" data-card="{card["id"]}">'
@@ -141,21 +141,41 @@ textarea{width:100%;min-height:60px;background:#191919;color:#fff;border:1px sol
 @media(max-width:680px){main{padding:14px}.deck{grid-template-columns:1fr}button{padding:10px 12px}}
 '''
 REVIEW_JS='''
-const feedback={version:1,approved:false,cards:{},variant:'dark'};
+const KEY='opc-review-v2';
+const feedback={version:2,approved:false,cards:{},variant:'dark'};
+try{const saved=JSON.parse(localStorage.getItem(KEY)||'null');if(saved&&saved.cards){Object.assign(feedback,saved)}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(feedback))}catch(e){}}
+function cardText(id){
+ const [theme,num]=id.split('-');
+ const deck=document.querySelector(`[data-deck="${theme}"]`);
+ const cards=[...deck.querySelectorAll('.card')]; const card=cards[Number(num)-1];
+ return {theme,num,headline:card?.querySelector('img')?.alt||'',note:card?.querySelector('textarea')?.value||''};
+}
+function output(){const rows=[];
+ Object.keys(feedback.cards).sort().forEach(id=>{const s=feedback.cards[id]||{};const m=cardText(id);if(!s.choice&&!String(s.note||'').trim())return;
+  rows.push(`=== ${m.theme.toUpperCase()} · CARD ${m.num} ===\n${m.headline}\nDecision: ${(s.choice||'NOTE ONLY').toUpperCase()}\nMy comment: ${String(s.note||'').trim()||'(none)'}`)});
+ const el=document.getElementById('review-output'); if(el) el.textContent=rows.length?rows.join('\n\n'):'No review notes yet.';
+}
 document.querySelectorAll('[data-theme]').forEach(b=>b.addEventListener('click',()=>{
- feedback.variant=b.dataset.theme;
+ feedback.variant=b.dataset.theme; save();
  document.querySelectorAll('[data-deck]').forEach(d=>d.hidden=d.dataset.deck!==feedback.variant);
  document.querySelectorAll('[data-theme]').forEach(x=>x.classList.toggle('active',x===b));
 }));
 document.querySelectorAll('[data-choice]').forEach(b=>b.addEventListener('click',()=>{
- const id=b.dataset.card;feedback.cards[id]={choice:b.dataset.choice,note:document.querySelector(`[data-note="${id}"]`).value};
- b.parentNode.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+ const id=b.dataset.card; const v=feedback.cards[id]||{}; v.choice=(v.choice===b.dataset.choice)?'':b.dataset.choice; feedback.cards[id]=v;
+ b.parentNode.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b && !!v.choice)));
+ save();output();
 }));
-document.getElementById('export-feedback').addEventListener('click',()=>{
- document.querySelectorAll('[data-note]').forEach(t=>{const v=feedback.cards[t.dataset.note];if(v)v.note=t.value;});
- const blob=new Blob([JSON.stringify(feedback,null,2)],{type:'application/json'});
- const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='opc-review-feedback.json';a.click();URL.revokeObjectURL(a.href);
+document.querySelectorAll('[data-note]').forEach(t=>{
+ const v=feedback.cards[t.dataset.note]; if(v?.note)t.value=v.note;
+ t.addEventListener('input',()=>{const x=feedback.cards[t.dataset.note]||{};x.note=t.value;feedback.cards[t.dataset.note]=x;save();output();});
 });
+async function copyReview(){output();const el=document.getElementById('review-output');const text=el.textContent;const b=document.getElementById('copy-review');
+ try{await navigator.clipboard.writeText(text);b.textContent='✓ Copied';setTimeout(()=>b.textContent='Copy my review',1600)}catch(e){
+  const r=document.createRange();r.selectNodeContents(el);const s=window.getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Selected — press ⌘C';
+ }}
+document.getElementById('copy-review').addEventListener('click',copyReview);
+output();
 '''
 
 
@@ -184,7 +204,9 @@ def review(spec: dict, root: Path) -> Path:
                 f'<textarea data-note="{key}" placeholder="What should change?"></textarea></article>')
         parts.append('</section>')
     parts.append('<h2>Caption</h2><div class="caption">'+esc(spec['caption']+'\n\n'+spec.get('hashtags',''))+'</div>'
-                 '<p>Feedback stays in this page until exported. Keep is not publication approval.</p><button id="export-feedback">Export review feedback</button>'
+                 '<details open><summary>Send your review back</summary><p>Your notes autosave in this browser. You can write a note without choosing Keep/Redo.</p>'
+                 '<pre id="review-output" style="white-space:pre-wrap;background:#191919;padding:12px;border:1px solid #555">No review notes yet.</pre>'
+                 '<button id="copy-review">Copy my review</button></details>'
                  '<details><summary>PRINT evidence pack — full sources and screenshots</summary>')
     for source in spec['sources']:
         parts.append(f'<article class="proof"><h3>{esc(source["name"])}</h3><p>{esc(source.get("heading",""))}</p>'
