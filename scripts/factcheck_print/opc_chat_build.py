@@ -216,6 +216,7 @@ def main()->None:
         spec=assemble(p,sources,assets)
         save(root/"cards.json",spec);save(root/"resources/content-gates.json",validate(spec,root,[]))
         save(root/"resources/chat-audit.json",p["audit"])
+        save(root/"resources/evidence.json",{"sources":spec["sources"],"audit":p["audit"],"retrieved_at":datetime.now(timezone.utc).isoformat()})
         export(spec,root);review(spec,root)
         (root/"motion/README.md").write_text("Static private owner review; no publication claim.\n",encoding="utf-8")
         store.rename_run(folder,spec["title"])
