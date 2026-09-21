@@ -107,7 +107,7 @@ Return {"title":"short English topic","caption":"150-200 characters before discl
 Create 5-8 cards: hook, 3-5 sequential useful points, one save/decision close. Every middle card has a
 supporting source_id supplied in the evidence. No quotes, raw markup, competitor names, debunk badges,
 promises, generic filler, invented prices, or claims about completed OPC work. Explain trade words briefly.
-Create 3-4 visually DISTINCT assets in one photographic world. Plan each card by VISUAL JOB first:
+Create 4-5 visually DISTINCT assets in one photographic world. Prefer one distinct visual per card for a five-card education deck; reuse only when the repeated frame itself teaches a controlled comparison. Plan each card by VISUAL JOB first:
 what must the viewer see to understand this specific point? Every visual subject must state camera position,
 perspective/angle, lighting behavior, foreground/midground/background, and the teaching purpose. Use a varied
 camera grammar when useful (eye-level, three-quarter, low/high angle, close detail, foreground obstruction),
@@ -161,8 +161,8 @@ def reuse_assets(previous: Path, visuals: list, root: Path) -> list:
 
 def make_assets(a, draft: dict, root: Path, store: Store, provider) -> list[dict]:
     visuals=draft.get('visuals',[])
-    if not 3<=len(visuals)<=4 or [x.get('key') for x in visuals]!=[f'A{i}' for i in range(1,len(visuals)+1)]:
-        raise GateError('Expected 3-4 sequential unique visual plans')
+    if not 4<=len(visuals)<=5 or [x.get('key') for x in visuals]!=[f'A{i}' for i in range(1,len(visuals)+1)]:
+        raise GateError('Expected 4-5 sequential unique visual plans')
     if a.reuse_assets:return reuse_assets(Path(a.reuse_assets),visuals,root)
     if a.kind=='project_proof':
         rows=store.photos(a.project_group)
