@@ -1,7 +1,7 @@
 const Anthropic = require('@anthropic-ai/sdk');
 const fs = require('fs');
-const { getRandomTopic } = require('./topics.js');
 const { COMPANY } = require('./company-info.js');
+const { selectApprovedBlogRow, buildWordPressDraftBody } = require('./blog-editorial-gate.js');
 
 // ─── Configuration ────────────────────────────────────────────────────────────
 const WP_URL          = process.env.WP_URL;
@@ -92,118 +92,7 @@ async function getGoogleToken(saKey) {
   return data.access_token;
 }
 
-// ─── Auto-approval: analyze Idea rows and approve safe ones ──────────────────
-// A topic is SAFE (auto-publish) if it passes ALL 5 criteria:
-//   1. Directly about a service Oak Park offers (additions, renovations, concrete, permits, etc.)
-//   2. Evergreen — not tied to a specific news event, law change, or "right now" situation
-//   3. No political/immigration/labor-policy angle — non-controversial
-//   4. Geographic fit — South Florida, Broward/Miami-Dade, or general homeowner advice
-//   5. No legal risk — no active lawsuits, no specific cost guarantees, no competitor names
-// REVIEW if any one fails (e.g. immigration enforcement, insurance crisis politics, DIY tutorials).
-async function autoApproveIdeasInSheet(rows, token) {
-  const colLetter = (i) => {
-    let r = '', n = i + 1;
-    while (n > 0) { r = String.fromCharCode(64 + (n % 26 || 26)) + r; n = Math.floor((n - 1) / 26); }
-    return r;
-  };
-
-  // Collect all unprocessed Idea rows
-  const ideaRows = [];
-  for (let i = 0; i < rows.length; i++) {
-    const row = rows[i];
-    const status  = (row[COL.status] || '').trim();
-    const blogUrl = (row[COL.blogUrl] || '').trim();
-    const rawIdea = (row[COL.rawIdea] || '').trim();
-    if (status === '🆕 Idea' && !blogUrl && rawIdea) {
-      ideaRows.push({ rowIndex: i, row });
-    }
-  }
-
-  if (ideaRows.length === 0) {
-    console.log('Auto-approval: no Idea rows to evaluate.');
-    return null;
-  }
-
-  // Build evaluation prompt — batch all topics in one Claude call (cheap + fast)
-  const topicsText = ideaRows.map((item, idx) => {
-    const row = item.row;
-    const topic     = row[COL.topicDirection] || row[COL.rawIdea];
-    const keyword   = row[COL.focusKeyword]   || '';
-    const rawIdea   = row[COL.rawIdea]        || '';
-    return `${idx + 1}. Topic: "${topic}" | Keyword: "${keyword}" | Raw idea: "${rawIdea}"`;
-  }).join('\n');
-
-  console.log(`Auto-approval: evaluating ${ideaRows.length} Idea row(s)...`);
-
-  let evaluationText = '';
-  try {
-    evaluationText = await callLlmText({
-      maxTokens: 400,
-      claudeModel: 'claude-haiku-4-5-20251001',
-      openaiModel: 'gpt-4o-mini',
-      system: 'You are a strict blog-topic safety classifier for Oak Park Construction.',
-      content: `You are evaluating blog post topics for Oak Park Construction — a licensed general contractor in South Florida (Broward County).
-
-A topic is SAFE (auto-publish) if ALL 5 are true:
-1. SERVICE: Directly about construction services homeowners hire for (additions, renovations, new builds, concrete, permits, garage conversions, kitchen/bath remodels, ADU, roofing as part of full project, permits, inspections, materials, hiring tips)
-2. EVERGREEN: Not tied to a specific breaking news event, active legislation, or "happening right now" situation
-3. NEUTRAL: No political, immigration, labor-workforce, or socially divisive angle
-4. GEOGRAPHIC: About South Florida / Broward / Miami-Dade conditions OR general homeowner advice that applies broadly
-5. LEGAL-SAFE: No active lawsuit context, no specific cost promises, no competitor names, not discouraging hiring a contractor
-
-A topic needs REVIEW (will be saved as draft) if ANY one fails — examples: immigration enforcement effects on construction labor, Florida insurance crisis political debates, specific active code enforcement controversies, DIY tutorials, competitor comparisons.
-
-Evaluate each topic below. Respond ONLY with the number and one word per line: SAFE or REVIEW. Nothing else.
-
-${topicsText}`
-    });
-    console.log(`Auto-approval evaluation:\n${evaluationText}`);
-  } catch (e) {
-    console.log(`Auto-approval evaluation failed: ${e.message} — skipping auto-approval`);
-    return null;
-  }
-
-  // Parse results and find first SAFE topic
-  const lines = evaluationText.split('\n');
-  for (const line of lines) {
-    const match = line.match(/^(\d+)\.\s*(SAFE|REVIEW)/i);
-    if (!match || match[2].toUpperCase() !== 'SAFE') continue;
-
-    const idx = parseInt(match[1], 10) - 1;
-    if (idx < 0 || idx >= ideaRows.length) continue;
-
-    const item = ideaRows[idx];
-    const sheetRow = item.rowIndex + 2;
-
-    // Update the sheet row status to Queued so it shows correctly
-    try {
-      const updateRes = await fetch(
-        `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}/values/Content%20Ideas!${colLetter(COL.status)}${sheetRow}?valueInputOption=USER_ENTERED`,
-        {
-          method: 'PUT',
-          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ values: [['🚀 Queued']] }),
-        }
-      );
-      if (updateRes.ok) {
-        const topic = item.row[COL.topicDirection] || item.row[COL.rawIdea];
-        console.log(`✅ Auto-approved row ${sheetRow}: "${topic}" — publishing directly`);
-      } else {
-        console.log(`Sheet update for auto-approval failed: ${await updateRes.text()}`);
-      }
-    } catch (e) {
-      console.log(`Could not update sheet for auto-approval: ${e.message}`);
-    }
-
-    // Return topic data so it publishes directly (originalStatus = 🚀 Queued → wpStatus = publish)
-    return buildSheetData(item.row, item.rowIndex, token, '🚀 Queued');
-  }
-
-  console.log('Auto-approval done — no SAFE topics found, falling back to draft.');
-  return null;
-}
-
-// ─── Read sheet and return the first publishable topic ───────────────────────
+// ─── Read sheet and return a human-approved brief only ──────────────────────
 async function getApprovedTopicFromSheet() {
   if (!GOOGLE_SHEET_ID || !GOOGLE_SA_KEY) return null;
   try {
@@ -214,43 +103,20 @@ async function getApprovedTopicFromSheet() {
       `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}/values/Content%20Ideas!A:V`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
-    if (!res.ok) { console.log('Could not read sheet, falling back to topics.js'); return null; }
+    if (!res.ok) { console.log('Could not read approved briefs in the sheet.'); return null; }
     const data = await res.json();
     const rows = (data.values || []).slice(1); // skip header
 
-    for (let i = 0; i < rows.length; i++) {
-      const row = rows[i];
-      const status  = (row[COL.status] || '').trim();
-      const blogUrl = (row[COL.blogUrl] || '').trim();
-      const rawIdea = (row[COL.rawIdea] || '').trim();
-
-      if ((status === '🚀 Queued' || status === '✅ Approved') && !blogUrl && rawIdea) {
-        console.log(`Sheet topic selected (row ${i + 2}) [${status} → will publish]: "${row[COL.topicDirection] || rawIdea}"`);
-        return buildSheetData(row, i, token, '🚀 Queued');
-      }
+    const selected = selectApprovedBlogRow(rows, COL);
+    if (selected) {
+      console.log(`Approved brief selected (row ${selected.rowIndex + 2}): "${selected.row[COL.topicDirection] || selected.row[COL.rawIdea]}"`);
+      return buildSheetData(selected.row, selected.rowIndex, token, '✅ Approved');
     }
 
-    // No approved/queued rows — try auto-approving safe Idea rows
-    const autoApproved = await autoApproveIdeasInSheet(rows, token);
-    if (autoApproved) return autoApproved;
-
-    // Last fallback: use first Idea row as draft (unsafe/uncertain topics)
-    for (let i = 0; i < rows.length; i++) {
-      const row = rows[i];
-      const status  = (row[COL.status] || '').trim();
-      const blogUrl = (row[COL.blogUrl] || '').trim();
-      const rawIdea = (row[COL.rawIdea] || '').trim();
-
-      if (status === '🆕 Idea' && !blogUrl && rawIdea) {
-        console.log(`Sheet topic selected (row ${i + 2}) [IDEA → draft, did not pass auto-approval]: "${row[COL.topicDirection] || rawIdea}"`);
-        return buildSheetData(row, i, token, '🆕 Idea');
-      }
-    }
-
-    console.log('No usable sheet rows found — falling back to topics.js');
+    console.log('No human-approved blog brief found.');
     return null;
   } catch (e) {
-    console.log(`Sheet read failed: ${e.message} — falling back to topics.js`);
+    console.log(`Sheet read failed: ${e.message}`);
     return null;
   }
 }
@@ -282,8 +148,8 @@ function buildSheetData(row, i, token, originalStatus) {
 }
 
 // After posting, update the sheet row status and Blog URL
-async function markSheetRowPosted(sheetData, blogUrl, wpStatus) {
-  const newStatus = wpStatus === 'publish' ? '📤 Published' : '✍️ Draft Created';
+async function markSheetRowPosted(sheetData, blogUrl) {
+  const newStatus = '✍️ Draft Created';
   try {
     const { token, sheetRow } = sheetData;
     const colLetter = (i) => {
@@ -291,11 +157,9 @@ async function markSheetRowPosted(sheetData, blogUrl, wpStatus) {
       while (n > 0) { r = String.fromCharCode(64 + (n % 26 || 26)) + r; n = Math.floor((n - 1) / 26); }
       return r;
     };
-    const publishedAt = new Date().toLocaleString('en-US', { timeZone: 'America/New_York', month: '2-digit', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
     const updates = [
       { range: `Content Ideas!${colLetter(COL.status)}${sheetRow}`,        values: [[newStatus]] },
       { range: `Content Ideas!${colLetter(COL.blogUrl)}${sheetRow}`,       values: [[blogUrl]] },
-      { range: `Content Ideas!${colLetter(COL.datePublished)}${sheetRow}`, values: [[publishedAt]] },
     ];
     const res = await fetch(
       `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}/values:batchUpdate`,
@@ -322,7 +186,7 @@ async function generatePost(topic, sheetData = null) {
 - Original source: ${sheetData.source || 'research'} ${sheetData.sourceLink ? `(${sheetData.sourceLink})` : ''}
 - Raw idea: "${sheetData.rawIdea}"
 - Topic direction: "${sheetData.topicDirection}"
-- Focus keyword: "${sheetData.focusKeyword}" ← use this in title, intro, 2+ subheadings, meta, and 4-6x in body
+- Focus keyword: "${sheetData.focusKeyword}" ← use only where it reads naturally
 - Secondary keyword: "${sheetData.secondaryKeyword || ''}"
 - Target audience: ${sheetData.targetAudience || 'Homeowner'}
 - Reader payoff: "${sheetData.readerPayoff || ''}" ← this is what the reader walks away knowing — make sure the post delivers it
@@ -335,14 +199,10 @@ TITLE — choose the strongest option from these pre-written hooks, or combine t
   Hook C (Gen Z/casual): "${sheetData.hookGenZ || ''}"
   Master hook:           "${sheetData.masterHook || ''}"
 
-Adapt the best hook into a 50-60 character SEO title that:
-- Includes the focus keyword naturally within the first 5 words
-- Reads like a human wrote it — NOT like a keyword list
-- Has a power word (Cost, Guide, Why, How, What, Full, Real, Honest) when natural
-- Example: "Concrete Slab Contractors Broward: Why DIY Fails in Florida's Heat"`
-    : `KEYWORD: Choose ONE clear focus keyword (3-5 words) with HIRE intent for South Florida (e.g. "home addition contractor Broward County"). Craft a compelling human title around it — do NOT use the raw keyword as the title. Use keyword in title, first 100 words, 2+ subheadings, meta description, and 4-6x in body.`;
+Adapt the best hook into a precise, useful title that describes the actual answer. Do not force a keyword or a power word.`
+    : `Choose a clear homeowner question and a precise title. Use search terms naturally; do not write for a keyword quota.`;
 
-  const system = `You are the content writer for ${COMPANY.name}, a ${COMPANY.license.status} based in ${COMPANY.location.headquarters}, serving ${COMPANY.location.primaryMarket} and surrounding areas.
+  const system = `You are the content writer for ${COMPANY.name}, a Florida construction company based in ${COMPANY.location.headquarters}, serving ${COMPANY.location.primaryMarket} and surrounding areas.
 
 COMPANY:
 ${COMPANY.origin}
@@ -369,7 +229,7 @@ REQUIRED ARTICLE STRUCTURE (adapt freely — this is a guide, not a template):
 - Section 5 (optional): What owners often miss or underestimate
 - Closing: ONE topic-specific CTA that finishes: "If you're trying to figure out [exact article problem], the next step is…"
 
-PROOF SIGNALS — include at least 2-3 per article (these replace citations and build authority):
+USEFUL DETAIL — include only details supported by the approved brief or a named source. These never replace citations:
 - A real-world scenario or common mistake homeowners make
 - A permit, inspection, or code note specific to South Florida
 - A contractor-selection tip (what to verify, what to ask)
@@ -383,13 +243,7 @@ Examples of good authority signals:
 "This matters more in South Florida because…"
 
 PRICING LANGUAGE RULE — critical:
-Never write prices with false certainty. Always use bounded, realistic, local language.
-Good: "In Broward County, many projects fall within this range depending on scope and finishes."
-Good: "A realistic starting point in South Florida is often…"
-Good: "Costs can move significantly depending on structure, municipality, and finish level."
-Bad: Fixed national-average figures presented as South Florida facts
-Bad: Pretending a rough contractor estimate is a universal rule
-If using price ranges: keep them local, realistic, clearly variable, and tied to specific scope conditions.
+Do not invent dollar amounts, ranges, percentages, project results, or timelines. Explain the decisions that change a quote. If an approved brief supplies a current local figure, preserve its source, scope, date, and uncertainty; otherwise omit the number.
 
 HEADING RULES:
 - WordPress adds the post title as H1 automatically — do NOT use any H1 tags in the HTML body
@@ -398,12 +252,11 @@ HEADING RULES:
 - Good: "What Affects the Cost of a Home Addition in Broward County?" / "What to Ask Before Hiring a Contractor"
 - Bad: "Home Addition Cost Broward County Florida Contractor Services Near Me"
 - H3 should feel calmer and more functional than H2 — not competing for attention
-- At least 2 headings must include the focus keyword or a natural variation
 - Do not make every section feel like a new headline moment — some content should breathe
 
 CTA RULE: The closing CTA must match the article topic exactly. Never use generic "contact us" language alone.
-- Shell article → "Send your plans for a free shell-scope review"
-- Addition cost → "Request a realistic Broward County budget range"
+- Shell article → "Bring your plans so the shell scope can be discussed"
+- Addition cost → "Discuss the project scope before requesting comparable estimates"
 - Comparison → "Talk through which option makes sense for your lot and budget"
 
 FEATURED IMAGE RULE — the image_search_query you return must follow this hierarchy:
@@ -433,31 +286,28 @@ CONTENT RULES:
 
 ${keywordInstructions}
 
-SEO REQUIREMENTS:
-- Title: 50-60 characters, focus keyword near start, reads like a human wrote it
-- Meta description: EXACTLY 150-160 characters — count carefully. Focus keyword + natural CTA
-- H2 for main sections, H3 for subsections
-- 1100-1300 words
-- Focus keyword used in: title, first 100 words, at least 2 subheadings, meta description, and 4-6x in body naturally
-- Mention ${COMPANY.location.primaryMarket} + at least 2 of: ${COMPANY.location.targetCities.slice(0,8).join(', ')}
-- 1-2 outbound links to credible sources (floridabuilding.org, myflorida.com, energy.gov, fema.gov, or similar) in <a href="URL" target="_blank" rel="noopener"> tags
-- One inline image placeholder mid-body: <!-- INLINE_IMAGE: [3-5 word search query] -->
+ARTICLE REQUIREMENTS:
+- Answer the homeowner's actual question. Include practical decisions, tradeoffs, and a next step.
+- Be as long as needed to answer well; do not pad to a target word count.
+- Use natural headings and a concise, accurate meta description.
+- Mention a South Florida city only when the location changes the advice.
+- Cite an authoritative primary source beside each consequential code, permit, price, legal, or technical claim. If the approved brief lacks evidence, omit or mark the claim for review.
+- Never fabricate an OPC project, customer, quote, statistic, guarantee, or first-hand experience.
+- Use only the approved brief's image facts. An image concept is a request for editorial review, not proof that an OPC project exists.
+- Mark a mid-article visual only if it helps explain a decision: <!-- INLINE_IMAGE: [specific educational concept] -->. A human must review the asset, caption, alt text, provenance, and rights before publication.
 
 READABILITY:
-- Sentences under 20 words average
-- Paragraphs 2-4 sentences max, start with the main idea
-- Transition words to open at least 30% of sentences
-- Active voice — avoid passive constructions
-- Vary rhythm: mix short punchy sentences with longer explanations
-- End each section with a takeaway, not just a stop
+- Lead with the answer, use concrete language, vary rhythm, and remove filler.
+- Favor a scope checklist, comparison, or decision tree when it genuinely helps the reader.
+- Do not force sentence length, transition-word, location, or keyword quotas.
 
 FORMAT: HTML only — h2, h3, p, ul, ol, li, a tags. No html/head/body wrappers. NO h1 tags — WordPress outputs the title as h1 automatically.
 
 Return ONLY this exact JSON (no markdown fences, no extra text):
 {
-  "title": "50-60 char title",
+  "title": "accurate descriptive title",
   "focus_keyword": "exact focus keyword",
-  "meta_description": "EXACTLY 150-160 chars",
+  "meta_description": "concise accurate summary",
   "image_search_query": "3-5 words MAX, plain ASCII only, no punctuation (e.g. 'residential concrete patio slab')",
   "html_content": "<h2>...</h2><p>...</p>"
 }`;
@@ -625,17 +475,10 @@ async function checkWordPressCredentials() {
 }
 
 // ─── Step 5: Post to WordPress as Draft ──────────────────────────────────────
-async function postToWordPress(post, featuredMediaId, wpCategoryId, wpStatus = 'draft') {
-  console.log(`Posting to WordPress as ${wpStatus}...`);
+async function postToWordPress(post, featuredMediaId, wpCategoryId) {
+  console.log('Saving WordPress draft...');
   const credentials = Buffer.from(`${WP_USERNAME}:${WP_APP_PASSWORD}`).toString('base64');
-  const body = {
-    title: post.title,
-    content: post.html_content,
-    excerpt: post.meta_description,
-    status: wpStatus,
-    categories: wpCategoryId ? [parseInt(wpCategoryId)] : [],
-  };
-  if (featuredMediaId) body.featured_media = featuredMediaId;
+  const body = buildWordPressDraftBody(post, featuredMediaId, wpCategoryId);
   const response = await fetch(`${WP_URL}/wp-json/wp/v2/posts`, {
     method: 'POST',
     headers: { Authorization: `Basic ${credentials}`, 'Content-Type': 'application/json' },
@@ -659,7 +502,7 @@ async function postToWordPress(post, featuredMediaId, wpCategoryId, wpStatus = '
     // 0. Validate WordPress credentials before any LLM work
     await checkWordPressCredentials();
 
-    // 1. Determine topic source: manual → sheet (Approved) → fallback random
+    // 1. Determine topic source: manual → human-approved sheet brief
     let topic, sheetData;
 
     if (MANUAL_TOPIC.trim()) {
@@ -667,12 +510,8 @@ async function postToWordPress(post, featuredMediaId, wpCategoryId, wpStatus = '
       console.log(`Topic: manual — "${topic}"`);
     } else {
       sheetData = await getApprovedTopicFromSheet();
-      if (sheetData) {
-        topic = sheetData.topicDirection;
-      } else {
-        topic = getRandomTopic();
-        console.log(`Topic: fallback random — "${topic}"`);
-      }
+      if (!sheetData) throw new Error('No approved blog brief found. Add a reviewed brief or provide a manual topic; no random fallback.');
+      topic = sheetData.topicDirection;
     }
 
     // 2. Generate post
@@ -689,19 +528,18 @@ async function postToWordPress(post, featuredMediaId, wpCategoryId, wpStatus = '
       console.log(`Image step failed (${imgErr.message}) — continuing without image.`);
     }
 
-    // 4. Post to WordPress — Approved rows publish directly, everything else is draft
-    const wpStatus = (sheetData?.originalStatus === '🚀 Queued') ? 'publish' : 'draft';
-    const result = await postToWordPress(post, featuredMedia?.id || null, sheetData?.wpCategoryId, wpStatus);
+    // 4. This legacy path is draft-only. Publication requires separate editorial approval.
+    const result = await postToWordPress(post, featuredMedia?.id || null, sheetData?.wpCategoryId);
 
     // 5. Update sheet row if topic came from sheet
     if (sheetData) {
-      await markSheetRowPosted(sheetData, result.link || result.editLink, wpStatus);
+      await markSheetRowPosted(sheetData, result.link || result.editLink);
     }
 
     // 6. Save output for workflow notification
     fs.writeFileSync('scripts/output.json', JSON.stringify(result, null, 2));
 
-    console.log(`\n✓ Done! Post ${wpStatus === 'publish' ? 'published live' : 'saved as draft'}.`);
+    console.log('\n✓ Done! Post saved as draft for review.');
     console.log(`  Title: ${result.title}`);
     console.log(`  Edit:  ${result.editLink}`);
   } catch (err) {
