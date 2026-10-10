@@ -1,6 +1,6 @@
 # Blog v2 quality decision — 2026-10-10
 
-Status: Council round 3 decision; proposed rules, not implemented gates. T-904 remains draft-only. Three of the five allowed Council rounds have been used.
+Status: Council round 3 decision with partial implementation. T-904 remains draft-only and recurrence remains held. Three of the five allowed Council rounds have been used.
 
 ## Decision and evidence
 
@@ -17,7 +17,7 @@ The article-level passes support keeping the drafts as reviewable pilots. They d
 3. Require each consequential claim to map to a relevant cited passage; reject irrelevant details and source links that merely mention the county.
 4. Review the three-article batch for distinct reader payoffs, specific actionable answers, and source diversity. A reviewer finding that the available sources cannot answer the central question blocks advancement.
 
-These are rule proposals. This document does not claim that the current runner enforces them. Publication still requires approval of the exact article version and a separate website release.
+Implementation state: the intake now requires an explicitly tagged topic-specific source, records rejected candidates, and anchors selected themes to the raw idea. The draft gate enforces a 400-word floor and checks listed claims against cited evidence. A blocked independent review may trigger one bounded revision and a second independent review. Cross-run draft similarity, cluster budgets, program-level batch usefulness review, and recurring cadence remain pending. The pilot records predating these gates remain unchanged. Publication still requires approval of the exact article version and a separate website release.
 
 ## Restart and rollback
 

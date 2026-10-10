@@ -31,6 +31,8 @@ After verifying that the installed Codex and Claude CLIs use existing subscripti
 OPC_ALLOW_SUBSCRIPTION_CLI=1 node scripts/blog-v2/cli.js --input /path/to/snapshot.json --out /path/to/draft-bundles --provider codex
 ```
 
+If Claude requests revision, the runner makes at most one Codex repair pass and asks Claude to review the revision independently. It preserves `originalDraft.json`, `originalReview.json`, `revisedDraft.json`, `revisedReview.json`, and `revision.json` in the new immutable bundle; `draft.json` and `review.json` are the final version used by the gate. To repair an existing blocked run without paying for another first draft or source retrieval, use `--resume-run /path/to/prior-run-dir` in place of `--input`. The new receipt links the prior run by ID and hash. A run that already used its one repair attempt cannot be resumed for another automatic repair.
+
 The draft comes from Codex; Claude independently reviews factual support and editorial quality. A failing source fetch, unavailable CLI, invalid JSON, unsupported claim, or reviewer finding stops readiness. No API fallback is configured. A fixture provider exists only for automated tests and does not count as an acceptance pilot.
 
 The bundle contains `snapshot.json`, `selection.json`, `sources.json`, `brief.json`, `draft.json`, `review.json`, `gate.json`, `status.json`, and `receipt.json`. `receipt.json` records file hashes. Preserve the bundle in the shared editorial workspace; verify hashes when transferring it. `draft-ready-for-human-review` is an editorial handoff, never publication approval. Publication requires a separate per-version human approval and website release workflow.

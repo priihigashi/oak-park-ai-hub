@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { selectTopic, validateDraft, writeRun, bodyWordCount } = require('../blog-v2/pipeline');
-const { verifySources } = require('../blog-v2/cli');
+const { verifySources, needsRevision, loadPriorRun, generateBundle } = require('../blog-v2/cli');
 const { intakeIdeas } = require('../blog-v2/intake');
 
 const source = { id: 's1', url: 'https://example.gov/additions', publisher: 'County', title: 'Addition guidance', excerpt: 'Home additions require a permit before construction begins and plans must be reviewed.', capturedAt: '2026-10-09' };
@@ -96,6 +96,36 @@ test('source receipt and reviewer context use a matched passage after long navig
     assert.ok(result[0].retrievedExcerpt.length <= 1600);
     assert.equal(result[0].retrieval, 'http');
   } finally { global.fetch = original; }
+});
+test('one bounded revision retains both independent reviews and rejects a second resume', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'opc-blog-revision-'));
+  const originalArgs = process.argv;
+  try {
+    const draft = { title: 'Guide', description: 'Guide', body: Array(410).fill('guidance').join(' '), claims: [], visuals: [] };
+    const blockedReview = { decision: 'revise', findings: [{ severity: 'major', issue: 'Unsupported sentence', evidence: 'Source passage' }], summary: 'Revise' };
+    const revisedDraft = { ...draft, body: Array(420).fill('verified').join(' ') };
+    const revisedReview = { decision: 'pass', findings: [], summary: 'Ready for human review' };
+    const priorDir = writeRun(root, { rawSnapshot: snapshot, intake: null, snapshot, selection: { selected: candidate }, sources: [source], brief: candidate, draft, review: blockedReview, gate: ['independent-review-blocked'], status: 'review-required' });
+    const prior = loadPriorRun(priorDir);
+    const draftPath = path.join(root, 'revised-draft.json'), reviewPath = path.join(root, 'revised-review.json');
+    fs.writeFileSync(draftPath, JSON.stringify(revisedDraft));
+    fs.writeFileSync(reviewPath, JSON.stringify(revisedReview));
+    process.argv = ['node', 'cli.js', '--fixture-revised-draft', draftPath, '--fixture-revised-review', reviewPath];
+    const bundle = generateBundle('fixture', candidate, [source], prior);
+    assert.equal(bundle.revision.attempts, 1);
+    assert.deepEqual(bundle.originalReview, blockedReview);
+    assert.deepEqual(bundle.revisedReview, revisedReview);
+    assert.deepEqual(bundle.draft, revisedDraft);
+    const revisedDir = writeRun(root, { ...bundle, rawSnapshot: snapshot, intake: null, snapshot, selection: { selected: candidate }, sources: [source], brief: candidate, priorRun: prior.priorRun, gate: [], status: 'review-required' });
+    assert.throws(() => loadPriorRun(revisedDir), /already used its one revision attempt/);
+    fs.writeFileSync(path.join(priorDir, 'draft.json'), '{}');
+    assert.throws(() => loadPriorRun(priorDir), /hash mismatch/);
+  } finally { process.argv = originalArgs; fs.rmSync(root, { recursive: true, force: true }); }
+});
+test('revision trigger includes reviewer decision or a major finding', () => {
+  assert.equal(needsRevision({ decision: 'revise', findings: [] }), true);
+  assert.equal(needsRevision({ decision: 'pass', findings: [{ severity: 'major' }] }), true);
+  assert.equal(needsRevision({ decision: 'pass', findings: [{ severity: 'minor' }] }), false);
 });
 test('intake turns raw hook into a safe question and preserves only row provenance', () => {
   const rows = [{ rowNumber: 120, rawIdea: 'Complete guide to a home addition in Fort Lauderdale', topicDirection: 'Guaranteed 30-day addition at $50,000', hookProfessional: 'We built 500 additions', readerPayoff: 'Get your permit in one day', sourceLink: 'https://youtube.com/watch?v=example', status: '🆕 Idea' }];
