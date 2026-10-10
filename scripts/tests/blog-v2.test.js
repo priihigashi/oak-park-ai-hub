@@ -68,6 +68,7 @@ test('draft and repair prompts prohibit sources outside the verified run', () =>
   assert.match(draftPrompt(brief, sources), /state the source retrieval date from retrievedAt/);
   assert.match(articleReviewPrompt(brief, {}, sources), /matching claims\[\] entry/);
   assert.match(articleReviewPrompt(brief, {}, sources), /visible as-of retrieval date/);
+  assert.match(articleReviewPrompt(brief, {}, sources), /directly states a permit trigger/);
   assert.match(revisionPrompt(brief, sources, {}, { decision: 'revise' }), /never add, recall, search for, or cite another source/);
 });
 test('company service scope is read from the existing knowledge file', () => {
