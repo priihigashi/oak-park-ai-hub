@@ -43,6 +43,20 @@ The bundle contains `snapshot.json`, `selection.json`, `sources.json`, `brief.js
 
 The v3 editorial gate counts visible article words. A body under 400 words is `incomplete-article`; the drafting prompt targets a useful 450–650 words when evidence supports it and forbids padding or invented detail.
 
+## Format and series review
+
+The intake now assigns a `formatKey` to each supported theme: an evidence explainer, sequence walkthrough, or scope map. The draft and independent review must address that format with direct, source-supported answers. The deterministic gate rejects a mismatched format key or a draft that returns to mostly question headings. This guard addresses the repeated question-list failure in the first acceptance batch; independent review still judges whether the substance is useful.
+
+After three distinct article-ready runs, evaluate the series with the existing Claude subscription route:
+
+```sh
+OPC_ALLOW_SUBSCRIPTION_CLI=1 node scripts/blog-v2/batch-review.js /path/to/run-1 /path/to/run-2 /path/to/run-3 --out /path/to/batch-audits
+```
+
+The command checks each immutable receipt, rejects blocked or duplicate runs, and records Claude's separate program-level review, findings, and a new hashed receipt. `private-trial-ready` permits only a private draft-generation trial; it never approves an article, a schedule, or publication. A `batch-hold` keeps recurrence off. Do not substitute three article-level passes for this series review. The site review preview can render a structured in-body decision diagram with provenance and rights metadata, but diagram content still needs factual and editorial review before it counts toward readiness.
+
+Council round 4 requires jurisdiction metadata to describe the source's actual coverage. A Florida statute is tagged `Florida`, not `Broward County`. The intake can use statewide sources for a Broward reader, but its question and the draft title may claim county specificity only with county-level topic evidence. With national-only guidance, omit geography from the headline. A format-based draft run requires `OPC_ENABLE_ORIGINAL_DIAGRAMS=1` before any model call. This off-by-default path builds one original in-body diagram from article sections and the verified claim ledger. Every source node repeats an exact reviewed claim and source ID; unsourced sections are visibly labeled OPC planning notes. The independent review sees the diagram before deciding, and its receipt preserves the exact figure. No external image asset is fetched or licensed.
+
 ## Rollback
 
 Disable any separate schedule and stop invoking this CLI. Existing site content is not changed by a run. Keep bundles and receipts for audit. Revert the v2 runner commit to remove the code; do not re-enable the old WordPress workflow.

@@ -1,6 +1,14 @@
 # Blog v2 quality decision — 2026-10-10
 
-Status: Council round 3 decision with partial implementation. T-904 remains draft-only and recurrence remains held. Three of the five allowed Council rounds have been used.
+Status: Council round 4 decision with partial implementation. T-904 remains draft-only and recurrence remains held. Four of the five allowed Council rounds have been used.
+
+## Council round 4 and format regression
+
+The fresh three-topic format batch improved article variety and direct answers, but the independent series review returned HOLD. It found no in-body figures, nominal Broward relevance, a single-source HVAC article, inconsistent section-level sourcing, and CTA repetition. Its immutable audit is retained in the shared Drive. The first diagram trial also failed independent review: an ordered decision flow implied a legal sequence unsupported by the cited DOJ and Florida passages, and copied sentences added little visual explanation. Preserve that failed trial as evidence.
+
+Council round 4 accepted original deterministic diagrams only as an opt-in private trial, with a verified claim and source bound to each sourced node, visible editorial labels, provenance, rights, alt text, and exact version checks. Scope and evidence maps must be unordered; a sequence diagram requires actual evidence for sequence. It also ruled that a county label needs a topic-specific county source. National guidance or Florida law alone should lead to a broader title, and unsupported local wording should be dropped. Dissent was that even a legally accurate diagram can create a new unsupported impression, and that source-to-section matching needs a falsifiable gate. The current gate checks exact in-body claim text and source IDs, plus heading labels; independent review still decides whether the visual interpretation is sound.
+
+The pilot diagram path is disabled unless `OPC_ENABLE_ORIGINAL_DIAGRAMS=1`; it creates only local review artifacts. `scope-map` and `evidence-map` use unordered nodes, while `decision-flow` is reserved for a real sequence. The batch reviewer checks immutable article receipts before assessing a series. Noindex on a local preview is a crawler hint, not access control for any future hosted preview. Publication remains held until a human approval binds to the exact content hash in a separate release workflow. Do not activate paid APIs or a cadence from these results.
 
 ## Acceptance batch, 2026-10-10
 

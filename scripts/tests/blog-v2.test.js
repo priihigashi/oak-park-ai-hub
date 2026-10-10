@@ -3,14 +3,55 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
-const { selectTopic, validateDraft, writeRun, bodyWordCount } = require('../blog-v2/pipeline');
+const { selectTopic, validateDraft, formatErrors, geographicErrors, diagramErrors, writeRun, bodyWordCount } = require('../blog-v2/pipeline');
+const { addReviewFigure } = require('../blog-v2/review-figure');
 const { verifySources, needsRevision, loadPriorRun, generateBundle, bundleStatus, draftPrompt, revisionPrompt } = require('../blog-v2/cli');
+const { batchGate, readVerifiedRun, reviewPrompt } = require('../blog-v2/batch-review');
 
 test('draft and repair prompts prohibit sources outside the verified run', () => {
   const brief = { service: 'commercial build-out', area: 'Broward County', question: 'What should be checked?', readerDecision: 'Check accessibility scope' };
   const sources = [{ id: 'doj', url: 'https://www.ada.gov/resources/title-iii-primer/', retrievedExcerpt: 'Alterations can affect accessibility.' }];
   assert.match(draftPrompt(brief, sources), /EXCLUSIVE whitelist/);
   assert.match(revisionPrompt(brief, sources, {}, { decision: 'revise' }), /never add, recall, search for, or cite another source/);
+});
+test('repeated question headings from the failed acceptance batch violate a direct-answer format', () => {
+  const selected = { formatKey: 'scope-map' };
+  const oldPattern = { formatKey: 'scope-map', body: '## Which rules apply here?\n\nAsk the team.\n\n## What should the team verify?\n\nAsk the team.\n\n## Who reviews the plan?\n\nAsk the team.' };
+  assert.ok(formatErrors(oldPattern, selected).includes('question-list-format-drift'));
+  const revised = { formatKey: 'scope-map', body: '## Federal scope\n\nThe cited rule applies here.\n\n## Florida scope\n\nThe statute adds its own requirement.' };
+  assert.deepEqual(formatErrors(revised, selected), []);
+});
+test('national guidance cannot license a Broward headline while county evidence can', () => {
+  const draft = { title: 'Broward County Kitchen Exhaust Planning', slug: 'broward-kitchen-exhaust', description: 'Broward advice' };
+  assert.deepEqual(geographicErrors(draft, { area: 'Broward County', evidenceScope: 'unscoped' }), ['unsupported-local-framing']);
+  assert.deepEqual(geographicErrors(draft, { area: 'Broward County', evidenceScope: 'Broward County' }), []);
+});
+test('original diagram binds sourced nodes to the reviewed claim and labels editorial nodes', () => {
+  const draft = { title: 'A plan', formatKey: 'scope-map', body: 'Intro.\n\n## Source point\n\nThe cited rule applies. [Agency](https://example.gov/rule)\n\n## Design point\n\nRecord the layout.\n\n## Final point\n\nConfirm the scope.', claims: [{ id: 'c1', text: 'The cited rule applies.', sourceId: 's1', status: 'verified' }] };
+  const result = addReviewFigure(draft, { enabled: true });
+  assert.deepEqual(result.figures[0].steps.map(step => step.kind), ['source', 'editorial', 'editorial']);
+  assert.deepEqual(diagramErrors(result, { formatKey: 'scope-map' }), []);
+  result.figures[0].type = 'decision-flow';
+  assert.ok(diagramErrors(result, { formatKey: 'scope-map' }).includes('figure-provenance-invalid'));
+  result.figures[0].type = 'scope-map';
+  result.figures[0].steps[0].sourceId = 'unsupplied';
+  assert.ok(diagramErrors(result, { formatKey: 'scope-map' }).includes('unbound-source-step'));
+});
+test('series gate keeps factual-pass drafts held when independent editorial review finds repeated work', () => {
+  const runs = ['scope-map', 'evidence-explainer', 'sequence-walkthrough'].map((formatKey, i) => ({ id: `run-${i}`, brief: { intentKey: `intent-${i}`, formatKey }, draft: { title: `Article ${i}`, body: 'A direct answer.' }, sources: [], articleReview: { decision: 'pass' } }));
+  const review = { decision: 'hold', findings: [{ severity: 'major', issue: 'Three articles defer the answer', evidence: 'Repeated question lists' }] };
+  assert.ok(batchGate(runs, review).includes('independent-batch-hold'));
+  assert.match(reviewPrompt(runs), /direct source-supported answers/);
+  assert.deepEqual(batchGate(runs, { decision: 'trial_ready', findings: [] }), []);
+});
+test('series review refuses a draft altered after its article receipt was written', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'opc-batch-tamper-'));
+  try {
+    const run = writeRun(root, { snapshot: {}, selection: { selected: null }, brief: { intentKey: 'test' }, draft: { title: 'Original', body: 'Body' }, sources: [], review: { decision: 'pass' }, gate: [], status: 'draft-ready-for-human-review' });
+    assert.equal(readVerifiedRun(run).draft.title, 'Original');
+    fs.writeFileSync(path.join(run, 'draft.json'), JSON.stringify({ title: 'Changed' }));
+    assert.throws(() => readVerifiedRun(run), /has changed/);
+  } finally { fs.rmSync(root, { recursive: true, force: true }); }
 });
 const { intakeIdeas } = require('../blog-v2/intake');
 
@@ -195,6 +236,12 @@ test('generic county pages cannot qualify a theme without a topic-specific sourc
   const doj = { ...source, id: 'doj-ada', publisher: 'US Department of Justice', sourceRole: 'topic-specific', themeTags: ['retail-accessibility'], coverageAreas: ['national'] };
   const supported = intakeIdeas([row], [generic, doj]);
   assert.deepEqual(supported.candidates[0].sourceIds, ['doj-ada']);
+  assert.equal(supported.candidates[0].evidenceScope, 'unscoped');
+  assert.doesNotMatch(supported.candidates[0].question, /Broward/);
+  const florida = { ...source, id: 'florida-accessibility', sourceRole: 'topic-specific', themeTags: ['retail-accessibility'], coverageAreas: ['Florida'] };
+  const statewide = intakeIdeas([row], [doj, florida]);
+  assert.equal(statewide.candidates[0].evidenceScope, 'Florida');
+  assert.match(statewide.candidates[0].question, /in Florida/);
 });
 test('kitchen exhaust is in full renovation scope; patio cover remains ineligible', () => {
   const doe = { ...source, id: 'doe-kitchen-exhaust', sourceRole: 'topic-specific', themeTags: ['kitchen-exhaust'], coverageAreas: ['national'] };

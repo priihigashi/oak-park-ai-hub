@@ -102,9 +102,63 @@ function validDraftShape(draft) {
 function visualErrors(visuals) {
   return visuals.filter(visual => ![visual.type, visual.alt, visual.provenance, visual.rights].every(Boolean)).map(() => 'unverified-visual');
 }
+function formatErrors(draft, selected) {
+  if (!selected.formatKey) return [];
+  const errors = [];
+  if (draft.formatKey !== selected.formatKey) errors.push('format-contract-mismatch');
+  const headings = draft.body.match(/^#{2,3}\s+.+$/gm) || [];
+  if (headings.length < 2) errors.push('missing-article-structure');
+  if (headings.length && headings.filter(heading => /\?\s*$/.test(heading)).length > headings.length / 2) errors.push('question-list-format-drift');
+  return errors;
+}
+function geographicErrors(draft, selected) {
+  if (!selected.evidenceScope || selected.evidenceScope === selected.area) return [];
+  const county = String(selected.area || '').replace(/\s+County$/i, '');
+  if (!county) return [];
+  return new RegExp(county.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').test(`${draft.title} ${draft.slug || ''} ${draft.description}`) ? ['unsupported-local-framing'] : [];
+}
+function validEditorialStep(step, draft) {
+  const headings = (draft.body.match(/^##\s+.+$/gm) || []).map(h => h.slice(3).trim());
+  return !step.claimId && !step.sourceId && !step.label && headings.includes(step.text);
+}
+function validSourceStep(step, draft) {
+  const claim = draft.claims.find(item => item.id === step.claimId);
+  const headings = (draft.body.match(/^##\s+.+$/gm) || []).map(h => h.slice(3).trim());
+  return claim?.status === 'verified' && claim.text === step.text && claim.sourceId === step.sourceId && headings.includes(step.label);
+}
+function diagramStepErrors(step, draft) {
+  if (!step || typeof step.text !== 'string' || !step.text.trim()) return ['invalid-figure-step'];
+  if (step.kind === 'editorial') return validEditorialStep(step, draft) ? [] : ['unbound-editorial-step'];
+  return step.kind === 'source' && validSourceStep(step, draft) ? [] : ['unbound-source-step'];
+}
+function diagramMetadataErrors(figure, selected) {
+  const types = { 'scope-map': 'scope-map', 'evidence-explainer': 'evidence-map', 'sequence-walkthrough': 'decision-flow' };
+  return figure.type === types[selected.formatKey] && figure.approved === false && figure.rights === 'OPC original diagram'
+    && [figure.title, figure.alt, figure.caption, figure.provenance].every(Boolean) ? [] : ['figure-provenance-invalid'];
+}
+function diagramMarkerErrors(draft, figure) {
+  const marker = `<!-- FIGURE:${figure.id} -->`;
+  const errors = draft.body.split(marker).length === 2 ? [] : ['figure-marker-mismatch'];
+  const bodyDigest = crypto.createHash('sha256').update(draft.body.replaceAll(marker, '').replace(/\n{3,}/g, '\n\n')).digest('hex').slice(0, 16);
+  if (!String(figure.provenance || '').includes(bodyDigest)) errors.push('figure-provenance-mismatch');
+  return errors;
+}
+function diagramStepsErrors(draft, figure) {
+  if (!Array.isArray(figure.steps) || figure.steps.length < 3 || figure.steps.length > 5) return ['figure-step-count'];
+  return figure.steps.flatMap(step => diagramStepErrors(step, draft));
+}
+function diagramErrors(draft, selected) {
+  if (!selected.formatKey) return [];
+  const figure = draft.figures?.[0];
+  if (!figure || draft.figures.length !== 1) return ['missing-in-body-figure'];
+  return [...diagramMarkerErrors(draft, figure), ...diagramMetadataErrors(figure, selected), ...diagramStepsErrors(draft, figure)];
+}
 function validateDraft(draft, selected, snapshot) {
   if (!validDraftShape(draft)) return ['draft-schema'];
   const errors = draftBaseErrors(draft);
+  errors.push(...formatErrors(draft, selected));
+  errors.push(...geographicErrors(draft, selected));
+  errors.push(...diagramErrors(draft, selected));
   const allowed = new Set(selected.sourceIds);
   for (const claim of draft.claims) errors.push(...claimErrors(claim, draft, allowed, snapshot.sources));
   const sourceIds = new Set(snapshot.sources.map(s => s.id));
@@ -121,4 +175,4 @@ function writeRun(outDir, payload) {
   fs.writeFileSync(path.join(runDir, 'receipt.json'), JSON.stringify({ id, createdAt: new Date().toISOString(), inputHash: sha(payload.snapshot), selectedId: payload.selection.selected?.id || null, status: payload.status, fileHashes: Object.fromEntries(Object.keys(payload).map(name => [name + '.json', crypto.createHash('sha256').update(fs.readFileSync(path.join(runDir, `${name}.json`))).digest('hex')])) }, null, 2) + '\n', { flag: 'wx' });
   return runDir;
 }
-module.exports = { selectTopic, validateDraft, writeRun, sha, similarity, bodyWordCount };
+module.exports = { selectTopic, validateDraft, formatErrors, geographicErrors, diagramErrors, writeRun, sha, similarity, bodyWordCount };
