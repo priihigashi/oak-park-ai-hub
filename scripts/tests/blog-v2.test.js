@@ -16,6 +16,8 @@ test('draft and repair prompts prohibit sources outside the verified run', () =>
   const sources = [{ id: 'doj', url: 'https://www.ada.gov/resources/title-iii-primer/', retrievedExcerpt: 'Alterations can affect accessibility.' }];
   assert.match(draftPrompt(brief, sources), /EXCLUSIVE whitelist/);
   assert.match(draftPrompt(brief, sources), /standalone OPC services/);
+  assert.match(draftPrompt(brief, sources), /never describe the research packet as 'supplied sources'/);
+  assert.match(draftPrompt(brief, sources), /For national-only evidence, identify the federal source in the description/);
   assert.match(revisionPrompt(brief, sources, {}, { decision: 'revise' }), /never add, recall, search for, or cite another source/);
 });
 test('company service scope is read from the existing knowledge file', () => {
