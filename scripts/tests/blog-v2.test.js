@@ -5,7 +5,7 @@ const os = require('node:os');
 const path = require('node:path');
 const { selectTopic, validateDraft, formatErrors, terminalArtifactErrors, geographicErrors, claimGeographyErrors, diagramErrors, writeRun, bodyWordCount, sourceGeographyErrors } = require('../blog-v2/pipeline');
 const { addReviewFigure } = require('../blog-v2/review-figure');
-const { verifySources, needsRevision, loadPriorRun, generateBundle, bundleStatus, draftPrompt, revisionPrompt } = require('../blog-v2/cli');
+const { verifySources, needsRevision, loadPriorRun, generateBundle, bundleStatus, draftPrompt, reviewPrompt: articleReviewPrompt, revisionPrompt } = require('../blog-v2/cli');
 const { batchGate, readVerifiedRun, reviewPrompt } = require('../blog-v2/batch-review');
 const { verifiedCompanyService, standaloneTradeErrors } = require('../blog-v2/company-scope');
 const { planMedia } = require('../blog-v2/media-plan');
@@ -18,6 +18,10 @@ test('draft and repair prompts prohibit sources outside the verified run', () =>
   assert.match(draftPrompt(brief, sources), /standalone OPC services/);
   assert.match(draftPrompt(brief, sources), /never describe the research packet as 'supplied sources'/);
   assert.match(draftPrompt(brief, sources), /For national-only evidence, identify the federal source in the description/);
+  assert.match(draftPrompt(brief, sources), /including conditional permit or approval requirements/);
+  assert.match(draftPrompt(brief, sources), /state the source retrieval date from retrievedAt/);
+  assert.match(articleReviewPrompt(brief, {}, sources), /matching claims\[\] entry/);
+  assert.match(articleReviewPrompt(brief, {}, sources), /visible as-of retrieval date/);
   assert.match(revisionPrompt(brief, sources, {}, { decision: 'revise' }), /never add, recall, search for, or cite another source/);
 });
 test('company service scope is read from the existing knowledge file', () => {
