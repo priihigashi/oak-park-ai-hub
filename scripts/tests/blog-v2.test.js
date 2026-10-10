@@ -80,7 +80,7 @@ test('verifies HTTP source content and rejects stale excerpt', async () => {
 });
 test('intake turns raw hook into a safe question and preserves only row provenance', () => {
   const rows = [{ rowNumber: 120, rawIdea: 'Complete guide to a home addition in Fort Lauderdale', topicDirection: 'Guaranteed 30-day addition at $50,000', hookProfessional: 'We built 500 additions', readerPayoff: 'Get your permit in one day', sourceLink: 'https://youtube.com/watch?v=example', status: '🆕 Idea' }];
-  const sources = [{ ...source, id: 'broward-permit', url: 'https://www.broward.org/Building', publisher: 'Broward County', title: 'Permit office' }];
+  const sources = [{ ...source, id: 'broward-permit', url: 'https://www.broward.org/Building', publisher: 'Broward County', title: 'Permit office', sourceRole: 'topic-specific', themeTags: ['addition-planning'], coverageAreas: ['Broward County'] }];
   const result = intakeIdeas(rows, sources, { spreadsheetId: 'sheet-1' });
   assert.equal(result.candidates.length, 1);
   assert.equal(result.candidates[0].service, 'home addition');
@@ -91,8 +91,8 @@ test('intake turns raw hook into a safe question and preserves only row provenan
 });
 test('intake covers screen enclosure, commercial build-out and permit themes', () => {
   const sources = [
-    { ...source, id: 'miami-permit', publisher: 'Miami-Dade County', title: 'Permit applications', url: 'https://miamidade.gov/permit' },
-    { ...source, id: 'broward-building', publisher: 'Broward County', title: 'Building permits', url: 'https://broward.org/building' },
+    { ...source, id: 'miami-permit', publisher: 'Miami-Dade County', title: 'Permit applications', url: 'https://miamidade.gov/permit', sourceRole: 'topic-specific', themeTags: ['screen-enclosure-planning', 'commercial-retail-buildout'], coverageAreas: ['Miami-Dade County'] },
+    { ...source, id: 'broward-building', publisher: 'Broward County', title: 'Building permits', url: 'https://broward.org/building', sourceRole: 'topic-specific', themeTags: ['permit-lookup'], coverageAreas: ['Broward County'] },
   ];
   const rows = [
     { rowNumber: 2, rawIdea: 'Screened porch in Miami-Dade' },
@@ -108,4 +108,22 @@ test('intake rejects used rows and themes without area-specific official sources
   assert.equal(result.candidates.length, 0);
   assert.ok(result.rejected[0].reasons.includes('already-used-row'));
   assert.ok(result.rejected[1].reasons.includes('no-topic-relevant-official-source'));
+});
+test('generic county pages cannot qualify a theme without a topic-specific source', () => {
+  const row = { rowNumber: 4, rawIdea: 'Boutique retail accessibility layout in Broward' };
+  const generic = { ...source, id: 'broward-building', sourceRole: 'general-permit', themeTags: ['retail-accessibility'], coverageAreas: ['Broward County'] };
+  const empty = intakeIdeas([row], [generic]);
+  assert.equal(empty.candidates.length, 0);
+  assert.ok(empty.rejected[0].reasons.includes('no-topic-relevant-official-source'));
+  const doj = { ...source, id: 'doj-ada', publisher: 'US Department of Justice', sourceRole: 'topic-specific', themeTags: ['retail-accessibility'], coverageAreas: ['national'] };
+  const supported = intakeIdeas([row], [generic, doj]);
+  assert.deepEqual(supported.candidates[0].sourceIds, ['doj-ada']);
+});
+test('kitchen exhaust is in full renovation scope; patio cover remains ineligible', () => {
+  const doe = { ...source, id: 'doe-kitchen-exhaust', sourceRole: 'topic-specific', themeTags: ['kitchen-exhaust'], coverageAreas: ['national'] };
+  const rows = [{ rowNumber: 14, rawIdea: 'Kitchen exhaust redesign for a full home renovation in Broward' }, { rowNumber: 115, rawIdea: 'Patio cover wind connections in Broward' }];
+  const result = intakeIdeas(rows, [doe]);
+  assert.equal(result.candidates[0].theme, 'kitchen-exhaust');
+  assert.equal(result.candidates[0].service, 'home renovation');
+  assert.equal(result.rejected[0].id, 'content-ideas-row-115');
 });
