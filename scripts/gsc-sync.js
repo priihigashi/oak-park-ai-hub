@@ -7,7 +7,7 @@
 
 const GOOGLE_SHEET_ID  = process.env.GOOGLE_SHEET_ID;
 const GOOGLE_SA_KEY    = process.env.GOOGLE_SA_KEY;
-const GSC_SITE_URL     = process.env.GSC_SITE_URL; // e.g. https://oakpark-construction.com
+const GSC_SITE_URL     = process.env.GSC_SITE_URL; // e.g. sc-domain:oakpark-construction.com
 
 // Column indexes (0-based)
 const COL_BLOG_URL    = 20; // U — existing Blog URL column
