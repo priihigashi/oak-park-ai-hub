@@ -4,7 +4,14 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { selectTopic, validateDraft, writeRun, bodyWordCount } = require('../blog-v2/pipeline');
-const { verifySources, needsRevision, loadPriorRun, generateBundle, bundleStatus, revisionPrompt } = require('../blog-v2/cli');
+const { verifySources, needsRevision, loadPriorRun, generateBundle, bundleStatus, draftPrompt, revisionPrompt } = require('../blog-v2/cli');
+
+test('draft and repair prompts prohibit sources outside the verified run', () => {
+  const brief = { service: 'commercial build-out', area: 'Broward County', question: 'What should be checked?', readerDecision: 'Check accessibility scope' };
+  const sources = [{ id: 'doj', url: 'https://www.ada.gov/resources/title-iii-primer/', retrievedExcerpt: 'Alterations can affect accessibility.' }];
+  assert.match(draftPrompt(brief, sources), /EXCLUSIVE whitelist/);
+  assert.match(revisionPrompt(brief, sources, {}, { decision: 'revise' }), /never add, recall, search for, or cite another source/);
+});
 const { intakeIdeas } = require('../blog-v2/intake');
 
 const source = { id: 's1', url: 'https://example.gov/additions', publisher: 'County', title: 'Addition guidance', excerpt: 'Home additions require a permit before construction begins and plans must be reviewed.', capturedAt: '2026-10-09' };
