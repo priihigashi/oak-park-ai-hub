@@ -24,28 +24,32 @@ function relevantSources(sources, theme, area) {
     return areaPattern.test(searchable) && theme.sourceTags.some(tag => searchable.includes(tag));
   });
 }
+function classifyRow(row, sources, options) {
+  const provenance = { spreadsheetId: options.spreadsheetId || null, sheet: 'Content Ideas', row: row.rowNumber, status: row.status || '', inspirationUrl: row.sourceLink || '' };
+  const text = `${row.rawIdea || ''} ${row.topicDirection || ''}`;
+  const theme = THEMES.find(item => item.match.test(text));
+  const area = AREAS.find(item => item.test.test(text))?.name || options.defaultArea || 'Broward County';
+  const sourceIds = theme ? relevantSources(sources, theme, area).map(s => s.id) : [];
+  const reasons = [];
+  if (/published|draft created|posted/i.test(row.status || '') || row.blogUrl) reasons.push('already-used-row');
+  if (!text.trim()) reasons.push('empty-idea');
+  if (!theme) reasons.push('unsupported-theme');
+  if (theme && !sourceIds.length) reasons.push('no-topic-relevant-official-source');
+  return { provenance, text, theme, area, sourceIds, reasons, id: `content-ideas-row-${row.rowNumber}` };
+}
+function toCandidate(classification) {
+  const { id, theme, area, sourceIds, text, provenance } = classification;
+  const planningSignals = ['permit', 'planning', 'process', 'requirements'].filter(term => new RegExp(`\\b${term}\\b`, 'i').test(text)).length;
+  const intentFamily = ['addition-planning', 'permit-lookup'].includes(theme.id) ? 'residential-permit-office' : theme.id;
+  return { id, question: theme.question(area), readerDecision: theme.decision, service: theme.service, area, sourceIds, theme: theme.id, intentKey: `${intentFamily}:${area.toLowerCase()}`, priority: planningSignals, inputProvenance: provenance };
+}
 function intakeIdeas(rows, sources, options = {}) {
   if (!Array.isArray(rows) || !Array.isArray(sources)) throw new Error('Intake requires raw idea rows and source catalog arrays');
   const candidates = [], rejected = [];
   rows.forEach((raw, index) => {
-    const row = unpack(raw, index);
-    const provenance = { spreadsheetId: options.spreadsheetId || null, sheet: 'Content Ideas', row: row.rowNumber, status: row.status || '', inspirationUrl: row.sourceLink || '' };
-    const text = `${row.rawIdea || ''} ${row.topicDirection || ''}`;
-    const reasons = [];
-    if (/published|draft created|posted/i.test(row.status || '') || row.blogUrl) reasons.push('already-used-row');
-    if (!text.trim()) reasons.push('empty-idea');
-    const theme = THEMES.find(item => item.match.test(text));
-    if (!theme) reasons.push('unsupported-theme');
-    const area = AREAS.find(item => item.test.test(text))?.name || options.defaultArea || 'Broward County';
-    const sourceIds = theme ? relevantSources(sources, theme, area).map(s => s.id) : [];
-    if (theme && !sourceIds.length) reasons.push('no-topic-relevant-official-source');
-    const id = `content-ideas-row-${row.rowNumber}`;
-    if (reasons.length) rejected.push({ id, reasons, provenance });
-    else {
-      const planningSignals = ['permit', 'planning', 'process', 'requirements'].filter(term => new RegExp(`\\b${term}\\b`, 'i').test(text)).length;
-      const intentFamily = ['addition-planning', 'permit-lookup'].includes(theme.id) ? 'residential-permit-office' : theme.id;
-      candidates.push({ id, question: theme.question(area), readerDecision: theme.decision, service: theme.service, area, sourceIds, theme: theme.id, intentKey: `${intentFamily}:${area.toLowerCase()}`, priority: planningSignals, inputProvenance: provenance });
-    }
+    const classification = classifyRow(unpack(raw, index), sources, options);
+    if (classification.reasons.length) rejected.push({ id: classification.id, reasons: classification.reasons, provenance: classification.provenance });
+    else candidates.push(toCandidate(classification));
   });
   return { candidates, rejected, rulesVersion: 'blog-v2-intake-2026-10-10' };
 }

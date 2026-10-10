@@ -9,26 +9,30 @@ const { intakeIdeas } = require('./intake');
 function option(name) { const i = process.argv.indexOf(name); return i < 0 ? null : process.argv[i + 1]; }
 function parseJson(text, label) { try { return JSON.parse(text.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/, '')); } catch (error) { throw new Error(`${label} did not return JSON: ${error.message}`); } }
 function textOnly(html) { return html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, ' ').replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ' ').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' '); }
+function verifyExcerpt(source, body) {
+  const terms = source.excerpt.toLowerCase().split(/\W+/).filter(w => w.length > 5);
+  if (terms.length && terms.filter(w => body.toLowerCase().includes(w)).length / terms.length < 0.5) throw new Error(`Source ${source.id} excerpt is not supported by retrieved page`);
+}
+async function fetchOfficialSource(source) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 15000);
+  let response;
+  try { response = await fetch(source.url, { signal: controller.signal, headers: { 'user-agent': 'OPC-Blog-Research/2.0' } }); }
+  finally { clearTimeout(timeout); }
+  if (!response.ok) throw new Error(`Source ${source.id} returned HTTP ${response.status}`);
+  const body = textOnly((await response.text()).slice(0, 500000));
+  if (body.length < 100) throw new Error(`Source ${source.id} has insufficient retrieved text`);
+  verifyExcerpt(source, body);
+  return { ...source, retrieval: 'http', httpStatus: response.status, retrievedAt: new Date().toISOString(), contentDigest: sha(body), retrievedExcerpt: body.slice(0, 1200) };
+}
+async function verifySource(source) {
+  if (source.access !== 'internal-preverified') return fetchOfficialSource(source);
+  if (![source.evidenceId, source.verifiedBy, source.excerpt, source.capturedAt].every(Boolean)) throw new Error(`Internal source ${source.id} lacks verification record`);
+  return { ...source, retrieval: 'internal-preverified', contentDigest: sha(source.excerpt) };
+}
 async function verifySources(sources) {
   const verified = [];
-  for (const source of sources) {
-    if (source.access === 'internal-preverified') {
-      if (!source.evidenceId || !source.verifiedBy || !source.excerpt || !source.capturedAt) throw new Error(`Internal source ${source.id} lacks verification record`);
-      verified.push({ ...source, retrieval: 'internal-preverified', contentDigest: sha(source.excerpt) });
-      continue;
-    }
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 15000);
-    let response;
-    try { response = await fetch(source.url, { signal: controller.signal, headers: { 'user-agent': 'OPC-Blog-Research/2.0' } }); }
-    finally { clearTimeout(timeout); }
-    if (!response.ok) throw new Error(`Source ${source.id} returned HTTP ${response.status}`);
-    const body = textOnly((await response.text()).slice(0, 500000));
-    if (body.length < 100) throw new Error(`Source ${source.id} has insufficient retrieved text`);
-    const terms = source.excerpt.toLowerCase().split(/\W+/).filter(w => w.length > 5);
-    if (terms.length && terms.filter(w => body.toLowerCase().includes(w)).length / terms.length < 0.5) throw new Error(`Source ${source.id} excerpt is not supported by retrieved page`);
-    verified.push({ ...source, retrieval: 'http', httpStatus: response.status, retrievedAt: new Date().toISOString(), contentDigest: sha(body), retrievedExcerpt: body.slice(0, 1200) });
-  }
+  for (const source of sources) verified.push(await verifySource(source));
   return verified;
 }
 function runModel(program, args, prompt, label) {
@@ -44,17 +48,33 @@ function reviewPrompt(brief, draft, sources) {
   return `Act as an independent OPC editorial and factual reviewer. Return ONLY JSON: {"decision":"pass"|"revise","findings":[{"severity":"blocker"|"major"|"minor","issue":"...","claimId":"... or null","evidence":"..."}],"summary":"..."}. Verify every consequential assertion against the supplied source excerpts, flag source relevance gaps, fabricated OPC experience or commercial claims, bad area/service scope, duplicate intent, incomplete reader answer, and unsupported numbers. Do not assume citations prove their claims. Brief: ${JSON.stringify(brief)}. Sources: ${JSON.stringify(sources)}. Draft: ${JSON.stringify(draft)}`;
 }
 async function main() {
+  const { input, out, provider } = parseOptions();
+  const rawSnapshot = JSON.parse(fs.readFileSync(input, 'utf8'));
+  const { intake, snapshot, selection } = prepareSelection(rawSnapshot);
+  const sources = await verifySources(snapshot.sources.filter(s => selection.selected.sourceIds.includes(s.id)));
+  const brief = { ...selection.selected, selectedAutonomously: true, selectionScore: selection.score, sourceIds: sources.map(s => s.id), rulesVersion: 'blog-v2-2026-10-10' };
+  const { draft, review } = generateBundle(provider, brief, sources);
+  const gate = reviewGate(draft, brief, sources, review);
+  const status = gate.length ? 'review-required' : 'draft-ready-for-human-review';
+  const runDir = writeRun(out, { rawSnapshot, intake, snapshot, selection, sources, brief, draft, review, gate, status });
+  console.log(JSON.stringify({ runDir, selectedId: brief.id, status, gate, provider }));
+  if (gate.length) process.exitCode = 2;
+}
+function parseOptions() {
   const input = option('--input'), out = option('--out'), provider = option('--provider');
   if (!input || !out || !['codex', 'fixture'].includes(provider)) throw new Error('Usage: cli.js --input snapshot.json --out draft-bundles --provider codex|fixture [--fixture-draft draft.json --fixture-review review.json]');
   if (/publish|wordpress|wp-content|wp-admin/i.test(out)) throw new Error('Refusing publication or WordPress output path');
   if (provider === 'codex' && process.env.OPC_ALLOW_SUBSCRIPTION_CLI !== '1') throw new Error('Codex/Claude CLI model calls require OPC_ALLOW_SUBSCRIPTION_CLI=1 after subscription cost verification');
-  const rawSnapshot = JSON.parse(fs.readFileSync(input, 'utf8'));
+  return { input, out, provider };
+}
+function prepareSelection(rawSnapshot) {
   const intake = Array.isArray(rawSnapshot.ideaRows) ? intakeIdeas(rawSnapshot.ideaRows, rawSnapshot.sourceCatalog || rawSnapshot.sources, { spreadsheetId: rawSnapshot.spreadsheetId }) : null;
   const snapshot = intake ? { snapshotAt: rawSnapshot.snapshotAt, candidates: intake.candidates, existing: rawSnapshot.existing, sources: rawSnapshot.sourceCatalog || rawSnapshot.sources } : rawSnapshot;
   const selection = selectTopic(snapshot);
   if (!selection.selected) throw new Error(`No eligible autonomous topic: ${JSON.stringify(selection.rejected)}`);
-  const sources = await verifySources(snapshot.sources.filter(s => selection.selected.sourceIds.includes(s.id)));
-  const brief = { ...selection.selected, selectedAutonomously: true, selectionScore: selection.score, sourceIds: sources.map(s => s.id), rulesVersion: 'blog-v2-2026-10-10' };
+  return { intake, snapshot, selection };
+}
+function generateBundle(provider, brief, sources) {
   let draft, review;
   if (provider === 'fixture') {
     draft = JSON.parse(fs.readFileSync(option('--fixture-draft'), 'utf8'));
@@ -68,14 +88,14 @@ async function main() {
       review = parseJson(runModel(process.env.OPC_CLAUDE_CLI || 'claude', ['-p', '--no-session-persistence', '--tools', '', '--output-format', 'text'], reviewPrompt(brief, draft, sources), 'Claude'), 'Claude');
     } finally { fs.rmSync(temp, { recursive: true, force: true }); }
   }
+  return { draft, review };
+}
+function reviewGate(draft, brief, sources, review) {
   const gate = validateDraft(draft, brief, { sources });
   if (!['pass', 'revise'].includes(review?.decision) || !Array.isArray(review.findings)) gate.push('invalid-independent-review');
   if (review?.findings?.some(f => ['blocker', 'major'].includes(f.severity))) gate.push('independent-review-findings');
   if (review?.decision !== 'pass') gate.push('independent-review-blocked');
-  const status = gate.length ? 'review-required' : 'draft-ready-for-human-review';
-  const runDir = writeRun(out, { rawSnapshot, intake, snapshot, selection, sources, brief, draft, review, gate, status });
-  console.log(JSON.stringify({ runDir, selectedId: brief.id, status, gate, provider }));
-  if (gate.length) process.exitCode = 2;
+  return gate;
 }
 if (require.main === module) main().catch(error => { console.error(error.message); process.exitCode = 1; });
 module.exports = { verifySources, draftPrompt, reviewPrompt };
