@@ -5,6 +5,7 @@ const os = require('node:os');
 const path = require('node:path');
 const { selectTopic, validateDraft, formatErrors, terminalArtifactErrors, geographicErrors, claimGeographyErrors, diagramErrors, writeRun, bodyWordCount, sourceGeographyErrors } = require('../blog-v2/pipeline');
 const { addReviewFigure } = require('../blog-v2/review-figure');
+const { addThreeViewFigure } = require('../blog-v2/three-view-figure');
 const { verifySources, textOnly, needsRevision, loadPriorRun, generateBundle, bundleStatus, draftPrompt, reviewPrompt: articleReviewPrompt, revisionPrompt } = require('../blog-v2/cli');
 const { batchGate, readVerifiedRun, reviewPrompt } = require('../blog-v2/batch-review');
 const { verifiedCompanyService, standaloneTradeErrors } = require('../blog-v2/company-scope');
@@ -134,12 +135,27 @@ test('scope map can be text-only when an automatic figure adds no independent va
   assert.deepEqual(diagramErrors(draft, { formatKey: 'scope-map' }), []);
   assert.deepEqual(diagramErrors({ ...draft, body: `<!-- FIGURE:planning-map -->\n${draft.body}` }, { formatKey: 'scope-map' }), ['figure-marker-mismatch']);
 });
+test('three-view concept figure requires a verified in-body source claim and exact marker', () => {
+  const brief = { formatKey: 'sequence-walkthrough', figureConcept: 'addition-three-views' };
+  const draft = { body: 'Intro.\n\n## Three plan views\n\nThe checklist names a site plan, floor plan, and elevation plan.', claims: [{ id: 'c1', sourceId: 's1', status: 'verified', text: 'The checklist names a site plan, floor plan, and elevation plan.' }] };
+  const illustrated = addThreeViewFigure(draft, brief);
+  assert.deepEqual(diagramErrors(illustrated, brief), []);
+  assert.equal(illustrated.figures[0].approved, false);
+  assert.ok(diagramErrors({ ...illustrated, body: illustrated.body.replace('<!-- FIGURE:addition-three-views -->', '') }, brief).includes('figure-marker-mismatch'));
+  assert.ok(diagramErrors(addThreeViewFigure({ ...draft, claims: [] }, brief), brief).includes('missing-required-concept-figure'));
+});
 test('series gate keeps factual-pass drafts held when independent editorial review finds repeated work', () => {
   const runs = ['scope-map', 'evidence-explainer', 'sequence-walkthrough'].map((formatKey, i) => ({ id: `run-${i}`, brief: { intentKey: `intent-${i}`, formatKey }, draft: { title: `Article ${i}`, body: 'A direct answer.' }, sources: [], articleReview: { decision: 'pass' } }));
   const review = { decision: 'hold', findings: [{ severity: 'major', issue: 'Three articles defer the answer', evidence: 'Repeated question lists' }] };
   assert.ok(batchGate(runs, review).includes('independent-batch-hold'));
   assert.match(reviewPrompt(runs), /direct source-supported answers/);
   assert.deepEqual(batchGate(runs, { decision: 'trial_ready', findings: [] }), []);
+});
+test('series reviewer uses the verified tri-county service area without visual or publisher quotas', () => {
+  const prompt = reviewPrompt([{ id: 'a', brief: { formatKey: 'scope-map', question: 'Question', readerDecision: 'Decision' }, draft: { title: 'Title', body: 'Body' }, sources: [], articleReview: { decision: 'pass', findings: [] } }]);
+  assert.match(prompt, /Broward, Miami-Dade, and Palm Beach counties/);
+  assert.match(prompt, /missing figure is a defect only when/);
+  assert.match(prompt, /do not require an arbitrary publisher count/);
 });
 test('series review refuses a draft altered after its article receipt was written', () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'opc-batch-tamper-'));

@@ -179,11 +179,32 @@ function diagramStepsErrors(draft, figure) {
   if (!Array.isArray(figure.steps) || figure.steps.length < 3 || figure.steps.length > 5) return ['figure-step-count'];
   return figure.steps.flatMap(step => diagramStepErrors(step, draft));
 }
+function threeViewErrors(draft, selected, figure) {
+  const errors = [];
+  if (!validThreeViewMetadata(selected, figure)) errors.push('figure-provenance-invalid');
+  const claim = (draft.claims || []).find(item => item.id === figure.claimId);
+  if (!validThreeViewClaim(draft, claim, figure)) errors.push('unbound-three-view-source');
+  return errors;
+}
+function validThreeViewMetadata(selected, figure) {
+  return selected.figureConcept === 'addition-three-views' && selected.formatKey === 'sequence-walkthrough'
+    && figure.approved === false && figure.rights === 'OPC original diagram'
+    && [figure.title, figure.alt, figure.caption, figure.provenance].every(Boolean);
+}
+function validThreeViewClaim(draft, claim, figure) {
+  return Boolean(claim && claim.sourceId === figure.sourceId && claim.status === 'verified'
+    && draft.body.includes(claim.text) && ['site plan', 'floor plan', 'elevation plan'].every(term => claim.text.toLowerCase().includes(term)));
+}
+function missingDiagramErrors(draft, selected) {
+  if (selected.figureConcept === 'addition-three-views') return ['missing-required-concept-figure'];
+  return /<!-- FIGURE:[^>]+ -->/.test(draft.body || '') ? ['figure-marker-mismatch'] : [];
+}
 function diagramErrors(draft, selected) {
   if (!selected.formatKey) return [];
   const figure = draft.figures?.[0];
-  if (!figure && !draft.figures?.length) return /<!-- FIGURE:[^>]+ -->/.test(draft.body || '') ? ['figure-marker-mismatch'] : [];
+  if (!figure && !draft.figures?.length) return missingDiagramErrors(draft, selected);
   if (!figure || draft.figures.length !== 1) return ['missing-in-body-figure'];
+  if (figure.type === 'three-view-diagram') return [...diagramMarkerErrors(draft, figure), ...threeViewErrors(draft, selected, figure)];
   return [...diagramMarkerErrors(draft, figure), ...diagramMetadataErrors(figure, selected), ...diagramStepsErrors(draft, figure)];
 }
 function validateDraft(draft, selected, snapshot) {

@@ -7,6 +7,7 @@ const { spawnSync } = require('node:child_process');
 const { selectTopic, validateDraft, writeRun, sha } = require('./pipeline');
 const { intakeIdeas } = require('./intake');
 const { addReviewFigure } = require('./review-figure');
+const { addThreeViewFigure } = require('./three-view-figure');
 const { companyScope } = require('./company-scope');
 const { planMedia } = require('./media-plan');
 const { addSiteInventory } = require('./site-inventory');
@@ -171,12 +172,12 @@ function initialPair(provider, brief, sources, prior) {
   if (provider === 'fixture') {
     return { draft: JSON.parse(fs.readFileSync(option('--fixture-draft'), 'utf8')), review: JSON.parse(fs.readFileSync(option('--fixture-review'), 'utf8')) };
   }
-  const draft = addReviewFigure(codexJson(draftPrompt(brief, sources), 'Codex draft'));
+  const draft = addThreeViewFigure(addReviewFigure(codexJson(draftPrompt(brief, sources), 'Codex draft')), brief);
   return { draft, review: claudeReview(brief, draft, sources) };
 }
 function revisedPair(provider, brief, sources, draft, review) {
   if (provider === 'fixture') return { draft: JSON.parse(fs.readFileSync(option('--fixture-revised-draft'), 'utf8')), review: JSON.parse(fs.readFileSync(option('--fixture-revised-review'), 'utf8')) };
-  const revisedDraft = addReviewFigure(codexJson(revisionPrompt(brief, sources, draft, review), 'Codex revision'));
+  const revisedDraft = addThreeViewFigure(addReviewFigure(codexJson(revisionPrompt(brief, sources, draft, review), 'Codex revision')), brief);
   return { draft: revisedDraft, review: claudeReview(brief, revisedDraft, sources) };
 }
 function generateBundle(provider, brief, sources, prior) {
