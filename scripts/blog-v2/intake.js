@@ -78,6 +78,17 @@ function intakeIdeas(rows, sources, options = {}) {
     if (classification.reasons.length) rejected.push({ id: classification.id, reasons: classification.reasons, provenance: classification.provenance });
     else candidates.push(toCandidate(classification, sources));
   });
-  return { candidates, rejected, rulesVersion: 'blog-v2-intake-2026-10-10' };
+  const byIntent = new Map();
+  for (const candidate of candidates) {
+    const prior = byIntent.get(candidate.intentKey);
+    if (!prior || candidate.priority > prior.priority) byIntent.set(candidate.intentKey, candidate);
+  }
+  const unique = candidates.filter(candidate => {
+    const chosen = byIntent.get(candidate.intentKey);
+    if (chosen === candidate) return true;
+    rejected.push({ id: candidate.id, reasons: [`duplicate-idea-intent:${chosen.id}`], provenance: candidate.inputProvenance });
+    return false;
+  });
+  return { candidates: unique, rejected, rulesVersion: 'blog-v2-intake-2026-10-10' };
 }
 module.exports = { intakeIdeas, relevantSources };

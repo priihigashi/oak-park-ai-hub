@@ -25,6 +25,8 @@ Each qualifying source catalog record must explicitly set `sourceRole: "topic-sp
 
 The runner reads `scripts/company-info.js` for the existing OPC core-service and within-project trade boundaries. It records a digest of that policy in each brief, feeds it to the drafter and independent reviewer, and rejects positive standalone roofing/plumbing/electrical promises. An optional `mediaCatalog` in the input snapshot yields a `mediaPlan.json` shortlist only for records marked OPC-owned, blog-approved, privacy-checked, project-bound, and service-matched. The plan never chooses or approves an image; no photo is required for a draft. A human checks the exact candidate and derivative before a later site release.
 
+When multiple Content Ideas rows resolve to the same theme and area, intake now keeps one candidate per `intentKey` (highest planning signal, earliest row on ties) and records the other rows as `duplicate-idea-intent` rejections with their sheet provenance. This prevents repeated rows from masquerading as fresh weekly topics. The existing live, legacy, and queued inventory remains a separate duplicate check.
+
 Allowed services: `home renovation`, `home addition`, `shell construction`, `concrete work`, `deck construction`, `screen porch enclosure`, `commercial renovation`, `commercial build-out`, `commercial construction`. Allowed areas: `Broward County`, `Miami-Dade County`, `Palm Beach County`. The selector ranks eligible questions autonomously and stores the full rejected pool, including duplicates and out-of-scope topics.
 
 ## Run

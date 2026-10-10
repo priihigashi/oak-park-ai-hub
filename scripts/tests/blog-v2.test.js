@@ -245,6 +245,18 @@ test('intake turns raw hook into a safe question and preserves only row provenan
   assert.equal(result.candidates[0].inputProvenance.inspirationUrl, rows[0].sourceLink);
   assert.doesNotMatch(JSON.stringify(result.candidates[0]), /Guaranteed|\$50,000|500 additions|one day/);
 });
+test('intake retains one candidate per reader intent and audits duplicate idea rows', () => {
+  const sources = [{ ...source, id: 'broward-permit', sourceRole: 'topic-specific', themeTags: ['addition-planning'], coverageAreas: ['Broward County'] }];
+  const rows = [
+    { rowNumber: 12, rawIdea: 'Home addition in Fort Lauderdale' },
+    { rowNumber: 131, rawIdea: 'Home addition planning in Broward', topicDirection: 'Permit planning before design' },
+    { rowNumber: 348, rawIdea: 'Home addition cost in Broward' },
+  ];
+  const result = intakeIdeas(rows, sources);
+  assert.equal(result.candidates.length, 1);
+  assert.equal(result.candidates[0].id, 'content-ideas-row-131');
+  assert.deepEqual(result.rejected.filter(item => item.reasons[0].startsWith('duplicate-idea-intent')).map(item => item.id), ['content-ideas-row-12', 'content-ideas-row-348']);
+});
 test('intake covers screen enclosure, commercial build-out and permit themes', () => {
   const sources = [
     { ...source, id: 'miami-permit', publisher: 'Miami-Dade County', title: 'Permit applications', url: 'https://miamidade.gov/permit', sourceRole: 'topic-specific', themeTags: ['screen-enclosure-planning', 'commercial-retail-buildout'], coverageAreas: ['Miami-Dade County'] },
