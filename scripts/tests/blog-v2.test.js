@@ -65,11 +65,13 @@ test('draft and repair prompts prohibit sources outside the verified run', () =>
   assert.match(draftPrompt(brief, sources), /never describe the research packet as 'supplied sources'/);
   assert.match(draftPrompt(brief, sources), /For national-only evidence, identify the federal source in the description/);
   assert.match(draftPrompt(brief, sources), /including conditional permit or approval requirements/);
+  assert.match(draftPrompt(brief, sources), /never infer that one replaces or does not replace the other/);
   assert.match(draftPrompt(brief, sources), /state the source retrieval date from retrievedAt/);
   assert.match(articleReviewPrompt(brief, {}, sources), /matching claims\[\] entry/);
   assert.match(articleReviewPrompt(brief, {}, sources), /visible as-of retrieval date/);
   assert.match(articleReviewPrompt(brief, {}, sources), /directly states a permit trigger/);
   assert.match(revisionPrompt(brief, sources, {}, { decision: 'revise' }), /never add, recall, search for, or cite another source/);
+  assert.match(revisionPrompt(brief, sources, {}, { decision: 'revise' }), /delete any substitution or non-substitution claim/);
 });
 test('company service scope is read from the existing knowledge file', () => {
   assert.equal(verifiedCompanyService('home addition'), true);
