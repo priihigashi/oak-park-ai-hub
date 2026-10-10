@@ -127,3 +127,20 @@ test('kitchen exhaust is in full renovation scope; patio cover remains ineligibl
   assert.equal(result.candidates[0].service, 'home renovation');
   assert.equal(result.rejected[0].id, 'content-ideas-row-115');
 });
+test('source-gated themes safely reframe boutique remodel, kitchen hosting, and addition HVAC rows', () => {
+  const catalog = [
+    { ...source, id: 'doj-ada', sourceRole: 'topic-specific', themeTags: ['retail-accessibility'], coverageAreas: ['national'] },
+    { ...source, id: 'doe-kitchen', sourceRole: 'topic-specific', themeTags: ['kitchen-exhaust'], coverageAreas: ['national'] },
+    { ...source, id: 'doe-hvac', sourceRole: 'topic-specific', themeTags: ['addition-hvac-planning'], coverageAreas: ['national'] },
+  ];
+  const rows = [
+    { rowNumber: 4, rawIdea: 'Boutique retail remodel in Broward', readerPayoff: 'Guaranteed ADA compliance' },
+    { rowNumber: 14, rawIdea: 'Kitchen renovation for hosting in Broward', readerPayoff: 'Improves air quality by 90%' },
+    { rowNumber: 98, rawIdea: 'HVAC coordination for a room addition in Broward', topicDirection: 'Standalone HVAC referral and exact tonnage advice' },
+  ];
+  const result = intakeIdeas(rows, catalog);
+  assert.deepEqual(result.candidates.map(c => c.theme), ['retail-accessibility', 'kitchen-exhaust', 'addition-hvac-planning']);
+  assert.deepEqual(result.candidates.map(c => c.sourceIds[0]), ['doj-ada', 'doe-kitchen', 'doe-hvac']);
+  assert.doesNotMatch(JSON.stringify(result.candidates), /Guaranteed|90%|Standalone HVAC|tonnage/);
+  assert.equal(result.candidates[2].service, 'home addition');
+});
