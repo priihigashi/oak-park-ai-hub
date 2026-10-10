@@ -37,6 +37,8 @@ The bundle contains `snapshot.json`, `selection.json`, `sources.json`, `brief.js
 
 `draft.body` is Markdown, matching the existing website posts. Every listed claim must appear in the body with an inline Markdown source link. Numeric claims must have the same quantity in the cited source excerpt and the claim evidence. Visuals are provenance records for review, not automatic assets.
 
+The v3 editorial gate counts visible article words. A body under 400 words is `incomplete-article`; the drafting prompt targets a useful 450–650 words when evidence supports it and forbids padding or invented detail.
+
 ## Rollback
 
 Disable any separate schedule and stop invoking this CLI. Existing site content is not changed by a run. Keep bundles and receipts for audit. Revert the v2 runner commit to remove the code; do not re-enable the old WordPress workflow.

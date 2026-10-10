@@ -9,6 +9,10 @@ const commercialClaim = /\b(we|oak park construction|opc)\s+(guarantee(?:d|s)?|c
 const numericClaim = /(?:\$\s*\d|\b\d+(?:\.\d+)?\s*(?:%|percent|days|weeks|months|years)\b)/i;
 function quantities(s) { return String(s || '').match(/(?:\$\s*\d[\d,.]*|\b\d+(?:\.\d+)?\s*(?:%|percent|days|weeks|months|years)\b)/gi) || []; }
 function quantityKey(s) { return s.toLowerCase().replace(/[\s,$]/g, ''); }
+function bodyWordCount(body) {
+  const visible = body.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/https?:\/\/\S+/g, ' ');
+  return visible.match(/[\p{L}\p{N}][\p{L}\p{N}'’-]*/gu)?.length || 0;
+}
 
 function normalize(s) { return String(s || '').toLowerCase().replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim(); }
 function tokens(s) { return new Set(normalize(s).split(' ').filter(w => w.length > 3 && !['what', 'when', 'with', 'from', 'your', 'home', 'florida', 'south'].includes(w))); }
@@ -65,7 +69,7 @@ function draftBaseErrors(draft) {
   if (forbidden.test(draft.title + ' ' + draft.body)) errors.push('out-of-scope-language');
   if (commercialClaim.test(draft.body)) errors.push('unsupported-commercial-claim');
   if (numericClaim.test(draft.body) && !draft.claims.some(cl => numericClaim.test(cl.text || ''))) errors.push('unledgered-numeric-claim');
-  if (draft.body.length < 700) errors.push('incomplete-article');
+  if (bodyWordCount(draft.body) < 400) errors.push('incomplete-article');
   if (/<[a-z][\s\S]*?>|wp-json|wordpress/i.test(draft.body)) errors.push('html-or-wordpress-content');
   return errors;
 }
@@ -117,4 +121,4 @@ function writeRun(outDir, payload) {
   fs.writeFileSync(path.join(runDir, 'receipt.json'), JSON.stringify({ id, createdAt: new Date().toISOString(), inputHash: sha(payload.snapshot), selectedId: payload.selection.selected?.id || null, status: payload.status, fileHashes: Object.fromEntries(Object.keys(payload).map(name => [name + '.json', crypto.createHash('sha256').update(fs.readFileSync(path.join(runDir, `${name}.json`))).digest('hex')])) }, null, 2) + '\n', { flag: 'wx' });
   return runDir;
 }
-module.exports = { selectTopic, validateDraft, writeRun, sha, similarity };
+module.exports = { selectTopic, validateDraft, writeRun, sha, similarity, bodyWordCount };

@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
-const { selectTopic, validateDraft, writeRun } = require('../blog-v2/pipeline');
+const { selectTopic, validateDraft, writeRun, bodyWordCount } = require('../blog-v2/pipeline');
 const { verifySources } = require('../blog-v2/cli');
 const { intakeIdeas } = require('../blog-v2/intake');
 
@@ -51,6 +51,13 @@ test('Markdown draft requires each cited claim in body and source-supported numb
   assert.ok(!errors.includes('html-or-wordpress-content'));
   const revised = { ...draft, body: draft.body.replace('14 days', '10 days'), claims: [{ ...claim, text: 'Review takes 10 days', evidence: 'review takes 10 days before construction starts' }] };
   assert.ok(!validateDraft(revised, candidate, { sources: [numbered] }).some(e => e.startsWith('unsupported-number')));
+});
+test('v3 editorial floor counts visible words and rejects a 399-word draft', () => {
+  const shortBody = Array(399).fill('guidance').join(' ');
+  const longBody = Array(400).fill('guidance').join(' ');
+  assert.equal(bodyWordCount(`[County guidance](https://example.gov/long/path) ${Array(398).fill('guidance').join(' ')}`), 400);
+  assert.ok(validateDraft({ title: 'Guide', description: 'Guide', body: shortBody, claims: [], visuals: [] }, candidate, snapshot).includes('incomplete-article'));
+  assert.ok(!validateDraft({ title: 'Guide', description: 'Guide', body: longBody, claims: [], visuals: [] }, candidate, snapshot).includes('incomplete-article'));
 });
 test('a linked publisher name counts as visible claim text', () => {
   const claim = { id: 'office', text: 'County guidance says home additions require a permit before construction begins.', sourceId: 's1', evidence: source.excerpt, checkedAt: '2026-10-10', status: 'verified' };
