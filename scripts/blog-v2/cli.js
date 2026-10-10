@@ -9,9 +9,30 @@ const { intakeIdeas } = require('./intake');
 function option(name) { const i = process.argv.indexOf(name); return i < 0 ? null : process.argv[i + 1]; }
 function parseJson(text, label) { try { return JSON.parse(text.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/, '')); } catch (error) { throw new Error(`${label} did not return JSON: ${error.message}`); } }
 function textOnly(html) { return html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, ' ').replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ' ').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' '); }
-function verifyExcerpt(source, body) {
-  const terms = source.excerpt.toLowerCase().split(/\W+/).filter(w => w.length > 5);
-  if (terms.length && terms.filter(w => body.toLowerCase().includes(w)).length / terms.length < 0.5) throw new Error(`Source ${source.id} excerpt is not supported by retrieved page`);
+function excerptTerms(excerpt) {
+  return [...new Set(excerpt.toLowerCase().split(/\W+/).filter(w => w.length > 5))];
+}
+function passageCandidates(body, terms) {
+  const lower = body.toLowerCase();
+  const passages = [];
+  for (const term of terms) {
+    let position = 0;
+    for (let count = 0; count < 20; count += 1) {
+      position = lower.indexOf(term, position);
+      if (position < 0) break;
+      passages.push(body.slice(Math.max(0, position - 300), position + 1300));
+      position += term.length;
+    }
+  }
+  return passages;
+}
+function matchedPassage(source, body) {
+  const terms = excerptTerms(source.excerpt);
+  const passages = passageCandidates(body, terms);
+  const score = passage => terms.filter(term => passage.toLowerCase().includes(term)).length / terms.length;
+  passages.sort((a, b) => score(b) - score(a));
+  if (!passages.length || score(passages[0]) < 0.5) throw new Error(`Source ${source.id} excerpt is not supported by a retrieved passage`);
+  return passages[0];
 }
 async function fetchOfficialSource(source) {
   const controller = new AbortController();
@@ -22,8 +43,8 @@ async function fetchOfficialSource(source) {
   if (!response.ok) throw new Error(`Source ${source.id} returned HTTP ${response.status}`);
   const body = textOnly((await response.text()).slice(0, 500000));
   if (body.length < 100) throw new Error(`Source ${source.id} has insufficient retrieved text`);
-  verifyExcerpt(source, body);
-  return { ...source, retrieval: 'http', httpStatus: response.status, retrievedAt: new Date().toISOString(), contentDigest: sha(body), retrievedExcerpt: body.slice(0, 1200) };
+  const retrievedExcerpt = matchedPassage(source, body);
+  return { ...source, retrieval: 'http', httpStatus: response.status, retrievedAt: new Date().toISOString(), contentDigest: sha(body), retrievedExcerpt };
 }
 async function verifySource(source) {
   if (source.access !== 'internal-preverified') return fetchOfficialSource(source);

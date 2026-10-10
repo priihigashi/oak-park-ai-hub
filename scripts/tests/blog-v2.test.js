@@ -78,6 +78,18 @@ test('verifies HTTP source content and rejects stale excerpt', async () => {
   try { await assert.rejects(verifySources([source]), /excerpt is not supported/); }
   finally { global.fetch = original; }
 });
+test('source receipt and reviewer context use a matched passage after long navigation', async () => {
+  const original = global.fetch;
+  const navigation = 'Navigation menu account services links '.repeat(110);
+  const guidance = 'Home additions require a permit before construction begins and plans must be reviewed.';
+  global.fetch = async () => ({ ok: true, status: 200, text: async () => `<html><body>${navigation}<main>${guidance}</main></body></html>` });
+  try {
+    const result = await verifySources([source]);
+    assert.ok(result[0].retrievedExcerpt.includes(guidance));
+    assert.ok(result[0].retrievedExcerpt.length <= 1600);
+    assert.equal(result[0].retrieval, 'http');
+  } finally { global.fetch = original; }
+});
 test('intake turns raw hook into a safe question and preserves only row provenance', () => {
   const rows = [{ rowNumber: 120, rawIdea: 'Complete guide to a home addition in Fort Lauderdale', topicDirection: 'Guaranteed 30-day addition at $50,000', hookProfessional: 'We built 500 additions', readerPayoff: 'Get your permit in one day', sourceLink: 'https://youtube.com/watch?v=example', status: '🆕 Idea' }];
   const sources = [{ ...source, id: 'broward-permit', url: 'https://www.broward.org/Building', publisher: 'Broward County', title: 'Permit office', sourceRole: 'topic-specific', themeTags: ['addition-planning'], coverageAreas: ['Broward County'] }];
