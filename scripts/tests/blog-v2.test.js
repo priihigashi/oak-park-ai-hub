@@ -144,3 +144,17 @@ test('source-gated themes safely reframe boutique remodel, kitchen hosting, and 
   assert.doesNotMatch(JSON.stringify(result.candidates), /Guaranteed|90%|Standalone HVAC|tonnage/);
   assert.equal(result.candidates[2].service, 'home addition');
 });
+test('peripheral investment, showroom and cost mentions cannot inherit a targeted angle', () => {
+  const catalog = [
+    { ...source, id: 'doj-ada', sourceRole: 'topic-specific', themeTags: ['retail-accessibility'], coverageAreas: ['national'] },
+    { ...source, id: 'doe-hvac', sourceRole: 'topic-specific', themeTags: ['addition-hvac-planning'], coverageAreas: ['national'] },
+  ];
+  const rows = [
+    { rowNumber: 522, rawIdea: 'Retail center acquisition', topicDirection: 'Renovation demand may follow' },
+    { rowNumber: 1073, rawIdea: 'Cost breakdown for home additions', topicDirection: 'Mention HVAC sizing' },
+    { rowNumber: 1132, rawIdea: 'Virginia showroom relocation', topicDirection: 'Retail renovation and accessibility' },
+  ];
+  const result = intakeIdeas(rows, catalog);
+  assert.equal(result.candidates.length, 0);
+  assert.ok(result.rejected.every(item => item.reasons.some(reason => reason.startsWith('missing-raw-idea-anchor'))));
+});

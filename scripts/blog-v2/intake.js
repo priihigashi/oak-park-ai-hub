@@ -1,9 +1,9 @@
 // Raw Content Ideas are inspiration only. Templates deliberately exclude hooks,
 // payoffs, social assertions, and unverified project claims from the brief.
 const THEMES = [
-  { id: 'addition-hvac-planning', match: /\b(additions?|extra room|second story)\b.*\b(hvac|air conditioning|load calculation|proper sizing)\b|\b(hvac|air conditioning|load calculation|proper sizing)\b.*\b(additions?|extra room|second story)\b/i, service: 'home addition', question: area => `What HVAC sizing questions should an owner raise when planning a room addition in ${area}?`, decision: 'Discuss load-based HVAC sizing with the addition design and construction team before finalizing scope' },
-  { id: 'retail-accessibility', match: /\b(boutique|retail|storefront)\b.*\b(accessib\w*|ada|layout|remodel\w*|renovation)\b|\b(accessib\w*|ada|layout|remodel\w*|renovation)\b.*\b(boutique|retail|storefront)\b/i, service: 'commercial build-out', question: area => `What accessibility questions should a boutique owner raise before planning a retail build-out in ${area}?`, decision: 'Identify accessibility requirements to discuss with the design and construction team before defining a retail build-out scope' },
-  { id: 'kitchen-exhaust', match: /\b(kitchen|cooking)\b.*\b(exhaust|ventilation|range hood|renovation|hosting)\b|\b(exhaust|ventilation|range hood|renovation|hosting)\b.*\b(kitchen|cooking)\b/i, service: 'home renovation', question: area => `What should a homeowner ask about kitchen exhaust when planning a full renovation in ${area}?`, decision: 'Identify kitchen exhaust questions to resolve during full renovation planning' },
+  { id: 'addition-hvac-planning', rawAnchor: /\b(hvac|air conditioning)\b/i, match: /\b(additions?|extra room|second story)\b.*\b(hvac|air conditioning|load calculation|proper sizing)\b|\b(hvac|air conditioning|load calculation|proper sizing)\b.*\b(additions?|extra room|second story)\b/i, service: 'home addition', question: area => `What HVAC sizing questions should an owner raise when planning a room addition in ${area}?`, decision: 'Discuss load-based HVAC sizing with the addition design and construction team before finalizing scope' },
+  { id: 'retail-accessibility', rawAnchor: /\b(boutique|retail)\b.*\b(remodel\w*|renovat\w*|build.?out|layout)\b|\b(remodel\w*|renovat\w*|build.?out|layout)\b.*\b(boutique|retail)\b/i, match: /\b(boutique|retail|storefront)\b.*\b(accessib\w*|ada|layout|remodel\w*|renovat\w*)\b|\b(accessib\w*|ada|layout|remodel\w*|renovat\w*)\b.*\b(boutique|retail|storefront)\b/i, service: 'commercial build-out', question: area => `What accessibility questions should a boutique owner raise before planning a retail build-out in ${area}?`, decision: 'Identify accessibility requirements to discuss with the design and construction team before defining a retail build-out scope' },
+  { id: 'kitchen-exhaust', rawAnchor: /\b(kitchen|cooking)\b/i, match: /\b(kitchen|cooking)\b.*\b(exhaust|ventilation|range hood|renovat\w*|hosting|entertaining)\b|\b(exhaust|ventilation|range hood|renovat\w*|hosting|entertaining)\b.*\b(kitchen|cooking)\b/i, service: 'home renovation', question: area => `What should a homeowner ask about kitchen exhaust when planning a full renovation in ${area}?`, decision: 'Identify kitchen exhaust questions to resolve during full renovation planning' },
   { id: 'addition-planning', match: /\b(additions?|add on|second story|extra room|expand.*home)\b/i, service: 'home addition', question: area => `Which permit office should an owner check before planning a home addition in ${area}?`, decision: 'Identify the responsible permit office before defining an addition scope', sourceTags: ['permit', 'building'] },
   { id: 'screen-enclosure-planning', match: /\b(screen(?:ed)?\s*(?:porch|enclosure|patio)|porch enclosure|patio cover)\b/i, service: 'screen porch enclosure', question: area => `Where should an owner check permit requirements before planning a screen porch enclosure in ${area}?`, decision: 'Identify the responsible permit office before defining a screen enclosure scope', sourceTags: ['permit', 'building'] },
   { id: 'commercial-retail-buildout', match: /\b(retail|storefront|tenant improvement|commercial build.?out|office renovation)\b/i, service: 'commercial build-out', question: area => `Where should a business owner check permit and plan review requirements for a retail build-out in ${area}?`, decision: 'Identify the responsible permit office and plan review starting point before a retail build-out', sourceTags: ['permit', 'plan review', 'building'] },
@@ -27,21 +27,23 @@ function relevantSources(sources, theme, area) {
 function rowProvenance(row, options) {
   return { spreadsheetId: options.spreadsheetId || null, sheet: 'Content Ideas', row: row.rowNumber, status: row.status || '', inspirationUrl: row.sourceLink || '' };
 }
-function rowReasons(row, text, theme, sourceIds) {
+function rowReasons(row, text, theme, sourceIds, unanchored) {
   const reasons = [];
   if (/published|draft created|posted/i.test(row.status || '') || row.blogUrl) reasons.push('already-used-row');
   if (!text.trim()) reasons.push('empty-idea');
   if (!theme) reasons.push('unsupported-theme');
+  if (unanchored) reasons.push(`missing-raw-idea-anchor:${unanchored.id}`);
   if (theme && !sourceIds.length) reasons.push('no-topic-relevant-official-source');
   return reasons;
 }
 function classifyRow(row, sources, options) {
   const provenance = rowProvenance(row, options);
   const text = `${row.rawIdea || ''} ${row.topicDirection || ''}`;
-  const theme = THEMES.find(item => item.match.test(text));
+  const theme = THEMES.find(item => item.match.test(text) && (!item.rawAnchor || item.rawAnchor.test(row.rawIdea || '')));
+  const unanchored = THEMES.find(item => item.rawAnchor && item.match.test(text) && !item.rawAnchor.test(row.rawIdea || ''));
   const area = AREAS.find(item => item.test.test(text))?.name || options.defaultArea || 'Broward County';
   const sourceIds = theme ? relevantSources(sources, theme, area).map(s => s.id) : [];
-  const reasons = rowReasons(row, text, theme, sourceIds);
+  const reasons = rowReasons(row, text, theme, sourceIds, unanchored);
   return { provenance, text, theme, area, sourceIds, reasons, id: `content-ideas-row-${row.rowNumber}` };
 }
 function toCandidate(classification) {
