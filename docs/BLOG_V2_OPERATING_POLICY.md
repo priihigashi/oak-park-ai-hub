@@ -1,6 +1,6 @@
 # OPC Blog v2 — operating decision (2026-10-10)
 
-Status: **publication 0/week; recurrence disabled.** The independent three-article series audit is HOLD. This policy specifies what to turn on after a new acceptance batch clears the article, series, media, and exact-version approval gates. It does not activate a schedule or a paid API.
+Status: **publication 0/week; one private drafting attempt each Monday at 9:00 AM America/New_York.** A three-article series passed independent review for a private trial with no major/blocker findings. The Codex app heartbeat is active; it cannot approve or publish an article. No paid API is active. Exact-version human approval and the React/Vercel release gate still control any public post.
 
 ## Cadence and quality decision
 
@@ -32,6 +32,6 @@ The Drive folder `Mikes Photos & Videos` and OPC portfolio assets exist, but thi
 
 ## Rollout, measurement, and rollback
 
-Before enabling one weekly draft attempt, a fresh batch must pass article and independent series review with distinct payoffs, service-specific evidence, source-scoped geography, truthful media, and a reader-usable result. A publishing path must enforce exact-version human approval and the site preview/build checks. Record per accepted article: brief, source receipts, company-scope digest, original/revised text, editor findings, media decision, approval hash, release SHA, cost/time, and later search outcome. Keep rejected articles and no-image decisions.
+The weekly private draft attempt was enabled only after three distinct pilots passed individual and independent series review with no major/blocker findings. Each future attempt still needs its own service-specific evidence, source-scoped geography, truthful media, and reader-usable result; a weak topic skips the week. A publishing path must enforce exact-version human approval and the site preview/build checks. Record per accepted article: brief, source receipts, company-scope digest, original/revised text, editor findings, media decision, approval hash, release SHA, cost/time, and later search outcome. Keep rejected articles and no-image decisions.
 
 If quality or cost regresses, disable the draft schedule, leave queued work unpublished, and revert the versioned rule or release commit. Preserve immutable audits. The old WordPress generator stays paused.

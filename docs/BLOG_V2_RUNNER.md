@@ -2,7 +2,7 @@
 
 This runner produces a review bundle only. It has no publishing or WordPress operation. The legacy `blog-generator.js` remains separate and must stay disabled for v2.
 
-Operating cadence, company scope, media fallback, and cost decision: [BLOG_V2_OPERATING_POLICY.md](BLOG_V2_OPERATING_POLICY.md). The present public frequency is zero while the independent series review remains HOLD. The target after a clean acceptance batch and release interlock is one approved article per week, with skipped weeks when quality is insufficient.
+Operating cadence, company scope, media fallback, and cost decision: [BLOG_V2_OPERATING_POLICY.md](BLOG_V2_OPERATING_POLICY.md). The present public frequency is zero. A distinct three-article series passed for a private drafting trial, and the task-attached weekly heartbeat is active. Public release still requires exact-version human approval and the separate website gate; target at most one approved article per week, skipping weak weeks.
 
 ## Input snapshot
 
@@ -41,7 +41,19 @@ OPC_ALLOW_SUBSCRIPTION_CLI=1 node scripts/blog-v2/discover-sources.js --input /p
 
 This stage chooses a nonduplicate, in-scope question against the live React/legacy inventory, asks the existing Codex CLI to search for official government sources, then fetches each suggested page or PDF. Only an allowlisted HTTPS official host with an exact quote present in the live content reaches the prepared snapshot; failed URLs and quotes remain in the immutable audit. The verified retrieved passage, not the model's search snippet, becomes the draft evidence. County domains are conservatively marked `unscoped`; a Fort Lauderdale question backed only by City pages is narrowed to `Fort Lauderdale`. The current allowlist covers Broward, Miami-Dade, Fort Lauderdale, Palm Beach, Florida DBPR, Florida DOH, and EPA. This is a bounded discovery route, not a guarantee that a relevant official page exists or that one verified passage is enough for an article. The later independent review and series gate can still hold a draft.
 
-To recheck saved suggestions after a verifier fix without paying for another model call, add `--suggestions-file /path/to/prior/discovery.json`. The replay file hash is retained. The output's `preparedSnapshot.json` is the input to the draft command below. Keep the research and draft bundles together in the shared audit. No paid API fallback, schedule, or publication is involved.
+To recheck saved suggestions after a verifier fix without paying for another model call, add `--suggestions-file /path/to/prior/discovery.json`. The replay file hash is retained. The output's `preparedSnapshot.json` is the input to the draft command below. Keep the research and draft bundles together in the shared audit. No paid API fallback or publication is involved.
+
+## Weekly private coordinator
+
+The recurring heartbeat prepares a fresh candidate snapshot from current Content Ideas, the site inventory, and prior reviewed or queued intents. It then invokes one versioned command that connects official-source research, Codex drafting, independent Claude review, and a private HTML preview:
+
+```sh
+OPC_ALLOW_SUBSCRIPTION_CLI=1 node scripts/blog-v2/weekly-private.js --input /path/to/current-candidates.json --site-frontend /path/to/opc-website-v1/frontend --out /path/to/private-weekly-runs
+```
+
+The command fails closed when research yields no verified official source or article review blocks the draft. It writes a status and keeps the research and article receipts. Successful runs add their verified intent to the local queue so a stale input cannot select it again; a second successful draft in the same Monday-to-Sunday UTC week is refused before another model call. The heartbeat must also include held pilots and editor-queued intents from the Shared Drive in `existing`, because local queue history alone cannot know work stored elsewhere. Upload the run directory and preview to the OPC Website Shared Drive and link its receipt in T-904. Nothing in the coordinator publishes, changes the website, or approves an image.
+
+A no-source replay test using the actual intake and checked-out site returned `research-hold` with zero sources; it wrote a research receipt and status and made no drafting call. The coordinator also has tests for a successful research-to-preview handoff, the weekly cap, and a held research result. This validates control flow; the first scheduled live run must still verify subscription CLI access and produce its own audit.
 
 ## Run
 
