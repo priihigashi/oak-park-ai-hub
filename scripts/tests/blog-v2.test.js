@@ -156,6 +156,8 @@ test('series reviewer uses the verified tri-county service area without visual o
   assert.match(prompt, /Broward, Miami-Dade, and Palm Beach counties/);
   assert.match(prompt, /missing figure is a defect only when/);
   assert.match(prompt, /do not require an arbitrary publisher count/);
+  assert.match(prompt, /missing final human approval is a publication gate/);
+  assert.match(prompt, /deterministically validates the body digest/);
 });
 test('series review refuses a draft altered after its article receipt was written', () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'opc-batch-tamper-'));
