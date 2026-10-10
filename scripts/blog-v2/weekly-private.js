@@ -33,13 +33,18 @@ function command(script, args, { timeout = 600000, json = true } = {}) {
   const output = json ? JSON.parse(lines.at(-1)) : lines.at(-1);
   return { output, exitCode: result.status };
 }
+function readAttemptStatus(file) {
+  const receipt = JSON.parse(fs.readFileSync(path.join(path.dirname(file), 'receipt.json'), 'utf8'));
+  if (digestFile(file) !== receipt.statusSha256) throw new Error('Weekly attempt status changed after receipt');
+  return JSON.parse(fs.readFileSync(file, 'utf8'));
+}
 function queuedRuns(out) {
   if (!fs.existsSync(out)) return [];
   const items = [];
   for (const name of fs.readdirSync(out)) {
     const statusPath = path.join(out, name, 'status.json');
     if (!fs.existsSync(statusPath)) continue;
-    const status = JSON.parse(fs.readFileSync(statusPath, 'utf8'));
+    const status = readAttemptStatus(statusPath);
     if (status.status !== 'ready-for-human-review') continue;
     const run = readVerifiedRun(status.articleRun);
     items.push({ id: 'queued:' + run.id, intentKey: run.brief.intentKey, title: run.draft.title, intent: run.brief.readerDecision, type: 'queued', receiptHash: run.receiptHash });
@@ -55,7 +60,7 @@ function preparedThisWeek(out, now = new Date()) {
   for (const name of fs.readdirSync(out)) {
     const file = path.join(out, name, 'status.json');
     if (!fs.existsSync(file)) continue;
-    const status = JSON.parse(fs.readFileSync(file, 'utf8'));
+    const status = readAttemptStatus(file);
     if (status.status === 'ready-for-human-review' && weekStart(new Date(status.createdAt)) === weekStart(now)) return status;
   }
   return null;
@@ -68,7 +73,9 @@ function stagedInput(raw, queued) {
 }
 function writeStatus(dir, status) {
   const stamped = { ...status, createdAt: new Date().toISOString() };
-  fs.writeFileSync(path.join(dir, 'status.json'), JSON.stringify(stamped, null, 2) + '\n', { flag: 'wx' });
+  const file = path.join(dir, 'status.json');
+  fs.writeFileSync(file, JSON.stringify(stamped, null, 2) + '\n', { flag: 'wx' });
+  fs.writeFileSync(path.join(dir, 'receipt.json'), JSON.stringify({ rulesVersion: 'weekly-private-v1', statusSha256: digestFile(file) }, null, 2) + '\n', { flag: 'wx' });
   return stamped;
 }
 function runAttempt(options, runner = command) {
@@ -78,11 +85,11 @@ function runAttempt(options, runner = command) {
   fs.mkdirSync(lock);
   let dir;
   try {
-    const queued = queuedRuns(options.out);
     dir = path.join(options.out, new Date().toISOString().replace(/[:.]/g, '-') + '-' + crypto.randomBytes(4).toString('hex'));
     fs.mkdirSync(dir);
     const prior = preparedThisWeek(options.out);
     if (prior) return writeStatus(dir, { status: 'already-prepared-this-week', priorArticleRun: prior.articleRun });
+    const queued = queuedRuns(options.out);
     const staged = path.join(dir, 'input.json');
     fs.writeFileSync(staged, JSON.stringify(stagedInput(raw, queued), null, 2) + '\n', { flag: 'wx' });
     const researchArgs = ['--input', staged, '--site-frontend', options.siteFrontend, '--out', path.join(dir, 'research')];
