@@ -2,6 +2,12 @@
 
 Status: Council round 3 decision with partial implementation. T-904 remains draft-only and recurrence remains held. Three of the five allowed Council rounds have been used.
 
+## Acceptance batch, 2026-10-10
+
+The next autonomous batch selected Content Ideas rows 14 (kitchen exhaust during a full renovation), 98 (HVAC sizing during a room addition), and 4 (retail accessibility). The first two produced 453- and 425-word drafts with clear deterministic gates and independent Claude article-level passes. Both reviewers noted that their Broward framing rests on national sources, so those passes do not establish local editorial usefulness. The third run failed after its one allowed revision: the model added four Florida/Broward/legal source IDs absent from the supplied source set, and cited a DOJ sentence outside the retrieved excerpt. The source and independent review gates blocked it. No draft was published.
+
+Program decision: keep recurrence held. Retain the failed run and reviewer findings in the shared Drive audit; do not weaken the source gate to pass it. Next add verified official local evidence where local claims matter, strengthen the prompt's source whitelist and its regression coverage, then rerun a fresh immutable third candidate. A three-article batch review must confirm distinct reader payoffs, local relevance, source diversity, and useful answers before any one-per-week trial. The Website Build Tracker and shared Council/OCC record contain the editorial decision and audit link.
+
 ## Decision and evidence
 
 Hold recurring generation. Three autonomous pilots selected separate Content Ideas rows after screening 93 raw rows against 239 current and legacy entries. The subjects were a Broward home addition, screen porch enclosure, and retail build-out. All three relied on the same two general Broward County pages: Building Code Division jurisdiction and ePermits OneStop. Claude's independent article-level factual reviews passed with minor notes, while the cross-run assessment found repeated office-identification advice and little service-specific guidance. Two pilot bundles passed the current automated gate. None was published. Article-level factual restraint does not prove a useful three-article series.
