@@ -69,6 +69,8 @@ The v3 editorial gate counts visible article words. A body under 400 words is `i
 
 The intake now assigns a `formatKey` to each supported theme: an evidence explainer, sequence walkthrough, or scope map. The draft and independent review must address that format with direct, source-supported answers. The deterministic gate rejects a mismatched format key or a draft that returns to mostly question headings. This guard addresses the repeated question-list failure in the first acceptance batch; independent review still judges whether the substance is useful.
 
+A `scope-map` brief may opt into `endingStyle: "decision-bullets"` when a table would repeat another article's payoff. In that case draft and repair prompts require two short decision bullets followed by an action, and the deterministic terminal gate rejects a final comparison table. The default scope-map still requires its comparison table. The Miami-Dade addition pilot may opt into `figureConcept: "addition-three-views"`: the runner inserts a private, unapproved original concept figure only when a verified in-body claim names site, floor, and elevation plans together. The source/claim IDs, marker, rights, and body digest are validated; the preview clearly says it is not a permit drawing or compliance finding. Final asset approval is a separate publication gate.
+
 After three distinct article-ready runs, evaluate the series with the existing Claude subscription route:
 
 ```sh

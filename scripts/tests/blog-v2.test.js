@@ -113,6 +113,13 @@ test('Council round five requires a reader artifact in the final section', () =>
   assert.deepEqual(terminalArtifactErrors({ body: '## Final scope\n\n- Use approval\n- Work approval' }, { formatKey: 'scope-map' }), ['missing-format-specific-reader-artifact']);
   assert.deepEqual(terminalArtifactErrors({ body: '## Final steps\n\n1. Gather the site plan.\n2. Compare the floor plan.' }, { formatKey: 'sequence-walkthrough' }), []);
 });
+test('decision-bullet scope map keeps its distinct ending through draft and repair', () => {
+  const brief = { formatKey: 'scope-map', endingStyle: 'decision-bullets', service: 'commercial build-out', area: 'Fort Lauderdale' };
+  assert.match(draftPrompt(brief, []), /Do not put a comparison table in the final section/);
+  assert.match(revisionPrompt(brief, [], {}, { decision: 'revise' }), /two short Markdown decision bullets/);
+  assert.deepEqual(terminalArtifactErrors({ body: '## Decision map\n\n- Use unresolved: check use.\n- Physical work planned: check permit.\n\nBring the intended use and scope.' }, brief), []);
+  assert.deepEqual(terminalArtifactErrors({ body: '## Decision map\n\n| Use | Work |\n| --- | --- |\n| CU | Permit |' }, brief), ['missing-decision-bullets-ending']);
+});
 test('original diagram binds sourced nodes to the reviewed claim and labels editorial nodes', () => {
   const draft = { title: 'A plan', formatKey: 'scope-map', body: 'Intro.\n\n## Source point\n\nThe cited rule applies. [Agency](https://example.gov/rule)\n\n## Design point\n\nRecord the layout.\n\n## Final point\n\nConfirm the scope.', claims: [{ id: 'c1', text: 'The cited rule applies.', sourceId: 's1', status: 'verified' }] };
   const result = addReviewFigure(draft, { enabled: true });

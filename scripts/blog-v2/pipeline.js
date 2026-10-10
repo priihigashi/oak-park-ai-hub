@@ -135,12 +135,22 @@ function hasReaderTable(last) {
   const tableRows = last.split('\n').filter(line => /^\s*\|[^\n]+\|\s*$/.test(line));
   return tableRows.length >= 3 && tableRows.some(line => /^\s*\|[\s:|-]+\|\s*$/.test(line));
 }
+function decisionBulletErrors(last) {
+  const bullets = last.split('\n').filter(line => /^\s*[-*]\s+\S/.test(line));
+  const finalLine = last.trim().split('\n').at(-1) || '';
+  return bullets.length >= 2 && !hasReaderTable(last) && !/^\s*\|/.test(finalLine)
+    ? [] : ['missing-decision-bullets-ending'];
+}
+function sequenceArtifactErrors(last) {
+  return /^\s*1\.\s+\S/m.test(last) && /^\s*2\.\s+\S/m.test(last) ? [] : ['missing-format-specific-reader-artifact'];
+}
 function terminalArtifactErrors(draft, selected) {
   if (!selected.formatKey) return [];
   const sections = String(draft.body || '').split(/^##\s+.+$/gm);
   const last = sections.at(-1) || '';
+  if (selected.formatKey === 'scope-map' && selected.endingStyle === 'decision-bullets') return decisionBulletErrors(last);
   if (['scope-map', 'evidence-explainer'].includes(selected.formatKey)) return hasReaderTable(last) ? [] : ['missing-format-specific-reader-artifact'];
-  if (selected.formatKey === 'sequence-walkthrough') return /^\s*1\.\s+\S/m.test(last) && /^\s*2\.\s+\S/m.test(last) ? [] : ['missing-format-specific-reader-artifact'];
+  if (selected.formatKey === 'sequence-walkthrough') return sequenceArtifactErrors(last);
   return /(?:^|\n)(?:\s*[-*]\s+|\s*\d+\.\s+|\s*\|[^\n]+\|)/m.test(last) ? [] : ['missing-reader-artifact'];
 }
 function geographicErrors(draft, selected) {
