@@ -3,7 +3,7 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 const { verifiedCompanyService, standaloneTradeErrors } = require('./company-scope');
 
-const AREAS = new Set(['broward county', 'miami dade county', 'palm beach county']);
+const AREAS = new Set(['broward county', 'miami dade county', 'palm beach county', 'fort lauderdale']);
 const forbidden = /\b(roofing.only|plumbing.only|electrical.only|handyman|sink install|chicago|illinois)\b/i;
 const commercialClaim = /\b(we|oak park construction|opc)\s+(guarantee(?:d|s)?|completed|built|saved|charge|offer|have done)\b/i;
 const numericClaim = /(?:\$\s*\d|\b\d+(?:\.\d+)?\s*(?:%|percent|days|weeks|months|years)\b)/i;
@@ -49,25 +49,25 @@ function sourceReasons(candidate, snapshot, byId) {
   if (!fresh) reasons.push('source-after-snapshot');
   return reasons;
 }
-function candidateReasons(candidate, snapshot, byId) {
+function candidateReasons(candidate, snapshot, byId, researchMode = false) {
   const reasons = [];
   if (![candidate.id, candidate.question, candidate.readerDecision].every(Boolean)) reasons.push('missing-reader-question-or-decision');
   if (!verifiedCompanyService(candidate.service)) reasons.push('unverified-service');
   if (!AREAS.has(normalize(candidate.area))) reasons.push('unverified-area');
   if (forbidden.test(`${candidate.question} ${candidate.service} ${candidate.area}`)) reasons.push('out-of-scope');
-  reasons.push(...sourceReasons(candidate, snapshot, byId));
+  if (!researchMode) reasons.push(...sourceReasons(candidate, snapshot, byId));
   const duplicate = findDuplicate(candidate, snapshot.existing);
   if (duplicate) reasons.push(`duplicate:${duplicate.id || duplicate.slug || duplicate.title}`);
   return reasons;
 }
-function selectTopic(snapshot) {
+function selectTopic(snapshot, { researchMode = false } = {}) {
   assertSnapshot(snapshot);
   const byId = new Map(snapshot.sources.map(s => [s.id, s]));
   const rejected = [], eligible = [];
   for (const c of snapshot.candidates) {
-    const reasons = candidateReasons(c, snapshot, byId);
+    const reasons = candidateReasons(c, snapshot, byId, researchMode);
     if (reasons.length) rejected.push({ id: c.id, question: c.question || '', reasons });
-    else eligible.push({ candidate: c, score: Math.min(c.sourceIds.length, 4) * 10 + Math.min(tokens(c.readerDecision).size, 12) + (c.priority || 0) });
+    else eligible.push({ candidate: c, score: (researchMode ? 0 : Math.min(c.sourceIds.length, 4) * 10) + Math.min(tokens(c.readerDecision).size, 12) + (c.priority || 0) });
   }
   eligible.sort((a, b) => b.score - a.score || String(a.candidate.id).localeCompare(String(b.candidate.id)));
   if (!eligible.length) return { selected: null, rejected, ranked: [] };

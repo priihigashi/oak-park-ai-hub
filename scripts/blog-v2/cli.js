@@ -13,7 +13,17 @@ const { addSiteInventory } = require('./site-inventory');
 
 function option(name) { const i = process.argv.indexOf(name); return i < 0 ? null : process.argv[i + 1]; }
 function parseJson(text, label) { try { return JSON.parse(text.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/, '')); } catch (error) { throw new Error(`${label} did not return JSON: ${error.message}`); } }
-function textOnly(html) { return html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, ' ').replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ' ').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' '); }
+function decodeEntity(match, name, entities) {
+  if (entities[name.toLowerCase()]) return entities[name.toLowerCase()];
+  const code = name.startsWith('#') ? Number(name.slice(1)) : 0;
+  return code > 0 && code <= 0x10ffff ? String.fromCodePoint(code) : match;
+}
+function textOnly(html) {
+  const entities = { nbsp: ' ', amp: '&', quot: '"', apos: "'", rsquo: '’', lsquo: '‘', ldquo: '“', rdquo: '”', ndash: '–', mdash: '—' };
+  return html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, ' ').replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ' ').replace(/<[^>]*>/g, ' ')
+    .replace(/&([a-z]+|#\d+);/gi, (match, name) => decodeEntity(match, name, entities))
+    .replace(/\s+/g, ' ').trim();
+}
 function excerptTerms(excerpt) {
   return [...new Set(excerpt.toLowerCase().split(/\W+/).filter(w => w.length > 5))];
 }
@@ -57,7 +67,7 @@ async function fetchOfficialSource(source) {
   const body = isPdf ? extractPdfText(Buffer.from(await response.arrayBuffer())) : textOnly((await response.text()).slice(0, 500000));
   if (body.length < 100) throw new Error(`Source ${source.id} has insufficient retrieved text`);
   const retrievedExcerpt = matchedPassage(source, body);
-  return { ...source, retrieval: isPdf ? 'http-pdf' : 'http', httpStatus: response.status, retrievedAt: new Date().toISOString(), contentDigest: sha(body), retrievedExcerpt };
+  return { ...source, retrieval: isPdf ? 'http-pdf' : 'http', httpStatus: response.status, finalUrl: response.url, retrievedAt: new Date().toISOString(), contentDigest: sha(body), retrievedExcerpt };
 }
 async function verifySource(source) {
   if (source.access !== 'internal-preverified') return fetchOfficialSource(source);
@@ -187,4 +197,4 @@ function bundleStatus(bundle, gate) {
   return bundle.revisedDraft ? 'revision-gate-failed' : 'review-required';
 }
 if (require.main === module) main().catch(error => { console.error(error.message); process.exitCode = 1; });
-module.exports = { verifySources, draftPrompt, reviewPrompt, revisionPrompt, needsRevision, loadPriorRun, generateBundle, bundleStatus };
+module.exports = { verifySources, textOnly, draftPrompt, reviewPrompt, revisionPrompt, needsRevision, loadPriorRun, generateBundle, bundleStatus };

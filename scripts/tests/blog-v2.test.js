@@ -5,12 +5,13 @@ const os = require('node:os');
 const path = require('node:path');
 const { selectTopic, validateDraft, formatErrors, terminalArtifactErrors, geographicErrors, claimGeographyErrors, diagramErrors, writeRun, bodyWordCount, sourceGeographyErrors } = require('../blog-v2/pipeline');
 const { addReviewFigure } = require('../blog-v2/review-figure');
-const { verifySources, needsRevision, loadPriorRun, generateBundle, bundleStatus, draftPrompt, reviewPrompt: articleReviewPrompt, revisionPrompt } = require('../blog-v2/cli');
+const { verifySources, textOnly, needsRevision, loadPriorRun, generateBundle, bundleStatus, draftPrompt, reviewPrompt: articleReviewPrompt, revisionPrompt } = require('../blog-v2/cli');
 const { batchGate, readVerifiedRun, reviewPrompt } = require('../blog-v2/batch-review');
 const { verifiedCompanyService, standaloneTradeErrors } = require('../blog-v2/company-scope');
 const { planMedia } = require('../blog-v2/media-plan');
 const { nextSnapshot } = require('../blog-v2/next-snapshot');
 const { fromSite, addSiteInventory } = require('../blog-v2/site-inventory');
+const { officialHost, sourceFromSuggestion, scopedCandidate } = require('../blog-v2/discover-sources');
 
 test('live site and legacy routes join queued topics before autonomous selection', () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'opc-site-inventory-'));
@@ -35,6 +36,24 @@ test('live site and legacy routes join queued topics before autonomous selection
     assert.equal(stale.existing[0].intentKey, 'permit-guide');
     assert.equal(selectTopic({ ...snapshot, existing: enriched.existing, candidates: [{ ...candidate, intentKey: null, question: 'Home Addition Permit Guide', readerDecision: 'Use a permit planning guide' }] }).selected, null);
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
+test('source research ranks a duplicate-safe topic before sources and rejects nonofficial suggestions', () => {
+  const input = { ...snapshot, candidates: [{ ...candidate, sourceIds: [] }], sources: [] };
+  assert.equal(selectTopic(input).selected, null);
+  assert.equal(selectTopic(input, { researchMode: true }).selected.id, candidate.id);
+  assert.equal(officialHost('https://example.com/broward.org/permits'), null);
+  assert.equal(officialHost('https://www.broward.org/path?redirect=https://evil.test'), null);
+  assert.equal(officialHost('https://www.broward.org/building').publisher, 'Broward County');
+  assert.equal(sourceFromSuggestion({ url: 'https://example.com/page', title: 'Wrong', quote: 'A very long and seemingly valid official-sounding passage.' }, candidate, snapshot.snapshotAt), null);
+  const source = sourceFromSuggestion({ url: 'https://www.epa.gov/lead/example', title: 'Lead guidance', quote: 'A sufficiently long exact sentence from an official page.' }, candidate, snapshot.snapshotAt);
+  assert.deepEqual(source.coverageAreas, ['national']);
+  assert.equal(source.publisher, 'US Environmental Protection Agency');
+  const city = { ...candidate, question: 'How does a Fort Lauderdale Certificate of Use differ from a renovation permit?', area: 'Broward County' };
+  assert.equal(scopedCandidate(city, [{ coverageAreas: ['Fort Lauderdale'] }]).area, 'Fort Lauderdale');
+  assert.equal(scopedCandidate({ ...city, question: 'How do Broward permits work?' }, [{ coverageAreas: ['Fort Lauderdale'] }]).evidenceScope, 'unscoped');
+});
+test('official HTML entities preserve exact source quote verification', () => {
+  assert.equal(textOnly('<p>The building&rsquo;s approved use &amp; permits&nbsp;matter.</p>'), 'The building’s approved use & permits matter.');
 });
 
 test('draft and repair prompts prohibit sources outside the verified run', () => {
@@ -317,6 +336,13 @@ test('intake retains one candidate per reader intent and audits duplicate idea r
   assert.equal(result.candidates.length, 1);
   assert.equal(result.candidates[0].id, 'content-ideas-row-131');
   assert.deepEqual(result.rejected.filter(item => item.reasons[0].startsWith('duplicate-idea-intent')).map(item => item.id), ['content-ideas-row-12', 'content-ideas-row-348']);
+});
+test('research intake can select an unsourced idea but drafting intake cannot', () => {
+  const rows = [{ rowNumber: 44, rawIdea: 'Home addition planning in Broward', topicDirection: 'Permit planning before design' }];
+  assert.equal(intakeIdeas(rows, []).candidates.length, 0);
+  const research = intakeIdeas(rows, [], { allowMissingSources: true });
+  assert.equal(research.candidates.length, 1);
+  assert.deepEqual(research.candidates[0].sourceIds, []);
 });
 test('intake covers screen enclosure, commercial build-out and permit themes', () => {
   const sources = [

@@ -42,14 +42,17 @@ function evidenceScope(sourceIds, sources, area) {
 function rowProvenance(row, options) {
   return { spreadsheetId: options.spreadsheetId || null, sheet: 'Content Ideas', row: row.rowNumber, status: row.status || '', inspirationUrl: row.sourceLink || '' };
 }
-function rowReasons(row, text, theme, sourceIds, unanchored) {
+function rowReasons(row, text, theme, sourceIds, unanchored, allowMissingSources = false) {
   const reasons = [];
   if (/published|draft created|posted/i.test(row.status || '') || row.blogUrl) reasons.push('already-used-row');
   if (!text.trim()) reasons.push('empty-idea');
   if (!theme) reasons.push('unsupported-theme');
   if (unanchored) reasons.push(`missing-raw-idea-anchor:${unanchored.id}`);
-  if (theme && !sourceIds.length) reasons.push('no-topic-relevant-official-source');
+  if (needsOfficialSource(theme, sourceIds, allowMissingSources)) reasons.push('no-topic-relevant-official-source');
   return reasons;
+}
+function needsOfficialSource(theme, sourceIds, allowMissingSources) {
+  return Boolean(theme) && !sourceIds.length && !allowMissingSources;
 }
 function classifyRow(row, sources, options) {
   const provenance = rowProvenance(row, options);
@@ -58,7 +61,7 @@ function classifyRow(row, sources, options) {
   const unanchored = THEMES.find(item => item.rawAnchor && item.match.test(text) && !item.rawAnchor.test(row.rawIdea || ''));
   const area = AREAS.find(item => item.test.test(text))?.name || options.defaultArea || 'Broward County';
   const sourceIds = theme ? relevantSources(sources, theme, area).map(s => s.id) : [];
-  const reasons = rowReasons(row, text, theme, sourceIds, unanchored);
+  const reasons = rowReasons(row, text, theme, sourceIds, unanchored, options.allowMissingSources);
   return { provenance, text, theme, area, sourceIds, reasons, id: `content-ideas-row-${row.rowNumber}` };
 }
 function toCandidate(classification, sources) {

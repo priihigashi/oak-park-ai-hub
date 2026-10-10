@@ -29,7 +29,19 @@ The runner reads `scripts/company-info.js` for the existing OPC core-service and
 
 When multiple Content Ideas rows resolve to the same theme and area, intake now keeps one candidate per `intentKey` (highest planning signal, earliest row on ties) and records the other rows as `duplicate-idea-intent` rejections with their sheet provenance. This prevents repeated rows from masquerading as fresh weekly topics. The existing live, legacy, and queued inventory remains a separate duplicate check.
 
-Allowed services: `home renovation`, `home addition`, `shell construction`, `concrete work`, `deck construction`, `screen porch enclosure`, `commercial renovation`, `commercial build-out`, `commercial construction`. Allowed areas: `Broward County`, `Miami-Dade County`, `Palm Beach County`. The selector ranks eligible questions autonomously and stores the full rejected pool, including duplicates and out-of-scope topics.
+Allowed services: `home renovation`, `home addition`, `shell construction`, `concrete work`, `deck construction`, `screen porch enclosure`, `commercial renovation`, `commercial build-out`, `commercial construction`. Allowed areas: `Broward County`, `Miami-Dade County`, `Palm Beach County`, and the narrower `Fort Lauderdale` when the question and verified evidence are city-specific. The selector ranks eligible questions autonomously and stores the full rejected pool, including duplicates and out-of-scope topics.
+
+## Autonomous official-source research
+
+For candidate questions or raw Content Ideas rows lacking a verified source catalog, first run the subscription CLI research stage:
+
+```sh
+OPC_ALLOW_SUBSCRIPTION_CLI=1 node scripts/blog-v2/discover-sources.js --input /path/to/raw-ideas-or-candidates.json --site-frontend /path/to/opc-website-v1/frontend --out /path/to/research-bundles
+```
+
+This stage chooses a nonduplicate, in-scope question against the live React/legacy inventory, asks the existing Codex CLI to search for official government sources, then fetches each suggested page or PDF. Only an allowlisted HTTPS official host with an exact quote present in the live content reaches the prepared snapshot; failed URLs and quotes remain in the immutable audit. The verified retrieved passage, not the model's search snippet, becomes the draft evidence. County domains are conservatively marked `unscoped`; a Fort Lauderdale question backed only by City pages is narrowed to `Fort Lauderdale`. The current allowlist covers Broward, Miami-Dade, Fort Lauderdale, Palm Beach, Florida DBPR, Florida DOH, and EPA. This is a bounded discovery route, not a guarantee that a relevant official page exists or that one verified passage is enough for an article. The later independent review and series gate can still hold a draft.
+
+To recheck saved suggestions after a verifier fix without paying for another model call, add `--suggestions-file /path/to/prior/discovery.json`. The replay file hash is retained. The output's `preparedSnapshot.json` is the input to the draft command below. Keep the research and draft bundles together in the shared audit. No paid API fallback, schedule, or publication is involved.
 
 ## Run
 
