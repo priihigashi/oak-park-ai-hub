@@ -9,6 +9,7 @@ const { verifySources, needsRevision, loadPriorRun, generateBundle, bundleStatus
 const { batchGate, readVerifiedRun, reviewPrompt } = require('../blog-v2/batch-review');
 const { verifiedCompanyService, standaloneTradeErrors } = require('../blog-v2/company-scope');
 const { planMedia } = require('../blog-v2/media-plan');
+const { nextSnapshot } = require('../blog-v2/next-snapshot');
 
 test('draft and repair prompts prohibit sources outside the verified run', () => {
   const brief = { service: 'commercial build-out', area: 'Broward County', question: 'What should be checked?', readerDecision: 'Check accessibility scope' };
@@ -55,8 +56,10 @@ test('a Florida statute cannot be cataloged as county-specific evidence', () => 
 });
 test('Council round five requires a reader artifact in the final section', () => {
   const selected = { formatKey: 'evidence-explainer' };
-  assert.deepEqual(terminalArtifactErrors({ body: '## Planning consequence\n\nAsk the design team to verify the scope.' }, selected), ['missing-reader-artifact']);
-  assert.deepEqual(terminalArtifactErrors({ body: '## Planning consequence\n\nRecord these items:\n- Cooking location\n- Outdoor vent route\n\nAsk the design team to verify requirements.' }, selected), []);
+  assert.deepEqual(terminalArtifactErrors({ body: '## Planning consequence\n\nAsk the design team to verify the scope.' }, selected), ['missing-format-specific-reader-artifact']);
+  assert.deepEqual(terminalArtifactErrors({ body: '## Planning consequence\n\n| Evidence establishes | Evidence does not establish |\n| --- | --- |\n| A relevant fact | A project-specific outcome |' }, selected), []);
+  assert.deepEqual(terminalArtifactErrors({ body: '## Final scope\n\n- Use approval\n- Work approval' }, { formatKey: 'scope-map' }), ['missing-format-specific-reader-artifact']);
+  assert.deepEqual(terminalArtifactErrors({ body: '## Final steps\n\n1. Gather the site plan.\n2. Compare the floor plan.' }, { formatKey: 'sequence-walkthrough' }), []);
 });
 test('original diagram binds sourced nodes to the reviewed claim and labels editorial nodes', () => {
   const draft = { title: 'A plan', formatKey: 'scope-map', body: 'Intro.\n\n## Source point\n\nThe cited rule applies. [Agency](https://example.gov/rule)\n\n## Design point\n\nRecord the layout.\n\n## Final point\n\nConfirm the scope.', claims: [{ id: 'c1', text: 'The cited rule applies.', sourceId: 's1', status: 'verified' }] };
@@ -75,6 +78,11 @@ test('a weak evidence explainer stays text-only after the kitchen figure review'
   assert.deepEqual(result.figures, []);
   assert.deepEqual(diagramErrors(result, { formatKey: 'evidence-explainer' }), []);
 });
+test('scope map can be text-only when an automatic figure adds no independent value', () => {
+  const draft = { formatKey: 'scope-map', body: '## Use permission\n\nA CU addresses use.\n\n## Work permission\n\nRenovation approvals are separate.', figures: [] };
+  assert.deepEqual(diagramErrors(draft, { formatKey: 'scope-map' }), []);
+  assert.deepEqual(diagramErrors({ ...draft, body: `<!-- FIGURE:planning-map -->\n${draft.body}` }, { formatKey: 'scope-map' }), ['figure-marker-mismatch']);
+});
 test('series gate keeps factual-pass drafts held when independent editorial review finds repeated work', () => {
   const runs = ['scope-map', 'evidence-explainer', 'sequence-walkthrough'].map((formatKey, i) => ({ id: `run-${i}`, brief: { intentKey: `intent-${i}`, formatKey }, draft: { title: `Article ${i}`, body: 'A direct answer.' }, sources: [], articleReview: { decision: 'pass' } }));
   const review = { decision: 'hold', findings: [{ severity: 'major', issue: 'Three articles defer the answer', evidence: 'Repeated question lists' }] };
@@ -90,6 +98,15 @@ test('series review refuses a draft altered after its article receipt was writte
     fs.writeFileSync(path.join(run, 'draft.json'), JSON.stringify({ title: 'Changed' }));
     assert.throws(() => readVerifiedRun(run), /has changed/);
   } finally { fs.rmSync(root, { recursive: true, force: true }); }
+});
+test('an article-ready pilot moves its intent into the next private snapshot', () => {
+  const input = { candidates: [{ id: 'pilot-a' }, { id: 'pilot-b' }], existing: [] };
+  const run = { id: 'run-a', receiptHash: 'abc', brief: { id: 'pilot-a', intentKey: 'distinct-a', readerDecision: 'Answer A' }, draft: { title: 'Article A' } };
+  const next = nextSnapshot(input, run);
+  assert.equal(next.existing[0].type, 'queued');
+  assert.equal(next.existing[0].receiptHash, 'abc');
+  assert.throws(() => nextSnapshot(next, run), /already in the inventory/);
+  assert.throws(() => nextSnapshot(input, { ...run, brief: { ...run.brief, id: 'missing' } }), /absent from input snapshot/);
 });
 const { intakeIdeas } = require('../blog-v2/intake');
 
@@ -193,6 +210,18 @@ test('source receipt and reviewer context use a matched passage after long navig
     assert.ok(result[0].retrievedExcerpt.includes(guidance));
     assert.ok(result[0].retrievedExcerpt.length <= 1600);
     assert.equal(result[0].retrieval, 'http');
+  } finally { global.fetch = original; }
+});
+test('official PDF source is extracted and checked against the supplied excerpt', async () => {
+  const original = global.fetch;
+  const bytes = fs.readFileSync(path.join(__dirname, 'fixtures', 'blog-source.pdf'));
+  const pdf = { ...source, id: 'county-patio-pdf', url: 'https://example.gov/patio.pdf', excerpt: 'A site plan and survey show property lines. The applicant should include the proposed patio dimensions and materials.' };
+  global.fetch = async () => ({ ok: true, status: 200, headers: { get: () => 'application/pdf' }, arrayBuffer: async () => bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) });
+  try {
+    const result = await verifySources([pdf]);
+    assert.equal(result[0].retrieval, 'http-pdf');
+    assert.match(result[0].retrievedExcerpt, /proposed patio dimensions and materials/);
+    await assert.rejects(verifySources([{ ...pdf, excerpt: 'Completely unrelated legal rules and fees for a different project' }]), /excerpt is not supported/);
   } finally { global.fetch = original; }
 });
 test('one bounded revision retains both independent reviews and rejects a second resume', () => {
