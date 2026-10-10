@@ -1,8 +1,8 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
+const { verifiedCompanyService, standaloneTradeErrors } = require('./company-scope');
 
-const SERVICES = new Set(['home renovation', 'home addition', 'shell construction', 'concrete work', 'deck construction', 'screen porch enclosure', 'commercial renovation', 'commercial build out', 'commercial construction']);
 const AREAS = new Set(['broward county', 'miami dade county', 'palm beach county']);
 const forbidden = /\b(roofing.only|plumbing.only|electrical.only|handyman|sink install|chicago|illinois)\b/i;
 const commercialClaim = /\b(we|oak park construction|opc)\s+(guarantee(?:d|s)?|completed|built|saved|charge|offer|have done)\b/i;
@@ -41,7 +41,7 @@ function sourceReasons(candidate, snapshot, byId) {
 function candidateReasons(candidate, snapshot, byId) {
   const reasons = [];
   if (![candidate.id, candidate.question, candidate.readerDecision].every(Boolean)) reasons.push('missing-reader-question-or-decision');
-  if (!SERVICES.has(normalize(candidate.service))) reasons.push('unverified-service');
+  if (!verifiedCompanyService(candidate.service)) reasons.push('unverified-service');
   if (!AREAS.has(normalize(candidate.area))) reasons.push('unverified-area');
   if (forbidden.test(`${candidate.question} ${candidate.service} ${candidate.area}`)) reasons.push('out-of-scope');
   reasons.push(...sourceReasons(candidate, snapshot, byId));
@@ -68,6 +68,7 @@ function draftBaseErrors(draft) {
   const errors = [];
   if (forbidden.test(draft.title + ' ' + draft.body)) errors.push('out-of-scope-language');
   if (commercialClaim.test(draft.body)) errors.push('unsupported-commercial-claim');
+  errors.push(...standaloneTradeErrors(draft.body));
   if (numericClaim.test(draft.body) && !draft.claims.some(cl => numericClaim.test(cl.text || ''))) errors.push('unledgered-numeric-claim');
   if (bodyWordCount(draft.body) < 400) errors.push('incomplete-article');
   if (/<[a-z][\s\S]*?>|wp-json|wordpress/i.test(draft.body)) errors.push('html-or-wordpress-content');

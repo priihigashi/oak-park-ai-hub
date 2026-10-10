@@ -7,12 +7,30 @@ const { selectTopic, validateDraft, formatErrors, terminalArtifactErrors, geogra
 const { addReviewFigure } = require('../blog-v2/review-figure');
 const { verifySources, needsRevision, loadPriorRun, generateBundle, bundleStatus, draftPrompt, revisionPrompt } = require('../blog-v2/cli');
 const { batchGate, readVerifiedRun, reviewPrompt } = require('../blog-v2/batch-review');
+const { verifiedCompanyService, standaloneTradeErrors } = require('../blog-v2/company-scope');
+const { planMedia } = require('../blog-v2/media-plan');
 
 test('draft and repair prompts prohibit sources outside the verified run', () => {
   const brief = { service: 'commercial build-out', area: 'Broward County', question: 'What should be checked?', readerDecision: 'Check accessibility scope' };
   const sources = [{ id: 'doj', url: 'https://www.ada.gov/resources/title-iii-primer/', retrievedExcerpt: 'Alterations can affect accessibility.' }];
   assert.match(draftPrompt(brief, sources), /EXCLUSIVE whitelist/);
+  assert.match(draftPrompt(brief, sources), /standalone OPC services/);
   assert.match(revisionPrompt(brief, sources, {}, { decision: 'revise' }), /never add, recall, search for, or cite another source/);
+});
+test('company service scope is read from the existing knowledge file', () => {
+  assert.equal(verifiedCompanyService('home addition'), true);
+  assert.equal(verifiedCompanyService('commercial build-out'), true);
+  assert.equal(verifiedCompanyService('standalone roofing'), false);
+  assert.deepEqual(standaloneTradeErrors('Oak Park Construction offers standalone roofing services.'), ['unsupported-standalone-trade']);
+  assert.deepEqual(standaloneTradeErrors('Roofing is coordinated inside a full renovation.'), []);
+});
+test('photo planning keeps uncleared or unrelated assets out and never auto-approves', () => {
+  const cleared = { id: 'opc-1', projectId: 'job-1', sourceDriveId: 'drive-1', approvedForBlog: true, privacyChecked: true, rights: 'OPC-owned', serviceTags: ['home addition'], alt: 'Framing at an OPC addition', caption: 'OPC addition framing' };
+  const plan = planMedia([cleared, { ...cleared, id: 'wrong-service', serviceTags: ['commercial build-out'] }, { ...cleared, id: 'uncleared', privacyChecked: false }], { service: 'home addition' });
+  assert.deepEqual(plan.candidates.map(asset => asset.id), ['opc-1']);
+  assert.equal(plan.approved, false);
+  assert.equal(plan.chosenAssetId, null);
+  assert.equal(planMedia([], { service: 'home addition' }).status, 'no-cleared-match');
 });
 test('repeated question headings from the failed acceptance batch violate a direct-answer format', () => {
   const selected = { formatKey: 'scope-map' };

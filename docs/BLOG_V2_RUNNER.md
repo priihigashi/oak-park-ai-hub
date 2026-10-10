@@ -2,6 +2,8 @@
 
 This runner produces a review bundle only. It has no publishing or WordPress operation. The legacy `blog-generator.js` remains separate and must stay disabled for v2.
 
+Operating cadence, company scope, media fallback, and cost decision: [BLOG_V2_OPERATING_POLICY.md](BLOG_V2_OPERATING_POLICY.md). The present public frequency is zero while the independent series review remains HOLD. The target after a clean acceptance batch and release interlock is one approved article per week, with skipped weeks when quality is insufficient.
+
 ## Input snapshot
 
 Save a JSON file with `snapshotAt`, `candidates`, `existing`, and `sources`:
@@ -20,6 +22,8 @@ Save a JSON file with `snapshotAt`, `candidates`, `existing`, and `sources`:
 For autonomous intake directly from the Content Ideas export, use `{snapshotAt, ideaRows, sourceCatalog, existing}`. Each `ideaRows` entry may be a 23-column sheet row array or an object with `rowNumber`, `rawIdea`, `topicDirection`, `sourceLink`, `status`, and `blogUrl`. The intake adapter classifies supported themes into safe question templates. It never passes raw hooks or payoffs into the draft brief; source links stay as inspiration provenance only. It requires a topic-specific source whose stated coverage includes the county or the nation and stores all intake rejections in `intake.json`.
 
 Each qualifying source catalog record must explicitly set `sourceRole: "topic-specific"`, `themeTags` (matching the intake theme), and `coverageAreas` (the county or `national`). Generic portal and jurisdiction pages may remain in the catalog but cannot alone qualify a candidate. The intake also recognizes boutique retail accessibility, kitchen exhaust planning for a full renovation, and HVAC sizing discussion within a room addition. These themes frame questions for the design team; they do not advertise standalone HVAC work or assert a technical result. A patio cover remains ineligible without verified company service scope and a matching specific source.
+
+The runner reads `scripts/company-info.js` for the existing OPC core-service and within-project trade boundaries. It records a digest of that policy in each brief, feeds it to the drafter and independent reviewer, and rejects positive standalone roofing/plumbing/electrical promises. An optional `mediaCatalog` in the input snapshot yields a `mediaPlan.json` shortlist only for records marked OPC-owned, blog-approved, privacy-checked, project-bound, and service-matched. The plan never chooses or approves an image; no photo is required for a draft. A human checks the exact candidate and derivative before a later site release.
 
 Allowed services: `home renovation`, `home addition`, `shell construction`, `concrete work`, `deck construction`, `screen porch enclosure`, `commercial renovation`, `commercial build-out`, `commercial construction`. Allowed areas: `Broward County`, `Miami-Dade County`, `Palm Beach County`. The selector ranks eligible questions autonomously and stores the full rejected pool, including duplicates and out-of-scope topics.
 
