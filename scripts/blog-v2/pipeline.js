@@ -27,16 +27,22 @@ function findDuplicate(candidate, existing) {
     ? p.intentKey === candidate.intentKey
     : similarity(candidate.question + ' ' + candidate.readerDecision, (p.title || '') + ' ' + (p.intent || '')) >= 0.75);
 }
+function sourceReasons(candidate, snapshot, byId) {
+  const reasons = [];
+  if (!candidate.sourceIds?.length || candidate.sourceIds.some(id => !byId.has(id))) reasons.push('missing-source');
+  const fresh = (candidate.sourceIds || []).every(id => byId.get(id) && Date.parse(byId.get(id).capturedAt) <= Date.parse(snapshot.snapshotAt));
+  if (!fresh) reasons.push('source-after-snapshot');
+  return reasons;
+}
 function candidateReasons(candidate, snapshot, byId) {
   const reasons = [];
   if (![candidate.id, candidate.question, candidate.readerDecision].every(Boolean)) reasons.push('missing-reader-question-or-decision');
   if (!SERVICES.has(normalize(candidate.service))) reasons.push('unverified-service');
   if (!AREAS.has(normalize(candidate.area))) reasons.push('unverified-area');
   if (forbidden.test(`${candidate.question} ${candidate.service} ${candidate.area}`)) reasons.push('out-of-scope');
-  if (!candidate.sourceIds?.length || candidate.sourceIds.some(id => !byId.has(id))) reasons.push('missing-source');
+  reasons.push(...sourceReasons(candidate, snapshot, byId));
   const duplicate = findDuplicate(candidate, snapshot.existing);
   if (duplicate) reasons.push(`duplicate:${duplicate.id || duplicate.slug || duplicate.title}`);
-  if (!(candidate.sourceIds || []).every(id => byId.get(id) && Date.parse(byId.get(id).capturedAt) <= Date.parse(snapshot.snapshotAt))) reasons.push('source-after-snapshot');
   return reasons;
 }
 function selectTopic(snapshot) {
@@ -86,14 +92,20 @@ function claimErrors(claim, draft, allowed, sources) {
   if (source) errors.push(...claimEvidenceErrors(claim, source, draft.body));
   return errors;
 }
+function validDraftShape(draft) {
+  return Boolean(draft) && [draft.title, draft.description, draft.body].every(Boolean) && Array.isArray(draft.claims) && Array.isArray(draft.visuals);
+}
+function visualErrors(visuals) {
+  return visuals.filter(visual => ![visual.type, visual.alt, visual.provenance, visual.rights].every(Boolean)).map(() => 'unverified-visual');
+}
 function validateDraft(draft, selected, snapshot) {
-  if (!draft || ![draft.title, draft.description, draft.body].every(Boolean) || !Array.isArray(draft.claims) || !Array.isArray(draft.visuals)) return ['draft-schema'];
+  if (!validDraftShape(draft)) return ['draft-schema'];
   const errors = draftBaseErrors(draft);
   const allowed = new Set(selected.sourceIds);
   for (const claim of draft.claims) errors.push(...claimErrors(claim, draft, allowed, snapshot.sources));
   const sourceIds = new Set(snapshot.sources.map(s => s.id));
   if (draft.claims.some(c => !sourceIds.has(c.sourceId))) errors.push('unknown-claim-source');
-  for (const visual of draft.visuals) if (!visual.type || !visual.alt || !visual.provenance || !visual.rights) errors.push('unverified-visual');
+  errors.push(...visualErrors(draft.visuals));
   return [...new Set(errors)];
 }
 function writeRun(outDir, payload) {

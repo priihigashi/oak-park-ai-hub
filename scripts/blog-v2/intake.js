@@ -24,17 +24,24 @@ function relevantSources(sources, theme, area) {
     return areaPattern.test(searchable) && theme.sourceTags.some(tag => searchable.includes(tag));
   });
 }
-function classifyRow(row, sources, options) {
-  const provenance = { spreadsheetId: options.spreadsheetId || null, sheet: 'Content Ideas', row: row.rowNumber, status: row.status || '', inspirationUrl: row.sourceLink || '' };
-  const text = `${row.rawIdea || ''} ${row.topicDirection || ''}`;
-  const theme = THEMES.find(item => item.match.test(text));
-  const area = AREAS.find(item => item.test.test(text))?.name || options.defaultArea || 'Broward County';
-  const sourceIds = theme ? relevantSources(sources, theme, area).map(s => s.id) : [];
+function rowProvenance(row, options) {
+  return { spreadsheetId: options.spreadsheetId || null, sheet: 'Content Ideas', row: row.rowNumber, status: row.status || '', inspirationUrl: row.sourceLink || '' };
+}
+function rowReasons(row, text, theme, sourceIds) {
   const reasons = [];
   if (/published|draft created|posted/i.test(row.status || '') || row.blogUrl) reasons.push('already-used-row');
   if (!text.trim()) reasons.push('empty-idea');
   if (!theme) reasons.push('unsupported-theme');
   if (theme && !sourceIds.length) reasons.push('no-topic-relevant-official-source');
+  return reasons;
+}
+function classifyRow(row, sources, options) {
+  const provenance = rowProvenance(row, options);
+  const text = `${row.rawIdea || ''} ${row.topicDirection || ''}`;
+  const theme = THEMES.find(item => item.match.test(text));
+  const area = AREAS.find(item => item.test.test(text))?.name || options.defaultArea || 'Broward County';
+  const sourceIds = theme ? relevantSources(sources, theme, area).map(s => s.id) : [];
+  const reasons = rowReasons(row, text, theme, sourceIds);
   return { provenance, text, theme, area, sourceIds, reasons, id: `content-ideas-row-${row.rowNumber}` };
 }
 function toCandidate(classification) {
