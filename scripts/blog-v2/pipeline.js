@@ -90,10 +90,10 @@ function claimErrors(claim, draft, allowed, sources) {
   const errors = [];
   if (![claim.id, claim.text, claim.sourceId, claim.evidence, claim.checkedAt].every(Boolean) || !allowed.has(claim.sourceId) || !['verified', 'uncertain'].includes(claim.status)) errors.push(`invalid-claim:${claim.id || 'unknown'}`);
   if (claim.status !== 'verified') errors.push(`unverified-claim:${claim.id}`);
-  const visibleBody = draft.body.replace(/\[([^\]]+)\]\(https:\/\/[^)]+\)/g, '$1');
-  if (!visibleBody.includes(claim.text)) errors.push(`claim-not-in-body:${claim.id}`);
+  const citedParagraph = draft.body.split(/\n\s*\n/).find(paragraph => paragraph.replace(/\[([^\]]+)\]\(https:\/\/[^)]+\)/g, '$1').includes(claim.text));
+  if (!citedParagraph) errors.push(`claim-not-in-body:${claim.id}`);
   const source = sources.find(s => s.id === claim.sourceId);
-  if (source) errors.push(...claimEvidenceErrors(claim, source, draft.body));
+  if (source) errors.push(...claimEvidenceErrors(claim, source, citedParagraph || ''));
   return errors;
 }
 function validDraftShape(draft) {

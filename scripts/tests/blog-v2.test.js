@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { selectTopic, validateDraft, writeRun, bodyWordCount } = require('../blog-v2/pipeline');
-const { verifySources, needsRevision, loadPriorRun, generateBundle } = require('../blog-v2/cli');
+const { verifySources, needsRevision, loadPriorRun, generateBundle, bundleStatus, revisionPrompt } = require('../blog-v2/cli');
 const { intakeIdeas } = require('../blog-v2/intake');
 
 const source = { id: 's1', url: 'https://example.gov/additions', publisher: 'County', title: 'Addition guidance', excerpt: 'Home additions require a permit before construction begins and plans must be reviewed.', capturedAt: '2026-10-09' };
@@ -64,6 +64,18 @@ test('a linked publisher name counts as visible claim text', () => {
   const body = `[County guidance](${source.url}) says home additions require a permit before construction begins. ${'Owners should confirm the applicable local office. '.repeat(20)}`;
   const errors = validateDraft({ title: 'Addition guide', description: 'Guide', body, claims: [claim], visuals: [] }, candidate, snapshot);
   assert.ok(!errors.includes('claim-not-in-body:office'));
+});
+test('revised claim text must match a visible sentence with its citation in the same paragraph', () => {
+  const claim = { id: 'permit', text: 'Home additions require a permit before construction begins.', sourceId: 's1', evidence: source.excerpt, checkedAt: '2026-10-10', status: 'verified' };
+  const filler = Array(400).fill('guidance').join(' ');
+  const paraphrased = { title: 'Guide', description: 'Guide', body: `Home additions need a permit before work starts. [County](${source.url})\n\n${filler}`, claims: [claim], visuals: [] };
+  assert.ok(validateDraft(paraphrased, candidate, snapshot).includes('claim-not-in-body:permit'));
+  const distantCitation = { ...paraphrased, body: `${claim.text}\n\n[County](${source.url})\n\n${filler}` };
+  assert.ok(validateDraft(distantCitation, candidate, snapshot).includes('missing-inline-citation:permit'));
+  const exact = { ...paraphrased, body: `${claim.text} [County](${source.url})\n\n${filler}` };
+  const errors = validateDraft(exact, candidate, snapshot);
+  assert.ok(!errors.includes('claim-not-in-body:permit'));
+  assert.ok(!errors.includes('missing-inline-citation:permit'));
 });
 test('retains immutable audit files with hashes', () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'opc-blog-test-'));
@@ -126,6 +138,15 @@ test('revision trigger includes reviewer decision or a major finding', () => {
   assert.equal(needsRevision({ decision: 'revise', findings: [] }), true);
   assert.equal(needsRevision({ decision: 'pass', findings: [{ severity: 'major' }] }), true);
   assert.equal(needsRevision({ decision: 'pass', findings: [{ severity: 'minor' }] }), false);
+});
+test('failed revised draft has explicit terminal gate status and one-pass prompt', () => {
+  assert.equal(bundleStatus({ revisedDraft: {} }, ['claim-not-in-body:c1']), 'revision-gate-failed');
+  assert.equal(bundleStatus({ draft: {} }, ['incomplete-article']), 'review-required');
+  assert.equal(bundleStatus({ revisedDraft: {} }, []), 'draft-ready-for-human-review');
+  const prompt = revisionPrompt(candidate, [source], { body: 'draft' }, { decision: 'revise', findings: [] });
+  assert.match(prompt, /claim\.text exactly/);
+  assert.match(prompt, /SAME paragraph/);
+  assert.match(prompt, /air changes per hour/);
 });
 test('intake turns raw hook into a safe question and preserves only row provenance', () => {
   const rows = [{ rowNumber: 120, rawIdea: 'Complete guide to a home addition in Fort Lauderdale', topicDirection: 'Guaranteed 30-day addition at $50,000', hookProfessional: 'We built 500 additions', readerPayoff: 'Get your permit in one day', sourceLink: 'https://youtube.com/watch?v=example', status: '🆕 Idea' }];

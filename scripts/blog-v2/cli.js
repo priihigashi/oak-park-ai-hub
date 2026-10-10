@@ -70,7 +70,7 @@ function reviewPrompt(brief, draft, sources) {
   return `Act as an independent OPC editorial and factual reviewer. Return ONLY JSON: {"decision":"pass"|"revise","findings":[{"severity":"blocker"|"major"|"minor","issue":"...","claimId":"... or null","evidence":"..."}],"summary":"..."}. Verify every consequential assertion against the supplied source excerpts, flag source relevance gaps, fabricated OPC experience or commercial claims, bad area/service scope, duplicate intent, incomplete reader answer, and unsupported numbers. Do not assume citations prove their claims. Brief: ${JSON.stringify(brief)}. Sources: ${JSON.stringify(sources)}. Draft: ${JSON.stringify(draft)}`;
 }
 function revisionPrompt(brief, sources, draft, review) {
-  return `Return ONLY a complete revised draft JSON with the same schema as the original: title, slug, category, description, body (Markdown), claims, visuals. This is the sole repair attempt. Address every independent review finding with source evidence or remove unsupported text; do not silently preserve uncited consequential claims. Keep a useful answer of at least 400 visible words without padding or invention. Preserve the reader decision and approved scope. Do not add publication instructions. Brief: ${JSON.stringify(brief)}. Verified sources: ${JSON.stringify(sources)}. Original draft: ${JSON.stringify(draft)}. Independent findings: ${JSON.stringify(review)}`;
+  return `Return ONLY a complete revised draft JSON with the same schema as the original: title, slug, category, description, body (Markdown), claims, visuals. This is the sole repair attempt. Address every independent review finding with source evidence or remove unsupported text; do not silently preserve uncited consequential claims. Claim ledger rule: for EVERY claims[] item, copy claim.text exactly from one contiguous visible-body sentence after removing Markdown link syntax; keep punctuation identical and put a Markdown citation to that claim's sourceId URL in the SAME paragraph. Do not paraphrase claim.text in the ledger. Example body: "The permit office reviews plans before construction. [County](https://example.gov/permit)"; claim.text: "The permit office reviews plans before construction.". Before returning JSON, check every claim this way and delete or rewrite any claim that fails. Prefer omitting ambiguous performance numbers such as air changes per hour when the source lacks usable measurement context; never imply a national guide is local code. Keep a useful answer of at least 400 visible words without padding or invention. Preserve the reader decision and approved scope. Do not add publication instructions. Brief: ${JSON.stringify(brief)}. Verified sources: ${JSON.stringify(sources)}. Original draft: ${JSON.stringify(draft)}. Independent findings: ${JSON.stringify(review)}`;
 }
 function needsRevision(review) {
   return review?.decision === 'revise' || review?.findings?.some(f => ['major', 'blocker'].includes(f.severity));
@@ -102,7 +102,7 @@ async function main() {
   const bundle = generateBundle(options.provider, brief, sources, priorRun ? context : null);
   const { draft, review } = bundle;
   const gate = reviewGate(draft, brief, sources, review);
-  const status = gate.length ? 'review-required' : 'draft-ready-for-human-review';
+  const status = bundleStatus(bundle, gate);
   const runDir = writeRun(options.out, { rawSnapshot, intake, snapshot, selection, sources, brief, ...bundle, ...(priorRun ? { priorRun } : {}), gate, status });
   console.log(JSON.stringify({ runDir, selectedId: brief.id, status, gate, provider: options.provider, revisionAttempted: Boolean(bundle.revisedDraft) }));
   if (gate.length) process.exitCode = 2;
@@ -158,5 +158,9 @@ function reviewGate(draft, brief, sources, review) {
   if (review?.decision !== 'pass') gate.push('independent-review-blocked');
   return gate;
 }
+function bundleStatus(bundle, gate) {
+  if (!gate.length) return 'draft-ready-for-human-review';
+  return bundle.revisedDraft ? 'revision-gate-failed' : 'review-required';
+}
 if (require.main === module) main().catch(error => { console.error(error.message); process.exitCode = 1; });
-module.exports = { verifySources, draftPrompt, reviewPrompt, revisionPrompt, needsRevision, loadPriorRun, generateBundle };
+module.exports = { verifySources, draftPrompt, reviewPrompt, revisionPrompt, needsRevision, loadPriorRun, generateBundle, bundleStatus };
