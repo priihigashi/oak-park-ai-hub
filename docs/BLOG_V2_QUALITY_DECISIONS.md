@@ -1,6 +1,14 @@
 # Blog v2 quality decision — 2026-10-10
 
-Status: Council round 4 decision with partial implementation. T-904 remains draft-only and recurrence remains held. Four of the five allowed Council rounds have been used.
+Status: Council round 5 final decision with partial implementation. T-904 remains draft-only and recurrence remains held. All five allowed Council rounds have been used; no further Council model round is planned for this decision.
+
+## Council round 5 — final adjudication
+
+Three corrected article pilots passed individually, but the immutable independent series review returned HOLD. The articles ended with the same handoff to a design team, the HVAC sequence was supported by only a short single-source DOE passage, county-targeted intents had no county topic evidence, and the only scope figure was unapproved and added little. The source/claim discipline remained sound. Full audit and reviewer findings are linked from T-904 and the OPC shared Council/OCC record.
+
+Adopt these falsifiable gates now: (1) a sub-state claim and headline must be supported by a topic-relevant source whose own geographic scope includes that place; (2) the final substantive section needs a reader-usable checklist, table, or named-input sequence, with independent review assessing whether it is useful rather than a disguised handoff; (3) a separate independent series pass blocks recurrence; (4) exact-version human approval is required before any future publication route; (5) a figure needs independent value and factual review, not merely a marker. The current runner checks county scope in metadata and individual claim text, requires a Markdown artifact in the last section, and already records separate series review. The proxy is intentionally narrow: it catches the three pilot endings but cannot prove editorial usefulness by itself. No publication route exists in this PR, so the hash approval interlock remains a prerequisite for that later work.
+
+Council dissent and resolution: the reviewer proposed hard two-publisher, claim-per-stage, county-source-per-local-intent, and figure-per-article quotas. These remain advisory proposals pending representative corpus measurements because arbitrary counts can force filler or block sound national explainers. A Broward demand signal may be explicitly reframed to Florida or national scope when the local source is absent; the title and claims must reflect that true scope. The HVAC two-sentence source cannot carry a multi-stage sequence, so that theme is held for either better dependency evidence or a narrower explainer. Council suggested two consecutive clean pilots as a restart rule; this numeric threshold is likewise left unadopted pending evidence. Keep recurrence HOLD until a fresh batch passes both the deterministic gates and independent series review. Rollback of a gate requires a versioned Git change with its reason and retained failing evidence; no audit bundle is deleted.
 
 ## Council round 4 and format regression
 

@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
-const { selectTopic, validateDraft, formatErrors, geographicErrors, diagramErrors, writeRun, bodyWordCount } = require('../blog-v2/pipeline');
+const { selectTopic, validateDraft, formatErrors, terminalArtifactErrors, geographicErrors, claimGeographyErrors, diagramErrors, writeRun, bodyWordCount } = require('../blog-v2/pipeline');
 const { addReviewFigure } = require('../blog-v2/review-figure');
 const { verifySources, needsRevision, loadPriorRun, generateBundle, bundleStatus, draftPrompt, revisionPrompt } = require('../blog-v2/cli');
 const { batchGate, readVerifiedRun, reviewPrompt } = require('../blog-v2/batch-review');
@@ -25,6 +25,14 @@ test('national guidance cannot license a Broward headline while county evidence 
   const draft = { title: 'Broward County Kitchen Exhaust Planning', slug: 'broward-kitchen-exhaust', description: 'Broward advice' };
   assert.deepEqual(geographicErrors(draft, { area: 'Broward County', evidenceScope: 'unscoped' }), ['unsupported-local-framing']);
   assert.deepEqual(geographicErrors(draft, { area: 'Broward County', evidenceScope: 'Broward County' }), []);
+  const claim = { id: 'c1', text: 'Broward County requires this work.' };
+  assert.deepEqual(claimGeographyErrors(claim, { coverageAreas: ['Florida'] }, { area: 'Broward County' }), ['unsupported-claim-geography:c1']);
+  assert.deepEqual(claimGeographyErrors(claim, { coverageAreas: ['Broward County'] }, { area: 'Broward County' }), []);
+});
+test('Council round five requires a reader artifact in the final section', () => {
+  const selected = { formatKey: 'evidence-explainer' };
+  assert.deepEqual(terminalArtifactErrors({ body: '## Planning consequence\n\nAsk the design team to verify the scope.' }, selected), ['missing-reader-artifact']);
+  assert.deepEqual(terminalArtifactErrors({ body: '## Planning consequence\n\nRecord these items:\n- Cooking location\n- Outdoor vent route\n\nAsk the design team to verify requirements.' }, selected), []);
 });
 test('original diagram binds sourced nodes to the reviewed claim and labels editorial nodes', () => {
   const draft = { title: 'A plan', formatKey: 'scope-map', body: 'Intro.\n\n## Source point\n\nThe cited rule applies. [Agency](https://example.gov/rule)\n\n## Design point\n\nRecord the layout.\n\n## Final point\n\nConfirm the scope.', claims: [{ id: 'c1', text: 'The cited rule applies.', sourceId: 's1', status: 'verified' }] };

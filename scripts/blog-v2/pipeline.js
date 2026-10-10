@@ -86,7 +86,14 @@ function claimEvidenceErrors(claim, source, body) {
   }
   return errors;
 }
-function claimErrors(claim, draft, allowed, sources) {
+function claimGeographyErrors(claim, source, selected) {
+  if (!source) return [];
+  const county = String(selected.area || '').replace(/\s+County$/i, '');
+  if (!county) return [];
+  const namesCounty = new RegExp(county.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').test(claim.text);
+  return namesCounty && !(source.coverageAreas || []).includes(selected.area) ? [`unsupported-claim-geography:${claim.id}`] : [];
+}
+function claimErrors(claim, draft, allowed, sources, selected) {
   const errors = [];
   if (![claim.id, claim.text, claim.sourceId, claim.evidence, claim.checkedAt].every(Boolean) || !allowed.has(claim.sourceId) || !['verified', 'uncertain'].includes(claim.status)) errors.push(`invalid-claim:${claim.id || 'unknown'}`);
   if (claim.status !== 'verified') errors.push(`unverified-claim:${claim.id}`);
@@ -94,6 +101,7 @@ function claimErrors(claim, draft, allowed, sources) {
   if (!citedParagraph) errors.push(`claim-not-in-body:${claim.id}`);
   const source = sources.find(s => s.id === claim.sourceId);
   if (source) errors.push(...claimEvidenceErrors(claim, source, citedParagraph || ''));
+  errors.push(...claimGeographyErrors(claim, source, selected));
   return errors;
 }
 function validDraftShape(draft) {
@@ -110,6 +118,12 @@ function formatErrors(draft, selected) {
   if (headings.length < 2) errors.push('missing-article-structure');
   if (headings.length && headings.filter(heading => /\?\s*$/.test(heading)).length > headings.length / 2) errors.push('question-list-format-drift');
   return errors;
+}
+function terminalArtifactErrors(draft, selected) {
+  if (!selected.formatKey) return [];
+  const sections = String(draft.body || '').split(/^##\s+.+$/gm);
+  const last = sections.at(-1) || '';
+  return /(?:^|\n)(?:\s*[-*]\s+|\s*\d+\.\s+|\s*\|[^\n]+\|)/m.test(last) ? [] : ['missing-reader-artifact'];
 }
 function geographicErrors(draft, selected) {
   if (!selected.evidenceScope || selected.evidenceScope === selected.area) return [];
@@ -158,10 +172,11 @@ function validateDraft(draft, selected, snapshot) {
   if (!validDraftShape(draft)) return ['draft-schema'];
   const errors = draftBaseErrors(draft);
   errors.push(...formatErrors(draft, selected));
+  errors.push(...terminalArtifactErrors(draft, selected));
   errors.push(...geographicErrors(draft, selected));
   errors.push(...diagramErrors(draft, selected));
   const allowed = new Set(selected.sourceIds);
-  for (const claim of draft.claims) errors.push(...claimErrors(claim, draft, allowed, snapshot.sources));
+  for (const claim of draft.claims) errors.push(...claimErrors(claim, draft, allowed, snapshot.sources, selected));
   const sourceIds = new Set(snapshot.sources.map(s => s.id));
   if (draft.claims.some(c => !sourceIds.has(c.sourceId))) errors.push('unknown-claim-source');
   errors.push(...visualErrors(draft.visuals));
@@ -176,4 +191,4 @@ function writeRun(outDir, payload) {
   fs.writeFileSync(path.join(runDir, 'receipt.json'), JSON.stringify({ id, createdAt: new Date().toISOString(), inputHash: sha(payload.snapshot), selectedId: payload.selection.selected?.id || null, status: payload.status, fileHashes: Object.fromEntries(Object.keys(payload).map(name => [name + '.json', crypto.createHash('sha256').update(fs.readFileSync(path.join(runDir, `${name}.json`))).digest('hex')])) }, null, 2) + '\n', { flag: 'wx' });
   return runDir;
 }
-module.exports = { selectTopic, validateDraft, formatErrors, geographicErrors, diagramErrors, writeRun, sha, similarity, bodyWordCount };
+module.exports = { selectTopic, validateDraft, formatErrors, terminalArtifactErrors, geographicErrors, claimGeographyErrors, diagramErrors, writeRun, sha, similarity, bodyWordCount };
