@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
-const { selectTopic, validateDraft, formatErrors, terminalArtifactErrors, geographicErrors, claimGeographyErrors, diagramErrors, writeRun, bodyWordCount } = require('../blog-v2/pipeline');
+const { selectTopic, validateDraft, formatErrors, terminalArtifactErrors, geographicErrors, claimGeographyErrors, diagramErrors, writeRun, bodyWordCount, sourceGeographyErrors } = require('../blog-v2/pipeline');
 const { addReviewFigure } = require('../blog-v2/review-figure');
 const { verifySources, needsRevision, loadPriorRun, generateBundle, bundleStatus, draftPrompt, revisionPrompt } = require('../blog-v2/cli');
 const { batchGate, readVerifiedRun, reviewPrompt } = require('../blog-v2/batch-review');
@@ -46,6 +46,12 @@ test('national guidance cannot license a Broward headline while county evidence 
   const claim = { id: 'c1', text: 'Broward County requires this work.' };
   assert.deepEqual(claimGeographyErrors(claim, { coverageAreas: ['Florida'] }, { area: 'Broward County' }), ['unsupported-claim-geography:c1']);
   assert.deepEqual(claimGeographyErrors(claim, { coverageAreas: ['Broward County'] }, { area: 'Broward County' }), []);
+});
+test('a Florida statute cannot be cataloged as county-specific evidence', () => {
+  const statute = { ...source, id: 'fl-statute', url: 'https://www.leg.state.fl.us/statutes/index.cfm?section=553.504', coverageAreas: ['Broward County'] };
+  assert.deepEqual(sourceGeographyErrors(statute), ['state-statute-marked-county:fl-statute']);
+  assert.throws(() => selectTopic({ ...snapshot, sources: [statute], candidates: [{ ...candidate, sourceIds: ['fl-statute'] }] }), /Invalid source geography/);
+  assert.deepEqual(sourceGeographyErrors({ ...statute, coverageAreas: ['Florida'] }), []);
 });
 test('Council round five requires a reader artifact in the final section', () => {
   const selected = { formatKey: 'evidence-explainer' };

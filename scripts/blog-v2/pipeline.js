@@ -21,10 +21,21 @@ function sha(value) { return crypto.createHash('sha256').update(JSON.stringify(v
 function validSource(s) {
   return [s.id, s.capturedAt, s.title, s.publisher, s.excerpt].every(Boolean) && /^https:\/\//.test(s.url || '');
 }
+function sourceGeographyErrors(source) {
+  let host;
+  try { host = new URL(source.url).hostname.toLowerCase(); } catch { return ['invalid-source-url']; }
+  const countyTags = (source.coverageAreas || []).filter(area => /\bcounty\b/i.test(area));
+  if (/^(?:www\.)?leg\.state\.fl\.us$/.test(host) && countyTags.length) return [`state-statute-marked-county:${source.id}`];
+  return [];
+}
 function assertSnapshot(snapshot) {
   if (!['candidates', 'existing', 'sources'].every(key => Array.isArray(snapshot[key]))) throw new Error('Snapshot requires candidates, existing, and sources arrays');
   if (!snapshot.snapshotAt || Number.isNaN(Date.parse(snapshot.snapshotAt))) throw new Error('Snapshot needs a dated snapshotAt');
-  for (const s of snapshot.sources) if (!validSource(s)) throw new Error(`Invalid source ${s.id || 'unknown'}: URL, publisher, title, excerpt and capture date required`);
+  for (const s of snapshot.sources) {
+    if (!validSource(s)) throw new Error(`Invalid source ${s.id || 'unknown'}: URL, publisher, title, excerpt and capture date required`);
+    const geographyErrors = sourceGeographyErrors(s);
+    if (geographyErrors.length) throw new Error(`Invalid source geography: ${geographyErrors.join(', ')}`);
+  }
 }
 function findDuplicate(candidate, existing) {
   return existing.find(p => candidate.intentKey && p.intentKey
@@ -192,4 +203,4 @@ function writeRun(outDir, payload) {
   fs.writeFileSync(path.join(runDir, 'receipt.json'), JSON.stringify({ id, createdAt: new Date().toISOString(), inputHash: sha(payload.snapshot), selectedId: payload.selection.selected?.id || null, status: payload.status, fileHashes: Object.fromEntries(Object.keys(payload).map(name => [name + '.json', crypto.createHash('sha256').update(fs.readFileSync(path.join(runDir, `${name}.json`))).digest('hex')])) }, null, 2) + '\n', { flag: 'wx' });
   return runDir;
 }
-module.exports = { selectTopic, validateDraft, formatErrors, terminalArtifactErrors, geographicErrors, claimGeographyErrors, diagramErrors, writeRun, sha, similarity, bodyWordCount };
+module.exports = { selectTopic, validateDraft, formatErrors, terminalArtifactErrors, geographicErrors, claimGeographyErrors, diagramErrors, writeRun, sha, similarity, bodyWordCount, sourceGeographyErrors };
