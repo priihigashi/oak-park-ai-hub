@@ -10,6 +10,32 @@ const { batchGate, readVerifiedRun, reviewPrompt } = require('../blog-v2/batch-r
 const { verifiedCompanyService, standaloneTradeErrors } = require('../blog-v2/company-scope');
 const { planMedia } = require('../blog-v2/media-plan');
 const { nextSnapshot } = require('../blog-v2/next-snapshot');
+const { fromSite, addSiteInventory } = require('../blog-v2/site-inventory');
+
+test('live site and legacy routes join queued topics before autonomous selection', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'opc-site-inventory-'));
+  try {
+    fs.mkdirSync(path.join(dir, 'src/blog'), { recursive: true });
+    fs.mkdirSync(path.join(dir, 'src/data'), { recursive: true });
+    fs.writeFileSync(path.join(dir, 'src/blog/posts.json'), JSON.stringify([{ slug: 'home-addition-permit-guide', title: 'Home Addition Permit Guide', description: 'A permit planning guide' }]));
+    fs.writeFileSync(path.join(dir, 'src/data/legacyBlogPaths.json'), JSON.stringify({ paths: ['/blog', '/screen-porch-permit-guide'] }));
+    const { inventory, siteEvidence } = fromSite(dir);
+    assert.equal(siteEvidence.reactPosts, 1);
+    assert.equal(siteEvidence.legacyRoutes, 1);
+    assert.match(siteEvidence.postsSha256, /^[a-f0-9]{64}$/);
+    assert.deepEqual(inventory.map(item => item.slug), ['home-addition-permit-guide', 'screen-porch-permit-guide']);
+    const enriched = addSiteInventory({ existing: [{ id: 'queued-1', intentKey: 'another:topic' }] }, dir);
+    assert.equal(enriched.existing.length, 3);
+    assert.equal(enriched.existing[0].id, 'queued-1');
+    const twice = addSiteInventory(enriched, dir);
+    assert.equal(twice.existing.length, 3);
+    const stale = addSiteInventory({ existing: [{ id: 'old-live', slug: '/home-addition-permit-guide', title: 'Outdated title', intentKey: 'permit-guide' }] }, dir);
+    assert.equal(stale.existing.length, 2);
+    assert.equal(stale.existing[0].title, 'Home Addition Permit Guide');
+    assert.equal(stale.existing[0].intentKey, 'permit-guide');
+    assert.equal(selectTopic({ ...snapshot, existing: enriched.existing, candidates: [{ ...candidate, intentKey: null, question: 'Home Addition Permit Guide', readerDecision: 'Use a permit planning guide' }] }).selected, null);
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
 
 test('draft and repair prompts prohibit sources outside the verified run', () => {
   const brief = { service: 'commercial build-out', area: 'Broward County', question: 'What should be checked?', readerDecision: 'Check accessibility scope' };

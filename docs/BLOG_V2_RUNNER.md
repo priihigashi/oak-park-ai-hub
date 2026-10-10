@@ -17,7 +17,7 @@ Save a JSON file with `snapshotAt`, `candidates`, `existing`, and `sources`:
 }
 ```
 
-`existing` must contain the current React articles, legacy WordPress titles/intents, and queued topics. The Content Ideas sheet can supply questions and provenance, but it does not establish construction facts. Every candidate needs at least one topic-relevant official source. The runner fetches public sources at run time, checks status and excerpt overlap, and records a retrieval digest. Internal company facts may use `access: "internal-preverified"` with `evidenceId`, `verifiedBy`, `capturedAt`, and `excerpt`; this cannot support external technical or legal assertions.
+`existing` must contain queued topics and any manually researched duplicate intents. A new Codex draft run also requires the checked-out React site's `frontend` directory: the runner reads its current `posts.json` and `legacyBlogPaths.json`, refreshes matching entries, and adds every live and legacy route to `existing`. It records both file hashes and counts in the immutable snapshot. Missing or malformed site inventory stops drafting; a revision reuses the original immutable inventory. The Content Ideas sheet can supply questions and provenance, but it does not establish construction facts. Every candidate needs at least one topic-relevant official source. The runner fetches public sources at run time, checks status and excerpt overlap, and records a retrieval digest. Internal company facts may use `access: "internal-preverified"` with `evidenceId`, `verifiedBy`, `capturedAt`, and `excerpt`; this cannot support external technical or legal assertions.
 
 Official PDF sources are now read with local Python `pypdf`; the file is limited to 10 MiB and the first 30 pages. The extracted text receives the same excerpt-overlap check and content digest as HTML, with `retrieval: "http-pdf"` in the receipt. If `pypdf` is unavailable or text cannot be extracted, the source fails closed before drafting. Check the actual PDF date and jurisdiction; a successful text match does not make an old checklist current law.
 
@@ -36,7 +36,7 @@ Allowed services: `home renovation`, `home addition`, `shell construction`, `con
 After verifying that the installed Codex and Claude CLIs use existing subscriptions and no paid API key, run:
 
 ```sh
-OPC_ALLOW_SUBSCRIPTION_CLI=1 node scripts/blog-v2/cli.js --input /path/to/snapshot.json --out /path/to/draft-bundles --provider codex
+OPC_ALLOW_SUBSCRIPTION_CLI=1 node scripts/blog-v2/cli.js --input /path/to/snapshot.json --site-frontend /path/to/opc-website-v1/frontend --out /path/to/draft-bundles --provider codex
 ```
 
 If Claude requests revision, the runner makes at most one Codex repair pass and asks Claude to review the revision independently. It preserves `originalDraft.json`, `originalReview.json`, `revisedDraft.json`, `revisedReview.json`, and `revision.json` in the new immutable bundle; `draft.json` and `review.json` are the final version used by the gate. To repair an existing blocked run without paying for another first draft or source retrieval, use `--resume-run /path/to/prior-run-dir` in place of `--input`. The new receipt links the prior run by ID and hash. A run that already used its one repair attempt cannot be resumed for another automatic repair.

@@ -9,6 +9,7 @@ const { intakeIdeas } = require('./intake');
 const { addReviewFigure } = require('./review-figure');
 const { companyScope } = require('./company-scope');
 const { planMedia } = require('./media-plan');
+const { addSiteInventory } = require('./site-inventory');
 
 function option(name) { const i = process.argv.indexOf(name); return i < 0 ? null : process.argv[i + 1]; }
 function parseJson(text, label) { try { return JSON.parse(text.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/, '')); } catch (error) { throw new Error(`${label} did not return JSON: ${error.message}`); } }
@@ -105,7 +106,8 @@ function loadPriorRun(dir) {
 }
 function prepareContext(options) {
   if (options.resumeRun) return loadPriorRun(options.resumeRun);
-  const rawSnapshot = JSON.parse(fs.readFileSync(options.input, 'utf8'));
+  const input = JSON.parse(fs.readFileSync(options.input, 'utf8'));
+  const rawSnapshot = options.siteFrontend ? addSiteInventory(input, options.siteFrontend) : input;
   const { intake, snapshot, selection } = prepareSelection(rawSnapshot);
   return { rawSnapshot, intake, snapshot, selection };
 }
@@ -125,11 +127,16 @@ async function main() {
   if (gate.length) process.exitCode = 2;
 }
 function parseOptions() {
-  const input = option('--input'), resumeRun = option('--resume-run'), out = option('--out'), provider = option('--provider');
-  if (Boolean(input) === Boolean(resumeRun) || !out || !['codex', 'fixture'].includes(provider)) throw new Error('Usage: cli.js (--input snapshot.json | --resume-run prior-run-dir) --out draft-bundles --provider codex|fixture');
+  const input = option('--input'), resumeRun = option('--resume-run'), out = option('--out'), provider = option('--provider'), siteFrontend = option('--site-frontend');
+  if (Boolean(input) === Boolean(resumeRun) || !out || !['codex', 'fixture'].includes(provider)) throw new Error('Usage: cli.js (--input snapshot.json | --resume-run prior-run-dir) --out draft-bundles --provider codex|fixture [--site-frontend /path/to/site/frontend]');
+  validateSiteOption({ input, resumeRun, provider, siteFrontend });
   if (/publish|wordpress|wp-content|wp-admin/i.test(out)) throw new Error('Refusing publication or WordPress output path');
   if (provider === 'codex' && process.env.OPC_ALLOW_SUBSCRIPTION_CLI !== '1') throw new Error('Codex/Claude CLI model calls require OPC_ALLOW_SUBSCRIPTION_CLI=1 after subscription cost verification');
-  return { input, resumeRun, out, provider };
+  return { input, resumeRun, out, provider, siteFrontend };
+}
+function validateSiteOption({ input, resumeRun, provider, siteFrontend }) {
+  if (resumeRun && siteFrontend) throw new Error('A revision resumes its immutable site inventory; omit --site-frontend');
+  if (provider === 'codex' && input && !siteFrontend) throw new Error('Autonomous drafting requires --site-frontend to verify live and legacy blog inventory');
 }
 function prepareSelection(rawSnapshot) {
   const intake = Array.isArray(rawSnapshot.ideaRows) ? intakeIdeas(rawSnapshot.ideaRows, rawSnapshot.sourceCatalog || rawSnapshot.sources, { spreadsheetId: rawSnapshot.spreadsheetId }) : null;
