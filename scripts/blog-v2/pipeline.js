@@ -150,6 +150,7 @@ function diagramStepsErrors(draft, figure) {
 function diagramErrors(draft, selected) {
   if (!selected.formatKey) return [];
   const figure = draft.figures?.[0];
+  if (!figure && selected.formatKey !== 'scope-map') return [];
   if (!figure || draft.figures.length !== 1) return ['missing-in-body-figure'];
   return [...diagramMarkerErrors(draft, figure), ...diagramMetadataErrors(figure, selected), ...diagramStepsErrors(draft, figure)];
 }

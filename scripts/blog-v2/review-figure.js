@@ -20,7 +20,6 @@ function figureSteps(draft, parts) {
       : { text: part.heading, kind: 'editorial' };
   });
 }
-const TYPES = { 'scope-map': 'scope-map', 'evidence-explainer': 'evidence-map', 'sequence-walkthrough': 'decision-flow' };
 function figureTitle(type) {
   return { 'decision-flow': 'Planning sequence', 'scope-map': 'Scope areas to review', 'evidence-map': 'Evidence and planning map' }[type];
 }
@@ -29,8 +28,14 @@ function selectSteps(parts, draft) {
   const sourced = allSteps.filter(step => step.kind === 'source');
   return sourced.length >= 3 ? sourced : allSteps;
 }
+function captionForSteps(steps) {
+  return steps.some(step => step.kind === 'editorial')
+    ? 'Original draft scope map. Source claims and OPC planning notes are labeled separately.'
+    : 'Original draft scope map. Every node is a source-backed claim; no sequence is implied.';
+}
 function addReviewFigure(draft, options = {}) {
   if ((options.enabled ?? (process.env.OPC_ENABLE_ORIGINAL_DIAGRAMS === '1')) !== true) return draft;
+  if (draft.formatKey !== 'scope-map') return { ...draft, body: String(draft.body || '').replaceAll(MARKER, ''), figures: [] };
   const cleanBody = String(draft.body || '').replaceAll(MARKER, '').replace(/\n{3,}/g, '\n\n');
   const parts = sections(cleanBody);
   if (parts.length < 3 || parts.length > 5) return { ...draft, body: cleanBody, figures: [] };
@@ -38,10 +43,10 @@ function addReviewFigure(draft, options = {}) {
   if (firstSection < 0) return { ...draft, body: cleanBody, figures: [] };
   const steps = selectSteps(parts, draft);
   const digest = crypto.createHash('sha256').update(cleanBody).digest('hex').slice(0, 16);
-  const type = TYPES[draft.formatKey] || 'evidence-map';
+  const type = 'scope-map';
   const title = figureTitle(type);
   const alt = `${title}: ${steps.map(step => step.label || step.text).join('; ')}`;
-  const figure = { id: 'planning-map', type, title, alt, caption: 'Original draft diagram. Source claims and OPC planning notes are labeled separately.', provenance: `OPC draft runner from article sections; body SHA-256 ${digest}; no external asset`, rights: 'OPC original diagram', approved: false, steps };
+  const figure = { id: 'planning-map', type, title, alt, caption: captionForSteps(steps), provenance: `OPC draft runner from article sections; body SHA-256 ${digest}; no external asset`, rights: 'OPC original diagram', approved: false, steps };
   return { ...draft, body: cleanBody.slice(0, firstSection) + '\n\n' + MARKER + cleanBody.slice(firstSection), figures: [figure] };
 }
 module.exports = { addReviewFigure, MARKER };

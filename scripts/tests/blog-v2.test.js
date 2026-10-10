@@ -37,6 +37,12 @@ test('original diagram binds sourced nodes to the reviewed claim and labels edit
   result.figures[0].steps[0].sourceId = 'unsupplied';
   assert.ok(diagramErrors(result, { formatKey: 'scope-map' }).includes('unbound-source-step'));
 });
+test('a weak evidence explainer stays text-only after the kitchen figure review', () => {
+  const draft = { formatKey: 'evidence-explainer', body: 'A sourced explanation.' };
+  const result = addReviewFigure(draft, { enabled: true });
+  assert.deepEqual(result.figures, []);
+  assert.deepEqual(diagramErrors(result, { formatKey: 'evidence-explainer' }), []);
+});
 test('series gate keeps factual-pass drafts held when independent editorial review finds repeated work', () => {
   const runs = ['scope-map', 'evidence-explainer', 'sequence-walkthrough'].map((formatKey, i) => ({ id: `run-${i}`, brief: { intentKey: `intent-${i}`, formatKey }, draft: { title: `Article ${i}`, body: 'A direct answer.' }, sources: [], articleReview: { decision: 'pass' } }));
   const review = { decision: 'hold', findings: [{ severity: 'major', issue: 'Three articles defer the answer', evidence: 'Repeated question lists' }] };
