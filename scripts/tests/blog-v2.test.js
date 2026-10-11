@@ -185,6 +185,9 @@ test('series reviewer uses the verified tri-county service area without visual o
   const prompt = reviewPrompt([{ id: 'a', brief: { formatKey: 'scope-map', question: 'Question', readerDecision: 'Decision' }, draft: { title: 'Title', body: 'Body' }, sources: [], articleReview: { decision: 'pass', findings: [] } }]);
   assert.match(prompt, /Broward, Miami-Dade, and Palm Beach counties/);
   assert.match(prompt, /missing figure is a defect only when/);
+  const articlePrompt = articleReviewPrompt({ formatKey: 'scope-map', endingStyle: 'decision-bullets' }, { body: 'Two sourced decisions.' }, []);
+  assert.match(articlePrompt, /two-track text map can satisfy the format without a figure/);
+  assert.match(articlePrompt, /Do not treat a figure count as a format requirement/);
   assert.match(prompt, /do not require an arbitrary publisher count/);
   assert.match(prompt, /missing final human approval is a publication gate/);
   assert.match(prompt, /deterministically validates the body digest/);
