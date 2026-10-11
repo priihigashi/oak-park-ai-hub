@@ -48,7 +48,7 @@ jobs:
                   with urllib.request.urlopen(req, timeout=120) as r:
                       return json.loads(r.read())
               except urllib.error.HTTPError as e:
-                  return {"error": e.code, "detail": e.read().decode()[:2000]}
+                  return {"http_error": e.code, "detail": e.read().decode()[:2000]}
 
           log = []
           for j in jobs:
@@ -56,16 +56,27 @@ jobs:
               if j.get("schema"):
                   m = call("GET", f"https://api.replicate.com/v1/models/{model}")
                   schema = (((m.get("latest_version") or {}).get("openapi_schema") or {})
-                            .get("components", {}).get("schemas", {}).get("Input"))
+                            .get("components", {}).get("schemas", {}))
+                  schema = {"input": schema.get("Input"), "description": m.get("description"),
+                            "default_example": m.get("default_example"), "raw_keys": list(m.keys())}
                   open(f"out/{name}_schema.json", "w").write(json.dumps(schema, indent=1, ensure_ascii=False))
                   log.append({"name": name, "schema": bool(schema)})
                   continue
-              p = call("POST", f"https://api.replicate.com/v1/models/{model}/predictions", {"input": j["input"]})
+              if ":" in model:  # owner/name:version
+                  p = call("POST", "https://api.replicate.com/v1/predictions",
+                           {"version": model.split(":", 1)[1], "input": j["input"]})
+              else:
+                  p = call("POST", f"https://api.replicate.com/v1/models/{model}/predictions", {"input": j["input"]})
+                  if p.get("http_error") == 404:  # community model: use its latest version
+                      m = call("GET", f"https://api.replicate.com/v1/models/{model}")
+                      v = (m.get("latest_version") or {}).get("id")
+                      if v:
+                          p = call("POST", "https://api.replicate.com/v1/predictions", {"version": v, "input": j["input"]})
               t0 = time.time()
-              while p.get("status") not in ("succeeded", "failed", "canceled") and "error" not in p and time.time() - t0 < 600:
+              while p.get("status") not in ("succeeded", "failed", "canceled") and "http_error" not in p and time.time() - t0 < 600:
                   time.sleep(3)
                   p = call("GET", p["urls"]["get"])
-              entry = {"name": name, "model": model, "status": p.get("status"), "error": p.get("error") or p.get("detail")}
+              entry = {"name": name, "model": model, "status": p.get("status"), "error": p.get("error") or p.get("http_error"), "detail": p.get("detail")}
               outp = p.get("output")
               urls = outp if isinstance(outp, list) else ([outp] if isinstance(outp, str) else [])
               files = []
