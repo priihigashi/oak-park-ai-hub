@@ -15,10 +15,11 @@ function parseOptions(args) {
   const siteFrontend = option('--site-frontend', args);
   const out = option('--out', args);
   const suggestionsFile = option('--research-suggestions-file', args);
-  if (!input || !siteFrontend || !out) throw new Error('Usage: weekly-private.js --input snapshot.json --site-frontend site/frontend --out private-runs [--research-suggestions-file saved.json]');
+  const reviewRunsFile = option('--review-runs-file', args);
+  if (!input || !siteFrontend || !out) throw new Error('Usage: weekly-private.js --input snapshot.json --site-frontend site/frontend --out private-runs [--research-suggestions-file saved.json] [--review-runs-file reviewed-runs.json]');
   if (/publish|wordpress|wp-content|wp-admin/i.test(out)) throw new Error('Refusing publication or WordPress output path');
   if (process.env.OPC_ALLOW_SUBSCRIPTION_CLI !== '1') throw new Error('Verified subscription CLI flag required');
-  return { input: path.resolve(input), siteFrontend: path.resolve(siteFrontend), out: path.resolve(out), suggestionsFile };
+  return { input: path.resolve(input), siteFrontend: path.resolve(siteFrontend), out: path.resolve(out), suggestionsFile, reviewRunsFile: reviewRunsFile ? path.resolve(reviewRunsFile) : null };
 }
 function digestFile(file) {
   return crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
@@ -50,6 +51,15 @@ function queuedRuns(out) {
     items.push({ id: 'queued:' + run.id, intentKey: run.brief.intentKey, title: run.draft.title, intent: run.brief.readerDecision, type: 'queued', receiptHash: run.receiptHash });
   }
   return items;
+}
+function reviewedRuns(file) {
+  if (!file) return [];
+  const paths = JSON.parse(fs.readFileSync(file, 'utf8'));
+  if (!Array.isArray(paths) || !paths.every(item => typeof item === 'string' && item.trim())) throw new Error('Review runs file must be a JSON array of run paths');
+  return paths.map(item => {
+    const run = readVerifiedRun(path.resolve(path.dirname(file), item));
+    return { id: 'reviewed:' + run.id, intentKey: run.brief.intentKey, title: run.draft.title, intent: run.brief.readerDecision, type: 'reviewed-private', receiptHash: run.receiptHash };
+  });
 }
 function weekStart(date) {
   const day = date.getUTCDay();
@@ -89,7 +99,7 @@ function runAttempt(options, runner = command) {
     fs.mkdirSync(dir);
     const prior = preparedThisWeek(options.out);
     if (prior) return writeStatus(dir, { status: 'already-prepared-this-week', priorArticleRun: prior.articleRun });
-    const queued = queuedRuns(options.out);
+    const queued = [...queuedRuns(options.out), ...reviewedRuns(options.reviewRunsFile)];
     const staged = path.join(dir, 'input.json');
     fs.writeFileSync(staged, JSON.stringify(stagedInput(raw, queued), null, 2) + '\n', { flag: 'wx' });
     const researchArgs = ['--input', staged, '--site-frontend', options.siteFrontend, '--out', path.join(dir, 'research')];
@@ -115,4 +125,4 @@ if (require.main === module) {
     if (status.status !== 'ready-for-human-review') process.exitCode = 2;
   } catch (error) { console.error(error.message); process.exitCode = 1; }
 }
-module.exports = { parseOptions, queuedRuns, preparedThisWeek, stagedInput, runAttempt };
+module.exports = { parseOptions, queuedRuns, reviewedRuns, preparedThisWeek, stagedInput, runAttempt };

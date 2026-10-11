@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { writeRun } = require('../blog-v2/pipeline');
-const { parseOptions, queuedRuns, runAttempt } = require('../blog-v2/weekly-private');
+const { parseOptions, queuedRuns, reviewedRuns, runAttempt } = require('../blog-v2/weekly-private');
 
 test('weekly private coordinator links verified research, article, and preview without publishing', () => {
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'opc-weekly-'));
@@ -73,5 +73,32 @@ test('weekly coordinator preserves a failed attempt and releases its lock', () =
     assert.equal(attempts.length, 1);
     assert.equal(JSON.parse(fs.readFileSync(path.join(out, attempts[0], 'status.json'))).status, 'failed');
     assert.equal(fs.existsSync(path.join(out, '.weekly-private.lock')), false);
+  } finally { fs.rmSync(temp, { recursive: true, force: true }); }
+});
+
+
+test('weekly research imports only receipt-verified private review topics before model calls', () => {
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'opc-weekly-reviewed-'));
+  const input = path.join(temp, 'ideas.json');
+  const reviewRunsFile = path.join(temp, 'reviewed-runs.json');
+  const out = path.join(temp, 'private');
+  fs.writeFileSync(input, JSON.stringify({ snapshotAt: new Date().toISOString(), candidates: [], existing: [], sources: [] }));
+  const runDir = writeRun(path.join(temp, 'fixture-runs'), {
+    snapshot: { snapshotAt: new Date().toISOString() }, selection: { selected: { id: 'topic-1' } },
+    brief: { intentKey: 'lead-safe:florida', readerDecision: 'Choose a certified firm' },
+    draft: { title: 'Lead-safe hiring', body: 'A private draft.' }, sources: [],
+    review: { decision: 'pass' }, gate: [], status: 'draft-ready-for-human-review',
+  });
+  fs.writeFileSync(reviewRunsFile, JSON.stringify([path.relative(temp, runDir)]));
+  try {
+    assert.deepEqual(reviewedRuns(reviewRunsFile).map(item => item.intentKey), ['lead-safe:florida']);
+    const status = runAttempt({ input, siteFrontend: temp, out, reviewRunsFile }, (script, args) => {
+      const staged = JSON.parse(fs.readFileSync(args[1], 'utf8'));
+      assert.deepEqual(staged.existing.map(item => item.intentKey), ['lead-safe:florida']);
+      return { output: { status: 'research-hold', sourceCount: 0, runDir: path.join(temp, 'research') } };
+    });
+    assert.equal(status.queuedIntentCount, 1);
+    fs.writeFileSync(path.join(runDir, 'draft.json'), '{}');
+    assert.throws(() => reviewedRuns(reviewRunsFile), /hash|changed|receipt/i);
   } finally { fs.rmSync(temp, { recursive: true, force: true }); }
 });
