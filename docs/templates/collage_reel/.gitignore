@@ -1,0 +1,7 @@
+node_modules/
+assets/
+*.mp4
+*.wav
+snaps/
+events.json
+package*.json
