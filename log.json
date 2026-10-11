@@ -1,0 +1,22 @@
+[
+ {
+  "name": "n6",
+  "model": "elevenlabs/v3",
+  "status": "succeeded",
+  "error": null,
+  "detail": null,
+  "files": [
+   "out/n6.mp3"
+  ]
+ },
+ {
+  "name": "n7",
+  "model": "elevenlabs/v3",
+  "status": "succeeded",
+  "error": null,
+  "detail": null,
+  "files": [
+   "out/n7.mp3"
+  ]
+ }
+]
