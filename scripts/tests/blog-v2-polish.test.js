@@ -36,6 +36,10 @@ test('editorial polish preserves article and series lineage and independently ga
     assert.equal(lineage.id, prior.id);
     assert.equal(lineage.receiptHash, prior.receiptHash);
     assert.equal(lineage.submittedDraftSha256, crypto.createHash('sha256').update(fs.readFileSync(draftFile)).digest('hex'));
+    const weekly = polish({ priorRun, batchAudit: null, draftFile, out: path.join(root, 'weekly-polished'), changeNote: 'Single weekly draft edit' }, () => ({ decision: 'pass', findings: [] }));
+    const weeklyLineage = JSON.parse(fs.readFileSync(path.join(weekly.runDir, 'polishedFrom.json'), 'utf8'));
+    assert.equal(weeklyLineage.batch, null);
+    assert.equal(weekly.status, 'review-required');
     fs.writeFileSync(path.join(batchAudit, 'status.json'), '"batch-hold"\n');
     assert.throws(() => polish({ priorRun, batchAudit, draftFile, out: path.join(root, 'again'), changeNote: 'Retry' }, () => { throw new Error('Must not review'); }), /Batch audit changed/);
   } finally { fs.rmSync(root, { recursive: true, force: true }); }

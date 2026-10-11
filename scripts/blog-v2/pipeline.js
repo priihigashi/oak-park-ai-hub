@@ -85,6 +85,12 @@ function draftBaseErrors(draft) {
   if (/<[a-z][\s\S]*?>|wp-json|wordpress/i.test(draft.body)) errors.push('html-or-wordpress-content');
   return errors;
 }
+function floodplainApplicabilityError(claim) {
+  const namesArea = /structures? within (?:the |a )?special flood hazard area/i.test(claim.text);
+  const sourceLimitsArea = /special flood hazard area.*community participating in the national flood insurance program/i.test(claim.evidence);
+  const claimKeepsLimit = /community participating in the national flood insurance program|NFIP.participating/i.test(claim.text);
+  return namesArea && sourceLimitsArea && !claimKeepsLimit ? `omitted-floodplain-applicability:${claim.id}` : null;
+}
 function claimEvidenceErrors(claim, source, body) {
   const errors = [];
   const evidenceTerms = tokens(claim.evidence);
@@ -96,6 +102,8 @@ function claimEvidenceErrors(claim, source, body) {
   for (const number of quantities(claim.text)) {
     if (!sourceQuantities.has(quantityKey(number)) || !quantities(claim.evidence).map(quantityKey).includes(quantityKey(number))) errors.push(`unsupported-number:${claim.id}`);
   }
+  const applicability = floodplainApplicabilityError(claim);
+  if (applicability) errors.push(applicability);
   return errors;
 }
 function claimGeographyErrors(claim, source, selected) {
@@ -105,6 +113,9 @@ function claimGeographyErrors(claim, source, selected) {
   const namesCounty = new RegExp(county.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').test(claim.text);
   return namesCounty && !(source.coverageAreas || []).includes(selected.area) ? [`unsupported-claim-geography:${claim.id}`] : [];
 }
+function claimCheckTimeErrors(claim, source) {
+  return source?.retrievedAt && claim.checkedAt !== source.retrievedAt ? [`claim-check-time-mismatch:${claim.id}`] : [];
+}
 function claimErrors(claim, draft, allowed, sources, selected) {
   const errors = [];
   if (![claim.id, claim.text, claim.sourceId, claim.evidence, claim.checkedAt].every(Boolean) || !allowed.has(claim.sourceId) || !['verified', 'uncertain'].includes(claim.status)) errors.push(`invalid-claim:${claim.id || 'unknown'}`);
@@ -113,6 +124,7 @@ function claimErrors(claim, draft, allowed, sources, selected) {
   if (!citedParagraph) errors.push(`claim-not-in-body:${claim.id}`);
   const source = sources.find(s => s.id === claim.sourceId);
   if (source) errors.push(...claimEvidenceErrors(claim, source, citedParagraph || ''));
+  errors.push(...claimCheckTimeErrors(claim, source));
   errors.push(...claimGeographyErrors(claim, source, selected));
   return errors;
 }

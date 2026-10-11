@@ -69,9 +69,29 @@ test('draft and repair prompts prohibit sources outside the verified run', () =>
   assert.match(draftPrompt(brief, sources), /state the source retrieval date from retrievedAt/);
   assert.match(articleReviewPrompt(brief, {}, sources), /matching claims\[\] entry/);
   assert.match(articleReviewPrompt(brief, {}, sources), /visible as-of retrieval date/);
+  assert.match(articleReviewPrompt(brief, {}, sources), /omitted condition that limits where a regulatory rule applies as major/);
   assert.match(articleReviewPrompt(brief, {}, sources), /directly states a permit trigger/);
   assert.match(revisionPrompt(brief, sources, {}, { decision: 'revise' }), /never add, recall, search for, or cite another source/);
   assert.match(revisionPrompt(brief, sources, {}, { decision: 'revise' }), /delete any substitution or non-substitution claim/);
+});
+test('floodplain claim retains the official NFIP applicability condition', () => {
+  const evidence = 'Structures within the Special Flood Hazard Area (SFHA) in a community participating in the National Flood Insurance Program (NFIP) are subject to floodplain management regulations.';
+  const source = { id: 'city-flood', url: 'https://www.fortlauderdale.gov/flood', excerpt: evidence };
+  const claim = { id: 'flood-1', text: 'Structures within a Special Flood Hazard Area are subject to floodplain management regulations.', sourceId: source.id, evidence, checkedAt: '2026-10-11T00:00:00Z', status: 'verified' };
+  const draft = { title: 'Floodplain review', description: 'Floodplain review.', body: `${claim.text} [City](${source.url})` + ' Planning context.'.repeat(420), claims: [claim], visuals: [] };
+  const selected = { sourceIds: [source.id], area: 'Fort Lauderdale' };
+  assert.ok(validateDraft(draft, selected, { sources: [source] }).includes('omitted-floodplain-applicability:flood-1'));
+  const corrected = 'Structures within a Special Flood Hazard Area in a community participating in the National Flood Insurance Program are subject to floodplain management regulations.';
+  const fixed = { ...draft, body: draft.body.replace(claim.text, corrected), claims: [{ ...claim, text: corrected }] };
+  assert.ok(!validateDraft(fixed, selected, { sources: [source] }).includes('omitted-floodplain-applicability:flood-1'));
+});
+test('claim check time matches the immutable source retrieval timestamp', () => {
+  const source = { id: 'city', url: 'https://www.fortlauderdale.gov/example', excerpt: 'The City provides an online certificate search for a specific property.', retrievedAt: '2026-10-11T00:09:26.235Z' };
+  const claim = { id: 'lookup', text: 'The City provides an online certificate search for a specific property.', sourceId: source.id, evidence: source.excerpt, checkedAt: '2026-10-11T00:09:26.700Z', status: 'verified' };
+  const draft = { title: 'City lookup', description: 'How to find a certificate.', body: `${claim.text} [City](${source.url})` + ' Planning context.'.repeat(420), claims: [claim], visuals: [] };
+  const selected = { sourceIds: [source.id], area: 'Fort Lauderdale' };
+  assert.ok(validateDraft(draft, selected, { sources: [source] }).includes('claim-check-time-mismatch:lookup'));
+  assert.ok(!validateDraft({ ...draft, claims: [{ ...claim, checkedAt: source.retrievedAt }] }, selected, { sources: [source] }).includes('claim-check-time-mismatch:lookup'));
 });
 test('company service scope is read from the existing knowledge file', () => {
   assert.equal(verifiedCompanyService('home addition'), true);

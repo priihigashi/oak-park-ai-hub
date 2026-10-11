@@ -12,10 +12,10 @@ function option(name, args) { const index = args.indexOf(name); return index < 0
 function parseOptions(args) {
   const priorRun = option('--prior-run', args), batchAudit = option('--batch-audit', args);
   const draftFile = option('--draft', args), out = option('--out', args), changeNote = option('--change-note', args);
-  if (![priorRun, batchAudit, draftFile, out, changeNote].every(Boolean)) throw new Error('Usage: editorial-polish.js --prior-run ready-run --batch-audit ready-series --draft revised-draft.json --out review-bundles --change-note "specific edits"');
+  if (![priorRun, draftFile, out, changeNote].every(Boolean)) throw new Error('Usage: editorial-polish.js --prior-run ready-run [--batch-audit ready-series] --draft revised-draft.json --out review-bundles --change-note "specific edits"');
   if (/publish|wordpress|wp-content|wp-admin/i.test(out)) throw new Error('Refusing publication or WordPress output path');
   if (process.env.OPC_ALLOW_SUBSCRIPTION_CLI !== '1') throw new Error('Verified subscription CLI flag required');
-  return { priorRun: path.resolve(priorRun), batchAudit: path.resolve(batchAudit), draftFile: path.resolve(draftFile), out: path.resolve(out), changeNote };
+  return { priorRun: path.resolve(priorRun), batchAudit: batchAudit ? path.resolve(batchAudit) : null, draftFile: path.resolve(draftFile), out: path.resolve(out), changeNote };
 }
 function digest(file) { return crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex'); }
 function readJson(dir, name) { return JSON.parse(fs.readFileSync(path.join(dir, `${name}.json`), 'utf8')); }
@@ -32,7 +32,7 @@ function verifiedAudit(dir, prior) {
 }
 function polish(options, reviewer = claudeReview) {
   const prior = readVerifiedRun(options.priorRun);
-  const batch = verifiedAudit(options.batchAudit, prior);
+  const batch = options.batchAudit ? verifiedAudit(options.batchAudit, prior) : null;
   const rawDraft = JSON.parse(fs.readFileSync(options.draftFile, 'utf8'));
   const brief = readJson(options.priorRun, 'brief');
   const sources = readJson(options.priorRun, 'sources');
@@ -47,7 +47,7 @@ function polish(options, reviewer = claudeReview) {
   }
   Object.assign(payload, { polishedFrom: { id: prior.id, receiptHash: prior.receiptHash, batch, changeNote: options.changeNote, submittedDraftSha256: digest(options.draftFile) }, draft, review, gate, status });
   const runDir = writeRun(options.out, payload);
-  return { runDir, status, gate, selectedId: brief.id, priorRun: prior.id, batchAudit: batch.id };
+  return { runDir, status, gate, selectedId: brief.id, priorRun: prior.id, batchAudit: batch?.id || null };
 }
 if (require.main === module) {
   try {
