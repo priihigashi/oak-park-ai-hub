@@ -73,6 +73,14 @@ The draft comes from Codex; Claude independently reviews factual support and edi
 
 The bundle contains `snapshot.json`, `selection.json`, `sources.json`, `brief.json`, `draft.json`, `review.json`, `gate.json`, `status.json`, and `receipt.json`. `receipt.json` records file hashes. Preserve the bundle in the shared editorial workspace; verify hashes when transferring it. `draft-ready-for-human-review` is an editorial handoff, never publication approval. Publication requires a separate per-version human approval and website release workflow.
 
+To polish a ready pilot after its independent series review, save the edited complete draft JSON in a new file and run `editorial-polish.js` with the original article bundle, its `private-trial-ready` batch audit, and a specific change note. The tool verifies both immutable receipts and that the article belongs to the series, rebuilds a required conceptual figure against the new body digest, asks Claude to review the exact edited version, runs the same deterministic article gate, and writes a new linked receipt. It cannot write to a publication path. A held revised draft remains held; do not copy old approval metadata onto it. Review the three new article receipts together with `batch-review.js` before treating the edited series as trial-ready.
+
+```sh
+OPC_ALLOW_SUBSCRIPTION_CLI=1 node scripts/blog-v2/editorial-polish.js --prior-run /path/to/ready-article --batch-audit /path/to/ready-series --draft /path/to/edited-draft.json --out /path/to/polished-runs --change-note "Describe the editorial correction"
+```
+
+On this Mac, Claude is installed in `~/.local/bin`; the runner resolves that location when it is missing from the Node process PATH. The subscription may be invisible inside a restricted sandbox. A failed `claude auth status` there does not prove the account is logged out; verify the existing Claude Max login in its authorized local execution context. No paid API fallback is configured.
+
 `draft.body` is Markdown, matching the existing website posts. Every listed claim must appear in the body with an inline Markdown source link. Numeric claims must have the same quantity in the cited source excerpt and the claim evidence. Visuals are provenance records for review, not automatic assets.
 
 The v3 editorial gate counts visible article words. A body under 400 words is `incomplete-article`; the drafting prompt targets a useful 450–650 words when evidence supports it and forbids padding or invented detail.

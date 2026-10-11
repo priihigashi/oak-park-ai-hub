@@ -5,6 +5,7 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 const { spawnSync } = require('node:child_process');
 const { writeRun } = require('./pipeline');
+const { claudeProgram } = require('./cli');
 
 function readVerifiedRun(dir) {
   const receipt = JSON.parse(fs.readFileSync(path.join(dir, 'receipt.json'), 'utf8'));
@@ -39,7 +40,7 @@ function reviewPrompt(runs) {
 function claudeReview(runs) {
   if (process.env.OPC_ALLOW_SUBSCRIPTION_CLI !== '1') throw new Error('Subscription CLI cost verification flag required');
   const safeEnv = Object.fromEntries(Object.entries(process.env).filter(([key]) => !/^(WP_|WORDPRESS_|PEXELS_API_KEY|GOOGLE_SA_KEY|OPENAI_API_KEY|ANTHROPIC_API_KEY|CLAUDE_KEY_4_CONTENT)/i.test(key)));
-  const call = spawnSync(process.env.OPC_CLAUDE_CLI || 'claude', ['-p', '--no-session-persistence', '--tools', '', '--output-format', 'text'], { input: reviewPrompt(runs), encoding: 'utf8', timeout: 180000, maxBuffer: 4 * 1024 * 1024, env: safeEnv });
+  const call = spawnSync(claudeProgram(), ['-p', '--no-session-persistence', '--tools', '', '--output-format', 'text'], { input: reviewPrompt(runs), encoding: 'utf8', timeout: 180000, maxBuffer: 4 * 1024 * 1024, env: safeEnv });
   if (call.error || call.status !== 0) throw new Error(`Claude batch review failed: ${(call.error?.message || call.stderr || '').slice(0, 500)}`);
   return JSON.parse(call.stdout.trim().replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/, ''));
 }

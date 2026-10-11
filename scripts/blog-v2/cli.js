@@ -170,8 +170,13 @@ function codexJson(prompt, label) {
     return parseJson(fs.readFileSync(output, 'utf8'), label);
   } finally { fs.rmSync(temp, { recursive: true, force: true }); }
 }
+function claudeProgram() {
+  if (process.env.OPC_CLAUDE_CLI) return process.env.OPC_CLAUDE_CLI;
+  const local = path.join(os.homedir(), '.local/bin/claude');
+  return fs.existsSync(local) ? local : 'claude';
+}
 function claudeReview(brief, draft, sources) {
-  return parseJson(runModel(process.env.OPC_CLAUDE_CLI || 'claude', ['-p', '--no-session-persistence', '--tools', '', '--output-format', 'text'], reviewPrompt(brief, draft, sources), 'Claude'), 'Claude');
+  return parseJson(runModel(claudeProgram(), ['-p', '--no-session-persistence', '--tools', '', '--output-format', 'text'], reviewPrompt(brief, draft, sources), 'Claude'), 'Claude');
 }
 function initialPair(provider, brief, sources, prior) {
   if (prior) return { draft: prior.draft, review: prior.review };
@@ -204,4 +209,4 @@ function bundleStatus(bundle, gate) {
   return bundle.revisedDraft ? 'revision-gate-failed' : 'review-required';
 }
 if (require.main === module) main().catch(error => { console.error(error.message); process.exitCode = 1; });
-module.exports = { verifySources, textOnly, draftPrompt, reviewPrompt, revisionPrompt, needsRevision, loadPriorRun, generateBundle, bundleStatus };
+module.exports = { verifySources, textOnly, draftPrompt, reviewPrompt, revisionPrompt, needsRevision, loadPriorRun, generateBundle, reviewGate, claudeProgram, claudeReview, bundleStatus };
