@@ -8,6 +8,14 @@ Demo renderizado de cada entrada: `repertorio.html` → `node capture.js demo.mp
 
 ---
 
+## REF 00 — motor clássico (episódio 1, "Comida subiu mais?")
+Demo: `repertorio_classico.html` (30 s) — cada cena com o nome do preset embaixo:
+pop + data-bob (sticker) · slam + data-shake (recorte de jornal) · up escalonado · left · fade (fonte) · receipt + .cnt (contador com tique) ·
+stamp VERDADE/FALSO · drop com quique · .cnt gigante + data-o (troca de item) · data-shake-end · chip · .bar (cresce do zero) · .col (ano a ano, negativo em vermelho) · tag.
+Linguagem: fundo chapado com textura de papel, cores por bloco (vermelho/tinta/ouro/papel/ardósia), Anton + Fraunces + JetBrains Mono.
+
+---
+
 ## REF 01 — @doantidoto ("Nenhum dos dois", 86 s, out/2026)
 
 **Linguagem:** fundo quase preto chapado (#121212), fotos em **retícula de linhas** (gravura), duotone vermelho/azul pra "os dois lados", **uma palavra gigante por batida** em grotesca pesada com ponto final ("FALAM." "FATO." "ÚNICO."), legenda **karaokê** amarela em itálico embaixo, tudo narrado em 1ª pessoa. Corte a cada ~1,5–3 s, nada parado.
