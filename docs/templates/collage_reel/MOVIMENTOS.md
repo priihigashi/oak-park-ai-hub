@@ -50,6 +50,10 @@ Isso aparece em TODO reel, seja qual for o look:
 - Nada encosta/sobrepõe: título, subtítulo, rótulos, números, caixas. Mínimo 24px entre blocos de texto; 40px+ entre seções.
 - Margens laterais iguais (70px) e uma grade só; alinhar pela esquerda os blocos da mesma coluna.
 - Entrelinha do título ~0.92–1.0; subtítulo nunca colado no título.
+- **Ordem das camadas (quem cobre quem)**: antes de sobrepor, decidir o que é o assunto. Rosto/pessoa/dado principal fica NA FRENTE; foto de apoio nunca cobre rosto, olhos, número ou título. Se duas imagens disputam, mova uma pra área vazia ou reduza.
+- **Destaque de palavra (marca-texto)**: faixa POR BAIXO do texto, só na metade de baixo da linha (`.hl` = gradiente 58%→92%), nunca um bloco de fundo que invade a linha de cima/baixo. Em título de várias linhas com entrelinha apertada, nunca usar fundo cheio com padding vertical.
+- **Nada de "um monte de retângulos duros"**: cartões e caixas com canto levemente arredondado (6–18px) e sombra suave difusa (blur), não sombra sólida deslocada em tudo. Sombra dura/recorte reto = escolha pontual de estilo (colagem/papel), não padrão.
+- **Texto sobre foto**: garantir contraste — área escura/vazia da foto, sombra suave no texto ou faixa. Nunca título em cima de rosto.
 - Rodar `snap.js` em 4–6 tempos (incluindo meio de transição) e OLHAR os frames antes de entregar.
 
 ## 3. MOVIMENTOS — nome · como é · ideal para · ideias

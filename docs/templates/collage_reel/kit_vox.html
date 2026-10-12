@@ -16,11 +16,12 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
 .el{position:absolute;will-change:transform}
 .anton{font-family:Anton;line-height:.92;text-transform:uppercase}
 .mono{font-family:JBM;font-weight:700;letter-spacing:1px}
-.lbl{font-family:JBM;font-weight:700;font-size:24px;letter-spacing:2px;padding:8px 14px;background:var(--k);color:var(--w)}
-.card{background:#fff;color:var(--k);padding:54px 56px;box-shadow:14px 18px 0 rgba(0,0,0,.3);width:860px}
+.lbl{font-family:JBM;font-weight:700;font-size:24px;letter-spacing:2px;padding:8px 14px;background:var(--k);color:var(--w);border-radius:6px}
+.card{background:#fff;color:var(--k);padding:54px 56px;border-radius:6px;box-shadow:0 22px 50px rgba(0,0,0,.25),0 2px 6px rgba(0,0,0,.12);width:860px}
 .card .rule{border-top:4px solid var(--k);border-bottom:1px solid var(--k);height:10px;margin-bottom:26px}
 .card .mast{font-family:JBM;font-weight:700;font-size:24px;letter-spacing:3px;display:flex;justify-content:space-between;margin-bottom:18px}
-.popup{background:var(--y);color:var(--k);padding:26px 30px;width:520px;box-shadow:10px 12px 0 var(--k);border:4px solid var(--k)}
+.popup{background:var(--y);color:var(--k);padding:26px 30px;width:520px;border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.22)}
+.hl{background:linear-gradient(transparent 58%,var(--y) 58%,var(--y) 92%,transparent 92%);padding:0 .08em}
 #prog{display:none}
 </style></head><body>
 <div id="stage">
@@ -40,19 +41,19 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
 <!-- 2 · CORTE NA CURVA + PARALLAX + 12 fps (tut_01/02) -->
 <section class="scene" data-s="5.2" data-e="10.4" data-in="curve" data-fps="12" data-outcurve="1" data-theme="dark" style="background:#0e0e0e">
   <div class="parallax" data-pan="-120,-30">
-    <img data-depth=".25" src="assets/demo/cam_lines.png" style="left:-60px;top:300px;width:1250px;opacity:.55">
-    <img data-depth=".6" src="assets/demo/bg_rocket.jpg" style="left:520px;top:560px;width:620px;filter:grayscale(1) contrast(1.2);box-shadow:16px 16px 0 var(--g)">
-    <img data-depth="1" class="sticker" src="assets/demo/face_rings_slate.png" style="left:-40px;top:820px;width:720px">
+    <img data-depth=".25" src="assets/demo/cam_lines.png" style="left:-60px;top:520px;width:1250px;opacity:.55">
+    <img data-depth=".6" src="assets/demo/bg_rocket.jpg" style="left:640px;top:1360px;width:400px;filter:grayscale(1) contrast(1.15);border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.5);outline:6px solid var(--g);outline-offset:-6px">
+    <img data-depth="1" class="sticker" src="assets/demo/face_rings_slate.png" style="left:-60px;top:1100px;width:640px">
   </div>
   <div class="el lbl" style="left:70px;top:150px;background:var(--g)" data-a="left" data-t=".3">PARALLAX · 3 CAMADAS</div>
-  <div class="el anton" style="left:70px;top:230px;font-size:120px;color:#fff" data-a="up" data-t=".5">Foto parada<br>vira <span style="color:var(--y)">cena</span></div>
+  <div class="el anton" style="left:70px;top:230px;font-size:120px;color:#fff;text-shadow:0 6px 30px rgba(0,0,0,.6)" data-a="up" data-t=".5">Foto parada<br>vira <span style="color:var(--y)">cena</span></div>
 </section>
 
 <!-- 3 · PÁGINA VIRANDO a 8 fps (tut_03) -->
 <section class="scene" data-s="10.4" data-e="15.4" data-in="curve" data-fps="8" data-theme="light" style="background:#fff">
   <div class="el card" style="left:110px;top:560px;transform:rotate(1deg)">
     <div class="rule"></div><div class="mast"><span>DIÁRIO · PÁGINA 2</span><span>2021</span></div>
-    <div class="anton" style="font-size:110px">O preço<br>da <span style="background:var(--y)">comida</span></div>
+    <div class="anton" style="font-size:110px">O preço<br>da <span class="hl">comida</span></div>
     <div class="mono" style="font-size:28px;margin-top:22px;font-weight:500">a página de baixo aparece quando a de cima vira</div>
   </div>
   <div class="el pt-wrap" style="left:110px;top:560px">
@@ -235,7 +236,7 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
   <svg class="el" style="left:0;top:0" width="1080" height="1920"><path id="rota" class="trim" data-t="2" data-d="1.2" d="" fill="none" stroke="#0e0e0e" stroke-width="7" stroke-dasharray="1" /></svg>
   <div class="focus" id="foc" data-r="300"></div>
   <div class="waves" id="wDF" style="color:var(--b)" data-t="3.3"></div>
-  <div class="el anton" style="left:70px;top:150px;font-size:96px;color:var(--k)" data-a="up" data-t=".1">Onde <span style="background:var(--y);padding:0 10px">olhar</span></div>
+  <div class="el anton" style="left:70px;top:150px;font-size:96px;color:var(--k)" data-a="up" data-t=".1">Onde <span class="hl">olhar</span></div>
 
   <div class="el lbl" style="left:70px;top:1700px;background:var(--b)" data-a="left" data-t=".4">MAPA · FOCO ANDA ATÉ O PONTO</div>
 </section>
