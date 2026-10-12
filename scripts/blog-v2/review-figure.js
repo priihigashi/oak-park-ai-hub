@@ -30,20 +30,26 @@ function selectSteps(parts, draft) {
 }
 function captionForSteps(steps) {
   return steps.some(step => step.kind === 'editorial')
-    ? 'Original draft scope map. Source claims and OPC planning notes are labeled separately.'
-    : 'Original draft scope map. Every node is a source-backed claim; no sequence is implied.';
+    ? 'Original draft evidence map. Source claims and OPC planning notes are labeled separately.'
+    : 'Original draft evidence map. Every node is a source-backed claim; no sequence is implied.';
+}
+function withoutFigure(draft, body) {
+  return { ...draft, body, figures: [] };
+}
+function diagramEnabled(options) {
+  return (options.enabled ?? (process.env.OPC_ENABLE_ORIGINAL_DIAGRAMS === '1')) === true;
 }
 function addReviewFigure(draft, options = {}) {
-  if ((options.enabled ?? (process.env.OPC_ENABLE_ORIGINAL_DIAGRAMS === '1')) !== true) return draft;
-  if (draft.formatKey !== 'scope-map') return { ...draft, body: String(draft.body || '').replaceAll(MARKER, ''), figures: [] };
+  if (!diagramEnabled(options)) return draft;
+  if (!['scope-map', 'evidence-explainer'].includes(draft.formatKey)) return withoutFigure(draft, String(draft.body || '').replaceAll(MARKER, ''));
   const cleanBody = String(draft.body || '').replaceAll(MARKER, '').replace(/\n{3,}/g, '\n\n');
   const parts = sections(cleanBody);
-  if (parts.length < 3 || parts.length > 5) return { ...draft, body: cleanBody, figures: [] };
+  if (parts.length < 3 || parts.length > 5) return withoutFigure(draft, cleanBody);
   const firstSection = cleanBody.indexOf('\n\n## ');
-  if (firstSection < 0) return { ...draft, body: cleanBody, figures: [] };
+  if (firstSection < 0) return withoutFigure(draft, cleanBody);
   const steps = selectSteps(parts, draft);
   const digest = crypto.createHash('sha256').update(cleanBody).digest('hex').slice(0, 16);
-  const type = 'scope-map';
+  const type = draft.formatKey === 'evidence-explainer' ? 'evidence-map' : 'scope-map';
   const title = figureTitle(type);
   const alt = `${title}: ${steps.map(step => step.label || step.text).join('; ')}`;
   const figure = { id: 'planning-map', type, title, alt, caption: captionForSteps(steps), provenance: `OPC draft runner from article sections; body SHA-256 ${digest}; no external asset`, rights: 'OPC original diagram', approved: false, steps };

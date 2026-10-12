@@ -178,6 +178,17 @@ test('a weak evidence explainer stays text-only after the kitchen figure review'
   assert.deepEqual(result.figures, []);
   assert.deepEqual(diagramErrors(result, { formatKey: 'evidence-explainer' }), []);
 });
+test('a source-bound evidence explainer can add an original in-body visual', () => {
+  const draft = { formatKey: 'evidence-explainer', body: 'Direct answer.\n\n## Requirement\n\nA certificate is required.\n\n## Preparation\n\nA licensed professional prepares it.\n\n## Permit review\n\nThe City receives it.', claims: [
+    { id: 'c1', text: 'A certificate is required.', sourceId: 's1', status: 'verified' },
+    { id: 'c2', text: 'A licensed professional prepares it.', sourceId: 's1', status: 'verified' },
+    { id: 'c3', text: 'The City receives it.', sourceId: 's1', status: 'verified' },
+  ] };
+  const illustrated = addReviewFigure(draft, { enabled: true });
+  assert.equal(illustrated.figures[0].type, 'evidence-map');
+  assert.deepEqual(illustrated.figures[0].steps.map(step => step.kind), ['source', 'source', 'source']);
+  assert.deepEqual(diagramErrors(illustrated, { formatKey: 'evidence-explainer' }), []);
+});
 test('scope map can be text-only when an automatic figure adds no independent value', () => {
   const draft = { formatKey: 'scope-map', body: '## Use permission\n\nA CU addresses use.\n\n## Work permission\n\nRenovation approvals are separate.', figures: [] };
   assert.deepEqual(diagramErrors(draft, { formatKey: 'scope-map' }), []);
