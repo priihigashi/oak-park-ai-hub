@@ -1,0 +1,49 @@
+name: Reel reference fetch (collage template study)
+# Push a list of reel URLs to docs/templates/collage_reel/ref_urls.txt on a branch →
+# downloads each with yt-dlp (IG cookies from secret) → short-lived artifact for analysis.
+on:
+  push:
+    paths:
+      - "docs/templates/collage_reel/ref_urls.txt"
+permissions:
+  contents: read
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: actions/setup-python@v5.6.0
+        with: { python-version: "3.11" }
+      - name: Install
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+          pip install -q yt-dlp
+      - name: Download
+        env:
+          PRI_OP_IG_COOKIES: ${{ secrets.PRI_OP_IG_COOKIES }}
+        run: |
+          mkdir -p out
+          python - <<'EOF'
+          import os, base64
+          v = os.environ.get("PRI_OP_IG_COOKIES","")
+          if v:
+              try:
+                  t = base64.b64decode(v).decode()
+                  if "\t" not in t: t = v
+              except Exception:
+                  t = v
+              open("/tmp/ig_cookies.txt","w").write(t)
+          EOF
+          i=0
+          grep -v '^#' docs/templates/collage_reel/ref_urls.txt | while read -r name url; do
+            [ -z "$url" ] && continue
+            C=""; [ -s /tmp/ig_cookies.txt ] && C="--cookies /tmp/ig_cookies.txt"
+            yt-dlp $C -f "bv*+ba/b" --merge-output-format mp4 -o "out/${name}.%(ext)s" --write-info-json "$url" || echo "FAIL $name $url" >> out/errors.txt
+          done
+          ls -la out
+      - uses: actions/upload-artifact@v4.6.2
+        with:
+          name: ref-reels
+          path: out/
+          retention-days: 2
