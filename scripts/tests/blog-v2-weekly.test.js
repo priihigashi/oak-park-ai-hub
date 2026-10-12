@@ -3,8 +3,9 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
+const crypto = require('node:crypto');
 const { writeRun } = require('../blog-v2/pipeline');
-const { parseOptions, queuedRuns, reviewedRuns, weekStart, runAttempt } = require('../blog-v2/weekly-private');
+const { parseOptions, queuedRuns, heldRuns, reviewedRuns, stagedInput, weekStart, runAttempt } = require('../blog-v2/weekly-private');
 
 test('weekly boundary follows New York Monday across UTC and daylight saving time', () => {
   assert.equal(weekStart(new Date('2026-10-11T23:00:00Z')), weekStart(new Date('2026-10-12T01:00:00Z')));
@@ -69,6 +70,30 @@ test('weekly coordinator records research hold and refuses publication paths', (
     else process.env.OPC_ALLOW_SUBSCRIPTION_CLI = previous;
     fs.rmSync(temp, { recursive: true, force: true });
   }
+});
+
+test('held article intent joins next research input only after receipt verification', () => {
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'opc-weekly-held-'));
+  const out = path.join(temp, 'private');
+  const run = writeRun(path.join(temp, 'articles'), {
+    snapshot: { snapshotAt: new Date().toISOString() }, selection: { selected: { id: 'retail' } },
+    brief: { intentKey: 'retail-accessibility:broward', readerDecision: 'Choose a scope' },
+    draft: { title: 'Held retail article', body: 'Do not publish.' },
+    gate: ['independent-review-blocked'], status: 'revision-gate-failed',
+  });
+  const attempt = path.join(out, 'attempt');
+  fs.mkdirSync(attempt, { recursive: true });
+  const statusPath = path.join(attempt, 'status.json');
+  fs.writeFileSync(statusPath, JSON.stringify({ status: 'article-hold', articleRun: run, createdAt: new Date().toISOString() }));
+  const hash = crypto.createHash('sha256').update(fs.readFileSync(statusPath)).digest('hex');
+  fs.writeFileSync(path.join(attempt, 'receipt.json'), JSON.stringify({ statusSha256: hash }));
+  try {
+    const held = heldRuns(out);
+    assert.deepEqual(held.map(item => item.intentKey), ['retail-accessibility:broward']);
+    assert.deepEqual(stagedInput({ existing: [] }, held).existing.map(item => item.intentKey), ['retail-accessibility:broward']);
+    fs.writeFileSync(path.join(run, 'draft.json'), '{}');
+    assert.throws(() => heldRuns(out), /Held article changed after receipt/);
+  } finally { fs.rmSync(temp, { recursive: true, force: true }); }
 });
 
 test('weekly coordinator preserves a failed attempt and releases its lock', () => {

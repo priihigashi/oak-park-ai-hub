@@ -52,6 +52,27 @@ function queuedRuns(out) {
   }
   return items;
 }
+function heldRuns(out) {
+  if (!fs.existsSync(out)) return [];
+  const items = [];
+  for (const name of fs.readdirSync(out)) {
+    const statusPath = path.join(out, name, 'status.json');
+    if (!fs.existsSync(statusPath)) continue;
+    const status = readAttemptStatus(statusPath);
+    if (status.status !== 'article-hold') continue;
+    const dir = path.resolve(status.articleRun);
+    const receipt = JSON.parse(fs.readFileSync(path.join(dir, 'receipt.json'), 'utf8'));
+    for (const [file, expected] of Object.entries(receipt.fileHashes || {})) {
+      if (digestFile(path.join(dir, file)) !== expected) throw new Error(`Held article changed after receipt: ${file}`);
+    }
+    const articleStatus = JSON.parse(fs.readFileSync(path.join(dir, 'status.json'), 'utf8'));
+    if (articleStatus !== receipt.status || articleStatus === 'draft-ready-for-human-review') throw new Error('Invalid held article receipt');
+    const brief = JSON.parse(fs.readFileSync(path.join(dir, 'brief.json'), 'utf8'));
+    const draft = JSON.parse(fs.readFileSync(path.join(dir, 'draft.json'), 'utf8'));
+    items.push({ id: 'held:' + receipt.id, intentKey: brief.intentKey, title: draft.title, intent: brief.readerDecision, type: 'held-private', receiptHash: digestFile(path.join(dir, 'receipt.json')) });
+  }
+  return items;
+}
 function reviewedRuns(file) {
   if (!file) return [];
   const paths = JSON.parse(fs.readFileSync(file, 'utf8'));
@@ -119,7 +140,7 @@ function runAttempt(options, runner = command) {
   try {
     dir = path.join(options.out, new Date().toISOString().replace(/[:.]/g, '-') + '-' + crypto.randomBytes(4).toString('hex'));
     fs.mkdirSync(dir);
-    const queued = [...queuedRuns(options.out), ...reviewedRuns(options.reviewRunsFile)];
+    const queued = [...queuedRuns(options.out), ...heldRuns(options.out), ...reviewedRuns(options.reviewRunsFile)];
     const prior = attemptedThisWeek(options.out);
     if (prior) return writeStatus(dir, skippedAttempt(prior));
     const staged = path.join(dir, 'input.json');
@@ -147,4 +168,4 @@ if (require.main === module) {
     if (status.status !== 'ready-for-human-review') process.exitCode = 2;
   } catch (error) { console.error(error.message); process.exitCode = 1; }
 }
-module.exports = { parseOptions, queuedRuns, reviewedRuns, weekStart, preparedThisWeek, attemptedThisWeek, stagedInput, runAttempt };
+module.exports = { parseOptions, queuedRuns, heldRuns, reviewedRuns, weekStart, preparedThisWeek, attemptedThisWeek, stagedInput, runAttempt };
