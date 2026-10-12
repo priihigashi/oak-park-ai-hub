@@ -24,7 +24,8 @@
 3. **Primeira frase de análise (embaixo):** na primeira vez que aparece, desfocar/escurecer o resto da tela por ~1s e destacar só a frase + uma seta ("essa frase muda a cada mandato"). Rápido, elegante, nada brego.
 4. **Combinações de cor:** ela achou de mau gosto. Seguir as referências; revezar paletas (MOVIMENTOS §2b); evitar tela chapada sem textura.
 5. **Medo dela:** "não quero que ninguém tire sarro de mim". Prioridade: acabamento premium e factual impecável.
-6. Mantém: gancho no início ("O presidente muda. A Câmara, não."), corrida de barras, ano contando no lugar, pausa+som por mandato, % em cinza, Bloco direita/esquerda coloridos, "pura", 2027 com nota, revelação final (vencedora) com celebração conceitual, pergunta final sobre voto pra deputado.
+6. **Glitch na transição entre cenas finais:** quando uma cena final sai (fade) e a próxima entra, o gráfico da corrida aparece por baixo por um instante (ex.: entre a vencedora e o fecho). Correção: depois de RACE_END esconder o gráfico (ou pôr fundo sólido/textura fixa por trás das cenas finais) e fazer crossfade cena→cena, nunca cena→vazio.
+7. Mantém: gancho no início ("O presidente muda. A Câmara, não."), corrida de barras, ano contando no lugar, pausa+som por mandato, % em cinza, Bloco direita/esquerda coloridos, "pura", 2027 com nota, revelação final (vencedora) com celebração conceitual, pergunta final sobre voto pra deputado.
 
 ## Pendências fora do reel
 - Upload da biblioteca completa (demos/ref 00–05/75 cenas) do Mac pro Drive: token OAuth não está em ~/ClaudeWorkspace/Credentials; alternativa = workflow do GitHub com secret SHEETS_TOKEN.
