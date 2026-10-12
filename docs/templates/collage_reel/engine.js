@@ -46,7 +46,7 @@ function anim(el,t,T,idx){
   }
   el.style.opacity=c.o;
   el.style.transform=`translate(${c.tx}px,${c.ty}px) rotate(${c.r}deg) scale(${c.sc}) ${el._fxTr||''}`;
-  el._fxFilter=c.filter; if(!el.dataset.boil) el.style.filter=c.filter; el.style.clipPath=c.clip||'';
+  el._fxFilter=c.filter; if(!el.dataset.boil&&!el.dataset.rough) el.style.filter=c.filter; el.style.clipPath=c.clip||'';
 }
 function render(T){
   let shake=0; let theme='dark';

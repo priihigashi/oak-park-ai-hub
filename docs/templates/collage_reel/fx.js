@@ -12,6 +12,7 @@
    SAÍDAS:  data-out="glitch|dissolve|scatter" + data-o="<seg>"
    CONTÍNUOS:
      data-boil="1"        borda de tinta "fervendo" a 8 fps (texto carimbado/serigrafia)
+     data-rough="1"       borda fotocopiada PARADA (mesma textura, sem ferver)
      data-kb="1.08"       Ken Burns: zoom lento durante a cena (data-kbo="50% 30%" = origem)
      data-drift="-30,0"   deriva lenta em px durante a cena
      data-jit="2"         tremidinha de câmera na mão (px)
@@ -116,6 +117,7 @@ function frame(sc,t,T,dur){
     sc.style.filter=`brightness(${(1+(rnd(st+3)-.5)*.08).toFixed(3)})`; }
   // contínuos
   sc.querySelectorAll('[data-boil]').forEach((el,i)=>{el.style.filter=(el._fxFilter||'')+` url(#boil${(Math.floor(T*8)+i)%4})`});
+  sc.querySelectorAll('[data-rough]:not([data-boil])').forEach(el=>{el.style.filter=(el._fxFilter||'')+' url(#boil1)'});   // borda fotocopiada parada
   sc.querySelectorAll('[data-kb],[data-drift],[data-jit]').forEach((el,i)=>{
     const p=clamp(t/dur); let tr='';
     if(el.dataset.drift){const [dx,dy]=el.dataset.drift.split(',').map(Number); tr+=`translate(${(dx*p).toFixed(1)}px,${(dy*p).toFixed(1)}px) `}
