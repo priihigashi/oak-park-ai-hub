@@ -7,7 +7,7 @@ const { spawnSync } = require('node:child_process');
 const { writeRun } = require('./pipeline');
 const { claudeProgram } = require('./cli');
 
-function readVerifiedRun(dir) {
+function readImmutableRun(dir) {
   const receipt = JSON.parse(fs.readFileSync(path.join(dir, 'receipt.json'), 'utf8'));
   for (const [name, expected] of Object.entries(receipt.fileHashes || {})) {
     const actual = crypto.createHash('sha256').update(fs.readFileSync(path.join(dir, name))).digest('hex');
@@ -15,9 +15,14 @@ function readVerifiedRun(dir) {
   }
   const read = name => JSON.parse(fs.readFileSync(path.join(dir, `${name}.json`), 'utf8'));
   const status = read('status');
-  if (status !== 'draft-ready-for-human-review' || receipt.status !== status || read('gate').length) throw new Error(`Run ${receipt.id} is not article-ready`);
+  if (receipt.status !== status) throw new Error(`Run ${receipt.id} status changed`);
+  return { id: receipt.id, receiptHash: crypto.createHash('sha256').update(fs.readFileSync(path.join(dir, 'receipt.json'))).digest('hex'), status, gate: read('gate'), brief: read('brief'), draft: read('draft'), receipt, read };
+}
+function readVerifiedRun(dir) {
+  const { id, receiptHash, status, gate, brief, draft, receipt, read } = readImmutableRun(dir);
+  if (status !== 'draft-ready-for-human-review' || gate.length) throw new Error(`Run ${id} is not article-ready`);
   const { reviewProviders, codexReview } = readProviderReviews(receipt, read);
-  return { id: receipt.id, receiptHash: crypto.createHash('sha256').update(fs.readFileSync(path.join(dir, 'receipt.json'))).digest('hex'), brief: read('brief'), draft: read('draft'), sources: read('sources').map(({ id, publisher, title, url, coverageAreas }) => ({ id, publisher, title, url, coverageAreas })), articleReview: read('review'), codexReview, reviewProviders, editorialScore: receipt.fileHashes['editorialScore.json'] ? read('editorialScore') : null };
+  return { id, receiptHash, brief, draft, sources: read('sources').map(({ id, publisher, title, url, coverageAreas }) => ({ id, publisher, title, url, coverageAreas })), articleReview: read('review'), codexReview, reviewProviders, editorialScore: receipt.fileHashes['editorialScore.json'] ? read('editorialScore') : null };
 }
 function readProviderReviews(receipt, read) {
   const reviewProviders = receipt.fileHashes['reviewProviders.json'] ? read('reviewProviders') : [];
@@ -69,4 +74,4 @@ function main() {
   if (gate.length) process.exitCode = 2;
 }
 if (require.main === module) try { main(); } catch (error) { console.error(error.message); process.exitCode = 1; }
-module.exports = { readVerifiedRun, batchGate, reviewPrompt };
+module.exports = { readImmutableRun, readVerifiedRun, batchGate, reviewPrompt };

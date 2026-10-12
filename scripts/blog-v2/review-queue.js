@@ -1,7 +1,8 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
-const { readVerifiedRun } = require('./batch-review');
+const { readVerifiedRun, readImmutableRun } = require('./batch-review');
+const runForItem = item => item.feedbackOnly ? readImmutableRun(item.articleRun) : readVerifiedRun(item.articleRun);
 
 function readQueue(file) {
   if (!fs.existsSync(file)) return { version: 1, items: [] };
@@ -27,14 +28,15 @@ function mutateQueue(file, change) {
   } finally { fs.rmdirSync(lock); }
 }
 
-function enqueueReview(file, articleRun, preview, previewSha256) {
-  const run = readVerifiedRun(articleRun);
+function enqueueReview(file, articleRun, preview, previewSha256, { feedbackOnly = false } = {}) {
+  const run = feedbackOnly ? readImmutableRun(articleRun) : readVerifiedRun(articleRun);
+  if (feedbackOnly && !['revision-pending-claude', 'draft-ready-for-human-review'].includes(run.status)) throw new Error('Run is not a reviewable draft');
   if (!preview || !fs.existsSync(preview) || !/^[a-f0-9]{64}$/.test(previewSha256 || '')) throw new Error('Private preview and digest required');
   verifyPreview(preview, previewSha256);
   const item = {
     id: run.id, articleRun: path.resolve(articleRun), articleReceiptHash: run.receiptHash,
     title: run.draft.title, intentKey: run.brief.intentKey, editorialScore: run.editorialScore?.score ?? null,
-    preview: path.resolve(preview), previewSha256, state: 'pending', createdAt: new Date().toISOString(),
+    preview: path.resolve(preview), previewSha256, feedbackOnly, state: 'pending', createdAt: new Date().toISOString(),
   };
   return mutateQueue(file, queue => {
     const existing = queue.items.find(entry => entry.id === item.id);
@@ -51,7 +53,7 @@ function replacePreview(file, id, preview, previewSha256) {
   return mutateQueue(file, queue => {
     const item = queue.items.find(entry => entry.id === id);
     if (!item || ['approved', 'rejected', 'needs-revision'].includes(item.state)) throw new Error('Article is not awaiting a preview');
-    const run = readVerifiedRun(item.articleRun);
+    const run = runForItem(item);
     if (run.receiptHash !== item.articleReceiptHash) throw new Error('Article version changed after queueing');
     verifyPreview(item.preview, item.previewSha256);
     verifyPreview(preview, previewSha256);
@@ -72,7 +74,7 @@ function markPreviewViewed(file, id, now = new Date()) {
   return mutateQueue(file, queue => {
     const item = queue.items.find(entry => entry.id === id);
     if (!item) throw new Error('Unknown review item');
-    const run = readVerifiedRun(item.articleRun);
+    const run = runForItem(item);
     if (run.receiptHash !== item.articleReceiptHash) throw new Error('Article version changed after queueing');
     verifyPreview(item.preview, item.previewSha256);
     item.previewOpenedAt = now.toISOString();
@@ -100,9 +102,10 @@ function recordAction(file, id, action, { snoozedUntil, feedback, now = new Date
     const item = queue.items.find(entry => entry.id === id);
     if (!item) throw new Error('Unknown review item');
     if (['approved', 'rejected', 'needs-revision'].includes(item.state)) throw new Error('Review decision is final for this version');
-    const run = readVerifiedRun(item.articleRun);
+    const run = runForItem(item);
     if (run.receiptHash !== item.articleReceiptHash) throw new Error('Article version changed after queueing');
     verifyPreview(item.preview, item.previewSha256);
+    if (action === 'approved' && item.feedbackOnly) throw new Error('This draft is available for feedback only');
     if (action === 'approved' && !item.previewOpenedAt) throw new Error('Open the exact preview before approval');
     if (action === 'feedback') return saveFeedback(item, feedback, now);
     if (action === 'snoozed') setSnooze(item, snoozedUntil, now);

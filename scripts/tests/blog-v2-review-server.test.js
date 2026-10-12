@@ -67,3 +67,31 @@ test('Mac notification is emitted once and keeps pending item after notifier fai
     assert.equal(readQueue(queue).items[0].state, 'notified');
   } finally { fs.rmSync(temp, { recursive: true, force: true }); }
 });
+
+test('a pending independent review accepts feedback but never offers or accepts approval', async () => {
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'opc-feedback-only-'));
+  const queue = path.join(temp, 'queue.json');
+  const preview = path.join(temp, 'preview.html');
+  fs.writeFileSync(preview, '<html>Private revision</html>');
+  const hash = crypto.createHash('sha256').update(fs.readFileSync(preview)).digest('hex');
+  const run = writeRun(path.join(temp, 'runs'), {
+    snapshot: {}, selection: { selected: { id: 'topic' } }, brief: { intentKey: 'topic:broward' },
+    draft: { title: 'Revision in progress' }, sources: [], review: { decision: 'pass' },
+    gate: ['pending-claude-independent-review'], status: 'revision-pending-claude',
+  });
+  const item = enqueueReview(queue, run, preview, hash, { feedbackOnly: true });
+  const server = http.createServer(createHandler(queue, 'test-secret'));
+  try {
+    await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+    const base = `http://127.0.0.1:${server.address().port}`;
+    const home = await (await fetch(`${base}/?token=test-secret`)).text();
+    assert.match(home, /Rascunho em revisão independente/);
+    assert.doesNotMatch(home, /Aprovar rascunho/);
+    const forced = await fetch(`${base}/action/${item.id}`, { method: 'POST', body: new URLSearchParams({ token: 'test-secret', action: 'approved' }) });
+    assert.equal(forced.status, 400);
+    assert.equal(readQueue(queue).items[0].state, 'pending');
+    const feedback = await fetch(`${base}/action/${item.id}`, { method: 'POST', redirect: 'manual', body: new URLSearchParams({ token: 'test-secret', action: 'feedback', feedback: 'Please add a relevant image.' }) });
+    assert.equal(feedback.status, 303);
+    assert.equal(readQueue(queue).items[0].state, 'needs-revision');
+  } finally { await new Promise(resolve => server.close(resolve)); fs.rmSync(temp, { recursive: true, force: true }); }
+});
