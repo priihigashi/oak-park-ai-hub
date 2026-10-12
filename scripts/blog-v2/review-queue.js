@@ -47,6 +47,22 @@ function enqueueReview(file, articleRun, preview, previewSha256) {
   });
 }
 
+function replacePreview(file, id, preview, previewSha256) {
+  return mutateQueue(file, queue => {
+    const item = queue.items.find(entry => entry.id === id);
+    if (!item || ['approved', 'rejected', 'needs-revision'].includes(item.state)) throw new Error('Article is not awaiting a preview');
+    const run = readVerifiedRun(item.articleRun);
+    if (run.receiptHash !== item.articleReceiptHash) throw new Error('Article version changed after queueing');
+    verifyPreview(item.preview, item.previewSha256);
+    verifyPreview(preview, previewSha256);
+    item.previewHistory = [...(item.previewHistory || []), { preview: item.preview, previewSha256: item.previewSha256, replacedAt: new Date().toISOString() }];
+    item.preview = path.resolve(preview);
+    item.previewSha256 = previewSha256;
+    delete item.previewOpenedAt;
+    return item;
+  });
+}
+
 function dueNotices(file, now = new Date()) {
   return readQueue(file).items.filter(item => item.state === 'pending'
     || (item.state === 'snoozed' && Date.parse(item.snoozedUntil) <= now.getTime()));
@@ -64,25 +80,37 @@ function markPreviewViewed(file, id, now = new Date()) {
   });
 }
 
-function recordAction(file, id, action, { snoozedUntil, now = new Date() } = {}) {
-  if (!['notified', 'approved', 'rejected', 'snoozed', 'queued'].includes(action)) throw new Error('Invalid review action');
+function saveFeedback(item, feedback, now) {
+  const note = String(feedback || '').trim();
+  if (note.length < 5 || note.length > 2000) throw new Error('Feedback must contain 5–2000 characters');
+  item.feedback = { note, articleReceiptHash: item.articleReceiptHash, previewSha256: item.previewSha256, createdAt: now.toISOString() };
+  item.state = 'needs-revision';
+  item.updatedAt = now.toISOString();
+  return item;
+}
+function setSnooze(item, snoozedUntil, now) {
+  const until = Date.parse(snoozedUntil);
+  if (!Number.isFinite(until) || until <= now.getTime() || until > now.getTime() + 30 * 86400000) throw new Error('Snooze must be within 30 days');
+  item.snoozedUntil = new Date(until).toISOString();
+}
+
+function recordAction(file, id, action, { snoozedUntil, feedback, now = new Date() } = {}) {
+  if (!['notified', 'approved', 'rejected', 'snoozed', 'queued', 'feedback'].includes(action)) throw new Error('Invalid review action');
   return mutateQueue(file, queue => {
     const item = queue.items.find(entry => entry.id === id);
     if (!item) throw new Error('Unknown review item');
-    if (['approved', 'rejected'].includes(item.state)) throw new Error('Review decision is final');
+    if (['approved', 'rejected', 'needs-revision'].includes(item.state)) throw new Error('Review decision is final for this version');
     const run = readVerifiedRun(item.articleRun);
     if (run.receiptHash !== item.articleReceiptHash) throw new Error('Article version changed after queueing');
     verifyPreview(item.preview, item.previewSha256);
     if (action === 'approved' && !item.previewOpenedAt) throw new Error('Open the exact preview before approval');
-    if (action === 'snoozed') {
-      const until = Date.parse(snoozedUntil);
-      if (!Number.isFinite(until) || until <= now.getTime() || until > now.getTime() + 30 * 86400000) throw new Error('Snooze must be within 30 days');
-      item.snoozedUntil = new Date(until).toISOString();
-    } else delete item.snoozedUntil;
+    if (action === 'feedback') return saveFeedback(item, feedback, now);
+    if (action === 'snoozed') setSnooze(item, snoozedUntil, now);
+    else delete item.snoozedUntil;
     item.state = action;
     item.updatedAt = now.toISOString();
     return item;
   });
 }
 
-module.exports = { readQueue, enqueueReview, dueNotices, markPreviewViewed, recordAction };
+module.exports = { readQueue, enqueueReview, replacePreview, dueNotices, markPreviewViewed, recordAction };
