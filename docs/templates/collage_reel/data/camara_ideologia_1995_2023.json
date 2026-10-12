@@ -7,7 +7,8 @@
   "União Brasil (DEM+PSL) não está no paper → direita (ambos os antecessores são direita/extrema-direita)",
   "Não classificados (sem sucessor claro no paper): PSD antigo, PST, PRN, PAN. PP de 1994 (36) → PP: fundiu-se ao PPR em 1995 formando o PPB (atual Progressistas)",
   "2018 PSL: Bolsonaro eleito pelo PSL, depois PL (2021)",
-  "Temer (MDB) governou 2016-2018 após impeachment de Dilma — o reel deve mostrar a troca em 2016"
+  "Temer (MDB) governou 2016-2018 após impeachment de Dilma — o reel deve mostrar a troca em 2016",
+  "2026: União-PP→direita; PRD-Solidariedade→centro-direita (PRD = PTB+Patriota; flag); Missão (1) não está no paper → não classificado. Conferir no TSE após a diplomação."
  ],
  "terms": [
   {
@@ -327,6 +328,40 @@
     "nao_classificado": 0
    },
    "total": 513
+  },
+  {
+   "start_year": 2027,
+   "election_year": 2026,
+   "president": "em disputa (2º turno 25/10/2026)",
+   "president_party": null,
+   "president_spectrum": null,
+   "seats_by_party": {
+    "PL": 121,
+    "FE_Brasil(PT70+PCdoB+PV)": 88,
+    "Uniao_PP": 87,
+    "PSD": 43,
+    "Republicanos": 41,
+    "MDB": 36,
+    "PODE": 27,
+    "PSB": 15,
+    "PSOL_REDE": 15,
+    "PSDB_Cidadania": 11,
+    "NOVO": 10,
+    "PRD_Solidariedade": 7,
+    "PDT": 6,
+    "Avante": 5,
+    "Missao": 1
+   },
+   "by_spectrum": {
+    "esquerda": 103,
+    "centro_esquerda": 21,
+    "centro": 0,
+    "centro_direita": 12,
+    "direita": 376,
+    "nao_classificado": 1
+   },
+   "total": 513,
+   "source": "Câmara dos Deputados/SGM via CNN Brasil (05/10/2026) e Blog Edison Silva/Agência Senado — 99,99% apurado; TSE ainda diplomando; sub judice pode mudar"
   }
  ]
 }

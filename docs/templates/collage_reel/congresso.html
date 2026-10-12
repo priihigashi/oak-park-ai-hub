@@ -32,11 +32,13 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);color:
 .row .val b{font:500 23px JBM;color:var(--mute);margin-left:10px;vertical-align:4px}
 .row.grp .lab{font-size:29px}
 .row.grp .bar{height:54px;top:20px;border-radius:0 27px 27px 0}
-#year{position:absolute;right:80px;top:1185px;font:900 210px/1 IT;letter-spacing:-8px;font-variant-numeric:tabular-nums}
-#tag{position:absolute;right:84px;top:1160px;font:700 22px JBM;letter-spacing:2px;padding:8px 14px;color:#fff;white-space:nowrap}
-#pres{position:absolute;left:80px;top:1290px}
+#year{position:absolute;right:80px;top:1215px;font:900 168px/1 IT;letter-spacing:-6px;font-variant-numeric:tabular-nums}
+#tag{position:absolute;right:84px;top:1182px;font:700 22px JBM;letter-spacing:2px;padding:8px 14px;color:#fff;white-space:nowrap}
+#pres{position:absolute;left:80px;top:1232px;width:470px}
 #pres .k{font:700 19px JBM;letter-spacing:4px;color:var(--mute)}
-#pres .n{font:900 54px/1.05 IT;margin-top:6px}
+#pres .n{font:900 46px/1.05 IT;margin-top:8px}
+#pres .sp{display:inline-block;font:700 18px JBM;letter-spacing:2px;color:#fff;padding:5px 10px;margin-left:10px;border-radius:4px;vertical-align:1px}
+#pres .note{font:500 18px/1.3 JBM;color:var(--mute);margin-top:8px}
 #rank{position:absolute;left:80px;top:1440px;width:920px}
 #rank .h{font:700 19px JBM;letter-spacing:4px;color:var(--mute);padding-bottom:12px;border-bottom:2px solid var(--ink)}
 #rank .r{display:flex;align-items:center;height:70px;border-bottom:1px solid var(--line);font:900 34px/70px IT}
@@ -56,18 +58,18 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);color:
 </style></head><body>
 <div id="flag"></div>
 <div id="t1">Quem <em>governa</em><br>de verdade?</div>
-<div id="t2">E QUEM PRECISA NEGOCIAR COM QUEM · CÂMARA 1995–2023</div>
+<div id="t2">E QUEM PRECISA NEGOCIAR COM QUEM · CÂMARA 1995–2027</div>
 <div id="axis"></div><div id="grid"></div><div id="maj"></div><div id="majl">MAIORIA · 257</div>
 <div id="rows"></div>
 <div id="tag"></div><div id="year">1995</div>
-<div id="pres"><div class="k">PRESIDENTE</div><div class="n"></div></div>
+<div id="pres"><div class="k">PRESIDENTE<span class="sp"></span></div><div class="n"></div><div class="note"></div></div>
 <div id="rank"><div class="h">PLACAR DA CÂMARA · QUEM ESTÁ EM CIMA, NO MEIO E EMBAIXO</div>
  <div class="r"><div class="p">1º MAIORIA</div><div class="nm"><span></span></div><div class="v"></div></div>
  <div class="r"><div class="p">2º</div><div class="nm"><span></span></div><div class="v"></div></div>
  <div class="r"><div class="p">3º</div><div class="nm"><span></span></div><div class="v"></div></div></div>
 <div id="neg"></div>
 <div id="tl"><div class="base"></div><div class="fill"></div></div>
-<div id="src">Bancadas eleitas: TSE · Espectro: Bolognesi, Ribeiro &amp; Codato (2023), pesquisa com cientistas políticos — mesma régua pra todos os partidos.</div>
+<div id="src">Bancadas eleitas: TSE (2026: Câmara/SGM, 99,99% apurado) · Espectro: Bolognesi, Ribeiro &amp; Codato (2023), pesquisa com cientistas políticos — mesma régua pra todos os partidos.</div>
 <div id="grain"></div>
 <script>
 const T=[ // ano de início, presidente, espectro do presidente, E,CE,C,CD,D  (bancada eleita)
@@ -75,9 +77,10 @@ const T=[ // ano de início, presidente, espectro do presidente, E,CE,C,CD,D  (b
  [2003,'LULA · PT','E',103,43,20,27,313],[2007,'LULA · PT','E',99,51,34,28,300],
  [2011,'DILMA · PT','E',106,62,27,30,288],[2015,'DILMA · PT','E',84,53,18,49,309],
  [2016,'TEMER · MDB','D',84,53,18,49,309],[2019,'BOLSONARO · PSL','D',75,60,13,39,326],
- [2023,'LULA · PT','E',95,31,0,12,375]];
-const END=2026;
-const COL={gD:'#2b5fc4',D:'#5b86d6',CD:'#a9c1ec',C:'#c8c6c0',CE:'#f2aaa1',E:'#e2675c',gE:'#c63b33'};
+ [2023,'LULA · PT','E',95,31,0,12,375],
+ [2027,'EM DISPUTA','?',103,21,0,12,376]]; // eleita em 04/10/2026; 99,99% apurado, TSE ainda diplomando; Missão (1) não classificado
+const END=2027;
+const COL={gD:'#2b5fc4',D:'#5b86d6',CD:'#a9c1ec',C:'#e3b23c',CE:'#f2aaa1',E:'#e2675c',gE:'#c63b33'};
 const ROWS=[['gD','Bloco direita','Dir. + Centro-dir.',v=>v.D+v.CD,1],['D','Direita','pura',v=>v.D,0],['CD','Centro-direita','pura',v=>v.CD,0],
  ['C','Centro','',v=>v.C,0],['CE','Centro-esquerda','pura',v=>v.CE,0],['E','Esquerda','pura',v=>v.E,0],['gE','Bloco esquerda','Esq. + Centro-esq.',v=>v.E+v.CE,1]];
 const X0=380, W=520/420, RH=98, TOP=455;
@@ -112,19 +115,20 @@ function render(T_){
     el.children[2].innerHTML=`${Math.round(n)}<b>(${(n/513*100).toFixed(0)}%)</b>`;});
   year.textContent=T_<INTRO?1995:cur.year;
   const dy=cur.start?0:Math.max(0,1-(T_-cur.t)/.08)*-18; year.style.transform=`translateY(${dy}px)`;
-  tag.textContent=a[1].split(' · ')[0]+' ASSUME'; tag.style.background=a[2]==='E'?COL.gE:COL.gD;
+  tag.textContent=a[2]==='?'?'NOVA CÂMARA ELEITA':a[1].split(' · ')[0]+' ASSUME'; tag.style.background=a[2]==='E'?COL.gE:(a[2]==='D'?COL.gD:'#151515');
   tag.style.opacity=(cur.start&&T_>=INTRO)?Math.min(1,(T_-startT)/.3):0;
-  pres.children[1].textContent=a[1];
   const g=grp(v).map(x=>[x[0],Math.round(x[1])]), gb=grp(vb);
   rank.querySelectorAll('.r').forEach((row,i)=>{const sp=row.querySelector('.nm span'); const changed=k&&gb[i][0]!==g[i][0];
     sp.textContent=g[i][0]; sp.style.color=g[i][0]==='Bloco direita'?COL.gD:(g[i][0]==='Bloco esquerda'?COL.gE:'#151515'); sp.style.transform=changed?`translateY(${((1-p)*70).toFixed(1)}px)`:'none';
     row.querySelector('.v').innerHTML=`${g[i][1]}<b>${(g[i][1]/513*100).toFixed(0)}%</b>`;});
-  const half=k&&p<.5, A=half?b:a, VA=half?vb:va;
-  pres.children[1].textContent=A[1];
+  const half=k&&p<.5, A0=a, A=half?b:a, VA=half?vb:va;
+  pres.children[1].textContent=A0[1];
+  { const sp=pres.querySelector('.sp'); sp.textContent=A0[2]==='?'?'':SP[A0[2]].toUpperCase(); sp.style.display=A0[2]==='?'?'none':'inline-block'; sp.style.background=A0[2]==='E'?COL.gE:COL.gD;
+    pres.querySelector('.note').textContent=A0[2]==='?'?'2º turno em 25/10/2026. Câmara eleita em 04/10 (99,99% apurado; 1 cadeira do Missão sem classificação).':''; }
   const dir=VA.D+VA.CD, esq=VA.E+VA.CE, cong=dir>=257?'direita':(esq>=257?'esquerda':'sem maioria');
-  neg.innerHTML=SP[A[2]]===cong?`Presidente de <u>${SP[A[2]]}</u> com Câmara de <u>${cong}</u>: maioria própria, não depende da oposição.`
+  neg.innerHTML=A[2]==='?'?`Quem vencer o 2º turno vai governar com uma Câmara de <u>${cong}</u> — ${dir} de 513 cadeiras.`:SP[A[2]]===cong?`Presidente de <u>${SP[A[2]]}</u> com Câmara de <u>${cong}</u>: maioria própria, não depende da oposição.`
     :`Presidente de <u>${SP[A[2]]}</u> precisa negociar com uma Câmara de <u>${cong}</u> — ${dir} de 513 cadeiras.`;
-  if(T_>t) neg.innerHTML='Em <u>8 de 8</u> Câmaras eleitas desde 1994, o bloco da direita teve maioria.';
+  if(T_>t) neg.innerHTML='Em <u>9 de 9</u> Câmaras eleitas desde 1994, o bloco da direita teve maioria.';
   neg.style.opacity=T_<INTRO?0:(k&&p<1?Math.max(.0,Math.abs(p-.5)*2):1);
   tl.querySelector('.fill').style.width=Math.min(920,(cur.year-1995+(T_<INTRO?0:.5))/(END-1995)*920)+'px';
 }
