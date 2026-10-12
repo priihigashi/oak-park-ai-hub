@@ -8,6 +8,17 @@ Demo renderizado de cada entrada: `repertorio.html` → `node capture.js demo.mp
 
 ---
 
+## REGRA DE USO — inspiração, NÃO cópia (ler antes de montar qualquer reel)
+O repertório é uma **caixa de ferramentas**, não um molde. Uma referência ensina *movimentos*; ela nunca define o reel inteiro.
+1. **Mistura obrigatória:** todo reel combina presets de **pelo menos 2 fontes** (REF 00 clássico + REF 01 + futuras). Nenhuma referência sozinha passa de ~40% das cenas.
+2. **O tema decide o visual, não a referência:** primeiro o roteiro e o dado; depois escolher os presets que servem àquela cena. Nunca começar por "vou fazer no estilo X".
+3. **Nunca reproduzir a sequência, a paleta ou a capa de uma referência.** Ex.: REF 01 = fundo preto + duotone vermelho/azul + palavra por batida + karaokê amarelo → no nosso reel usar 1–2 dessas ideias, com a NOSSA paleta (ardósia × ouro, papel, tinta) e nossas fontes.
+4. **Pelo menos 1 coisa nova por reel** (combinação inédita, cor de bloco diferente, preset usado de outro jeito).
+5. **Teste anti-cópia antes do render:** pôr o contact sheet do nosso reel ao lado do contact sheet de cada referência. Se alguém diria "é igual ao vídeo X" → trocar paleta/ordem/presets até não dizer.
+6. **Variar entre episódios:** registrar no STORY doc quais presets/paleta foram usados; o próximo reel não repete a mesma combinação principal.
+
+---
+
 ## REF 00 — motor clássico (episódio 1, "Comida subiu mais?")
 Demo: `repertorio_classico.html` (30 s) — cada cena com o nome do preset embaixo:
 pop + data-bob (sticker) · slam + data-shake (recorte de jornal) · up escalonado · left · fade (fonte) · receipt + .cnt (contador com tique) ·
