@@ -31,6 +31,7 @@ test('weekly private coordinator links verified research, article, and preview w
   const runner = (script, args) => {
     calls.push(path.basename(script));
     if (script.endsWith('discover-sources.js')) {
+      if (calls.filter(name => name === 'discover-sources.js').length === 2) return { output: { status: 'research-hold', sourceCount: 0, runDir: path.join(temp, 'research-hold') } };
       const snapshot = path.join(temp, 'prepared.json');
       fs.writeFileSync(snapshot, '{}');
       return { output: { status: 'source-shortlist-ready', sourceCount: 2, runDir: path.join(temp, 'research-receipt'), snapshot } };
@@ -44,7 +45,7 @@ test('weekly private coordinator links verified research, article, and preview w
     assert.equal(status.status, 'ready-for-human-review');
     assert.equal(status.editorialScore, 88);
     assert.match(status.previewSha256, /^[a-f0-9]{64}$/);
-    assert.deepEqual(calls, ['discover-sources.js', 'cli.js', 'generate-blog-review-preview.mjs']);
+    assert.deepEqual(calls, ['discover-sources.js', 'cli.js', 'generate-blog-review-preview.mjs', 'discover-sources.js']);
     assert.deepEqual(queuedRuns(out).map(item => item.intentKey), ['commercial-cu:fort-lauderdale']);
     assert.deepEqual(queuedRuns(out).map(item => item.editorialScore), [88]);
     assert.equal(readQueue(path.join(out, 'review-queue.json')).items[0].state, 'pending');
@@ -76,7 +77,7 @@ test('weekly coordinator records research hold and refuses publication paths', (
   }
 });
 
-test('held article triggers a different topic in the same run and stops after a reviewable draft', () => {
+test('held article triggers a different topic and continues after a reviewable draft', () => {
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'opc-weekly-retry-'));
   const input = path.join(temp, 'ideas.json');
   const out = path.join(temp, 'private');
@@ -95,8 +96,9 @@ test('held article triggers a different topic in the same run and stops after a 
     const result = runAttempt({ input, siteFrontend: temp, out }, (script, args) => {
       if (script.endsWith('discover-sources.js')) {
         const staged = JSON.parse(fs.readFileSync(args[1], 'utf8'));
-        assert.deepEqual(staged.existing.map(item => item.intentKey), searches ? ['topic-a:broward'] : []);
+        assert.deepEqual(staged.existing.map(item => item.intentKey), searches === 0 ? [] : searches === 1 ? ['topic-a:broward'] : ['topic-b:broward', 'topic-a:broward']);
         searches += 1;
+        if (searches === 3) return { output: { status: 'research-hold', sourceCount: 0, runDir: path.join(temp, 'research-3') } };
         return { output: { status: 'source-shortlist-ready', sourceCount: 2, runDir: path.join(temp, `research-${searches}`), snapshot: input } };
       }
       if (script.endsWith('cli.js')) return { output: searches === 1
@@ -105,11 +107,42 @@ test('held article triggers a different topic in the same run and stops after a 
       fs.writeFileSync(args[1], '<html>Private preview</html>');
       return { output: args[1] };
     });
-    assert.equal(searches, 2);
+    assert.equal(searches, 3);
     assert.equal(result.status, 'ready-for-human-review');
     assert.equal(result.attempt, 2);
     assert.deepEqual(heldRuns(out).map(item => item.intentKey), ['topic-a:broward']);
     assert.deepEqual(queuedRuns(out).map(item => item.intentKey), ['topic-b:broward']);
+  } finally { fs.rmSync(temp, { recursive: true, force: true }); }
+});
+
+test('reviewable drafts stay queued while the coordinator tries distinct topics up to three attempts', () => {
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'opc-weekly-ready-retry-'));
+  const input = path.join(temp, 'ideas.json');
+  const out = path.join(temp, 'private');
+  fs.writeFileSync(input, JSON.stringify({ candidates: [], existing: [], sources: [] }));
+  const runs = ['a', 'b', 'c'].map(id => writeRun(path.join(temp, 'articles'), {
+    snapshot: { snapshotAt: new Date().toISOString() }, selection: { selected: { id } },
+    brief: { intentKey: `${id}:broward`, readerDecision: `Decide ${id}` },
+    draft: { title: `Draft ${id}`, body: 'Private article.' },
+    review: { decision: 'pass' }, sources: [], gate: [], status: 'draft-ready-for-human-review',
+  }));
+  let searches = 0;
+  try {
+    const result = runAttempt({ input, siteFrontend: temp, out }, (script, args) => {
+      if (script.endsWith('discover-sources.js')) {
+        const staged = JSON.parse(fs.readFileSync(args[1], 'utf8'));
+        assert.deepEqual(staged.existing.map(item => item.intentKey), ['a', 'b', 'c'].slice(0, searches).map(id => `${id}:broward`));
+        searches += 1;
+        return { output: { status: 'source-shortlist-ready', sourceCount: 2, runDir: path.join(temp, `research-${searches}`), snapshot: input } };
+      }
+      if (script.endsWith('cli.js')) return { output: { status: 'draft-ready-for-human-review', runDir: runs[searches - 1], selectedId: ['a', 'b', 'c'][searches - 1] } };
+      fs.writeFileSync(args[1], '<html>Private preview</html>');
+      return { output: args[1] };
+    });
+    assert.equal(searches, 3);
+    assert.equal(result.status, 'ready-for-human-review');
+    assert.equal(queuedRuns(out).length, 3);
+    assert.equal(readQueue(path.join(out, 'review-queue.json')).items.length, 3);
   } finally { fs.rmSync(temp, { recursive: true, force: true }); }
 });
 

@@ -156,7 +156,7 @@ function executeAttempt(options, runner, raw, dir, attempt, selectedIds) {
   const articleRun = readVerifiedRun(article.runDir);
   const preview = path.join(dir, 'preview.html');
   runner(path.join(options.siteFrontend, 'scripts/generate-blog-review-preview.mjs'), [article.runDir, preview], { json: false });
-  return { status: queueReady(options, writeStatus(dir, { ...base, articleRun: article.runDir, articleReceiptHash: articleRun.receiptHash, selectedId: article.selectedId, intentKey: articleRun.brief.intentKey, editorialScore: articleRun.editorialScore?.score ?? null, preview, previewSha256: digestFile(preview), status: 'ready-for-human-review' })), retry: false };
+  return { status: queueReady(options, writeStatus(dir, { ...base, articleRun: article.runDir, articleReceiptHash: articleRun.receiptHash, selectedId: article.selectedId, intentKey: articleRun.brief.intentKey, editorialScore: articleRun.editorialScore?.score ?? null, preview, previewSha256: digestFile(preview), status: 'ready-for-human-review' })), retry: attempt < 3 };
 }
 function runAttempt(options, runner = command) {
   const raw = JSON.parse(fs.readFileSync(options.input, 'utf8'));
@@ -165,7 +165,7 @@ function runAttempt(options, runner = command) {
   fs.mkdirSync(lock);
   let dir;
   try {
-    const prior = attemptedThisWeek(options.out);
+    const prior = preparedThisWeek(options.out) || attemptedThisWeek(options.out);
     if (prior) {
       queueReady(options, prior);
       dir = path.join(options.out, new Date().toISOString().replace(/[:.]/g, '-') + '-' + crypto.randomBytes(4).toString('hex'));
@@ -177,7 +177,7 @@ function runAttempt(options, runner = command) {
       dir = path.join(options.out, new Date().toISOString().replace(/[:.]/g, '-') + '-' + crypto.randomBytes(4).toString('hex'));
       fs.mkdirSync(dir);
       const result = executeAttempt(options, runner, raw, dir, attempt, selectedIds);
-      if (!result.retry) return result.status;
+      if (!result.retry) return preparedThisWeek(options.out) || result.status;
     }
   } catch (error) {
     if (dir && !fs.existsSync(path.join(dir, 'status.json'))) writeStatus(dir, { status: 'failed', error: error.message });
