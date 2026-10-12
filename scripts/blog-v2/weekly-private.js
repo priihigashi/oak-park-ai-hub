@@ -131,6 +131,28 @@ function writeStatus(dir, status) {
   fs.writeFileSync(path.join(dir, 'receipt.json'), JSON.stringify({ rulesVersion: 'weekly-private-v1', statusSha256: digestFile(file) }, null, 2) + '\n', { flag: 'wx' });
   return stamped;
 }
+function executeAttempt(options, runner, raw, dir, attempt, selectedIds) {
+  const queued = [...queuedRuns(options.out), ...heldRuns(options.out), ...reviewedRuns(options.reviewRunsFile)];
+  const staged = path.join(dir, 'input.json');
+  fs.writeFileSync(staged, JSON.stringify(stagedInput(raw, queued), null, 2) + '\n', { flag: 'wx' });
+  const researchArgs = ['--input', staged, '--site-frontend', options.siteFrontend, '--out', path.join(dir, 'research')];
+  if (options.suggestionsFile) researchArgs.push('--suggestions-file', path.resolve(options.suggestionsFile));
+  const research = runner(path.join(__dirname, 'discover-sources.js'), researchArgs).output;
+  const base = { inputSha256: digestFile(staged), researchRun: research.runDir, sourceCount: research.sourceCount, queuedIntentCount: queued.length, attempt };
+  if (research.status !== 'source-shortlist-ready') return { status: writeStatus(dir, { ...base, status: 'research-hold' }), retry: false };
+  const article = runner(path.join(__dirname, 'cli.js'), ['--input', research.snapshot, '--site-frontend', options.siteFrontend, '--out', path.join(dir, 'drafts'), '--provider', 'codex']).output;
+  if (selectedIds.has(article.selectedId)) throw new Error(`Research repeated held topic: ${article.selectedId}`);
+  selectedIds.add(article.selectedId);
+  if (article.status !== 'draft-ready-for-human-review') {
+    const held = writeStatus(dir, { ...base, articleRun: article.runDir, selectedId: article.selectedId, status: 'article-hold', gate: article.gate });
+    const run = heldRuns(options.out).find(item => item.id === 'held:' + path.basename(article.runDir));
+    return { status: held, retry: Boolean(run?.intentKey) && attempt < 3 };
+  }
+  const articleRun = readVerifiedRun(article.runDir);
+  const preview = path.join(dir, 'preview.html');
+  runner(path.join(options.siteFrontend, 'scripts/generate-blog-review-preview.mjs'), [article.runDir, preview], { json: false });
+  return { status: writeStatus(dir, { ...base, articleRun: article.runDir, articleReceiptHash: articleRun.receiptHash, selectedId: article.selectedId, intentKey: articleRun.brief.intentKey, preview, previewSha256: digestFile(preview), status: 'ready-for-human-review' }), retry: false };
+}
 function runAttempt(options, runner = command) {
   const raw = JSON.parse(fs.readFileSync(options.input, 'utf8'));
   fs.mkdirSync(options.out, { recursive: true });
@@ -138,24 +160,19 @@ function runAttempt(options, runner = command) {
   fs.mkdirSync(lock);
   let dir;
   try {
-    dir = path.join(options.out, new Date().toISOString().replace(/[:.]/g, '-') + '-' + crypto.randomBytes(4).toString('hex'));
-    fs.mkdirSync(dir);
-    const queued = [...queuedRuns(options.out), ...heldRuns(options.out), ...reviewedRuns(options.reviewRunsFile)];
     const prior = attemptedThisWeek(options.out);
-    if (prior) return writeStatus(dir, skippedAttempt(prior));
-    const staged = path.join(dir, 'input.json');
-    fs.writeFileSync(staged, JSON.stringify(stagedInput(raw, queued), null, 2) + '\n', { flag: 'wx' });
-    const researchArgs = ['--input', staged, '--site-frontend', options.siteFrontend, '--out', path.join(dir, 'research')];
-    if (options.suggestionsFile) researchArgs.push('--suggestions-file', path.resolve(options.suggestionsFile));
-    const research = runner(path.join(__dirname, 'discover-sources.js'), researchArgs).output;
-    const base = { inputSha256: digestFile(staged), researchRun: research.runDir, sourceCount: research.sourceCount, queuedIntentCount: queued.length };
-    if (research.status !== 'source-shortlist-ready') return writeStatus(dir, { ...base, status: 'research-hold' });
-    const article = runner(path.join(__dirname, 'cli.js'), ['--input', research.snapshot, '--site-frontend', options.siteFrontend, '--out', path.join(dir, 'drafts'), '--provider', 'codex']).output;
-    if (article.status !== 'draft-ready-for-human-review') return writeStatus(dir, { ...base, articleRun: article.runDir, status: 'article-hold', gate: article.gate });
-    const articleRun = readVerifiedRun(article.runDir);
-    const preview = path.join(dir, 'preview.html');
-    runner(path.join(options.siteFrontend, 'scripts/generate-blog-review-preview.mjs'), [article.runDir, preview], { json: false });
-    return writeStatus(dir, { ...base, articleRun: article.runDir, articleReceiptHash: articleRun.receiptHash, selectedId: article.selectedId, intentKey: articleRun.brief.intentKey, preview, previewSha256: digestFile(preview), status: 'ready-for-human-review' });
+    if (prior) {
+      dir = path.join(options.out, new Date().toISOString().replace(/[:.]/g, '-') + '-' + crypto.randomBytes(4).toString('hex'));
+      fs.mkdirSync(dir);
+      return writeStatus(dir, skippedAttempt(prior));
+    }
+    const selectedIds = new Set();
+    for (let attempt = 1; attempt <= 3; attempt += 1) {
+      dir = path.join(options.out, new Date().toISOString().replace(/[:.]/g, '-') + '-' + crypto.randomBytes(4).toString('hex'));
+      fs.mkdirSync(dir);
+      const result = executeAttempt(options, runner, raw, dir, attempt, selectedIds);
+      if (!result.retry) return result.status;
+    }
   } catch (error) {
     if (dir && !fs.existsSync(path.join(dir, 'status.json'))) writeStatus(dir, { status: 'failed', error: error.message });
     throw error;

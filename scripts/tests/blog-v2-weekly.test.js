@@ -72,6 +72,43 @@ test('weekly coordinator records research hold and refuses publication paths', (
   }
 });
 
+test('held article triggers a different topic in the same run and stops after a reviewable draft', () => {
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'opc-weekly-retry-'));
+  const input = path.join(temp, 'ideas.json');
+  const out = path.join(temp, 'private');
+  fs.writeFileSync(input, JSON.stringify({ snapshotAt: new Date().toISOString(), candidates: [], existing: [], sources: [] }));
+  const makeRun = (id, status) => writeRun(path.join(temp, 'articles'), {
+    snapshot: { snapshotAt: new Date().toISOString() }, selection: { selected: { id } },
+    brief: { intentKey: `${id}:broward`, readerDecision: `Decide ${id}` },
+    draft: { title: `Draft ${id}`, body: 'Private article.' }, sources: [],
+    review: { decision: status === 'draft-ready-for-human-review' ? 'pass' : 'revise' },
+    gate: status === 'draft-ready-for-human-review' ? [] : ['review-blocked'], status,
+  });
+  const heldRun = makeRun('topic-a', 'revision-gate-failed');
+  const readyRun = makeRun('topic-b', 'draft-ready-for-human-review');
+  let searches = 0;
+  try {
+    const result = runAttempt({ input, siteFrontend: temp, out }, (script, args) => {
+      if (script.endsWith('discover-sources.js')) {
+        const staged = JSON.parse(fs.readFileSync(args[1], 'utf8'));
+        assert.deepEqual(staged.existing.map(item => item.intentKey), searches ? ['topic-a:broward'] : []);
+        searches += 1;
+        return { output: { status: 'source-shortlist-ready', sourceCount: 2, runDir: path.join(temp, `research-${searches}`), snapshot: input } };
+      }
+      if (script.endsWith('cli.js')) return { output: searches === 1
+        ? { status: 'revision-gate-failed', runDir: heldRun, selectedId: 'topic-a', gate: ['review-blocked'] }
+        : { status: 'draft-ready-for-human-review', runDir: readyRun, selectedId: 'topic-b' } };
+      fs.writeFileSync(args[1], '<html>Private preview</html>');
+      return { output: args[1] };
+    });
+    assert.equal(searches, 2);
+    assert.equal(result.status, 'ready-for-human-review');
+    assert.equal(result.attempt, 2);
+    assert.deepEqual(heldRuns(out).map(item => item.intentKey), ['topic-a:broward']);
+    assert.deepEqual(queuedRuns(out).map(item => item.intentKey), ['topic-b:broward']);
+  } finally { fs.rmSync(temp, { recursive: true, force: true }); }
+});
+
 test('held article intent joins next research input only after receipt verification', () => {
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'opc-weekly-held-'));
   const out = path.join(temp, 'private');
