@@ -11,7 +11,7 @@ const { addThreeViewFigure } = require('./three-view-figure');
 const { companyScope } = require('./company-scope');
 const { planMedia } = require('./media-plan');
 const { addSiteInventory } = require('./site-inventory');
-const { scoreEditorial } = require('./editorial-score');
+const { scoreEditorial, scoreDualEditorial } = require('./editorial-score');
 
 function option(name) { const i = process.argv.indexOf(name); return i < 0 ? null : process.argv[i + 1]; }
 function parseJson(text, label) { try { return JSON.parse(text.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/, '')); } catch (error) { throw new Error(`${label} did not return JSON: ${error.message}`); } }
@@ -129,6 +129,19 @@ function prepareContext(options) {
   const { intake, snapshot, selection } = prepareSelection(rawSnapshot);
   return { rawSnapshot, intake, snapshot, selection };
 }
+function finalReviews(provider, brief, draft, sources, claudeReviewResult) {
+  const codexReview = provider === 'codex' ? codexJson(reviewPrompt(brief, draft, sources), 'Codex independent final review') : null;
+  return combineFinalReviews(provider, brief, draft, sources, claudeReviewResult, codexReview);
+}
+function combineFinalReviews(provider, brief, draft, sources, claudeReviewResult, codexReview) {
+  const gate = reviewGate(draft, brief, sources, claudeReviewResult);
+  if (provider === 'codex') {
+    if (!codexReview) gate.push('codex:review-missing');
+    else gate.push(...reviewGate(draft, brief, sources, codexReview).map(reason => `codex:${reason}`));
+  }
+  const editorialScore = codexReview ? scoreDualEditorial(claudeReviewResult, codexReview, gate) : scoreEditorial(claudeReviewResult, gate);
+  return { codexReview, gate, editorialScore };
+}
 async function main() {
   const options = parseOptions();
   const context = prepareContext(options);
@@ -138,10 +151,9 @@ async function main() {
   const bundle = generateBundle(options.provider, brief, sources, priorRun ? context : null);
   const { draft, review } = bundle;
   const mediaPlan = planMedia(rawSnapshot.mediaCatalog, brief);
-  const gate = reviewGate(draft, brief, sources, review);
-  const editorialScore = scoreEditorial(review, gate);
+  const { codexReview, gate, editorialScore } = finalReviews(options.provider, brief, draft, sources, review);
   const status = bundleStatus(bundle, gate);
-  const runDir = writeRun(options.out, { rawSnapshot, intake, snapshot, selection, sources, brief, mediaPlan, ...bundle, ...(priorRun ? { priorRun } : {}), gate, editorialScore, status });
+  const runDir = writeRun(options.out, { rawSnapshot, intake, snapshot, selection, sources, brief, mediaPlan, ...bundle, ...(codexReview ? { codexReview } : {}), reviewProviders: codexReview ? ['claude', 'codex'] : ['fixture'], ...(priorRun ? { priorRun } : {}), gate, editorialScore, status });
   console.log(JSON.stringify({ runDir, selectedId: brief.id, status, gate, editorialScore: editorialScore.score, provider: options.provider, revisionAttempted: Boolean(bundle.revisedDraft) }));
   if (gate.length) process.exitCode = 2;
 }
@@ -211,4 +223,4 @@ function bundleStatus(bundle, gate) {
   return bundle.revisedDraft ? 'revision-gate-failed' : 'review-required';
 }
 if (require.main === module) main().catch(error => { console.error(error.message); process.exitCode = 1; });
-module.exports = { verifySources, textOnly, draftPrompt, reviewPrompt, revisionPrompt, needsRevision, loadPriorRun, generateBundle, reviewGate, claudeProgram, claudeReview, bundleStatus };
+module.exports = { verifySources, textOnly, draftPrompt, reviewPrompt, revisionPrompt, needsRevision, loadPriorRun, generateBundle, reviewGate, combineFinalReviews, claudeProgram, claudeReview, bundleStatus };

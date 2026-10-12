@@ -22,4 +22,18 @@ function scoreEditorial(review, gate) {
   return { rubricVersion: 'opc-blog-editorial-v1', score, criteria: CRITERIA, ratings, route: gate.length ? 'blocked' : 'human-review', reasons };
 }
 
-module.exports = { CRITERIA, scoreEditorial };
+function scoreDualEditorial(claudeReview, codexReview, gate) {
+  const claude = scoreEditorial(claudeReview, gate);
+  const codex = scoreEditorial(codexReview, gate);
+  return {
+    rubricVersion: 'opc-blog-editorial-v1',
+    score: claude.score === null || codex.score === null ? null : Math.min(claude.score, codex.score),
+    criteria: CRITERIA,
+    providerScores: { claude: claude.score, codex: codex.score },
+    providerRatings: { claude: claude.ratings || null, codex: codex.ratings || null },
+    route: gate.length ? 'blocked' : 'human-review',
+    reasons: [...new Set([...claude.reasons, ...codex.reasons])],
+  };
+}
+
+module.exports = { CRITERIA, scoreEditorial, scoreDualEditorial };

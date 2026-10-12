@@ -6,7 +6,7 @@ const path = require('node:path');
 const { selectTopic, validateDraft, formatErrors, terminalArtifactErrors, geographicErrors, claimGeographyErrors, diagramErrors, writeRun, bodyWordCount, sourceGeographyErrors } = require('../blog-v2/pipeline');
 const { addReviewFigure } = require('../blog-v2/review-figure');
 const { addThreeViewFigure } = require('../blog-v2/three-view-figure');
-const { verifySources, textOnly, needsRevision, loadPriorRun, generateBundle, bundleStatus, draftPrompt, reviewPrompt: articleReviewPrompt, revisionPrompt } = require('../blog-v2/cli');
+const { verifySources, textOnly, needsRevision, loadPriorRun, generateBundle, bundleStatus, combineFinalReviews, draftPrompt, reviewPrompt: articleReviewPrompt, revisionPrompt } = require('../blog-v2/cli');
 const { batchGate, readVerifiedRun, reviewPrompt } = require('../blog-v2/batch-review');
 const { verifiedCompanyService, standaloneTradeErrors } = require('../blog-v2/company-scope');
 const { planMedia } = require('../blog-v2/media-plan');
@@ -388,6 +388,16 @@ test('revision trigger includes reviewer decision or a major finding', () => {
   assert.equal(needsRevision({ decision: 'revise', findings: [] }), true);
   assert.equal(needsRevision({ decision: 'pass', findings: [{ severity: 'major' }] }), true);
   assert.equal(needsRevision({ decision: 'pass', findings: [{ severity: 'minor' }] }), false);
+});
+test('final Codex review can veto Claude and the lower score is retained', () => {
+  const keys = ['readerAnswer', 'factualSupport', 'serviceAndAreaFit', 'clarity', 'searchIntent', 'visualIntegrity'];
+  const rated = (rating, findings = []) => ({ decision: 'pass', findings, ratings: Object.fromEntries(keys.map(key => [key, { rating, evidence: `Exact draft evidence for ${key}` }])) });
+  const draft = { title: 'Guide', description: 'Guide', body: Array(410).fill('guidance').join(' '), claims: [], visuals: [] };
+  const result = combineFinalReviews('codex', candidate, draft, [source], rated(4), rated(3, [{ severity: 'major', issue: 'Unsupported claim' }]));
+  assert.equal(result.editorialScore.score, 75);
+  assert.equal(result.editorialScore.route, 'blocked');
+  assert.ok(result.gate.includes('codex:independent-review-findings'));
+  assert.ok(combineFinalReviews('codex', candidate, draft, [source], rated(4), null).gate.includes('codex:review-missing'));
 });
 test('failed revised draft has explicit terminal gate status and one-pass prompt', () => {
   assert.equal(bundleStatus({ revisedDraft: {} }, ['claim-not-in-body:c1']), 'revision-gate-failed');
