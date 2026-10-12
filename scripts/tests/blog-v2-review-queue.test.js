@@ -5,7 +5,7 @@ const os = require('node:os');
 const path = require('node:path');
 const crypto = require('node:crypto');
 const { writeRun } = require('../blog-v2/pipeline');
-const { readQueue, enqueueReview, dueNotices, recordAction } = require('../blog-v2/review-queue');
+const { readQueue, enqueueReview, dueNotices, markPreviewViewed, recordAction } = require('../blog-v2/review-queue');
 
 test('private review queue persists one notice and supports snooze and final decision', () => {
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'opc-review-queue-'));
@@ -29,6 +29,8 @@ test('private review queue persists one notice and supports snooze and final dec
     recordAction(file, item.id, 'snoozed', { now, snoozedUntil: '2026-10-13T15:00:00Z' });
     assert.equal(dueNotices(file, now).length, 0);
     assert.equal(dueNotices(file, new Date('2026-10-13T15:00:00Z')).length, 1);
+    assert.throws(() => recordAction(file, item.id, 'approved'), /Open the exact preview/);
+    markPreviewViewed(file, item.id);
     recordAction(file, item.id, 'approved', { now: new Date('2026-10-13T16:00:00Z') });
     assert.equal(dueNotices(file).length, 0);
     assert.equal(readQueue(file).items[0].state, 'approved');

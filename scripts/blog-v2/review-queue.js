@@ -52,6 +52,18 @@ function dueNotices(file, now = new Date()) {
     || (item.state === 'snoozed' && Date.parse(item.snoozedUntil) <= now.getTime()));
 }
 
+function markPreviewViewed(file, id, now = new Date()) {
+  return mutateQueue(file, queue => {
+    const item = queue.items.find(entry => entry.id === id);
+    if (!item) throw new Error('Unknown review item');
+    const run = readVerifiedRun(item.articleRun);
+    if (run.receiptHash !== item.articleReceiptHash) throw new Error('Article version changed after queueing');
+    verifyPreview(item.preview, item.previewSha256);
+    item.previewOpenedAt = now.toISOString();
+    return item;
+  });
+}
+
 function recordAction(file, id, action, { snoozedUntil, now = new Date() } = {}) {
   if (!['notified', 'approved', 'rejected', 'snoozed', 'queued'].includes(action)) throw new Error('Invalid review action');
   return mutateQueue(file, queue => {
@@ -61,6 +73,7 @@ function recordAction(file, id, action, { snoozedUntil, now = new Date() } = {})
     const run = readVerifiedRun(item.articleRun);
     if (run.receiptHash !== item.articleReceiptHash) throw new Error('Article version changed after queueing');
     verifyPreview(item.preview, item.previewSha256);
+    if (action === 'approved' && !item.previewOpenedAt) throw new Error('Open the exact preview before approval');
     if (action === 'snoozed') {
       const until = Date.parse(snoozedUntil);
       if (!Number.isFinite(until) || until <= now.getTime() || until > now.getTime() + 30 * 86400000) throw new Error('Snooze must be within 30 days');
@@ -72,4 +85,4 @@ function recordAction(file, id, action, { snoozedUntil, now = new Date() } = {})
   });
 }
 
-module.exports = { readQueue, enqueueReview, dueNotices, recordAction };
+module.exports = { readQueue, enqueueReview, dueNotices, markPreviewViewed, recordAction };

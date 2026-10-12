@@ -3,7 +3,7 @@ const http = require('node:http');
 const fs = require('node:fs');
 const crypto = require('node:crypto');
 const { spawnSync } = require('node:child_process');
-const { readQueue, dueNotices, recordAction } = require('./review-queue');
+const { readQueue, dueNotices, markPreviewViewed, recordAction } = require('./review-queue');
 
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 const digest = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
@@ -18,7 +18,9 @@ function activeItems(queueFile) {
 function card(item, token) {
   const form = (action, label, extra = '') => `<form method="post" action="/action/${encodeURIComponent(item.id)}"><input type="hidden" name="token" value="${token}"><input type="hidden" name="action" value="${action}">${extra}<button type="submit">${label}</button></form>`;
   const snooze = `<label>Adiar até <input type="datetime-local" name="until" required></label>`;
-  return `<article><h2>${escapeHtml(item.title)}</h2><p>Nota editorial: ${item.editorialScore == null ? 'pendente' : escapeHtml(item.editorialScore)}/100 · ${escapeHtml(item.state)}</p><a class="preview" href="/preview/${encodeURIComponent(item.id)}?token=${token}" target="_blank" rel="noopener noreferrer">Abrir prévia</a><div class="actions">${form('approved', 'Aprovar rascunho')}${form('rejected', 'Rejeitar')}${form('queued', 'Deixar na fila')}${form('snoozed', 'Adiar', snooze)}</div></article>`;
+  const states = { pending: 'aguardando aviso', notified: 'aguardando sua decisão', snoozed: 'adiado', queued: 'na fila' };
+  const score = item.editorialScore == null ? 'Nota editorial ainda não calculada' : `Nota editorial: ${escapeHtml(item.editorialScore)}/100`;
+  return `<article><h2>${escapeHtml(item.title)}</h2><p>${score} · ${states[item.state] || escapeHtml(item.state)}</p><a class="preview" href="/preview/${encodeURIComponent(item.id)}?token=${token}" target="_blank" rel="noopener noreferrer">Abrir prévia</a><div class="actions">${form('approved', 'Aprovar rascunho')}${form('rejected', 'Rejeitar')}${form('queued', 'Deixar na fila')}${form('snoozed', 'Adiar', snooze)}</div></article>`;
 }
 function page(queueFile, token) {
   const items = activeItems(queueFile);
@@ -41,6 +43,7 @@ function snoozeDate(value) {
 function servePreview(queueFile, id, response) {
   const item = findItem(queueFile, decodeURIComponent(id));
   if (!item) throw new Error('Unknown article');
+  markPreviewViewed(queueFile, item.id);
   response.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store', 'referrer-policy': 'no-referrer', 'content-security-policy': "default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:;" });
   response.end(verifiedPreview(item));
 }
