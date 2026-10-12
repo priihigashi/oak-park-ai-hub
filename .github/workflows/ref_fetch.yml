@@ -64,6 +64,7 @@ jobs:
               with open(v[:-4]+"_transcript.txt","w") as f:
                   for s in segs: f.write(f"[{s.start:6.2f}-{s.end:6.2f}] {s.text.strip()}\n")
           EOF3
+          for v in out/*.mp4; do ffmpeg -loglevel error -y -i "$v" -vn -c:a libmp3lame -q:a 3 "${v%.mp4}_audio.mp3"; done
           rm -rf out/*_frames
       - name: Upload to Drive (template library › repertorio › _entrada)
         env:
