@@ -100,6 +100,13 @@ Cenas recortadas: biblioteca-cenas (ref02_agroecologia).
 
 ---
 
+## REF 05 — @joaoerre (Argentina → Brasil, 134 s) — "nada demais", só o melhor
+**Vale:** cor forte chapada + papel com fibra (amarelo-limão #EFF90C, azul-marinho em degradê #0A1E3F→#18376D, papel #F0EEEF, carvão #232122, vermelho #CB142A só em seta/X) · **pílula marca-texto "gosmenta"** (cada linha com fundo arredondado que se funde nas quebras; Bricolage Grotesque 800) · **rosto rasgado ao meio** (metade de A + metade de B, emenda serrilhada com borda branca) · **letreiro grafite pingando** (Rubik Wet Paint com contorno grosso) · números largos (Unbounded 800) · **linha diagonal "de lá → pra cá"** ligando dois cartões · fundo de moedas reais em close.
+**Movimentos:** Painel Inclinado que Sobe (borda torta ~8°, 0,18 s) · Lista que Acende em Pílulas · X Vermelho que Cancela · Seta que Despenca (desenha durante a fala) · Contador por Dígito na Pílula · Balão Digitado.
+**Não copiar:** campanha; contrafactual de inflação de outro país sem fonte/período (se usar a linha diagonal: fonte, período igual e rótulo SIMULAÇÃO); amarelo + azul como identidade fixa (lê como cor de partido — só como cor de um ato); cenas paradas 10–20 s.
+
+---
+
 ## Variações de template que esse repertório abre
 1. **"Palavra por batida"** (kinetic type puro, fundo preto) — 30–45 s, pra opinião curta / resposta rápida / veredito. Sem gráfico; tudo `.grot` + `glitch` + `.kar`.
 2. **"Retícula"** — o Colagem atual, mas com todas as fotos em `linescreen.py` (B&W) e lados em ardósia × ouro. Mais sério, cara de jornal impresso.

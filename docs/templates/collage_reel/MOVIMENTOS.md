@@ -27,6 +27,7 @@ Isso aparece em TODO reel, seja qual for o look:
 
 | **Editorial Cartão** (REF 03) | cartões tipográficos, 2 cores + creme, grão estático, grid fixo, texto que sobe da régua | listas de feitos, séries ("Nº 1, Nº 2"), explicadores | Montserrat 800 + Newsreader Italic + Mono |
 | **Explicador em Movimento** (REF 04) | grafite com vinheta, flat, cada número vira objeto que se mexe, digitação com cursor | economia, "quanto custa pra você", projeções | Montserrat 900/800 + Source Serif 4 |
+| **Cor Forte + Papel** (REF 05) | 1–2 cores chapadas e saturadas por ato sobre papel com fibra, pílulas marca-texto, letreiro de grafite em uma palavra | economia do dia a dia, "quanto custa", promessa × realidade | Bricolage Grotesque 800 + Unbounded 800 (números) + Mono |
 | **Cor por Ato** (REF 02) | fundos saturados que mudam por ato, objetos em foto real recortada, rosto testemunha embaixo | preço, itens, comparação por categoria | condensada pesada + sans itálica pros números |
 
 > Ideias de looks novos são bem-vindas. Um look novo vira linha aqui quando for usado.
@@ -101,6 +102,13 @@ Cada um diz o que acontece quadro a quadro. Os presets entre `colchetes` são o 
 34. **Contador + Curva Sincronizados** (REF 03/04) — o número conta enquanto a curva se desenha; uma segunda curva (inflação) entra pra comparar. *Ideal:* "subiu X% contra Y% da inflação".
 35. **Linha do Tempo de Pontos** (REF 03) — eixo se desenha e os anos acendem um a um. *Ideal:* quem começou o quê, quando.
 36. **Legenda em Barra (karaokê invertido)** (REF 04) — frase inteira visível numa barra escura, palavras faladas acendem. *Variação do `.kar`.*
+
+38. **Pílula Marca-texto** (REF 05) — cada linha de texto ganha fundo arredondado de cor forte; as linhas se fundem nas quebras. Lê muito bem sobre foto. *Ideal:* frase-chave sobre imagem, listas. *Ideia:* pílula ouro sobre foto em retícula.
+39. **Painel Inclinado que Sobe** (REF 05) — a cena nova sobe com a borda de cima torta (~8°) e endireita no último quadro. *Ideal:* virada de ato com energia.
+40. **X que Cancela** (REF 05) — dois traços vermelhos grossos riscam a promessa/fala; "NÃO" em pílula no centro. *Ideal:* FALSO, promessa não cumprida.
+41. **Seta que Despenca** (REF 05) — seta se desenha na diagonal durante a fala, palavra final maior na ponta. *Ideal:* queda de renda/poder de compra.
+42. **Rosto Rasgado** (REF 05) — metade de uma foto + metade de outra, emenda serrilhada com borda branca. *Ideal:* "o que disse × o que fez" DA MESMA pessoa (duas fotos/datas). *Cuidado:* fundir dois políticos diferentes vira caricatura — só usar se a comparação for um fato documentado.
+43. **Contador por Dígito** (REF 05) — o valor é digitado caractere por caractere dentro da pílula que alarga. *Ideal:* preço antes/depois.
 
 ### Clipe real do personagem — ASSINATURA DA PÁGINA (sempre que existir)
 37. **Da Boca Dele** — um trecho curto (2–6 s) de vídeo REAL da pessoa falando, recortada (cabeça ou corpo) sobre o nosso design, com legenda karaokê e crédito "FONTE · VEÍCULO/CANAL · DATA". Pode ser fala sobre o tema ou comportamento público que mostre quem a pessoa é. *Ideal:* todo reel sobre político — é o que diferencia a gente de quem só usa foto parada. *Regras:* o trecho mantém o sentido que tinha no vídeo inteiro (assistir antes e depois do corte); data e fonte na tela; guardar link original no STORY doc.
