@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<title>Repertório 01 — movimento estilo Antídoto</title>
+<link rel="stylesheet" href="fx.css">
+<style>
+@font-face{font-family:Anton;src:url(assets/anton-latin-400-normal.woff2)}
+@font-face{font-family:JBM;font-weight:500;src:url(assets/jetbrains-mono-latin-500-normal.woff2)}
+@font-face{font-family:JBM;font-weight:700;src:url(assets/jetbrains-mono-latin-700-normal.woff2)}
+:root{--ink:#0E0D0B;--paper:#F2ECE0;--gold:#C9A84C;--red:#C8352B;--slate:#3B5470;--true:#2E8B57}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:#111}
+.scene{position:absolute;inset:0;display:none;overflow:hidden;background:#121212}
+#grain{position:absolute;inset:-40px;background:url(assets/grain.png);opacity:.14;mix-blend-mode:overlay;pointer-events:none;z-index:50}
+.el{position:absolute;will-change:transform}
+.mono{font-family:JBM;font-weight:700;letter-spacing:2px}
+.lbl{left:50px;top:230px;font-size:24px;color:#F2ECE0;opacity:.75;background:rgba(0,0,0,.55);padding:8px 14px;z-index:30}
+.kar{left:90px;width:900px;top:1500px}
+#handle{position:absolute;right:60px;top:300px;font-family:JBM;font-weight:700;font-size:20px;color:#fff;opacity:.8;z-index:60;letter-spacing:2px}
+</style></head><body><div id="stage">
+<div id="handle">@TENTANDOCHEGARATEVOCE</div>
+
+<!-- 1 · DUOTONE RETÍCULA + SCATTER ------------------------------------------------>
+<section class="scene" data-s="0" data-e="4.2" data-in="fade">
+  <div class="el" data-a="dissolve" data-t="0" data-d=".8" data-kb="1.06" style="left:-120px;top:420px;width:820px"><img src="assets/demo/face_red.png" style="width:100%"></div>
+  <div class="el" data-a="dissolve" data-t=".25" data-d=".8" data-kb="1.06" style="left:330px;top:420px;width:820px;mix-blend-mode:screen"><img src="assets/demo/face_blue.png" style="width:100%"></div>
+  <div class="el grot" data-a="scatter" data-t="1.6" data-d=".7" data-boil="1" style="left:0;width:1080px;text-align:center;top:780px;font-size:190px;color:#fff">NENHUM</div>
+  <div class="el kar" data-words="duotone:.2 vermelho:.5 e:.8 azul:.95 /  a:1.6 palavra:1.75 nasce:2.0 espalhada:2.25 e:2.6 se:2.7 junta.:2.85"></div>
+  <div class="el mono lbl" data-a="fade" data-t="0">PRESET · linescreen.py duotone + scatter + boil + karaokê</div>
+</section>
+
+<!-- 2 · PALAVRA ÚNICA COM GLITCH ENTRE ELAS --------------------------------------->
+<section class="scene" data-s="4.2" data-e="7.6" data-in="cut">
+  <div class="el grot" data-a="glitch" data-t="0" data-d=".25" data-o="1.05" data-od=".01" data-boil="1" style="left:0;width:1080px;text-align:center;top:760px;font-size:230px;color:#fff">FALAM.</div>
+  <div class="el grot" data-a="glitch" data-t="1.08" data-d=".25" data-o="2.15" data-od=".01" data-boil="1" style="left:0;width:1080px;text-align:center;top:680px;font-size:230px;color:#fff">LEAL-<br>DADE</div>
+  <div class="el grot" data-a="glitch" data-t="2.18" data-d=".25" data-boil="1" style="left:0;width:1080px;text-align:center;top:760px;font-size:250px;color:#fff">FATO.</div>
+  <div class="el kar" data-words="uma:.1 palavra:.3 por:.55 batida, / troca:1.1 com:1.35 glitch / e:2.2 assenta:2.4 com:2.7 ponto.:2.85"></div>
+  <div class="el mono lbl" data-a="fade" data-t="0">PRESET · .grot + data-a="glitch" + data-boil</div>
+</section>
+
+<!-- 3 · KNOCKOUT SOBRE SILHUETA --------------------------------------------------->
+<section class="scene" data-s="7.6" data-e="10.6" data-in="fade">
+  <div class="el" data-a="dissolve" data-t=".1" data-d=".9" data-drift="0,-40" style="left:190px;top:420px;width:760px"><img class="sil" src="assets/1f99c.png" style="width:100%;transform:scaleX(-1)"></div>
+  <div class="el grot knock" data-a="fade" data-t="0" data-d=".2" style="left:0;width:1080px;text-align:center;top:760px;font-size:250px">FALAM.</div>
+  <div class="el kar" data-words="silhueta:.2 branca / texto:1.0 em:1.25 difference:1.4 /  vira:2.1 preto:2.3 por:2.5 cima.:2.6"></div>
+  <div class="el mono lbl" data-a="fade" data-t="0">PRESET · .sil + .knock (mix-blend difference)</div>
+</section>
+
+<!-- 4 · PALAVRA EMPILHADA --------------------------------------------------------->
+<section class="scene" data-s="10.6" data-e="12.8" data-in="cut">
+  <div class="el stack" data-word="VALORES." data-rows="24" data-t="0" data-d=".55" style="left:40px;top:-20px;font-size:132px"></div>
+  <div class="el mono lbl" data-a="fade" data-t="0">PRESET · .stack (palavra repetida enche a tela)</div>
+</section>
+
+<!-- 5 · QUADRINHO: BALÃO + PAPEL RASGADO + BANDEIRA ------------------------------->
+<section class="scene" data-s="12.8" data-e="16.6" data-in="glitch" data-vhs="1">
+  <div class="el" data-a="dissolve" data-t="0" data-d=".4" data-jit="3" data-kb="1.05" style="left:-60px;top:420px;width:1200px"><img src="assets/demo/face_yellow.png" style="width:100%"></div>
+  <div class="el burst" data-a="pop" data-t=".5" data-d=".3" data-tail="left" data-spikes="20" style="left:430px;top:300px;width:600px;height:460px;font-size:64px">A GENTE<br>VAI TE PEGAR!</div>
+  <div class="el burst" data-a="pop" data-t="1.4" data-d=".3" data-tail="right" data-spikes="16" style="left:40px;top:1060px;width:560px;height:420px;font-size:56px">SEMPRE SOUBE<br>QUE VOCÊ ERA…</div>
+  <div class="el torn" data-a="up" data-t="2.0" data-d=".3" style="left:-10px;width:1100px;top:1640px;height:120px;font-size:44px">(EXEMPLOS DE ATAQUES REAIS — CRÉDITO NA TELA)</div>
+  <div class="el kar" style="top:1520px" data-words="balão:.6 estrelado:.8 / papel:2.0 rasgado:2.2 + VHS:2.6"></div>
+  <div class="el mono lbl" data-a="fade" data-t="0">PRESET · .burst + .torn + data-vhs + data-jit + linescreen amarelo/verde</div>
+</section>
+
+<!-- 6 · OLHO (IRIS) → FOTO COM KEN BURNS ------------------------------------------>
+<section class="scene" data-s="16.6" data-e="20.4" data-in="cut">
+  <div class="el" data-a="iris" data-t="0" data-d=".6" data-o="1.5" data-out="dissolve" data-od=".5" style="left:240px;top:640px;width:600px"><img src="assets/demo/eye_lines.png" style="width:100%"></div>
+  <div class="el" data-a="dissolve" data-t="1.5" data-d=".6" data-kb="1.1" data-kbo="50% 40%" style="left:90px;top:520px;width:900px"><img src="assets/demo/books_lines.png" style="width:100%"></div>
+  <div class="el" data-a="dissolve" data-t="1.7" data-d=".6" data-kb="1.1" style="left:250px;top:640px;width:580px"><img src="assets/demo/globe_lines.png" style="width:100%"></div>
+  <div class="el kar" data-words="olho:.1 abre:.3 em:.5 íris / dissolve:1.5 pra:1.8 colagem / com:2.6 zoom:2.8 lento:3.0"></div>
+  <div class="el mono lbl" data-a="fade" data-t="0">PRESET · iris + data-out="dissolve" + data-kb</div>
+</section>
+
+<!-- 7 · MANCHETE QUE DESCE + TROCA ANTES/DEPOIS ----------------------------------->
+<section class="scene" data-s="20.4" data-e="24.4" data-in="fade">
+  <div class="el" data-a="dissolve" data-t="0" data-d=".5" data-kb="1.07" style="left:40px;top:560px;width:1000px"><img src="assets/demo/cam_lines.png" style="width:100%"></div>
+  <div class="el webcard" data-a="down" data-t=".35" data-d=".35" data-o="1.9" data-out="dissolve" data-od=".35" style="left:60px;top:300px;width:960px">
+    <div class="wbar"></div><div class="src">JORNAL X · 12/03/2022</div><div class="hd">Manchete A: o dado que acusa um lado (refeita, com data)</div></div>
+  <div class="el webcard" data-a="dissolve" data-t="1.95" data-d=".35" style="left:60px;top:300px;width:960px">
+    <div class="wbar" style="background:#2E8B57"></div><div class="src">JORNAL Y · 08/2026</div><div class="hd">Manchete B: o mesmo índice, outro período</div></div>
+  <div class="el kar" data-words="manchete:.35 desce:.6 de:.8 cima / e:1.95 troca:2.1 por:2.3 dissolve:2.45"></div>
+  <div class="el mono lbl" data-a="fade" data-t="0">PRESET · .webcard + down + dissolve (antes/depois)</div>
+</section>
+
+<!-- 8 · CARTÃO VERMELHO DE DADOS -------------------------------------------------->
+<section class="scene" data-s="24.4" data-e="27.4" data-in="cut">
+  <div class="el" data-a="flash" data-t="0" data-d=".3" style="left:70px;top:420px;width:940px;height:1000px;background:var(--red);padding:60px 56px;color:#fff">
+    <div class="bebas" style="font-size:78px">ITEM 1: NÚMERO GRANDE</div><div class="mono" style="font-size:22px;opacity:.8;margin:6px 0 40px">FONTE · SÉRIE · PERÍODO</div>
+    <div class="bebas" style="font-size:78px">ITEM 2: NÚMERO GRANDE</div><div class="mono" style="font-size:22px;opacity:.8;margin:6px 0 40px">FONTE · SÉRIE · PERÍODO</div>
+    <div class="bebas" style="font-size:78px">ITEM 3: NÚMERO GRANDE</div><div class="mono" style="font-size:22px;opacity:.8;margin:6px 0 40px">FONTE · SÉRIE · PERÍODO</div>
+  </div>
+  <div class="el kar" data-words="cartão:.1 de:.3 dados:.45 entra:.7 com:.9 flash"></div>
+  <div class="el mono lbl" data-a="fade" data-t="0">PRESET · data-a="flash" + .bebas</div>
+</section>
+
+<!-- 9 · FECHO --------------------------------------------------------------------->
+<section class="scene" data-s="27.4" data-e="30" data-in="fade">
+  <div class="el" data-a="dissolve" data-t="0" data-d=".6" style="left:-120px;top:420px;width:820px;opacity:.35"><img src="assets/demo/face_red.png" style="width:100%;opacity:.4"></div>
+  <div class="el" data-a="dissolve" data-t="0" data-d=".6" style="left:330px;top:420px;width:820px;mix-blend-mode:screen"><img src="assets/demo/face_blue.png" style="width:100%;opacity:.4"></div>
+  <div class="el grot" data-a="scatter" data-t=".3" data-d=".7" data-boil="1" style="left:0;width:1080px;text-align:center;top:820px;font-size:120px;color:#fff">REPERTÓRIO<br>01</div>
+  <div class="el mono" data-a="fade" data-t="1.0" style="left:0;width:1080px;text-align:center;top:1120px;font-size:28px;color:#F2ECE0">ref.: @doantidoto · motor: collage_reel/fx.js</div>
+</section>
+
+<div id="grain"></div>
+</div>
+<script>window.DUR=30;</script>
+<script src="fx.js"></script>
+<script src="engine.js"></script>
+</body></html>

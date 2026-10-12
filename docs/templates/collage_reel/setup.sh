@@ -3,13 +3,16 @@
 set -e
 cd "$(dirname "$0")"
 [ -f package.json ] || npm init -y >/dev/null
-npm i -s @fontsource/anton @fontsource/fraunces @fontsource/jetbrains-mono @twemoji/svg playwright
+npm i -s @fontsource/anton @fontsource/fraunces @fontsource/jetbrains-mono @fontsource/inter-tight @fontsource/inter @fontsource/bebas-neue @twemoji/svg playwright
 mkdir -p assets
 F=node_modules/@fontsource
 cp $F/anton/files/anton-latin-400-normal.woff2 $F/fraunces/files/fraunces-latin-900-normal.woff2 \
    $F/fraunces/files/fraunces-latin-700-italic.woff2 $F/jetbrains-mono/files/jetbrains-mono-latin-500-normal.woff2 \
    $F/jetbrains-mono/files/jetbrains-mono-latin-700-normal.woff2 assets/
-for e in 1f34c 1f33e 1fad7 1f9c5 1f345 1fad8 2615 1f69c 23f0 1f37d 1f50e; do cp node_modules/@twemoji/svg/$e.svg assets/; done
+# repertório 01 (fx.css): grotesca pesada, legenda itálica, condensada de quadrinho
+cp $F/inter-tight/files/inter-tight-latin-900-normal.woff2 $F/inter-tight/files/inter-tight-latin-800-normal.woff2 \
+   $F/inter/files/inter-latin-800-italic.woff2 $F/bebas-neue/files/bebas-neue-latin-400-normal.woff2 assets/
+for e in 1f34c 1f33e 1fad7 1f9c5 1f345 1fad8 2615 1f69c 23f0 1f37d 1f50e 1f99c 1f441 1f30d 1f4da 1f4f0; do cp node_modules/@twemoji/svg/$e.svg assets/; done
 python3 - <<'PY'
 import numpy as np; from PIL import Image; from scipy.ndimage import gaussian_filter
 r=np.random.default_rng(7)

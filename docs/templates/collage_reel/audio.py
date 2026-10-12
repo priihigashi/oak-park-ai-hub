@@ -1,5 +1,6 @@
 import json, numpy as np, wave, sys
-SR=48000; DUR=72.0; N=int(SR*DUR)
+SR=48000; DUR=float(sys.argv[3]) if len(sys.argv)>3 else 72.0;  # python3 audio.py events.json out.wav [duração]
+N=int(SR*DUR)
 rng=np.random.default_rng(3)
 ev=json.load(open(sys.argv[1]))
 mus=np.zeros(N); sfx=np.zeros(N)
@@ -66,6 +67,10 @@ for s in ev['whoosh'][1:]: add(sfx,max(0,s-.06),whoosh(),.35)
 for s in ev['slap']: add(sfx,s,slap(),.45)
 for s in ev['thud']: add(sfx,s,thud(),.9)
 for s in ev['pop']: add(sfx,s,pop(),.12)
+def zap():  # glitch digital (repertório 01): bitcrush + ruído picotado
+    n=int(.16*SR); t=np.arange(n)/SR; x=np.sign(np.sin(2*np.pi*(1800-9000*t)*t))*(rng.random(n)>.35)
+    x=np.repeat(x[::24],24)[:n]; return x*np.exp(-t*14)*.6
+for s in ev.get('glitch',[]): add(sfx,s,zap(),.22)
 for a,bq in ev['tick']:
     x=a
     while x<bq: add(sfx,x,click(),.25); x+=1/16

@@ -41,13 +41,22 @@ Primeira peça: `reel.html` → "Com o Lula, a comida subiu mais?" (72 s, out/20
 ## Vocabulário de shots (classes do motor)
 `slam` (bate com tremida) · `pop` · `drop` (cai com quique) · `up`/`left` · `fade` · `stamp` (carimbo) · `.cnt` (número que conta) · `.bar`/`.col` (gráfico cresce) · `data-bob` (sticker respirando, tremidinha stop-motion 12 fps) · `data-o` (sai da cena) · `data-shake` (tremor de câmera).
 
+## Repertório extra de movimento (fx.js + fx.css) — ver `REPERTORIO.md`
+Motor agora em `engine.js` (mesmo comportamento do v1; `reel.html` usa ele). `fx.js` acrescenta, sem quebrar nada:
+entradas `glitch` · `scatter` · `dissolve` · `iris` · `down` · `flash` · saídas `data-out="glitch|dissolve|scatter"` ·
+contínuos `data-boil` (tinta fervendo) · `data-kb` (Ken Burns) · `data-drift` · `data-jit` (câmera na mão) ·
+componentes `.kar` (legenda karaokê) · `.stack` (palavra repetida) · `.knock` (texto difference) · `.burst` (balão) · `.torn` (papel rasgado) · `.webcard` (manchete refeita) · `.sil` (silhueta) ·
+cena `data-in="cut|fade|glitch|wipe"` · `data-vhs`. Fontes novas: `.grot` (Inter Tight 900) · `.kar` (Inter 800 itálico) · `.bebas`.
+`linescreen.py` = foto/recorte em retícula de linhas (B&W, duotone, bandeira). `svg2png.js` = emoji/ícone grande em PNG.
+Demo de todos: `repertorio.html` (30 s).
+
 ## Pipeline técnico (determinístico)
 1. `npm i @fontsource/anton @fontsource/fraunces @fontsource/jetbrains-mono @twemoji/svg playwright` → copiar fontes/emojis para `assets/`.
 2. Rostos: foto editorial real (pasta resources/) → `python3 cutout.py` (recorte por cor de fundo) ou remove-bg. Sem foto: cartão de iniciais (nunca caixa vazia).
 3. Escrever as cenas em `reel.html` (cada `<section class="scene" data-s data-e>`).
 4. Prévia: `node snap.js snaps 1.5 10 20 …` → conferir quadros.
-5. Render: `node capture.js video_noaudio.mp4` (30 fps, 1080×1920, quadro a quadro, sem perda de frame).
-6. Áudio: `python3 audio.py events.json audio.wav` (trilha + whoosh/carimbo/ticks sincronizados pelos eventos da timeline; tudo sintetizado, sem direitos autorais). Locução opcional por cima.
+5. Render: `node capture.js video_noaudio.mp4 [pagina.html]` (30 fps, 1080×1920, quadro a quadro; duração = `window.DUR` da página).
+6. Áudio: `python3 audio.py events.json audio.wav [duração]` (trilha + whoosh/carimbo/ticks sincronizados pelos eventos da timeline; tudo sintetizado, sem direitos autorais). Locução opcional por cima.
 7. `ffmpeg -i video_noaudio.mp4 -i audio.wav -c:v copy -c:a aac -shortest final.mp4`
 8. Story doc + legenda (começa com COMPARTILHA NOS STORIES) + capa.
 
