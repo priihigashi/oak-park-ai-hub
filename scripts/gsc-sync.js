@@ -7,7 +7,7 @@
 
 const GOOGLE_SHEET_ID  = process.env.GOOGLE_SHEET_ID;
 const GOOGLE_SA_KEY    = process.env.GOOGLE_SA_KEY;
-const GSC_SITE_URL     = process.env.GSC_SITE_URL; // e.g. https://oakpark-construction.com
+const GSC_SITE_URL     = process.env.GSC_SITE_URL; // e.g. sc-domain:oakpark-construction.com
 
 // Column indexes (0-based)
 const COL_BLOG_URL    = 20; // U — existing Blog URL column
@@ -107,9 +107,9 @@ async function fetchGSCData(token, pageUrl) {
 
   if (!res.ok) {
     const err = await res.text();
-    // 403 usually means page hasn't appeared in search yet — not an error worth throwing
-    if (res.status === 403 || res.status === 400) return null;
-    throw new Error(`GSC API error ${res.status}: ${err}`);
+    // Search Console returns an empty rows array for a page with no search data.
+    // 400/403 are configuration or permission errors and must fail the workflow.
+    throw new Error(`GSC API error ${res.status} for ${GSC_SITE_URL}: ${err}`);
   }
 
   const data = await res.json();
@@ -193,15 +193,13 @@ async function ensureGSCHeaders(token, rows) {
   console.log('GSC column headers added to sheet.');
 }
 
-(async () => {
+async function main() {
   try {
     if (!GOOGLE_SHEET_ID || !GOOGLE_SA_KEY) {
-      console.log('No Google Sheet credentials. Exiting.');
-      process.exit(0);
+      throw new Error('GOOGLE_SHEET_ID and GOOGLE_SA_KEY are required.');
     }
     if (!GSC_SITE_URL) {
-      console.log('GSC_SITE_URL not set. Add it as a GitHub secret. Exiting.');
-      process.exit(0);
+      throw new Error('GSC_SITE_URL is required and must match the verified Search Console property.');
     }
 
     const saKey = JSON.parse(Buffer.from(GOOGLE_SA_KEY, 'base64').toString('utf8'));
@@ -250,4 +248,8 @@ async function ensureGSCHeaders(token, rows) {
     console.error('Error:', err.message);
     process.exit(1);
   }
-})();
+}
+
+if (require.main === module) main();
+
+module.exports = { fetchGSCData };
