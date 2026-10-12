@@ -4,7 +4,13 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { writeRun } = require('../blog-v2/pipeline');
-const { parseOptions, queuedRuns, reviewedRuns, runAttempt } = require('../blog-v2/weekly-private');
+const { parseOptions, queuedRuns, reviewedRuns, weekStart, runAttempt } = require('../blog-v2/weekly-private');
+
+test('weekly boundary follows New York Monday across UTC and daylight saving time', () => {
+  assert.equal(weekStart(new Date('2026-10-11T23:00:00Z')), weekStart(new Date('2026-10-12T01:00:00Z')));
+  assert.notEqual(weekStart(new Date('2026-10-12T01:00:00Z')), weekStart(new Date('2026-10-12T13:00:00Z')));
+  assert.equal(weekStart(new Date('2026-11-01T05:30:00Z')), weekStart(new Date('2026-11-01T06:30:00Z')));
+});
 
 test('weekly private coordinator links verified research, article, and preview without publishing', () => {
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'opc-weekly-'));

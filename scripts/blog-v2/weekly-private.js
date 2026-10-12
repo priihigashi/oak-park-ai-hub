@@ -62,8 +62,12 @@ function reviewedRuns(file) {
   });
 }
 function weekStart(date) {
-  const day = date.getUTCDay();
-  return Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() - ((day + 6) % 7));
+  const local = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short',
+  }).formatToParts(date);
+  const part = type => local.find(item => item.type === type).value;
+  const day = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(part('weekday'));
+  return Date.UTC(Number(part('year')), Number(part('month')) - 1, Number(part('day')) - ((day + 6) % 7));
 }
 function preparedThisWeek(out, now = new Date()) {
   if (!fs.existsSync(out)) return null;
@@ -143,4 +147,4 @@ if (require.main === module) {
     if (status.status !== 'ready-for-human-review') process.exitCode = 2;
   } catch (error) { console.error(error.message); process.exitCode = 1; }
 }
-module.exports = { parseOptions, queuedRuns, reviewedRuns, preparedThisWeek, attemptedThisWeek, stagedInput, runAttempt };
+module.exports = { parseOptions, queuedRuns, reviewedRuns, weekStart, preparedThisWeek, attemptedThisWeek, stagedInput, runAttempt };
