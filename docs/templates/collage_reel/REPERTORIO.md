@@ -120,3 +120,14 @@ Cenas recortadas: biblioteca-cenas (ref02_agroecologia).
 3. Listar movimentos → mapear pra preset existente; o que não existir vira preset novo em `fx.js` (documentar no cabeçalho).
 4. Cena nova em `repertorio.html` mostrando o preset + render do demo.
 5. Quadros/tiras/demo no Drive `repertorio/ref_NN_<pagina>/` + bloco novo neste arquivo + NOTE datada no doc TEMPLATE.
+
+
+## Lote 2026-10-12 (baixados pelo workflow ref_fetch → Drive › colagem-reel-template › _entrada_refs: vídeo, folha de quadros, transcrição, áudio)
+- **tut_01–06** — tutoriais de efeitos estilo Vox (parallax, corte na curva, página virando, TV antiga, cursor/contador/ondas, fundo em camadas ★). Viraram o KIT VOX (fx2.js, MOVIMENTOS §3b).
+- **ref_06–08** — telas divididas em 3 / cartões, comparar países × períodos (download falhou na 1ª vez; nova tentativa com repetição). Opção de layout, não regra.
+- **ref_09–11** — mais estilos (a analisar).
+- **ref_12** — mapas Vox: foco radial + desfoque + linhas que se desenham → movimento 52.
+- **ref_13** — "How we spend our time": corrida de barras por ano, fundo quase branco, serifa, barras suaves, ano grande no canto, etiqueta de evento ("RADIO ARRIVES"), régua do tempo → base do congresso.html v2. Também: coletar o SOM (pasta de áudios).
+- **ref_14** — gráfico + mouse que clica no período e abre explicação → movimento 50.
+- **ref_15** — estilo Vox com colagem de pessoas reais (favorito). **ref_16** — inserir personagem (favorito). **ref_17** — contar história misturando P&B e cor.
+- **Sons**: cada referência tem `<nome>_audio.mp3` na pasta — biblioteca de sons/trilhas pra inspiração (não reutilizar áudio de terceiros em post publicado sem licença).

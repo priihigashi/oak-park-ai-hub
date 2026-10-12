@@ -133,6 +133,22 @@ Cada um diz o que acontece quadro a quadro. Os presets entre `colchetes` são o 
 ### Clipe real do personagem — ASSINATURA DA PÁGINA (sempre que existir)
 37. **Da Boca Dele** — um trecho curto (2–6 s) de vídeo REAL da pessoa falando, recortada (cabeça ou corpo) sobre o nosso design, com legenda karaokê e crédito "FONTE · VEÍCULO/CANAL · DATA". Pode ser fala sobre o tema ou comportamento público que mostre quem a pessoa é. *Ideal:* todo reel sobre político — é o que diferencia a gente de quem só usa foto parada. *Regras:* o trecho mantém o sentido que tinha no vídeo inteiro (assistir antes e depois do corte); data e fonte na tela; guardar link original no STORY doc.
 
+
+### 3b. KIT VOX / DOCUMENTÁRIO (fx2.js — aprendido dos tutoriais tut_01–06 + refs 12–14, demo: kit_vox.html)
+Não se limite a estes — combine, adapte ou invente melhor. Cada um está pronto no motor:
+44. **Fundo em camadas** (`.tintbg data-tint`) — fotos do tema (prédio do Congresso, jornal escaneado, arquitetura) empilhadas em P&B, contraste baixo, tinta de cor + textura. *Ideal:* abertura, cartela de tema, fundo atrás de manchete. Substitui fundo chapado sem identidade. ★ favorito da Priih.
+45. **Parallax** (`.parallax > [data-depth]`) — foto separada em fundo/meio/frente que andam em velocidades diferentes. *Ideal:* foto histórica, arquivo, "trazer foto parada à vida".
+46. **Corte na curva** (`data-outcurve` → próxima cena `data-in="curve"`) — zoom com easing forte; o corte acontece no pico de velocidade, fica invisível. *Ideal:* trocar de foto/tema sem "tranco".
+47. **Posterize time** (`data-fps="8|12"`) — cena anda a 8 ou 12 quadros/s: stop-motion orgânico, feito à mão. *Ideal:* papel, recorte, página, colagem.
+48. **Página virando** (`.pageturn` em `.pt-wrap`) — dobra 3D do canto + sombra; com 8 fps. *Ideal:* documentos, jornais, "virar a página" de período/governo.
+49. **TV antiga** (`data-crt`) — scanlines + faixa escura rolando + cor de fósforo + vinheta. *Ideal:* arquivo de TV, discurso antigo, clipe "Da Boca Dele" de outra época.
+50. **Cursor que clica** (`.cursor data-path data-click`) + **popup** — o cursor vai até o ano/pico do gráfico, clica, abre a caixa ("o que aconteceu aqui"). *Ideal:* começar um capítulo a partir do gráfico ("a inflação bateu o pico em 2021 — deixa eu te contar"), mostrar Covid/guerra/crise no período.
+51. **Ondas de rádio** (`.waves`) — anéis saindo de um ponto. *Ideal:* marcador de local, pico do gráfico, "olha aqui".
+52. **Foco de mapa** (`.focus data-path`) — escurece e desfoca tudo fora de um círculo que anda até onde o olho deve ir; + **linha que se desenha** (`.trim`). Mapa do Brasil por estado em `assets/maps/brazil.svg` (CC BY 4.0, @svg-maps/brazil). *Ideal:* onde aconteceu, rotas, comparar estados.
+53. **Contador monoespaçado** — `.cnt` agora com números de largura fixa, não treme.
+54. **Corrida de barras por período** (demo: congresso.html) — barras trocam de posição pelo tamanho, ano conta no mesmo lugar, pausa ~2,5s no 1º ano de cada mandato (com som), etiqueta "X ASSUME", placar 1º/2º/3º, frase "quem negocia com quem" que muda com o cenário, % em cinza entre parênteses. *Ideal:* composição do Congresso, rankings ao longo dos anos, comparação de países por período.
+55. **Split em 3 / cartões** (refs 06–08, a analisar) — opção, não regra: três países/períodos lado a lado, ou só um painel.
+
 ## 4. FONTES — combinações (uma por reel, no máximo 3 famílias)
 - **Clássica da casa:** Anton (título) · Fraunces 900/itálico (manchete e frase) · JetBrains Mono (fonte do dado).
 - **Grotesca premium:** Inter Tight 900 apertada (palavra gigante com ponto) · Inter 800 itálico (legenda) · Mono.

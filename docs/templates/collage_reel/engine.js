@@ -19,6 +19,7 @@ scenes.forEach(sc=>{
   });
   sc.querySelectorAll('.cnt').forEach(el=>{const t=s+(+el.dataset.t),d=+el.dataset.d; EVENTS.tick.push([t,t+d]);});
 });
+if(window.FX2_EVENTS){EVENTS.tick.push(...FX2_EVENTS.tick); EVENTS.pop.push(...FX2_EVENTS.pop);}
 window.EVENTS=EVENTS;
 
 function anim(el,t,T,idx){
@@ -49,10 +50,10 @@ function anim(el,t,T,idx){
   el._fxFilter=c.filter; if(!el.dataset.boil&&!el.dataset.rough) el.style.filter=c.filter; el.style.clipPath=c.clip||'';
 }
 function render(T){
-  let shake=0; let theme='dark';
-  scenes.forEach(sc=>{
+  let shake=0; let theme='dark'; const Treal=T;
+  scenes.forEach(sc=>{ T=Treal;
     const s=+sc.dataset.s,e=+sc.dataset.e, vis=T>=s&&T<e; sc.style.display=vis?'block':'none'; if(!vis)return;
-    theme=sc.dataset.theme; const t=T-s;
+    theme=sc.dataset.theme; const fps=+(sc.dataset.fps||0); const Tq=fps?Math.floor(T*fps)/fps:T; const t=Math.max(0,Tq-s); T=fps?Tq:T; // data-fps = posterize time
     if(!sc.dataset.in||sc.dataset.in==='wipe'){ // entry wipe (paper slide) first .18s
       const w=clamp(t/.18); sc.style.clipPath= w<1?`inset(${(1-E.out(w))*100}% 0 0 0)`:'none';}
     if(window.FX) FX.frame(sc,t,T,e-s);
@@ -68,6 +69,7 @@ function render(T){
     sc.querySelectorAll('.col').forEach(el=>{const p=E.out(clamp((t-+el.dataset.t)/+el.dataset.d)); const v=+el.dataset.v, k=+el.dataset.k, base=+el.dataset.base;
       const h=Math.abs(v)*k*p; el.style.height=Math.max(h,0)+'px'; el.style.top=(v>=0?base-h:base)+'px'; if(v<0) el.style.background='#ff6b5e';});
   });
+  T=Treal;
   const st=document.getElementById('stage'); const sx=(rnd(Math.floor(T*30))-.5)*2*shake, sy=(rnd(Math.floor(T*30)+99)-.5)*2*shake;
   st.style.transform=`translate(${sx}px,${sy}px)`;
   const pi=document.querySelector('#prog i'); if(pi) pi.style.width=(T/DUR*100)+'%';

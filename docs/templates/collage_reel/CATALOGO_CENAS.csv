@@ -75,3 +75,9 @@ veredito-carimbo,ref00_classico,26.0-30.0s,manchete-volta-falso,"drop, stamp FAL
 veredito-carimbo,ref00b_premium,22.0-26.0s,enganoso-titulo-errado,"drop, stamp, scatter",veredito,veredito-carimbo__ref00b_premium__enganoso-titulo-errado.mp4
 veredito-carimbo,ref05_joaoerre,21.9-23.0s,x-vermelho-nao-balao,"dois X vermelhos riscam balões, NÃO em pílula",negar promessa / FALSO,veredito-carimbo__ref05_joaoerre__x-vermelho-nao-balao.mp4
 grafico_corrida_anos,DEMO própria,congresso.html,"Quem governa de verdade: barras por espectro mudando por legislatura (1995→2023) + placar Maioria/Meio/Minoria + frase quem negocia com quem","corrida de barras; contador de ano; placar que troca nomes; frase que muda com o cenário",composição do Congresso / qualquer série por período,congresso.html
+fundo,KIT tut_06,kit_vox.html 0-5s,"Fundo em camadas (fotos P&B + tinta + textura) atrás de manchete","tintbg; slam; outcurve",abertura / cartela de tema,kit_vox.html
+foto_viva,KIT tut_01/02,kit_vox.html 5-10s,"Parallax 3 camadas, entrada corte-na-curva, 12fps","parallax; curve; fps12",foto histórica / arquivo,kit_vox.html
+documento,KIT tut_03,kit_vox.html 10-15s,"Página de jornal virando (8fps) revela a de baixo","pageturn; fps8",trocar período/governo,kit_vox.html
+grafico_linha,KIT tut_05 + ref_14,kit_vox.html 15-22s,"Linha se desenha, faixa Covid, cursor clica no pico, ondas, popup com contador","trim; cursor; waves; pop; cnt",abrir capítulo a partir do gráfico,kit_vox.html
+mapa,ref_12,kit_vox.html 22-27s,"Mapa do Brasil, foco anda SP→DF, linha da rota se desenha, ondas no destino","focus; trim; waves",onde aconteceu / rotas,kit_vox.html
+arquivo_tv,KIT tut_04,kit_vox.html 27-32s,"Tela de TV antiga (scanlines, faixa rolando, fósforo) + contador de ano","crt; kb; cnt",arquivo / época,kit_vox.html
