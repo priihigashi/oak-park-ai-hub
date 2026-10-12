@@ -29,6 +29,9 @@ function officialHost(url) {
   } catch { return null; }
 }
 function normalize(value) { return String(value || '').toLowerCase().replace(/[’‘]/g, "'").replace(/\s+/g, ' ').trim(); }
+function sourceApplicable(candidate, source) {
+  return (source.coverageAreas || []).some(area => area === candidate.area || area === 'Florida' || area === 'national');
+}
 function sourceFromSuggestion(item, candidate, now) {
   const official = officialHost(item?.url);
   const quote = String(item?.quote || '');
@@ -43,6 +46,7 @@ function sourceFromSuggestion(item, candidate, now) {
 async function verifySuggestion(item, candidate, now) {
   const source = sourceFromSuggestion(item, candidate, now);
   if (!source) return { accepted: null, reason: 'invalid-or-nonofficial-source' };
+  if (!sourceApplicable(candidate, source)) return { accepted: null, reason: 'out-of-jurisdiction-source' };
   try {
     const [verified] = await verifySources([source]);
     if (!officialHost(verified.finalUrl)) return { accepted: null, reason: 'redirect-outside-official-hosts' };
@@ -59,9 +63,7 @@ function scopedCandidate(candidate, sources) {
   return { ...candidate, evidenceScope: sources.some(source => source.coverageAreas.includes('Florida')) ? 'Florida' : 'unscoped' };
 }
 function hasApplicableSource(candidate, sources) {
-  const area = candidate.area;
-  return sources.some(source => (source.coverageAreas || []).some(coverage =>
-    coverage === area || coverage === 'Florida' || coverage === 'national'));
+  return sources.some(source => sourceApplicable(candidate, source));
 }
 function codexSearch(candidate) {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'opc-source-discovery-'));
@@ -118,4 +120,4 @@ function readSuggestions(file) {
   return list;
 }
 if (require.main === module) main().catch(error => { console.error(error.message); process.exitCode = 1; });
-module.exports = { officialHost, sourceFromSuggestion, verifySuggestion, researchPrompt, prepareResearchInput, scopedCandidate, hasApplicableSource };
+module.exports = { officialHost, sourceFromSuggestion, sourceApplicable, verifySuggestion, researchPrompt, prepareResearchInput, scopedCandidate, hasApplicableSource };

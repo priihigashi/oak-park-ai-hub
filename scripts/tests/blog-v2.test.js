@@ -12,7 +12,7 @@ const { verifiedCompanyService, standaloneTradeErrors } = require('../blog-v2/co
 const { planMedia } = require('../blog-v2/media-plan');
 const { nextSnapshot } = require('../blog-v2/next-snapshot');
 const { fromSite, addSiteInventory } = require('../blog-v2/site-inventory');
-const { officialHost, sourceFromSuggestion, scopedCandidate, hasApplicableSource } = require('../blog-v2/discover-sources');
+const { officialHost, sourceFromSuggestion, sourceApplicable, verifySuggestion, scopedCandidate, hasApplicableSource } = require('../blog-v2/discover-sources');
 
 test('live site and legacy routes join queued topics before autonomous selection', () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'opc-site-inventory-'));
@@ -57,6 +57,17 @@ test('source research ranks a duplicate-safe topic before sources and rejects no
   assert.equal(hasApplicableSource(broward, [{ coverageAreas: ['Broward County'] }]), true);
   assert.equal(hasApplicableSource(broward, [{ coverageAreas: ['Florida'] }]), true);
   assert.deepEqual(officialHost('https://www.miamidade.gov/permit').coverageAreas, ['Miami-Dade County']);
+  assert.equal(sourceApplicable(broward, { coverageAreas: ['Miami-Dade County'] }), false);
+  assert.equal(sourceApplicable(broward, { coverageAreas: ['Broward County'] }), true);
+});
+
+test('source discovery rejects another county before fetching its page', async () => {
+  const result = await verifySuggestion({
+    url: 'https://www.miamidade.gov/permit', title: 'Neighboring county permit page',
+    quote: 'A long enough passage from a neighboring county to satisfy the quote length rule.',
+  }, { area: 'Broward County', question: 'Which permit office applies?' }, new Date().toISOString());
+  assert.equal(result.accepted, null);
+  assert.equal(result.reason, 'out-of-jurisdiction-source');
 });
 test('official HTML entities preserve exact source quote verification', () => {
   assert.equal(textOnly('<p>The building&rsquo;s approved use &amp; permits&nbsp;matter.</p>'), 'The building’s approved use & permits matter.');
