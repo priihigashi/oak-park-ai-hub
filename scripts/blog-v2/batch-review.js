@@ -16,7 +16,7 @@ function readVerifiedRun(dir) {
   const read = name => JSON.parse(fs.readFileSync(path.join(dir, `${name}.json`), 'utf8'));
   const status = read('status');
   if (status !== 'draft-ready-for-human-review' || receipt.status !== status || read('gate').length) throw new Error(`Run ${receipt.id} is not article-ready`);
-  return { id: receipt.id, receiptHash: crypto.createHash('sha256').update(fs.readFileSync(path.join(dir, 'receipt.json'))).digest('hex'), brief: read('brief'), draft: read('draft'), sources: read('sources').map(({ id, publisher, title, url, coverageAreas }) => ({ id, publisher, title, url, coverageAreas })), articleReview: read('review') };
+  return { id: receipt.id, receiptHash: crypto.createHash('sha256').update(fs.readFileSync(path.join(dir, 'receipt.json'))).digest('hex'), brief: read('brief'), draft: read('draft'), sources: read('sources').map(({ id, publisher, title, url, coverageAreas }) => ({ id, publisher, title, url, coverageAreas })), articleReview: read('review'), editorialScore: receipt.fileHashes['editorialScore.json'] ? read('editorialScore') : null };
 }
 function runErrors(runs) {
   const errors = [];

@@ -24,7 +24,7 @@ test('weekly private coordinator links verified research, article, and preview w
     snapshot: { snapshotAt: new Date().toISOString() }, selection: { selected: { id: 'topic-1' } },
     brief: { intentKey: 'commercial-cu:fort-lauderdale', readerDecision: 'Choose the approval track' },
     draft: { title: 'CU and work approval', body: 'A private draft.' }, sources: [],
-    review: { decision: 'pass' }, gate: [], status: 'draft-ready-for-human-review',
+    review: { decision: 'pass' }, editorialScore: { score: 88, route: 'human-review' }, gate: [], status: 'draft-ready-for-human-review',
   });
   const calls = [];
   const runner = (script, args) => {
@@ -41,9 +41,11 @@ test('weekly private coordinator links verified research, article, and preview w
   try {
     const status = runAttempt({ input, siteFrontend, out }, runner);
     assert.equal(status.status, 'ready-for-human-review');
+    assert.equal(status.editorialScore, 88);
     assert.match(status.previewSha256, /^[a-f0-9]{64}$/);
     assert.deepEqual(calls, ['discover-sources.js', 'cli.js', 'generate-blog-review-preview.mjs']);
     assert.deepEqual(queuedRuns(out).map(item => item.intentKey), ['commercial-cu:fort-lauderdale']);
+    assert.deepEqual(queuedRuns(out).map(item => item.editorialScore), [88]);
     assert.equal(fs.existsSync(path.join(out, '.weekly-private.lock')), false);
     const second = runAttempt({ input, siteFrontend, out }, () => { throw new Error('A second draft should not start this week'); });
     assert.equal(second.status, 'already-prepared-this-week');

@@ -48,7 +48,7 @@ function queuedRuns(out) {
     const status = readAttemptStatus(statusPath);
     if (status.status !== 'ready-for-human-review') continue;
     const run = readVerifiedRun(status.articleRun);
-    items.push({ id: 'queued:' + run.id, intentKey: run.brief.intentKey, title: run.draft.title, intent: run.brief.readerDecision, type: 'queued', receiptHash: run.receiptHash });
+      items.push({ id: 'queued:' + run.id, intentKey: run.brief.intentKey, title: run.draft.title, intent: run.brief.readerDecision, type: 'queued', receiptHash: run.receiptHash, editorialScore: run.editorialScore?.score ?? null });
   }
   return items;
 }
@@ -151,7 +151,7 @@ function executeAttempt(options, runner, raw, dir, attempt, selectedIds) {
   const articleRun = readVerifiedRun(article.runDir);
   const preview = path.join(dir, 'preview.html');
   runner(path.join(options.siteFrontend, 'scripts/generate-blog-review-preview.mjs'), [article.runDir, preview], { json: false });
-  return { status: writeStatus(dir, { ...base, articleRun: article.runDir, articleReceiptHash: articleRun.receiptHash, selectedId: article.selectedId, intentKey: articleRun.brief.intentKey, preview, previewSha256: digestFile(preview), status: 'ready-for-human-review' }), retry: false };
+  return { status: writeStatus(dir, { ...base, articleRun: article.runDir, articleReceiptHash: articleRun.receiptHash, selectedId: article.selectedId, intentKey: articleRun.brief.intentKey, editorialScore: articleRun.editorialScore?.score ?? null, preview, previewSha256: digestFile(preview), status: 'ready-for-human-review' }), retry: false };
 }
 function runAttempt(options, runner = command) {
   const raw = JSON.parse(fs.readFileSync(options.input, 'utf8'));
