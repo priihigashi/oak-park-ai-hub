@@ -1,5 +1,11 @@
 # OPC Blog v2 — operating decision (2026-10-10)
 
+## Owner feedback and phone access (2026-10-12)
+
+Priscila wants two optional paths: leave feedback on an exact draft from her Mac or phone, or take no action while the scheduled workflow continues. A request for changes vetoes that exact version and requires a new immutable draft and review. Silence is not approval. She prefers an SMS containing the mobile review link; a Mac notification alone does not reach her phone. The local `127.0.0.1` page is Mac-only. A trial draft was copied to an internal Google Doc so she can read and comment from a phone, but this is not yet a connected feedback or notification pipeline, and the imported document does not prove visual parity with the site preview.
+
+Before calling mobile review operational, connect each reviewed draft to a restricted phone-accessible preview, capture its exact content hash, send a tested SMS to her confirmed number, ingest her feedback against that hash, and verify a revised draft appears when she requests changes. Check the existing Retell account's SMS capability and approval before using it; do not assume a voice number can text. Until then, the mobile document is a manual feedback route only. The owner also requested high-score autonomous publication without per-article approval, but the release policy and publisher remain disabled pending score calibration, exact-version dual review, media and release gates, and an end-to-end deployment test. Do not count a scheduled private draft or an unanswered notification as a published article.
+
 Status: **publication 0/week; one private drafting attempt each Monday at 9:00 AM America/New_York.** A three-article series passed independent review for a private trial with no major/blocker findings. The Codex app heartbeat is active; it cannot approve or publish an article. No paid API is active. Exact-version human approval and the React/Vercel release gate still control any public post.
 
 ## Cadence and quality decision
