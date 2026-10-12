@@ -1,4 +1,4 @@
-# name url
+# name url  (tut_06 = favorita da Priih)
 ref_06 https://www.instagram.com/reel/DZ0QR-3huTK/
 ref_07 https://www.instagram.com/reel/DZ42MBXy-WP/
 ref_08 https://www.instagram.com/reel/Db-hT0gx4DY/
@@ -8,3 +8,6 @@ tut_03 https://www.instagram.com/reel/Dafr0KjAkve/
 tut_04 https://www.instagram.com/reel/DaQeqljgc7y/
 tut_05 https://www.instagram.com/reel/DaNlGAcgYsD/
 tut_06 https://www.instagram.com/reel/DY7TSLJAQef/
+ref_09 https://www.instagram.com/reel/DYXFBeuqNPZ/
+ref_10 https://www.instagram.com/reel/DVcF9XyiSjm/
+ref_11 https://www.instagram.com/reel/DZFqNzwAqVa/

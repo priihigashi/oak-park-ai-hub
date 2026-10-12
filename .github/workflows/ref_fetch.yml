@@ -18,7 +18,7 @@ jobs:
       - name: Install
         run: |
           sudo apt-get update -qq && sudo apt-get install -y ffmpeg
-          pip install -q yt-dlp google-api-python-client google-auth
+          pip install -q faster-whisper yt-dlp google-api-python-client google-auth
       - name: Download
         env:
           PRI_OP_IG_COOKIES: ${{ secrets.PRI_OP_IG_COOKIES }}
@@ -39,9 +39,32 @@ jobs:
           grep -v '^#' docs/templates/collage_reel/ref_urls.txt | while read -r name url; do
             [ -z "$url" ] && continue
             C=""; [ -s /tmp/ig_cookies.txt ] && C="--cookies /tmp/ig_cookies.txt"
-            yt-dlp $C -f "bv*+ba/b" --merge-output-format mp4 -o "out/${name}.%(ext)s" --write-info-json "$url" || echo "FAIL $name $url" >> out/errors.txt
+            ok=0
+            for k in 1 2 3; do
+              yt-dlp $C -f "bv*+ba/b" --merge-output-format mp4 -o "out/${name}.%(ext)s" "$url" && { ok=1; break; }
+              yt-dlp -f "b" -o "out/${name}.%(ext)s" "$url" && { ok=1; break; }
+              sleep 25
+            done
+            [ $ok = 1 ] || echo "FAIL $name $url" >> out/errors.txt
           done
           ls -la out
+      - name: Frames + contact sheets + transcript
+        run: |
+          for v in out/*.mp4; do
+            n=$(basename "$v" .mp4); mkdir -p "out/${n}_frames"
+            ffmpeg -loglevel error -i "$v" -vf "fps=4,scale=270:-2" "out/${n}_frames/f_%04d.jpg"
+            ffmpeg -loglevel error -i "$v" -vf "fps=2,scale=216:-2,tile=8x4" "out/${n}_sheet_%02d.jpg"
+          done
+          python - <<'EOF3'
+          import glob, os
+          from faster_whisper import WhisperModel
+          m = WhisperModel("small", compute_type="int8")
+          for v in sorted(glob.glob("out/*.mp4")):
+              segs,_ = m.transcribe(v)
+              with open(v[:-4]+"_transcript.txt","w") as f:
+                  for s in segs: f.write(f"[{s.start:6.2f}-{s.end:6.2f}] {s.text.strip()}\n")
+          EOF3
+          rm -rf out/*_frames
       - name: Upload to Drive (template library › repertorio › _entrada)
         env:
           SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
@@ -61,6 +84,7 @@ jobs:
           fid=f[0]["id"] if f else d.files().create(body={"name":"_entrada_refs","mimeType":"application/vnd.google-apps.folder","parents":[ROOT]},supportsAllDrives=True,fields="id").execute()["id"]
           print("FOLDER",fid)
           for p in sorted(glob.glob("out/*")):
+              if os.path.isdir(p): continue
               n=os.path.basename(p)
               ex=d.files().list(q=f"'{fid}' in parents and name='{n}' and trashed=false",supportsAllDrives=True,includeItemsFromAllDrives=True,fields="files(id)").execute()["files"]
               if ex: print("skip",n); continue
