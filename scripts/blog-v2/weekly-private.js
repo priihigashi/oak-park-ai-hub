@@ -5,6 +5,7 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 const { spawnSync } = require('node:child_process');
 const { readVerifiedRun } = require('./batch-review');
+const { enqueueReview } = require('./review-queue');
 
 function option(name, args) {
   const index = args.indexOf(name);
@@ -118,6 +119,10 @@ function skippedAttempt(prior) {
     priorArticleRun: prior.articleRun || null,
   };
 }
+function queueReady(options, status) {
+  if (status.status === 'ready-for-human-review') enqueueReview(path.join(options.out, 'review-queue.json'), status.articleRun, status.preview, status.previewSha256);
+  return status;
+}
 function stagedInput(raw, queued) {
   const existing = [...(raw.existing || [])];
   const seen = new Set(existing.map(item => item.intentKey).filter(Boolean));
@@ -151,7 +156,7 @@ function executeAttempt(options, runner, raw, dir, attempt, selectedIds) {
   const articleRun = readVerifiedRun(article.runDir);
   const preview = path.join(dir, 'preview.html');
   runner(path.join(options.siteFrontend, 'scripts/generate-blog-review-preview.mjs'), [article.runDir, preview], { json: false });
-  return { status: writeStatus(dir, { ...base, articleRun: article.runDir, articleReceiptHash: articleRun.receiptHash, selectedId: article.selectedId, intentKey: articleRun.brief.intentKey, editorialScore: articleRun.editorialScore?.score ?? null, preview, previewSha256: digestFile(preview), status: 'ready-for-human-review' }), retry: false };
+  return { status: queueReady(options, writeStatus(dir, { ...base, articleRun: article.runDir, articleReceiptHash: articleRun.receiptHash, selectedId: article.selectedId, intentKey: articleRun.brief.intentKey, editorialScore: articleRun.editorialScore?.score ?? null, preview, previewSha256: digestFile(preview), status: 'ready-for-human-review' })), retry: false };
 }
 function runAttempt(options, runner = command) {
   const raw = JSON.parse(fs.readFileSync(options.input, 'utf8'));
@@ -162,6 +167,7 @@ function runAttempt(options, runner = command) {
   try {
     const prior = attemptedThisWeek(options.out);
     if (prior) {
+      queueReady(options, prior);
       dir = path.join(options.out, new Date().toISOString().replace(/[:.]/g, '-') + '-' + crypto.randomBytes(4).toString('hex'));
       fs.mkdirSync(dir);
       return writeStatus(dir, skippedAttempt(prior));

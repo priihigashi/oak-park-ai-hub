@@ -5,6 +5,7 @@ const os = require('node:os');
 const path = require('node:path');
 const crypto = require('node:crypto');
 const { writeRun } = require('../blog-v2/pipeline');
+const { readQueue } = require('../blog-v2/review-queue');
 const { parseOptions, queuedRuns, heldRuns, reviewedRuns, stagedInput, weekStart, runAttempt } = require('../blog-v2/weekly-private');
 
 test('weekly boundary follows New York Monday across UTC and daylight saving time', () => {
@@ -46,6 +47,7 @@ test('weekly private coordinator links verified research, article, and preview w
     assert.deepEqual(calls, ['discover-sources.js', 'cli.js', 'generate-blog-review-preview.mjs']);
     assert.deepEqual(queuedRuns(out).map(item => item.intentKey), ['commercial-cu:fort-lauderdale']);
     assert.deepEqual(queuedRuns(out).map(item => item.editorialScore), [88]);
+    assert.equal(readQueue(path.join(out, 'review-queue.json')).items[0].state, 'pending');
     assert.equal(fs.existsSync(path.join(out, '.weekly-private.lock')), false);
     const second = runAttempt({ input, siteFrontend, out }, () => { throw new Error('A second draft should not start this week'); });
     assert.equal(second.status, 'already-prepared-this-week');
