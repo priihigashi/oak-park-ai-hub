@@ -55,6 +55,9 @@ test('weekly coordinator records research hold and refuses publication paths', (
     const status = runAttempt({ input, siteFrontend: temp, out }, () => ({ output: { status: 'research-hold', sourceCount: 0, runDir: path.join(temp, 'research') } }));
     assert.equal(status.status, 'research-hold');
     assert.equal(queuedRuns(out).length, 0);
+    const second = runAttempt({ input, siteFrontend: temp, out }, () => { throw new Error('Blocked week must not call a model again'); });
+    assert.equal(second.status, 'already-attempted-this-week');
+    assert.equal(second.priorStatus, 'research-hold');
   } finally {
     if (previous === undefined) delete process.env.OPC_ALLOW_SUBSCRIPTION_CLI;
     else process.env.OPC_ALLOW_SUBSCRIPTION_CLI = previous;
@@ -73,6 +76,9 @@ test('weekly coordinator preserves a failed attempt and releases its lock', () =
     assert.equal(attempts.length, 1);
     assert.equal(JSON.parse(fs.readFileSync(path.join(out, attempts[0], 'status.json'))).status, 'failed');
     assert.equal(fs.existsSync(path.join(out, '.weekly-private.lock')), false);
+    const second = runAttempt({ input, siteFrontend: temp, out }, () => { throw new Error('Failed week must not call a model again'); });
+    assert.equal(second.status, 'already-attempted-this-week');
+    assert.equal(second.priorStatus, 'failed');
   } finally { fs.rmSync(temp, { recursive: true, force: true }); }
 });
 

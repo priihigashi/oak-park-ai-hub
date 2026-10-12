@@ -75,6 +75,17 @@ function preparedThisWeek(out, now = new Date()) {
   }
   return null;
 }
+function attemptedThisWeek(out, now = new Date()) {
+  if (!fs.existsSync(out)) return null;
+  for (const name of fs.readdirSync(out).sort().reverse()) {
+    const file = path.join(out, name, 'status.json');
+    if (!fs.existsSync(file)) continue;
+    const status = readAttemptStatus(file);
+    if (['ready-for-human-review', 'research-hold', 'article-hold', 'failed'].includes(status.status)
+      && weekStart(new Date(status.createdAt)) === weekStart(now)) return status;
+  }
+  return null;
+}
 function stagedInput(raw, queued) {
   const existing = [...(raw.existing || [])];
   const seen = new Set(existing.map(item => item.intentKey).filter(Boolean));
@@ -97,9 +108,12 @@ function runAttempt(options, runner = command) {
   try {
     dir = path.join(options.out, new Date().toISOString().replace(/[:.]/g, '-') + '-' + crypto.randomBytes(4).toString('hex'));
     fs.mkdirSync(dir);
-    const prior = preparedThisWeek(options.out);
-    if (prior) return writeStatus(dir, { status: 'already-prepared-this-week', priorArticleRun: prior.articleRun });
     const queued = [...queuedRuns(options.out), ...reviewedRuns(options.reviewRunsFile)];
+    const prior = attemptedThisWeek(options.out);
+    if (prior) return writeStatus(dir, {
+      status: prior.status === 'ready-for-human-review' ? 'already-prepared-this-week' : 'already-attempted-this-week',
+      priorStatus: prior.status, priorArticleRun: prior.articleRun || null,
+    });
     const staged = path.join(dir, 'input.json');
     fs.writeFileSync(staged, JSON.stringify(stagedInput(raw, queued), null, 2) + '\n', { flag: 'wx' });
     const researchArgs = ['--input', staged, '--site-frontend', options.siteFrontend, '--out', path.join(dir, 'research')];
@@ -125,4 +139,4 @@ if (require.main === module) {
     if (status.status !== 'ready-for-human-review') process.exitCode = 2;
   } catch (error) { console.error(error.message); process.exitCode = 1; }
 }
-module.exports = { parseOptions, queuedRuns, reviewedRuns, preparedThisWeek, stagedInput, runAttempt };
+module.exports = { parseOptions, queuedRuns, reviewedRuns, preparedThisWeek, attemptedThisWeek, stagedInput, runAttempt };
