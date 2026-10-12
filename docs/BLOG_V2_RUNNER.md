@@ -1,0 +1,116 @@
+# OPC Blog v2 draft runner
+
+This runner produces a review bundle only. It has no publishing or WordPress operation. The legacy `blog-generator.js` remains separate and must stay disabled for v2.
+
+Operating cadence, company scope, media fallback, and cost decision: [BLOG_V2_OPERATING_POLICY.md](BLOG_V2_OPERATING_POLICY.md). The present public frequency is zero. A distinct three-article series passed for a private drafting trial, and the task-attached weekly heartbeat is active. Public release still requires exact-version human approval and the separate website gate; target at most one approved article per week, skipping weak weeks.
+
+## Input snapshot
+
+Save a JSON file with `snapshotAt`, `candidates`, `existing`, and `sources`:
+
+```json
+{
+  "snapshotAt": "2026-10-10T16:00:00-04:00",
+  "candidates": [{"id":"sheet-row-12","question":"What should I check before a home addition in Broward County?","readerDecision":"Understand permit sequence before pricing an addition","service":"home addition","area":"Broward County","sourceIds":["county-addition-page"],"priority":0,"provenance":{"sheetRow":12,"sheetStatus":"Raw Idea"}}],
+  "existing": [{"id":"live-1","title":"Existing article title","intent":"What reader decision this answers","slug":"existing-article"}],
+  "sources": [{"id":"county-addition-page","url":"https://example.gov/official-guidance","publisher":"County building division","title":"Official guidance","excerpt":"Specific text copied from the official page that answers this question.","capturedAt":"2026-10-10T15:00:00-04:00"}]
+}
+```
+
+`existing` must contain queued topics and any manually researched duplicate intents. A new Codex draft run also requires the checked-out React site's `frontend` directory: the runner reads its current `posts.json` and `legacyBlogPaths.json`, refreshes matching entries, and adds every live and legacy route to `existing`. It records both file hashes and counts in the immutable snapshot. Missing or malformed site inventory stops drafting; a revision reuses the original immutable inventory. The Content Ideas sheet can supply questions and provenance, but it does not establish construction facts. Every candidate needs at least one topic-relevant official source. The runner fetches public sources at run time, checks status and excerpt overlap, and records a retrieval digest. Internal company facts may use `access: "internal-preverified"` with `evidenceId`, `verifiedBy`, `capturedAt`, and `excerpt`; this cannot support external technical or legal assertions.
+
+Official PDF sources are now read with local Python `pypdf`; the file is limited to 10 MiB and the first 30 pages. The extracted text receives the same excerpt-overlap check and content digest as HTML, with `retrieval: "http-pdf"` in the receipt. If `pypdf` is unavailable or text cannot be extracted, the source fails closed before drafting. Check the actual PDF date and jurisdiction; a successful text match does not make an old checklist current law.
+
+For autonomous intake directly from the Content Ideas export, use `{snapshotAt, ideaRows, sourceCatalog, existing}`. Each `ideaRows` entry may be a 23-column sheet row array or an object with `rowNumber`, `rawIdea`, `topicDirection`, `sourceLink`, `status`, and `blogUrl`. The intake adapter classifies supported themes into safe question templates. It never passes raw hooks or payoffs into the draft brief; source links stay as inspiration provenance only. It requires a topic-specific source whose stated coverage includes the county or the nation and stores all intake rejections in `intake.json`.
+
+Each qualifying source catalog record must explicitly set `sourceRole: "topic-specific"`, `themeTags` (matching the intake theme), and `coverageAreas` (the county or `national`). Generic portal and jurisdiction pages may remain in the catalog but cannot alone qualify a candidate. The intake also recognizes boutique retail accessibility, kitchen exhaust planning for a full renovation, and HVAC sizing discussion within a room addition. These themes frame questions for the design team; they do not advertise standalone HVAC work or assert a technical result. A patio cover remains ineligible without verified company service scope and a matching specific source.
+
+The runner reads `scripts/company-info.js` for the existing OPC core-service and within-project trade boundaries. It records a digest of that policy in each brief, feeds it to the drafter and independent reviewer, and rejects positive standalone roofing/plumbing/electrical promises. An optional `mediaCatalog` in the input snapshot yields a `mediaPlan.json` shortlist only for records marked OPC-owned, blog-approved, privacy-checked, project-bound, and service-matched. The plan never chooses or approves an image; no photo is required for a draft. A human checks the exact candidate and derivative before a later site release.
+
+When multiple Content Ideas rows resolve to the same theme and area, intake now keeps one candidate per `intentKey` (highest planning signal, earliest row on ties) and records the other rows as `duplicate-idea-intent` rejections with their sheet provenance. This prevents repeated rows from masquerading as fresh weekly topics. The existing live, legacy, and queued inventory remains a separate duplicate check.
+
+Allowed services: `home renovation`, `home addition`, `shell construction`, `concrete work`, `deck construction`, `screen porch enclosure`, `commercial renovation`, `commercial build-out`, `commercial construction`. Allowed areas: `Broward County`, `Miami-Dade County`, `Palm Beach County`, and the narrower `Fort Lauderdale` when the question and verified evidence are city-specific. The selector ranks eligible questions autonomously and stores the full rejected pool, including duplicates and out-of-scope topics.
+
+## Autonomous official-source research
+
+For candidate questions or raw Content Ideas rows lacking a verified source catalog, first run the subscription CLI research stage:
+
+```sh
+OPC_ALLOW_SUBSCRIPTION_CLI=1 node scripts/blog-v2/discover-sources.js --input /path/to/raw-ideas-or-candidates.json --site-frontend /path/to/opc-website-v1/frontend --out /path/to/research-bundles
+```
+
+This stage chooses a nonduplicate, in-scope question against the live React/legacy inventory, asks the existing Codex CLI to search for official government sources, then fetches each suggested page or PDF. Only an allowlisted HTTPS official host with an exact quote present in the live content reaches the prepared snapshot; failed URLs and quotes remain in the immutable audit. The verified retrieved passage, not the model's search snippet, becomes the draft evidence. County domains are conservatively marked `unscoped`; a Fort Lauderdale question backed only by City pages is narrowed to `Fort Lauderdale`. The current allowlist covers Broward, Miami-Dade, Fort Lauderdale, Palm Beach, Florida DBPR, Florida DOH, and EPA. This is a bounded discovery route, not a guarantee that a relevant official page exists or that one verified passage is enough for an article. The later independent review and series gate can still hold a draft.
+
+To recheck saved suggestions after a verifier fix without paying for another model call, add `--suggestions-file /path/to/prior/discovery.json`. The replay file hash is retained. The output's `preparedSnapshot.json` is the input to the draft command below. Keep the research and draft bundles together in the shared audit. No paid API fallback or publication is involved.
+
+## Weekly private coordinator
+
+The recurring heartbeat prepares a fresh candidate snapshot from current Content Ideas, the site inventory, and prior reviewed or queued intents. It then invokes one versioned command that connects official-source research, Codex drafting, independent Claude review, and a private HTML preview:
+
+```sh
+OPC_ALLOW_SUBSCRIPTION_CLI=1 node scripts/blog-v2/weekly-private.js --input /path/to/current-candidates.json --site-frontend /path/to/opc-website-v1/frontend --out /path/to/private-weekly-runs
+```
+
+The command fails closed when research yields no verified official source or article review blocks the draft. It writes a status and keeps the research and article receipts. Successful runs add their verified intent to the local queue so a stale input cannot select it again; a second successful draft in the same Monday-to-Sunday UTC week is refused before another model call. The heartbeat must also include held pilots and editor-queued intents from the Shared Drive in `existing`, because local queue history alone cannot know work stored elsewhere. Upload the run directory and preview to the OPC Website Shared Drive and link its receipt in T-904. Nothing in the coordinator publishes, changes the website, or approves an image.
+
+A no-source replay test using the actual intake and checked-out site returned `research-hold` with zero sources; it wrote a research receipt and status and made no drafting call. The coordinator also has tests for a successful research-to-preview handoff, the weekly cap, and a held research result. This validates control flow; the first scheduled live run must still verify subscription CLI access and produce its own audit.
+
+A later manual, live trial of the same weekly command selected a distinct Fort Lauderdale home-addition question about elevation certificates, verified two current City pages, drafted through Codex, received independent Claude review, and generated a local private preview. The coordinator returned `ready-for-human-review`; an immediate repeat returned `already-prepared-this-week` before any new model call. Editorial polish of that ready run retained linked immutable receipts and was reviewed separately. One intermediate version was held after Claude found an unledgered consequential permit statement; a corrected six-claim version passed with two minor notes. This proves the full private handoff for a real article, not the first scheduled Monday execution or public approval. Audit: https://drive.google.com/file/d/1_rzL6M3RwVX7PWBkux7i71Lx4XZG_Fvj/view (SHA-256 `26a60e18afdcb651935375a60dc4ee636b1d9fccd9baf852548682590f735b2f`).
+
+## Run
+
+After verifying that the installed Codex and Claude CLIs use existing subscriptions and no paid API key, run:
+
+```sh
+OPC_ALLOW_SUBSCRIPTION_CLI=1 node scripts/blog-v2/cli.js --input /path/to/snapshot.json --site-frontend /path/to/opc-website-v1/frontend --out /path/to/draft-bundles --provider codex
+```
+
+If Claude requests revision, the runner makes at most one Codex repair pass and asks Claude to review the revision independently. It preserves `originalDraft.json`, `originalReview.json`, `revisedDraft.json`, `revisedReview.json`, and `revision.json` in the new immutable bundle; `draft.json` and `review.json` are the final version used by the gate. To repair an existing blocked run without paying for another first draft or source retrieval, use `--resume-run /path/to/prior-run-dir` in place of `--input`. The new receipt links the prior run by ID and hash. A run that already used its one repair attempt cannot be resumed for another automatic repair.
+
+For a multi-topic private batch, after an article-ready run, use `node scripts/blog-v2/next-snapshot.js <input-snapshot.json> <run-dir> <next-snapshot.json>`. It verifies the immutable receipt, adds that topic to `existing` as queued with its receipt hash, and writes a new snapshot without replacing the old one. Re-run the drafter on the new snapshot to select the next nonduplicate topic. A blocked run cannot advance this helper; investigate its failure and preserve its bundle. No schedule or publication operation is involved.
+
+The repair prompt requires every `claims[].text` to match a contiguous visible sentence in `draft.body`, with that source's Markdown link in the same paragraph. The deterministic gate enforces this. If the repaired draft still fails a deterministic or independent review gate, its terminal status is `revision-gate-failed`; it receives no further automatic repair.
+
+The draft comes from Codex; Claude independently reviews factual support and editorial quality. A failing source fetch, unavailable CLI, invalid JSON, unsupported claim, or reviewer finding stops readiness. No API fallback is configured. A fixture provider exists only for automated tests and does not count as an acceptance pilot.
+
+The bundle contains `snapshot.json`, `selection.json`, `sources.json`, `brief.json`, `draft.json`, `review.json`, `gate.json`, `status.json`, and `receipt.json`. `receipt.json` records file hashes. Preserve the bundle in the shared editorial workspace; verify hashes when transferring it. `draft-ready-for-human-review` is an editorial handoff, never publication approval. Publication requires a separate per-version human approval and website release workflow.
+
+To polish a ready pilot after its independent series review, save the edited complete draft JSON in a new file and run `editorial-polish.js` with the original article bundle, its `private-trial-ready` batch audit, and a specific change note. For a single new weekly article that has not entered a series audit, omit `--batch-audit`; the edited run remains an individual draft for human review and gains no series status. The tool verifies the immutable article receipt and, when given, the batch receipt and membership; it rebuilds a required conceptual figure against the new body digest, asks Claude to review the exact edited version, runs the same deterministic article gate, and writes a new linked receipt. It cannot write to a publication path. A held revised draft remains held; do not copy old approval metadata onto it. Review the three new article receipts together with `batch-review.js` before treating the edited series as trial-ready.
+
+```sh
+OPC_ALLOW_SUBSCRIPTION_CLI=1 node scripts/blog-v2/editorial-polish.js --prior-run /path/to/ready-article --batch-audit /path/to/ready-series --draft /path/to/edited-draft.json --out /path/to/polished-runs --change-note "Describe the editorial correction"
+```
+
+On this Mac, Claude is installed in `~/.local/bin`; the runner resolves that location when it is missing from the Node process PATH. The subscription may be invisible inside a restricted sandbox. A failed `claude auth status` there does not prove the account is logged out; verify the existing Claude Max login in its authorized local execution context. No paid API fallback is configured.
+
+`draft.body` is Markdown, matching the existing website posts. Every listed claim must appear in the body with an inline Markdown source link. Numeric claims must have the same quantity in the cited source excerpt and the claim evidence. Visuals are provenance records for review, not automatic assets.
+
+The v3 editorial gate counts visible article words. A body under 400 words is `incomplete-article`; the drafting prompt targets a useful 450–650 words when evidence supports it and forbids padding or invented detail.
+
+## Format and series review
+
+The intake now assigns a `formatKey` to each supported theme: an evidence explainer, sequence walkthrough, or scope map. The draft and independent review must address that format with direct, source-supported answers. The deterministic gate rejects a mismatched format key or a draft that returns to mostly question headings. This guard addresses the repeated question-list failure in the first acceptance batch; independent review still judges whether the substance is useful.
+
+A `scope-map` brief may opt into `endingStyle: "decision-bullets"` when a table would repeat another article's payoff. In that case draft and repair prompts require two short decision bullets followed by an action, and the deterministic terminal gate rejects a final comparison table. The default scope-map still requires its comparison table. The Miami-Dade addition pilot may opt into `figureConcept: "addition-three-views"`: the runner inserts a private, unapproved original concept figure only when a verified in-body claim names site, floor, and elevation plans together. The source/claim IDs, marker, rights, and body digest are validated; the preview clearly says it is not a permit drawing or compliance finding. Final asset approval is a separate publication gate.
+
+After three distinct article-ready runs, evaluate the series with the existing Claude subscription route:
+
+```sh
+OPC_ALLOW_SUBSCRIPTION_CLI=1 node scripts/blog-v2/batch-review.js /path/to/run-1 /path/to/run-2 /path/to/run-3 --out /path/to/batch-audits
+```
+
+The command checks each immutable receipt, rejects blocked or duplicate runs, and records Claude's separate program-level review, findings, and a new hashed receipt. `private-trial-ready` permits only a private draft-generation trial; it never approves an article or publication. A `batch-hold` keeps recurrence off. Do not substitute three article-level passes for this series review. The site review preview can render a structured in-body decision diagram with provenance and rights metadata, but diagram content still needs factual and editorial review before it counts toward readiness.
+
+After a three-article series returned `private-trial-ready` with no major/blocker findings, a Codex app heartbeat named `OPC Blog v2 — preparo semanal privado` was activated for Mondays at 9:00 AM America/New_York. It prepares at most one private reviewed draft using existing subscriptions and skips a week when evidence is weak. It is a task-attached local automation, so the Mac and required local tools must be available; its exact prompt and execution outcomes are recorded in the OPC Shared Drive and T-904. It has no publish command. Pause that named automation to stop future private runs. Public cadence remains zero until a human approves the exact version and the separate site release gate succeeds.
+
+Council round 4 requires jurisdiction metadata to describe the source's actual coverage. A Florida statute is tagged `Florida`, not `Broward County`. The intake can use statewide sources for a Broward reader, but its question and the draft title may claim county specificity only with county-level topic evidence. With national-only guidance, omit geography from the headline. Original in-body diagrams remain an explicit `OPC_ENABLE_ORIGINAL_DIAGRAMS=1` trial. A text-only scope map is now valid: the Fort Lauderdale CU pilot passed article review but its auto-built figure repeated headings and implied a sequence the sources did not establish. The evidence-explainer kitchen diagram likewise failed independent review for duplicated text and a misleading caption. Every source node in any future figure must repeat an exact reviewed claim and source ID; unsourced sections are visibly labeled OPC planning notes. The independent review sees a proposed diagram before deciding, and its receipt preserves the exact figure. No external image asset is fetched or licensed.
+
+The snapshot validator now rejects a `leg.state.fl.us` statute whose `coverageAreas` includes a county. This enforces the observed Council round 4 correction before selection or model calls. It is a targeted guard against the exact misclassification in the retail pilot; other source coverage still requires editorial verification against the page itself.
+
+Council round 5 adds a geographic check to each claim and a last-section reader artifact gate. A Markdown list or table is only a deterministic proxy; the independent series reviewer still decides whether it is useful and distinct across articles. The three pilots that prompted these gates remain immutable and held. Numeric publisher, claim, and figure quotas are not active. The source-poor HVAC sequence needs explicit order/dependency evidence or a narrower explainer before another acceptance batch. Publication requires a separate exact-content-hash human approval path, which is not present in the runner.
+
+## Rollback
+
+Disable any separate schedule and stop invoking this CLI. Existing site content is not changed by a run. Keep bundles and receipts for audit. Revert the v2 runner commit to remove the code; do not re-enable the old WordPress workflow.
+
+The weekly coordinator accepts `--review-runs-file` with a JSON array of paths to prior private article run bundles, resolved relative to that file. Each run's immutable receipt is verified before its reader intent joins the duplicate inventory. Use this for polished pilot and weekly drafts held outside the weekly output folder; the existing weekly output folder is still scanned automatically. A missing or changed listed bundle fails the attempt before research or model calls. The current local editorial manifest is `work/weekly-inputs/blog-v2-reviewed-runs.json` in the task workspace, linked from the heartbeat prompt and shared editorial record. Add newly reviewed drafts to it only after verifying their receipt; a `reviewed-private` inventory entry prevents an accidental repeat but grants no publication approval. Rollback: remove `--review-runs-file` to restore the prior input-only inventory, or pause the private heartbeat.
