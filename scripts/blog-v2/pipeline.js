@@ -93,6 +93,18 @@ function floodplainApplicabilityError(claim) {
   const claimKeepsLimit = /community participating in the national flood insurance program|NFIP.participating/i.test(claim.text);
   return namesArea && sourceLimitsArea && !claimKeepsLimit ? `omitted-floodplain-applicability:${claim.id}` : null;
 }
+function unsupportedPriceErrors(claim, source) {
+  const sourceMoney = new Set(moneyValues(source.excerpt + ' ' + (source.retrievedExcerpt || '')).map(moneyKey));
+  const evidenceMoney = new Set(moneyValues(claim.evidence).map(moneyKey));
+  return moneyValues(claim.text)
+    .filter(amount => !sourceMoney.has(moneyKey(amount)) || !evidenceMoney.has(moneyKey(amount)))
+    .map(() => `unsupported-price:${claim.id}`);
+}
+function priceContextErrors(claim) {
+  const values = [claim.priceContext?.scope, claim.priceContext?.area, claim.priceContext?.asOf, claim.priceContext?.conditions];
+  return moneyValues(claim.text).length && !values.every(value => typeof value === 'string' && value.trim())
+    ? [`missing-price-context:${claim.id}`] : [];
+}
 function claimEvidenceErrors(claim, source, body) {
   const errors = [];
   const evidenceTerms = tokens(claim.evidence);
@@ -104,11 +116,7 @@ function claimEvidenceErrors(claim, source, body) {
   for (const number of quantities(claim.text)) {
     if (!sourceQuantities.has(quantityKey(number)) || !quantities(claim.evidence).map(quantityKey).includes(quantityKey(number))) errors.push(`unsupported-number:${claim.id}`);
   }
-  const sourceMoney = new Set(moneyValues(source.excerpt + ' ' + (source.retrievedExcerpt || '')).map(moneyKey));
-  const evidenceMoney = new Set(moneyValues(claim.evidence).map(moneyKey));
-  for (const amount of moneyValues(claim.text)) {
-    if (!sourceMoney.has(moneyKey(amount)) || !evidenceMoney.has(moneyKey(amount))) errors.push(`unsupported-price:${claim.id}`);
-  }
+  errors.push(...unsupportedPriceErrors(claim, source));
   const applicability = floodplainApplicabilityError(claim);
   if (applicability) errors.push(applicability);
   return errors;
@@ -127,7 +135,7 @@ function claimErrors(claim, draft, allowed, sources, selected) {
   const errors = [];
   if (![claim.id, claim.text, claim.sourceId, claim.evidence, claim.checkedAt].every(Boolean) || !allowed.has(claim.sourceId) || !['verified', 'uncertain'].includes(claim.status)) errors.push(`invalid-claim:${claim.id || 'unknown'}`);
   if (claim.status !== 'verified') errors.push(`unverified-claim:${claim.id}`);
-  if (moneyValues(claim.text).length && ![claim.priceContext?.scope, claim.priceContext?.area, claim.priceContext?.asOf, claim.priceContext?.conditions].every(value => typeof value === 'string' && value.trim())) errors.push(`missing-price-context:${claim.id}`);
+  errors.push(...priceContextErrors(claim));
   const citedParagraph = draft.body.split(/\n\s*\n/).find(paragraph => paragraph.replace(/\[([^\]]+)\]\(https:\/\/[^)]+\)/g, '$1').includes(claim.text));
   if (!citedParagraph) errors.push(`claim-not-in-body:${claim.id}`);
   const source = sources.find(s => s.id === claim.sourceId);
