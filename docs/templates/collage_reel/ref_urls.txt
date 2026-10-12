@@ -1,4 +1,7 @@
 # name url
-ref_06 https://www.instagram.com/reel/DZ0QR-3huTK/
-ref_07 https://www.instagram.com/reel/DZ42MBXy-WP/
-ref_08 https://www.instagram.com/reel/Db-hT0gx4DY/
+tut_01 https://www.instagram.com/reel/DZsDDmvtNJP/
+tut_02 https://www.instagram.com/reel/DaDhDFjAysT/
+tut_03 https://www.instagram.com/reel/Dafr0KjAkve/
+tut_04 https://www.instagram.com/reel/DaQeqljgc7y/
+tut_05 https://www.instagram.com/reel/DaNlGAcgYsD/
+tut_06 https://www.instagram.com/reel/DY7TSLJAQef/
