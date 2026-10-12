@@ -109,6 +109,33 @@ test('held article triggers a different topic in the same run and stops after a 
   } finally { fs.rmSync(temp, { recursive: true, force: true }); }
 });
 
+test('weekly retries stop after three distinct held articles', () => {
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'opc-weekly-cap-'));
+  const input = path.join(temp, 'ideas.json');
+  const out = path.join(temp, 'private');
+  fs.writeFileSync(input, JSON.stringify({ snapshotAt: new Date().toISOString(), candidates: [], existing: [], sources: [] }));
+  const runs = ['a', 'b', 'c'].map(id => writeRun(path.join(temp, 'articles'), {
+    snapshot: { snapshotAt: new Date().toISOString() }, selection: { selected: { id } },
+    brief: { intentKey: `${id}:broward`, readerDecision: `Decide ${id}` },
+    draft: { title: `Held ${id}`, body: 'Private article.' },
+    gate: ['review-blocked'], status: 'revision-gate-failed',
+  }));
+  let searches = 0;
+  try {
+    const result = runAttempt({ input, siteFrontend: temp, out }, script => {
+      if (script.endsWith('discover-sources.js')) {
+        searches += 1;
+        return { output: { status: 'source-shortlist-ready', sourceCount: 1, runDir: path.join(temp, `research-${searches}`), snapshot: input } };
+      }
+      return { output: { status: 'revision-gate-failed', runDir: runs[searches - 1], selectedId: ['a', 'b', 'c'][searches - 1], gate: ['review-blocked'] } };
+    });
+    assert.equal(result.status, 'article-hold');
+    assert.equal(result.attempt, 3);
+    assert.equal(searches, 3);
+    assert.equal(heldRuns(out).length, 3);
+  } finally { fs.rmSync(temp, { recursive: true, force: true }); }
+});
+
 test('held article intent joins next research input only after receipt verification', () => {
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'opc-weekly-held-'));
   const out = path.join(temp, 'private');
