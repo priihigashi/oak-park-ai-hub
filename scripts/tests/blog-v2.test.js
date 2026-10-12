@@ -12,7 +12,7 @@ const { verifiedCompanyService, standaloneTradeErrors } = require('../blog-v2/co
 const { planMedia } = require('../blog-v2/media-plan');
 const { nextSnapshot } = require('../blog-v2/next-snapshot');
 const { fromSite, addSiteInventory } = require('../blog-v2/site-inventory');
-const { officialHost, sourceFromSuggestion, scopedCandidate } = require('../blog-v2/discover-sources');
+const { officialHost, sourceFromSuggestion, scopedCandidate, hasApplicableSource } = require('../blog-v2/discover-sources');
 
 test('live site and legacy routes join queued topics before autonomous selection', () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'opc-site-inventory-'));
@@ -52,6 +52,11 @@ test('source research ranks a duplicate-safe topic before sources and rejects no
   const city = { ...candidate, question: 'How does a Fort Lauderdale Certificate of Use differ from a renovation permit?', area: 'Broward County' };
   assert.equal(scopedCandidate(city, [{ coverageAreas: ['Fort Lauderdale'] }]).area, 'Fort Lauderdale');
   assert.equal(scopedCandidate({ ...city, question: 'How do Broward permits work?' }, [{ coverageAreas: ['Fort Lauderdale'] }]).evidenceScope, 'unscoped');
+  const broward = { area: 'Broward County' };
+  assert.equal(hasApplicableSource(broward, [{ coverageAreas: ['Miami-Dade County'] }]), false);
+  assert.equal(hasApplicableSource(broward, [{ coverageAreas: ['Broward County'] }]), true);
+  assert.equal(hasApplicableSource(broward, [{ coverageAreas: ['Florida'] }]), true);
+  assert.deepEqual(officialHost('https://www.miamidade.gov/permit').coverageAreas, ['Miami-Dade County']);
 });
 test('official HTML entities preserve exact source quote verification', () => {
   assert.equal(textOnly('<p>The building&rsquo;s approved use &amp; permits&nbsp;matter.</p>'), 'The building’s approved use & permits matter.');

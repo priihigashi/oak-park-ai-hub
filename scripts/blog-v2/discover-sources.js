@@ -12,10 +12,10 @@ const { addSiteInventory } = require('./site-inventory');
 const { verifySources } = require('./cli');
 
 const OFFICIAL = new Map([
-  ['broward.org', { publisher: 'Broward County', coverageAreas: ['unscoped'] }],
-  ['miamidade.gov', { publisher: 'Miami-Dade County', coverageAreas: ['unscoped'] }],
+  ['broward.org', { publisher: 'Broward County', coverageAreas: ['Broward County'] }],
+  ['miamidade.gov', { publisher: 'Miami-Dade County', coverageAreas: ['Miami-Dade County'] }],
   ['fortlauderdale.gov', { publisher: 'City of Fort Lauderdale', coverageAreas: ['Fort Lauderdale'] }],
-  ['pbcgov.org', { publisher: 'Palm Beach County', coverageAreas: ['unscoped'] }],
+  ['pbcgov.org', { publisher: 'Palm Beach County', coverageAreas: ['Palm Beach County'] }],
   ['myfloridalicense.com', { publisher: 'Florida Department of Business and Professional Regulation', coverageAreas: ['Florida'] }],
   ['floridahealth.gov', { publisher: 'Florida Department of Health', coverageAreas: ['Florida'] }],
   ['epa.gov', { publisher: 'US Environmental Protection Agency', coverageAreas: ['national'] }],
@@ -58,6 +58,11 @@ function scopedCandidate(candidate, sources) {
   if (onlyFortLauderdale && /fort lauderdale/i.test(candidate.question)) return { ...candidate, area: 'Fort Lauderdale', evidenceScope: 'Fort Lauderdale' };
   return { ...candidate, evidenceScope: sources.some(source => source.coverageAreas.includes('Florida')) ? 'Florida' : 'unscoped' };
 }
+function hasApplicableSource(candidate, sources) {
+  const area = candidate.area;
+  return sources.some(source => (source.coverageAreas || []).some(coverage =>
+    coverage === area || coverage === 'Florida' || coverage === 'national'));
+}
 function codexSearch(candidate) {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'opc-source-discovery-'));
   const output = path.join(tmp, 'response.json');
@@ -93,7 +98,7 @@ async function main() {
     snapshotAt: new Date().toISOString(), candidates: snapshot.candidates.map(item => item.id === selected.id ? selected : item),
     existing: snapshot.existing, sources: [...new Map([...snapshot.sources, ...unique].map(item => [item.id, item])).values()], siteEvidence: snapshot.siteEvidence,
   };
-  const status = unique.length ? 'source-shortlist-ready' : 'research-hold';
+  const status = unique.length && hasApplicableSource(selection.selected, unique) ? 'source-shortlist-ready' : 'research-hold';
   const suggestionsProvenance = suggestionsFile ? { file: suggestionsFile, sha256: crypto.createHash('sha256').update(fs.readFileSync(suggestionsFile)).digest('hex') } : { provider: 'codex-cli-live-search' };
   const runDir = writeRun(out, { rawSnapshot, intake, snapshot, selection, discovery: { suggestions, suggestionsProvenance, checked: checked.map(({ suggestion, accepted: source, reason }) => ({ suggestion, sourceId: source?.id || null, reason })) }, sources: unique, preparedSnapshot, status });
   console.log(JSON.stringify({ runDir, status, selectedId: selected.id, sourceCount: unique.length, snapshot: path.join(runDir, 'preparedSnapshot.json') }));
@@ -113,4 +118,4 @@ function readSuggestions(file) {
   return list;
 }
 if (require.main === module) main().catch(error => { console.error(error.message); process.exitCode = 1; });
-module.exports = { officialHost, sourceFromSuggestion, verifySuggestion, researchPrompt, prepareResearchInput, scopedCandidate };
+module.exports = { officialHost, sourceFromSuggestion, verifySuggestion, researchPrompt, prepareResearchInput, scopedCandidate, hasApplicableSource };
