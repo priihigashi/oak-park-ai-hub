@@ -30,6 +30,9 @@ test('Mac review page shows private preview and records a CSRF-protected decisio
     assert.match(home, /&lt;script&gt;Unsafe title&lt;\/script&gt;/);
     assert.doesNotMatch(home, /<script>Unsafe title/);
     assert.match(home, /Pedir ajustes/);
+    assert.match(home, /Opção 1 · Dar feedback/);
+    assert.match(home, /Opção 2 · Deixar seguir sozinho/);
+    assert.match(home, /não precisa abrir esta página nem responder/);
     const shown = await (await fetch(`${base}/preview/${item.id}?token=test-secret`)).text();
     assert.match(shown, /Exact private preview/);
     const denied = await fetch(`${base}/action/${item.id}`, { method: 'POST', body: new URLSearchParams({ token: 'wrong', action: 'approved' }) });
