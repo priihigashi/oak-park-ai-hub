@@ -205,7 +205,7 @@ function scenes(T_){
   // vencedora
   const w0=RACE_END+CROWN, v=T_-w0; show('win',v>=0&&v<WIN+.2);
   if(v>=0&&v<WIN+.2){const q=document.querySelector('#win .q'); q.style.opacity=cl(v/.4);
-    const dr=document.querySelector('#win .dr'); dr.style.opacity=v>.6&&v<2.25?1:0; dr.textContent='·'.repeat(1+Math.floor(((v-.6)*6))%4);
+    const dr=document.querySelector('#win .dr'); dr.style.opacity=v>.6&&v<2.25?1:0; dr.textContent='·'.repeat(1+(Math.max(0,Math.floor((v-.6)*6))%4));
     const bg=document.querySelector('#win .big'); const bp=cl((v-2.25)/.35); bg.style.opacity=v>=2.25?1:0; bg.style.transform=`scale(${(1.6-.6*eb(bp)).toFixed(3)})`; bg.style.transformOrigin='0 50%';
     document.querySelector('#win .sub').style.opacity=cl((v-3.1)/.4);
     // confete de cédulas (12 fps, cai e gira)
