@@ -32,6 +32,26 @@ Isso aparece em TODO reel, seja qual for o look:
 
 > Ideias de looks novos são bem-vindas. Um look novo vira linha aqui quando for usado.
 
+
+### 2b. COR — revezar paletas, manter a personalidade (regra da Priih, 2026-10-12)
+- **Não** usar sempre creme/papel velho + vermelho + amarelo (cores do Placar). Pode, mas como UMA opção entre várias. Papel velho/creme = às vezes, não sempre.
+- Revezar entre reels: um reel muito vermelho → o próximo, mesmo estilo, outra paleta. A personalidade (tipografia, ritmo, recortes, textura, placar) é o que liga os posts — não a cor.
+- Paletas na roda (escolher UMA por reel e registrar no STORY doc):
+  1. **Pop** — cores fortes e saturadas, fundo chapado.
+  2. **Minimal P&B + 1 splash** — preto e branco com textura (grão/halftone) e UMA cor de destaque.
+  3. **Brasil** — branco + verde #009C3B / amarelo #FFDF00 / azul #002776 (combinar, não bandeira literal). Branco é bem-vindo.
+  4. **EUA** — branco + azul #0A3161 + vermelho #B31942.
+  5. **P&B misturado com cor** — cenas de arquivo em P&B, pessoa/dado atual em cor (contar história no tempo).
+  6. **Papel & Recorte (creme)** — às vezes.
+  7. Paletas tiradas das referências que ela manda (ver REPERTORIO.md) — inspiração, não cópia.
+- Esquerda/direita em gráfico político: vermelho = esquerda, azul = direita (convenção de leitura) — independentemente da paleta do reel.
+
+### 2c. ALINHAMENTO E ESPAÇO (checar em TODO frame antes de render)
+- Nada encosta/sobrepõe: título, subtítulo, rótulos, números, caixas. Mínimo 24px entre blocos de texto; 40px+ entre seções.
+- Margens laterais iguais (70px) e uma grade só; alinhar pela esquerda os blocos da mesma coluna.
+- Entrelinha do título ~0.92–1.0; subtítulo nunca colado no título.
+- Rodar `snap.js` em 4–6 tempos (incluindo meio de transição) e OLHAR os frames antes de entregar.
+
 ## 3. MOVIMENTOS — nome · como é · ideal para · ideias
 Cada um diz o que acontece quadro a quadro. Os presets entre `colchetes` são o jeito mais rápido de fazer no motor, mas não são o único.
 
