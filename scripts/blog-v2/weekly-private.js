@@ -86,6 +86,13 @@ function attemptedThisWeek(out, now = new Date()) {
   }
   return null;
 }
+function skippedAttempt(prior) {
+  return {
+    status: prior.status === 'ready-for-human-review' ? 'already-prepared-this-week' : 'already-attempted-this-week',
+    priorStatus: prior.status,
+    priorArticleRun: prior.articleRun || null,
+  };
+}
 function stagedInput(raw, queued) {
   const existing = [...(raw.existing || [])];
   const seen = new Set(existing.map(item => item.intentKey).filter(Boolean));
@@ -110,10 +117,7 @@ function runAttempt(options, runner = command) {
     fs.mkdirSync(dir);
     const queued = [...queuedRuns(options.out), ...reviewedRuns(options.reviewRunsFile)];
     const prior = attemptedThisWeek(options.out);
-    if (prior) return writeStatus(dir, {
-      status: prior.status === 'ready-for-human-review' ? 'already-prepared-this-week' : 'already-attempted-this-week',
-      priorStatus: prior.status, priorArticleRun: prior.articleRun || null,
-    });
+    if (prior) return writeStatus(dir, skippedAttempt(prior));
     const staged = path.join(dir, 'input.json');
     fs.writeFileSync(staged, JSON.stringify(stagedInput(raw, queued), null, 2) + '\n', { flag: 'wx' });
     const researchArgs = ['--input', staged, '--site-frontend', options.siteFrontend, '--out', path.join(dir, 'research')];
