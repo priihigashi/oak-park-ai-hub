@@ -31,3 +31,8 @@
 - Upload da biblioteca completa (demos/ref 00–05/75 cenas) do Mac pro Drive: token OAuth não está em ~/ClaudeWorkspace/Credentials; alternativa = workflow do GitHub com secret SHEETS_TOKEN.
 - Refs 06–08 (telas em 3) falharam no download. Refs 09–11, 15–17 baixadas, falta analisar (ver folhas de quadros na pasta _entrada_refs).
 - Skill: botão de salvar não funciona pra skill sincronizada; propor como skill nova ou recriar.
+
+## Novo fecho (pedido da Priih, 14:44)
+- Trocar a última tela por: "E quem está escolhendo não mudar é" + **VOCÊ** enorme, ocupando a tela (alternativa: "E quem está escolhendo é VOCÊ."). Entrada com impacto (slam/stamp + som), textura, nada de tela preta lisa.
+- Pode manter antes a pergunta "Em quem você votou pra deputado?" ou fundir as duas.
+- Google Doc deste handoff: https://docs.google.com/document/d/1xKqbkckbkxuNvUxcmeMz6dFqXAIMIALUWYpgD6JH4Cs/edit
