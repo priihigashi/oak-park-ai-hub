@@ -64,6 +64,42 @@ Linguagem: fundo chapado com textura de papel, cores por bloco (vermelho/tinta/o
 
 ---
 
+---
+
+## REF 02 — @ana_agroecologia ("O preço da comida", 74 s) — o original que inspirou o episódio 1
+**Linguagem:** fundos de cor chapada e BEM saturados que mudam por ato (laranja → azul → papel → preto → vermelho), objetos em FOTO REAL recortada (banana, arroz, óleo, cebola — não emoji), rosto recortado gigante ancorado embaixo, condensada pesada em caixa alta, números em sans itálica branca, legenda pequena branca com contorno.
+**Movimentos que valem ouro:**
+- **Rosto Testemunha + Prateleira:** o rosto do responsável fica ancorado embaixo (cortado na testa/olhos) a cena toda; cada item entra no meio com pop, o contador sobe ao lado, e depois o item ENCOLHE e voa pra uma "prateleira" no topo, acumulando (+98,5% · +56% · +140%…). Ótimo pra lista de itens do mesmo responsável.
+- **Pontos que Escorrem:** painel de papel sobe; pontos nascem pequenos e "escorrem" em fila (cobra) até formar uma grade; cada linha ganha cor e rótulo de categoria (laticínios, hortifruti…); depois a grade inteira vira preta e bate "NENHUM / FICOU MAIS BARATO". Ótimo pra "acompanhamos N itens".
+- **Caixas que Empilham:** blocos coloridos com sigla (PAA · PNAE · CONAB) caem um sobre o outro.
+- **Mapa com Faixa Torta:** mapa do Brasil + faixa branca girada que bate com o texto.
+- **Barras Horizontais Longas:** ranking de 35 itens, barras crescem em 2 cores sobrepostas (antes × depois).
+**Não copiar:** fim de campanha ("vote 13"), dados organizados pelo partido, período escondido, gráfico sem escala (ver REF 00 / episódio 1, onde corrigimos).
+Cenas recortadas: biblioteca-cenas (ref02_agroecologia).
+
+---
+
+## REF 03 — @projeto.contraponto ("Feitos da direita que a esquerda não te conta", 103 s)
+**Linguagem:** "carrossel animado" — cartões editoriais tipográficos sobre fundo verde-escuro com grão fino ESTÁTICO; 2 cores + creme (verde #03301F, amarelo #FCC13D, creme #FCF8F0, sálvia #7EAB9B); sem sombra; grid rígido (margem 7%, eyebrow sempre a 14,5% da altura, linha FONTE sempre a 78,5%); câmera 100% parada.
+**Fontes:** Montserrat 800/900 (títulos, números) · Montserrat 600 caixa alta com tracking .15em (eyebrow, rótulos, FONTE) · serifa itálica (Newsreader Italic) nas frases-conclusão.
+**Fotos:** duotone verde gigante de fundo (~30%); recorte P&B em CÍRCULO com a cabeça saindo pelo topo; recorte P&B sangrando no canto.
+**Movimentos novos:** Linha que Sobe da Régua (texto nasce dentro de máscara, linha a linha, 0,25 s, atraso 0,12–0,17 s) · Painel que Sobe (cena nova sobe por cima, expo-out) · Limpa e Reconstrói · Contador Escala com milhar (2.477%) · Queda com Curva (número desce + curva em S desenhada) · Moeda que Gira (rotateY) · Barra que Encolhe com o Número · Rótulo que Viaja no topo da coluna · Lista que Empilha e Compacta · Retrato que Estoura do Círculo · Linha do Tempo de Pontos · Zero que Bate.
+**Melhor que o nosso:** grid fixo, linha FONTE curta em todo dado, estrutura de série ("FEITO Nº 1"), contraste sans pesada × serifa itálica.
+**Não copiar:** peça de campanha ("vote contra"), verde-amarelo politizado, dados de um lado só, fotos sem crédito, ritmo lento demais pro nosso DNA, marca d'água/outro do IG.
+
+---
+
+## REF 04 — @projeto.contraponto ("O que seria o governo Flávio Milei", 95 s)
+**Linguagem:** motion graphics contínuo — poucos cortes (12), mas algo entra a cada 0,5–1,5 s, sincronizado com a fala; fundo grafite com vinheta radial (#2C2A2F → #17151A); 3 cores (vermelho #EA4339, off-white #F2EEE8, grafite) + cor semântica de país (azul Argentina); flat, sem grão, sem sombra.
+**Fontes:** Montserrat 900 (títulos-soco, números gigantes) · Montserrat 800 tracking aberto (kickers) · serifa editorial (Source Serif 4 / Newsreader) nas manchetes e citações · Montserrat 600 na legenda.
+**Legenda:** barra preta de largura total a ~75% da altura, frase inteira visível, palavras faladas em branco e as próximas em cinza (karaokê invertido).
+**Fotos:** recorte P&B em DISCO cinza com a cabeça vazando pelo topo.
+**Movimentos novos:** Máquina de Escrever com Cursor ▮ (assinatura) · Varrida Lateral (whip com borrão) · Ondas de Som · Plateia que Brota + Balões "…" · Retrato que Rola pra Dentro (disco) · Citação com Marca-texto · **Números Chutados** (dígitos aleatórios + etiqueta torta — perfeito pra checagem) · Lupa sobre o Documento · Empurrão Vertical · Zoom-Soco · Pop com Anel · Recibo que Estica + Risco · Ping de Lugar no mapa · Contador + Curva sincronizados · Grade que Acende (recolor seco) · Foguete (itens disparam com rastro) · Pedaço que Cai (barra perde pedaço com gravidade) · Cédulas que Enchem e Voam · Teclas Ctrl+C/V · Máscara que Revela · Grade-resumo de Cartões · Corte para Vazio.
+**Melhor que o nosso:** cada número vira um OBJETO que se comporta como o dado (conta estica, barra perde pedaço, cédulas voam); montagem sincronizada com a fala; sistema rígido de 2 fontes / 3 cores; cartão de fonte com formato fixo (VEÍCULO · fio · manchete serifada · data).
+**Não copiar:** rosto fundido de dois políticos (caricatura, não dado); projeção de inflação de outro país direto em reais (dado fraco); opinião de terceiro como fato; vermelho dominante; marca d'água/outro do IG.
+
+---
+
 ## Variações de template que esse repertório abre
 1. **"Palavra por batida"** (kinetic type puro, fundo preto) — 30–45 s, pra opinião curta / resposta rápida / veredito. Sem gráfico; tudo `.grot` + `glitch` + `.kar`.
 2. **"Retícula"** — o Colagem atual, mas com todas as fotos em `linescreen.py` (B&W) e lados em ardósia × ouro. Mais sério, cara de jornal impresso.
