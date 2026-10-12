@@ -18,7 +18,7 @@ jobs:
       - name: Install
         run: |
           sudo apt-get update -qq && sudo apt-get install -y ffmpeg
-          pip install -q yt-dlp
+          pip install -q yt-dlp google-api-python-client google-auth
       - name: Download
         env:
           PRI_OP_IG_COOKIES: ${{ secrets.PRI_OP_IG_COOKIES }}
@@ -42,6 +42,31 @@ jobs:
             yt-dlp $C -f "bv*+ba/b" --merge-output-format mp4 -o "out/${name}.%(ext)s" --write-info-json "$url" || echo "FAIL $name $url" >> out/errors.txt
           done
           ls -la out
+      - name: Upload to Drive (template library › repertorio › _entrada)
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: |
+          python - <<'EOF2'
+          import os, json, glob, urllib.request, urllib.parse
+          from google.oauth2.credentials import Credentials
+          from googleapiclient.discovery import build
+          from googleapiclient.http import MediaFileUpload
+          td=json.loads(os.environ["SHEETS_TOKEN"])
+          r=json.loads(urllib.request.urlopen(urllib.request.Request("https://oauth2.googleapis.com/token",data=urllib.parse.urlencode({"client_id":td["client_id"],"client_secret":td["client_secret"],"refresh_token":td["refresh_token"],"grant_type":"refresh_token"}).encode())).read())
+          c=Credentials(token=r["access_token"])
+          d=build("drive","v3",credentials=c)
+          ROOT="13OJNMGCR6oFHYuX_xsLznlSr3qwQdC8a"
+          q=f"'{ROOT}' in parents and name='_entrada_refs' and trashed=false"
+          f=d.files().list(q=q,supportsAllDrives=True,includeItemsFromAllDrives=True,fields="files(id)").execute()["files"]
+          fid=f[0]["id"] if f else d.files().create(body={"name":"_entrada_refs","mimeType":"application/vnd.google-apps.folder","parents":[ROOT]},supportsAllDrives=True,fields="id").execute()["id"]
+          print("FOLDER",fid)
+          for p in sorted(glob.glob("out/*")):
+              n=os.path.basename(p)
+              ex=d.files().list(q=f"'{fid}' in parents and name='{n}' and trashed=false",supportsAllDrives=True,includeItemsFromAllDrives=True,fields="files(id)").execute()["files"]
+              if ex: print("skip",n); continue
+              o=d.files().create(body={"name":n,"parents":[fid]},media_body=MediaFileUpload(p,resumable=True),supportsAllDrives=True,fields="id,name").execute()
+              print("UP",o)
+          EOF2
       - uses: actions/upload-artifact@v4.6.2
         with:
           name: ref-reels
