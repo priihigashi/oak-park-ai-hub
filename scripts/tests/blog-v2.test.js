@@ -83,6 +83,8 @@ test('draft and repair prompts prohibit sources outside the verified run', () =>
   assert.match(draftPrompt(brief, sources), /including conditional permit or approval requirements/);
   assert.match(draftPrompt(brief, sources), /never infer that one replaces or does not replace the other/);
   assert.match(draftPrompt(brief, sources), /state the source retrieval date from retrievedAt/);
+  assert.match(draftPrompt(brief, sources), /priceContext \{scope,area,asOf,conditions\}/);
+  assert.match(articleReviewPrompt(brief, {}, sources), /generic disclaimer cannot rescue an unsupported range/);
   assert.match(articleReviewPrompt(brief, {}, sources), /matching claims\[\] entry/);
   assert.match(articleReviewPrompt(brief, {}, sources), /visible as-of retrieval date/);
   assert.match(articleReviewPrompt(brief, {}, sources), /omitted condition that limits where a regulatory rule applies as major/);
@@ -272,6 +274,21 @@ test('Markdown draft requires each cited claim in body and source-supported numb
   assert.ok(!errors.includes('html-or-wordpress-content'));
   const revised = { ...draft, body: draft.body.replace('14 days', '10 days'), claims: [{ ...claim, text: 'Review takes 10 days', evidence: 'review takes 10 days before construction starts' }] };
   assert.ok(!validateDraft(revised, candidate, { sources: [numbered] }).some(e => e.startsWith('unsupported-number')));
+});
+test('price figures need exact source support, ledger coverage and scope context', () => {
+  const pricedSource = { ...source, excerpt: 'For this defined addition scope, the recorded price was $10,000 on 2026-10-01.' };
+  const text = 'For this defined addition scope, the recorded price was $10,000 on 2026-10-01.';
+  const claim = { id: 'price', text, sourceId: 's1', evidence: pricedSource.excerpt, checkedAt: '2026-10-10', status: 'verified' };
+  const body = `## Cost example\n\n${text} [Source](${source.url}).\n\n` + 'Project conditions change the final estimate. '.repeat(65);
+  const draft = { title: 'Addition cost example', description: 'A scoped example.', body, claims: [], visuals: [] };
+  assert.ok(validateDraft(draft, candidate, { sources: [pricedSource] }).includes('unledgered-price-amount:10000'));
+  const withClaim = { ...draft, claims: [claim] };
+  assert.ok(validateDraft(withClaim, candidate, { sources: [pricedSource] }).includes('missing-price-context:price'));
+  const contextual = { ...claim, priceContext: { scope: 'Defined addition scope', area: 'Broward County', asOf: '2026-10-01', conditions: 'Actual structural and utility scope can change the quote.' } };
+  const clean = validateDraft({ ...draft, claims: [contextual] }, candidate, { sources: [pricedSource] });
+  assert.ok(!clean.some(error => /price|unledgered/.test(error)));
+  const unsupported = validateDraft({ ...draft, claims: [{ ...contextual, text: text.replace('$10,000', '$20,000') }], body: body.replace('$10,000', '$20,000') }, candidate, { sources: [pricedSource] });
+  assert.ok(unsupported.includes('unsupported-price:price'));
 });
 test('v3 editorial floor counts visible words and rejects a 399-word draft', () => {
   const shortBody = Array(399).fill('guidance').join(' ');
