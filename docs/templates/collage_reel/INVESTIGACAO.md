@@ -26,6 +26,40 @@ A IA erra quando olha só o voto. Antes de afirmar "ele é a favor/contra X":
 - Na tela: recorte da pessoa sobre o nosso design + legenda karaokê + "FONTE · CANAL/VEÍCULO · DATA". No STORY doc: link original + minutagem.
 - Download: yt-dlp no Mac (a nuvem bloqueia), arquivo em resources/ do episódio.
 
+## 1d. DOSSIÊ OBRIGATÓRIO — projeto de lei, medida, preço ou qualquer fato (preencher ANTES do roteiro)
+Vale pra lei, MP, PEC, decreto, programa, mudança de preço — qualquer coisa que "aconteceu". Vai inteiro na seção BRIEF/RESEARCH do STORY doc, com fonte em cada linha.
+
+**QUEM FEZ**
+- Autor(es): nome, cargo na época (deputado, senador, ministro, presidente), partido e espectro (esquerda · centro-esquerda · centro · centro-direita · direita).
+- **Relator** (em inglês: *rapporteur*) em cada comissão e no plenário: nome, partido, espectro. O relator nem sempre tem o mesmo objetivo do autor — dizer isso quando for o caso.
+- Quem pediu urgência, quem sancionou/vetou (e o que foi vetado).
+
+**O QUE MUDOU NO CAMINHO**
+- Quantas versões o texto teve (original → substitutivos → emendas aprovadas → texto final). O que cada versão acrescentou/tirou — principalmente regras de acesso, valores, prazos, exigências.
+- Linha do tempo: data de apresentação → comissões → plenário de cada casa → sanção/veto/arquivamento. **Quanto tempo levou** (dias/meses/anos).
+
+**QUEM SE OPÔS E POR QUÊ**
+- Separar: contra o projeto inteiro × contra partes (um trecho, uma emenda, uma versão do relator). Exemplo típico: um partido apoia a ideia do benefício, mas vota contra a versão final porque o relator dificultou o acesso.
+- Argumentos reais da oposição tirados de: discursos em plenário (notas taquigráficas), audiências públicas e reuniões de comissão (TV Câmara/TV Senado/YouTube — às vezes horas de vídeo: baixar, transcrever, procurar os argumentos), votos em separado, destaques, notas técnicas.
+- Os votos de ninguém viram "posição" sem o registro completo (§1b).
+
+**DADOS DOS DOIS LADOS**
+- Para cada argumento central (a favor e contra): existe dado que sustenta? Fonte primária. Se nenhum lado consegue provar agora, dizer isso com honestidade. Se há países que escolheram um dos caminhos, mostrar o resultado lá (mesmo indicador, mesmo período, com fonte).
+
+**OS NÚMEROS DA VOTAÇÃO**
+- Votação nominal: placar total + **por partido e por espectro ideológico** (quantos votos da esquerda, centro-esquerda, centro, centro-direita, direita) + orientação de cada liderança.
+- Se NÃO houve votação nominal (votação simbólica, acordo de líderes, aprovação em comissão terminativa): dizer isso e investigar por quê (quem pediu, quem não pediu verificação).
+- Classificação ideológica: usar sempre a mesma régua e citar (ex.: classificação acadêmica de partidos brasileiros por especialistas — conferir a versão mais recente antes de usar) e anotar no STORY doc qual foi usada.
+
+**ÂNGULO EDITORIAL DA PÁGINA (atual)**
+- Público principal agora: quem acha que a esquerda não está funcionando. Foco em o que a esquerda está fazendo, por que propôs, e mostrar também o que a direita fez/votou — sempre com fato e fonte. O ângulo escolhe o tema e a ordem; nunca muda o dado, nem esconde fato do outro lado.
+
+## 1e. GRÁFICOS COM CONTEXTO DE PERÍODO
+- Quando o período comparado tem choque externo (Covid 2020–2021, guerra Rússia–Ucrânia 2022, crise hídrica, pandemia, eleição etc.): faixa de destaque discreta no gráfico + rótulo menor (não minúsculo) dizendo o que foi, direto na faixa — não em legenda separada.
+- Destacar também os períodos SEM choque para o mesmo governo (ex.: 2019 antes da Covid), porque problema em período normal não tem desculpa externa.
+- Fazer as DUAS leituras quando fizer diferença: período inteiro e período sem choque. Nunca usar o choque como desculpa automática — às vezes a alta veio de outra causa; checar antes de rotular.
+- Anotar no STORY doc quais faixas de contexto foram usadas e por quê.
+
 ## 2. REGRA ANTI-AMACIAMENTO (sem falso equilíbrio)
 O vídeo é sobre FATOS. Não é nosso trabalho "equilibrar" um fato negativo com algo fraco a favor do político.
 

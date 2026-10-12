@@ -130,6 +130,8 @@ Cada um diz o que acontece quadro a quadro. Os presets entre `colchetes` são o 
 - [ ] Nada parado: zoom lento (`data-kb`) ou deriva (`data-drift`) em toda foto.
 - [ ] Respiro: margens de 60 px, nada colado nas zonas de UI do Instagram (topo 220 px, base 300 px).
 - [ ] Som acompanha cada entrada (whoosh, tique, carimbo, zap).
+- [ ] Gráfico com faixa de contexto de período (choque externo × período normal) quando o recorte cruza Covid, guerra etc. — rótulo direto na faixa (INVESTIGACAO.md §1e).
+- [ ] Placar de votação por espectro ideológico + orientação dos partidos, quando o tema for lei/votação.
 - [ ] Grid fixo: rótulo/eyebrow e linha de FONTE sempre na mesma altura em todas as cenas (REF 03).
 - [ ] Pelo menos 1 clipe real "Da Boca Dele" quando o tema for uma pessoa (§3, nº 37).
 - [ ] Cada número de impacto vira objeto que se comporta como o dado (§3, nº 33).
