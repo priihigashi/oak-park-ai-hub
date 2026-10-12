@@ -90,7 +90,10 @@ function startServer(queueFile, port = 43127, notify = macNotify) {
   const token = crypto.randomBytes(32).toString('hex');
   const server = http.createServer(createHandler(queueFile, token));
   const reviewUrl = () => `http://127.0.0.1:${server.address().port}/?token=${token}`;
-  server.listen(port, '127.0.0.1', () => notifyDue(queueFile, reviewUrl(), notify));
+  server.listen(port, '127.0.0.1', () => {
+    fs.writeFileSync(`${queueFile}.link`, reviewUrl() + '\n', { mode: 0o600 });
+    notifyDue(queueFile, reviewUrl(), notify);
+  });
   const timer = setInterval(() => notifyDue(queueFile, reviewUrl(), notify), 60000);
   server.on('close', () => clearInterval(timer));
   return server;
@@ -98,7 +101,12 @@ function startServer(queueFile, port = 43127, notify = macNotify) {
 if (require.main === module) {
   const index = process.argv.indexOf('--queue');
   const queueFile = index < 0 ? null : process.argv[index + 1];
-  if (!queueFile) { console.error('Usage: review-server.js --queue private-runs/review-queue.json [--port 43127]'); process.exitCode = 1; }
+  if (!queueFile) { console.error('Usage: review-server.js --queue private-runs/review-queue.json [--port 43127] [--open]'); process.exitCode = 1; }
+  else if (process.argv.includes('--open')) {
+    const url = fs.readFileSync(`${queueFile}.link`, 'utf8').trim();
+    const opened = spawnSync('open', [url], { encoding: 'utf8', timeout: 10000 });
+    if (opened.error || opened.status !== 0) { console.error(opened.error?.message || opened.stderr); process.exitCode = 1; }
+  }
   else {
     const portIndex = process.argv.indexOf('--port');
     const port = portIndex < 0 ? 43127 : Number(process.argv[portIndex + 1]);
