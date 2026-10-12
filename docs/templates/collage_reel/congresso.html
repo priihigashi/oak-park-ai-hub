@@ -115,15 +115,17 @@ function render(T_){
   tag.textContent=a[1].split(' · ')[0]+' ASSUME'; tag.style.background=a[2]==='E'?COL.gE:COL.gD;
   tag.style.opacity=(cur.start&&T_>=INTRO)?Math.min(1,(T_-startT)/.3):0;
   pres.children[1].textContent=a[1];
-  const g=grp(va), gb=grp(vb);
+  const g=grp(v).map(x=>[x[0],Math.round(x[1])]), gb=grp(vb);
   rank.querySelectorAll('.r').forEach((row,i)=>{const sp=row.querySelector('.nm span'); const changed=k&&gb[i][0]!==g[i][0];
     sp.textContent=g[i][0]; sp.style.color=g[i][0]==='Bloco direita'?COL.gD:(g[i][0]==='Bloco esquerda'?COL.gE:'#151515'); sp.style.transform=changed?`translateY(${((1-p)*70).toFixed(1)}px)`:'none';
     row.querySelector('.v').innerHTML=`${g[i][1]}<b>${(g[i][1]/513*100).toFixed(0)}%</b>`;});
-  const dir=va.D+va.CD, esq=va.E+va.CE, cong=dir>=257?'direita':(esq>=257?'esquerda':'sem maioria');
-  neg.innerHTML=SP[a[2]]===cong?`Presidente de <u>${SP[a[2]]}</u> com Câmara de <u>${cong}</u>: maioria própria, não depende da oposição.`
-    :`Presidente de <u>${SP[a[2]]}</u> precisa negociar com uma Câmara de <u>${cong}</u> — ${dir} de 513 cadeiras.`;
+  const half=k&&p<.5, A=half?b:a, VA=half?vb:va;
+  pres.children[1].textContent=A[1];
+  const dir=VA.D+VA.CD, esq=VA.E+VA.CE, cong=dir>=257?'direita':(esq>=257?'esquerda':'sem maioria');
+  neg.innerHTML=SP[A[2]]===cong?`Presidente de <u>${SP[A[2]]}</u> com Câmara de <u>${cong}</u>: maioria própria, não depende da oposição.`
+    :`Presidente de <u>${SP[A[2]]}</u> precisa negociar com uma Câmara de <u>${cong}</u> — ${dir} de 513 cadeiras.`;
   if(T_>t) neg.innerHTML='Em <u>8 de 8</u> Câmaras eleitas desde 1994, o bloco da direita teve maioria.';
-  neg.style.opacity=T_<INTRO?0:1;
+  neg.style.opacity=T_<INTRO?0:(k&&p<1?Math.max(.0,Math.abs(p-.5)*2):1);
   tl.querySelector('.fill').style.width=Math.min(920,(cur.year-1995+(T_<INTRO?0:.5))/(END-1995)*920)+'px';
 }
 window.render=render; render(0); window.READY=document.fonts.ready;
