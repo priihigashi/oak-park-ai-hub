@@ -1,0 +1,102 @@
+[
+ {
+  "name": "vo01",
+  "model": "minimax/speech-02-hd",
+  "status": "succeeded",
+  "error": null,
+  "detail": null,
+  "files": [
+   "out/vo01.mp3"
+  ]
+ },
+ {
+  "name": "vo02",
+  "model": "minimax/speech-02-hd",
+  "status": "succeeded",
+  "error": null,
+  "detail": null,
+  "files": [
+   "out/vo02.mp3"
+  ]
+ },
+ {
+  "name": "vo03",
+  "model": "minimax/speech-02-hd",
+  "status": "succeeded",
+  "error": null,
+  "detail": null,
+  "files": [
+   "out/vo03.mp3"
+  ]
+ },
+ {
+  "name": "vo04",
+  "model": "minimax/speech-02-hd",
+  "status": "succeeded",
+  "error": null,
+  "detail": null,
+  "files": [
+   "out/vo04.mp3"
+  ]
+ },
+ {
+  "name": "vo05",
+  "model": "minimax/speech-02-hd",
+  "status": "succeeded",
+  "error": null,
+  "detail": null,
+  "files": [
+   "out/vo05.mp3"
+  ]
+ },
+ {
+  "name": "vo06",
+  "model": "minimax/speech-02-hd",
+  "status": "succeeded",
+  "error": null,
+  "detail": null,
+  "files": [
+   "out/vo06.mp3"
+  ]
+ },
+ {
+  "name": "vo07",
+  "model": "minimax/speech-02-hd",
+  "status": "succeeded",
+  "error": null,
+  "detail": null,
+  "files": [
+   "out/vo07.mp3"
+  ]
+ },
+ {
+  "name": "vo08",
+  "model": "minimax/speech-02-hd",
+  "status": "succeeded",
+  "error": null,
+  "detail": null,
+  "files": [
+   "out/vo08.mp3"
+  ]
+ },
+ {
+  "name": "vo09",
+  "model": "minimax/speech-02-hd",
+  "status": "succeeded",
+  "error": null,
+  "detail": null,
+  "files": [
+   "out/vo09.mp3"
+  ]
+ },
+ {
+  "name": "vo10",
+  "model": "minimax/speech-02-hd",
+  "status": "succeeded",
+  "error": null,
+  "detail": null,
+  "files": [
+   "out/vo10.mp3"
+  ]
+ }
+]
