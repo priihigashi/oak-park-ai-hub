@@ -1,0 +1,97 @@
+name: Sala Escura gen (temporary, branch-only)
+
+# Temporary runner for the "Sala escura" reel. Runs Replicate jobs from sala_escura/jobs.json
+# on push to this branch only. Delete the branch when the reel is done.
+on:
+  push:
+    branches: [claude/sala-escura]
+    paths: ['sala_escura/jobs.json']
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Replicate jobs
+        env:
+          REPLICATE_API_TOKEN: ${{ secrets.PRI_OP_REPLICATE_API_KEY }}
+          JOBS_FILE: sala_escura/jobs.json
+        run: |
+          mkdir -p out
+          python3 - <<'PY'
+          import os, json, base64, time, urllib.request, urllib.error
+          raw = open(os.environ["JOBS_FILE"]).read().strip()
+          try:
+              jobs = json.loads(raw)
+          except Exception:
+              jobs = json.loads(base64.b64decode(raw).decode())
+          tok = os.environ["REPLICATE_API_TOKEN"]
+          H = {"Authorization": f"Bearer {tok}", "Content-Type": "application/json"}
+
+          def call(method, url, body=None):
+              req = urllib.request.Request(url, method=method, headers=H,
+                                           data=json.dumps(body).encode() if body is not None else None)
+              try:
+                  with urllib.request.urlopen(req, timeout=120) as r:
+                      return json.loads(r.read())
+              except urllib.error.HTTPError as e:
+                  return {"http_error": e.code, "detail": e.read().decode()[:2000]}
+
+          log = []
+          for j in jobs:
+              name, model = j["name"], j["model"]
+              if j.get("schema"):
+                  m = call("GET", f"https://api.replicate.com/v1/models/{model}")
+                  schema = (((m.get("latest_version") or {}).get("openapi_schema") or {})
+                            .get("components", {}).get("schemas", {}))
+                  schema = {"input": schema.get("Input"), "description": m.get("description"),
+                            "default_example": m.get("default_example"), "raw_keys": list(m.keys())}
+                  open(f"out/{name}_schema.json", "w").write(json.dumps(schema, indent=1, ensure_ascii=False))
+                  log.append({"name": name, "schema": bool(schema)})
+                  continue
+              if ":" in model:  # owner/name:version
+                  p = call("POST", "https://api.replicate.com/v1/predictions",
+                           {"version": model.split(":", 1)[1], "input": j["input"]})
+              else:
+                  p = call("POST", f"https://api.replicate.com/v1/models/{model}/predictions", {"input": j["input"]})
+                  if p.get("http_error") == 404:  # community model: use its latest version
+                      m = call("GET", f"https://api.replicate.com/v1/models/{model}")
+                      v = (m.get("latest_version") or {}).get("id")
+                      if v:
+                          p = call("POST", "https://api.replicate.com/v1/predictions", {"version": v, "input": j["input"]})
+              t0 = time.time()
+              while p.get("status") not in ("succeeded", "failed", "canceled") and "http_error" not in p and time.time() - t0 < 600:
+                  time.sleep(3)
+                  p = call("GET", p["urls"]["get"])
+              entry = {"name": name, "model": model, "status": p.get("status"), "error": p.get("error") or p.get("http_error"), "detail": p.get("detail")}
+              outp = p.get("output")
+              urls = outp if isinstance(outp, list) else ([outp] if isinstance(outp, str) else [])
+              files = []
+              for k, u in enumerate(urls):
+                  if not (isinstance(u, str) and u.startswith("http")):
+                      continue
+                  ext = u.split("?")[0].rsplit(".", 1)[-1][:5] or "bin"
+                  fn = f"out/{name}{'' if k == 0 else '_' + str(k)}.{ext}"
+                  urllib.request.urlretrieve(u, fn)
+                  files.append(fn)
+              entry["files"] = files
+              log.append(entry)
+              print(json.dumps(entry, ensure_ascii=False))
+          open("out/log.json", "w").write(json.dumps(log, indent=1, ensure_ascii=False))
+          PY
+
+      - name: Push outputs to temp branch
+        env:
+          OUT: tmp-salaescura-out
+        run: |
+          cd out
+          git init -q -b "$OUT"
+          git config user.name "replicate-batch"
+          git config user.email "actions@github.com"
+          git add -A
+          git commit -qm "replicate outputs (temporary)"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" "$OUT"
