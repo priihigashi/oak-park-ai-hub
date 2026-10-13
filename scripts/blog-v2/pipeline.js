@@ -9,6 +9,8 @@ const commercialClaim = /\b(we|oak park construction|opc)\s+(guarantee(?:d|s)?|c
 const numericClaim = /(?:\$\s*\d|\b\d+(?:\.\d+)?\s*(?:%|percent|days|weeks|months|years)\b)/i;
 function quantities(s) { return String(s || '').match(/(?:\$\s*\d[\d,.]*|\b\d+(?:\.\d+)?\s*(?:%|percent|days|weeks|months|years)\b)/gi) || []; }
 function quantityKey(s) { return s.toLowerCase().replace(/[\s,$]/g, ''); }
+function moneyValues(s) { return String(s || '').match(/(?:US\$|\$|USD\s*)\s*\d[\d,]*(?:\.\d{1,2})?/gi) || []; }
+function moneyKey(s) { return s.replace(/^(?:US\$|\$|USD\s*)\s*/i, '').replace(/,/g, ''); }
 function bodyWordCount(body) {
   const visible = body.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/https?:\/\/\S+/g, ' ');
   return visible.match(/[\p{L}\p{N}][\p{L}\p{N}'’-]*/gu)?.length || 0;
@@ -91,6 +93,18 @@ function floodplainApplicabilityError(claim) {
   const claimKeepsLimit = /community participating in the national flood insurance program|NFIP.participating/i.test(claim.text);
   return namesArea && sourceLimitsArea && !claimKeepsLimit ? `omitted-floodplain-applicability:${claim.id}` : null;
 }
+function unsupportedPriceErrors(claim, source) {
+  const sourceMoney = new Set(moneyValues(source.excerpt + ' ' + (source.retrievedExcerpt || '')).map(moneyKey));
+  const evidenceMoney = new Set(moneyValues(claim.evidence).map(moneyKey));
+  return moneyValues(claim.text)
+    .filter(amount => !sourceMoney.has(moneyKey(amount)) || !evidenceMoney.has(moneyKey(amount)))
+    .map(() => `unsupported-price:${claim.id}`);
+}
+function priceContextErrors(claim) {
+  const values = [claim.priceContext?.scope, claim.priceContext?.area, claim.priceContext?.asOf, claim.priceContext?.conditions];
+  return moneyValues(claim.text).length && !values.every(value => typeof value === 'string' && value.trim())
+    ? [`missing-price-context:${claim.id}`] : [];
+}
 function claimEvidenceErrors(claim, source, body) {
   const errors = [];
   const evidenceTerms = tokens(claim.evidence);
@@ -102,6 +116,7 @@ function claimEvidenceErrors(claim, source, body) {
   for (const number of quantities(claim.text)) {
     if (!sourceQuantities.has(quantityKey(number)) || !quantities(claim.evidence).map(quantityKey).includes(quantityKey(number))) errors.push(`unsupported-number:${claim.id}`);
   }
+  errors.push(...unsupportedPriceErrors(claim, source));
   const applicability = floodplainApplicabilityError(claim);
   if (applicability) errors.push(applicability);
   return errors;
@@ -120,6 +135,7 @@ function claimErrors(claim, draft, allowed, sources, selected) {
   const errors = [];
   if (![claim.id, claim.text, claim.sourceId, claim.evidence, claim.checkedAt].every(Boolean) || !allowed.has(claim.sourceId) || !['verified', 'uncertain'].includes(claim.status)) errors.push(`invalid-claim:${claim.id || 'unknown'}`);
   if (claim.status !== 'verified') errors.push(`unverified-claim:${claim.id}`);
+  errors.push(...priceContextErrors(claim));
   const citedParagraph = draft.body.split(/\n\s*\n/).find(paragraph => paragraph.replace(/\[([^\]]+)\]\(https:\/\/[^)]+\)/g, '$1').includes(claim.text));
   if (!citedParagraph) errors.push(`claim-not-in-body:${claim.id}`);
   const source = sources.find(s => s.id === claim.sourceId);
@@ -232,6 +248,10 @@ function diagramErrors(draft, selected) {
 function validateDraft(draft, selected, snapshot) {
   if (!validDraftShape(draft)) return ['draft-schema'];
   const errors = draftBaseErrors(draft);
+  const verifiedAmounts = new Set(draft.claims.filter(claim => claim.status === 'verified').flatMap(claim => moneyValues(claim.text).map(moneyKey)));
+  for (const amount of moneyValues(`${draft.title} ${draft.description} ${draft.body}`)) {
+    if (!verifiedAmounts.has(moneyKey(amount))) errors.push(`unledgered-price-amount:${moneyKey(amount)}`);
+  }
   errors.push(...formatErrors(draft, selected));
   errors.push(...terminalArtifactErrors(draft, selected));
   errors.push(...geographicErrors(draft, selected));
