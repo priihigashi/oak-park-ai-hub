@@ -37,6 +37,20 @@ jobs:
           PY
           rm -f /tmp/cookies.txt
           ls -la out
+      - name: Transcribe audio (faster-whisper)
+        run: |
+          pip install -q faster-whisper
+          python3 - <<'PY'
+          import json, glob, os
+          from faster_whisper import WhisperModel
+          m = WhisperModel("medium", device="cpu", compute_type="int8")
+          files = sorted(glob.glob('sala_escura/audio/*.mp3')) + sorted(glob.glob('out/*.mp4'))
+          res = {}
+          for f in files:
+              segs, info = m.transcribe(f, word_timestamps=False, vad_filter=False)
+              res[os.path.basename(f)] = {"language": info.language, "segments": [{"start": round(s.start, 2), "end": round(s.end, 2), "text": s.text.strip()} for s in segs]}
+          json.dump(res, open('out/transcripts.json', 'w'), ensure_ascii=False, indent=1)
+          PY
       - name: Push outputs
         run: |
           cd out
