@@ -23,10 +23,10 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
  border:1.5px solid rgba(255,255,255,.5);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.75),inset 0 -1px 0 rgba(255,255,255,.18),0 30px 60px rgba(0,25,15,.35);color:#fff;transform-origin:0 0}
 .glass:after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(115deg,rgba(255,255,255,.0) 30%,rgba(255,255,255,.22) 42%,rgba(255,255,255,0) 54%);background-size:300% 100%;background-position:var(--sh,120%) 0;pointer-events:none}
 #main{left:60px;top:170px;width:960px;padding:46px 56px 46px}
-#main p{font-family:FrS;font-variation-settings:"SOFT" 100,"opsz" 36;font-weight:520;font-size:30px;line-height:1.28;margin-bottom:20px;text-shadow:0 2px 14px rgba(0,30,15,.35)}
+#main p{font-family:FrS;font-variation-settings:"SOFT" 100,"opsz" 36;font-weight:520;font-size:27px;line-height:1.28;margin-bottom:16px;text-shadow:0 2px 14px rgba(0,30,15,.35)}
 #main p:last-child{margin-bottom:0}
-#main .h{font-weight:760;font-size:46px;line-height:1.14;font-variation-settings:"SOFT" 100,"opsz" 72}
-#main .rei{font-weight:850;font-size:60px;line-height:1.04;font-variation-settings:"SOFT" 100,"opsz" 144;color:#fff}
+#main .h{font-weight:760;font-size:36px;line-height:1.14;font-variation-settings:"SOFT" 100,"opsz" 72}
+#main .rei{font-weight:850;font-size:48px;line-height:1.04;font-variation-settings:"SOFT" 100,"opsz" 144;color:#fff}
 #main .rei em{font-style:normal;color:var(--gold)}
 .g{color:var(--gold)}
 #main .tag{font-family:Int;font-weight:700;font-size:21px;letter-spacing:4px;opacity:.8;margin-bottom:26px;display:flex;justify-content:space-between}
@@ -48,14 +48,16 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
 
 <div id="main" class="glass">
  <div class="tag"><span>DESABAFO</span><span>OUT · 2026</span></div>
- <p class="h">Não voto em quem descaradamente faz proposta pra um grupo só.</p>
- <p>Discordo de como eles dizem que vão combater a desigualdade. E rejeito a premissa de que o Brasil tá assim por culpa da esquerda. Não foram anos seguidos: foram <span class="g">13</span> de esquerda, depois <span class="g">6</span> de centro-direita e direita, e só então mais <span class="g">4</span> de esquerda. E o tempo todo o Congresso foi uns <span class="g">60%</span> de centro, centro-direita e direita. Agora vai ser <span class="g">75%</span>. Vc tem noção desse poder?</p>
- <p class="h">Isso não é mudança. É mais do mesmo, e ainda mais forte.</p>
- <p>Quem derrubou uma presidente foi o Congresso. E vc ainda não entendeu a força dele: isenta ele de toda culpa e ainda dá de prêmio mais cadeiras em 2027.</p>
- <p class="rei">Presidente de extrema direita com 75% do Congresso do lado não é presidente. <em>É rei.</em></p>
- <p>E eu vejo como esse lado fala de quem é diferente: com desprezo. Palavra e a normalização do desprezo têm peso e consequências.</p>
- <p class="h">Eu quero um país onde vc possa ser mãe, dona de casa, evangélica, católica, da umbanda, gostar de homem ou de mulher, e ter seus direitos garantidos.</p>
- <p class="h">Dia 25 eu não vou de Flávio. <img class="fl" src="node_modules/@twemoji/svg/1f1e7-1f1f7.svg"> Brasil soberano precisa de contraponto, não de um rei.</p>
+ <p class="h">Não voto em quem faz proposta descaradamente para um grupo só.</p>
+ <p>Discordo da forma como dizem que vão combater a desigualdade. Também rejeito a premissa de que o Brasil está assim por culpa da esquerda.</p>
+ <p>Desde a volta da democracia, foram <span class="g">18</span> anos de centro e direita, sempre maioria. Depois, <span class="g">13</span> de esquerda, quando o Brasil saiu do Mapa da Fome. Vieram então <span class="g">6</span> anos de centro-direita e direita. Esses não contam? Só depois houve mais <span class="g">4</span> de esquerda, com um Congresso cada vez mais à direita.</p>
+ <p>O Congresso sempre teve cerca de <span class="g">60%</span> de representantes de centro, centro-direita e direita. Agora serão <span class="g">75%</span>. Você tem noção do poder que isso representa?</p>
+ <p class="h">Isso não é mudança. É mais do mesmo, com ainda mais força.</p>
+ <p>Foi o Congresso que derrubou uma presidente. E você continua isentando esse poder de qualquer culpa, enquanto lhe dá de presente mais cadeiras em 2027.</p>
+ <p class="rei">Um presidente de extrema direita com 75% do Congresso a seu lado não governa: <em>reina.</em></p>
+ <p>Eu vejo como esses novos líderes falam de quem é diferente: com desprezo. Brasil, EUA… a história se repete. Palavras têm peso. Normalizar essas atitudes tem consequências. Somos criaturas de hábitos.</p>
+ <p class="h">Quero um país onde você possa ser mãe, dona de casa, dono de casa, evangélica, católica, da umbanda, gostar de homem ou de mulher e ter seus direitos garantidos. Casar sem mijar nas calças.</p>
+ <p class="h">Dia 25, não vou de Flávio. <img class="fl" src="node_modules/@twemoji/svg/1f1e7-1f1f7.svg"> O Congresso formado precisa de contraponto, não de um <span class="g">REI!</span> Brasil soberano, Brasil para Todos!</p>
 </div>
 
 <div class="glass myth" data-t="31.5" style="left:430px;top:262px"><small>DIZEM:</small> “É só se esforçar.”</div>
@@ -131,10 +133,10 @@ function render(T){
   const r=o.rs+Math.sin(T*2*Math.PI/59*5+i*1.7)*4; const s=1+Math.sin(T*2*Math.PI/59*6+i)*.025;
   o.d.style.transform=`translate(${x}px,${y}px) rotate(${r}deg) scale(${s})`;});
  // cartão principal
- const t=T; {const p=C((t-1.2)/3.2),q=IO(p); main.style.opacity=C((t-1.2)/1.2)*(1); main.style.filter=p<1?`blur(${(1-q)*10}px)`:'none';
-  if(t<30) main.style.transform=`translateY(${(1-q)*120}px) scale(${.78+.22*q})`; main.style.zIndex=t<3.6?2:5;
-  items.forEach(o=>{if(o.layer==2){o.d.style.zIndex=t<3.6?7:2;}});}
- ps.forEach((p,i)=>{const t0=4.2+i*.8, q=C((t-t0)/.6); p.style.opacity=q; p.style.transform=`translateY(${(1-O3(q))*18}px)`; p.style.filter=q<1?`blur(${(1-q)*6}px)`:'none';});
+ const t=T; {const q=C((t-.4)/.5); main.style.opacity=q; main.style.filter=q<1?`blur(${(1-q)*8}px)`:'none';
+  if(t<29.5) main.style.transform='none'; main.style.zIndex=t<1.0?2:5;
+  items.forEach(o=>{if(o.layer==2){o.d.style.zIndex=t<1.0?7:2;}});}
+ ps.forEach((p,i)=>{const t0=.7+i*.06, q=C((t-t0)/.5); p.style.opacity=q; p.style.transform=`translateY(${(1-O3(q))*18}px)`; p.style.filter=q<1?`blur(${(1-q)*6}px)`:'none';});
  const mv=IO(C((t-29.5)/1.6)); if(t>=29.5){ main.style.transform=`translate(${-30*mv}px,${0}px) scale(${1-.6*mv}) rotate(${-2*mv}deg)`; main.style.filter='none'; main.style.opacity=1;}
  // pares mito/desmentido
  cards.forEach(el=>enter(el,t,+el.dataset.t,el.classList.contains('myth')?.45:.8,el.classList.contains('myth')?'pop':'ease'));
@@ -144,7 +146,7 @@ function render(T){
  document.getElementById('scrim').style.opacity=C((t-50.5)/1.2)*(1-C((t-56.6)/1.8));
  cl.forEach((el,i)=>{const t0=51.4+i*1.2,q=C((t-t0)/.9),z=C((t-56.4)/1.6); el.style.opacity=q*(1-z); el.style.transform=`translateY(${(1-O3(q))*50}px)`; el.style.filter=(q<1||z>0)?`blur(${(1-q)*16+z*18}px)`:'none';});
  if(t>=50.3&&t<56){main.style.opacity=1-out;}
- if(t<1.2){main.style.opacity=0;}
+ if(t<.6){main.style.opacity=0;}
 }
 window.render=render; window.EVENTS={whoosh:[],thud:[],slap:[],tick:[],pop:[],glitch:[]};
 window.READY=document.fonts.ready.then(()=>Promise.all([...document.images].map(i=>i.complete?1:new Promise(r=>{i.onload=i.onerror=r})))).then(()=>{render(0);return true});
