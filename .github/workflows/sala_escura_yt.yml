@@ -49,7 +49,10 @@ jobs:
               m = WhisperModel("small", device="cpu", compute_type="int8")
               for f in sorted(glob.glob('sala_escura/audio/*.mp3')) + sorted(glob.glob('out/*.mp4')):
                   try:
-                      segs, info = m.transcribe(f)
+                      import subprocess, numpy as np
+                      raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', f, '-ac', '1', '-ar', '16000', '-f', 's16le', '-'], capture_output=True).stdout
+                      audio = np.frombuffer(raw, np.int16).astype(np.float32) / 32768.0
+                      segs, info = m.transcribe(audio)
                       res[os.path.basename(f)] = {"language": info.language, "segments": [{"start": round(x.start, 2), "end": round(x.end, 2), "text": x.text.strip()} for x in segs]}
                   except Exception:
                       res[os.path.basename(f)] = {"error": traceback.format_exc()}
