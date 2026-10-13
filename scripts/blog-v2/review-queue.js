@@ -1,1 +1,128 @@
-Y29uc3QgZnMgPSByZXF1aXJlKCdub2RlOmZzJyk7CmNvbnN0IHBhdGggPSByZXF1aXJlKCdub2RlOnBhdGgnKTsKY29uc3QgY3J5cHRvID0gcmVxdWlyZSgnbm9kZTpjcnlwdG8nKTsKY29uc3QgeyByZWFkVmVyaWZpZWRSdW4sIHJlYWRJbW11dGFibGVSdW4gfSA9IHJlcXVpcmUoJy4vYmF0Y2gtcmV2aWV3Jyk7CmNvbnN0IHJ1bkZvckl0ZW0gPSBpdGVtID0+IGl0ZW0uZmVlZGJhY2tPbmx5ID8gcmVhZEltbXV0YWJsZVJ1bihpdGVtLmFydGljbGVSdW4pIDogcmVhZFZlcmlmaWVkUnVuKGl0ZW0uYXJ0aWNsZVJ1bik7CgpmdW5jdGlvbiByZWFkUXVldWUoZmlsZSkgewogIGlmICghZnMuZXhpc3RzU3luYyhmaWxlKSkgcmV0dXJuIHsgdmVyc2lvbjogMSwgaXRlbXM6IFtdIH07CiAgY29uc3QgcXVldWUgPSBKU09OLnBhcnNlKGZzLnJlYWRGaWxlU3luYyhmaWxlLCAndXRmOCcpKTsKICBpZiAocXVldWUudmVyc2lvbiAhPT0gMSB8fCAhQXJyYXkuaXNBcnJheShxdWV1ZS5pdGVtcykpIHRocm93IG5ldyBFcnJvcignSW52YWxpZCBibG9nIHJldmlldyBxdWV1ZScpOwogIHJldHVybiBxdWV1ZTsKfQpmdW5jdGlvbiB2ZXJpZnlQcmV2aWV3KHByZXZpZXcsIGV4cGVjdGVkKSB7CiAgaWYgKCFmcy5leGlzdHNTeW5jKHByZXZpZXcpIHx8IGNyeXB0by5jcmVhdGVIYXNoKCdzaGEyNTYnKS51cGRhdGUoZnMucmVhZEZpbGVTeW5jKHByZXZpZXcpKS5kaWdlc3QoJ2hleCcpICE9PSBleHBlY3RlZCkgdGhyb3cgbmV3IEVycm9yKCdQcml2YXRlIHByZXZpZXcgY2hhbmdlZCBhZnRlciBxdWV1ZWluZycpOwp9CgpmdW5jdGlvbiBtdXRhdGVRdWV1ZShmaWxlLCBjaGFuZ2UpIHsKICBmcy5ta2RpclN5bmMocGF0aC5kaXJuYW1lKGZpbGUpLCB7IHJlY3Vyc2l2ZTogdHJ1ZSB9KTsKICBjb25zdCBsb2NrID0gYCR7ZmlsZX0ubG9ja2A7CiAgZnMubWtkaXJTeW5jKGxvY2spOwogIHRyeSB7CiAgICBjb25zdCBxdWV1ZSA9IHJlYWRRdWV1ZShmaWxlKTsKICAgIGNvbnN0IHJlc3VsdCA9IGNoYW5nZShxdWV1ZSk7CiAgICBjb25zdCB0ZW1wb3JhcnkgPSBgJHtmaWxlfS4ke3Byb2Nlc3MucGlkfS50bXBgOwogICAgZnMud3JpdGVGaWxlU3luYyh0ZW1wb3JhcnksIEpTT04uc3RyaW5naWZ5KHF1ZXVlLCBudWxsLCAyKSArICdcbicsIHsgZmxhZzogJ3d4JywgbW9kZTogMG82MDAgfSk7CiAgICBmcy5yZW5hbWVTeW5jKHRlbXBvcmFyeSwgZmlsZSk7CiAgICByZXR1cm4gcmVzdWx0OwogIH0gZmluYWxseSB7IGZzLnJtZGlyU3luYyhsb2NrKTsgfQp9CgpmdW5jdGlvbiBhc3NlcnRSdW5Jc1Jldmlld2FibGUoZmVlZGJhY2tPbmx5LCBydW4pIHsKICBpZiAoZmVlZGJhY2tPbmx5ICYmICFbJ3JldmlzaW9uLXBlbmRpbmctY2xhdWRlJywgJ2RyYWZ0LXJlYWR5LWZvci1odW1hbi1yZXZpZXcnXS5pbmNsdWRlcyhydW4uc3RhdHVzKSkKICAgIHRocm93IG5ldyBFcnJvcignUnVuIGlzIG5vdCBhIHJldmlld2FibGUgZHJhZnQnKTsKfQoKZnVuY3Rpb24gYXNzZXJ0UHJldmlld0lzVmFsaWQocHJldmlldywgcHJldmlld1NoYTI1NikgewogIGlmICghcHJldmlldyB8fCAhZnMuZXhpc3RzU3luYyhwcmV2aWV3KSB8fCAhL15bYS1mMC05XXs2NH0kLy50ZXN0KHByZXZpZXdTaGEyNTYgfHwgJycpKQogICAgdGhyb3cgbmV3IEVycm9yKCdQcml2YXRlIHByZXZpZXcgYW5kIGRpZ2VzdCByZXF1aXJlZCcpOwp9CgpmdW5jdGlvbiBpbnNlcnRPclJldHVybkV4aXN0aW5nKHF1ZXVlLCBpdGVtKSB7CiAgY29uc3QgZXhpc3RpbmcgPSBxdWV1ZS5pdGVtcy5maW5kKGVudHJ5ID0+IGVudHJ5LmlkID09PSBpdGVtLmlkKTsKICBpZiAoZXhpc3RpbmcpIHsKICAgIGlmIChleGlzdGluZy5hcnRpY2xlUmVjZWlwdEhhc2ggIT09IGl0ZW0uYXJ0aWNsZVJlY2VpcHRIYXNoKSB0aHJvdyBuZXcgRXJyb3IoJ1F1ZXVlIGl0ZW0gdmVyc2lvbiBjaGFuZ2VkJyk7CiAgICByZXR1cm4gZXhpc3Rpbmc7CiAgfQogIHF1ZXVlLml0ZW1zLnB1c2goaXRlbSk7CiAgcmV0dXJuIGl0ZW07Cn0KCmZ1bmN0aW9uIGVucXVldWVSZXZpZXcoZmlsZSwgYXJ0aWNsZVJ1biwgcHJldmlldywgcHJldmlld1NoYTI1NiwgeyBmZWVkYmFja09ubHkgPSBmYWxzZSB9ID0ge30pIHsKICBjb25zdCBydW4gPSBmZWVkYmFja09ubHkgPyByZWFkSW1tdXRhYmxlUnVuKGFydGljbGVSdW4pIDogcmVhZFZlcmlmaWVkUnVuKGFydGljbGVSdW4pOwogIGFzc2VydFJ1bklzUmV2aWV3YWJsZShmZWVkYmFja09ubHksIHJ1bik7CiAgYXNzZXJ0UHJldmlld0lzVmFsaWQocHJldmlldywgcHJldmlld1NoYTI1Nik7CiAgdmVyaWZ5UHJldmlldyhwcmV2aWV3LCBwcmV2aWV3U2hhMjU2KTsKICBjb25zdCBpdGVtID0gewogICAgaWQ6IHJ1bi5pZCwgYXJ0aWNsZVJ1bjogcGF0aC5yZXNvbHZlKGFydGljbGVSdW4pLCBhcnRpY2xlUmVjZWlwdEhhc2g6IHJ1bi5yZWNlaXB0SGFzaCwKICAgIHRpdGxlOiBydW4uZHJhZnQudGl0bGUsIGludGVudEtleTogcnVuLmJyaWVmLmludGVudEtleSwgZWRpdG9yaWFsU2NvcmU6IHJ1bi5lZGl0b3JpYWxTY29yZT8uc2NvcmUgPz8gbnVsbCwKICAgIHByZXZpZXc6IHBhdGgucmVzb2x2ZShwcmV2aWV3KSwgcHJldmlld1NoYTI1NiwgZmVlZGJhY2tPbmx5LCBzdGF0ZTogJ3BlbmRpbmcnLCBjcmVhdGVkQXQ6IG5ldyBEYXRlKCkudG9JU09TdHJpbmcoKSwKICB9OwogIHJldHVybiBtdXRhdGVRdWV1ZShmaWxlLCBxdWV1ZSA9PiBpbnNlcnRPclJldHVybkV4aXN0aW5nKHF1ZXVlLCBpdGVtKSk7Cn0KCmZ1bmN0aW9uIHJlcGxhY2VQcmV2aWV3KGZpbGUsIGlkLCBwcmV2aWV3LCBwcmV2aWV3U2hhMjU2KSB7CiAgcmV0dXJuIG11dGF0ZVF1ZXVlKGZpbGUsIHF1ZXVlID0+IHsKICAgIGNvbnN0IGl0ZW0gPSBxdWV1ZS5pdGVtcy5maW5kKGVudHJ5ID0+IGVudHJ5LmlkID09PSBpZCk7CiAgICBpZiAoIWl0ZW0gfHwgWydhcHByb3ZlZCcsICdyZWplY3RlZCcsICduZWVkcy1yZXZpc2lvbiddLmluY2x1ZGVzKGl0ZW0uc3RhdGUpKSB0aHJvdyBuZXcgRXJyb3IoJ0FydGljbGUgaXMgbm90IGF3YWl0aW5nIGEgcHJldmlldycpOwogICAgY29uc3QgcnVuID0gcnVuRm9ySXRlbShpdGVtKTsKICAgIGlmIChydW4ucmVjZWlwdEhhc2ggIT09IGl0ZW0uYXJ0aWNsZVJlY2VpcHRIYXNoKSB0aHJvdyBuZXcgRXJyb3IoJ0FydGljbGUgdmVyc2lvbiBjaGFuZ2VkIGFmdGVyIHF1ZXVlaW5nJyk7CiAgICB2ZXJpZnlQcmV2aWV3KGl0ZW0ucHJldmlldywgaXRlbS5wcmV2aWV3U2hhMjU2KTsKICAgIHZlcmlmeVByZXZpZXcocHJldmlldywgcHJldmlld1NoYTI1Nik7CiAgICBpdGVtLnByZXZpZXdIaXN0b3J5ID0gWy4uLihpdGVtLnByZXZpZXdIaXN0b3J5IHx8IFtdKSwgeyBwcmV2aWV3OiBpdGVtLnByZXZpZXcsIHByZXZpZXdTaGEyNTY6IGl0ZW0ucHJldmlld1NoYTI1NiwgcmVwbGFjZWRBdDogbmV3IERhdGUoKS50b0lTT1N0cmluZygpIH1dOwogICAgaXRlbS5wcmV2aWV3ID0gcGF0aC5yZXNvbHZlKHByZXZpZXcpOwogICAgaXRlbS5wcmV2aWV3U2hhMjU2ID0gcHJldmlld1NoYTI1NjsKICAgIGRlbGV0ZSBpdGVtLnByZXZpZXdPcGVuZWRBdDsKICAgIHJldHVybiBpdGVtOwogIH0pOwp9CgpmdW5jdGlvbiBkdWVOb3RpY2VzKGZpbGUsIG5vdyA9IG5ldyBEYXRlKCkpIHsKICByZXR1cm4gcmVhZFF1ZXVlKGZpbGUpLml0ZW1zLmZpbHRlcihpdGVtID0+IGl0ZW0uc3RhdGUgPT09ICdwZW5kaW5nJwogICAgfHwgKGl0ZW0uc3RhdGUgPT09ICdzbm9vemVkJyAmJiBEYXRlLnBhcnNlKGl0ZW0uc25vb3plZFVudGlsKSA8PSBub3cuZ2V0VGltZSgpKSk7Cn0KCmZ1bmN0aW9uIG1hcmtQcmV2aWV3Vmlld2VkKGZpbGUsIGlkLCBub3cgPSBuZXcgRGF0ZSgpKSB7CiAgcmV0dXJuIG11dGF0ZVF1ZXVlKGZpbGUsIHF1ZXVlID0+IHsKICAgIGNvbnN0IGl0ZW0gPSBxdWV1ZS5pdGVtcy5maW5kKGVudHJ5ID0+IGVudHJ5LmlkID09PSBpZCk7CiAgICBpZiAoIWl0ZW0pIHRocm93IG5ldyBFcnJvcignVW5rbm93biByZXZpZXcgaXRlbScpOwogICAgY29uc3QgcnVuID0gcnVuRm9ySXRlbShpdGVtKTsKICAgIGlmIChydW4ucmVjZWlwdEhhc2ggIT09IGl0ZW0uYXJ0aWNsZVJlY2VpcHRIYXNoKSB0aHJvdyBuZXcgRXJyb3IoJ0FydGljbGUgdmVyc2lvbiBjaGFuZ2VkIGFmdGVyIHF1ZXVlaW5nJyk7CiAgICB2ZXJpZnlQcmV2aWV3KGl0ZW0ucHJldmlldywgaXRlbS5wcmV2aWV3U2hhMjU2KTsKICAgIGl0ZW0ucHJldmlld09wZW5lZEF0ID0gbm93LnRvSVNPU3RyaW5nKCk7CiAgICByZXR1cm4gaXRlbTsKICB9KTsKfQoKZnVuY3Rpb24gc2F2ZUZlZWRiYWNrKGl0ZW0sIGZlZWRiYWNrLCBub3cpIHsKICBjb25zdCBub3RlID0gU3RyaW5nKGZlZWRiYWNrIHx8ICcnKS50cmltKCk7CiAgaWYgKG5vdGUubGVuZ3RoIDwgNSB8fCBub3RlLmxlbmd0aCA+IDIwMDApIHRocm93IG5ldyBFcnJvcignRmVlZGJhY2sgbXVzdCBjb250YWluIDXigJMyMDAwIGNoYXJhY3RlcnMnKTsKICBpdGVtLmZlZWRiYWNrID0geyBub3RlLCBhcnRpY2xlUmVjZWlwdEhhc2g6IGl0ZW0uYXJ0aWNsZVJlY2VpcHRIYXNoLCBwcmV2aWV3U2hhMjU2OiBpdGVtLnByZXZpZXdTaGEyNTYsIGNyZWF0ZWRBdDogbm93LnRvSVNPU3RyaW5nKCkgfTsKICBpdGVtLnN0YXRlID0gJ25lZWRzLXJldmlzaW9uJzsKICBpdGVtLnVwZGF0ZWRBdCA9IG5vdy50b0lTT1N0cmluZygpOwogIHJldHVybiBpdGVtOwp9CmZ1bmN0aW9uIHNldFNub296ZShpdGVtLCBzbm9vemVkVW50aWwsIG5vdykgewogIGNvbnN0IHVudGlsID0gRGF0ZS5wYXJzZShzbm9vemVkVW50aWwpOwogIGlmICghTnVtYmVyLmlzRmluaXRlKHVudGlsKSB8fCB1bnRpbCA8PSBub3cuZ2V0VGltZSgpIHx8IHVudGlsID4gbm93LmdldFRpbWUoKSArIDMwICogODY0MDAwMDApIHRocm93IG5ldyBFcnJvcignU25vb3plIG11c3QgYmUgd2l0aGluIDMwIGRheXMnKTsKICBpdGVtLnNub296ZWRVbnRpbCA9IG5ldyBEYXRlKHVudGlsKS50b0lTT1N0cmluZygpOwp9CgpmdW5jdGlvbiByZWNvcmRBY3Rpb24oZmlsZSwgaWQsIGFjdGlvbiwgeyBzbm9vemVkVW50aWwsIGZlZWRiYWNrLCBub3cgPSBuZXcgRGF0ZSgpIH0gPSB7fSkgewogIGlmICghWydub3RpZmllZCcsICdhcHByb3ZlZCcsICdyZWplY3RlZCcsICdzbm9vemVkJywgJ3F1ZXVlZCcsICdmZWVkYmFjayddLmluY2x1ZGVzKGFjdGlvbikpIHRocm93IG5ldyBFcnJvcignSW52YWxpZCByZXZpZXcgYWN0aW9uJyk7CiAgcmV0dXJuIG11dGF0ZVF1ZXVlKGZpbGUsIHF1ZXVlID0+IHsKICAgIGNvbnN0IGl0ZW0gPSBxdWV1ZS5pdGVtcy5maW5kKGVudHJ5ID0+IGVudHJ5LmlkID09PSBpZCk7CiAgICBpZiAoIWl0ZW0pIHRocm93IG5ldyBFcnJvcignVW5rbm93biByZXZpZXcgaXRlbScpOwogICAgaWYgKFsnYXBwcm92ZWQnLCAncmVqZWN0ZWQnLCAnbmVlZHMtcmV2aXNpb24nXS5pbmNsdWRlcyhpdGVtLnN0YXRlKSkgdGhyb3cgbmV3IEVycm9yKCdSZXZpZXcgZGVjaXNpb24gaXMgZmluYWwgZm9yIHRoaXMgdmVyc2lvbicpOwogICAgY29uc3QgcnVuID0gcnVuRm9ySXRlbShpdGVtKTsKICAgIGlmIChydW4ucmVjZWlwdEhhc2ggIT09IGl0ZW0uYXJ0aWNsZVJlY2VpcHRIYXNoKSB0aHJvdyBuZXcgRXJyb3IoJ0FydGljbGUgdmVyc2lvbiBjaGFuZ2VkIGFmdGVyIHF1ZXVlaW5nJyk7CiAgICB2ZXJpZnlQcmV2aWV3KGl0ZW0ucHJldmlldywgaXRlbS5wcmV2aWV3U2hhMjU2KTsKICAgIGlmIChhY3Rpb24gPT09ICdhcHByb3ZlZCcgJiYgaXRlbS5mZWVkYmFja09ubHkpIHRocm93IG5ldyBFcnJvcignVGhpcyBkcmFmdCBpcyBhdmFpbGFibGUgZm9yIGZlZWRiYWNrIG9ubHknKTsKICAgIGlmIChhY3Rpb24gPT09ICdhcHByb3ZlZCcgJiYgIWl0ZW0ucHJldmlld09wZW5lZEF0KSB0aHJvdyBuZXcgRXJyb3IoJ09wZW4gdGhlIGV4YWN0IHByZXZpZXcgYmVmb3JlIGFwcHJvdmFsJyk7CiAgICBpZiAoYWN0aW9uID09PSAnZmVlZGJhY2snKSByZXR1cm4gc2F2ZUZlZWRiYWNrKGl0ZW0sIGZlZWRiYWNrLCBub3cpOwogICAgaWYgKGFjdGlvbiA9PT0gJ3Nub296ZWQnKSBzZXRTbm9vemUoaXRlbSwgc25vb3plZFVudGlsLCBub3cpOwogICAgZWxzZSBkZWxldGUgaXRlbS5zbm9vemVkVW50aWw7CiAgICBpdGVtLnN0YXRlID0gYWN0aW9uOwogICAgaXRlbS51cGRhdGVkQXQgPSBub3cudG9JU09TdHJpbmcoKTsKICAgIHJldHVybiBpdGVtOwogIH0pOwp9Cgptb2R1bGUuZXhwb3J0cyA9IHsgcmVhZFF1ZXVlLCBlbnF1ZXVlUmV2aWV3LCByZXBsYWNlUHJldmlldywgZHVlTm90aWNlcywgbWFya1ByZXZpZXdWaWV3ZWQsIHJlY29yZEFjdGlvbiB9Owo=
+const fs = require('node:fs');
+const path = require('node:path');
+const crypto = require('node:crypto');
+const { readVerifiedRun, readImmutableRun } = require('./batch-review');
+const runForItem = item => item.feedbackOnly ? readImmutableRun(item.articleRun) : readVerifiedRun(item.articleRun);
+
+function readQueue(file) {
+  if (!fs.existsSync(file)) return { version: 1, items: [] };
+  const queue = JSON.parse(fs.readFileSync(file, 'utf8'));
+  if (queue.version !== 1 || !Array.isArray(queue.items)) throw new Error('Invalid blog review queue');
+  return queue;
+}
+function verifyPreview(preview, expected) {
+  if (!fs.existsSync(preview) || crypto.createHash('sha256').update(fs.readFileSync(preview)).digest('hex') !== expected) throw new Error('Private preview changed after queueing');
+}
+
+function mutateQueue(file, change) {
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  const lock = `${file}.lock`;
+  fs.mkdirSync(lock);
+  try {
+    const queue = readQueue(file);
+    const result = change(queue);
+    const temporary = `${file}.${process.pid}.tmp`;
+    fs.writeFileSync(temporary, JSON.stringify(queue, null, 2) + '\n', { flag: 'wx', mode: 0o600 });
+    fs.renameSync(temporary, file);
+    return result;
+  } finally { fs.rmdirSync(lock); }
+}
+
+function reviewableRun(articleRun, feedbackOnly) {
+  const run = feedbackOnly ? readImmutableRun(articleRun) : readVerifiedRun(articleRun);
+  if (feedbackOnly && !['revision-pending-claude', 'draft-ready-for-human-review'].includes(run.status)) throw new Error('Run is not a reviewable draft');
+  return run;
+}
+
+function requirePreview(preview, previewSha256) {
+  if (!preview || !fs.existsSync(preview) || !/^[a-f0-9]{64}$/.test(previewSha256 || '')) throw new Error('Private preview and digest required');
+  verifyPreview(preview, previewSha256);
+}
+
+function enqueueReview(file, articleRun, preview, previewSha256, { feedbackOnly = false } = {}) {
+  const run = reviewableRun(articleRun, feedbackOnly);
+  requirePreview(preview, previewSha256);
+  const item = {
+    id: run.id, articleRun: path.resolve(articleRun), articleReceiptHash: run.receiptHash,
+    title: run.draft.title, intentKey: run.brief.intentKey, editorialScore: run.editorialScore?.score ?? null,
+    preview: path.resolve(preview), previewSha256, feedbackOnly, state: 'pending', createdAt: new Date().toISOString(),
+  };
+  return mutateQueue(file, queue => {
+    const existing = queue.items.find(entry => entry.id === item.id);
+    if (existing) {
+      if (existing.articleReceiptHash !== item.articleReceiptHash) throw new Error('Queue item version changed');
+      return existing;
+    }
+    queue.items.push(item);
+    return item;
+  });
+}
+
+function replacePreview(file, id, preview, previewSha256) {
+  return mutateQueue(file, queue => {
+    const item = queue.items.find(entry => entry.id === id);
+    if (!item || ['approved', 'rejected', 'needs-revision'].includes(item.state)) throw new Error('Article is not awaiting a preview');
+    const run = runForItem(item);
+    if (run.receiptHash !== item.articleReceiptHash) throw new Error('Article version changed after queueing');
+    verifyPreview(item.preview, item.previewSha256);
+    verifyPreview(preview, previewSha256);
+    item.previewHistory = [...(item.previewHistory || []), { preview: item.preview, previewSha256: item.previewSha256, replacedAt: new Date().toISOString() }];
+    item.preview = path.resolve(preview);
+    item.previewSha256 = previewSha256;
+    delete item.previewOpenedAt;
+    return item;
+  });
+}
+
+function dueNotices(file, now = new Date()) {
+  return readQueue(file).items.filter(item => item.state === 'pending'
+    || (item.state === 'snoozed' && Date.parse(item.snoozedUntil) <= now.getTime()));
+}
+
+function markPreviewViewed(file, id, now = new Date()) {
+  return mutateQueue(file, queue => {
+    const item = queue.items.find(entry => entry.id === id);
+    if (!item) throw new Error('Unknown review item');
+    const run = runForItem(item);
+    if (run.receiptHash !== item.articleReceiptHash) throw new Error('Article version changed after queueing');
+    verifyPreview(item.preview, item.previewSha256);
+    item.previewOpenedAt = now.toISOString();
+    return item;
+  });
+}
+
+function saveFeedback(item, feedback, now) {
+  const note = String(feedback || '').trim();
+  if (note.length < 5 || note.length > 2000) throw new Error('Feedback must contain 5–2000 characters');
+  item.feedback = { note, articleReceiptHash: item.articleReceiptHash, previewSha256: item.previewSha256, createdAt: now.toISOString() };
+  item.state = 'needs-revision';
+  item.updatedAt = now.toISOString();
+  return item;
+}
+function setSnooze(item, snoozedUntil, now) {
+  const until = Date.parse(snoozedUntil);
+  if (!Number.isFinite(until) || until <= now.getTime() || until > now.getTime() + 30 * 86400000) throw new Error('Snooze must be within 30 days');
+  item.snoozedUntil = new Date(until).toISOString();
+}
+
+function recordAction(file, id, action, { snoozedUntil, feedback, now = new Date() } = {}) {
+  if (!['notified', 'approved', 'rejected', 'snoozed', 'queued', 'feedback'].includes(action)) throw new Error('Invalid review action');
+  return mutateQueue(file, queue => {
+    const item = queue.items.find(entry => entry.id === id);
+    if (!item) throw new Error('Unknown review item');
+    if (['approved', 'rejected', 'needs-revision'].includes(item.state)) throw new Error('Review decision is final for this version');
+    const run = runForItem(item);
+    if (run.receiptHash !== item.articleReceiptHash) throw new Error('Article version changed after queueing');
+    verifyPreview(item.preview, item.previewSha256);
+    if (action === 'approved' && item.feedbackOnly) throw new Error('This draft is available for feedback only');
+    if (action === 'approved' && !item.previewOpenedAt) throw new Error('Open the exact preview before approval');
+    if (action === 'feedback') return saveFeedback(item, feedback, now);
+    if (action === 'snoozed') setSnooze(item, snoozedUntil, now);
+    else delete item.snoozedUntil;
+    item.state = action;
+    item.updatedAt = now.toISOString();
+    return item;
+  });
+}
+
+module.exports = { readQueue, enqueueReview, replacePreview, dueNotices, markPreviewViewed, recordAction };
