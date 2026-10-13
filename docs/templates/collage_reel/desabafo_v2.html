@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<title>Desabafo v2 — vidro</title>
+<style>
+@font-face{font-family:FrS;src:url(assets/fraunces-latin-full-normal.woff2);font-weight:100 900}
+@font-face{font-family:FrS;src:url(assets/fraunces-latin-full-italic.woff2);font-weight:100 900;font-style:italic}
+@font-face{font-family:Int;src:url(assets/inter-latin-wght-normal.woff2);font-weight:100 900}
+:root{--gold:#F2C94C;--coral:#FF6B5B}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden}
+#bg{position:absolute;inset:0}
+#light{position:absolute;width:1600px;height:1600px;border-radius:50%;background:radial-gradient(circle,rgba(255,214,120,.38),rgba(255,214,120,0) 62%);mix-blend-mode:soft-light;pointer-events:none}
+#field{position:absolute;inset:0}
+.glass,#close{z-index:5}
+.il{position:absolute;left:0;top:0;will-change:transform}
+.il img{width:100%;display:block}
+#grain{position:absolute;inset:-40px;background:url(assets/grain.png);opacity:.14;mix-blend-mode:overlay;pointer-events:none;z-index:50}
+#vig{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 42%,transparent 48%,rgba(0,20,10,.45));pointer-events:none;z-index:49}
+.soft{font-family:FrS;font-variation-settings:"SOFT" 100,"WONK" 0,"opsz" 72}
+.glass{position:absolute;border-radius:46px;background:linear-gradient(160deg,rgba(255,255,255,.26),rgba(255,255,255,.08) 45%,rgba(255,255,255,.14));
+ backdrop-filter:blur(22px) saturate(1.7) brightness(.92);-webkit-backdrop-filter:blur(22px) saturate(1.7) brightness(.92);
+ border:1.5px solid rgba(255,255,255,.5);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.75),inset 0 -1px 0 rgba(255,255,255,.18),0 30px 60px rgba(0,25,15,.35);color:#fff;transform-origin:0 0}
+.glass:after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(115deg,rgba(255,255,255,.0) 30%,rgba(255,255,255,.22) 42%,rgba(255,255,255,0) 54%);background-size:300% 100%;background-position:var(--sh,120%) 0;pointer-events:none}
+#main{left:60px;top:215px;width:960px;padding:54px 58px 56px}
+#main p{font-family:FrS;font-variation-settings:"SOFT" 100,"opsz" 36;font-weight:520;font-size:35px;line-height:1.28;margin-bottom:20px;text-shadow:0 2px 14px rgba(0,30,15,.35)}
+#main p:last-child{margin-bottom:0}
+#main .h{font-weight:760;font-size:46px;line-height:1.14;font-variation-settings:"SOFT" 100,"opsz" 72}
+#main .rei{font-weight:850;font-size:60px;line-height:1.04;font-variation-settings:"SOFT" 100,"opsz" 144;color:#fff}
+#main .rei em{font-style:normal;color:var(--gold)}
+.g{color:var(--gold)}
+#main .tag{font-family:Int;font-weight:700;font-size:21px;letter-spacing:4px;opacity:.8;margin-bottom:26px;display:flex;justify-content:space-between}
+.fl{height:38px;vertical-align:-6px;margin-left:4px}
+.myth{padding:16px 30px 18px;border-radius:999px;background:linear-gradient(160deg,rgba(255,107,91,.62),rgba(200,53,43,.45));font-family:FrS;font-variation-settings:"SOFT" 100,"opsz" 72;font-weight:780;font-size:40px;font-style:italic;white-space:nowrap}
+.deb{padding:30px 34px 28px;border-radius:38px}
+.deb .k{font-family:FrS;font-variation-settings:"SOFT" 100,"opsz" 72;font-weight:820;font-size:46px;line-height:1.05}
+.deb .t{font-family:FrS;font-variation-settings:"SOFT" 100,"opsz" 36;font-weight:480;font-size:29px;line-height:1.25;margin-top:12px;opacity:.95}
+.deb .s{font-family:Int;font-weight:600;font-size:17px;letter-spacing:1.5px;margin-top:14px;opacity:.7;text-transform:uppercase}
+#close{position:absolute;left:70px;right:70px;top:640px;text-align:center;color:#fff}
+#close .a{font-family:FrS;font-variation-settings:"SOFT" 100,"opsz" 144;font-weight:800;font-size:96px;line-height:1.02;text-shadow:0 6px 40px rgba(0,20,10,.5)}
+#close .b{font-family:FrS;font-variation-settings:"SOFT" 100,"opsz" 144;font-weight:850;font-size:124px;line-height:1;color:var(--gold);margin-top:40px;text-shadow:0 6px 40px rgba(0,20,10,.5)}
+#close .c{font-family:FrS;font-variation-settings:"SOFT" 100,"opsz" 36;font-style:italic;font-weight:500;font-size:44px;margin-top:70px}
+#foot{position:absolute;left:0;right:0;top:1748px;text-align:center;font:600 25px Int;letter-spacing:3px;z-index:60;color:#fff;opacity:.85}
+</style></head>
+<body><div id="stage">
+<div id="bg"></div><div id="light"></div><div id="field"></div>
+
+<div id="main" class="glass">
+ <div class="tag"><span>DESABAFO</span><span>OUT · 2026</span></div>
+ <p class="h">Por isso não vou votar em quem descaradamente tem uma proposta com foco em outro grupo de pessoas somente.</p>
+ <p>Discordo de como eles acreditam que a desigualdade social será combatida. Rejeito a premissa de que o país está como está pq teve presidentes de esquerda por <span class="g">13 anos</span>, depois <span class="g">6</span> de direita e centro-direita, e depois mais <span class="g">4</span>, com o Congresso sempre <span class="g">60%</span>, agora <span class="g">75%</span> de centro-direita e direita.</p>
+ <p>Não, vcs não estão trazendo mudança. Estão só votando do mesmo jeito e intensificando essa força.</p>
+ <p>Quem foi capaz de um impeachment foi o nosso Congresso. Só aí vcs já veem o poder que ele tem.</p>
+ <p class="rei">Hj, um presidente de extrema direita com um Congresso 75% de direita não é presidente, <em>é rei!</em></p>
+ <p class="h">Dia 25 não irei de Flávio <img class="fl" src="node_modules/@twemoji/svg/1f1e7-1f1f7.svg"><img class="fl" src="node_modules/@twemoji/svg/1f1e7-1f1f7.svg"><img class="fl" src="node_modules/@twemoji/svg/1f1e7-1f1f7.svg"></p>
+ <p>Para um Brasil soberano, precisamos de um governo balanceado e não hegemônico. Quando um partido domina tanto o Congresso, pode definir a agenda e o resultado das votações só para um grupo, sem contraponto.</p>
+</div>
+
+<div class="glass myth" data-t="31.5" style="left:430px;top:262px">“É só se esforçar.”</div>
+<div class="glass deb" data-t="32.4" style="left:430px;top:372px;width:600px">
+ <div class="k">Sair da base leva <span class="g">9 gerações</span> no Brasil.</div>
+ <div class="t">Não é falta de capacidade: fome na infância, estresse, escola fraca, nenhuma rede de apoio.</div>
+ <div class="s">OCDE · A Broken Social Elevator · 2018</div></div>
+
+<div class="glass myth" data-t="35.0" style="left:60px;top:830px">“Nórdico é socialismo.”</div>
+<div class="glass deb" data-t="35.9" style="left:60px;top:940px;width:960px">
+ <div class="k">É capitalismo com <span class="g">Estado forte.</span></div>
+ <div class="t">Saúde, escola e renda mínima pra todo mundo. Chama social-democracia.</div>
+ <div class="s">Noruega · Suécia · Dinamarca · economias de mercado</div></div>
+
+<div class="glass myth" data-t="38.5" style="left:60px;top:1240px;font-size:34px">“Mais pena resolve.”</div>
+<div class="glass deb" data-t="39.4" style="left:60px;top:1336px;width:468px;padding:24px 26px 22px">
+ <div class="k" style="font-size:36px">Cadeia cheia. Crime não caiu junto.</div>
+ <div class="t" style="font-size:24px">Noruega aposta em reabilitação: ~20% voltam ao crime em 2 anos.</div>
+ <div class="s" style="font-size:14px">SENAPPEN · World Prison Brief · Kristoffersen 2010</div></div>
+
+<div class="glass myth" data-t="42.0" style="left:552px;top:1240px;font-size:34px">“Já tentaram reduzir!”</div>
+<div class="glass deb" data-t="42.9" style="left:552px;top:1336px;width:468px;padding:24px 26px 22px">
+ <div class="k" style="font-size:36px">A PEC 171 não era pra todo crime.</div>
+ <div class="t" style="font-size:24px">16 anos só p/ hediondo, homicídio e lesão seguida de morte. Parou no Senado.</div>
+ <div class="s" style="font-size:14px">Câmara · PEC 171/1993 · 2015</div></div>
+
+<div class="glass myth" data-t="45.5" style="left:60px;top:1590px;font-size:34px">“Bolsa Família vicia.”</div>
+<div class="glass deb" data-t="46.4" style="left:470px;top:1580px;width:550px;padding:20px 26px 18px">
+ <div class="k" style="font-size:34px">Arrumou emprego? Não perde na hora.</div>
+ <div class="s" style="font-size:14px">MDS · Regra de Proteção</div></div>
+
+<div id="scrim" style="position:absolute;inset:0;z-index:4;opacity:0;backdrop-filter:blur(16px) brightness(.7);-webkit-backdrop-filter:blur(16px) brightness(.7)"></div>
+<div id="close">
+ <div class="a">Equilíbrio não é ficar em cima do muro.</div>
+ <div class="b">É ter contraponto.</div>
+ <div class="c">E pra você, o que falta no debate?</div>
+</div>
+
+<div id="vig"></div><div id="grain"></div>
+<div id="foot">@tentandochegaratevoce</div>
+</div>
+<script>window.IMGS=['aparecida', 'casal_h', 'baiana2', 'farmacia2', 'arara', 'chaves', 'vaqueiro', 'bonfim', 'formanda', 'casal_m', 'futebol', 'igreja', 'indigena', 'merenda', 'operario', 'gaucho', 'onca', 'arcoiris', 'evangelica', 'nissei', 'caju', 'feira', 'motoboy', 'agricultora', 'casa', 'bandeira', 'sus', 'monstera'];</script>
+<script>
+window.DUR=59;
+const C=(x,a=0,b=1)=>Math.max(a,Math.min(b,x)), O3=t=>1-Math.pow(1-t,3), IO=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+const BK=t=>{const c1=1.5,c3=c1+1;return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2)};
+const R=s=>{const x=Math.sin(s*12.9898+78.233)*43758.5453;return x-Math.floor(x)};
+const IMG=window.IMGS||[];
+const field=document.getElementById('field'), items=[];
+const N=IMG.length;
+for(let i=0;i<N;i++){const name=IMG[i%IMG.length]; const layer=i%3; // 0 far 1 mid 2 near
+ const d=document.createElement('div'); d.className='il';
+ const w=layer==0?200+R(i)*60:layer==1?280+R(i)*70:360+R(i)*90; d.style.width=w+'px';
+ d.innerHTML=`<img src="assets/v2/${name}${layer==0?'_b':''}.png">`; d.style.zIndex=layer; d.style.opacity=layer==0?.75:1;
+ field.appendChild(d); items.push({d,w,layer,x:(i%2?540:0)+R(i*13+5)*540-w*.4,per:[59,29.5,19.6667][layer],ph:R(i+7),rs:(R(i+3)-.5)*24});}
+const cards=[...document.querySelectorAll('.myth,.deb')], main=document.getElementById('main'), ps=[...main.querySelectorAll('p')];
+const close=document.getElementById('close'), cl=[...close.children];
+function enter(el,t,t0,d,kind){ // glass cards: rise + scale + blur-in + shine sweep
+ const p=C((t-t0)/d); if(p<=0){el.style.opacity=0;return}
+ const q=kind==='pop'?BK(p):O3(p);
+ el.style.opacity=C(p*2.2); el.style.filter=p<1?`blur(${(1-p)*14}px)`:'none';
+ el.style.transform=`translateY(${(1-q)*70}px) scale(${.86+.14*q})`;
+ el.style.setProperty('--sh',(120-C((t-t0-d*.4)/1.1)*220)+'%');
+}
+function render(T){
+ // fundo: verde-bandeira que respira para azul royal no meio e volta
+ const m=(Math.sin(T/59*Math.PI*2-Math.PI/2)+1)/2;
+ const g1=[0,140,69],g2=[20,60,170]; const c=g1.map((v,i)=>Math.round(v+(g2[i]-v)*m*.85));
+ document.getElementById('bg').style.background=`radial-gradient(ellipse at 50% 30%,rgb(${c.map(v=>Math.min(255,v+38))}) 0%,rgb(${c}) 55%,rgb(${c.map(v=>v*.55|0)}) 100%)`;
+ const L=document.getElementById('light'); L.style.transform=`translate(${-260+Math.sin(T*2*Math.PI/59*2)*380}px,${-300+Math.cos(T*2*Math.PI/59)*420}px)`;
+ // ilustrações flutuando (parallax de 3 camadas)
+ items.forEach((o,i)=>{const p=((T/o.per)+o.ph)%1; const y=1960-p*(1960+o.w*1.2); const x=o.x+Math.sin(T*2*Math.PI/59*3+i)*22*(o.layer+1);
+  const r=o.rs+Math.sin(T*2*Math.PI/59*5+i*1.7)*4; const s=1+Math.sin(T*2*Math.PI/59*6+i)*.025;
+  o.d.style.transform=`translate(${x}px,${y}px) rotate(${r}deg) scale(${s})`;});
+ // cartão principal
+ const t=T; {const p=C((t-1.2)/3.2),q=IO(p); main.style.opacity=C((t-1.2)/1.2)*(1); main.style.filter=p<1?`blur(${(1-q)*10}px)`:'none';
+  if(t<30) main.style.transform=`translateY(${(1-q)*120}px) scale(${.78+.22*q})`; main.style.zIndex=t<3.6?2:5;
+  items.forEach(o=>{if(o.layer==2){o.d.style.zIndex=t<3.6?7:2;}});}
+ ps.forEach((p,i)=>{const t0=4.2+i*.8, q=C((t-t0)/.6); p.style.opacity=q; p.style.transform=`translateY(${(1-O3(q))*18}px)`; p.style.filter=q<1?`blur(${(1-q)*6}px)`:'none';});
+ const mv=IO(C((t-29.5)/1.6)); if(t>=29.5){ main.style.transform=`translate(${-30*mv}px,${0}px) scale(${1-.6*mv}) rotate(${-2*mv}deg)`; main.style.filter='none'; main.style.opacity=1;}
+ // pares mito/desmentido
+ cards.forEach(el=>enter(el,t,+el.dataset.t,el.classList.contains('myth')?.45:.8,el.classList.contains('myth')?'pop':'ease'));
+ // saída de tudo e fecho
+ const out=C((t-50.3)/1.2);
+ if(out>0){[main,...cards].forEach((el,i)=>{el.style.opacity=(1-out); el.style.filter=`blur(${out*18}px)`;});}
+ document.getElementById('scrim').style.opacity=C((t-50.5)/1.2)*(1-C((t-56.6)/1.8));
+ cl.forEach((el,i)=>{const t0=51.4+i*1.2,q=C((t-t0)/.9),z=C((t-56.4)/1.6); el.style.opacity=q*(1-z); el.style.transform=`translateY(${(1-O3(q))*50}px)`; el.style.filter=(q<1||z>0)?`blur(${(1-q)*16+z*18}px)`:'none';});
+ if(t>=50.3&&t<56){main.style.opacity=1-out;}
+ if(t<1.2){main.style.opacity=0;}
+}
+window.render=render; window.EVENTS={whoosh:[],thud:[],slap:[],tick:[],pop:[],glitch:[]};
+window.READY=document.fonts.ready.then(()=>Promise.all([...document.images].map(i=>i.complete?1:new Promise(r=>{i.onload=i.onerror=r})))).then(()=>{render(0);return true});
+</script>
+</body></html>
