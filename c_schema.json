@@ -1,0 +1,9 @@
+{
+ "input": null,
+ "description": null,
+ "default_example": null,
+ "raw_keys": [
+  "http_error",
+  "detail"
+ ]
+}
