@@ -1,6 +1,6 @@
 {
  "slug": "eleitor-imprevisivel",
- "pass": 11,
+ "pass": 12,
  "main": {
   "drive_id": "1ehfPqbxAQtaJ6HmYLbpGxnJMoA6J-lqh",
   "ig_url": "https://www.instagram.com/reel/DeeiNsMk5Dj/"
@@ -248,5 +248,5 @@
    "start": 0.0
   }
  ],
- "clip_speed": 1.2
+ "clip_speed": 1.3
 }
