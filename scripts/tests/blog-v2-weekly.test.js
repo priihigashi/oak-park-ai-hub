@@ -6,12 +6,17 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 const { writeRun } = require('../blog-v2/pipeline');
 const { readQueue } = require('../blog-v2/review-queue');
-const { parseOptions, queuedRuns, heldRuns, reviewedRuns, stagedInput, weekStart, runAttempt } = require('../blog-v2/weekly-private');
+const { parseOptions, queuedRuns, heldRuns, reviewedRuns, stagedInput, weekStart, dayStart, runAttempt } = require('../blog-v2/weekly-private');
 
 test('weekly boundary follows New York Monday across UTC and daylight saving time', () => {
   assert.equal(weekStart(new Date('2026-10-11T23:00:00Z')), weekStart(new Date('2026-10-12T01:00:00Z')));
   assert.notEqual(weekStart(new Date('2026-10-12T01:00:00Z')), weekStart(new Date('2026-10-12T13:00:00Z')));
   assert.equal(weekStart(new Date('2026-11-01T05:30:00Z')), weekStart(new Date('2026-11-01T06:30:00Z')));
+});
+
+test('cadence allows one attempt per New York day', () => {
+  assert.equal(dayStart(new Date('2026-10-14T03:30:00Z')), dayStart(new Date('2026-10-13T13:00:00Z')));
+  assert.notEqual(dayStart(new Date('2026-10-14T13:00:00Z')), dayStart(new Date('2026-10-13T13:00:00Z')));
 });
 
 test('weekly private coordinator links verified research, article, and preview without publishing', () => {
