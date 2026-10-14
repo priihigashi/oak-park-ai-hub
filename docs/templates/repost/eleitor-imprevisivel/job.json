@@ -1,6 +1,6 @@
 {
  "slug": "eleitor-imprevisivel",
- "pass": 7,
+ "pass": 8,
  "main": {
   "drive_id": "1ehfPqbxAQtaJ6HmYLbpGxnJMoA6J-lqh",
   "ig_url": "https://www.instagram.com/reel/DeeiNsMk5Dj/"
@@ -211,12 +211,20 @@
    "len": 6
   },
   {
-   "type": "card",
-   "quote": "“Não. Presidente Trump não jogou uma bomba nuclear no Brasil — *ainda*.”",
+   "type": "clip",
+   "id": "c8_eduardo",
+   "url": "https://www.instagram.com/reels/DMTzbDAJ-FJ/",
+   "alt": [],
+   "keywords": [
+    "terra arrasada",
+    "vingado",
+    "ditadores de toga"
+   ],
+   "len": 9,
+   "quote": "“Se houver um cenário de *terra arrasada*, pelo menos eu estarei vingado desses ditadores de toga.”",
    "who": "Eduardo Bolsonaro",
    "role": "ex-deputado federal",
-   "src": "post no X · 16/07/2025",
-   "len": 5
+   "src": "vídeo · jul/2025"
   },
   {
    "type": "clip",
