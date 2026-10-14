@@ -27,8 +27,9 @@ jobs:
                               client_id=td["client_id"], client_secret=td["client_secret"])
           drive = build("drive", "v3", credentials=creds)
           lines = open("sala_escura/pacote_folder.txt").read().split()
-          folder, only = lines[0], set(lines[1:])
-          for f in sorted(glob.glob("sala_escura/pacote/*")):
+          folders, only = lines[0].split(","), set(lines[1:])
+          for folder in folders:
+           for f in sorted(glob.glob("sala_escura/pacote/*")):
               if only and os.path.basename(f) not in only: continue
               name = os.path.basename(f)
               body = {"name": name, "parents": [folder]}
@@ -40,5 +41,5 @@ jobs:
                   mime = "text/plain"
               r = drive.files().create(body=body, media_body=MediaFileUpload(f, mimetype=mime, resumable=True),
                                        supportsAllDrives=True, fields="id,name").execute()
-              print("uploaded", r["name"], r["id"])
+              print("uploaded", folder, r["name"], r["id"])
           PY
