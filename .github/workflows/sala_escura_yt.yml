@@ -71,6 +71,22 @@ jobs:
             cp /tmp/sep/htdemucs/sam_hq/no_vocals.wav out/sam_music.wav 2>/dev/null || true
             ls -la out
           fi
+      - name: Voice lines (edge-tts)
+        continue-on-error: true
+        run: |
+          if [ -f sala_escura/voice_lines.json ]; then
+            pip install -q edge-tts > out/edge_pip.log 2>&1 || true
+            python3 - <<'PY'
+          import json, subprocess
+          for it in json.load(open('sala_escura/voice_lines.json')):
+              cmd = ['edge-tts', '--voice', it['voice'], '--text', it['text'], '--write-media', f"out/{it['name']}.mp3"]
+              if it.get('rate'): cmd += ['--rate', it['rate']]
+              if it.get('pitch'): cmd += ['--pitch', it['pitch']]
+              r = subprocess.run(cmd, capture_output=True, text=True)
+              print(it['name'], r.returncode, r.stderr[-300:])
+          PY
+            ls -la out
+          fi
       - name: Push outputs
         if: always()
         run: |
