@@ -83,7 +83,7 @@ jobs:
               if it.get('rate'): cmd += ['--rate', it['rate']]
               if it.get('pitch'): cmd += ['--pitch', it['pitch']]
               r = subprocess.run(cmd, capture_output=True, text=True)
-              print(it['name'], r.returncode, r.stderr[-300:])
+              open('out/edge.log','a').write(f"{it['name']} rc={r.returncode} {r.stderr[-600:]}\n")
           PY
             ls -la out
           fi
