@@ -1,6 +1,6 @@
 {
  "slug": "eleitor-imprevisivel",
- "pass": 2,
+ "pass": 3,
  "main": {
   "drive_id": "1ehfPqbxAQtaJ6HmYLbpGxnJMoA6J-lqh",
   "ig_url": "https://www.instagram.com/reel/DeeiNsMk5Dj/"
@@ -11,9 +11,9 @@
    "t0": 18.2,
    "t1": 24.0,
    "kicker": "INSPIRADO EM",
-   "who": "Paulo Figueiredo",
-   "what": "“mulher vota muito mal”",
-   "src": "live no YouTube · jun/2026"
+   "who": "Pietra Bertolazzi",
+   "what": "“Voto feminino? Contra.”",
+   "src": "vídeo viral · jul/2026"
   },
   {
    "t0": 40.2,
@@ -42,11 +42,29 @@
  ],
  "clips": [
   {
+   "id": "c2_pietra",
+   "url": "https://x.com/bralternativo_/status/2072441544838160852",
+   "alt": [],
+   "keywords": [
+    "voto feminino",
+    "contra o voto",
+    "mulher votar",
+    "mulheres votarem"
+   ],
+   "len": 4.4,
+   "who": "Pietra Bertolazzi",
+   "role": "influenciadora conservadora",
+   "src": "vídeo viral · jul/2026",
+   "start": 47.5,
+   "quote": "“Voto feminino?” — “Contra.”"
+  },
+  {
    "id": "c1_figueiredo",
    "url": "https://www.youtube.com/watch?v=ROVmydiCiwk",
    "alt": [
-    "https://www.youtube.com/watch?v=SKMB-pyDG-0",
-    "https://www.youtube.com/watch?v=jczGiTN7TjE"
+    "https://x.com/congressoemfoco/status/2071930237097517070",
+    "https://x.com/RomuloBDias/status/2072266910196982030",
+    "https://www.youtube.com/watch?v=SKMB-pyDG-0"
    ],
    "keywords": [
     "vota muito mal",
@@ -60,29 +78,10 @@
    "src": "live no YouTube · jun/2026"
   },
   {
-   "id": "c2_pietra",
-   "url": "https://x.com/bralternativo_/status/2072441544838160852",
-   "alt": [
-    "https://www.youtube.com/watch?v=uoTIw-6enFc",
-    "https://www.youtube.com/watch?v=KWIGVBvHDbE"
-   ],
-   "keywords": [
-    "voto feminino",
-    "contra o voto",
-    "mulher votar",
-    "mulheres votarem"
-   ],
-   "len": 9,
-   "who": "Pietra Bertolazzi",
-   "role": "influenciadora conservadora",
-   "src": "vídeo viral · jul/2026"
-  },
-  {
    "id": "c3_campopiano",
    "url": "https://x.com/Poder360/status/2107187750390652956",
    "alt": [
-    "https://x.com/folha/status/2106879515691770204",
-    "https://www.youtube.com/watch?v=JjZ5AzMWIZs"
+    "https://x.com/folha/status/2106879515691770204"
    ],
    "keywords": [
     "canibal",
@@ -91,16 +90,18 @@
     "colonizaram",
     "catequizaram"
    ],
-   "len": 10,
+   "len": 12.6,
    "who": "Eduarda Campopiano (PL)",
    "role": "deputada estadual eleita mais votada de SP",
-   "src": "RedCast · mai/2026"
+   "src": "RedCast · mai/2026",
+   "start": 0.0,
+   "quote": "“Glória a Deus que colonizaram, glória a Deus que catequizaram as índias… falou pros índios: ó galera, fazer sacrifício e comer o braço do irmãozinho não é legal”"
   },
   {
    "id": "c4_bolsonaro",
-   "url": "https://www.youtube.com/watch?v=v-LXgcCCKik",
+   "url": "https://x.com/Pimenta13Br/status/1578436215484821505",
    "alt": [
-    "https://www.youtube.com/watch?v=SOt30kUKYxY"
+    "https://www.youtube.com/watch?v=v-LXgcCCKik"
    ],
    "keywords": [
     "comeria um índio",
@@ -116,10 +117,11 @@
   },
   {
    "id": "c5_flavio",
-   "url": "https://x.com/CNNBrasil/status/1943483723208421392",
+   "url": "https://x.com/bnews_oficial/status/1943424538064359591",
    "alt": [
-    "https://www.youtube.com/watch?v=EFcgIwM3dSA",
-    "https://www.youtube.com/watch?v=bE1o0FMhmtA"
+    "https://x.com/updatecharts/status/1943626321139319115",
+    "https://x.com/o_antagonista/status/1943822627983773845",
+    "https://x.com/CNNBrasil/status/1943483723208421392"
    ],
    "keywords": [
     "hiroshima",
@@ -142,5 +144,6 @@
    "len": 5
   }
  ],
- "version": 1
+ "version": 1,
+ "lt_y": 1532
 }
