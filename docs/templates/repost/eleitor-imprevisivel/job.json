@@ -1,0 +1,28 @@
+{
+  "slug": "eleitor-imprevisivel",
+  "pass": 1,
+  "main": {"drive_id": "1ehfPqbxAQtaJ6HmYLbpGxnJMoA6J-lqh", "ig_url": "https://www.instagram.com/reel/DeeiNsMk5Dj/"},
+  "page_tag": "@tentandochegaratevoce",
+  "lower_thirds": [
+    {"t0": 18.2, "t1": 24.0, "kicker": "INSPIRADO EM", "who": "Paulo Figueiredo", "what": "“mulher vota muito mal”", "src": "live no YouTube · jun/2026"},
+    {"t0": 40.2, "t1": 49.5, "kicker": "INSPIRADO EM", "who": "Eduarda Campopiano (PL)", "what": "ligou indígenas a canibalismo", "src": "RedCast · mai/2026"},
+    {"t0": 79.2, "t1": 88.0, "kicker": "INSPIRADO EM", "who": "Jair Bolsonaro", "what": "“comeria um índio sem problema”", "src": "entrevista ao NYT · 2016"},
+    {"t0": 101.2, "t1": 108.5, "kicker": "INSPIRADO EM", "who": "Flávio e Eduardo Bolsonaro", "what": "Hiroshima / “bomba nuclear – ainda”", "src": "CNN 10/07/2025 · X 16/07/2025"}
+  ],
+  "clips": [
+    {"id": "c1_figueiredo", "url": "https://www.youtube.com/watch?v=ROVmydiCiwk", "alt": ["https://www.youtube.com/watch?v=SKMB-pyDG-0"], "keywords": ["vota muito mal", "votam muito mal", "vota mal", "votam mal"], "len": 9,
+     "who": "Paulo Figueiredo", "role": "comentarista, aliado da família Bolsonaro", "src": "live no YouTube · jun/2026"},
+    {"id": "c2_pietra", "url": "https://www.youtube.com/watch?v=uoTIw-6enFc", "alt": ["https://www.youtube.com/watch?v=KWIGVBvHDbE"], "keywords": ["voto feminino", "contra o voto", "mulher votar", "mulheres votarem"], "len": 9,
+     "who": "Pietra Bertolazzi", "role": "influenciadora conservadora", "src": "vídeo viral · jul/2026"},
+    {"id": "c3_campopiano", "url": "https://www.youtube.com/watch?v=JjZ5AzMWIZs", "alt": ["https://www.youtube.com/watch?v=EEOxfRfXMNA"], "keywords": ["canibal", "glória a deus", "gloria a deus", "colonizaram", "catequizaram"], "len": 10,
+     "who": "Eduarda Campopiano (PL)", "role": "deputada estadual eleita mais votada de SP", "src": "RedCast · mai/2026"},
+    {"id": "c4_bolsonaro", "url": "https://www.youtube.com/watch?v=v-LXgcCCKik", "alt": ["https://www.youtube.com/watch?v=eyWnCFg9904"], "keywords": ["comeria um índio", "comeria um indio", "comeria", "comer o índio", "carne"], "len": 9,
+     "who": "Jair Bolsonaro", "role": "então deputado federal", "src": "entrevista ao New York Times · 2016"},
+    {"id": "c5_flavio", "url": "https://www.youtube.com/watch?v=EFcgIwM3dSA", "alt": ["https://www.youtube.com/watch?v=bE1o0FMhmtA", "https://www.youtube.com/watch?v=w1gyQryNjTM"], "keywords": ["hiroshima", "nagasaki", "bomba"], "len": 10,
+     "who": "Flávio Bolsonaro (PL)", "role": "senador", "src": "entrevista à CNN · 10/07/2025"}
+  ],
+  "cards": [
+    {"id": "k6_eduardo", "who": "Eduardo Bolsonaro", "role": "ex-deputado federal", "src": "post no X · 16/07/2025",
+     "quote": "“Não. Presidente Trump não jogou uma bomba nuclear no Brasil – ainda.”", "len": 5}
+  ]
+}

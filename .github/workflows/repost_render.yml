@@ -1,0 +1,105 @@
+name: Repost render (vídeo + tarja de referência + coletânea de clipes)
+# Push de docs/templates/repost/<slug>/job.json → baixa o reel (Drive) e os clipes-fonte (yt-dlp),
+# acha o trecho por palavra-chave (faster-whisper), renderiza 2 versões (com/sem tarja) e sobe pro
+# Drive News › Reels_Shorts › v<N>_<slug>/motion. Relatório + contact sheet vão num branch tmp-repost-*
+# (apagar depois). Nenhuma mídia de terceiros é commitada no repo.
+on:
+  push:
+    paths:
+      - "docs/templates/repost/*/job.json"
+permissions:
+  contents: write
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4.2.2
+        with: { fetch-depth: 2 }
+      - uses: actions/setup-python@v5.6.0
+        with: { python-version: "3.11" }
+      - name: Install
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-inter fonts-jetbrains-mono
+          pip install -q faster-whisper "yt-dlp[default]" pillow google-api-python-client google-auth
+      - name: Job + fonts + cookies
+        env:
+          PRI_OP_YT_COOKIES: ${{ secrets.PRI_OP_YT_COOKIES }}
+        run: |
+          JOB=$(git diff --name-only HEAD~1 HEAD -- 'docs/templates/repost/*/job.json' | head -1)
+          [ -z "$JOB" ] && JOB=$(ls docs/templates/repost/*/job.json | head -1)
+          echo "JOB=$JOB" >> $GITHUB_ENV
+          mkdir -p work/fonts
+          curl -sSL -o work/fonts/Anton-Regular.ttf https://github.com/google/fonts/raw/main/ofl/anton/Anton-Regular.ttf
+          python - <<'EOF'
+          import os, base64
+          v = os.environ.get("PRI_OP_YT_COOKIES","")
+          if v:
+              try:
+                  t = base64.b64decode(v).decode()
+                  if "\t" not in t: t = v
+              except Exception:
+                  t = v
+              open("/tmp/yt_cookies.txt","w").write(t)
+          EOF
+      - name: Download main reel from Drive
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: |
+          python - <<'EOF'
+          import os, json, io, urllib.request, urllib.parse
+          from google.oauth2.credentials import Credentials
+          from googleapiclient.discovery import build
+          from googleapiclient.http import MediaIoBaseDownload
+          td=json.loads(os.environ["SHEETS_TOKEN"])
+          r=json.loads(urllib.request.urlopen(urllib.request.Request("https://oauth2.googleapis.com/token",data=urllib.parse.urlencode({"client_id":td["client_id"],"client_secret":td["client_secret"],"refresh_token":td["refresh_token"],"grant_type":"refresh_token"}).encode())).read())
+          d=build("drive","v3",credentials=Credentials(token=r["access_token"]))
+          job=json.load(open(os.environ["JOB"]))
+          fh=io.FileIO("work/main_src.mp4","wb")
+          dl=MediaIoBaseDownload(fh,d.files().get_media(fileId=job["main"]["drive_id"],supportsAllDrives=True))
+          done=False
+          while not done: _,done=dl.next_chunk()
+          print("ok", os.path.getsize("work/main_src.mp4"))
+          EOF
+      - name: Render
+        run: python docs/templates/repost/render.py "$JOB" work
+      - name: Upload to Drive (News › Reels_Shorts › v<N>_<slug>)
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: |
+          python - <<'EOF'
+          import os, json, glob, re, urllib.request, urllib.parse
+          from google.oauth2.credentials import Credentials
+          from googleapiclient.discovery import build
+          from googleapiclient.http import MediaFileUpload
+          td=json.loads(os.environ["SHEETS_TOKEN"])
+          r=json.loads(urllib.request.urlopen(urllib.request.Request("https://oauth2.googleapis.com/token",data=urllib.parse.urlencode({"client_id":td["client_id"],"client_secret":td["client_secret"],"refresh_token":td["refresh_token"],"grant_type":"refresh_token"}).encode())).read())
+          d=build("drive","v3",credentials=Credentials(token=r["access_token"]))
+          job=json.load(open(os.environ["JOB"])); slug=job["slug"]; ps=job.get("pass",1)
+          ROOT="1IY4TJyv9Dk1qJPdhskyn4flj1g1jp0Kl"
+          def ls(q): return d.files().list(q=q,supportsAllDrives=True,includeItemsFromAllDrives=True,fields="files(id,name)").execute()["files"]
+          def mk(name,parent): return d.files().create(body={"name":name,"mimeType":"application/vnd.google-apps.folder","parents":[parent]},supportsAllDrives=True,fields="id").execute()["id"]
+          ex=ls(f"'{ROOT}' in parents and trashed=false and mimeType='application/vnd.google-apps.folder' and name contains '_{slug}'")
+          vers=sorted(int(m.group(1)) for f in ex for m in [re.match(rf"v(\d+)_{re.escape(slug)}$",f["name"])] if m)
+          if job.get("version"): v=int(job["version"])
+          else: v=(vers[-1] if (vers and ps>1) else (vers[-1]+1 if vers else 1))
+          name=f"v{v}_{slug}"; hit=[f for f in ex if f["name"]==name]
+          vid=hit[0]["id"] if hit else mk(name,ROOT)
+          sub={}
+          for s in ("motion","resources"):
+              h=ls(f"'{vid}' in parents and name='{s}' and trashed=false"); sub[s]=h[0]["id"] if h else mk(s,vid)
+          up=[]
+          for p in sorted(glob.glob("work/out/*")):
+              n=os.path.basename(p); base,ext=os.path.splitext(n)
+              tgt=sub["motion"] if ext==".mp4" else sub["resources"]
+              o=d.files().create(body={"name":f"{base}_p{ps}{ext}","parents":[tgt]},media_body=MediaFileUpload(p,resumable=True),supportsAllDrives=True,fields="id,name,size").execute()
+              up.append(o); print("UP",o)
+          json.dump({"version_folder":vid,"name":name,"uploads":up},open("work/out/drive.json","w"),indent=1)
+          EOF
+      - name: Report branch (sheets + report only; delete after review)
+        run: |
+          B="tmp-repost-${{ github.run_id }}"
+          mkdir -p /tmp/rep && cp work/out/*.jpg work/out/*.json /tmp/rep/ 2>/dev/null || true
+          git config user.name "repost-bot"; git config user.email "repost-bot@users.noreply.github.com"
+          git checkout --orphan "$B"; git rm -rq --cached . ; rm -rf ./* .github 2>/dev/null || true
+          cp /tmp/rep/* . ; git add -A; git commit -qm "repost report ${{ github.run_id }}"; git push -q origin "$B"
