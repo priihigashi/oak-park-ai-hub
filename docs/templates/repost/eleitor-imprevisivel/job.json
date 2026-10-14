@@ -1,6 +1,6 @@
 {
  "slug": "eleitor-imprevisivel",
- "pass": 8,
+ "pass": 9,
  "main": {
   "drive_id": "1ehfPqbxAQtaJ6HmYLbpGxnJMoA6J-lqh",
   "ig_url": "https://www.instagram.com/reel/DeeiNsMk5Dj/"
@@ -192,6 +192,20 @@
    "tag": "“COMER CRIANÇA, COMER CADÁVER”"
   },
   {
+   "type": "clip",
+   "id": "c5_animais",
+   "url": "https://www.instagram.com/reels/DeJwO7xRaGK/",
+   "alt": [],
+   "keywords": [],
+   "start": 0.0,
+   "len": 19.5,
+   "tag": "“E ANIMAIS. FALA DE ANIMAIS.”",
+   "quote": "“Todo mundo ia atrás de *galinha* no galinheiro… alguns mais malandros, na *bezerrinha*, na *jumentinha*… era comum.”",
+   "who": "Jair Bolsonaro",
+   "role": "então deputado federal",
+   "src": "programa CQC, quadro com detector de mentiras · mar/2012"
+  },
+  {
    "type": "card",
    "tag": "“VAMOS TENTAR UMA NECROFILIA?”",
    "quote": "Em aula para futuros policiais, brincou com *violar o corpo de uma mulher morta* e disse que a pena “é pequena”.",
@@ -212,6 +226,21 @@
   },
   {
    "type": "clip",
+   "id": "c7_negociacao",
+   "url": "https://www.instagram.com/reels/DMqy7hBOSG2/",
+   "alt": [],
+   "keywords": [],
+   "start": 0.0,
+   "len": 13.4,
+   "tag": "“O BRASIL TEM QUE ACABAR”",
+   "quote": "— Não vão encontrar diálogo, então? — “Com certeza não, e *eu trabalho para que eles não encontrem diálogo*. Nós estamos em guerra, e é tudo ou nada.”",
+   "body": "Enquanto senadores estavam nos EUA tentando negociar a tarifa de 50% sobre produtos brasileiros.",
+   "who": "Eduardo Bolsonaro",
+   "role": "então deputado federal (PL-SP)",
+   "src": "entrevista ao SBT News · 28/07/2025"
+  },
+  {
+   "type": "clip",
    "id": "c8_eduardo",
    "url": "https://www.instagram.com/reels/DMTzbDAJ-FJ/",
    "alt": [],
@@ -229,29 +258,22 @@
   {
    "type": "clip",
    "id": "c9_culto",
-   "url": "https://www.youtube.com/watch?v=yu9_NUBnGLo",
-   "alt": [
-    "https://www.youtube.com/watch?v=4I1CLifhhgM",
-    "https://www.youtube.com/watch?v=i-MyCbdT6Ak"
-   ],
-   "keywords": [
-    "futuro presidente",
-    "a igreja está pedindo",
-    "igreja esta pedindo",
-    "guerra espiritual"
-   ],
-   "len": 12,
+   "url": "https://www.instagram.com/reels/DeVMQunEjrE/",
+   "alt": [],
+   "keywords": [],
+   "len": 9.3,
    "tag": "E AÍ ELE VIRA REI",
    "quote": "No púlpito, o bispo chama Flávio de *“futuro presidente”* — e o ginásio grita “É 22!”",
    "who": "Flávio Bolsonaro (PL)",
    "role": "candidato a presidente",
-   "src": "culto do centenário da Assembleia de Deus Madureira · Maracanãzinho · 10/10/2026",
+   "src": "culto do centenário da Assembleia de Deus Madureira · Maracanãzinho · 10/10/2026 · vídeo: Pleno.News",
    "fallback": {
     "type": "image",
     "img_url": "https://cdn.jornaldebrasilia.com.br/wp-content/uploads/2026/10/10191555/AFP__20261010__D2VM3YN__v1__MidRes__BrazilRunoffElectionReligionCampaign-620x620.jpg",
     "src": "culto do centenário da Assembleia de Deus Madureira · Maracanãzinho · 10/10/2026 · foto: Douglas Shineidr/AFP",
     "len": 7
-   }
+   },
+   "start": 0.0
   }
  ],
  "clip_speed": 1.2
