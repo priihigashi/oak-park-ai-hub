@@ -17,4 +17,5 @@
 # feito: ref_15 https://www.instagram.com/reel/DbSrtDFgti9/
 # feito: ref_16 https://www.instagram.com/reel/DX5bYoeiVqv/
 # feito: ref_17 https://www.instagram.com/reel/Da2cY47umOE/
-rp_01_bolso_indigenas https://www.instagram.com/reel/DeeiNsMk5Dj/
+# feito: rp_01_bolso_indigenas https://www.instagram.com/reel/DeeiNsMk5Dj/
+rp_02_negociacao https://www.instagram.com/reels/DMqy7hBOSG2/
