@@ -1,6 +1,6 @@
 {
  "slug": "eleitor-imprevisivel",
- "pass": 3,
+ "pass": 4,
  "main": {
   "drive_id": "1ehfPqbxAQtaJ6HmYLbpGxnJMoA6J-lqh",
   "ig_url": "https://www.instagram.com/reel/DeeiNsMk5Dj/"
@@ -59,25 +59,6 @@
    "quote": "“Voto feminino?” — “Contra.”"
   },
   {
-   "id": "c1_figueiredo",
-   "url": "https://www.youtube.com/watch?v=ROVmydiCiwk",
-   "alt": [
-    "https://x.com/congressoemfoco/status/2071930237097517070",
-    "https://x.com/RomuloBDias/status/2072266910196982030",
-    "https://www.youtube.com/watch?v=SKMB-pyDG-0"
-   ],
-   "keywords": [
-    "vota muito mal",
-    "votam muito mal",
-    "vota mal",
-    "votam mal"
-   ],
-   "len": 9,
-   "who": "Paulo Figueiredo",
-   "role": "comentarista, aliado da família Bolsonaro",
-   "src": "live no YouTube · jun/2026"
-  },
-  {
    "id": "c3_campopiano",
    "url": "https://x.com/Poder360/status/2107187750390652956",
    "alt": [
@@ -100,9 +81,7 @@
   {
    "id": "c4_bolsonaro",
    "url": "https://x.com/Pimenta13Br/status/1578436215484821505",
-   "alt": [
-    "https://www.youtube.com/watch?v=v-LXgcCCKik"
-   ],
+   "alt": [],
    "keywords": [
     "comeria um índio",
     "comeria um indio",
@@ -113,28 +92,31 @@
    "len": 9,
    "who": "Jair Bolsonaro",
    "role": "então deputado federal",
-   "src": "entrevista ao New York Times · 2016"
-  },
-  {
-   "id": "c5_flavio",
-   "url": "https://x.com/bnews_oficial/status/1943424538064359591",
-   "alt": [
-    "https://x.com/updatecharts/status/1943626321139319115",
-    "https://x.com/o_antagonista/status/1943822627983773845",
-    "https://x.com/CNNBrasil/status/1943483723208421392"
+   "src": "entrevista ao New York Times · 2016 (trecho que voltou a circular em 2022)",
+   "segments": [
+    [
+     8.0,
+     20.45
+    ],
+    [
+     25.95,
+     27.15
+    ]
    ],
-   "keywords": [
-    "hiroshima",
-    "nagasaki",
-    "bomba"
-   ],
-   "len": 10,
-   "who": "Flávio Bolsonaro (PL)",
-   "role": "senador",
-   "src": "entrevista à CNN · 10/07/2025"
+   "quote": "“Queria ver o índio sendo cozinhado… Eu comeria um índio sem problema nenhum.”"
   }
  ],
  "cards": [
+  {
+   "id": "k5_flavio",
+   "kind": "fala",
+   "who": "Flávio Bolsonaro (PL)",
+   "role": "senador",
+   "src": "entrevista à CNN · 10/07/2025",
+   "quote": "“Nós não estamos em condições de exigir nada por parte do governo Trump.”",
+   "note": "ao comparar o Brasil ao Japão de Hiroshima e Nagasaki",
+   "len": 5
+  },
   {
    "id": "k6_eduardo",
    "who": "Eduardo Bolsonaro",

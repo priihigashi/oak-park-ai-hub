@@ -151,7 +151,16 @@ def get_clip(c):
         if t is None:
             rep.setdefault("errors", []).append(f"{url}: keyword not found"); continue
         ln = float(c.get("len", 9)); v = os.path.join(d, "v.mp4")
-        sh(["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{t:.2f}", "-i", full, "-t", f"{ln:.2f}", *ENC, v])
+        if c.get("segments"):  # vários trechos colados (ex.: pular narração de terceiros)
+            parts = []
+            for k, (a, b) in enumerate(c["segments"]):
+                pp = os.path.join(d, f"s{k}.mp4"); parts.append(pp)
+                sh(["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{a:.2f}", "-i", full, "-t", f"{b - a:.2f}", *ENC, pp])
+            lst = os.path.join(d, "segs.txt"); open(lst, "w").write("".join(f"file '{q}'\n" for q in parts))
+            sh(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", lst, *ENC, v])
+            t, ln = c["segments"][0][0], sum(b - a for a, b in c["segments"])
+        else:
+            sh(["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{t:.2f}", "-i", full, "-t", f"{ln:.2f}", *ENC, v])
         rep.update(ok=True, t0=round(t, 2), t1=round(t + ln, 2), file=v)
         try:
             segs, _ = whisper("small").transcribe(v, language="pt")
@@ -201,6 +210,14 @@ def card_frame(idx, total, k, path):
     comp_bg(idx, total, k, k["quote"], path, bx)
     img = Image.open(path); d = ImageDraw.Draw(img)
     # cartão de post (texto refeito, sem print de terceiros)
+    if k.get("kind") == "fala":
+        d.rectangle(bx, fill=PAPER)
+        d.text((bx[0] + 40, bx[1] + 10), "\u201c", font=font("anton", 200), fill=GOLD)
+        fq = font("xbold", 42); y = bx[1] + 170
+        for ln in wrap(d, k["quote"].strip("\u201c\u201d"), fq, bx[2] - bx[0] - 80):
+            d.text((bx[0] + 40, y), ln, font=fq, fill=INK); y += 54
+        d.text((bx[0] + 40, bx[3] - 50), k.get("note", ""), font=font("mono", 22), fill="#6b665c")
+        img.save(path); return
     d.rectangle(bx, fill="#FFFFFF")
     d.ellipse([bx[0] + 40, bx[1] + 40, bx[0] + 120, bx[1] + 120], fill=SLATE)
     ini = "".join(p[0] for p in k["who"].split()[:2]).upper()
@@ -227,7 +244,12 @@ def build_compilation(reps):
         else:
             quote = c.get("quote") or r.get("cut_text", "")
             quote = quote if quote.startswith("“") else f"“{quote.strip()}”"
-            bx = comp_bg(i, total, c, quote, bg)
+            r_ = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height", "-of", "csv=p=0", r["file"]], capture_output=True, text=True)
+            cw, ch = [int(x) for x in r_.stdout.strip().split(",")[:2]]
+            mw, mh = W - 80, 900 if ch > cw else 620
+            sc = min(mw / cw, mh / ch); bw_, bh_ = int(cw * sc) // 2 * 2, int(ch * sc) // 2 * 2
+            x0 = (W - bw_) // 2
+            bx = comp_bg(i, total, c, quote, bg, (x0, 380, x0 + bw_, 380 + bh_))
             vw, vh = bx[2] - bx[0], bx[3] - bx[1]
             sh(["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-i", bg, "-i", r["file"], "-filter_complex",
                 f"[1:v]scale={vw}:{vh}:force_original_aspect_ratio=decrease,pad={vw}:{vh}:(ow-iw)/2:(oh-ih)/2:color=black,setsar=1[c];"
