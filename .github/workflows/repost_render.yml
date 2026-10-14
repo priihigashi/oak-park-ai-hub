@@ -9,6 +9,9 @@ on:
       - "docs/templates/repost/*/job.json"
 permissions:
   contents: write
+concurrency:
+  group: repost-render
+  cancel-in-progress: true
 jobs:
   render:
     runs-on: ubuntu-latest
@@ -25,6 +28,7 @@ jobs:
       - name: Job + fonts + cookies
         env:
           PRI_OP_YT_COOKIES: ${{ secrets.PRI_OP_YT_COOKIES }}
+          PRI_OP_IG_COOKIES: ${{ secrets.PRI_OP_IG_COOKIES }}
         run: |
           JOB=$(git diff --name-only HEAD~1 HEAD -- 'docs/templates/repost/*/job.json' | head -1)
           [ -z "$JOB" ] && JOB=$(ls docs/templates/repost/*/job.json | head -1)
@@ -41,6 +45,14 @@ jobs:
               except Exception:
                   t = v
               open("/tmp/yt_cookies.txt","w").write(t)
+          v = os.environ.get("PRI_OP_IG_COOKIES","")
+          if v:
+              try:
+                  t = base64.b64decode(v).decode()
+                  if "\t" not in t: t = v
+              except Exception:
+                  t = v
+              open("/tmp/ig_cookies.txt","w").write(t)
           EOF
       - name: Download main reel from Drive
         env:

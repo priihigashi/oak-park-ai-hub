@@ -90,10 +90,21 @@ def burn_lower_thirds(main, dst):
 
 # ---------------------------------------------------------------- clips
 COOK_YT = "/tmp/yt_cookies.txt"
+COOK_IG = "/tmp/ig_cookies.txt"
 def ytdlp(args):
-    base = ["yt-dlp", "--no-playlist", "--no-warnings", "--retries", "3"]
-    if os.path.exists(COOK_YT) and os.path.getsize(COOK_YT) > 0: base += ["--cookies", COOK_YT]
-    return subprocess.run(base + args, capture_output=True, text=True)
+    """Tenta várias combinações (YouTube bloqueia IP de runner; X/IG costumam passar)."""
+    url = args[-1]; base = ["yt-dlp", "--no-playlist", "--no-warnings", "--retries", "3"]
+    variants = []
+    if "instagram.com" in url and os.path.exists(COOK_IG): variants.append(["--cookies", COOK_IG])
+    if "youtu" in url:
+        if os.path.exists(COOK_YT) and os.path.getsize(COOK_YT) > 0: variants.append(["--cookies", COOK_YT])
+        variants += [["--extractor-args", "youtube:player_client=mweb"], ["--extractor-args", "youtube:player_client=tv_embedded,web_safari"]]
+    variants.append([])
+    r = None
+    for v in variants:
+        r = subprocess.run(base + v + args, capture_output=True, text=True)
+        if r.returncode == 0: return r
+    return r
 
 _WM = {}
 def whisper(name="small"):
