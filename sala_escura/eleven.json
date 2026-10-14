@@ -1,1 +1,1 @@
-{"search": {"language": "pt", "accent": "brazilian", "gender": "female", "age": "middle_aged", "page_size": 40}, "take": 4, "model": "eleven_multilingual_v2", "settings": {"stability": 0.45, "similarity_boost": 0.75, "style": 0.15, "use_speaker_boost": true}, "lines": [{"n": "1ateparece", "t": "Ah... até parece."}, {"n": "2facebook", "t": "Olha lá... o cara é o dono do Facebook."}, {"n": "3adoro", "t": "Ah, eu adoro o Trump."}]}
+{"search": {"language": "pt", "accent": "brazilian", "gender": "female", "age": "middle_aged", "page_size": 40}, "take": 0, "lines": []}

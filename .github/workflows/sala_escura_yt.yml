@@ -149,6 +149,11 @@ jobs:
                   vs = sr.json().get('voices', [])
                   vs.sort(key=lambda v: -(v.get('cloned_by_count') or 0))
                   log['search'] = [[v.get('voice_id'), v.get('name'), v.get('accent'), v.get('age'), v.get('descriptive'), v.get('cloned_by_count'), (v.get('description') or '')[:120]] for v in vs[:15]]
+                  for v in vs[:15]:
+                      try:
+                          pr = requests.get(v.get('preview_url'), timeout=60)
+                          if pr.status_code == 200: open(f"out/prev_{''.join(c for c in v['name'].lower() if c.isalnum())[:14]}.mp3", 'wb').write(pr.content)
+                      except Exception: pass
                   for v in vs[:cfg.get('take', 4)]:
                       ar = requests.post(f"https://api.elevenlabs.io/v1/voices/add/{v['public_owner_id']}/{v['voice_id']}", headers={**H, 'Content-Type': 'application/json'}, json={'new_name': 'SE ' + v['name'][:30]}, timeout=60)
                       vid = ar.json().get('voice_id') if ar.status_code == 200 else None
