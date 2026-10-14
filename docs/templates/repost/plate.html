@@ -43,7 +43,7 @@ img.pic{width:100%;border-radius:26px;display:block}
 </style></head><body>
 <div id="root"></div>
 <script>
-const S=JSON.parse(decodeURIComponent(new URLSearchParams(location.search).get('spec')));
+const S=JSON.parse(new URLSearchParams(location.search).get('spec'));
 const R=document.getElementById('root'); const W=1080,H=1920;
 const esc=s=>(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');
 const hl=s=>esc(s).replace(/\*([^*]+)\*/g,'<em>$1</em>');   // *palavra* = destaque ouro
