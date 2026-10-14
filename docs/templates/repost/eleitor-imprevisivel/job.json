@@ -1,6 +1,6 @@
 {
  "slug": "eleitor-imprevisivel",
- "pass": 10,
+ "pass": 11,
  "main": {
   "drive_id": "1ehfPqbxAQtaJ6HmYLbpGxnJMoA6J-lqh",
   "ig_url": "https://www.instagram.com/reel/DeeiNsMk5Dj/"
@@ -133,34 +133,15 @@
    "tag": "“ÍNDIO É TUDO CANIBAL”"
   },
   {
-   "type": "card",
-   "tag": "“A ÚNICA SAÍDA É O NAZISMO”",
-   "quote": "Comparou a vitória da direita na eleição à *ascensão de Hitler*.",
-   "body": "“Hitler não ficaria forte o suficiente com o apoio da população…”",
-   "who": "Cabo Gilberto (PL-PB)",
-   "role": "deputado federal reeleito",
-   "src": "entrevista à Rádio Arapuan · out/2026",
-   "len": 6
-  },
-  {
    "type": "image",
-   "tag": "E A ARTE NOVA DO FLÁVIO…",
+   "tag": "“A ÚNICA SAÍDA É O NAZISMO”",
    "img_url": "https://revistaforum.com.br/wp-content/uploads/2026/10/1791654345412144-960x540-1.webp",
-   "quote": "PL publicou — e apagou — arte de Flávio igual a cartaz de *Mussolini* (1934).",
-   "body": "Rosto em preto e branco com uma palavra repetida atrás. O PL disse que foi “coincidência”.",
-   "who": "PL (juventude do partido)",
+   "quote": "Deputado do PL comparou a vitória da direita à *ascensão de Hitler*.",
+   "body": "E o PL publicou — e apagou — arte de Flávio igual a cartaz de *Mussolini* (1934). Disse que foi “coincidência”.",
+   "who": "Cabo Gilberto (PL-PB) · PL",
    "role": "",
-   "src": "canal do PL no WhatsApp · 08/10/2026 · JB, Revista Fórum",
+   "src": "Rádio Arapuan, out/2026 · canal do PL no WhatsApp, 08/10/2026 · JB, Revista Fórum",
    "len": 8
-  },
-  {
-   "type": "card",
-   "tag": "ANTES DE “COMER ÍNDIO”…",
-   "quote": "“Pena que a cavalaria brasileira não tenha sido tão eficiente quanto a americana, que *exterminou os índios*.”",
-   "who": "Jair Bolsonaro",
-   "role": "então deputado federal",
-   "src": "Correio Braziliense · 12/04/1998",
-   "len": 6
   },
   {
    "id": "c4_bolsonaro",
@@ -189,7 +170,8 @@
    ],
    "quote": "“Queria ver o índio sendo cozinhado… Eu comeria um índio sem problema nenhum.”",
    "type": "clip",
-   "tag": "“COMER CRIANÇA, COMER CADÁVER”"
+   "tag": "“COMER CRIANÇA, COMER CADÁVER”",
+   "body": "Em 1998: “Pena que a cavalaria brasileira não tenha sido tão eficiente quanto a americana, que *exterminou os índios*.” (Correio Braziliense)"
   },
   {
    "type": "clip",
@@ -210,19 +192,9 @@
    "tag": "“VAMOS TENTAR UMA NECROFILIA?”",
    "quote": "Em aula para futuros policiais, brincou com *violar o corpo de uma mulher morta* e disse que a pena “é pequena”.",
    "who": "Evandro Guedes",
-   "role": "ex-PM, dono do cursinho AlfaCon, fã declarado de Eduardo Bolsonaro",
-   "src": "aula viralizada em dez/2023 · Diário do Nordeste, Brasil 247",
-   "len": 7
-  },
-  {
-   "type": "card",
-   "tag": "“O TRUMP TEM QUE JOGAR UMA BOMBA ATÔMICA”",
-   "quote": "“Nós não estamos em condições de exigir nada por parte do governo Trump.”",
-   "body": "Ao comparar o Brasil ao Japão de *Hiroshima e Nagasaki*.",
-   "who": "Flávio Bolsonaro (PL)",
-   "role": "senador",
-   "src": "entrevista à CNN · 10/07/2025",
-   "len": 6
+   "role": "ex-PM, dono do cursinho AlfaCon",
+   "src": "aula viralizada em dez/2023 · Diário do Nordeste",
+   "len": 5
   },
   {
    "type": "clip",
@@ -234,7 +206,7 @@
    "len": 13.4,
    "tag": "“O BRASIL TEM QUE ACABAR”",
    "quote": "— Não vão encontrar diálogo, então? — “Com certeza não, e *eu trabalho para que eles não encontrem diálogo*. Nós estamos em guerra, e é tudo ou nada.”",
-   "body": "Enquanto senadores estavam nos EUA tentando negociar a tarifa de 50% sobre produtos brasileiros.",
+   "body": "Senadores estavam nos EUA negociando a tarifa de 50%. Duas semanas antes, Flávio comparou o Brasil ao Japão de *Hiroshima e Nagasaki* (CNN, 10/07/2025).",
    "who": "Eduardo Bolsonaro",
    "role": "então deputado federal (PL-SP)",
    "src": "entrevista ao SBT News · 28/07/2025"
