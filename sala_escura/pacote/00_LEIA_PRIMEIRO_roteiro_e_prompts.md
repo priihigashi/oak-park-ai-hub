@@ -19,6 +19,21 @@ Ideia: uma mulher numa sala escura liga a TV. Primeiro passa o Trump rindo com o
 
 Gere cada clipe com pelo menos 5 s (mínimo dos modelos); eu corto para a duração acima.
 
+
+## Estimativa de custo (ChatGPT: 6 s = 60 créditos, 10 s = 120, 30 s = 360)
+| Cena | Gerar? | Clipe | Créditos |
+|---|---|---|---|
+| 1 Sala vazia | Não, é parada | — | 0 |
+| 2 Entrada até o assento | Sim | 6 s | 60 |
+| 3 Close do controle | Sim | 6 s | 60 |
+| 4 Por trás do ombro (Trump, e reaproveito no final) | Sim | 6 s | 60 |
+| 6 Por trás, sentada (Tio Sam, e reaproveito no final) | Sim | 6 s | 60 |
+| 7 TV de perto | Não, é parada | — | 0 |
+| **Total, uma tentativa por cena** | | | **240** |
+| Com uma refação por cena | | | até ~480 |
+
+Para economizar: usar o clipe da cena 4 também na cena 6 → 180 créditos (~360 com refações).
+
 ## Regra mais importante
 
 **O que passa na TV tem que ser o vídeo real.** Nenhuma IA pode gerar o Trump, o Zuckerberg ou o Tio Sam. Nas cenas geradas, a tela da TV deve ficar **lisa e clara (branco-azulada), sem nada**. Depois eu encaixo os vídeos reais na tela e acerto a perspectiva.
