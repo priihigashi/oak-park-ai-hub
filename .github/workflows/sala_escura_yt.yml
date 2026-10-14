@@ -107,6 +107,11 @@ jobs:
           keep = [v for v in vs if any(k in (v.get('name','') + v.get('language','')).lower() for k in cfg.get('voice_filter', []))]
           json.dump(keep, open('out/heygen_voices.json', 'w'), ensure_ascii=False, indent=1)
           log['n_voices'] = len(vs); log['n_kept'] = len(keep)
+          for ep in ['https://api.heygen.com/v2/user/me', 'https://api.heygen.com/v2/user/remaining_quota', 'https://api.heygen.com/v1/user/remaining_quota']:
+              try:
+                  q = requests.get(ep, headers=H, timeout=60); log[ep] = {'status': q.status_code, 'body': q.text[:700]}
+              except Exception as e:
+                  log[ep] = str(e)
           for it in cfg.get('tts', []):
               body = {'voice_id': it['voice_id'], 'text': it['text']}
               body.update(it.get('extra', {}))
