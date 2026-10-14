@@ -87,6 +87,42 @@ jobs:
           PY
             ls -la out
           fi
+      - name: HeyGen voices / TTS
+        continue-on-error: true
+        env:
+          HEYGEN_API_KEY: ${{ secrets.HEYGEN_API_KEY }}
+        run: |
+          if [ -f sala_escura/heygen.json ]; then
+          cat > /tmp/hg.py <<'PY'
+          import os, json, requests
+          K = os.environ['HEYGEN_API_KEY']; H = {'X-Api-Key': K, 'Accept': 'application/json'}
+          cfg = json.load(open('sala_escura/heygen.json'))
+          log = {}
+          r = requests.get('https://api.heygen.com/v2/voices', headers=H, timeout=60)
+          log['voices_status'] = r.status_code
+          try:
+              vs = r.json().get('data', {}).get('voices', [])
+          except Exception:
+              vs = []; log['voices_raw'] = r.text[:500]
+          keep = [v for v in vs if any(k in (v.get('name','') + v.get('language','')).lower() for k in cfg.get('voice_filter', []))]
+          json.dump(keep, open('out/heygen_voices.json', 'w'), ensure_ascii=False, indent=1)
+          log['n_voices'] = len(vs); log['n_kept'] = len(keep)
+          for it in cfg.get('tts', []):
+              body = {'voice_id': it['voice_id'], 'text': it['text']}
+              body.update(it.get('extra', {}))
+              rr = requests.post('https://api.heygen.com/v1/audio/text_to_speech', headers={**H, 'Content-Type': 'application/json'}, json=body, timeout=120)
+              entry = {'status': rr.status_code, 'body': rr.text[:600]}
+              try:
+                  url = rr.json().get('data', {}).get('audio_url')
+                  if url:
+                      open(f"out/{it['name']}.mp3", 'wb').write(requests.get(url, timeout=120).content); entry['saved'] = True
+              except Exception as e:
+                  entry['err'] = str(e)
+              log[it['name']] = entry
+          json.dump(log, open('out/heygen_log.json', 'w'), indent=1)
+          PY
+          python3 /tmp/hg.py > out/heygen_run.log 2>&1 || true
+          fi
       - name: Push outputs
         if: always()
         run: |
