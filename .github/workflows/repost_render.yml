@@ -104,7 +104,7 @@ jobs:
           for p in sorted(glob.glob("work/out/*")):
               n=os.path.basename(p); base,ext=os.path.splitext(n)
               tgt=sub["motion"] if ext==".mp4" else sub["resources"]
-              o=d.files().create(body={"name":f"{base}_p{ps}{ext}","parents":[tgt]},media_body=MediaFileUpload(p,resumable=True),supportsAllDrives=True,fields="id,name,size").execute()
+              o=d.files().create(body={"name":f"{base}_p{ps}{ext}","parents":[tgt]},media_body=MediaFileUpload(p,resumable=True),supportsAllDrives=True,fields="id,name,size").execute(num_retries=5)
               up.append(o); print("UP",o)
           json.dump({"version_folder":vid,"name":name,"uploads":up},open("work/out/drive.json","w"),indent=1)
           EOF
