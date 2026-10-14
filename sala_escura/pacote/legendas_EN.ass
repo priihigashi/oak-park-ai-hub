@@ -1,0 +1,40 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+WrapStyle: 2
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: TV,Inter,60,&H00AAECFF,&H00FFFFFF,&H00000000,&H96000000,1,1,0,0,100,100,0,0,1,4,1,2,70,70,380,1
+Style: Her,Inter,64,&H00AAECFF,&H00FFFFFF,&H00000000,&H96000000,1,1,0,0,100,100,0,0,1,4,1,2,70,70,380,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:08.60,0:00:12.60,TV,,0,0,0,,I want you not to vote on October\N25th.
+Dialogue: 0,0:00:15.60,0:00:18.60,TV,,0,0,0,,Hello, Brazil! Of course you know\Nme.
+Dialogue: 0,0:00:18.60,0:00:21.10,TV,,0,0,0,,After all these years, you know my\Nmovies, my songs, my heroes.
+Dialogue: 0,0:00:21.10,0:00:23.60,TV,,0,0,0,,We've gotten so close.
+Dialogue: 0,0:00:23.60,0:00:26.60,TV,,0,0,0,,I think it's time to take our\Nrelationship to the next level.
+Dialogue: 0,0:00:26.60,0:00:28.60,TV,,0,0,0,,So, let's talk. Not about\Npolitics.
+Dialogue: 0,0:00:28.60,0:00:31.10,TV,,0,0,0,,Nobody can stand politics anymore.
+Dialogue: 0,0:00:31.10,0:00:33.60,TV,,0,0,0,,Let's talk about guns.
+Dialogue: 0,0:00:33.60,0:00:37.60,TV,,0,0,0,,See this beauty? Two billion\Ndollars each.
+Dialogue: 0,0:00:38.60,0:00:41.60,TV,,0,0,0,,And this? Two million a pop.
+Dialogue: 0,0:00:43.60,0:00:48.60,TV,,0,0,0,,Every one of my F-35 jets needs\Nabout 400 kilos of rare earths.
+Dialogue: 0,0:00:48.60,0:00:51.60,TV,,0,0,0,,You have the second largest\Nreserve on the planet.
+Dialogue: 0,0:00:51.60,0:00:54.60,TV,,0,0,0,,And you're just sitting on it.
+Dialogue: 0,0:00:54.60,0:00:57.60,TV,,0,0,0,,Lucky me. Come on, amigo. Good\Nboy.
+Dialogue: 0,0:00:59.60,0:01:02.10,TV,,0,0,0,,I have to say, your country is\Nhuge.
+Dialogue: 0,0:01:02.10,0:01:05.60,TV,,0,0,0,,Do you know how much it would cost\Nto invade all that?
+Dialogue: 0,0:01:05.60,0:01:07.60,TV,,0,0,0,,I don't even want to think about\Nit.
+Dialogue: 0,0:01:08.60,0:01:10.60,TV,,0,0,0,,One coconut, por favor.
+Dialogue: 0,0:01:10.60,0:01:15.60,TV,,0,0,0,,And, to be honest, I don't want to\Nwaste my money on a war against\Nyou.
+Dialogue: 0,0:01:15.60,0:01:18.60,TV,,0,0,0,,That would be stupid.
+Dialogue: 0,0:01:18.60,0:01:21.60,TV,,0,0,0,,That's... un-American.
+Dialogue: 0,0:01:21.60,0:01:25.60,TV,,0,0,0,,So, I prefer option two. Much\Ncheaper.
+Dialogue: 0,0:01:25.60,0:01:29.10,TV,,0,0,0,,You spend over nine hours a day on\Nmy platforms.
+Dialogue: 0,0:01:29.10,0:01:31.40,TV,,0,0,0,,I don't need to invade your\Ncountry.
+Dialogue: 0,0:01:31.40,0:01:33.50,TV,,0,0,0,,I just need to invade your\Nopinion.
+Dialogue: 0,0:01:33.60,0:01:34.60,Her,,0,0,0,,"Yeah, right."
+Dialogue: 0,0:01:35.90,0:01:38.10,Her,,0,0,0,,"Oh, I love Trump."

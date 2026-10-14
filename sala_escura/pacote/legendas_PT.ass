@@ -1,0 +1,40 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+WrapStyle: 2
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: TV,Inter,60,&H00AAECFF,&H00FFFFFF,&H00000000,&H96000000,1,1,0,0,100,100,0,0,1,4,1,2,70,70,380,1
+Style: Her,Inter,64,&H00AAECFF,&H00FFFFFF,&H00000000,&H96000000,1,1,0,0,100,100,0,0,1,4,1,2,70,70,380,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:08.60,0:00:12.60,TV,,0,0,0,,Eu quero que você não vote no dia\N25 de outubro.
+Dialogue: 0,0:00:15.60,0:00:18.60,TV,,0,0,0,,Olá, Brasil! Claro que você me\Nconhece.
+Dialogue: 0,0:00:18.60,0:00:21.10,TV,,0,0,0,,Depois de todos esses anos, você\Nconhece meus filmes, minhas\Nmúsicas, meus heróis.
+Dialogue: 0,0:00:21.10,0:00:23.60,TV,,0,0,0,,A gente ficou tão próximo.
+Dialogue: 0,0:00:23.60,0:00:26.60,TV,,0,0,0,,Acho que é hora de levar a nossa\Nrelação para o próximo nível.
+Dialogue: 0,0:00:26.60,0:00:28.60,TV,,0,0,0,,Então, vamos conversar. Não sobre\Npolítica.
+Dialogue: 0,0:00:28.60,0:00:31.10,TV,,0,0,0,,Ninguém aguenta mais política.
+Dialogue: 0,0:00:31.10,0:00:33.60,TV,,0,0,0,,Vamos falar de armas.
+Dialogue: 0,0:00:33.60,0:00:37.60,TV,,0,0,0,,Tá vendo essa beleza? Dois bilhões\Nde dólares cada.
+Dialogue: 0,0:00:38.60,0:00:41.60,TV,,0,0,0,,E isso? Dois milhões cada\Nexplosão.
+Dialogue: 0,0:00:43.60,0:00:48.60,TV,,0,0,0,,Cada um dos meus caças F-35\Nprecisa de uns 400 kg de terras\Nraras.
+Dialogue: 0,0:00:48.60,0:00:51.60,TV,,0,0,0,,Vocês têm a segunda maior reserva\Ndo planeta.
+Dialogue: 0,0:00:51.60,0:00:54.60,TV,,0,0,0,,E vocês estão só sentados em cima\Ndisso.
+Dialogue: 0,0:00:54.60,0:00:57.60,TV,,0,0,0,,Sorte a minha. Vamos, amigo. Bom\Ngaroto.
+Dialogue: 0,0:00:59.60,0:01:02.10,TV,,0,0,0,,Tenho que dizer: seu país é\Nenorme.
+Dialogue: 0,0:01:02.10,0:01:05.60,TV,,0,0,0,,Você imagina quanto custaria\Ninvadir tudo isso?
+Dialogue: 0,0:01:05.60,0:01:07.60,TV,,0,0,0,,Nem quero pensar nisso.
+Dialogue: 0,0:01:08.60,0:01:10.60,TV,,0,0,0,,Um coco, por favor.
+Dialogue: 0,0:01:10.60,0:01:15.60,TV,,0,0,0,,E, pra ser sincero, não quero\Ngastar meu dinheiro numa guerra\Ncontra vocês.
+Dialogue: 0,0:01:15.60,0:01:18.60,TV,,0,0,0,,Isso seria burrice.
+Dialogue: 0,0:01:18.60,0:01:21.60,TV,,0,0,0,,Isso é... antiamericano.
+Dialogue: 0,0:01:21.60,0:01:25.60,TV,,0,0,0,,Então, eu prefiro a opção dois.\NBem mais barata.
+Dialogue: 0,0:01:25.60,0:01:29.10,TV,,0,0,0,,Vocês passam mais de nove horas\Npor dia nas minhas plataformas.
+Dialogue: 0,0:01:29.10,0:01:31.40,TV,,0,0,0,,Eu não preciso invadir o seu país.
+Dialogue: 0,0:01:31.40,0:01:33.50,TV,,0,0,0,,Eu só preciso invadir a sua\Nopinião.
+Dialogue: 0,0:01:33.60,0:01:34.60,Her,,0,0,0,,"Ah, até parece."
+Dialogue: 0,0:01:35.90,0:01:38.10,Her,,0,0,0,,"Ah, eu adoro o Trump."

@@ -1,0 +1,42 @@
+name: Sala Escura drive upload (temporary, branch-only)
+
+# Temporary: uploads sala_escura/pacote/* to the Drive folder in sala_escura/pacote_folder.txt on push.
+on:
+  push:
+    branches: [claude/sala-escura]
+    paths: ['sala_escura/pacote_folder.txt']
+
+jobs:
+  up:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Upload to Drive
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: |
+          pip install -q google-api-python-client google-auth
+          python3 - <<'PY'
+          import os, json, glob, mimetypes
+          from google.oauth2.credentials import Credentials
+          from googleapiclient.discovery import build
+          from googleapiclient.http import MediaFileUpload
+          td = json.loads(os.environ["SHEETS_TOKEN"])
+          creds = Credentials(None, refresh_token=td["refresh_token"], token_uri="https://oauth2.googleapis.com/token",
+                              client_id=td["client_id"], client_secret=td["client_secret"])
+          drive = build("drive", "v3", credentials=creds)
+          folder = open("sala_escura/pacote_folder.txt").read().strip()
+          for f in sorted(glob.glob("sala_escura/pacote/*")):
+              name = os.path.basename(f)
+              body = {"name": name, "parents": [folder]}
+              mime = mimetypes.guess_type(f)[0] or "application/octet-stream"
+              if f.endswith(".md"):
+                  body = {"name": name[:-3], "parents": [folder], "mimeType": "application/vnd.google-apps.document"}
+                  mime = "text/markdown"
+              if f.endswith(".ass"):
+                  mime = "text/plain"
+              r = drive.files().create(body=body, media_body=MediaFileUpload(f, mimetype=mime, resumable=True),
+                                       supportsAllDrives=True, fields="id,name").execute()
+              print("uploaded", r["name"], r["id"])
+          PY
