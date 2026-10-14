@@ -91,13 +91,19 @@ function weekStart(date) {
   const day = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(part('weekday'));
   return Date.UTC(Number(part('year')), Number(part('month')) - 1, Number(part('day')) - ((day + 6) % 7));
 }
+// Owner cadence decision 2026-10-13: scheduled runs on Mon/Wed/Thu, at most one attempt per New York day.
+function dayStart(date) {
+  const local = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(date);
+  const part = type => local.find(item => item.type === type).value;
+  return Date.UTC(Number(part('year')), Number(part('month')) - 1, Number(part('day')));
+}
 function preparedThisWeek(out, now = new Date()) {
   if (!fs.existsSync(out)) return null;
   for (const name of fs.readdirSync(out)) {
     const file = path.join(out, name, 'status.json');
     if (!fs.existsSync(file)) continue;
     const status = readAttemptStatus(file);
-    if (status.status === 'ready-for-human-review' && weekStart(new Date(status.createdAt)) === weekStart(now)) return status;
+    if (status.status === 'ready-for-human-review' && dayStart(new Date(status.createdAt)) === dayStart(now)) return status;
   }
   return null;
 }
@@ -108,7 +114,7 @@ function attemptedThisWeek(out, now = new Date()) {
     if (!fs.existsSync(file)) continue;
     const status = readAttemptStatus(file);
     if (['ready-for-human-review', 'research-hold', 'article-hold', 'failed'].includes(status.status)
-      && weekStart(new Date(status.createdAt)) === weekStart(now)) return status;
+      && dayStart(new Date(status.createdAt)) === dayStart(now)) return status;
   }
   return null;
 }
@@ -191,4 +197,4 @@ if (require.main === module) {
     if (status.status !== 'ready-for-human-review') process.exitCode = 2;
   } catch (error) { console.error(error.message); process.exitCode = 1; }
 }
-module.exports = { parseOptions, queuedRuns, heldRuns, reviewedRuns, weekStart, preparedThisWeek, attemptedThisWeek, stagedInput, runAttempt };
+module.exports = { parseOptions, queuedRuns, heldRuns, reviewedRuns, weekStart, dayStart, preparedThisWeek, attemptedThisWeek, stagedInput, runAttempt };
