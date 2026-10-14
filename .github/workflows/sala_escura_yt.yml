@@ -50,9 +50,9 @@ jobs:
               for f in sorted(glob.glob('sala_escura/audio/*.mp3')) + sorted(glob.glob('out/*.mp4')):
                   try:
                       import subprocess, numpy as np
-                      raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', f, '-ac', '1', '-ar', '16000', '-f', 's16le', '-'], capture_output=True).stdout
+                      raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', f, '-af', 'loudnorm', '-ac', '1', '-ar', '16000', '-f', 's16le', '-'], capture_output=True).stdout
                       audio = np.frombuffer(raw, np.int16).astype(np.float32) / 32768.0
-                      segs, info = m.transcribe(audio, language=('pt' if 'athena' in f else None), word_timestamps=True)
+                      segs, info = m.transcribe(audio, language=('pt' if 'athena' in f else None), word_timestamps=True, vad_filter=False, condition_on_previous_text=False, initial_prompt=('Ahh, até parece. Olha lá, o cara é o dono do Facebook. Ah, eu adoro o Trump.' if 'athena' in f else None))
                       res[os.path.basename(f)] = {"language": info.language, "segments": [{"start": round(x.start, 2), "end": round(x.end, 2), "text": x.text.strip(), "words": [[round(w.start,2), round(w.end,2), w.word] for w in (x.words or [])]} for x in segs]}
                   except Exception:
                       res[os.path.basename(f)] = {"error": traceback.format_exc()}
