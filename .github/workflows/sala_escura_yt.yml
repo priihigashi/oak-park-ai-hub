@@ -61,6 +61,16 @@ jobs:
           json.dump(res, open('out/transcripts.json', 'w'), ensure_ascii=False, indent=1)
           PY
           python3 /tmp/tr.py > out/tr.log 2>&1 || true
+      - name: Separate vocals (demucs)
+        continue-on-error: true
+        run: |
+          if [ -f sala_escura/audio/sam_hq.wav ]; then
+            pip install -q demucs soundfile > out/demucs_pip.log 2>&1 || true
+            python3 -m demucs --two-stems=vocals -n htdemucs -o /tmp/sep sala_escura/audio/sam_hq.wav > out/demucs.log 2>&1 || true
+            cp /tmp/sep/htdemucs/sam_hq/vocals.wav out/sam_vocals.wav 2>/dev/null || true
+            cp /tmp/sep/htdemucs/sam_hq/no_vocals.wav out/sam_music.wav 2>/dev/null || true
+            ls -la out
+          fi
       - name: Push outputs
         if: always()
         run: |
