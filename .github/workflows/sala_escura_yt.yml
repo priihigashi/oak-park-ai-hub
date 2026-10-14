@@ -143,6 +143,22 @@ jobs:
               d = r.json(); log['subscription'] = {k: d.get(k) for k in ['tier','character_count','character_limit','can_use_instant_voice_cloning','status','next_character_count_reset_unix']}
           except Exception:
               log['subscription'] = r.text[:300]
+          if cfg.get('search'):
+              sr = requests.get('https://api.elevenlabs.io/v1/shared-voices', headers=H, params=cfg['search'], timeout=60)
+              try:
+                  vs = sr.json().get('voices', [])
+                  vs.sort(key=lambda v: -(v.get('cloned_by_count') or 0))
+                  log['search'] = [[v.get('voice_id'), v.get('name'), v.get('accent'), v.get('age'), v.get('descriptive'), v.get('cloned_by_count'), (v.get('description') or '')[:120]] for v in vs[:15]]
+                  for v in vs[:cfg.get('take', 4)]:
+                      ar = requests.post(f"https://api.elevenlabs.io/v1/voices/add/{v['public_owner_id']}/{v['voice_id']}", headers={**H, 'Content-Type': 'application/json'}, json={'new_name': 'SE ' + v['name'][:30]}, timeout=60)
+                      vid = ar.json().get('voice_id') if ar.status_code == 200 else None
+                      log.setdefault('added', []).append([v['name'], ar.status_code, vid])
+                      if vid:
+                          slug = ''.join(c for c in v['name'].lower() if c.isalnum())[:12]
+                          for ln in cfg['lines']:
+                              cfg.setdefault('tts', []).append({'name': f"br_{slug}_{ln['n']}", 'voice_id': vid, 'text': ln['t'], 'model': cfg.get('model', 'eleven_multilingual_v2'), 'settings': cfg.get('settings')})
+              except Exception as e:
+                  log['search_err'] = f"{sr.status_code} {sr.text[:300]} {e}"
           found = None
           if cfg.get('find_voice'):
               vr = requests.get('https://api.elevenlabs.io/v1/voices', headers=H, timeout=60)
