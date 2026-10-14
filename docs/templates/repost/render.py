@@ -127,30 +127,37 @@ def find_moment(audio, keywords, override=None):
                 return max(0.0, s.start - 0.4), txt
     return None, txt
 
+def has_audio(p):
+    r = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=index", "-of", "csv=p=0", p], capture_output=True, text=True)
+    return bool(r.stdout.strip())
+
 def get_clip(c):
+    """Baixa o vídeo inteiro (fontes curtas no X/IG), acha o trecho pela fala e corta com ffmpeg."""
     cid = c["id"]; d = os.path.join(WD, "clips", cid); os.makedirs(d, exist_ok=True)
     rep = {"id": cid, "ok": False}
     for url in [c["url"]] + c.get("alt", []):
-        a = os.path.join(d, "a.m4a")
         for f in glob.glob(os.path.join(d, "*")): os.remove(f)
-        r = ytdlp(["-f", "ba[ext=m4a]/ba/b", "--download-sections", f"*0-{c.get('search_max', 1500)}", "-x", "--audio-format", "m4a", "-o", os.path.join(d, "a.%(ext)s"), url])
-        if r.returncode or not os.path.exists(a):
-            rep.setdefault("errors", []).append(f"{url}: audio fail {r.stderr[-300:]}"); continue
-        t, txt = find_moment(a, c["keywords"], c.get("start"))
+        r = ytdlp(["-f", "bv*[height<=1080]+ba/b", "--merge-output-format", "mp4", "-o", os.path.join(d, "full.%(ext)s"), url])
+        full = (glob.glob(os.path.join(d, "full.*")) or [None])[0]
+        if (r is None or r.returncode) or not full:
+            rep.setdefault("errors", []).append(f"{url}: download fail {(r.stderr if r else '')[-300:]}"); continue
+        if not has_audio(full):
+            rep.setdefault("errors", []).append(f"{url}: no audio"); continue
+        try:
+            t, txt = find_moment(full, c["keywords"], c.get("start"))
+        except Exception as e:
+            rep.setdefault("errors", []).append(f"{url}: whisper {e}"); continue
         rep["url"] = url; rep["full_transcript"] = [f"[{s:7.2f}-{e:7.2f}] {x}" for s, e, x in txt]
         if t is None:
             rep.setdefault("errors", []).append(f"{url}: keyword not found"); continue
-        ln = float(c.get("len", 9)); e = t + ln
-        v = os.path.join(d, "v.mp4")
-        r = ytdlp(["-f", "bv*[height<=1080]+ba/b", "--merge-output-format", "mp4", "--download-sections", f"*{t:.2f}-{e:.2f}",
-                   "--force-keyframes-at-cuts", "-o", os.path.join(d, "v.%(ext)s"), url])
-        vv = glob.glob(os.path.join(d, "v.*"))
-        if r.returncode or not vv:
-            rep.setdefault("errors", []).append(f"{url}: video fail {r.stderr[-300:]}"); continue
-        if vv[0] != v: os.rename(vv[0], v)
-        rep.update(ok=True, t0=round(t, 2), t1=round(e, 2), file=v)
-        segs, _ = whisper("small").transcribe(v, language="pt")
-        rep["cut_text"] = " ".join(s.text.strip() for s in segs)
+        ln = float(c.get("len", 9)); v = os.path.join(d, "v.mp4")
+        sh(["ffmpeg", "-y", "-loglevel", "error", "-ss", f"{t:.2f}", "-i", full, "-t", f"{ln:.2f}", *ENC, v])
+        rep.update(ok=True, t0=round(t, 2), t1=round(t + ln, 2), file=v)
+        try:
+            segs, _ = whisper("small").transcribe(v, language="pt")
+            rep["cut_text"] = " ".join(s.text.strip() for s in segs)
+        except Exception as e:
+            rep["cut_text"] = ""
         return rep
     return rep
 
