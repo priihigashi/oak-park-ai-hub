@@ -128,6 +128,33 @@ jobs:
           PY
           python3 /tmp/hg.py > out/heygen_run.log 2>&1 || true
           fi
+      - name: ElevenLabs
+        continue-on-error: true
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+        run: |
+          if [ -f sala_escura/eleven.json ]; then
+          cat > /tmp/el.py <<'PY'
+          import os, json, requests
+          K = os.environ['ELEVENLABS_API_KEY']; H = {'xi-api-key': K}
+          cfg = json.load(open('sala_escura/eleven.json')); log = {}
+          r = requests.get('https://api.elevenlabs.io/v1/user/subscription', headers=H, timeout=60)
+          try:
+              d = r.json(); log['subscription'] = {k: d.get(k) for k in ['tier','character_count','character_limit','can_use_instant_voice_cloning','status','next_character_count_reset_unix']}
+          except Exception:
+              log['subscription'] = r.text[:300]
+          for it in cfg.get('tts', []):
+              body = {'text': it['text'], 'model_id': it.get('model', 'eleven_v3')}
+              if it.get('settings'): body['voice_settings'] = it['settings']
+              rr = requests.post(f"https://api.elevenlabs.io/v1/text-to-speech/{it['voice_id']}?output_format=mp3_44100_128", headers={**H, 'Content-Type': 'application/json'}, json=body, timeout=180)
+              if rr.status_code == 200:
+                  open(f"out/{it['name']}.mp3", 'wb').write(rr.content); log[it['name']] = 'ok'
+              else:
+                  log[it['name']] = f"{rr.status_code} {rr.text[:300]}"
+          json.dump(log, open('out/eleven_log.json', 'w'), indent=1, ensure_ascii=False)
+          PY
+          python3 /tmp/el.py > out/eleven_run.log 2>&1 || true
+          fi
       - name: Push outputs
         if: always()
         run: |
