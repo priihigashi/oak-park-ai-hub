@@ -26,8 +26,10 @@ jobs:
           creds = Credentials(None, refresh_token=td["refresh_token"], token_uri="https://oauth2.googleapis.com/token",
                               client_id=td["client_id"], client_secret=td["client_secret"])
           drive = build("drive", "v3", credentials=creds)
-          folder = open("sala_escura/pacote_folder.txt").read().strip()
+          lines = open("sala_escura/pacote_folder.txt").read().split()
+          folder, only = lines[0], set(lines[1:])
           for f in sorted(glob.glob("sala_escura/pacote/*")):
+              if only and os.path.basename(f) not in only: continue
               name = os.path.basename(f)
               body = {"name": name, "parents": [folder]}
               mime = mimetypes.guess_type(f)[0] or "application/octet-stream"

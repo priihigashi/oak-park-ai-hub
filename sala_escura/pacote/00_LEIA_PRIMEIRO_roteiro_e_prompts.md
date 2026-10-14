@@ -3,6 +3,22 @@
 **Reel vertical 9:16 (1080×1920), ~1:37. Versões PT e EN.**
 Ideia: uma mulher numa sala escura liga a TV. Primeiro passa o Trump rindo com o Zuckerberg, depois ela troca de canal e entra o vídeo do Tio Sam ("Eu não preciso invadir o seu país. Eu só preciso invadir a sua opinião."). No final ela diz "Ah, até parece", troca de volta para o Trump e diz "Ah, eu adoro o Trump."
 
+## Tempo de cada cena (total ≈ 1:38)
+| Cena | O que é | Duração | Quando |
+|---|---|---|---|
+| 1 | Sala vazia | 1,0 s | 0:00 – 0:01 |
+| 2 | Ela entra e para no assento | 2,5 s | 0:01 – 0:03,5 |
+| 3 | Close do controle | 1,6 s | 0:03,5 – 0:05,1 |
+| 4 | Por trás do ombro: TV liga com Trump e Zuckerberg | 3,1 s | 0:05,1 – 0:08,2 |
+| 5 | Chiado (troca de canal) | 0,4 s | 0:08,2 – 0:08,6 |
+| 6 | Por trás, sentada: Tio Sam começa | 3,0 s | 0:08,6 – 0:11,6 |
+| 7 | TV de perto: Tio Sam até o fim | 79,5 s | 0:11,6 – 1:31,1 |
+| 8a | Final: vídeo acaba, "Ah, até parece." | 3,4 s | 1:31,1 – 1:34,5 |
+| 8b | Chiado | 0,4 s | 1:34,5 – 1:34,9 |
+| 8c | Trump e Zuckerberg rindo, "Ah, eu adoro o Trump." e fade | 3,3 s | 1:34,9 – 1:38,2 |
+
+Gere cada clipe com pelo menos 5 s (mínimo dos modelos); eu corto para a duração acima.
+
 ## Regra mais importante
 
 **O que passa na TV tem que ser o vídeo real.** Nenhuma IA pode gerar o Trump, o Zuckerberg ou o Tio Sam. Nas cenas geradas, a tela da TV deve ficar **lisa e clara (branco-azulada), sem nada**. Depois eu encaixo os vídeos reais na tela e acerto a perspectiva.
