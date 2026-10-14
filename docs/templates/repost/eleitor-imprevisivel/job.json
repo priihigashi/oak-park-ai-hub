@@ -1,6 +1,6 @@
 {
  "slug": "eleitor-imprevisivel",
- "pass": 6,
+ "pass": 7,
  "main": {
   "drive_id": "1ehfPqbxAQtaJ6HmYLbpGxnJMoA6J-lqh",
   "ig_url": "https://www.instagram.com/reel/DeeiNsMk5Dj/"
@@ -72,7 +72,7 @@
    "who": "Eduarda Campopiano (PL)",
    "role": "deputada estadual eleita",
    "src": "análise da BBC News Brasil · 07/10/2026",
-   "len": 7
+   "len": 5
   },
   {
    "type": "card",
@@ -89,7 +89,7 @@
    "who": "Flávio Bolsonaro (PL)",
    "role": "candidato a presidente",
    "src": "Folha (plano de Daniella Marques) · Metrópoles, 10/10/2026",
-   "len": 8
+   "len": 6
   },
   {
    "id": "c2_pietra",
@@ -245,5 +245,6 @@
     "len": 7
    }
   }
- ]
+ ],
+ "clip_speed": 1.2
 }

@@ -341,13 +341,14 @@ def plates(specs, tag):
     sh(["node", os.path.join(HERE, "plate.js"), sp, d])
     return d, json.load(open(os.path.join(d, "slots.json")))
 
-def overlay_in_slot(bg, video, slot, dst, radius=30, extra_vf=""):
-    mk = dst + ".mask.png"; round_mask(mk, slot["w"], slot["h"], radius); T = f"{probe_dur(video):.3f}"
+def overlay_in_slot(bg, video, slot, dst, radius=30, extra_vf="", speed=1.0):
+    mk = dst + ".mask.png"; round_mask(mk, slot["w"], slot["h"], radius); T = f"{probe_dur(video) / speed:.3f}"
+    sv, sa = (f"setpts=PTS/{speed},", f"atempo={speed},") if speed != 1.0 else ("", "")
     sh(["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-t", T, "-i", bg, "-i", video, "-loop", "1", "-t", T, "-i", mk, "-filter_complex",
-        f"[1:v]scale={slot['w']}:{slot['h']}:force_original_aspect_ratio=increase,crop={slot['w']}:{slot['h']},setsar=1,format=rgba[v];"
+        f"[1:v]{sv}scale={slot['w']}:{slot['h']}:force_original_aspect_ratio=increase,crop={slot['w']}:{slot['h']},setsar=1,format=rgba[v];"
         f"[2:v]format=gray,scale={slot['w']}:{slot['h']}[m];[v][m]alphamerge[rv];"
         f"[0:v][rv]overlay={slot['x']}:{slot['y']}:shortest=1,fps={FPS},format=yuv420p{extra_vf}[o];"
-        f"[1:a]aresample=48000[a]",
+        f"[1:a]{sa}aresample=48000[a]",
         "-map", "[o]", "-map", "[a]", "-t", T, *ENC, dst])
 
 def round_mask(path, w, h, r):
@@ -393,7 +394,7 @@ def glass_compilation():
                 pr = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height", "-of", "csv=p=0", r["file"]], capture_output=True, text=True)
                 cw, ch = [int(x) for x in pr.stdout.strip().split(",")[:2]]
                 d, sl = plates([dict(base, mode="clip", aspect=cw / ch)], base["id"])
-                overlay_in_slot(os.path.join(d, base["id"] + ".png"), r["file"], sl[base["id"]], seg, extra_vf=",fade=t=in:st=0:d=0.2")
+                overlay_in_slot(os.path.join(d, base["id"] + ".png"), r["file"], sl[base["id"]], seg, extra_vf=",fade=t=in:st=0:d=0.2", speed=float(it.get("speed", JOB.get("clip_speed", 1.0))))
                 segs.append(seg); continue
         if it.get("type") == "image" or base.get("type") == "image":
             base["img"] = "file://" + fetch_img(base["img_url"], os.path.join(WD, base["id"] + "_img.jpg"))
