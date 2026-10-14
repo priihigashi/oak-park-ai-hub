@@ -1,6 +1,6 @@
 {
  "slug": "eleitor-imprevisivel",
- "pass": 5,
+ "pass": 6,
  "main": {
   "drive_id": "1ehfPqbxAQtaJ6HmYLbpGxnJMoA6J-lqh",
   "ig_url": "https://www.instagram.com/reel/DeeiNsMk5Dj/"
@@ -240,8 +240,8 @@
    "src": "culto do centenário da Assembleia de Deus Madureira · Maracanãzinho · 10/10/2026",
    "fallback": {
     "type": "image",
-    "img_url": "https://static.poder360.com.br/uploads/2026/10/Flavio-Bolsonaro-e-Douglas-Costa-Charles-Vieira-Divulgacao-Campanha-Flavio-Bolsonaro--848x477.png",
-    "src": "culto no Maracanãzinho · 10/10/2026 · foto: Charles Vieira/Divulgação Campanha",
+    "img_url": "https://cdn.jornaldebrasilia.com.br/wp-content/uploads/2026/10/10191555/AFP__20261010__D2VM3YN__v1__MidRes__BrazilRunoffElectionReligionCampaign-620x620.jpg",
+    "src": "culto do centenário da Assembleia de Deus Madureira · Maracanãzinho · 10/10/2026 · foto: Douglas Shineidr/AFP",
     "len": 7
    }
   }
