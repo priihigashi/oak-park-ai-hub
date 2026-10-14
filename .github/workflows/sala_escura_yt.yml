@@ -80,7 +80,7 @@ jobs:
           import json, subprocess
           for it in json.load(open('sala_escura/voice_lines.json')):
               cmd = ['edge-tts', '--voice', it['voice'], '--text', it['text'], '--write-media', f"out/{it['name']}.mp3"]
-              if it.get('rate'): cmd += ['--rate', it['rate']]
+              if it.get('rate'): cmd += ['--rate=' + it['rate']]
               if it.get('pitch'): cmd += ['--pitch', it['pitch']]
               r = subprocess.run(cmd, capture_output=True, text=True)
               open('out/edge.log','a').write(f"{it['name']} rc={r.returncode} {r.stderr[-600:]}\n")
