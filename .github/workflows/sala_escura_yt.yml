@@ -112,21 +112,7 @@ jobs:
                   q = requests.get(ep, headers=H, timeout=60); log[ep] = {'status': q.status_code, 'body': q.text[:700]}
               except Exception as e:
                   log[ep] = str(e)
-          found = None
-          if cfg.get('find_voice'):
-              vr = requests.get('https://api.elevenlabs.io/v1/voices', headers=H, timeout=60)
-              try:
-                  vs = vr.json().get('voices', [])
-                  log['voices'] = [[v['voice_id'], v['name'], v.get('category')] for v in vs]
-                  m = [v for v in vs if cfg['find_voice'].lower() in v['name'].lower()]
-                  found = m[0]['voice_id'] if m else None
-              except Exception:
-                  log['voices'] = f"{vr.status_code} {vr.text[:300]}"
-              log['found'] = found
           for it in cfg.get('tts', []):
-              if it['voice_id'] == 'FIND':
-                  if not found: log[it['name']] = 'voice not found'; continue
-                  it['voice_id'] = found
               body = {'voice_id': it['voice_id'], 'text': it['text']}
               body.update(it.get('extra', {}))
               rr = requests.post('https://api.heygen.com/v1/audio/text_to_speech', headers={**H, 'Content-Type': 'application/json'}, json=body, timeout=120)
@@ -157,7 +143,21 @@ jobs:
               d = r.json(); log['subscription'] = {k: d.get(k) for k in ['tier','character_count','character_limit','can_use_instant_voice_cloning','status','next_character_count_reset_unix']}
           except Exception:
               log['subscription'] = r.text[:300]
+          found = None
+          if cfg.get('find_voice'):
+              vr = requests.get('https://api.elevenlabs.io/v1/voices', headers=H, timeout=60)
+              try:
+                  vs = vr.json().get('voices', [])
+                  log['voices'] = [[v['voice_id'], v['name'], v.get('category')] for v in vs]
+                  m = [v for v in vs if cfg['find_voice'].lower() in v['name'].lower()]
+                  found = m[0]['voice_id'] if m else None
+              except Exception:
+                  log['voices'] = f"{vr.status_code} {vr.text[:300]}"
+              log['found'] = found
           for it in cfg.get('tts', []):
+              if it['voice_id'] == 'FIND':
+                  if not found: log[it['name']] = 'voice not found'; continue
+                  it['voice_id'] = found
               body = {'text': it['text'], 'model_id': it.get('model', 'eleven_v3')}
               if it.get('settings'): body['voice_settings'] = it['settings']
               rr = requests.post(f"https://api.elevenlabs.io/v1/text-to-speech/{it['voice_id']}?output_format=mp3_44100_128", headers={**H, 'Content-Type': 'application/json'}, json=body, timeout=180)
