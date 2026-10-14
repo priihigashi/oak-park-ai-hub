@@ -105,4 +105,4 @@ Eu faço na edição, sem IA.
 ## Como devolver
 Gere as cenas 2, 3, 4 e 6 no ChatGPT, com a tela da TV lisa, e coloque os vídeos nesta pasta com o nome `GERADO_cena02.mp4` etc. Eu encaixo os vídeos reais na TV, coloco som e legendas e fecho as versões PT e EN.
 
-**Créditos no post:** @rodrigogonzalezgeo (Tio Sam) e @samiragharaee (Trump e Zuckerberg).
+**Créditos no post:** vídeo do Tio Sam: @filmeiro · Trump e Zuckerberg: @samiragharaee · montagem: nossa.
