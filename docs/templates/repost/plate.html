@@ -63,7 +63,7 @@ if(S.mode==='lt'){
     const x=60, cw=W-120, y=300;
     let inner='', slotH=0;
     if(S.mode==='clip'){
-      const ar=S.aspect||16/9, sw=cw-40; let sh=Math.round(sw/ar); const maxh=ar<1?860:600;
+      const ar=S.aspect||16/9, sw=cw-40; let sh=Math.round(sw/ar); const maxh=ar<1?(S.body?640:820):560;
       let w2=sw; if(sh>maxh){sh=maxh; w2=Math.round(sh*ar)}
       slotH=sh; inner=`<div id="slot" style="position:relative;margin:0 auto;width:${w2}px;height:${sh}px"></div>`;
     }
