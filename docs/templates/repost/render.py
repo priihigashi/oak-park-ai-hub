@@ -358,7 +358,8 @@ def glass_main():
     fr = JOB.get("frame", {})
     d, sl = plates([{"id": "main", "mode": "main", "page_tag": JOB.get("page_tag", ""), "scale": fr.get("scale", .8), "y": fr.get("y", 110)}], "main")
     slot = sl["main"]; out = os.path.join(WD, "main.mp4")
-    overlay_in_slot(os.path.join(d, "main.png"), os.path.join(WD, "main_src.mp4"), slot, out)
+    msp = float(JOB.get("main_speed", 1.0))
+    overlay_in_slot(os.path.join(d, "main.png"), os.path.join(WD, "main_src.mp4"), slot, out, speed=msp)
     # tarjas: PNG transparente, dentro do vídeo, abaixo da legenda queimada do esquete
     lts = JOB.get("lower_thirds", [])
     specs = [dict(lt, id=f"lt{i}", mode="lt", x=slot["x"] + 24, y=int(slot["y"] + JOB.get("lt_rel", .80) * slot["h"]), maxw=slot["w"] - 48) for i, lt in enumerate(lts)]
@@ -367,7 +368,7 @@ def glass_main():
         d2, _ = plates(specs, "lt"); dur = probe_dur(out); inputs, chains, last = ["-i", out], [], "0:v"
         for i, lt in enumerate(lts):
             inputs += ["-loop", "1", "-t", f"{dur:.2f}", "-i", os.path.join(d2, f"lt{i}.png")]
-            a, b = lt["t0"], lt["t1"]
+            a, b = round(lt["t0"] / msp, 2), round(lt["t1"] / msp, 2)
             chains.append(f"[{i+1}:v]format=rgba,fade=t=in:st={a}:d=0.3:alpha=1,fade=t=out:st={b-0.3}:d=0.3:alpha=1[l{i}]")
             chains.append(f"[{last}][l{i}]overlay=0:0:enable='between(t,{a},{b})'[v{i}]"); last = f"v{i}"
         lt_out = os.path.join(WD, "main_lt.mp4")
