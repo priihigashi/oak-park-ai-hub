@@ -1,6 +1,6 @@
 {
  "slug": "eleitor-imprevisivel",
- "pass": 12,
+ "pass": 13,
  "main": {
   "drive_id": "1ehfPqbxAQtaJ6HmYLbpGxnJMoA6J-lqh",
   "ig_url": "https://www.instagram.com/reel/DeeiNsMk5Dj/"
@@ -72,7 +72,7 @@
    "who": "Eduarda Campopiano (PL)",
    "role": "deputada estadual eleita",
    "src": "análise da BBC News Brasil · 07/10/2026",
-   "len": 5
+   "len": 4
   },
   {
    "type": "card",
@@ -89,7 +89,7 @@
    "who": "Flávio Bolsonaro (PL)",
    "role": "candidato a presidente",
    "src": "Folha (plano de Daniella Marques) · Metrópoles, 10/10/2026",
-   "len": 6
+   "len": 4
   },
   {
    "id": "c2_pietra",
@@ -123,7 +123,7 @@
     "colonizaram",
     "catequizaram"
    ],
-   "len": 12.6,
+   "len": 9.5,
    "who": "Eduarda Campopiano (PL)",
    "role": "deputada estadual eleita mais votada de SP",
    "src": "RedCast · mai/2026",
@@ -141,7 +141,7 @@
    "who": "Cabo Gilberto (PL-PB) · PL",
    "role": "",
    "src": "Rádio Arapuan, out/2026 · canal do PL no WhatsApp, 08/10/2026 · JB, Revista Fórum",
-   "len": 8
+   "len": 6
   },
   {
    "id": "c4_bolsonaro",
@@ -180,7 +180,7 @@
    "alt": [],
    "keywords": [],
    "start": 0.0,
-   "len": 19.5,
+   "len": 12.0,
    "tag": "“E ANIMAIS. FALA DE ANIMAIS.”",
    "quote": "“Todo mundo ia atrás de *galinha* no galinheiro… alguns mais malandros, na *bezerrinha*, na *jumentinha*… era comum.”",
    "who": "Jair Bolsonaro",
@@ -194,7 +194,7 @@
    "who": "Evandro Guedes",
    "role": "ex-PM, dono do cursinho AlfaCon",
    "src": "aula viralizada em dez/2023 · Diário do Nordeste",
-   "len": 5
+   "len": 4
   },
   {
    "type": "clip",
