@@ -1,0 +1,85 @@
+<!doctype html><html><head><meta charset="utf-8">
+<!-- Placas estáticas do repost no estilo "vidro líquido" (mesma família visual de Desabafos e Notinhas).
+     plate.js abre esta página com ?spec=<json> e tira o print; o vídeo entra depois, por cima do #slot, via ffmpeg. -->
+<style>
+@font-face{font-family:Out;src:url(assets/outfit.woff2);font-weight:100 900}
+@font-face{font-family:Fig;src:url(assets/figtree.woff2);font-weight:300 900}
+:root{--gold:#FFD84D;--ink:#06120c}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:transparent}
+#bg{position:absolute;inset:0;background:
+  radial-gradient(60% 42% at 8% 10%,rgba(246,214,62,.95),rgba(246,214,62,0) 70%),
+  radial-gradient(55% 40% at 98% 30%,rgba(76,190,110,.9),rgba(76,190,110,0) 70%),
+  radial-gradient(70% 45% at 95% 96%,rgba(32,72,196,.95),rgba(32,72,196,0) 72%),
+  radial-gradient(60% 40% at 5% 85%,rgba(18,120,60,.9),rgba(18,120,60,0) 70%),
+  linear-gradient(160deg,#2f9e4c,#1b8a45 55%,#1d5fb0)}
+#bg:after{content:"";position:absolute;inset:0;opacity:.16;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='300' height='300' filter='url(%23n)'/></svg>")}
+.glass{position:absolute;border-radius:46px;
+  background:linear-gradient(160deg,rgba(255,255,255,.30),rgba(255,255,255,.10) 45%,rgba(255,255,255,.16));
+  border:1.5px solid rgba(255,255,255,.55);
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,.6),0 40px 80px -30px rgba(0,40,20,.55)}
+.dots{position:absolute;left:34px;top:24px;display:flex;gap:12px}
+.dots i{width:13px;height:13px;border-radius:50%;background:rgba(255,255,255,.72)}
+#slot{position:absolute;border-radius:30px;background:rgba(0,0,0,.35)}
+.handle{position:absolute;left:0;right:0;text-align:center;font:600 32px Fig;color:#fff;letter-spacing:.02em;opacity:.95}
+.kick{position:absolute;left:70px;top:150px;font:800 50px/1.0 Out;color:#fff;letter-spacing:-.01em;text-shadow:0 2px 18px rgba(0,40,20,.45)}
+.kick b{color:var(--gold)}
+.count{position:absolute;right:70px;top:158px;font:600 30px Fig;color:rgba(255,255,255,.85)}
+.q{font:800 52px/1.14 Out;color:#fff;letter-spacing:-.01em}
+.q em{font-style:normal;color:var(--gold)}
+.who{font:800 38px Out;color:var(--gold);margin-top:22px}
+.meta{font:500 28px/1.3 Fig;color:rgba(255,255,255,.82);margin-top:6px}
+.tag{display:inline-block;font:800 24px Fig;letter-spacing:.08em;color:var(--ink);background:var(--gold);border-radius:999px;padding:7px 16px;margin-bottom:18px}
+.body{font:600 36px/1.3 Fig;color:#fff}
+.list{margin-top:16px;display:flex;flex-wrap:wrap;gap:10px}
+.list span{font:700 29px Fig;color:#fff;border:1.5px solid rgba(255,255,255,.6);border-radius:999px;padding:8px 18px;background:rgba(255,255,255,.12)}
+img.pic{width:100%;border-radius:26px;display:block}
+/* tarja (lower third) — fundo transparente */
+.lt{position:absolute;border-radius:26px;padding:14px 26px 16px;background:rgba(6,40,22,.62);border:1.5px solid rgba(255,255,255,.45)}
+.lt .k{font:700 18px Fig;letter-spacing:.12em;color:var(--gold)}
+.lt .w{font:800 30px Out;color:#fff;margin-top:2px}
+.lt .s{font:500 22px Fig;color:rgba(255,255,255,.85);margin-top:2px}
+</style></head><body>
+<div id="root"></div>
+<script>
+const S=JSON.parse(decodeURIComponent(new URLSearchParams(location.search).get('spec')));
+const R=document.getElementById('root'); const W=1080,H=1920;
+const esc=s=>(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const hl=s=>esc(s).replace(/\*([^*]+)\*/g,'<em>$1</em>');   // *palavra* = destaque ouro
+const handle=y=>`<div class="handle" style="top:${y}px">${esc(S.page_tag)}</div>`;
+function card(x,y,w,h){return `<div class="glass" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px"><div class="dots"><i></i><i></i><i></i></div></div>`}
+let html='';
+if(S.mode==='lt'){
+  html=`<div class="lt" style="left:${S.x}px;top:${S.y}px;max-width:${S.maxw}px"><div class="k">${esc(S.kicker)}</div><div class="w">${esc(S.who)}</div><div class="s">${esc(S.what)} · ${esc(S.src)}</div></div>`;
+} else {
+  html='<div id="bg"></div>';
+  if(S.mode==='main'){
+    const sc=S.scale||.80, vw=Math.round(W*sc/2)*2, vh=Math.round(H*sc/2)*2, pad=16, top=54;
+    const cw=vw+2*pad, ch=vh+pad+top, x=(W-cw)/2, y=S.y||110;
+    html+=card(x,y,cw,ch)+`<div id="slot" style="left:${x+pad}px;top:${y+top}px;width:${vw}px;height:${vh}px"></div>`+handle(y+ch+34);
+  } else {
+    html+=`<div class="kick">De onde veio<br><b>cada piada</b></div><div class="count">${S.i}/${S.n}</div>`;
+    const x=60, cw=W-120, y=300;
+    let inner='', slotH=0;
+    if(S.mode==='clip'){
+      const ar=S.aspect||16/9, sw=cw-40; let sh=Math.round(sw/ar); const maxh=ar<1?860:600;
+      let w2=sw; if(sh>maxh){sh=maxh; w2=Math.round(sh*ar)}
+      slotH=sh; inner=`<div id="slot" style="position:relative;margin:0 auto;width:${w2}px;height:${sh}px"></div>`;
+    }
+    if(S.mode==='image') inner=`<img class="pic" src="${S.img}">`;
+    const txt=`${S.tag?`<div class="tag">${esc(S.tag)}</div>`:''}${S.quote?`<div class="q">${hl(S.quote)}</div>`:''}${S.body?`<div class="body" style="margin-top:14px">${hl(S.body)}</div>`:''}${S.list?`<div class="list">${S.list.map(l=>`<span>${esc(l)}</span>`).join('')}</div>`:''}<div class="who">${esc(S.who)}</div><div class="meta">${esc(S.role||'')}${S.role?' · ':''}${esc(S.src)}</div>`;
+    html+=`<div class="glass" id="c" style="left:${x}px;top:${y}px;width:${cw}px;padding:62px 20px 38px"><div class="dots"><i></i><i></i><i></i></div>${inner}<div style="padding:${inner?'30px':'6px'} 22px 0">${txt}</div></div>`;
+  }
+}
+R.innerHTML=html;
+function layout(){
+  if(S.mode!=='lt' && S.mode!=='main'){ // cartão centralizado na vertical e @ embaixo
+    const c=document.getElementById('c'); const h=c.offsetHeight; const top=Math.max(280,Math.round((H-h)/2));
+    c.style.top=top+'px'; R.insertAdjacentHTML('beforeend',handle(Math.max(top+h+40,1760)));
+  }
+  const s=document.getElementById('slot'); if(!s) return null; const r=s.getBoundingClientRect();
+  return {x:Math.round(r.left),y:Math.round(r.top),w:Math.round(r.width),h:Math.round(r.height)};
+}
+window.READY=document.fonts.ready.then(()=>Promise.all([...document.images].map(i=>i.complete?1:new Promise(r=>{i.onload=i.onerror=r})))).then(()=>{window.SLOT=layout();return true});
+</script></body></html>

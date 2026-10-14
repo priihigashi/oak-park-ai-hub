@@ -35,6 +35,10 @@ jobs:
           echo "JOB=$JOB" >> $GITHUB_ENV
           mkdir -p work/fonts
           curl -sSL -o work/fonts/Anton-Regular.ttf https://github.com/google/fonts/raw/main/ofl/anton/Anton-Regular.ttf
+          # estilo vidro: Outfit + Figtree + Playwright (plate.js)
+          cd docs/templates/repost && npm init -y >/dev/null && npm i -s playwright @fontsource-variable/outfit @fontsource-variable/figtree && npx playwright install --with-deps chromium >/dev/null
+          mkdir -p assets && cp node_modules/@fontsource-variable/outfit/files/outfit-latin-wght-normal.woff2 assets/outfit.woff2 && cp node_modules/@fontsource-variable/figtree/files/figtree-latin-wght-normal.woff2 assets/figtree.woff2
+          cd - >/dev/null
           python - <<'EOF'
           import os, base64
           v = os.environ.get("PRI_OP_YT_COOKIES","")
