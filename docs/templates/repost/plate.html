@@ -51,9 +51,9 @@ const handle=y=>`<div class="handle" style="top:${y}px">${esc(S.page_tag)}</div>
 function card(x,y,w,h){return `<div class="glass" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px"><div class="dots"><i></i><i></i><i></i></div></div>`}
 let html='';
 if(S.mode==='cover'){
-  html='<div id="bg"></div>'+`<div style="position:absolute;left:70px;right:70px;top:300px;font:900 104px/1.0 Out;color:#fff;letter-spacing:-.02em;text-shadow:0 4px 30px rgba(0,40,20,.45)">${hl(S.title)}</div>`
-   +`<div class="glass" style="left:110px;top:${S.cardTop||720};width:860px;height:${S.cardH||760}px;padding:58px 18px 18px"><div class="dots"><i></i><i></i><i></i></div><img src="${S.img}" style="width:100%;height:100%;object-fit:cover;object-position:${S.pos||'50% 30%'};border-radius:28px;display:block"></div>`
-   +`<div style="position:absolute;left:70px;right:70px;top:${(S.cardTop||720)+(S.cardH||760)+40}px;font:700 40px/1.2 Fig;color:#fff;text-align:center">${hl(S.sub||'')}</div>`
+  html='<div id="bg"></div>'+`<div style="position:absolute;left:70px;width:940px;top:250px;font:900 112px/1.0 Out;color:#fff;letter-spacing:-.02em;text-shadow:0 4px 30px rgba(0,40,20,.45)">${hl(S.title)}</div>`
+   +`<div class="glass" style="left:110px;top:${S.cardTop||720}px;width:860px;height:${S.cardH||760}px;padding:58px 18px 18px"><div class="dots"><i></i><i></i><i></i></div><img src="${S.img}" style="width:100%;height:100%;object-fit:cover;object-position:${S.pos||'50% 30%'};border-radius:28px;display:block"></div>`
+   +`<div style="position:absolute;left:70px;width:940px;top:${(S.cardTop||720)+(S.cardH||760)+40}px;font:700 40px/1.2 Fig;color:#fff;text-align:center">${hl(S.sub||'')}</div>`
    +handle(1780);
 } else if(S.mode==='lt'){
   html=`<div class="lt" style="left:${S.x}px;top:${S.y}px;max-width:${S.maxw}px"><div class="k">${esc(S.kicker)}</div><div class="w">${esc(S.who)}</div><div class="s">${esc(S.what)} · ${esc(S.src)}</div></div>`;
@@ -79,7 +79,7 @@ if(S.mode==='cover'){
 }
 R.innerHTML=html;
 function layout(){
-  if(S.mode!=='lt' && S.mode!=='main'){ // cartão centralizado na vertical e @ embaixo
+  if(S.mode!=='lt' && S.mode!=='main' && S.mode!=='cover'){ // cartão centralizado na vertical e @ embaixo
     const c=document.getElementById('c'); const h=c.offsetHeight; const top=Math.max(280,Math.round((H-h)/2));
     c.style.top=top+'px'; R.insertAdjacentHTML('beforeend',handle(Math.max(top+h+40,1760)));
   }

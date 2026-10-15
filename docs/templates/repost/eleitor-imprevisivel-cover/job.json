@@ -1,8 +1,8 @@
 {
  "slug": "eleitor-imprevisivel",
  "version": 1,
- "pass": "cover2",
+ "pass": "cover3",
  "page_tag": "@tentandochegaratevoce",
  "main": {"drive_id": "1ehfPqbxAQtaJ6HmYLbpGxnJMoA6J-lqh"},
- "cover": {"t": 95.5, "title": "O que o povo <br>*realmente* quer?", "sub": "Cada piada desse esquete tem uma fala real por trás. *Fica até o final.*", "cardTop": 640, "cardH": 860, "pos": "50% 25%"}
+ "cover": {"t": 95.5, "title": "O que o povo *realmente* quer?", "sub": "Cada piada desse esquete tem uma fala real por trás. *Fica até o final.*", "cardTop": 640, "cardH": 860, "pos": "50% 25%"}
 }
