@@ -411,6 +411,12 @@ def glass_compilation():
     return segs
 
 if __name__ == "__main__":
+    if JOB.get("cover"):
+        cv = JOB["cover"]; fr = os.path.join(WD, "cover_frame.jpg")
+        sh(["ffmpeg", "-y", "-loglevel", "error", "-ss", str(cv["t"]), "-i", os.path.join(WD, "main_src.mp4"), "-frames:v", "1", "-q:v", "2", fr])
+        d, _ = plates([dict(cv, id="cover", mode="cover", img="file://" + fr, page_tag=JOB.get("page_tag", ""))], "cover")
+        Image.open(os.path.join(d, "cover.png")).convert("RGB").save(os.path.join(OUT, "cover.jpg"), quality=93)
+        print("OUT cover"); sys.exit(0)
     if JOB.get("style") == "glass":
         main, with_lt = glass_main()
         comp = glass_compilation()
