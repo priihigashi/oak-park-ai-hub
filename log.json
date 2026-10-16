@@ -1,0 +1,12 @@
+[
+ {
+  "name": "vo_v7_patch",
+  "model": "minimax/speech-02-turbo",
+  "status": "succeeded",
+  "error": null,
+  "detail": null,
+  "files": [
+   "out/vo_v7_patch.mp3"
+  ]
+ }
+]
