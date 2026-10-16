@@ -137,6 +137,8 @@ function frame(sc,t,T,dur){
     const pages=el._pages; let cur=-1; pages.forEach((pg,i)=>{if(t>=pg.t0) cur=i});
     pages.forEach((pg,i)=>{pg.el.style.display=i===cur?'block':'none'});
     if(cur<0) return;
+    if(el.classList.contains('karfull')){ const W=pages[cur].words;   // legenda inteira visível; só a cor anda
+      W.forEach((o,j)=>{ const nx=j+1<W.length?W[j+1].t:o.t+.5; o.s.style.opacity=1; o.s.className=(t>=o.t&&t<nx)?'kar-now':''; }); return; }
     pages[cur].words.forEach(o=>{ const k=t-o.t; o.s.style.opacity=k<0?0:1;
       o.s.className=k<0?'':(k<.14?'kar-now':'kar-lit'); });
   });

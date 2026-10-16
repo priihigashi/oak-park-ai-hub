@@ -62,7 +62,7 @@ function render(T){
     sc.querySelectorAll('.el[data-bob]:not([data-a])').forEach((el,i)=>anim(el,t,T,i));
     sc.querySelectorAll('.cnt').forEach(el=>{
       const p=clamp((t-+el.dataset.t)/+el.dataset.d); const v=+el.dataset.from+(+el.dataset.to-+el.dataset.from)*E.out(p);
-      if(el.dataset.o&&t>=+el.dataset.o){el.style.opacity=Math.max(0,1-(t-+el.dataset.o)/.22)}else el.style.opacity=t<+el.dataset.t?0:1; el.textContent=(el.dataset.pre||'')+fmt(v,+el.dataset.dec)+(el.dataset.suf||'');
+      if(el.dataset.o&&t>=+el.dataset.o){el.style.opacity=Math.max(0,1-(t-+el.dataset.o)/.22)}else el.style.opacity=t<+el.dataset.t?0:1; let tx=fmt(v,+el.dataset.dec); if(el.dataset.thou) tx=tx.replace(/\B(?=(\d{3})+(?!\d))/g,'.'); el.textContent=(el.dataset.pre||'')+tx+(el.dataset.suf||'');
       if(el.dataset.shakeEnd){const k=t-(+el.dataset.t+ +el.dataset.d); if(k>=0&&k<.35) shake=Math.max(shake,(1-k/.35)*16);}
     });
     sc.querySelectorAll('.bar').forEach(el=>{const p=clamp((t-+el.dataset.t)/+el.dataset.d); el.style.width=(E.out(p)*+el.dataset.to)+'px'});
