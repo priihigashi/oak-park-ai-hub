@@ -1,0 +1,12 @@
+[
+ {
+  "name": "k11_sp_praca",
+  "model": "bytedance/seedream-4",
+  "status": "succeeded",
+  "error": null,
+  "detail": null,
+  "files": [
+   "out/k11_sp_praca.jpg"
+  ]
+ }
+]
