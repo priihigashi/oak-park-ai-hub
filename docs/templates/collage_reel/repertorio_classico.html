@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<title>Repertório 00 — motor clássico da Colagem</title>
+<style>
+@font-face{font-family:Anton;src:url(assets/anton-latin-400-normal.woff2)}
+@font-face{font-family:Fraunces;font-weight:900;src:url(assets/fraunces-latin-900-normal.woff2)}
+@font-face{font-family:Fraunces;font-weight:700;font-style:italic;src:url(assets/fraunces-latin-700-italic.woff2)}
+@font-face{font-family:JBM;font-weight:500;src:url(assets/jetbrains-mono-latin-500-normal.woff2)}
+@font-face{font-family:JBM;font-weight:700;src:url(assets/jetbrains-mono-latin-700-normal.woff2)}
+:root{--ink:#0E0D0B;--paper:#F2ECE0;--gold:#C9A84C;--red:#C8352B;--slate:#3B5470;--true:#2E8B57;--mute:#7A7267}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden}
+.scene{position:absolute;inset:0;display:none;overflow:hidden}
+.bg-red{background:var(--red)}.bg-ink{background:var(--ink)}.bg-gold{background:var(--gold)}.bg-paper{background:var(--paper)}.bg-slate{background:var(--slate)}
+.scene::before{content:"";position:absolute;inset:0;background:url(assets/fibers.png);opacity:.22;mix-blend-mode:multiply;pointer-events:none}
+.scene::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,transparent 55%,rgba(0,0,0,.28));pointer-events:none}
+#grain{position:absolute;inset:-40px;background:url(assets/grain.png);opacity:.16;mix-blend-mode:overlay;pointer-events:none;z-index:50}
+.el{position:absolute;will-change:transform}
+.anton{font-family:Anton;line-height:.92;text-transform:uppercase;letter-spacing:.5px}
+.fr{font-family:Fraunces;font-weight:900;line-height:.95}
+.it{font-family:Fraunces;font-style:italic;font-weight:700;line-height:1.1}
+.mono{font-family:JBM;font-weight:500;letter-spacing:.5px}
+.c-ink{color:var(--ink)}.c-paper{color:var(--paper)}.c-gold{color:var(--gold)}.c-red{color:var(--red)}
+.sticker{filter:drop-shadow(6px 0 0 #fff) drop-shadow(-6px 0 0 #fff) drop-shadow(0 6px 0 #fff) drop-shadow(0 -6px 0 #fff) drop-shadow(10px 14px 0 rgba(0,0,0,.28))}
+.face{}
+.face img{width:100%;display:block}
+.clip{background:#f7f3ea;color:var(--ink);padding:46px 52px 50px;box-shadow:12px 16px 0 rgba(0,0,0,.25)}
+.clip .rule{border-top:3px solid var(--ink);border-bottom:1px solid var(--ink);height:9px;margin-bottom:22px}
+.clip .mast{font-family:JBM;font-weight:700;font-size:24px;letter-spacing:3px;display:flex;justify-content:space-between;margin-bottom:12px}
+.tape{position:absolute;width:190px;height:58px;background:rgba(232,220,180,.82);box-shadow:0 2px 4px rgba(0,0,0,.15)}
+.tag{display:inline-block;padding:10px 18px;font-family:JBM;font-weight:700;font-size:26px;letter-spacing:1px}
+.src{font-family:JBM;font-weight:500;font-size:24px;opacity:.85}
+.stamp{border:12px solid currentColor;padding:6px 34px 0;font-family:Anton;text-transform:uppercase;line-height:1;text-align:center;border-radius:14px;mix-blend-mode:multiply}
+.stamp small{display:block;font-family:JBM;font-weight:700;font-size:30px;letter-spacing:2px;padding:4px 0 14px}
+.receipt{background:#fffdf7;color:var(--ink);padding:44px 48px 70px;font-family:JBM;font-weight:500;font-size:34px;box-shadow:12px 16px 0 rgba(0,0,0,.22)}
+.receipt .row{display:flex;align-items:center;gap:18px;padding:16px 0;border-bottom:2px dashed #bbb}
+.receipt .row img{width:70px}
+.receipt .row .nm{flex:1}
+.receipt .row .v{font-family:Anton;font-size:64px;color:var(--red)}
+.chip{display:inline-flex;align-items:center;gap:10px;background:var(--paper);color:var(--ink);font-family:JBM;font-weight:700;font-size:28px;padding:10px 16px;box-shadow:5px 6px 0 rgba(0,0,0,.25)}
+.chip img{width:44px}
+.bar{position:absolute;height:110px;width:0}
+.col{position:absolute;width:96px;height:0}
+#prog{position:absolute;left:60px;right:60px;top:206px;height:8px;background:rgba(255,255,255,.22);z-index:60;border-radius:4px;overflow:hidden}
+#prog i{position:absolute;left:0;top:0;bottom:0;background:var(--gold);width:0}
+#prog.dark{background:rgba(0,0,0,.15)}
+#foot{position:absolute;left:0;right:0;top:1748px;text-align:center;font-family:JBM;font-weight:500;font-size:26px;letter-spacing:2px;z-index:60;opacity:.85}
+#tick{position:absolute;left:60px;top:228px;font-family:JBM;font-weight:700;font-size:22px;letter-spacing:3px;z-index:60;opacity:.8}
+.lbl{left:50px;top:1640px;font-size:24px;letter-spacing:1px;background:rgba(14,13,11,.75);color:#F2ECE0;padding:8px 14px;z-index:30;max-width:980px}
+</style></head>
+<body><div id="stage">
+
+<!-- 1 · SLAM + STICKER POP + BOB ------------------------------------------>
+<section class="scene bg-red" data-s="0" data-e="3.6" data-theme="dark">
+  <div class="el face sticker" data-a="pop" data-t="0" data-d=".35" data-bob="1" data-r="-3" style="left:300px;top:340px;width:480px"><img src="assets/demo/_face.png"></div>
+  <div class="el clip" data-a="slam" data-t=".6" data-d=".32" data-r="-2.5" data-shake="1" style="left:60px;top:930px;width:960px">
+    <div class="mast"><span>PLANTÃO</span><span>OUT/2026</span></div><div class="rule"></div>
+    <div class="fr" style="font-size:104px">MANCHETE QUE ACUSA ALGUÉM.</div>
+    <div class="tape" style="left:-40px;top:-20px;transform:rotate(-24deg)"></div><div class="tape" style="right:-40px;top:-14px;transform:rotate(18deg)"></div>
+  </div>
+  <div class="el anton c-paper" data-a="up" data-t="2.0" data-d=".3" style="left:60px;top:1500px;font-size:70px;width:960px;text-align:center">será que é verdade? 👀</div>
+  <div class="el mono lbl" data-a="fade" data-t="0">pop + data-bob (sticker) · slam + data-shake (recorte) · up</div>
+</section>
+
+<!-- 2 · SLAM GIGANTE + UP EM SEQUÊNCIA --------------------------------------->
+<section class="scene bg-ink" data-s="3.6" data-e="6.4" data-theme="dark">
+  <div class="el" data-a="pop" data-t=".25" data-d=".4" data-r="12" data-bob="1" style="left:760px;top:360px;width:220px"><img class="sticker" src="assets/1f50e.svg" style="width:100%"></div>
+  <div class="el anton c-gold" data-a="slam" data-t="0" data-d=".28" data-shake="1" style="left:60px;top:500px;font-size:300px">SERÁ?</div>
+  <div class="el anton c-paper" data-a="up" data-t=".85" data-d=".28" style="left:66px;top:860px;font-size:150px">BORA OLHAR</div>
+  <div class="el anton c-paper" data-a="up" data-t="1.15" data-d=".28" style="left:66px;top:1010px;font-size:150px">OS <span class="c-gold">NÚMEROS.</span></div>
+  <div class="el mono c-paper" data-a="fade" data-t="1.6" data-d=".4" style="left:70px;top:1220px;font-size:32px;opacity:.8">fontes: IBGE · DIEESE · BCB</div>
+  <div class="el mono lbl" data-a="fade" data-t="0">slam + shake · up escalonado · fade (fonte)</div>
+</section>
+
+<!-- 3 · RECIBO + CONTADORES + CARIMBO ---------------------------------------->
+<section class="scene bg-gold" data-s="6.4" data-e="11.2" data-theme="light">
+  <div class="el anton c-ink" data-a="left" data-t="0" data-d=".3" style="left:60px;top:300px;font-size:120px">TÁ CARO MESMO?</div>
+  <div class="el receipt" data-a="up" data-t=".4" data-d=".4" data-r="1.5" style="left:130px;top:520px;width:820px">
+    <div style="text-align:center;font-weight:700;letter-spacing:3px">*** RECIBO ***</div>
+    <div class="row"><img src="assets/1f345.svg"><span class="nm">ITEM A</span><span class="v cnt" data-from="0" data-to="58.7" data-dec="1" data-pre="+" data-suf="%" data-t=".9" data-d=".8"></span></div>
+    <div class="row"><img src="assets/1f9c5.svg"><span class="nm">ITEM B</span><span class="v cnt" data-from="0" data-to="61.8" data-dec="1" data-pre="+" data-suf="%" data-t="1.4" data-d=".8"></span></div>
+    <div class="row"><img src="assets/1fad8.svg"><span class="nm">ITEM C</span><span class="v cnt" data-from="0" data-to="27.8" data-dec="1" data-pre="+" data-suf="%" data-t="1.9" data-d=".8"></span></div>
+    <div style="font-size:24px;margin-top:20px;opacity:.75">FONTE: INSTITUIÇÃO · SÉRIE · PERÍODO</div>
+  </div>
+  <div class="el stamp" data-a="stamp" data-t="3.0" data-d=".22" data-r="-11" data-shake="1" style="left:300px;top:1240px;color:var(--true);font-size:120px">VERDADE<small>TÁ CARO SIM</small></div>
+  <div class="el mono lbl" data-a="fade" data-t="0">left · receipt + up · .cnt (contador c/ tique) · stamp (carimbo + tremor)</div>
+</section>
+
+<!-- 4 · DROP COM QUIQUE + CONTADOR GIGANTE + SAÍDA (data-o) -------------------->
+<section class="scene bg-slate" data-s="11.2" data-e="16.0" data-theme="dark">
+  <div class="el anton c-paper" data-a="left" data-t="0" data-d=".3" style="left:60px;top:300px;font-size:104px">O QUE MAIS SUBIU</div>
+  <div class="el" data-a="drop" data-t=".3" data-d=".45" data-o="2.3" data-r="-8" data-bob="1" style="left:330px;top:520px;width:420px"><img class="sticker" src="assets/1f34c.svg" style="width:100%"></div>
+  <div class="el anton c-paper cnt" data-from="0" data-to="98.5" data-dec="1" data-pre="+" data-suf="%" data-t=".5" data-d="1.1" data-o="2.3" style="left:0;width:1080px;text-align:center;top:1000px;font-size:230px"></div>
+  <div class="el" data-a="drop" data-t="2.45" data-d=".45" data-r="7" data-bob="1" style="left:330px;top:520px;width:420px"><img class="sticker" src="assets/1f9c5.svg" style="width:100%"></div>
+  <div class="el anton c-red cnt" data-from="0" data-to="183" data-dec="0" data-pre="+" data-suf="%" data-t="2.65" data-d="1.2" data-shake-end="1" style="left:0;width:1080px;text-align:center;top:1000px;font-size:260px;color:#ff6b5e"></div>
+  <div class="el" style="left:60px;top:1330px;display:flex;gap:14px"><span class="chip el2" data-a="pop" data-t="2.2" data-d=".25"><img src="assets/1f34c.svg">+98,5%</span></div>
+  <div class="el mono lbl" data-a="fade" data-t="0">drop (quique) + bob · .cnt gigante · data-o (sai) · data-shake-end · chip</div>
+</section>
+
+<!-- 5 · BARRAS QUE CRESCEM + ROSTOS PEQUENOS ---------------------------------->
+<section class="scene bg-paper" data-s="16.0" data-e="21.0" data-theme="light">
+  <div class="el anton c-ink" data-a="left" data-t="0" data-d=".3" style="left:60px;top:300px;font-size:120px">CARA A CARA</div>
+  <div class="el bar" data-to="760" data-t=".7" data-d="1.4" style="left:60px;top:700px;background:var(--slate)"></div>
+  <div class="el anton c-ink cnt" data-from="0" data-to="56.2" data-dec="1" data-pre="+" data-suf="%" data-t=".7" data-d="1.4" style="left:60px;top:825px;font-size:120px"></div>
+  <div class="el mono c-ink" data-a="fade" data-t=".4" style="left:60px;top:640px;font-size:30px;font-weight:700">GOV. ANTERIOR · 48 meses</div>
+  <div class="el bar" data-to="191" data-t="2.4" data-d=".8" style="left:60px;top:1150px;background:var(--gold)"></div>
+  <div class="el anton c-ink cnt" data-from="0" data-to="14.1" data-dec="1" data-pre="+" data-suf="%" data-t="2.4" data-d=".8" style="left:290px;top:1135px;font-size:120px"></div>
+  <div class="el mono c-ink" data-a="fade" data-t="2.1" style="left:60px;top:1090px;font-size:30px;font-weight:700">GOV. ATUAL · 45 meses</div>
+  <div class="el" data-a="pop" data-t="3.8" data-d=".35" data-r="-1.5" style="left:60px;top:1350px;width:960px;background:var(--ink);color:var(--paper);padding:22px 30px;box-shadow:10px 12px 0 rgba(0,0,0,.2)"><div class="anton" style="font-size:72px">≈11,8%/ano <span style="opacity:.6">×</span> <span class="c-gold">≈3,6%/ano</span></div></div>
+  <div class="el mono lbl" data-a="fade" data-t="0">.bar (barra cresce do zero) + .cnt junto · pop (caixa de resumo)</div>
+</section>
+
+<!-- 6 · COLUNAS ANO A ANO ----------------------------------------------------->
+<section class="scene bg-ink" data-s="21.0" data-e="26.0" data-theme="dark">
+  <div class="el anton c-paper" data-a="left" data-t="0" data-d=".3" style="left:60px;top:300px;font-size:120px">ANO A ANO</div>
+  <div class="el" data-a="fade" data-t=".3" style="left:50px;top:1270px;width:980px;height:3px;background:var(--paper);opacity:.6"></div>
+  <div id="cols"></div>
+  <div class="el tag" data-a="pop" data-t="3.0" data-d=".3" data-r="-4" data-shake="1" style="left:420px;top:1420px;background:var(--red);color:var(--paper);font-size:34px">UM ANO CAIU ↑</div>
+  <div class="el mono lbl" data-a="fade" data-t="0">.col (colunas positivas/negativas) · tag + pop + shake</div>
+</section>
+
+<!-- 7 · VEREDITO ------------------------------------------------------------>
+<section class="scene bg-paper" data-s="26.0" data-e="30.0" data-theme="light">
+  <div class="el clip" data-a="drop" data-t="0" data-d=".5" data-r="-2" style="left:60px;top:500px;width:960px">
+    <div class="mast"><span>PLANTÃO</span><span>OUT/2026</span></div><div class="rule"></div>
+    <div class="fr" style="font-size:104px">MANCHETE QUE ACUSA ALGUÉM.</div></div>
+  <div class="el stamp" data-a="stamp" data-t=".9" data-d=".22" data-r="-9" data-shake="1.4" style="left:250px;top:620px;color:var(--red);font-size:200px">FALSO</div>
+  <div class="el anton c-ink" data-a="up" data-t="1.8" data-d=".3" style="left:60px;top:1200px;font-size:96px;width:960px;text-align:center">O TÍTULO DESTE VÍDEO TAVA ERRADO.</div>
+  <div class="el mono lbl" data-a="fade" data-t="0">drop (volta o recorte) · stamp FALSO + shake forte · up</div>
+</section>
+
+<div id="grain"></div><div id="prog"><i></i></div><div id="tick">REPERTÓRIO 00 · CLÁSSICO</div><div id="foot">@TENTANDOCHEGARATEVOCE</div>
+</div>
+<script>
+window.DUR=30;
+const years=[[1,7.8],[2,18.2],[3,8.2],[4,13.2],[5,-0.5],[6,8.2],[7,1.4],[8,4.4]];
+(function buildCols(){const host=document.getElementById('cols'); const base=1270,k=36,x0=78,step=124;
+ years.forEach(([y,v],i)=>{const prev=i<4; const c=document.createElement('div'); c.className='el col'; c.dataset.v=v; c.dataset.t=(.6+i*.22).toFixed(2); c.dataset.d='.55';
+  c.style.left=(x0+i*step)+'px'; c.style.background=prev?'#6f8db3':'#C9A84C'; c.dataset.base=base; c.dataset.k=k; host.appendChild(c);
+  const val=document.createElement('div'); val.className='el anton'; val.dataset.a='pop'; val.dataset.t=(1.0+i*.22).toFixed(2); val.dataset.d='.25';
+  val.style.cssText=`left:${x0+i*step-22}px;top:${v<0?base-70:base-v*k-72}px;width:140px;text-align:center;font-size:56px;color:${v<0?'#ff6b5e':'#F2ECE0'}`;
+  val.textContent=(v>0?'+':'')+v.toFixed(1).replace('.',','); host.appendChild(val);});})();
+</script>
+<script src="fx.js"></script>
+<script src="engine.js"></script>
+</body></html>

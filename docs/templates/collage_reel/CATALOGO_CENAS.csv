@@ -1,0 +1,83 @@
+categoria,referencia,trecho,cena,movimentos,ideal_para,arquivo
+apresentacao-personagem,ref00b_premium,4.4-8.4s,perfil-duplo-ardosia-ouro,"dissolve+kb+screen, scatter",dois lados / dois governos,apresentacao-personagem__ref00b_premium__perfil-duplo-ardosia-ouro.mp4
+apresentacao-personagem,ref01_antidoto,0.0-9.6s,duotone-perfis-nenhum,"dissolve do preto, kb, scatter NENHUM",dois lados,apresentacao-personagem__ref01_antidoto__duotone-perfis-nenhum.mp4
+apresentacao-personagem,ref01_antidoto,50.5-56.5s,gravura-aneis-dois,"anéis concêntricos, dissolve",comparação de personagens,apresentacao-personagem__ref01_antidoto__gravura-aneis-dois.mp4
+apresentacao-personagem,ref01_antidoto,9.6-16.2s,fotos-pb-vhs,"kb + linha de tracking, dissolve",personagens em foto,apresentacao-personagem__ref01_antidoto__fotos-pb-vhs.mp4
+apresentacao-personagem,ref02_agroecologia,28.6-34.0s,sticker-governo-planta,"sticker pop, título monta, planta brota",apresentar o outro lado,apresentacao-personagem__ref02_agroecologia__sticker-governo-planta.mp4
+apresentacao-personagem,ref03_contraponto-feitos,72.4-80.6s,herdeiro-zero-zero,"retrato no círculo, zero que bate","""o que fez: nada""",apresentacao-personagem__ref03_contraponto-feitos__herdeiro-zero-zero.mp4
+apresentacao-personagem,ref05_joaoerre,41.0-44.9s,rosto-fundido-grafite,"rosto rasgado ao meio cai, letreiro grafite se escreve",X igual a Y / promessa x realidade,apresentacao-personagem__ref05_joaoerre__rosto-fundido-grafite.mp4
+capa-gancho,ref00_classico,0.0-3.6s,sticker-pop-manchete-bate,"pop+bob, slam+shake, fita",gancho que acusa,capa-gancho__ref00_classico__sticker-pop-manchete-bate.mp4
+capa-gancho,ref00b_premium,0.0-4.4s,cortina-de-rosto-aneis,"down+kb, anéis ouro, slam manchete",gancho com personagem,capa-gancho__ref00b_premium__cortina-de-rosto-aneis.mp4
+capa-gancho,ref02_agroecologia,0.0-2.3s,titulo-laranja,texto grande que monta,abertura simples,capa-gancho__ref02_agroecologia__titulo-laranja.mp4
+capa-gancho,ref03_contraponto-feitos,0.0-3.4s,capa-amarela-serifa,título linha a linha,capa editorial,capa-gancho__ref03_contraponto-feitos__capa-amarela-serifa.mp4
+capa-gancho,ref04_contraponto-milei,0.0-3.5s,capa-vermelha-personagens,"personagens grandes cortados, setas",capa com 2 personagens,capa-gancho__ref04_contraponto-milei__capa-vermelha-personagens.mp4
+capa-gancho,ref05_joaoerre,2.0-5.4s,moedas-pilula-amarela-rosto,"painel inclinado revela moedas, pílula marca-texto, rosto recortado",gancho sobre dinheiro,capa-gancho__ref05_joaoerre__moedas-pilula-amarela-rosto.mp4
+cartao-dados,ref01_antidoto,65.8-68.9s,cartao-vermelho-lista,"flash, lista condensada",lista de feitos/dados,cartao-dados__ref01_antidoto__cartao-vermelho-lista.mp4
+cartao-dados,ref05_joaoerre,124.6-130.0s,resumo-empilhado-pilulas,resumo em pílulas empilhadas,recap,cartao-dados__ref05_joaoerre__resumo-empilhado-pilulas.mp4
+cartao-resumo,ref04_contraponto-milei,80.3-84.7s,grade-4-cartoes,"cartões deslizam um por fala, fio corre",recap antes da conclusão,cartao-resumo__ref04_contraponto-milei__grade-4-cartoes.mp4
+cartao-texto,ref02_agroecologia,20.5-24.2s,inflacao-alta-em-tudo,"texto monta linha a linha no preto, seta sobe",frase de transição,cartao-texto__ref02_agroecologia__inflacao-alta-em-tudo.mp4
+cartao-texto,ref03_contraponto-feitos,46.2-53.1s,pergunta-amarela,"painel sobe, serifa itálica",pergunta-virada,cartao-texto__ref03_contraponto-feitos__pergunta-amarela.mp4
+citacao-balao,ref01_antidoto,16.2-21.6s,quadrinho-ataques,"balão estrelado, papel rasgado, jit",frases reais de redes,citacao-balao__ref01_antidoto__quadrinho-ataques.mp4
+citacao-balao,ref04_contraponto-milei,68.7-74.7s,balao-citacao-pessoas,pessoas brotam + balão de fala,fala/opinião,citacao-balao__ref04_contraponto-milei__balao-citacao-pessoas.mp4
+citacao-balao,ref05_joaoerre,117.8-119.8s,balao-digitado-sobre-rosto,"balão desce, texto digitado",citação com crédito,citacao-balao__ref05_joaoerre__balao-digitado-sobre-rosto.mp4
+citacao-fala,ref03_contraponto-feitos,80.6-90.4s,citacao-serifa-recorte-canto,"citação monta linha a linha, recorte no canto",fala do personagem,citacao-fala__ref03_contraponto-feitos__citacao-serifa-recorte-canto.mp4
+colagem-objetos,ref01_antidoto,35.0-45.8s,livros-globo-pontos,"retícula de pontos, kb","ideia abstrata (educação, ambiente)",colagem-objetos__ref01_antidoto__livros-globo-pontos.mp4
+contador-numero,ref00b_premium,11.6-15.4s,contador-sobre-pontos,"dots+drift, .cnt, fio ouro",dado principal,contador-numero__ref00b_premium__contador-sobre-pontos.mp4
+contador-numero,ref05_joaoerre,45.0-56.5s,ar-para-br-linha-diagonal,"linha diagonal liga dado de cima ao preço de baixo, painel inclinado","simulação ""se aplicar aqui"" (com rótulo)",contador-numero__ref05_joaoerre__ar-para-br-linha-diagonal.mp4
+contador-numero,ref05_joaoerre,92.4-108.3s,conta-luz-digito-pilula,valor digitado caractere a caractere na pílula,preço antes/depois,contador-numero__ref05_joaoerre__conta-luz-digito-pilula.mp4
+cta-fechamento,ref01_antidoto,75.0-86.0s,gravura-final-logo,"kb, escurece, logo",fechamento,cta-fechamento__ref01_antidoto__gravura-final-logo.mp4
+cta-fechamento,ref02_agroecologia,56.4-70.0s,foto-titulo-cta,"foto em moldura + título monta (NÃO copiar ""vote"")",layout de fechamento,cta-fechamento__ref02_agroecologia__foto-titulo-cta.mp4
+cta-fechamento,ref03_contraponto-feitos,90.4-98.9s,cta-amarelo-assinatura,"painel sobe, linhas sobem (NÃO copiar mensagem)",layout de fechamento,cta-fechamento__ref03_contraponto-feitos__cta-amarelo-assinatura.mp4
+cta-fechamento,ref04_contraponto-milei,84.7-90.7s,qual-e-documento-interrogacao,"slam pergunta final, ""?"" pop",pergunta final,cta-fechamento__ref04_contraponto-milei__qual-e-documento-interrogacao.mp4
+dinheiro-cedulas,ref04_contraponto-milei,59.8-68.7s,cedulas-enchem-voam,"cédulas brotam, viram vermelhas, voam, contador desce",salário/poder de compra,dinheiro-cedulas__ref04_contraponto-milei__cedulas-enchem-voam.mp4
+documento-lupa,ref04_contraponto-milei,12.6-16.7s,lupa-plano-economico,lente passeia sobre documento apagado,"""o que diz o documento""",documento-lupa__ref04_contraponto-milei__lupa-plano-economico.mp4
+grade-icones,ref04_contraponto-milei,44.5-51.0s,contas-acendem-disparam,"grade pop, recolor seco, foguete com rastro","""todas subiram""",grade-icones__ref04_contraponto-milei__contas-acendem-disparam.mp4
+grade-pontos,ref02_agroecologia,16.7-24.2s,pontos-escorrem-categorias,"painel sobe, pontos escorrem em cobra e formam grade, cor por categoria","""acompanhamos N itens""",grade-pontos__ref02_agroecologia__pontos-escorrem-categorias.mp4
+grade-pontos,ref02_agroecologia,24.2-28.6s,nenhum-ficou-mais-barato,"grade inteira vira preta, palavra slam, rosto volta","""nenhum/todos"" com dado",grade-pontos__ref02_agroecologia__nenhum-ficou-mais-barato.mp4
+grafico-barras,ref00_classico,16.0-21.0s,barras-cara-a-cara,".bar do zero + .cnt, caixa resumo",comparado com o quê,grafico-barras__ref00_classico__barras-cara-a-cara.mp4
+grafico-barras,ref03_contraponto-feitos,31.4-40.4s,retrato-circulo-barra-encolhe,"retrato estoura do círculo, barra encolhe com número","""X% mais barato""",grafico-barras__ref03_contraponto-feitos__retrato-circulo-barra-encolhe.mp4
+grafico-barras,ref04_contraponto-milei,51.0-59.8s,poder-compra-pedaco-cai,"manchete sobe, barra perde pedaço que cai","""perdeu X%""",grafico-barras__ref04_contraponto-milei__poder-compra-pedaco-cai.mp4
+grafico-barras-horizontais,ref02_agroecologia,45.0-56.4s,35-itens-dois-periodos,barras horizontais crescem em 2 cores sobrepostas,ranking longo,grafico-barras-horizontais__ref02_agroecologia__35-itens-dois-periodos.mp4
+grafico-colunas,ref00_classico,21.0-26.0s,ano-a-ano,".col positivas/negativas, tag",série histórica,grafico-colunas__ref00_classico__ano-a-ano.mp4
+grafico-colunas,ref03_contraponto-feitos,24.7-31.4s,receita-x-gasto,blocos crescem do chão,dois valores,grafico-colunas__ref03_contraponto-feitos__receita-x-gasto.mp4
+grafico-colunas,ref03_contraponto-feitos,59.8-65.7s,200-x-600-rotulo-viaja,coluna cresce com rótulo no topo,comparação de valores,grafico-colunas__ref03_contraponto-feitos__200-x-600-rotulo-viaja.mp4
+grafico-colunas,ref03_contraponto-feitos,65.7-72.4s,3-anos-colunas-iguais,mini-colunas + contador milhões,série curta,grafico-colunas__ref03_contraponto-feitos__3-anos-colunas-iguais.mp4
+grafico-linha-curva,ref03_contraponto-feitos,3.4-14.3s,contador-2477-curva,"painel sobe, contador milhar, curva em S desenhada",antes x depois de um índice,grafico-linha-curva__ref03_contraponto-feitos__contador-2477-curva.mp4
+grafico-linha-curva,ref04_contraponto-milei,37.1-44.5s,966-curva-x-inflacao,contador + curva desenhada + segunda curva,crescimento comparado,grafico-linha-curva__ref04_contraponto-milei__966-curva-x-inflacao.mp4
+item-objeto-contador,ref00_classico,11.2-16.0s,drop-quique-contador-gigante,"drop com quique, .cnt gigante, troca data-o",item a item,item-objeto-contador__ref00_classico__drop-quique-contador-gigante.mp4
+item-objeto-contador,ref02_agroecologia,2.3-16.7s,rosto-testemunha-prateleira,"rosto ancorado embaixo, item pop, contador itálico, item encolhe pra prateleira no topo",vários itens do mesmo personagem,item-objeto-contador__ref02_agroecologia__rosto-testemunha-prateleira.mp4
+item-objeto-contador,ref03_contraponto-feitos,40.4-46.2s,moeda-gira,moeda cai girando,preço/valor,item-objeto-contador__ref03_contraponto-feitos__moeda-gira.mp4
+linha-do-tempo,ref03_contraponto-feitos,53.1-59.8s,pix-2018-2020,"eixo se desenha, pontos acendem","quem começou o quê, quando",linha-do-tempo__ref03_contraponto-feitos__pix-2018-2020.mp4
+lista,ref02_agroecologia,34.0-38.8s,caixas-empilham,caixas coloridas pop em sequência,lista de medidas,lista__ref02_agroecologia__caixas-empilham.mp4
+lista,ref03_contraponto-feitos,14.3-24.7s,lista-empilha-compacta,"linhas sobem da régua, lista compacta, fio, conclusão",itens que convergem,lista__ref03_contraponto-feitos__lista-empilha-compacta.mp4
+lista,ref05_joaoerre,22.9-31.0s,lista-pilulas-icones-pop,"linhas em pílula amarela digitadas, ícones pop",o que fez/prometeu,lista__ref05_joaoerre__lista-pilulas-icones-pop.mp4
+manchete-fonte,ref00b_premium,17.8-22.0s,antes-depois-cafe,webcard down→dissolve sobre retícula,manchete que esconde período,manchete-fonte__ref00b_premium__antes-depois-cafe.mp4
+manchete-fonte,ref01_antidoto,56.5-62.4s,manchetes-antes-depois,"print desce, dissolve",manchete x manchete,manchete-fonte__ref01_antidoto__manchetes-antes-depois.mp4
+manchete-fonte,ref01_antidoto,68.9-75.0s,prints-incendio-ataques,prints em sequência,vários fatos rápidos,manchete-fonte__ref01_antidoto__prints-incendio-ataques.mp4
+manchete-fonte,ref04_contraponto-milei,16.7-19.8s,manchete-grifo-ctrl-c-v,"push vertical, marca-texto, teclas",citação de veículo / cópia,manchete-fonte__ref04_contraponto-milei__manchete-grifo-ctrl-c-v.mp4
+mapa,ref02_agroecologia,38.8-45.0s,mapa-faixa-saiu,mapa + faixa torta que bate,"""saiu do mapa X""",mapa__ref02_agroecologia__mapa-faixa-saiu.mp4
+mapa,ref04_contraponto-milei,19.8-28.0s,mapa-ping-personagem,"zoom-soco, pop com anel, mapa",onde / quem,mapa__ref04_contraponto-milei__mapa-ping-personagem.mp4
+mapa,ref04_contraponto-milei,31.0-37.1s,argentina-ping-icones,"ping radar, ícones um a um, selo de fonte",de onde vem o dado,mapa__ref04_contraponto-milei__argentina-ping-icones.mp4
+numeros-chutados,ref04_contraponto-milei,8.4-12.6s,retrato-disco-numeros-aleatorios,"disco desliza, dígitos aleatórios, etiqueta bate",desmentir número sem fonte,numeros-chutados__ref04_contraponto-milei__retrato-disco-numeros-aleatorios.mp4
+palavra-por-batida,ref00_classico,3.6-6.4s,sera-bora-olhar,"slam gigante, up escalonado, fonte em fade","virada ""será?""",palavra-por-batida__ref00_classico__sera-bora-olhar.mp4
+palavra-por-batida,ref00b_premium,15.4-17.8s,muro-prometeu,.stack + slam ouro,ênfase/repetição,palavra-por-batida__ref00b_premium__muro-prometeu.mp4
+palavra-por-batida,ref00b_premium,8.4-11.6s,sim-votou-contra-verdade,"glitch+rough, carimbo","virada, veredito parcial",palavra-por-batida__ref00b_premium__sim-votou-contra-verdade.mp4
+palavra-por-batida,ref01_antidoto,26.5-35.0s,feito-lealdade-valores-unico,"glitch, boil, stack",sequência de palavras,palavra-por-batida__ref01_antidoto__feito-lealdade-valores-unico.mp4
+palavra-por-batida,ref01_antidoto,62.4-65.8s,fato,palavra gigante + karaokê,afirmação curta,palavra-por-batida__ref01_antidoto__fato.mp4
+palavra-por-batida,ref04_contraponto-milei,74.7-78.0s,nao-e-chutados,"whip, números chutados de novo",resposta curta,palavra-por-batida__ref04_contraponto-milei__nao-e-chutados.mp4
+palavra-silhueta,ref01_antidoto,21.6-26.5s,falam-papagaio-knock,silhueta + texto difference,metáfora visual,palavra-silhueta__ref01_antidoto__falam-papagaio-knock.mp4
+plateia-opiniao,ref04_contraponto-milei,3.5-8.4s,em-voz-alta-plateia,"datilografia, whip, ondas de som, plateia brota","""dizem por aí"", bastidores",plateia-opiniao__ref04_contraponto-milei__em-voz-alta-plateia.mp4
+recibo-conta,ref00_classico,6.4-11.2s,recibo-contadores-carimbo-verdade,"receipt up, .cnt com tique, stamp","preço, cesta, admitir o que é verdade",recibo-conta__ref00_classico__recibo-contadores-carimbo-verdade.mp4
+recibo-conta,ref04_contraponto-milei,24.5-31.0s,recibo-estica-risco,"recibo cresce, total conta, risco desenha",impacto no bolso,recibo-conta__ref04_contraponto-milei__recibo-estica-risco.mp4
+revelacao-iris,ref01_antidoto,45.8-50.5s,olho-no-escuro,"íris/olho, dissolve","""olha o que ninguém viu""",revelacao-iris__ref01_antidoto__olho-no-escuro.mp4
+seta-tendencia,ref05_joaoerre,36.0-40.1s,seta-vermelha-despencou,seta diagonal se desenha com a fala,queda de renda/poder de compra,seta-tendencia__ref05_joaoerre__seta-vermelha-despencou.mp4
+veredito-carimbo,ref00_classico,26.0-30.0s,manchete-volta-falso,"drop, stamp FALSO forte",veredito,veredito-carimbo__ref00_classico__manchete-volta-falso.mp4
+veredito-carimbo,ref00b_premium,22.0-26.0s,enganoso-titulo-errado,"drop, stamp, scatter",veredito,veredito-carimbo__ref00b_premium__enganoso-titulo-errado.mp4
+veredito-carimbo,ref05_joaoerre,21.9-23.0s,x-vermelho-nao-balao,"dois X vermelhos riscam balões, NÃO em pílula",negar promessa / FALSO,veredito-carimbo__ref05_joaoerre__x-vermelho-nao-balao.mp4
+grafico_corrida_anos,DEMO própria,congresso.html,"Quem governa de verdade: barras por espectro mudando por legislatura (1995→2023) + placar Maioria/Meio/Minoria + frase quem negocia com quem","corrida de barras; contador de ano; placar que troca nomes; frase que muda com o cenário",composição do Congresso / qualquer série por período,congresso.html
+fundo,KIT tut_06,kit_vox.html 0-5s,"Fundo em camadas (fotos P&B + tinta + textura) atrás de manchete","tintbg; slam; outcurve",abertura / cartela de tema,kit_vox.html
+foto_viva,KIT tut_01/02,kit_vox.html 5-10s,"Parallax 3 camadas, entrada corte-na-curva, 12fps","parallax; curve; fps12",foto histórica / arquivo,kit_vox.html
+documento,KIT tut_03,kit_vox.html 10-15s,"Página de jornal virando (8fps) revela a de baixo","pageturn; fps8",trocar período/governo,kit_vox.html
+grafico_linha,KIT tut_05 + ref_14,kit_vox.html 15-22s,"Linha se desenha, faixa Covid, cursor clica no pico, ondas, popup com contador","trim; cursor; waves; pop; cnt",abrir capítulo a partir do gráfico,kit_vox.html
+mapa,ref_12,kit_vox.html 22-27s,"Mapa do Brasil, foco anda SP→DF, linha da rota se desenha, ondas no destino","focus; trim; waves",onde aconteceu / rotas,kit_vox.html
+arquivo_tv,KIT tut_04,kit_vox.html 27-32s,"Tela de TV antiga (scanlines, faixa rolando, fósforo) + contador de ano","crt; kb; cnt",arquivo / época,kit_vox.html
