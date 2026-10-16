@@ -1,0 +1,12 @@
+[
+ {
+  "name": "vo_v11_patch",
+  "model": "minimax/speech-02-turbo",
+  "status": "succeeded",
+  "error": null,
+  "detail": null,
+  "files": [
+   "out/vo_v11_patch.mp3"
+  ]
+ }
+]
