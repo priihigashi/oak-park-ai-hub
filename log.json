@@ -1,0 +1,12 @@
+[
+ {
+  "name": "h_palanque",
+  "model": "black-forest-labs/flux-1.1-pro",
+  "status": "succeeded",
+  "error": null,
+  "detail": null,
+  "files": [
+   "out/h_palanque.jpg"
+  ]
+ }
+]
