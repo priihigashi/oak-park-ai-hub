@@ -38,13 +38,15 @@ body{{background:var(--bg);color:var(--fg);font-family:system-ui,sans-serif;marg
 .pv-bar input{{flex:1;min-width:0;accent-color:#FFD34D}}
 .pv-bar output{{font:12px ui-monospace,monospace;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}}
 .pv-bar .sp{{min-width:0;padding:8px 12px;background:transparent;color:var(--fg);border:1px solid var(--line)}}.pv-bar .sp.on{{background:var(--accent);color:#111;border-color:var(--accent)}}.pv-sp-l{{font:12px ui-monospace,monospace;color:var(--muted)}}
+.pv-skip{{justify-content:space-between}}.pv-bar .sk{{flex:1;min-width:0;padding:10px 6px;background:transparent;color:var(--fg);border:1px solid var(--line);font-variant-numeric:tabular-nums}}
 .pv-note{{max-width:520px;color:var(--muted);font-size:12px;line-height:1.4;margin:0}}
 </style>
 <div class="pv-head"><h1>Querida amiga · prévia</h1><small id="ver">versão em edição</small></div>
 <div class="pv-frame" id="frame"><div id="scaler">{stage}</div></div>
 <div class="pv-bar"><button id="play" type="button">▶ Play</button><input id="seek" type="range" min="0" max="{dur}" step="0.05" value="0" aria-label="Posição"><output id="tm">0:00</output></div>
+<div class="pv-bar pv-skip" role="group" aria-label="Pular"><button type="button" class="sk" data-d="-10">↺ 10s</button><button type="button" class="sk" data-d="-5">↺ 5s</button><button type="button" class="sk" data-d="5">5s ↻</button><button type="button" class="sk" data-d="10">10s ↻</button></div>
 <div class="pv-bar" role="group" aria-label="Velocidade"><span class="pv-sp-l">Velocidade</span><button type="button" class="sp on" data-r="1">1x</button><button type="button" class="sp" data-r="1.2">1,2x</button><button type="button" class="sp" data-r="1.5">1,5x</button><button type="button" class="sp" data-r="2">2x</button><button type="button" class="sp" data-r="3">3x</button></div>
-<p class="pv-note">Prévia ao vivo do reel (as animações rodam no navegador; o MP4 final sai do mesmo arquivo). Recarregue para ver a última edição.</p>
+<p class="pv-note">Prévia ao vivo do reel (as animações rodam no navegador; o MP4 final sai do mesmo arquivo). Setas ← → pulam 5s (Shift: 10s), espaço dá play/pausa. Recarregue para ver a última edição.</p>
 <audio id="vo" src="narracao.mp3?v={int(__import__("time").time())}" preload="auto" playsinline></audio>
 <script>window.DUR={dur};</script><script src="fx.js"></script><script src="fx2.js"></script><script src="engine.js"></script><script src="layout.js"></script>
 <script>
@@ -56,6 +58,9 @@ b.onclick=()=>{{if(a.paused){{const go=()=>a.play().catch(()=>{{b.textContent='c
 document.querySelectorAll('.sp').forEach(x=>x.onclick=()=>{{a.playbackRate=+x.dataset.r;a.preservesPitch=true;document.querySelectorAll('.sp').forEach(y=>y.classList.toggle('on',y===x))}});
 a.onended=()=>{{b.textContent='▶ Play'}};
 sk.oninput=()=>{{a.currentTime=+sk.value}};
+const jump=d=>{{a.currentTime=Math.max(0,Math.min({dur},(a.currentTime||0)+d));sk.value=a.currentTime}};
+document.querySelectorAll('.sk[data-d]').forEach(x=>x.onclick=()=>jump(+x.dataset.d));
+addEventListener('keydown',e=>{{if(e.target===sk)return;if(e.key==='ArrowLeft'){{jump(e.shiftKey?-10:-5);e.preventDefault()}}else if(e.key==='ArrowRight'){{jump(e.shiftKey?10:5);e.preventDefault()}}else if(e.key===' '){{b.click();e.preventDefault()}}}});
 const f=t=>Math.floor(t/60)+':'+String(Math.floor(t%60)).padStart(2,'0');
 window.__tick=T=>{{if(document.activeElement!==sk)sk.value=T;tm.textContent=f(T)+' / '+f({dur})}};
 </script>'''
