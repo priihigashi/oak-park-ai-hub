@@ -7,21 +7,21 @@
 @font-face{font-family:JBM;font-weight:700;src:url(assets/jetbrains-mono-latin-700-normal.woff2)}
 @font-face{font-family:JBM;font-weight:500;src:url(assets/jetbrains-mono-latin-500-normal.woff2)}
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{width:1080px;height:1920px;overflow:hidden;background:#0E0D0B}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#050608}
 #stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:#0E0D0B}
-.scene{position:absolute;inset:0;display:none;overflow:hidden;background:#0E0D0B}
+.scene{position:absolute;inset:0;display:none;overflow:hidden;background:#050608}
 .el{position:absolute;will-change:transform}
 .bgimg,.fullimg{position:absolute;left:0;top:0;width:1080px;height:1920px;object-fit:cover}
 .fullimg{z-index:0}
 .tintc{position:absolute;inset:0;mix-blend-mode:color;opacity:.55}
-.shadeg{position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,13,11,.75) 0%,rgba(14,13,11,.35) 30%,rgba(14,13,11,.55) 62%,rgba(14,13,11,.95) 100%)}
+.shadeg{position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,6,8,.85) 0%,rgba(5,6,8,.55) 22%,rgba(5,6,8,.08) 42%,rgba(5,6,8,.15) 55%,rgba(5,6,8,.75) 72%,rgba(5,6,8,.95) 100%)}
 .shadeg2{left:0;top:0;width:1080px;height:1920px;background:linear-gradient(180deg,rgba(14,13,11,.7) 0%,rgba(14,13,11,.3) 30%,rgba(14,13,11,.6) 62%,rgba(14,13,11,.95) 100%)}
 #grain{position:absolute;inset:-40px;background:url(assets/grain.png);opacity:.16;mix-blend-mode:overlay;pointer-events:none;z-index:60}
 #foot{position:absolute;left:0;width:1080px;bottom:150px;text-align:center;font-family:JBM;font-weight:700;font-size:24px;letter-spacing:1px;color:#F2ECE0;opacity:.8;z-index:61}
 .h{font-family:Rub;font-weight:900;text-transform:uppercase;line-height:.95;letter-spacing:-.01em;text-shadow:0 6px 30px rgba(0,0,0,.45)}
 .letter .h,.card2 .h,.paper .h,.webcard2 .h{text-shadow:none}
-.hl{background:linear-gradient(transparent 12%,#C9A84C 12%,#C9A84C 92%,transparent 92%);color:#111;padding:0 .08em;box-decoration-break:clone;-webkit-box-decoration-break:clone;text-shadow:none}
-.hl2{background:linear-gradient(transparent 55%,#C9A84C 55%);padding:0 .05em}
+.hl{background:linear-gradient(transparent 12%,#FFD34D 12%,#FFD34D 92%,transparent 92%);color:#111;padding:0 .08em;box-decoration-break:clone;-webkit-box-decoration-break:clone;text-shadow:none}
+.hl2{background:linear-gradient(transparent 55%,#FFD34D 55%);padding:0 .05em}
 .hand{font-family:Hand;font-weight:700;line-height:1.05;color:#111}
 .letter{background:#fff;padding:40px 48px 44px;border-radius:6px;box-shadow:0 30px 60px rgba(0,0,0,.45);background-image:repeating-linear-gradient(180deg,transparent 0 63px,rgba(59,84,112,.18) 63px 65px)}
 .sub{font-family:Rub;font-weight:500;font-size:48px;line-height:1.15;color:#F2ECE0;text-shadow:0 3px 14px rgba(0,0,0,.6)}
@@ -29,25 +29,25 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#0E0D0B}
 .src{font-family:JBM;font-weight:500;font-size:20px;letter-spacing:1px;color:rgba(242,236,224,.78);text-transform:uppercase}
 .aiwarn{font-family:JBM;font-weight:500;font-size:19px;color:rgba(242,236,224,.6)}
 .label{font-family:JBM;font-weight:700;font-size:26px;letter-spacing:2px;padding:10px 16px;border-radius:6px;background:#F2ECE0;color:#111}
-.label.gold{background:#C9A84C;color:#111}.label.slate{background:#3B5470;color:#fff}
+.label.gold{background:#FFD34D;color:#111}.label.slate{background:#3B5470;color:#fff}
 .chip{font-family:Rub;font-weight:800;font-size:36px;padding:16px 24px;border-radius:40px;background:#fff;color:#111;box-shadow:0 12px 30px rgba(0,0,0,.35);text-transform:uppercase}
-.chip.gold{background:#C9A84C}.chip.slatebg{background:#3B5470;color:#fff}
+.chip.gold{background:#FFD34D}.chip.slatebg{background:#3B5470;color:#fff}
 .torn{display:flex;align-items:center;justify-content:center;font-family:Rub;font-weight:900;text-transform:uppercase;text-align:center;line-height:1;padding:0 30px;letter-spacing:0}
 .paper{background:#fff;padding:28px 34px;border-radius:4px;box-shadow:0 24px 50px rgba(0,0,0,.45)}
 .strike{text-decoration:line-through;text-decoration-color:#C8352B;text-decoration-thickness:10px}
 .stamp-g,.stamp-r,.stamp-s,.stamp-o,.verdict{font-family:Rub;font-weight:900;text-transform:uppercase;border:10px solid;border-radius:14px;padding:6px 26px;line-height:1.05}
-.stamp-g{font-size:110px;color:#C9A84C;border-color:#C9A84C;background:rgba(14,13,11,.75)}
+.stamp-g{font-size:110px;color:#FFD34D;border-color:#FFD34D;background:rgba(14,13,11,.75)}
 .stamp-r{font-size:62px;color:#fff;border-color:#C8352B;background:#C8352B;box-shadow:0 18px 40px rgba(0,0,0,.4)}
 .stamp-s{font-size:72px;color:#C8352B;border-color:#C8352B;background:rgba(255,255,255,.92)}
-.stamp-o{font-size:64px;color:#111;border-color:#C9A84C;background:#C9A84C;box-shadow:0 18px 40px rgba(0,0,0,.4)}
+.stamp-o{font-size:64px;color:#111;border-color:#FFD34D;background:#FFD34D;box-shadow:0 18px 40px rgba(0,0,0,.4)}
 .verdict{font-size:190px;letter-spacing:.02em;padding:0 40px}
 .verdict.red{color:#fff;background:#C8352B;border-color:#fff;box-shadow:0 30px 70px rgba(0,0,0,.6)}
 .dimmer{left:0;top:0;width:1080px;height:1920px;background:rgba(14,13,11,.95)}
-.chartcard,.rng{background:rgba(14,13,11,.72);border:2px solid rgba(242,236,224,.25);border-radius:14px;padding:26px 28px}
+.chartcard,.rng{background:none;border:none;padding:10px 6px;text-shadow:0 3px 14px rgba(0,0,0,.85)}
 .brow,.rrow{display:flex;align-items:center;gap:18px;margin-top:16px;font-family:JBM;font-weight:700;color:#fff;font-size:28px}
 .brow span,.rrow span{width:120px}.brow em,.rrow em{white-space:nowrap;font-style:normal;font-family:Rub;font-weight:900;font-size:44px;color:#fff}
 .bfill{height:46px;border-radius:6px}
-.track{position:relative;width:560px;height:46px;background:rgba(242,236,224,.12);border-radius:6px}
+.track{position:relative;width:560px;height:46px;background:rgba(245,243,234,.18);border-radius:6px}
 .seg{position:absolute;top:0;height:46px;border-radius:6px}
 .webcard2{background:#fff;border-radius:6px;box-shadow:0 24px 50px rgba(0,0,0,.5);overflow:hidden}
 .wtop{height:16px}
@@ -56,16 +56,16 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#0E0D0B}
 .tag{display:inline-block;margin-top:16px;background:#111;color:#fff;font-family:JBM;font-weight:700;font-size:28px;padding:8px 14px;border-radius:6px;letter-spacing:2px}
 .lawquote{background:#F2ECE0;color:#111;font-family:Rub;font-weight:500;font-size:38px;line-height:1.25;padding:28px 32px;border-radius:4px;box-shadow:0 20px 40px rgba(0,0,0,.4);font-style:italic}
 .rail .line{position:absolute;left:60px;top:22px;width:960px;height:8px;background:rgba(242,236,224,.25);border-radius:4px}
-.rail .fill{position:absolute;left:60px;top:22px;height:8px;background:#C9A84C;border-radius:4px}
+.rail .fill{position:absolute;left:60px;top:22px;height:8px;background:#FFD34D;border-radius:4px}
 .st{position:absolute;width:0}
 .st i{position:absolute;left:-20px;top:6px;width:40px;height:40px;border-radius:50%;background:#0E0D0B;border:7px solid rgba(242,236,224,.5)}
-.st.past i{border-color:#C9A84C;background:#C9A84C}
-.st.on i{border-color:#C9A84C;background:#fff;box-shadow:0 0 0 10px rgba(201,168,76,.35)}
+.st.past i{border-color:#FFD34D;background:#FFD34D}
+.st.on i{border-color:#FFD34D;background:#fff;box-shadow:0 0 0 10px rgba(201,168,76,.35)}
 .st b{position:absolute;left:-90px;width:180px;top:58px;text-align:center;font-family:JBM;font-weight:700;font-size:22px;color:rgba(242,236,224,.7);letter-spacing:1px}
-.st.on b{color:#C9A84C;font-size:26px}
-.st.big i{width:56px;height:56px;left:-28px;top:-10px;border-color:#C9A84C;background:#0E0D0B}
+.st.on b{color:#FFD34D;font-size:26px}
+.st.big i{width:56px;height:56px;left:-28px;top:-10px;border-color:#FFD34D;background:#0E0D0B}
 .st.big b{font-size:28px;color:#fff;top:62px}
-.bigline{height:14px;background:#C9A84C;border-radius:7px}
+.bigline{height:14px;background:#FFD34D;border-radius:7px}
 .mst{width:0}
 .mst i{position:absolute;left:-26px;top:-8px;width:52px;height:52px;border-radius:50%;background:#0E0D0B;border:8px solid #fff}
 .mst b{position:absolute;left:-100px;width:200px;top:58px;text-align:center;font-family:Rub;font-weight:800;font-size:30px;color:#fff}
@@ -76,153 +76,162 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#0E0D0B}
 .counter{display:flex;align-items:baseline;gap:22px;font-family:Rub;font-weight:900;color:#fff}
 .counter .cnt{font-size:170px;color:#C8352B;line-height:.9}
 .counter b{font-size:50px;line-height:1;white-space:nowrap}
-.scard{width:450px;height:300px;background:rgba(14,13,11,.78);border:2px solid rgba(242,236,224,.22);border-radius:14px;padding:24px 26px}
+.scard{width:450px;height:300px;background:none;border-left:4px solid rgba(245,243,234,.5);padding:14px 22px;text-shadow:0 3px 14px rgba(0,0,0,.9)}
 .col{position:absolute;border-radius:8px 8px 0 0}
 .colv{text-align:center;font-family:Rub;font-weight:900;font-size:84px;color:#fff}
 .colx{text-align:center;font-family:JBM;font-weight:700;font-size:32px;color:#F2ECE0}
-.repost{background:#C9A84C;color:#111;font-family:Rub;font-weight:900;font-size:84px;text-align:center;padding:26px 20px 30px;border-radius:24px;box-shadow:0 26px 60px rgba(0,0,0,.5);line-height:1}
+.repost{background:#FFD34D;color:#111;font-family:Rub;font-weight:900;font-size:84px;text-align:center;padding:26px 20px 30px;border-radius:24px;box-shadow:0 26px 60px rgba(0,0,0,.5);line-height:1}
 .repost small{display:block;font-family:Rub;font-weight:500;font-size:36px;margin-top:12px;text-transform:none}
 .kar{font-family:Rub;font-weight:800;font-style:normal;font-size:50px;line-height:1.15;--kar-lit:#fff;--kar-dim:rgba(255,255,255,.45);text-shadow:0 3px 12px rgba(0,0,0,.8)}
-.kar span.kar-now{color:#C9A84C}
+.kar span.kar-now{color:#FFD34D}
 </style></head><body><div id="stage">
-<section class="scene" data-s="0.0" data-e="9.233" data-in="cut" data-theme="dark"><img class="bgimg" src="assets/qa/w_run.jpg" data-kb="1.1" data-kbo="50% 40%"><div class="shadeg" style="opacity:0.6"></div>
+<section class="scene" data-s="0.0" data-e="8.172" data-in="cut" data-theme="dark"><img class="bgimg" src="assets/qa/w_gate.jpg" data-kb="1.1" data-kbo="50% 60%"><div class="shadeg" style="opacity:0.87"></div>
 <div class="el aiwarn" data-a="fade" data-t=".3" style="left:80px;top:1700px">imagens ilustrativas geradas por IA</div>
 <div class="el letter" data-a="drop" data-t=".05" data-d=".6" data-r="-3" style="left:90px;top:260px;width:900px">
   <div class="hand" style="font-size:96px">Querida amiga,</div>
   <div class="hand" style="font-size:52px;color:#444;margin-top:6px">te mandaram isso no grupo:</div>
 </div>
-<div class="el h" data-a="slam" data-t="2.43" data-d=".4" data-shake="1" style="left:80px;top:640px;width:930px;font-size:118px;color:#fff">"VETOU A <span class="hl">SAIDINHA</span> PRA ESTUPRADOR"</div>
-<div class="el torn" data-a="left" data-t="5.6" style="left:70px;top:1060px;width:820px;height:120px;font-size:64px;background:#C8352B;color:#fff">"E NINGUÉM ENDURECEU A PENA"</div>
-<div class="el chip" data-a="pop" data-t="7.17" style="left:80px;top:1230px">SERÁ? SENTA AQUI ↓</div>
-<div class="kar el" data-words="Querida:0.22 amiga,:0.745 te:1.3 mandaram:1.442 que:1.876 / o:1.957 presidente:1.997 vetou:2.532 a:3.017 saidinha:3.087 / pra:3.602 estuprador,:3.743 e:4.622 que:4.773 ninguém:4.874 / endureceu:5.187 a:5.651 pena:5.712 de:5.984 feminicídio.:6.096 / Senta:7.166 aqui:7.489 que:7.721 eu:7.822 te:7.923 / mostro.:8.075" style="left:80px;top:1395px;width:920px"></div></section>
-<section class="scene" data-s="9.233" data-e="18.7" data-in="cut" data-theme="dark"><img class="bgimg" src="assets/qa/w_bar.jpg" data-kb="1.1" data-kbo="50% 40%"><div class="shadeg" style="opacity:0.62"></div>
-<img class="el fullimg" src="assets/qa/w_park.jpg" data-a="fade" data-t="6.81" data-d=".5" data-kb="1.08">
-<div class="el shadeg2" data-a="fade" data-t="6.81" data-d=".5"></div>
-<div class="el letter" data-a="up" data-t=".1" data-r="2" style="left:90px;top:230px;width:900px"><div class="hand" style="font-size:72px">Eu sei que você tá preocupada.</div><div class="hand" style="font-size:72px;color:#C8352B" >Eu também.</div></div>
-<div class="el h cnt" data-t="4.44" data-d="1.6" data-from="0" data-to="1571" data-dec="0" style="left:80px;top:720px;font-size:250px;color:#fff;width:950px"></div>
-<div class="el sub" data-a="up" data-t="5.94" style="left:86px;top:990px;width:900px">mulheres vítimas de feminicídio no Brasil em 2025</div>
-<div class="el src" data-a="fade" data-t="6.24" style="left:86px;top:1110px">FBSP · ANUÁRIO BRASILEIRO DE SEGURANÇA PÚBLICA 2026</div>
-<div class="el h" data-a="slam" data-t="8.09" data-d=".35" style="left:80px;top:1190px;font-size:84px;color:#C9A84C">SEM CAIR EM MENTIRA.</div>
+<div class="el h" data-a="slam" data-t="2.79" data-d=".4" data-shake="1" style="left:80px;top:640px;width:930px;font-size:118px;color:#fff">"VETOU A <span class="hl">SAIDINHA</span> PRA ESTUPRADOR"</div>
+<div class="el torn" data-a="left" data-t="5.68" style="left:70px;top:1060px;width:820px;height:120px;font-size:64px;background:#C8352B;color:#fff">"E NINGUÉM ENDURECEU A PENA"</div>
+<div class="el chip" data-a="pop" data-t="6.92" style="left:80px;top:1230px">VAMOS AOS FATOS ↓</div>
+<div class="kar el" data-words="Querida:0.15 amiga:0.731 te:1.24 mandaram:1.41 que:1.922 / o:2.149 presidente:2.263 vetou:2.888 a:3.228 saidinha:3.342 / pra:3.853 estuprador:4.081 e:4.706 não:4.819 endureceu:5.047 / a:5.615 pena:5.728 do:6.012 feminicídio.:6.183 Vamos:6.922 / aos:7.257 fatos.:7.48" style="left:80px;top:1395px;width:920px"></div></section>
+<section class="scene" data-s="8.172" data-e="15.479" data-in="cut" data-theme="dark"><img class="bgimg" src="assets/qa/w_bar2.jpg" data-kb="1.1" data-kbo="50% 40%"><div class="shadeg" style="opacity:0.87"></div>
+<img class="el fullimg" src="assets/qa/w_park.jpg" data-a="fade" data-t="5.49" data-d=".5" data-kb="1.08">
+<div class="el shadeg2" data-a="fade" data-t="5.49" data-d=".5"></div>
+<div class="el letter" data-a="up" data-t=".1" data-r="2" style="left:90px;top:230px;width:900px"><div class="hand" style="font-size:80px">Eu também tô preocupada.</div></div>
+<div class="el h cnt" data-t="1.4" data-d="1.4" data-from="0" data-to="1571" data-dec="0" style="left:80px;top:720px;font-size:250px;color:#fff;width:950px"></div>
+<div class="el sub" data-a="up" data-t="2.97" style="left:86px;top:990px;width:900px">mulheres vítimas de feminicídio no Brasil em 2025</div>
+<div class="el src" data-a="fade" data-t="3.27" style="left:86px;top:1110px">FBSP · ANUÁRIO BRASILEIRO DE SEGURANÇA PÚBLICA 2026</div>
+<div class="el h" data-a="slam" data-t="6.37" data-d=".35" style="left:80px;top:1190px;font-size:84px;color:#FFD34D">SEM CAIR EM MENTIRA.</div>
 <div class="el aiwarn" data-a="fade" data-t=".3" style="left:80px;top:1700px">imagens ilustrativas geradas por IA</div>
-<div class="kar el" data-words="Eu:0.22 sei:0.422 que:0.614 você:0.715 tá:0.917 / preocupada.:1.008 Eu:1.886 também.:2.068 Em:2.723 dois:2.936 / mil:3.249 e:3.521 vinte:3.663 e:3.956 cinco:4.016 / foram:4.359 mil:4.642 quinhentas:4.874 e:5.389 setenta:5.45 / e:5.924 uma:6.045 mulheres.:6.237 Por:7.015 isso:7.206 / a:7.377 gente:7.429 não:7.65 pode:7.771 cair:7.994 / em:8.266 mentira.:8.337" style="left:80px;top:1395px;width:920px"></div></section>
-<section class="scene" data-s="18.7" data-e="21.562" data-in="cut" data-theme="dark"><img class="bgimg" src="assets/qa/w_bus.jpg" data-kb="1.15" data-kbo="50% 40%"><div class="tintc" style="background:#0E0D0B"></div><div class="shadeg" style="opacity:0.75"></div>
-<div class="el h" data-a="slam" data-t=".1" style="left:80px;top:520px;font-size:150px;color:#fff;width:950px">AS LEIS,<br><span style="color:#C9A84C">NA ORDEM.</span></div>
-<div class="el bigline bar" data-t=".2" data-d="1.3" data-to="860" style="left:110px;top:918px"></div>
-<div class="el st big" data-a="pop" data-t="0.30" style="left:110px;top:900px"><i></i><b>2015</b></div><div class="el st big" data-a="pop" data-t="0.52" style="left:282px;top:900px"><i></i><b>2019</b></div><div class="el st big" data-a="pop" data-t="0.74" style="left:454px;top:900px"><i></i><b>ABR/24</b></div><div class="el st big" data-a="pop" data-t="0.96" style="left:626px;top:900px"><i></i><b>OUT/24</b></div><div class="el st big" data-a="pop" data-t="1.18" style="left:798px;top:900px"><i></i><b>2026</b></div><div class="el st big" data-a="pop" data-t="1.40" style="left:970px;top:900px"><i></i><b>PARADO</b></div>
-<div class="kar el" data-words="Vamos:0.22 pela:0.563 ordem,:0.796 que:1.088 lei:1.219 / é:1.381 confusa:1.442 mesmo.:1.845" style="left:80px;top:1395px;width:920px"></div></section>
-<section class="scene" data-s="21.562" data-e="34.52" data-in="cut" data-theme="dark"><img class="bgimg" src="assets/qa/w_box.jpg" data-kb="1.1" data-kbo="50% 40%"><div class="shadeg" style="opacity:0.7"></div><div class="rail el" data-a="left" data-t="0.15" data-d=".35" style="left:0;top:150px"><div class="line"></div><div class="fill" style="width:50px"></div><div class="st on" style="left:110px"><i></i><b>2015</b></div><div class="st" style="left:282px"><i></i><b>2019</b></div><div class="st" style="left:454px"><i></i><b>ABR/24</b></div><div class="st" style="left:626px"><i></i><b>OUT/24</b></div><div class="st" style="left:798px"><i></i><b>2026</b></div><div class="st" style="left:970px"><i></i><b>PARADO</b></div></div>
+<div class="kar el" data-words="Eu:0.15 também:0.324 tô:0.73 preocupada:0.904 mil:1.601 / quinhentas:1.816 e:2.407 setenta:2.515 e:2.945 uma:3.053 / mulheres:3.268 mortas:3.752 em:4.129 dois:4.29 mil:4.559 / e:4.774 vinte:4.882 e:5.204 cinco.:5.312 Por:5.688 / isso,:5.926 nada:6.282 de:6.495 mentira.:6.623" style="left:80px;top:1395px;width:920px"></div></section>
+<section class="scene" data-s="15.479" data-e="16.411" data-in="cut" data-theme="dark"><img class="bgimg" src="assets/qa/w_bus2.jpg" data-kb="1.15" data-kbo="50% 40%"><div class="tintc" style="background:#0E0D0B"></div><div class="shadeg" style="opacity:1.0"></div>
+<div class="el h" data-a="slam" data-t="0" data-d=".3" style="left:80px;top:520px;font-size:150px;color:#fff;width:950px">AS LEIS,<br><span style="color:#FFD34D">NA ORDEM.</span></div>
+<div class="el bigline bar" data-t=".05" data-d=".6" data-to="860" style="left:110px;top:918px"></div>
+<div class="el st big" data-a="pop" data-t="0.05" style="left:110px;top:900px"><i></i><b>2015</b></div><div class="el st big" data-a="pop" data-t="0.15" style="left:282px;top:900px"><i></i><b>2019</b></div><div class="el st big" data-a="pop" data-t="0.25" style="left:454px;top:900px"><i></i><b>ABR/24</b></div><div class="el st big" data-a="pop" data-t="0.35" style="left:626px;top:900px"><i></i><b>OUT/24</b></div><div class="el st big" data-a="pop" data-t="0.45" style="left:798px;top:900px"><i></i><b>2026</b></div><div class="el st big" data-a="pop" data-t="0.55" style="left:970px;top:900px"><i></i><b>PARADO</b></div>
+<div class="kar el" data-words="Na:0.15 ordem.:0.295" style="left:80px;top:1395px;width:920px"></div></section>
+<section class="scene" data-s="16.411" data-e="35.312" data-in="cut" data-theme="dark"><img class="bgimg" src="assets/qa/w_box.jpg" data-kb="1.1" data-kbo="50% 40%"><div class="shadeg" style="opacity:0.97"></div><div class="rail el" data-a="left" data-t="0.15" data-d=".35" style="left:0;top:150px"><div class="line"></div><div class="fill" style="width:50px"></div><div class="st on" style="left:110px"><i></i><b>2015</b></div><div class="st" style="left:282px"><i></i><b>2019</b></div><div class="st" style="left:454px"><i></i><b>ABR/24</b></div><div class="st" style="left:626px"><i></i><b>OUT/24</b></div><div class="st" style="left:798px"><i></i><b>2026</b></div><div class="st" style="left:970px"><i></i><b>PARADO</b></div></div>
 <div class="el label" data-a="left" data-t=".2" style="left:80px;top:330px">09/03/2015 · LEI 13.104 · GOVERNO DILMA</div>
-<div class="el h" data-a="slam" data-t="1.62" style="left:80px;top:400px;width:940px;font-size:120px;color:#fff">O FEMINICÍDIO<br><span class="hl">GANHA NOME</span></div>
-<div class="el sub" data-a="up" data-t="2.69" style="left:86px;top:670px">crime hediondo · pena de 12 a 30 anos</div>
-<div class="el paper" data-a="pop" data-t="3.24" data-o="7.86" data-r="-2" style="left:110px;top:800px;width:840px">
+<div class="el h" data-a="slam" data-t="1.13" style="left:80px;top:400px;width:940px;font-size:120px;color:#fff">O FEMINICÍDIO<br><span class="hl">GANHA NOME</span></div>
+<div class="el sub" data-a="up" data-t="2.44" style="left:86px;top:670px">crime hediondo · pena de 12 a 30 anos</div>
+<div class="el paper" data-a="pop" data-t="3.23" data-o="9.79" data-r="-2" style="left:110px;top:800px;width:840px">
   <div class="mono" style="font-size:26px;color:#666">BOLETIM DE OCORRÊNCIA · ANTES</div>
-  <div class="h" style="font-size:78px;color:#111;margin-top:10px"><s class="strike">MAIS UM HOMICÍDIO</s></div></div>
-<div class="el stamp-g" data-a="stamp" data-t="6.67" data-d=".35" data-r="-6" data-o="7.86" style="left:200px;top:850px">FEMINICÍDIO</div>
-<div class="el chartcard" data-a="up" data-t="8.01" style="left:80px;top:800px;width:920px">
-  <div class="mono" style="font-size:24px;color:#ddd">FEMINICÍDIOS ENTRE OS HOMICÍDIOS DE MULHERES</div>
-  <div class="brow"><span>2015</span><div class="bar bfill" data-t="8.21" data-d=".9" data-to="149" style="background:#9aa7b8"></div><em>9,4%</em></div>
-  <div class="brow"><span>2024</span><div class="bar bfill" data-t="8.51" data-d=".9" data-to="640" style="background:#C9A84C"></div><em>40,3%</em></div>
+  <div class="h" style="font-size:78px;color:#111;margin-top:10px"><s class="strike">HOMICÍDIO COMUM</s></div></div>
+<div class="el stamp-g" data-a="stamp" data-t="6.95" data-d=".35" data-r="-6" data-o="9.79" style="left:200px;top:850px">FEMINICÍDIO</div>
+<div class="el chartcard" data-a="up" data-t="9.84" data-o="11.76" style="left:80px;top:800px;width:920px">
+  <div class="mono" style="font-size:24px;color:#ddd">ASSASSINATOS DE MULHERES REGISTRADOS COMO FEMINICÍDIO</div>
+  <div class="brow"><span>2015</span><div class="bar bfill" data-t="9.94" data-d=".6" data-to="149" style="background:#9aa7b8"></div><em>9 em 100</em></div>
+  <div class="brow"><span>2024</span><div class="bar bfill" data-t="10.14" data-d=".7" data-to="640" style="background:#FFD34D"></div><em>40 em 100</em></div>
+  <div class="mono" style="font-size:18px;color:#bbb;margin-top:12px">FBSP · NOTA TÉCNICA "RETRATO DOS FEMINICÍDIOS" · MAR/2026</div>
 </div>
-<div class="el src" data-a="fade" data-t="8.71" style="left:86px;top:1080px">FBSP · NOTA TÉCNICA "RETRATO DOS FEMINICÍDIOS" · MAR/2026</div>
-<div class="el torn" data-a="left" data-t="9.59" style="left:60px;top:1150px;width:900px;height:110px;font-size:54px;background:#C8352B;color:#fff">...MAS A VIOLÊNCIA TAMBÉM CRESCEU</div>
-<div class="kar el" data-words="Em:0.22 dois:0.543 mil:0.836 e:1.037 quinze,:1.118 / o:1.714 feminicídio:1.825 ganhou:2.37 nome.:2.693 Antes,:3.238 / mulher:3.753 morta:4.107 pelo:4.4 marido:4.591 virava:4.996 / mais:5.41 um:5.702 homicídio.:5.803 Agora:6.671 tem:7.075 / o:7.226 nome:7.287 certo,:7.499 e:7.983 o:8.135 / registro:8.205 sobe.:8.69 Mas:9.407 os:9.659 especialistas:9.79 / dizem:10.517 a:11.053 violência:11.154 também:11.618 cresceu.:11.87" style="left:80px;top:1395px;width:920px"></div></section>
-<section class="scene" data-s="34.52" data-e="47.024" data-in="cut" data-theme="dark"><img class="bgimg" src="assets/qa/w_exec.jpg" data-kb="1.12" data-kbo="50% 40%"><div class="tintc" style="background:#3B5470"></div><div class="shadeg" style="opacity:0.72"></div><div class="rail el" data-a="left" data-t="0.15" data-d=".35" style="left:0;top:150px"><div class="line"></div><div class="fill" style="width:222px"></div><div class="st past" style="left:110px"><i></i><b>2015</b></div><div class="st on" style="left:282px"><i></i><b>2019</b></div><div class="st" style="left:454px"><i></i><b>ABR/24</b></div><div class="st" style="left:626px"><i></i><b>OUT/24</b></div><div class="st" style="left:798px"><i></i><b>2026</b></div><div class="st" style="left:970px"><i></i><b>PARADO</b></div></div>
+<div class="el torn" data-a="left" data-t="10.04" data-o="11.76" style="left:60px;top:1110px;width:900px;height:110px;font-size:44px;background:#FFD34D;color:#111">PARTE É REGISTRO. PARTE É VIOLÊNCIA REAL.</div>
+<div class="el chartcard" data-a="up" data-t="11.91" style="left:80px;top:790px;width:920px">
+  <div class="mono" style="font-size:24px;color:#ddd">TOTAL DE MULHERES ASSASSINADAS</div>
+  <div style="display:flex;align-items:baseline;gap:24px;margin-top:10px;font-family:Rub;font-weight:900;color:#fff">
+    <span style="font-size:70px;color:#9aa7b8">3.903</span><span style="font-size:50px">→</span><span class="cnt" data-t="13.62" data-d=".9" data-from="3903" data-to="3642" data-dec="0" style="font-size:110px;color:#FFD34D"></span></div>
+  <div class="mono" style="font-size:26px;color:#fff;margin-top:6px">2023 → 2024 · <b style="color:#FFD34D">−6,7%</b></div>
+  <div class="mono" style="font-size:18px;color:#bbb;margin-top:12px">IPEA/FBSP · ATLAS DA VIOLÊNCIA 2026 (MINISTÉRIO DA SAÚDE)</div>
+</div>
+<div class="el torn" data-a="left" data-t="17.53" style="left:50px;top:1150px;width:960px;height:110px;font-size:54px;background:#C8352B;color:#fff">DENTRO DE CASA, NÃO CAIU</div>
+<div class="kar el" data-words="Dois:0.15 mil:0.428 e:0.651 quinze:0.762 o:1.207 / feminicídio:1.33 ganha:2.066 nome:2.435 na:2.741 lei.:2.926 / Naquele:3.233 ano,:3.733 só:4.046 nove:4.22 em:4.511 / cada:4.685 cem:4.976 assassinatos:5.208 de:5.964 mulheres:6.138 / eram:6.661 registrados:6.951 assim.:7.649 Em:8.056 dois:8.264 / mil:8.612 e:8.89 vinte:9.029 e:9.446 quatro,:9.585 / quarenta.:10.141 Parte:10.141 da:10.468 alta:10.632 é:10.904 / o:11.014 nome:11.123 certo.:11.395 E:11.777 o:11.894 / total:12.011 de:12.362 mulheres:12.537 assassinadas:13.063 caiu:13.823 / seis:14.115 vírgula:14.407 sete:14.874 por:15.166 cento:15.4 / em:15.751 dois:15.926 mil:16.218 e:16.452 vinte:16.569 / e:16.919 quatro.:17.036 Mas:17.504 dentro:17.631 de:17.855 / casa,:17.95 não:18.142 caiu.:18.326" style="left:80px;top:1395px;width:920px"></div></section>
+<section class="scene" data-s="35.312" data-e="44.012" data-in="cut" data-theme="dark"><img class="bgimg" src="assets/qa/w_uber.jpg" data-kb="1.12" data-kbo="50% 40%"><div class="tintc" style="background:#3B5470"></div><div class="shadeg" style="opacity:0.95"></div><div class="rail el" data-a="left" data-t="0.15" data-d=".35" style="left:0;top:150px"><div class="line"></div><div class="fill" style="width:222px"></div><div class="st past" style="left:110px"><i></i><b>2015</b></div><div class="st on" style="left:282px"><i></i><b>2019</b></div><div class="st" style="left:454px"><i></i><b>ABR/24</b></div><div class="st" style="left:626px"><i></i><b>OUT/24</b></div><div class="st" style="left:798px"><i></i><b>2026</b></div><div class="st" style="left:970px"><i></i><b>PARADO</b></div></div>
 <div class="el label slate" data-a="left" data-t=".2" style="left:80px;top:330px">24/12/2019 · LEI 13.964 · PACOTE ANTICRIME</div>
 <div class="el webcard2" data-a="drop" data-t=".35" data-d=".55" data-r="1.5" style="left:90px;top:410px;width:900px">
   <div class="wtop" style="background:#3B5470"></div>
   <div style="display:flex;gap:26px;align-items:center;padding:26px 30px">
     <div class="ini" style="background:#3B5470">JB</div>
     <div><div class="mono" style="font-size:24px;color:#666">DIÁRIO OFICIAL · SANCIONADO POR</div><div class="h" style="font-size:66px;color:#111">JAIR BOLSONARO</div></div></div></div>
-<div class="el sub" data-a="up" data-t="3.09" style="left:86px;top:720px;width:920px;font-size:52px">saidinha proibida só pra crime hediondo</div>
-<div class="el h" data-a="slam" data-t="5.49" data-shake="1" style="left:80px;top:870px;font-size:150px;color:#fff">COM <span class="hl">MORTE</span></div>
-<div class="el stamp-r" data-a="stamp" data-t="7.87" data-d=".35" data-r="-5" style="left:110px;top:1060px">ESTUPRADOR AINDA PODIA SAIR</div>
-<div class="el chip slatebg" data-a="pop" data-t="11.02" style="left:86px;top:1250px">PENA DO FEMINICÍDIO: 12 A 30 · FICOU IGUAL</div>
+<div class="el sub" data-a="up" data-t="2.57" style="left:86px;top:720px;width:920px;font-size:52px">saidinha proibida só pra crime hediondo</div>
+<div class="el h" data-a="slam" data-t="4.75" data-shake="1" style="left:80px;top:870px;font-size:150px;color:#fff">COM <span class="hl">MORTE</span></div>
+<div class="el stamp-r" data-a="stamp" data-t="5.38" data-d=".35" data-r="-5" style="left:110px;top:1060px">ESTUPRADOR AINDA PODIA SAIR</div>
+<div class="el chip slatebg" data-a="pop" data-t="7.61" style="left:86px;top:1250px">PENA DO FEMINICÍDIO: 12 A 30 · FICOU IGUAL</div>
 <div class="el src" data-a="fade" data-t=".8" style="left:86px;top:1345px">LEI 13.964/2019, ART. 122 §2º LEP · AGÊNCIA SENADO 26/12/2019</div>
-<div class="kar el" data-words="Em:0.22 dois:0.563 mil:0.906 e:1.139 dezenove,:1.199 / no:1.906 governo:2.017 anterior,:2.32 a:3.067 saidinha:3.188 / só:3.623 foi:3.794 proibida:4.006 pra:4.551 crime:4.703 / hediondo:4.985 com:5.54 morte.:5.722 Na:6.54 regra:6.691 / dele,:6.974 condenado:7.287 por:7.731 estupro:7.872 ainda:8.387 / podia:8.69 sair.:8.973 E:9.619 a:9.821 pena:9.891 / do:10.154 feminicídio?:10.245 Ficou:11.224 igual.:11.537" style="left:80px;top:1395px;width:920px"></div></section>
-<section class="scene" data-s="47.024" data-e="53.802" data-in="cut" data-theme="dark"><img class="bgimg" src="assets/qa/w_exec.jpg" data-kb="1.14" data-kbo="30% 60%"><div class="tintc" style="background:#3B5470"></div><div class="shadeg" style="opacity:0.8"></div><div class="rail el" data-a="left" data-t="0" data-d=".35" style="left:0;top:150px"><div class="line"></div><div class="fill" style="width:222px"></div><div class="st past" style="left:110px"><i></i><b>2015</b></div><div class="st on" style="left:282px"><i></i><b>2019</b></div><div class="st" style="left:454px"><i></i><b>ABR/24</b></div><div class="st" style="left:626px"><i></i><b>OUT/24</b></div><div class="st" style="left:798px"><i></i><b>2026</b></div><div class="st" style="left:970px"><i></i><b>PARADO</b></div></div>
+<div class="kar el" data-words="Dois:0.15 mil:0.474 e:0.733 dezenove,:0.862 governo:1.509 / anterior:2.026 saidinha:2.672 proibida:3.151 só:3.629 pra:3.789 / crime:4.002 hediondo:4.321 com:4.8 morte.:5.012 Estuprador:5.385 / ainda:5.891 podia:6.167 sair.:6.444 E:6.72 a:6.811 / pena:6.901 do:7.128 feminicídio:7.265 ficou:7.809 igual.:8.082" style="left:80px;top:1395px;width:920px"></div></section>
+<section class="scene" data-s="44.012" data-e="48.721" data-in="cut" data-theme="dark"><img class="bgimg" src="assets/qa/w_uber.jpg" data-kb="1.16" data-kbo="30% 70%"><div class="tintc" style="background:#3B5470"></div><div class="shadeg" style="opacity:1.0"></div><div class="rail el" data-a="left" data-t="0" data-d=".35" style="left:0;top:150px"><div class="line"></div><div class="fill" style="width:222px"></div><div class="st past" style="left:110px"><i></i><b>2015</b></div><div class="st on" style="left:282px"><i></i><b>2019</b></div><div class="st" style="left:454px"><i></i><b>ABR/24</b></div><div class="st" style="left:626px"><i></i><b>OUT/24</b></div><div class="st" style="left:798px"><i></i><b>2026</b></div><div class="st" style="left:970px"><i></i><b>PARADO</b></div></div>
 <div class="el label slate" data-a="left" data-t=".1" style="left:80px;top:330px">2019 · VETOS DO MESMO GOVERNO</div>
-<div class="el paper" data-a="drop" data-t="1.26" data-d=".5" data-r="-3" style="left:90px;top:440px;width:860px"><div class="mono" style="font-size:24px;color:#666">PL 2538/2019</div><div class="h" style="font-size:54px;color:#111">SAÚDE AVISAR A POLÍCIA DE VIOLÊNCIA CONTRA A MULHER</div></div>
-<div class="el paper" data-a="drop" data-t="2.41" data-d=".5" data-r="2.5" style="left:130px;top:760px;width:860px"><div class="mono" style="font-size:24px;color:#666">LEI 13.894/2019 (TRECHOS)</div><div class="h" style="font-size:54px;color:#111">DIVÓRCIO DA VÍTIMA NO JUIZADO DE VIOLÊNCIA DOMÉSTICA</div></div>
-<div class="el stamp-s" data-a="stamp" data-t="2.79" data-d=".3" data-r="-8" style="left:600px;top:600px">VETADO</div>
-<div class="el stamp-s" data-a="stamp" data-t="3.6" data-d=".3" data-r="6" style="left:640px;top:930px">VETADO</div>
-<div class="el stamp-o" data-a="stamp" data-t="4.84" data-d=".35" data-r="-4" data-shake="1" style="left:120px;top:1120px">CONGRESSO DERRUBOU OS DOIS</div>
-<div class="el src" data-a="fade" data-t=".5" style="left:86px;top:1310px">AGÊNCIA CÂMARA · 27/11/2019</div>
-<div class="kar el" data-words="No:0.22 mesmo:0.513 ano,:0.906 ele:1.25 vetou:1.462 / partes:1.775 de:2.27 duas:2.41 leis:2.795 de:3.027 / proteção:3.117 à:3.551 mulher.:3.602 O:4.218 Congresso:4.349 / derrubou:4.843 os:5.278 dois:5.399 vetos.:5.692" style="left:80px;top:1395px;width:920px"></div></section>
-<section class="scene" data-s="53.802" data-e="71.406" data-in="cut" data-theme="dark"><img class="bgimg" src="assets/qa/w_bar.jpg" data-kb="1.12" data-kbo="60% 40%"><div class="tintc" style="background:#5a4413"></div><div class="shadeg" style="opacity:0.78"></div><div class="rail el" data-a="left" data-t="0.15" data-d=".35" style="left:0;top:150px"><div class="line"></div><div class="fill" style="width:394px"></div><div class="st past" style="left:110px"><i></i><b>2015</b></div><div class="st past" style="left:282px"><i></i><b>2019</b></div><div class="st on" style="left:454px"><i></i><b>ABR/24</b></div><div class="st" style="left:626px"><i></i><b>OUT/24</b></div><div class="st" style="left:798px"><i></i><b>2026</b></div><div class="st" style="left:970px"><i></i><b>PARADO</b></div></div>
+<div class="el paper" data-a="drop" data-t="0.85" data-d=".5" data-r="-3" style="left:90px;top:440px;width:860px"><div class="mono" style="font-size:24px;color:#666">PL 2538/2019</div><div class="h" style="font-size:54px;color:#111">SAÚDE AVISAR A POLÍCIA DE VIOLÊNCIA CONTRA A MULHER</div></div>
+<div class="el paper" data-a="drop" data-t="1.89" data-d=".5" data-r="2.5" style="left:130px;top:760px;width:860px"><div class="mono" style="font-size:24px;color:#666">LEI 13.894/2019 (TRECHOS)</div><div class="h" style="font-size:54px;color:#111">DIVÓRCIO DA VÍTIMA NO JUIZADO DE VIOLÊNCIA DOMÉSTICA</div></div>
+<div class="el stamp-s" data-a="stamp" data-t="2.14" data-d=".3" data-r="-8" style="left:600px;top:600px">VETADO</div>
+<div class="el stamp-s" data-a="stamp" data-t="3.08" data-d=".3" data-r="6" style="left:640px;top:930px">VETADO</div>
+<div class="el stamp-o" data-a="stamp" data-t="3.98" data-d=".35" data-r="-4" data-shake="1" style="left:120px;top:1120px">CONGRESSO DERRUBOU OS DOIS</div>
+<div class="el src" data-a="fade" data-t=".5" style="left:86px;top:1345px">AGÊNCIA CÂMARA · 27/11/2019 · FBSP ANUÁRIO 2021</div>
+<div class="el chip slatebg" data-a="pop" data-t="3.86" style="left:80px;top:1260px;font-size:26px;white-space:nowrap">2020, PANDEMIA: 190 POR VIOLÊNCIA DOMÉSTICA +16% · REGISTRO NA DELEGACIA −7%</div>
+<div class="kar el" data-words="No:0.15 mesmo:0.3 ano,:0.6 ele:0.85 vetou:1.048 / trechos:1.346 de:1.742 duas:1.891 leis:2.139 de:2.386 / proteção:2.535 à:2.981 mulher.:3.08 O:3.477 Congresso:3.561 / derrubou.:3.985" style="left:80px;top:1395px;width:920px"></div></section>
+<section class="scene" data-s="48.721" data-e="62.678" data-in="cut" data-theme="dark"><img class="bgimg" src="assets/qa/w_bar2.jpg" data-kb="1.12" data-kbo="60% 40%"><div class="tintc" style="background:#5a4413"></div><div class="shadeg" style="opacity:1.0"></div><div class="rail el" data-a="left" data-t="0.15" data-d=".35" style="left:0;top:150px"><div class="line"></div><div class="fill" style="width:394px"></div><div class="st past" style="left:110px"><i></i><b>2015</b></div><div class="st past" style="left:282px"><i></i><b>2019</b></div><div class="st on" style="left:454px"><i></i><b>ABR/24</b></div><div class="st" style="left:626px"><i></i><b>OUT/24</b></div><div class="st" style="left:798px"><i></i><b>2026</b></div><div class="st" style="left:970px"><i></i><b>PARADO</b></div></div>
 <div class="el label gold" data-a="left" data-t=".2" style="left:80px;top:330px">11/04/2024 · LEI 14.843 · SAIDINHA</div>
-<div class="el card2" data-a="up" data-t="3.15" style="left:80px;top:410px;width:920px;border-left:16px solid #C9A84C">
+<div class="el card2" data-a="up" data-t="2.16" style="left:80px;top:410px;width:920px;border-left:16px solid #FFD34D">
   <div class="mono" style="font-size:26px;color:#8a6d1f">✓ SANCIONOU</div>
   <div class="h" style="font-size:60px;color:#111;line-height:1.02">SEM SAIDINHA PRA CRIME <span class="hl2">HEDIONDO</span> E <span class="hl2">VIOLENTO</span></div>
   <div class="tag" data-dummy="1">INCLUI ESTUPRO</div></div>
-<div class="el lawquote" data-a="left" data-t="6.28" data-o="8.48" style="left:100px;top:760px;width:880px">"Não terá direito à saída temporária (...) o condenado que cumpre pena por praticar crime hediondo ou com violência ou grave ameaça contra pessoa."<div class="mono" style="font-size:22px;margin-top:12px;color:#555">LEP, ART. 122, § 2º (REDAÇÃO DA LEI 14.843/2024)</div></div>
-<div class="el card2" data-a="up" data-t="8.63" style="left:80px;top:760px;width:920px;border-left:16px solid #9aa7b8">
+<div class="el lawquote" data-a="left" data-t="5.63" data-o="6.34" style="left:100px;top:760px;width:880px">"Não terá direito à saída temporária (...) o condenado que cumpre pena por praticar crime hediondo ou com violência ou grave ameaça contra pessoa."<div class="mono" style="font-size:22px;margin-top:12px;color:#555">LEP, ART. 122, § 2º (REDAÇÃO DA LEI 14.843/2024)</div></div>
+<div class="el card2" data-a="up" data-t="6.49" style="left:80px;top:760px;width:920px;border-left:16px solid #9aa7b8">
   <div class="mono" style="font-size:26px;color:#555">✗ VETOU SÓ</div>
   <div class="h" style="font-size:56px;color:#111;line-height:1.02">O FIM DA VISITA À FAMÍLIA, PRA QUEM <u>NÃO</u> COMETEU CRIME VIOLENTO</div></div>
-<div class="el chip gold" data-a="pop" data-t="12.52" style="left:80px;top:1100px;font-size:30px;white-space:nowrap">28/05/2024 · CONGRESSO DERRUBA O VETO · <span class="cnt" data-t="13.01" data-d=".8" data-from="0" data-to="314" data-dec="0"></span> × 126</div>
-<div class="el dimmer" data-a="fade" data-t="14.17" data-d=".3"></div>
-<div class="el h" data-a="slam" data-t="14.27" style="left:80px;top:560px;width:930px;font-size:112px;color:#fff">VETOU A SAIDINHA PRA ESTUPRADOR?</div>
-<div class="el verdict red" data-a="stamp" data-t="16.59" data-d=".35" data-r="-8" data-shake="1.4" style="left:250px;top:930px">FALSO</div>
+<div class="el chip gold" data-a="pop" data-t="11.3" style="left:80px;top:1100px;font-size:30px;white-space:nowrap">28/05/2024 · CONGRESSO DERRUBA O VETO · <span class="cnt" data-t="11.65" data-d=".8" data-from="0" data-to="314" data-dec="0"></span> × 126</div>
+<div class="el dimmer" data-a="fade" data-t="11.91" data-d=".3"></div>
+<div class="el h" data-a="slam" data-t="12.01" style="left:80px;top:560px;width:930px;font-size:112px;color:#fff">VETOU A SAIDINHA PRA ESTUPRADOR?</div>
+<div class="el verdict red" data-a="stamp" data-t="13.32" data-d=".35" data-r="-8" data-shake="1.4" style="left:250px;top:930px">FALSO</div>
 <div class="el src" data-a="fade" data-t=".8" style="left:86px;top:1310px">PLANALTO · LEI 14.843/2024 · AGÊNCIA CÂMARA · CONGRESSO EM FOCO</div>
-<div class="kar el" data-words="Abril:0.22 de:0.724 dois:0.846 mil:1.19 e:1.472 / vinte:1.583 e:1.825 quatro.:1.876 O:2.563 presidente:2.693 / sancionou:3.249 crime:4.107 hediondo:4.53 e:5.207 violento,:5.298 / incluindo:6.076 estupro,:6.601 sem:7.226 saidinha.:7.479 O:8.377 / que:8.518 ele:8.599 vetou:8.73 foi:9.043 só:9.205 / a:9.367 visita:9.427 à:9.801 família:9.871 de:10.296 / quem:10.417 não:10.638 cometeu:10.83 crime:11.194 violento.:11.437 / E:12.295 o:12.456 Congresso:12.517 derrubou:13.011 esse:13.496 / veto.:13.688 Então,:14.273 vetou:14.757 a:15.212 saidinha:15.272 / pra:15.727 estuprador?:15.838 Não.:16.636" style="left:80px;top:1395px;width:920px"></div></section>
-<section class="scene" data-s="71.406" data-e="81.495" data-in="cut" data-theme="dark"><img class="bgimg" src="assets/qa/w_pool.jpg" data-kb="1.1" data-kbo="50% 40%"><div class="shadeg" style="opacity:0.66"></div><div class="rail el" data-a="left" data-t="0.15" data-d=".35" style="left:0;top:150px"><div class="line"></div><div class="fill" style="width:566px"></div><div class="st past" style="left:110px"><i></i><b>2015</b></div><div class="st past" style="left:282px"><i></i><b>2019</b></div><div class="st past" style="left:454px"><i></i><b>ABR/24</b></div><div class="st on" style="left:626px"><i></i><b>OUT/24</b></div><div class="st" style="left:798px"><i></i><b>2026</b></div><div class="st" style="left:970px"><i></i><b>PARADO</b></div></div>
+<div class="kar el" data-words="Dois:0.15 mil:0.412 e:0.621 vinte:0.726 e:1.04 / quatro:1.144 o:1.563 presidente:1.671 sancionou:2.262 o:2.799 / fim:2.906 da:3.121 saidinha:3.283 pra:3.766 crime:3.981 / hediondo:4.303 e:4.787 violento,:4.895 incluindo:5.432 estupro.:6.041 / Vetou:6.589 só:7.023 a:7.241 visita:7.386 à:7.893 / família:8.038 de:8.617 quem:8.834 não:9.197 cometeu:9.486 / crime:10.066 violento.:10.501 O:11.225 Congresso:11.297 derrubou.:11.654 / Então,:12.012 vetou:12.012 pra:12.383 estuprador?:12.63 Não.:13.371" style="left:80px;top:1395px;width:920px"></div></section>
+<section class="scene" data-s="62.678" data-e="68.115" data-in="cut" data-theme="dark"><img class="bgimg" src="assets/qa/w_pool.jpg" data-kb="1.1" data-kbo="50% 40%"><div class="shadeg" style="opacity:0.91"></div><div class="rail el" data-a="left" data-t="0.15" data-d=".35" style="left:0;top:150px"><div class="line"></div><div class="fill" style="width:566px"></div><div class="st past" style="left:110px"><i></i><b>2015</b></div><div class="st past" style="left:282px"><i></i><b>2019</b></div><div class="st past" style="left:454px"><i></i><b>ABR/24</b></div><div class="st on" style="left:626px"><i></i><b>OUT/24</b></div><div class="st" style="left:798px"><i></i><b>2026</b></div><div class="st" style="left:970px"><i></i><b>PARADO</b></div></div>
 <div class="el label gold" data-a="left" data-t=".2" style="left:80px;top:330px">09/10/2024 · LEI 14.994 · PACOTE ANTIFEMINICÍDIO</div>
-<div class="el h" data-a="slam" data-t="1.37" data-shake="1" style="left:70px;top:430px;font-size:230px;color:#fff;line-height:.9">20 A 40<br><span style="color:#C9A84C">ANOS</span></div>
-<div class="el rng" data-a="up" data-t="5.72" style="left:80px;top:910px;width:920px">
+<div class="el h" data-a="slam" data-t="3.26" data-shake="1" style="left:70px;top:430px;font-size:230px;color:#fff;line-height:.9">20 A 40<br><span style="color:#FFD34D">ANOS</span></div>
+<div class="el rng" data-a="up" data-t="4.06" style="left:80px;top:910px;width:920px">
   <div class="rrow"><span>ANTES</span><div class="track"><div class="seg" style="left:168px;width:252px;background:#9aa7b8"></div></div><em>12–30</em></div>
-  <div class="rrow"><span>AGORA</span><div class="track"><div class="seg" style="left:280px;width:280px;background:#C9A84C"></div></div><em>20–40</em></div>
+  <div class="rrow"><span>AGORA</span><div class="track"><div class="seg" style="left:280px;width:280px;background:#FFD34D"></div></div><em>20–40</em></div>
   <div class="mono" style="font-size:22px;color:#ccc;margin-top:8px">ANOS DE PRISÃO · A MAIOR PENA DO CÓDIGO PENAL</div></div>
-<div class="el stamp-o" data-a="stamp" data-t="8.42" data-d=".35" data-r="-5" style="left:300px;top:1160px">SEM VETO</div>
+<div class="el stamp-o" data-a="stamp" data-t="4.51" data-d=".35" data-r="-5" style="left:300px;top:1160px">SEM VETO</div>
 <div class="el src" data-a="fade" data-t=".8" style="left:86px;top:1320px">LEI 14.994/2024 · PL 4266/2023 (SEN. MARGARETH BUZETTI, PSD-MT)</div>
-<div class="kar el" data-words="Outubro:0.22 de:0.785 dois:0.906 mil:1.219 e:1.401 / vinte:1.472 e:1.704 quatro:1.764 feminicídio:2.542 passou:3.188 / pra:3.481 vinte:3.683 a:4.137 quarenta:4.269 anos:4.733 / de:4.975 prisão.:5.066 A:5.793 maior:5.924 pena:6.247 / do:6.57 Código:6.681 Penal.:7.044 Sancionada:7.711 sem:8.417 / nenhum:8.63 veto.:9.013" style="left:80px;top:1395px;width:920px"></div></section>
-<section class="scene" data-s="81.495" data-e="95.215" data-in="cut" data-theme="dark"><img class="bgimg" src="assets/qa/w_park.jpg" data-kb="1.12" data-kbo="50% 70%"><div class="tintc" style="background:#0E0D0B"></div><div class="shadeg" style="opacity:0.8"></div><div class="rail el" data-a="left" data-t="0.15" data-d=".35" style="left:0;top:150px"><div class="line"></div><div class="fill" style="width:738px"></div><div class="st past" style="left:110px"><i></i><b>2015</b></div><div class="st past" style="left:282px"><i></i><b>2019</b></div><div class="st past" style="left:454px"><i></i><b>ABR/24</b></div><div class="st past" style="left:626px"><i></i><b>OUT/24</b></div><div class="st on" style="left:798px"><i></i><b>2026</b></div><div class="st" style="left:970px"><i></i><b>PARADO</b></div></div>
+<div class="kar el" data-words="Outubro:0.15 de:0.593 dois:0.759 mil:1.035 e:1.257 / vinte:1.367 e:1.699 quatro:1.81 feminicídio:2.253 passa:2.856 / pra:3.157 vinte:3.358 a:3.66 quarenta:3.76 anos.:4.213 / Sem:4.514 veto.:4.763" style="left:80px;top:1395px;width:920px"></div></section>
+<section class="scene" data-s="68.115" data-e="79.687" data-in="cut" data-theme="dark"><img class="bgimg" src="assets/qa/w_park.jpg" data-kb="1.12" data-kbo="50% 70%"><div class="tintc" style="background:#0E0D0B"></div><div class="shadeg" style="opacity:1.0"></div><div class="rail el" data-a="left" data-t="0.15" data-d=".35" style="left:0;top:150px"><div class="line"></div><div class="fill" style="width:738px"></div><div class="st past" style="left:110px"><i></i><b>2015</b></div><div class="st past" style="left:282px"><i></i><b>2019</b></div><div class="st past" style="left:454px"><i></i><b>ABR/24</b></div><div class="st past" style="left:626px"><i></i><b>OUT/24</b></div><div class="st on" style="left:798px"><i></i><b>2026</b></div><div class="st" style="left:970px"><i></i><b>PARADO</b></div></div>
 <div class="el label gold" data-a="left" data-t=".2" style="left:80px;top:330px">24/03/2026 · LEI 15.358 · LEI ANTIFACÇÃO</div>
-<div class="el h" data-a="slam" data-t="3.81" style="left:80px;top:400px;width:940px;font-size:84px;color:#fff">PROJETO DO <span class="hl">PRÓPRIO GOVERNO</span></div>
-<div class="el sub" data-a="up" data-t="5.48" style="left:86px;top:590px;width:920px;font-size:40px">feminicida réu primário: quanto da pena cumpre no fechado antes de progredir</div>
-<div class="el col" data-t="12.05" data-d=".8" data-v="50" data-k="5.5" data-base="1250" style="left:120px;width:200px;background:#3B5470"></div>
-<div class="el colv" data-a="pop" data-t="12.65" style="left:120px;top:865.0px;width:200px">50%</div>
-<div class="el colx" data-a="fade" data-t="12.05" style="left:120px;top:1264px;width:200px">2019</div><div class="el col" data-t="5.88" data-d=".8" data-v="55" data-k="5.5" data-base="1250" style="left:440px;width:200px;background:#9aa7b8"></div>
-<div class="el colv" data-a="pop" data-t="6.48" style="left:440px;top:837.5px;width:200px">55%</div>
-<div class="el colx" data-a="fade" data-t="5.88" style="left:440px;top:1264px;width:200px">2024</div><div class="el col" data-t="7.73" data-d=".8" data-v="75" data-k="5.5" data-base="1250" style="left:760px;width:200px;background:#C9A84C"></div>
-<div class="el colv" data-a="pop" data-t="8.33" style="left:760px;top:727.5px;width:200px">75%</div>
-<div class="el colx" data-a="fade" data-t="7.73" style="left:760px;top:1264px;width:200px">2026</div>
-<div class="el chip gold" data-a="pop" data-t="9.7" style="left:700px;top:1270px;font-size:26px">+ SEM LIVRAMENTO</div>
+<div class="el h" data-a="slam" data-t="2.31" style="left:80px;top:400px;width:940px;font-size:84px;color:#fff">PROJETO DO <span class="hl">PRÓPRIO GOVERNO</span></div>
+<div class="el sub" data-a="up" data-t="4.92" style="left:86px;top:590px;width:920px;font-size:40px">feminicida réu primário: quanto da pena cumpre no fechado antes de progredir</div>
+<div class="el col" data-t="10.6" data-d=".8" data-v="50" data-k="5.5" data-base="1250" style="left:120px;width:200px;background:#3B5470"></div>
+<div class="el colv" data-a="pop" data-t="11.2" style="left:120px;top:865.0px;width:200px">50%</div>
+<div class="el colx" data-a="fade" data-t="10.6" style="left:120px;top:1264px;width:200px">2019</div><div class="el col" data-t="5.32" data-d=".8" data-v="55" data-k="5.5" data-base="1250" style="left:440px;width:200px;background:#9aa7b8"></div>
+<div class="el colv" data-a="pop" data-t="5.92" style="left:440px;top:837.5px;width:200px">55%</div>
+<div class="el colx" data-a="fade" data-t="5.32" style="left:440px;top:1264px;width:200px">2024</div><div class="el col" data-t="6.92" data-d=".8" data-v="75" data-k="5.5" data-base="1250" style="left:760px;width:200px;background:#FFD34D"></div>
+<div class="el colv" data-a="pop" data-t="7.52" style="left:760px;top:727.5px;width:200px">75%</div>
+<div class="el colx" data-a="fade" data-t="6.92" style="left:760px;top:1264px;width:200px">2026</div>
+<div class="el chip gold" data-a="pop" data-t="8.81" style="left:700px;top:1270px;font-size:26px">+ SEM LIVRAMENTO</div>
 <div class="el src" data-a="fade" data-t="1" style="left:86px;top:1395px;opacity:0"></div>
 <div class="el src" data-a="fade" data-t=".8" style="left:86px;top:1340px">LEP ART. 112 · LEI 13.964/2019 · LEI 14.994/2024 · LEI 15.358/2026 (VI, d)</div>
-<div class="kar el" data-words="E:0.22 em:0.523 dois:0.654 mil:1.028 e:1.28 / vinte:1.371 e:1.613 seis:1.694 veio:2.138 a:2.441 / Lei:2.511 Antifacção,:2.795 que:3.774 saiu:3.915 do:4.208 / próprio:4.329 governo.:4.683 Feminicida:5.682 réu:6.288 primário:6.49 / agora:7.065 cumpre:7.408 setenta:7.731 e:8.196 cinco:8.257 / por:8.579 cento:8.73 da:9.013 pena:9.135 no:9.387 / fechado.:9.498 Em:10.447 dois:10.649 mil:10.962 e:11.183 / dezenove,:11.315 eram:12.052 cinquenta.:12.365" style="left:80px;top:1395px;width:920px"></div></section>
-<section class="scene" data-s="95.215" data-e="115.2" data-in="cut" data-theme="dark"><img class="bgimg" src="assets/qa/w_exec.jpg" data-kb="1.1" data-kbo="70% 30%"><div class="tintc" style="background:#0E0D0B"></div><div class="shadeg" style="opacity:0.86"></div>
+<div class="kar el" data-words="Dois:0.15 mil:0.51 e:0.799 vinte:0.943 e:1.375 / seis:1.519 Lei:1.952 Antifacção,:2.067 projeto:2.412 do:3.186 / próprio:3.477 governo.:4.251 Feminicida:5.122 réu:5.761 primário:5.993 / cumpre:6.516 setenta:6.923 e:7.388 cinco:7.504 por:7.853 / cento:8.085 no:8.434 fechado.:8.608 Em:9.131 dois:9.314 / mil:9.619 e:9.863 dezenove,:9.985 eram:10.595 cinquenta.:10.807" style="left:80px;top:1395px;width:920px"></div></section>
+<section class="scene" data-s="79.687" data-e="91.291" data-in="cut" data-theme="dark"><img class="bgimg" src="assets/qa/w_run2.jpg" data-kb="1.1" data-kbo="50% 40%"><div class="tintc" style="background:#0E0D0B"></div><div class="shadeg" style="opacity:1.0"></div>
 <div class="el label gold" data-a="left" data-t=".1" style="left:80px;top:150px">COMO UM PROJETO VIRA LEI (OU NÃO)</div>
 <div class="el h" data-a="up" data-t=".2" style="left:80px;top:220px;font-size:96px;color:#fff;width:950px">LEI VAI E VOLTA.</div>
 <div class="el bigline bar" data-t=".1" data-d="1" data-to="800" style="left:130px;top:488px"></div>
-<div class="el mst" data-a="pop" data-t="0.2" style="left:130px;top:470px"><i></i><b>CÂMARA</b></div><div class="el mst" data-a="pop" data-t="0.4" style="left:400px;top:470px"><i></i><b>SENADO</b></div><div class="el mst" data-a="pop" data-t="0.6" style="left:670px;top:470px"><i></i><b>SANÇÃO</b></div><div class="el mst" data-a="pop" data-t="0.8" style="left:930px;top:470px"><i></i><b>LEI</b></div><div class="el detour" data-a="left" data-t="0.93" data-o="3.88" data-r="-3" style="left:110px;top:560px">MUDOU O TEXTO? ⤺ VOLTA</div><div class="el detour" data-a="left" data-t="1.7" data-o="3.88" data-r="2" style="left:110px;top:640px">VETO? ⤺ CONGRESSO VOTA DE NOVO</div><div class="el detour" data-a="left" data-t="2.23" data-o="3.88" data-r="-2" style="left:110px;top:720px">INCONSTITUCIONAL? ⤺ STF DERRUBA</div><div class="el detour" data-a="left" data-t="2.99" data-o="3.88" data-r="3" style="left:110px;top:800px">SEM RELATOR? ⏸ GAVETA</div>
-<div class="el card2" data-a="up" data-t="5.7" style="left:80px;top:620px;width:920px;border-left:16px solid #C8352B">
+<div class="el mst" data-a="pop" data-t="0.2" style="left:130px;top:470px"><i></i><b>CÂMARA</b></div><div class="el mst" data-a="pop" data-t="0.4" style="left:400px;top:470px"><i></i><b>SENADO</b></div><div class="el mst" data-a="pop" data-t="0.6" style="left:670px;top:470px"><i></i><b>SANÇÃO</b></div><div class="el mst" data-a="pop" data-t="0.8" style="left:930px;top:470px"><i></i><b>LEI</b></div><div class="el detour" data-a="left" data-t="0.51" data-o="2.77" data-r="-3" style="left:110px;top:560px">MUDOU O TEXTO? ⤺ VOLTA</div><div class="el detour" data-a="left" data-t="1.11" data-o="2.77" data-r="2" style="left:110px;top:640px">VETO? ⤺ CONGRESSO VOTA DE NOVO</div><div class="el detour" data-a="left" data-t="1.57" data-o="2.77" data-r="-2" style="left:110px;top:720px">INCONSTITUCIONAL? ⤺ STF DERRUBA</div><div class="el detour" data-a="left" data-t="2.14" data-o="2.77" data-r="3" style="left:110px;top:800px">SEM RELATOR? ⏸ GAVETA</div>
+<div class="el card2" data-a="up" data-t="3.19" style="left:80px;top:620px;width:920px;border-left:16px solid #C8352B">
   <div class="mono" style="font-size:26px;color:#555">PL 1112/2023 · DEP. ALFREDO GASPAR (UNIÃO-AL)</div>
   <div class="h" style="font-size:64px;color:#111;line-height:1.02">80% DA PENA NO FECHADO PRA <span class="hl2">TODO CRIME HEDIONDO</span></div>
   <div class="tag">INCLUSIVE FEMINICÍDIO</div></div>
-<div class="el ball" data-a="pop" data-t="11.03" style="left:104px;top:462px"></div>
-<div class="el ball2" data-a="left" data-t="11.51" data-d=".6" style="left:374px;top:462px"></div>
-<div class="el gate" data-a="pop" data-t="12.29" style="left:250px;top:390px">COMISSÃO DE SEGURANÇA · SENADO</div>
-<div class="el counter" data-a="pop" data-t="12.39" style="left:80px;top:960px;width:920px"><span class="cnt" data-t="12.49" data-d="1.6" data-from="0" data-to="233" data-dec="0"></span><b>DIAS SEM RELATOR</b></div>
-<div class="el chip slatebg" data-a="pop" data-t="14.42" style="left:80px;top:1170px;font-size:30px">PRESIDENTE DA COMISSÃO: FLÁVIO BOLSONARO (PL-RJ)</div>
-<div class="el torn" data-a="left" data-t="16.86" style="left:50px;top:1245px;width:960px;height:110px;font-size:46px;background:#C8352B;color:#fff">QUEM COBRA DUREZA PODIA COMEÇAR ESCOLHENDO UM RELATOR</div>
+<div class="el ball" data-a="pop" data-t="5.42" style="left:104px;top:462px"></div>
+<div class="el ball2" data-a="left" data-t="5.98" data-d=".6" style="left:374px;top:462px"></div>
+<div class="el gate" data-a="pop" data-t="6.76" style="left:250px;top:390px">COMISSÃO DE SEGURANÇA · SENADO</div>
+<div class="el counter" data-a="pop" data-t="6.86" style="left:80px;top:960px;width:920px"><span class="cnt" data-t="6.96" data-d="1.6" data-from="0" data-to="233" data-dec="0"></span><b>DIAS SEM RELATOR</b></div>
+<div class="el chip slatebg" data-a="pop" data-t="10.15" style="left:80px;top:1170px;font-size:30px">PRESIDENTE DA COMISSÃO: FLÁVIO BOLSONARO (PL-RJ)</div>
+<div class="el torn" data-a="left" data-t="10.81" style="left:50px;top:1245px;width:960px;height:110px;font-size:46px;background:#C8352B;color:#fff">QUEM COBRA DUREZA PODIA COMEÇAR ESCOLHENDO UM RELATOR</div>
 <div class="el src" data-a="fade" data-t=".8" style="left:86px;top:1690px">SENADO · TRAMITAÇÃO PL 1112/2023 (NA CSP DESDE 25/02/2026) · 16/10/2026</div>
-<div class="kar el" data-words="Lei:0.22 vai:0.674 e:0.997 volta,:1.129 e:1.573 / é:1.674 por:1.744 isso:1.896 que:2.057 tanta:2.169 / informação:2.431 errada:2.916 circula.:3.188 Tem:3.976 um:4.208 / projeto:4.278 ainda:4.692 mais:4.924 duro,:5.237 o:5.783 / mil:5.903 cento:6.116 e:6.398 doze:6.47 oitenta:7.136 / por:7.701 cento:7.872 pra:8.165 todo:8.377 crime:8.73 / hediondo,:9.034 inclusive:9.558 feminicídio.:10.114 Passou:11.032 na:11.376 / Câmara,:11.507 e:12.052 tá:12.173 parado:12.295 há:12.617 / sete:12.709 meses:13.042 e:13.384 meio:13.456 na:13.728 / comissão:13.839 que:14.253 o:14.354 Flávio:14.424 Bolsonaro:14.748 / preside.:15.232 Sem:15.999 relator.:16.211 Quem:16.958 cobra:17.161 / dureza:17.463 podia:17.908 começar:18.18 escolhendo:18.624 um.:19.119" style="left:80px;top:1395px;width:920px"></div></section>
-<section class="scene" data-s="115.2" data-e="127.189" data-in="cut" data-theme="dark"><img class="bgimg" src="assets/qa/w_bus.jpg" data-kb="1.1" data-kbo="50% 40%"><div class="tintc" style="background:#0E0D0B"></div><div class="shadeg" style="opacity:0.82"></div>
-<div class="el label gold" data-a="left" data-t=".1" style="left:80px;top:150px">OLHA O GRÁFICO INTEIRO</div>
-<div class="el h" data-a="up" data-t=".2" style="left:80px;top:220px;font-size:100px;color:#fff">E OS NÚMEROS?</div>
-<div class="el scard" data-a="pop" data-t="2.59" style="left:80px;top:420px"><div class="mono" style="font-size:24px;color:#bbb">SÃO PAULO</div><div class="h" style="font-size:96px;color:#C8352B">▲ 22%</div><div class="mono" style="font-size:26px;color:#fff">221 → 270 vítimas · 2023→25</div><div class="mono" style="font-size:20px;color:#999;margin-top:6px">GOV. TARCÍSIO (REPUBLICANOS)</div></div><div class="el scard" data-a="pop" data-t="5.22" style="left:550px;top:420px"><div class="mono" style="font-size:24px;color:#bbb">RIO DE JANEIRO</div><div class="h" style="font-size:96px;color:#C8352B">▲ 6%</div><div class="mono" style="font-size:26px;color:#fff">99 → 105 vítimas · 2023→25</div><div class="mono" style="font-size:20px;color:#999;margin-top:6px">GOV. CLÁUDIO CASTRO (PL)</div></div><div class="el scard" data-a="pop" data-t="5.53" style="left:80px;top:750px"><div class="mono" style="font-size:24px;color:#bbb">SANTA CATARINA</div><div class="h" style="font-size:96px;color:#e9e3d3">▼ 7%</div><div class="mono" style="font-size:26px;color:#fff">57 → 53 vítimas · 2023→25</div><div class="mono" style="font-size:20px;color:#999;margin-top:6px">GOV. JORGINHO MELLO (PL)</div></div><div class="el scard" data-a="pop" data-t="4.95" style="left:550px;top:750px"><div class="mono" style="font-size:24px;color:#bbb">BAHIA</div><div class="h" style="font-size:96px;color:#e9e3d3">▼ 11%</div><div class="mono" style="font-size:26px;color:#fff">115 → 102 vítimas · 2023→25</div><div class="mono" style="font-size:20px;color:#999;margin-top:6px">GOV. JERÔNIMO (PT)</div></div>
-<div class="el chip gold" data-a="pop" data-t="7.8" style="left:80px;top:1110px">BRASIL JAN–JUL: 876 (2025) → 848 (2026) · −3,2%</div>
-<div class="el torn" data-a="left" data-t="9.35" style="left:50px;top:1200px;width:960px;height:120px;font-size:56px;background:#C9A84C;color:#111">QUEM COMANDA A POLÍCIA É O GOVERNADOR</div>
+<div class="kar el" data-words="Lei:0.15 vai:0.375 e:0.601 volta,:0.714 e:1.108 / é:1.21 aí:1.313 que:1.466 a:1.671 mentira:1.773 / se:2.183 espalha.:2.336 O:2.797 projeto:2.916 mil:3.391 / cento:3.629 e:3.986 doze,:4.105 ainda:4.461 mais:4.799 / duro,:5.081 passou:5.419 na:5.811 Câmara:5.979 e:6.371 / está:6.483 parado:6.762 há:7.154 sete:7.322 meses:7.602 / e:7.938 meio,:8.05 sem:8.385 relator,:8.712 na:9.448 / comissão:9.58 que:9.978 Flávio:10.155 Bolsonaro:10.464 preside.:10.906" style="left:80px;top:1395px;width:920px"></div></section>
+<section class="scene" data-s="91.291" data-e="97.29" data-in="cut" data-theme="dark"><img class="bgimg" src="assets/qa/w_bus2.jpg" data-kb="1.1" data-kbo="50% 40%"><div class="tintc" style="background:#0E0D0B"></div><div class="shadeg" style="opacity:1.0"></div>
+<div style="position:absolute;left:0;top:380px;width:1080px;height:1000px;background:linear-gradient(180deg,rgba(5,6,8,0),rgba(5,6,8,.8) 12%,rgba(5,6,8,.8) 88%,rgba(5,6,8,0))"></div><div class="el label gold" data-a="left" data-t=".1" style="left:80px;top:150px">OLHA O GRÁFICO INTEIRO</div>
+<div class="el h" data-a="up" data-t="0" style="left:80px;top:220px;font-size:100px;color:#fff">E OS NÚMEROS?</div>
+<div class="el scard" data-a="pop" data-t="0.05" style="left:80px;top:420px"><div class="mono" style="font-size:24px;color:#bbb">SÃO PAULO</div><div class="h" style="font-size:96px;color:#C8352B">▲ 22%</div><div class="mono" style="font-size:26px;color:#fff">221 → 270 vítimas · 2023→25</div><div class="mono" style="font-size:20px;color:#999;margin-top:6px">GOV. TARCÍSIO (REPUBLICANOS)</div></div><div class="el scard" data-a="pop" data-t="1.92" style="left:550px;top:420px"><div class="mono" style="font-size:24px;color:#bbb">RIO DE JANEIRO</div><div class="h" style="font-size:96px;color:#C8352B">▲ 6%</div><div class="mono" style="font-size:26px;color:#fff">99 → 105 vítimas · 2023→25</div><div class="mono" style="font-size:20px;color:#999;margin-top:6px">GOV. CLÁUDIO CASTRO (PL)</div></div><div class="el scard" data-a="pop" data-t="3.28" style="left:80px;top:750px"><div class="mono" style="font-size:24px;color:#bbb">SANTA CATARINA</div><div class="h" style="font-size:96px;color:#e9e3d3">▼ 7%</div><div class="mono" style="font-size:26px;color:#fff">57 → 53 vítimas · 2023→25</div><div class="mono" style="font-size:20px;color:#999;margin-top:6px">GOV. JORGINHO MELLO (PL)</div></div><div class="el scard" data-a="pop" data-t="2.47" style="left:550px;top:750px"><div class="mono" style="font-size:24px;color:#bbb">BAHIA</div><div class="h" style="font-size:96px;color:#e9e3d3">▼ 11%</div><div class="mono" style="font-size:26px;color:#fff">115 → 102 vítimas · 2023→25</div><div class="mono" style="font-size:20px;color:#999;margin-top:6px">GOV. JERÔNIMO (PT)</div></div>
+<div class="el chip gold" data-a="pop" data-t="3.68" style="left:80px;top:1110px">BRASIL JAN–JUL: 876 (2025) → 848 (2026) · −3,2%</div>
+<div class="el torn" data-a="left" data-t="3.82" style="left:50px;top:1200px;width:960px;height:120px;font-size:56px;background:#FFD34D;color:#111">QUEM COMANDA A POLÍCIA É O GOVERNADOR</div>
 <div class="el src" data-a="fade" data-t=".8" style="left:86px;top:1690px">FBSP · ANUÁRIO 2026 · SINESP/MJSP JAN–JUL 2026 · CF ART. 144, §6º</div>
-<div class="kar el" data-words="E:0.22 os:0.391 números?:0.523 Olha:1.169 o:1.442 / gráfico:1.502 inteiro.:1.906 São:2.693 Paulo:2.896 subiu:3.158 / vinte:3.491 e:3.794 dois:3.855 por:4.087 cento.:4.238 / A:4.904 Bahia:5.046 caiu:5.318 onze.:5.631 Em:6.247 / dois:6.449 mil:6.752 e:7.015 vinte:7.125 e:7.429 / seis,:7.499 o:7.903 Brasil:8.003 caiu:8.377 três.:8.68 / E:9.266 quem:9.448 comanda:9.639 a:10.033 polícia:10.094 / é:10.558 o:10.679 governador.:10.719" style="left:80px;top:1395px;width:920px"></div></section>
-<section class="scene" data-s="127.189" data-e="142.062" data-in="cut" data-theme="dark"><img class="bgimg" src="assets/qa/w_park.jpg" data-kb="1.06" data-kbo="50% 40%"><div class="shadeg" style="opacity:0.6"></div>
+<div class="kar el" data-words="São:0.15 Paulo:0.377 subiu:0.717 vinte:1.057 e:1.397 / dois:1.511 por:1.794 cento;:2.021 a:2.418 Bahia:2.566 / caiu:3.011 onze.:3.381 E:3.826 quem:3.917 comanda:4.146 / a:4.511 polícia:4.603 é:4.968 o:5.06 governador.:5.151" style="left:80px;top:1395px;width:920px"></div></section>
+<section class="scene" data-s="97.29" data-e="105.506" data-in="cut" data-theme="dark"><img class="bgimg" src="assets/qa/w_park.jpg" data-kb="1.06" data-kbo="50% 40%"><div class="shadeg" style="opacity:0.85"></div>
 <div class="el letter" data-a="drop" data-t=".05" data-d=".5" data-r="-2" style="left:90px;top:230px;width:900px"><div class="hand" style="font-size:80px">Então, amiga:</div><div class="h" style="font-size:66px;color:#111;margin-top:10px">VETOU A SAIDINHA PRA ESTUPRADOR?</div></div>
-<div class="el verdict red" data-a="stamp" data-t="3.81" data-d=".35" data-r="-8" data-shake="1.4" style="left:330px;top:470px;font-size:150px">FALSO</div>
-<div class="el h" data-a="slam" data-t="4.51" style="left:80px;top:700px;width:930px;font-size:86px;color:#fff">ENDURECEU A PENA?</div>
-<div class="el h" data-a="slam" data-t="5.96" data-shake="1" style="left:80px;top:810px;font-size:120px;color:#C9A84C;white-space:nowrap">DUAS VEZES.</div>
-<div class="el sub" data-a="up" data-t="6.58" style="left:86px;top:980px;width:900px;font-size:40px">20 a 40 anos (2024) · 75% no fechado (2026)</div>
-<div class="el repost" data-a="slam" data-t="8.08" data-shake="1" style="left:90px;top:1080px;width:900px">🔁 REPOSTA AGORA<small>essa desinformação tá rodando nos grupos</small></div>
-<div class="el hand" data-a="up" data-t="12.65" style="left:600px;top:1262px;font-size:70px;color:#fff">um beijo 💚</div>
-<div class="kar el" data-words="Então,:0.22 amiga:0.583 vetou:1.33 a:1.795 saidinha:1.886 / pra:2.461 estuprador?:2.643 Não.:3.855 Endureceu:4.51 a:5.097 / pena?:5.157 Duas:5.964 vezes.:6.378 Eu:7.226 recomendo:7.418 / você:7.832 repostar:8.176 esse:8.73 agora,:8.872 porque:9.286 / essa:9.629 desinformação:9.841 tá:10.508 rolando:10.659 solta:11.224 / nos:11.608 grupos.:11.77 Um:12.648 beijo.:12.85" style="left:80px;top:1395px;width:920px"></div></section>
+<div class="el verdict red" data-a="stamp" data-t="2.02" data-d=".35" data-r="-8" data-shake="1.4" style="left:330px;top:470px;font-size:150px">FALSO</div>
+<div class="el h" data-a="slam" data-t="2.07" style="left:80px;top:700px;width:930px;font-size:86px;color:#fff">ENDURECEU A PENA?</div>
+<div class="el h" data-a="slam" data-t="3.79" data-shake="1" style="left:80px;top:810px;font-size:120px;color:#FFD34D;white-space:nowrap">DUAS VEZES.</div>
+<div class="el sub" data-a="up" data-t="4.35" style="left:86px;top:980px;width:900px;font-size:40px">20 a 40 anos (2024) · 75% no fechado (2026)</div>
+<div class="el repost" data-a="slam" data-t="4.56" data-shake="1" style="left:90px;top:1080px;width:900px">🔁 REPOSTA AGORA<small>essa desinformação tá rodando nos grupos</small></div>
+<div class="el hand" data-a="up" data-t="6.78" style="left:600px;top:1262px;font-size:70px;color:#fff">um beijo 💚</div>
+<div class="kar el" data-words="Então:0.15 vetou:0.656 pra:1.04 estuprador?:1.297 Não.:2.066 / Endureceu:2.066 a:3.021 pena?:3.212 Duas:3.786 vezes.:4.151 / Reposta,:4.663 que:4.848 essa:5.065 mentira:5.336 tá:5.769 / rodando:5.932 nos:6.366 grupos.:6.582" style="left:80px;top:1395px;width:920px"></div></section>
 
 <div id="grain"></div><div id="foot">@tentandochegaratevoce</div></div>
-<script>window.DUR=142.06;</script><script src="fx.js"></script><script src="fx2.js"></script><script src="engine.js"></script></body></html>
+<script>window.DUR=105.51;</script><script src="fx.js"></script><script src="fx2.js"></script><script src="engine.js"></script></body></html>
