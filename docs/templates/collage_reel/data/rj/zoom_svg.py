@@ -39,8 +39,9 @@ def bbox(feats):
     return min(xs), min(ys), max(xs), max(ys)
 BR = bbox(UF); RJB = bbox([f for f in UF if f['properties']['sigla'] == 'RJ'])
 BW=BR[2]-BR[0]; RW=RJB[2]-RJB[0]
-s0=940/BW; s1=880/RW
-CAM={'s0':s0,'x0':540-s0*(BR[0]+BR[2])/2,'y0':1060-s0*(BR[1]+BR[3])/2,'s1':s1,'x1':560-s1*(RJB[0]+RJB[2])/2,'y1':1130-s1*(RJB[1]+RJB[3])/2}
+s0=940/BW; s1=2300/RW
+FX,FY=P(-43.30,-22.86)  # foco final: capital e região metropolitana
+CAM={'s0':s0,'x0':540-s0*(BR[0]+BR[2])/2,'y0':1060-s0*(BR[1]+BR[3])/2,'s1':s1,'x1':600-s1*FX,'y1':1100-s1*FY}
 ps=14/s1; pr=2.4/s1
 svg = f'''<svg class="zmap" width="1080" height="1920" viewBox="0 0 1080 1920" style="position:absolute;left:0;top:0">
 <defs>

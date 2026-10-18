@@ -347,10 +347,10 @@ page = f'''<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>
 /* zoom da abertura: Brasil -> estado do RJ (g#zcam data-cam). Roda dentro do FX.frame do motor, então vale na prévia e no MP4. */
 (function(){{const B=window.FX;const ease=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;const cl=x=>Math.max(0,Math.min(1,x));
 window.FX=Object.assign({{}},B,{{frame(sc,t,T,dur){{B.frame(sc,t,T,dur);const g=sc.querySelector('#zcam');if(!g)return;
-const c=g._c||(g._c=JSON.parse(g.dataset.cam));const p=ease(cl((t-.2)/2.7)),pc=ease(cl((t-.2)/2.2));
+const c=g._c||(g._c=JSON.parse(g.dataset.cam));const p=ease(cl((t-.15)/2.9)),pc=ease(cl((t-.15)/2.4));
 const s=c.s0*Math.pow(c.s1/c.s0,p)*(1+.025*Math.max(0,t-2.9)/Math.max(1,dur-2.9));
-const k0={{x:(540-c.x0)/c.s0,y:(1060-c.y0)/c.s0}},k1={{x:(560-c.x1)/c.s1,y:(1130-c.y1)/c.s1}};
-const cx=k0.x+(k1.x-k0.x)*pc,cy=k0.y+(k1.y-k0.y)*pc,ax=540+20*pc,ay=1060+70*pc;
+const k0={{x:(540-c.x0)/c.s0,y:(1060-c.y0)/c.s0}},k1={{x:(600-c.x1)/c.s1,y:(1100-c.y1)/c.s1}};
+const cx=k0.x+(k1.x-k0.x)*pc,cy=k0.y+(k1.y-k0.y)*pc,ax=540+60*pc,ay=1060+40*pc;
 g.setAttribute('transform',`translate(${{(ax-s*cx).toFixed(2)}},${{(ay-s*cy).toFixed(2)}}) scale(${{s.toFixed(4)}})`);
 const m=g.querySelector('.zmun');if(m)m.setAttribute('opacity',cl((p-.75)/.25).toFixed(3));}}}});}})();
 </script><script src="engine.js"></script><script src="layout.js"></script></body></html>'''
