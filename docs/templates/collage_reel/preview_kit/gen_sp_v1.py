@@ -37,10 +37,11 @@ def rail(active, t=.1):
     return f'<div class="rail el" data-a="fade" data-t="{t}" data-d=".3" style="left:0;top:150px"><div class="line"></div><div class="fill" style="width:{xs[active]-60}px"></div>{dots}</div>'
 def scene(sid, inner, bg, src, kbo='60% 50%', kb=1.08):
     o = S[sid]
-    b = f'<img class="bgimg" src="assets/sp/{bg}.jpg" data-kb="{kb}" data-kbo="{kbo}"><div class="shadeX"></div>'
+    b = f'<img class="bgimg" src="assets/sp/{bg}.jpg" data-kb="{kb}" data-kbo="{kbo}"><div class="shadeX"></div>' + ('<div style="position:absolute;inset:0;background:rgba(6,7,9,.6)"></div>' if bg in DIM else '')
     s = f'<div class="el srcline" data-a="fade" data-t=".4" style="left:130px;top:1640px;width:820px">FONTE: {src}</div>'
     return f'<section class="scene" data-s="{o["s"]}" data-e="{o["e"]}" data-in="cut" data-theme="dark">{b}<div class="safe">{inner}</div>{kar(sid)}{s}</section>\n'
 CUR = {'s': None}
+DIM = {'pm2'}
 def eb(n, txt, t=.05, top=None, flow='m:1'):
     top = FT.get(CUR['s'], top)
     ft = f' data-ftop="{top}"' if top else ''
@@ -195,14 +196,18 @@ H.append(scene(s, rail(2)+f'''
 
 s = 's06'; CUR['s'] = s
 H.append(scene(s, rail(2)+f'''
-{eb(5, 'POLÍTICOS DOS DOIS LADOS', top=320)}
-<div class="el rows" data-flow="m:2" data-gap="36" data-a="fade" data-t="{W(s,'vereador',0,-.3)}" style="left:80px">
-  {row('JUN/2026', 'SENIVAL MOURA · VEREADOR', None, '#fff', 0, sub=f'PT {ESQ}<br>PRESO, SOLTO POR HABEAS CORPUS')}
-  {row('SET/2026', 'MILTON LEITE · EX-PRESIDENTE DA CÂMARA', None, '#fff', 0, sub=f'UNIÃO BRASIL {DIR}<br>ALIADO DO PREFEITO NUNES', fade=W(s,'setembro',0,-.2))}
+{eb(5, 'POLÍTICOS DOS DOIS LADOS · ÔNIBUS DA CAPITAL', top=300)}
+<div class="el rows" data-flow="m:2" data-gap="30" data-a="fade" data-t="{W(s,'vereador',0,-.3)}" style="left:80px">
+  {row('JUN/2026', 'SENIVAL MOURA · VEREADOR', None, '#fff', 0, sub=f'PT {ESQ} · SOLTO POR HC')}
+  {row('SET/2026', 'MILTON LEITE · EX-PRES. DA CÂMARA', None, '#fff', 0, sub=f'UNIÃO BRASIL {DIR}', fade=W(s,'setembro',0,-.2))}
   {row('SET/2026', 'DANILO MORGADO · CANDIDATO', None, '#fff', 0, sub=f'PL {EXT}', fade=W(s,'candidato',0,-.2))}</div>
-<div class="el stamp-r" data-flow="m:3" data-gap="40" data-a="stamp" data-t="{W(s,'negam',0,-.1)}" data-d=".35" data-r="-2" style="left:80px;white-space:nowrap;font-size:46px">TODOS NEGAM</div>
-<div class="el fine" data-flow="m:4" data-gap="26" data-a="fade" data-t="{W(s,'negam',0,.4)}" style="left:80px">SÓ CASOS COM OPERAÇÃO OU PROCESSO. TRE-SP (OUT/2024): 10 VEREADORES E 2 PREFEITOS ELEITOS NO ESTADO SOB SUSPEITA DE LIGAÇÃO COM O CRIME ORGANIZADO. CONTRATOS DE ÔNIBUS SÃO DA PREFEITURA (NUNES, MDB {DIR}).</div>
-''', 'camara', 'MP-SP E POLÍCIA CIVIL (ÚLTIMA PARADA, JUN/2026; VECTURA CORRUPTA, SET/2026) · TRE-SP · ' + IDS, kbo='50% 50%'))
+<div class="el stamp-r" data-flow="m:3" data-gap="30" data-a="stamp" data-t="{W(s,'negam',0,-.1)}" data-d=".35" data-r="-2" style="left:80px;white-space:nowrap;font-size:42px">TODOS NEGAM</div>
+<div class="el eyebrow" data-flow="m:4" data-gap="44" data-a="left" data-t="{W(s,'raiz',0,-.2)}" style="left:80px">A RAIZ</div>
+<div class="el rows" data-flow="m:5" data-gap="18" data-a="fade" data-t="{W(s,'perueiros',0,-.3)}" style="left:80px">
+  {row('2003', 'PERUEIROS ENTRAM NO SISTEMA', None, '#fff', 0, sub=f'GESTÃO MARTA · PT {ESQ}')}
+  {row('2019', 'AS MESMAS EMPRESAS VENCEM A LICITAÇÃO', None, '#fff', 0, sub=f'GESTÃO COVAS · PSDB {DIR}', fade=W(s,'licitação',0,-.2))}</div>
+<div class="el fine" data-flow="m:6" data-gap="20" data-a="fade" data-t="{W(s,'covas',0,.2)}" style="left:80px">SEGUNDO O PROMOTOR LINCOLN GAKIYA (GAECO), INTEGRANTES DA FACÇÃO COMPRARAM COTAS DAS COOPERATIVAS. NINGUÉM ACUSA MARTA OU COVAS. CONTRATO DE ÔNIBUS É DA PREFEITURA (HOJE, NUNES, MDB {DIR}). SÓ CASOS COM OPERAÇÃO OU PROCESSO.</div>
+''', 'camara', 'MP-SP E POLÍCIA CIVIL (2024–2026) · DIÁRIO DO TRANSPORTE, MAR/2019 · O TEMPO, SET/2026 · ' + IDS, kbo='50% 50%'))
 
 s = 's07'; CUR['s'] = s
 c7 = chart(s, YM, [
@@ -218,6 +223,18 @@ H.append(scene(s, rail(3)+f'''
 <div class="el h" data-flow="m:4" data-gap="30" data-a="up" data-t="{W(s,'quatro',0,-.25)}" style="left:80px;width:880px;font-size:56px;color:#fff">2025: <span style="color:{R}">QUASE 1 EM CADA 4</span> MORTES VIOLENTAS DO ESTADO</div>
 <div class="el fine" data-flow="m:5" data-gap="22" data-a="fade" data-t="{W(s,'quatro',0,.5)}" style="left:80px">835 DE 3.615 (23,1%). FGV: −57% NOS BATALHÕES COM CÂMERA. O GOVERNO DE SP DIZ QUE A SOMA DO MANDATO É MENOR QUE A DO ANTERIOR; A DIREÇÃO, DESDE 2023, É DE ALTA. OPERAÇÃO VERÃO (2024): A MAIS LETAL DESDE O CARANDIRU.</div>
 ''', 'pm', 'SSP-SP (VIA AGÊNCIA BRASIL E FBSP, 2014–2025) · FGV, 2022 · FBSP, ANUÁRIO 2026', kbo='50% 55%'))
+
+s = 's07b'; CUR['s'] = s
+H.append(scene(s, rail(3)+f'''
+{eb(0, 'QUEM AJUDA A POLÍCIA A MATAR MENOS?', top=300)}
+<div class="el rows" data-flow="m:2" data-gap="34" data-a="fade" data-t="{W(s,'governo',0,-.3)}" style="left:80px">
+  {row('2024 · GOVERNO ATUAL 🦑', 'REGRAS NACIONAIS PARA CÂMERA NA FARDA E USO DA FORÇA', None, Y, 0, sub=f'TARCÍSIO DISSE QUE SP SEGUIRIA')}</div>
+<div class="el rows" data-flow="m:3" data-gap="34" data-a="fade" data-t="{W(s,'bolsonaro',0,-.3)}" style="left:80px">
+  {row('2020 · BOLSONARO', 'REVOGA AS REGRAS DE RASTREAMENTO DE ARMAS E MUNIÇÕES', None, '#5B7CFF', 0, sub=f'PL {EXT}')}
+  {row('2019 · BOLSONARO', 'PROJETO QUE ACABA COM A MARCAÇÃO DAS BALAS DA POLÍCIA', None, '#5B7CFF', 0, sub='PL 3.723/2019', fade=W(s,'projeto',0,-.2))}</div>
+<div class="el h" data-flow="m:4" data-gap="44" data-a="slam" data-t="{W(s,'flávio',0,-.2)}" style="left:80px;width:880px;font-size:62px;color:#fff">FLÁVIO BOLSONARO: <span class="hl">“DETALHEZINHO”</span></div>
+<div class="el fine" data-flow="m:5" data-gap="24" data-a="fade" data-t="{W(s,'outubro',0,-.1)}" style="left:80px">TV GLOBO, 16/10/2026 (PL {EXT}). A MARCAÇÃO AJUDOU A ESCLARECER OS CASOS MARIELLE FRANCO E PATRÍCIA ACIOLI (MPF). EM SP, A POLÍCIA CAUSOU 23,1% DAS MORTES VIOLENTAS EM 2025.</div>
+''', 'pm2', 'MJSP, PORTARIA DE CÂMERAS (MAI/2024) E DECRETO DO USO DA FORÇA (DEZ/2024) · EXÉRCITO/COLOG, ABR/2020 · PODER360 E METRÓPOLES, OUT/2026 · ' + IDS, kbo='50% 50%'))
 
 s = 's08'; CUR['s'] = s
 YE = [str(y) for y in range(2016, 2024)]
@@ -258,8 +275,8 @@ H.append(scene(s, f'''
   {row('FUNDO NACIONAL 2024', 'R$ 45,8 MI · A MAIOR FATIA', None, Y, 0, sub='ORÇAMENTO DA PM PAULISTA: R$ 10,3 BI')}
   {row('PF E RECEITA', 'NA OPERAÇÃO DOS COMBUSTÍVEIS', None, Y, 0, fade=W(s,'polícia',0,-.2))}</div>
 <div class="el h redtxt" data-flow="m:4" data-gap="44" data-a="slam" data-t="{W(s,'fronteira',0,-.15)}" style="left:80px;width:880px;font-size:66px">FRONTEIRA E PORTO DE SANTOS SÃO DA UNIÃO.</div>
-<div class="el note" data-flow="m:5" data-gap="16" data-a="fade" data-t="{W(s,'qualquer',0,-.1)}" style="left:80px">FALHA COM QUALQUER PRESIDENTE</div>
-<div class="el fine" data-flow="m:6" data-gap="22" data-a="fade" data-t="{W(s,'presidente',0,.3)}" style="left:80px">LEI ANTIFACÇÃO: PROPOSTA DO GOVERNO ATUAL 🦑, RELATOR DERRITE (PP {DIR}), SANCIONADA PELO PRESIDENTE. DERRITE RECUSOU APOIO DIRETO DA PF NO CASO RUY FERRAZ (SET/2025).</div>
+<div class="el body" data-flow="m:5" data-gap="26" data-a="up" data-t="{W(s,'decretos',0,-.2)}" style="left:80px;width:860px">Com os decretos de armas do governo Bolsonaro, a facção passou a <b>comprar fuzis com nota fiscal.</b></div>
+<div class="el fine" data-flow="m:6" data-gap="22" data-a="fade" data-t="{W(s,'registrados',0,.1)}" style="left:80px">FUZIL COM NOTA: R$ 12–15 MIL, CONTRA R$ 35–59 MIL NO CONTRABANDO (PROMOTOR LINCOLN GAKIYA, ESTADÃO, 2022). LEI ANTIFACÇÃO: PROPOSTA DO GOVERNO ATUAL 🦑, RELATOR DERRITE (PP {DIR}), SANCIONADA PELO PRESIDENTE. DERRITE RECUSOU APOIO DIRETO DA PF NO CASO RUY FERRAZ (SET/2025); NO SENADO, O RELATOR DISSE QUE A CÂMARA TIROU DO TEXTO PONTOS CONTRA CRIME DE COLARINHO BRANCO.</div>
 ''', 'santos', 'MJSP/FNSP, 2024 · TCE-SP, CONTAS 2023 · CÂMARA DOS DEPUTADOS, 2026', kbo='50% 50%'))
 
 s = 's11'; CUR['s'] = s
