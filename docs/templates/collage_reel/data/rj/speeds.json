@@ -1,0 +1,20 @@
+{
+ "_doc": "Velocidade (atempo) sobre a voz ORIGINAL de cada cena; reaplicar com build.py ao trocar a voz.",
+ "speeds": {
+  "v01": 1.22,
+  "v02": 1.12,
+  "v03": 1.12,
+  "v04": 1.12,
+  "v05": 1.12,
+  "v06": 1.22,
+  "v07": 1.22,
+  "v08": 1.22,
+  "v09": 1.22,
+  "v10": 1.12,
+  "v11": 1.22,
+  "v12": 1.22,
+  "v13": 1.12,
+  "v14": 1.22,
+  "v15": 1.22
+ }
+}
