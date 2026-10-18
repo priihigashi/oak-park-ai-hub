@@ -123,15 +123,16 @@ def segchart(years, lines, ymin, ymax, ticks, t0, dur, w=880, h=620, lw=270, tfm
         for a, b, col in L['segs']:
             pts = ' '.join(f'{X(i):.1f},{Yv(L["v"][i]):.1f}' for i in range(a, b+1) if L['v'][i] is not None)
             ln += f'<polyline points="{pts}" fill="none" stroke="{col}" stroke-width="{L.get("w",6)}" stroke-linejoin="round" stroke-linecap="round"{dash}/>'
-    want = sorted([(Yv(L['v'][-1]), k) for k, L in enumerate(lines)]); pos = {}; last = -1e9
+    want = sorted([(Yv([x for x in L['v'] if x is not None][-1]), k) for k, L in enumerate(lines)]); pos = {}; last = -1e9
     for y, k in want:
         hh = 30 + (26 if lines[k].get('sub') else 0); y = max(y, last); pos[k] = y; last = y + hh + 6
     lab = ''.join(f'<div class="clab" data-a="fade" data-t="{L.get("lt", t0+dur):.2f}" style="left:{px1+16}px;top:{pos[k]-15:.0f}px;color:{L.get("lc","#fff")}"><b>{L["n"]}</b>'
                   + (f'<small>{L["sub"]}</small>' if L.get('sub') else '') + '</div>' for k, L in enumerate(lines))
     pl = ''
-    for (k, i, txt, col, dy, t) in plabels:
+    for P_ in plabels:
+        k, i, txt, col, dy, t = P_[:6]; dx = P_[6] if len(P_) > 6 else 0
         v = lines[k]['v'][i]
-        pl += (f'<div class="clab plab" data-a="fade" data-t="{t:.2f}" style="left:{X(i)-70:.0f}px;width:140px;text-align:center;top:{Yv(v)+dy:.0f}px;color:{col}">{txt}</div>'
+        pl += (f'<div class="clab plab" data-a="fade" data-t="{t:.2f}" style="left:{X(i)-70+dx:.0f}px;width:140px;text-align:center;top:{Yv(v)+dy:.0f}px;color:{col}">{txt}</div>'
                f'<div class="pdot" data-a="fade" data-t="{t:.2f}" style="left:{X(i)-7:.0f}px;top:{Yv(v)-7:.0f}px;background:{col}"></div>')
     if all('rt' in L for L in lines):
         rev = ''
@@ -139,7 +140,7 @@ def segchart(years, lines, ymin, ymax, ticks, t0, dur, w=880, h=620, lw=270, tfm
             one = ''
             dash = ' stroke-dasharray="10 8"' if L.get('dash') else ''
             for a, b, col in L['segs']:
-                pts = ' '.join(f'{X(i):.1f},{Yv(L["v"][i]):.1f}' for i in range(a, b+1))
+                pts = ' '.join(f'{X(i):.1f},{Yv(L["v"][i]):.1f}' for i in range(a, b+1) if L['v'][i] is not None)
                 one += f'<polyline points="{pts}" fill="none" stroke="{col}" stroke-width="{L.get("w",6)}" stroke-linejoin="round" stroke-linecap="round"{dash}/>'
             rev += f'<div class="bar crev" data-t="{L["rt"]:.2f}" data-d="1.2" data-to="{px1+12}" style="height:{h}px"><svg width="{w}" height="{h}">{one}</svg></div>'
     else:
@@ -186,8 +187,8 @@ H.append(scene(s, rail(0)+f'''
   {gov('2014–2018', 'PEZÃO', 'MDB', DIR, W(s,'pezão',0,-.2), col=Y, sub='PRESO EM 2018, ABSOLVIDO')}
   {gov('2019–2020', 'WITZEL', 'PSC', DIR, W(s,'witzel',0,-.2), col=Y, sub='AFASTADO E CASSADO')}
   {gov('2020–2026', 'CASTRO', 'PSC→PL', DIR, W(s,'castro',0,-.2), col=Y, sub='INELEGÍVEL ATÉ 2030')}</div>
-<div class="el h" data-flow="m:3" data-gap="34" data-a="slam" data-t="{W(s,'vinte',0,-.15)}" style="left:80px;width:880px;font-size:64px;color:#fff">23 ANOS DE <span class="hl">MDB E DIREITA</span></div>
-<div class="el fine" data-flow="m:4" data-gap="20" data-a="fade" data-t="{W(s,'lados',0,.2)}" style="left:80px">MDB = 7,01 NA ESCALA, NO LIMITE DA DIREITA. O PT TEVE SECRETARIAS NO GOVERNO CABRAL ATÉ NOV/2013. GAROTINHO FOI SECRETÁRIO DE SEGURANÇA DE ROSINHA (2003–04) E APOIOU ALCKMIN (PSDB) EM 2006. HOJE GOVERNA O INTERINO RICARDO COUTO (TJ-RJ).</div>
+<div class="el h" data-flow="m:3" data-gap="34" data-a="slam" data-t="{W(s,'vinte',0,-.15)}" style="left:80px;width:880px;font-size:64px;color:#fff">23 ANOS DE <span class="hl">DIREITA</span></div>
+<div class="el fine" data-flow="m:4" data-gap="20" data-a="fade" data-t="{W(s,'lados',0,.2)}" style="left:80px">MDB = 7,01 NA ESCALA, NO LIMITE DA DIREITA. O PT TEVE SECRETARIAS NO GOVERNO CABRAL ATÉ NOV/2013. GAROTINHO FOI SECRETÁRIO DE SEGURANÇA DE ROSINHA (2003–04) E APOIOU ALCKMIN (PSDB) EM 2006. ANTES DE GAROTINHO: MARCELLO ALENCAR (PSDB, 1995–98) E BRIZOLA (PDT, CENTRO-ESQUERDA, 1991–94). HOJE GOVERNA O INTERINO RICARDO COUTO (TJ-RJ).</div>
 ''', 'i02', 'TSE · TJ-RJ · ' + IDS, kbo='60% 50%'))
 
 s = 'v03'; CUR['s'] = s
@@ -199,14 +200,14 @@ c3 = chart(s, XM, [
     dict(n='CABRAL 1 −24%', v=[0, .7, -6.7, -7.1, -23.8], c=BLUE, w=6, lt=W(s,'cabral',0,-.1)),
     dict(n='CABRAL 2 −2%', v=[0, -14.9, -19.9, -8.2, -1.9], c=BLUE, w=4, dash=True, lt=W(s,'cabral',0,.4)),
     dict(n='PEZÃO +17%', v=[0, -12.4, 9.5, 18.0, 17.4], c='#AFC0FF', w=5, lt=W(s,'pezão',0,-.1)),
-    dict(n='WITZEL/CASTRO −33%', v=[0, -10.9, -26.9, -29.1, -33.2], c='#2F57FF', w=7, lt=W(s,'witzel',0,-.1)),
-    dict(n='CASTRO 2 −13%', sub='3 ANOS', v=[0, -4.8, -15.1, -13.3, -13.3], c='#2F57FF', w=4, dash=True, lt=W(s,'witzel',0,.6)),
+    dict(n='WITZEL/CASTRO −33%', v=[0, -10.9, -26.9, -29.1, -33.2], c='#38BDF8', w=7, lt=W(s,'witzel',0,-.1)),
+    dict(n='CASTRO 2 −13%', sub='3 ANOS', v=[0, -4.8, -15.1, -13.3, -13.3], c='#38BDF8', w=4, dash=True, lt=W(s,'witzel',0,.6)),
 ], 40, [-40, -20, 0, 20, 40], 0, 0, h=640, lw=290, ymin=-40,
    tfmt=lambda v: (f'+{v}%' if v > 0 else f'{v}%'.replace('-', '−')),
    stages=[(0, 4, W(s,'linha',0,-.2), 1.8)]).replace('{flow}', 'm:3')
 H.append(scene(s, rail(1)+f'''
 {eb(2, 'MANDATO POR MANDATO · MORTES VIOLENTAS', top=290)}
-<div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:32px"><b style="color:{L1}">━ ESQUERDA</b> &nbsp;&nbsp; <b style="color:{BLUE}">━ DIREITA</b> &nbsp;&nbsp; <span style="color:#A9A291;font-size:24px">TRACEJADO = 2º MANDATO</span></div>
+<div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:32px"><b style="color:{L1}">━ ESQUERDA</b> &nbsp;&nbsp; <b style="color:{BLUE}">━ DIREITA</b> &nbsp;&nbsp; <span style="color:#A9A291;font-size:24px">TRACEJADO = 2º MANDATO, MESMA COR DO 1º</span></div>
 {c3}
 <div class="el fine" data-flow="m:4" data-gap="22" data-a="fade" data-t="{W(s,'linha',0,.4)}" style="left:80px">VARIAÇÃO NO NÚMERO DE MORTES VIOLENTAS ATÉ O FIM DO MANDATO, CONTRA O ANO ANTES DA POSSE. MESMA BASE DE 1998 A 2025 (ISP-RJ). BENEDITA (PT) GOVERNOU 9 MESES EM 2002; PEZÃO ASSUMIU EM ABR/2014; CASTRO EM AGO/2020. ANTES DE 1999, MARCELLO ALENCAR (PSDB, DIREITA): −26%. BRASIL ENTRE 2018 E 2022: CERCA DE −17% (FBSP, NÚMERO DE MORTES). OS +26% DE GAROTINHO INCLUEM OS 9 MESES DE BENEDITA (PT).</div>
 ''', 'i03', 'ISP-RJ, LETALIDADE VIOLENTA (1998–2020) · FBSP, ANUÁRIOS 2022–2026 · ' + IDS, kbo='55% 60%'))
@@ -215,35 +216,37 @@ s = 'v04'; CUR['s'] = s
 YC = [str(y) for y in range(1998, 2026)]
 VC = [6371,6401,6993,7083,8043,8054,7645,7987,7649,7699,7134,7106,5828,4960,4666,5348,5719,5010,6262,6749,6714,5980,4907,4762,4485,4270,3809,3890]
 ix = lambda y: y - 1998
-c4 = segchart(YC, [dict(n='', v=VC, segs=[(0, 1, BLUE), (1, 5, L1), (5, 27, BLUE)], w=7, lt=W(s,'linha',0))],
-    3000, 9000, [3000, 5000, 7000, 9000], W(s,'linha',0,-.2), 5.5, h=680, lw=40, tfmt=lambda v: f"{v:,}".replace(",", "."),
+VB = [None, None, None, None, None, None, 7645, 7524, 7769, 7537, 7919, 8135, 8287, 8254, 8917, 8972, 9453, 9235, 9772, 10254, 9059, 7113, 7795, 7479, 7254, 7151, 6657, None]
+c4 = segchart(YC, [dict(n='', v=VB, segs=[(6, 26, '#8C8C8C')], w=5, dash=True, lt=W(s,'brasil',0)), dict(n='', v=VC, segs=[(0, 1, BLUE), (1, 5, L1), (5, 27, BLUE)], w=7, lt=W(s,'linha',0))],
+    3000, 11000, [3000, 5000, 7000, 9000, 11000], W(s,'linha',0,-.2), 5.5, h=680, lw=40, tfmt=lambda v: f"{v:,}".replace(",", "."),
     xl=[ix(1998), ix(2006), ix(2014), ix(2022)],
-    plabels=[(0, ix(2002), '8.043<br>GAROTINHO', L1, -62, W(s,'linha',0,.6)),
-             (0, ix(2006), 'ROSINHA<br>7.649', BLUE, 18, W(s,'rosinha',0,-.2)),
-             (0, ix(2010), 'CABRAL<br>5.828', BLUE, 18, W(s,'cabral',0,-.2)),
-             (0, ix(2014), '5.719<br>CABRAL/PEZÃO', BLUE, -62, W(s,'cabral',0,.3)),
-             (0, ix(2018), '6.714<br>PEZÃO', BLUE, -62, W(s,'pezão',0,-.2)),
-             (0, ix(2022), '4.485<br>WITZEL/CASTRO', BLUE, -62, W(s,'dezoito',0,-.2)),
-             (0, ix(2025), 'CASTRO<br>3.890', BLUE, 18, W(s,'voltou',0,-.2))]).replace('{flow}', 'm:3')
+    plabels=[(1, ix(2002), 'GAROTINHO<br>8.043', L1, -30, W(s,'linha',0,.6), -100),
+             (1, ix(2003), '8.054<br>ROSINHA', BLUE, -62, W(s,'rosinha',0,-.2)),
+             (1, ix(2012), 'CABRAL<br>4.666', BLUE, 18, W(s,'cabral',0,-.2)),
+             (1, ix(2017), '6.749<br>PEZÃO', BLUE, -62, W(s,'pezão',0,-.2)),
+             (1, ix(2020), 'WITZEL/CASTRO<br>4.762', BLUE, -62, W(s,'dezoito',0,-.2), 64),
+             (1, ix(2025), 'CASTRO<br>3.890', BLUE, 18, W(s,'voltou',0,-.2)),
+             (0, ix(2017), 'BRASIL', '#B5B5B5', -48, W(s,'brasil',0,.2))]).replace('{flow}', 'm:3')
+c4 = c4[:-6] + f'<div class="big23" data-a="up" data-t="{W(s,"rosinha",0,-.1):.2f}"><b>23 ANOS</b><span>DE GOVERNOS DE DIREITA</span><small>DESDE 2003 · MDB CONTA COMO DIREITA</small></div></div>'
 H.append(scene(s, rail(1)+f'''
 {eb(3, 'A LINHA INTEIRA · 1998–2025', top=290)}
-<div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:32px"><b style="color:{L1}">━ ESQUERDA</b> &nbsp;&nbsp; <b style="color:{BLUE}">━ DIREITA</b></div>
+<div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:32px"><b style="color:{L1}">━ ESQUERDA</b> &nbsp;&nbsp; <b style="color:{BLUE}">━ DIREITA</b> &nbsp;&nbsp; <b style="color:#B5B5B5">┅ BRASIL</b></div>
 {c4}
 <div class="el h" data-flow="m:4" data-gap="30" data-a="up" data-t="{W(s,'subiu',0,-.2)}" style="left:80px;width:880px;font-size:58px;color:#fff">SUBIU E CAIU <span class="hl">COM OS DOIS LADOS.</span></div>
-<div class="el fine" data-flow="m:5" data-gap="20" data-a="fade" data-t="{W(s,'série',0,.1)}" style="left:80px">MESMA BASE DE 1998 A 2025 (ISP-RJ, NÚMERO DE MORTES VIOLENTAS). 2025: RIO +2,1% (MORTES PELA POLÍCIA +13%), BRASIL −8,2%, MENOR TAXA DA SÉRIE (FBSP). A QUEDA DEPOIS DE 2018 VEIO COM O RECORDE DE MORTES PELA POLÍCIA (1.814 EM 2019). 1998 = ÚLTIMO ANO DE MARCELLO ALENCAR (PSDB, DIREITA). A LINHA FICA AZUL A PARTIR DE 2003, QUANDO ROSINHA ENTRA NO MDB.</div>
+<div class="el fine" data-flow="m:5" data-gap="20" data-a="fade" data-t="{W(s,'série',0,.1)}" style="left:80px">MESMA BASE DE 1998 A 2025 (ISP-RJ, NÚMERO DE MORTES VIOLENTAS). 2025: RIO +2,1% (MORTES PELA POLÍCIA +13%), BRASIL −8,2%, MENOR TAXA DA SÉRIE (FBSP). A QUEDA DEPOIS DE 2018 VEIO COM O RECORDE DE MORTES PELA POLÍCIA (1.814 EM 2019). BRASIL: ATLAS DA VIOLÊNCIA (SIM), 2004–2024, NA MESMA ESCALA DO RIO EM 2004 (SÓ A FORMA DA CURVA). MDB = DIREITA NA ESCALA DE BOLOGNESI (7,01); AZUL DESDE AGO/2003.</div>
 ''', 'i04', 'ISP-RJ, LETALIDADE VIOLENTA · FBSP, ANUÁRIO 2026', kbo='60% 45%'))
 
 s = 'v05'; CUR['s'] = s
 YS = [str(y) for y in range(2013, 2026)]
 c5 = segchart(YS, [
-    dict(n='RIO 22,6', sub='PL', v=[31.8,33.9,29.5,36.7,39.5,39.2,34.8,28.5,27.7,26.1,24.8,22.1,22.6], segs=[(0, 12, BLUE)], w=9, lc=Y, lt=W(s,'rio',0,.4), rt=W(s,'rio',0,-.2)),
-    dict(n='ES 22,0', sub='PSB', v=[43.7,42.9,38.1,33.8,38.6,30.1,26.8,30.1,29.0,27.8,26.9,24.0,22.0], segs=[(0, 2, L1), (2, 6, BLUE), (6, 12, L1)], w=6, lt=W(s,'espírito',0,.6), rt=W(s,'espírito',0,-.2)),
-    dict(n='MINAS 12,9', sub='NOVO', v=[21.0,21.7,21.3,21.2,20.0,15.5,13.5,12.9,11.9,13.9,14.4,15.1,12.9], segs=[(0, 2, BLUE), (2, 6, L1), (6, 12, BLUE)], w=6, lt=W(s,'minas',0,.6), rt=W(s,'minas',0,-.2)),
-    dict(n='SP 7,8', sub='REPUBLICANOS', v=[12.6,13.3,11.8,11.1,10.8,9.6,9.0,9.1,8.0,8.2,7.6,8.2,7.8], segs=[(0, 12, BLUE)], w=6, lt=W(s,'paulo',0,.6), rt=W(s,'paulo',0,-.2)),
+    dict(n='RIO 22,6', sub='PL', v=[31.8,33.9,29.5,36.7,39.5,39.2,34.8,28.5,27.7,26.1,24.8,22.1,22.6], segs=[(0, 12, BLUE)], w=9, lc=BLUE, lt=W(s,'rio',0,.4), rt=W(s,'rio',0,-.2)),
+    dict(n='ES 22,0', sub='PSB', v=[43.7,42.9,38.1,33.8,38.6,30.1,26.8,30.1,29.0,27.8,26.9,24.0,22.0], segs=[(0, 2, L1), (2, 6, '#2DD4BF'), (6, 12, L1)], w=6, lc='#2DD4BF', lt=W(s,'espírito',0,.6), rt=W(s,'espírito',0,-.2)),
+    dict(n='MINAS 12,9', sub='NOVO', v=[21.0,21.7,21.3,21.2,20.0,15.5,13.5,12.9,11.9,13.9,14.4,15.1,12.9], segs=[(0, 2, '#38BDF8'), (2, 6, '#FF9C8F'), (6, 12, '#38BDF8')], w=6, lc='#38BDF8', lt=W(s,'minas',0,.6), rt=W(s,'minas',0,-.2)),
+    dict(n='SP 7,8', sub='REPUBLICANOS', v=[12.6,13.3,11.8,11.1,10.8,9.6,9.0,9.1,8.0,8.2,7.6,8.2,7.8], segs=[(0, 12, '#B9CCFF')], w=6, lc='#B9CCFF', lt=W(s,'paulo',0,.6), rt=W(s,'paulo',0,-.2)),
 ], 0, 45, [0, 15, 30, 45], W(s,'linha',0,-.2), 2.4, h=620, lw=230, xl=[0, 3, 6, 9, 12]).replace('{flow}', 'm:3')
 H.append(scene(s, rail(1)+f'''
 {eb(4, 'SUDESTE · MORTES VIOLENTAS POR 100 MIL', top=290)}
-<div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:30px"><b style="color:{L1}">━ GOVERNO DE ESQUERDA</b> &nbsp; <b style="color:{BLUE}">━ GOVERNO DE DIREITA</b><br><span style="color:#A9A291;font-size:24px">A COR DA LINHA MUDA QUANDO MUDA O GOVERNO</span></div>
+<div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:30px"><b style="color:{L1}">━ GOVERNO DE ESQUERDA</b> &nbsp; <b style="color:{BLUE}">━ GOVERNO DE DIREITA</b><br><span style="color:#A9A291;font-size:24px">CADA ESTADO TEM SEU TOM</span></div>
 {c5}
 <div class="el h" data-flow="m:4" data-gap="30" data-a="up" data-t="{W(s,'topo',0,-.3)}" style="left:80px;width:880px;font-size:54px;color:#fff">PARTIDO SOZINHO <span class="hl">NÃO DECIDE.</span></div>
 <div class="el fine" data-flow="m:5" data-gap="20" data-a="fade" data-t="{W(s,'topo',0,.3)}" style="left:80px">ES: CASAGRANDE (PSB, CENTRO-ESQUERDA) 2013–14 E 2019–25; HARTUNG (MDB, DIREITA) 2015–18 — CAIU NOS DOIS. MG: PIMENTEL (PT, ESQUERDA) 2015–18; ZEMA (NOVO, DIREITA) 2019–25. SP: PSDB E REPUBLICANOS (DIREITA); MÁRCIO FRANÇA (PSB) GOVERNOU 9 MESES EM 2018. A REVISTA OESTE (DADOS DO PODER360) DIZ “ESQUERDA 23,4 × DIREITA 14,8”: USA MÉDIA DO PAÍS INTEIRO E TIRA AS MORTES PELA POLÍCIA.</div>
@@ -350,7 +353,7 @@ H.append(scene(s, f'''
   {row('É DA UNIÃO', 'FRONTEIRAS E PORTOS POR ONDE ENTRAM ARMAS E DROGAS', None, Y, 0, fade=W(s,'armas',0,-.2))}
   {row('É DO ESTADO', 'AS ESCOLHAS SOBRE A POLÍCIA', None, R, 0, fade=W(s,'escolhas',0,-.2))}</div>
 <div class="el repost" data-flow="m:4" data-gap="44" data-a="slam" data-t="{W(s,'cobraria',0,-.3)}" data-shake="1" style="left:80px;width:880px;font-size:54px">O QUE VOCÊ COBRARIA DO GOVERNADOR ELEITO?<small>Douglas Ruas (PL, direita) · posse em 06/01/2027</small></div>
-<div class="el fine" data-flow="m:5" data-gap="20" data-a="fade" data-t="{W(s,'grupo',0,.2)}" style="left:80px">DESDE AGO/2003 (ROSINHA NO MDB), O RIO É GOVERNADO PELO MDB OU PELA DIREITA. RUAS FOI ELEITO NO 1º TURNO DEPOIS QUE O TSE ANULOU OS VOTOS DE GAROTINHO; É DO GRUPO DE CASTRO E BACELLAR, SEGUNDO A IMPRENSA.</div>
+<div class="el fine" data-flow="m:5" data-gap="20" data-a="fade" data-t="{W(s,'grupo',0,.2)}" style="left:80px">DESDE AGO/2003 (ROSINHA NO MDB), O RIO É GOVERNADO PELA DIREITA (MDB = DIREITA NA ESCALA, 7,01). RUAS FOI ELEITO NO 1º TURNO DEPOIS QUE O TSE ANULOU OS VOTOS DE GAROTINHO; É DO GRUPO DE CASTRO E BACELLAR, SEGUNDO A IMPRENSA.</div>
 ''', 'i15', 'TSE · TRE-RJ · FBSP · ISP-RJ · GENI/UFF · SOU DA PAZ', kbo='55% 55%'))
 
 CSS = open(os.path.join(KIT, 'preview_kit/style.css')).read() + '''
@@ -389,6 +392,7 @@ CSS = open(os.path.join(KIT, 'preview_kit/style.css')).read() + '''
 .st b{font-size:17px;top:50px;letter-spacing:1.5px}.st.on b{font-size:19px}
 .repost{font-size:58px;border-radius:16px;padding:26px 24px 28px}
 .plab{font-size:16px;line-height:1.2;letter-spacing:.5px}.pdot{position:absolute;width:14px;height:14px;border-radius:50%;border:3px solid #0b0c0e}
+.big23{position:absolute;left:84px;top:-6px;color:#5B7CFF;font-family:Rub,sans-serif;line-height:.95}.big23 b{display:block;font-size:92px;font-weight:900;letter-spacing:-2px}.big23 span{display:block;font-size:30px;font-weight:800;color:#fff;margin-top:6px}.big23 small{display:block;font-family:JBM,monospace;font-size:17px;color:#A9A291;margin-top:6px;letter-spacing:.5px}
 .items.tight .item{padding:14px 0 16px}.items.tight .item .t{font-size:36px}.items.tight .item .kick{font-size:19px}
 .zbg{position:absolute;inset:0;background:radial-gradient(ellipse at 55% 58%,#14192a 0%,#0a0b0e 62%)}
 .govs .row{padding:11px 0}.govs .row.txt .v{font-size:38px}.row .v .pt{font-family:JBM;font-weight:700;font-size:21px;color:#BDB6A6;letter-spacing:1px}
