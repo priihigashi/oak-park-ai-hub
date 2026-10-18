@@ -15,50 +15,76 @@ s12 36 palavras
 s13 35 palavras
 paulista_0.jpg | CC BY-SA 4.0 | File:Santa Catarina Hospital, Avenida Paulista, São Paulo, Brazil.jpg
 paulista_1.jpg | CC BY-SA 4.0 | File:Avenida Paulista at night 03.jpg
-paulista_2.jpg | CC BY-SA 4.0 | File:Avenida Paulista at night 02.jpg
 farialima_0.jpg | CC BY 3.0 | File:Avenida Brigadeiro Faria Lima 1995.jpg
 farialima_1.jpg | CC BY-SA 4.0 | File:Avenida Brigadeiro Faria Lima7.jpg
 bandeirantes_0.jpg | CC BY-SA 4.0 | File:Troféu Palácio dos Bandeirantes do Campeonato Paulista.jpg
-skip File:Palácio dos Bandeirantes Fotos gerais e detalhes do Palácio dos Bandeirantes. (33638921998).jpg HTTP Error 429: Too Many Requests
-skip File:Palácio dos Bandeirantes Fotos gerais e detalhes do Palácio dos Bandeirantes. (47462953362).jpg HTTP Error 429: Too Many Requests
-skip File:Palácio dos Bandeirantes Fotos gerais e detalhes do Palácio dos Bandeirantes. (46600211135).jpg HTTP Error 429: Too Many Requests
-skip File:Palácio dos Bandeirantes 2018 052.jpg HTTP Error 429: Too Many Requests
-skip File:Logo do Palácio dos Bandeirantes.png HTTP Error 429: Too Many Requests
-skip File:Palácio dos Bandeirantes Fotos gerais e detalhes do Palácio dos Bandeirantes. (47515671421).jpg HTTP Error 429: Too Many Requests
-skip File:Palácio dos Bandeirantes Fotos gerais e detalhes do Palácio dos Bandeirantes. (33638922328).jpg HTTP Error 429: Too Many Requests
-skip File:Palácio dos Bandeirantes Fotos gerais e detalhes do Palácio dos Bandeirantes. (46791861994).jpg HTTP Error 429: Too Many Requests
-skip File:Palácio dos Bandeirantes Fotos gerais e detalhes do Palácio dos Bandeirantes. (33638920398).jpg HTTP Error 429: Too Many Requests
-skip File:Palácio dos Bandeirantes Fotos gerais e detalhes do Palácio dos Bandeirantes. (47462957342).jpg HTTP Error 429: Too Many Requests
-Traceback (most recent call last):
-  File "/home/runner/work/oak-park-ai-hub/oak-park-ai-hub/docs/templates/collage_reel/preview_kit/commons_fetch.py", line 23, in <module>
-    r = get(dict(action='query', format='json', list='search', srnamespace=6, srlimit=12,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/oak-park-ai-hub/oak-park-ai-hub/docs/templates/collage_reel/preview_kit/commons_fetch.py", line 14, in get
-    return json.load(urllib.request.urlopen(req, timeout=40))
-                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/urllib/request.py", line 216, in urlopen
-    return opener.open(url, data, timeout)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/urllib/request.py", line 525, in open
-    response = meth(req, response)
-               ^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/urllib/request.py", line 634, in http_response
-    response = self.parent.error(
-               ^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/urllib/request.py", line 563, in error
-    return self._call_chain(*args)
-           ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/urllib/request.py", line 496, in _call_chain
-    result = func(*args)
-             ^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/urllib/request.py", line 643, in http_error_default
-    raise HTTPError(req.full_url, code, msg, hdrs, fp)
-urllib.error.HTTPError: HTTP Error 429: Too Many Requests
-falhou https://www.ipea.gov.br/atlasviolencia/api/v1/valores-series/20/3 HTTP Error 404: Not Found
-falhou https://www.ipea.gov.br/atlasviolencia/api/v1/series/20 HTTP Error 404: Not Found
-falhou https://www.ipea.gov.br/atlasviolencia/api/v1/valores-series/328/3 HTTP Error 404: Not Found
-falhou https://www.ipea.gov.br/atlasviolencia/api/v1/series/328 HTTP Error 404: Not Found
-falhou https://www.ipea.gov.br/atlasviolencia/api/v1/valores-series/329/3 HTTP Error 404: Not Found
-falhou https://www.ipea.gov.br/atlasviolencia/api/v1/series/329 <urlopen error timed out>
-falhou https://www.ipea.gov.br/atlasviolencia/api/v1/valores-series/330/3 HTTP Error 404: Not Found
-falhou https://www.ipea.gov.br/atlasviolencia/api/v1/series/330 HTTP Error 404: Not Found
+bandeirantes_1.jpg | CC BY 2.0 | File:Palácio dos Bandeirantes Fotos gerais e detalhes do Palácio dos Bandeirantes. (33638921998).jpg
+pm_0.jpg | CC BY 2.0 | File:Viaturas da Polícia Militar de São Paulo.jpg
+pm_1.jpg | CC BY 2.0 | File:Viaturas da Polícia de São Paulo, Ribeirão preto.jpg
+santos_0.jpg | CC BY-SA 2.0 | File:Navios da Marinha atracados no Porto de Santos SP - Operação Ágata 2022 (52115602920).jpg
+santos_1.jpg | CC BY-SA 4.0 | File:Museu do Porto de Santos 2018 006.jpg
+skyline_0.jpg | CC BY-SA 3.0 | File:Ponte estaiada Octavio Frias - Sao Paulo.jpg
+skyline_1.jpg | CC BY-SA 2.0 | File:Sao Paulo Skyline at night.jpg
+paraisopolis_0.jpg | Public domain | File:Ilustraçao da foto de Tuca Vieira que Desigualdade social em sao paulo.jpg
+camara_0.jpg | CC BY-SA 3.0 | File:Heliponto desativado da Câmara Municipal de São Paulo.JPG
+camara_1.jpg | CC BY-SA 3.0 | File:Bancada dos vereadores do PT na Câmara Municipal de São Paulo.JPG
+onibus_0.jpg | CC BY 4.0 | File:Ônibus a bateria São Paulo frente.jpg
+onibus_1.jpg | CC0 | File:Ônibus a bateria São Paulo.jpg
+NADA PARA posto posto de combustível São Paulo
+se_0.jpg | CC0 | File:Catedral da Sé em São Paulo.jpg
+se_1.jpg | CC0 | File:Catedral da Sé, São Paulo, Brasil.jpg
+viaduto_0.jpg | CC0 | File:Edifício Matarazzo (Viaduto do Chá), São Paulo (downtown).jpg
+viaduto_1.jpg | CC BY-SA 4.0 | File:Viaduto do Chá, São Paulo, Brazil.jpg
+alesp_0.jpg | CC BY 3.0 | File:Assembleia Legislativa do Estado de São Paulo 01.jpg
+alesp_1.jpg | CC BY 2.0 | File:Sessão solene de posse do novo governador do estado de São Paulo Tarcísio de Freitas na Assembleia Legislativa de São Paulo 09.jpg
+NADA PARA marginal Marginal Tietê noite
+luz_0.jpg | CC BY-SA 4.0 | File:Metro de São Paulo, Luz Station, Brazil.jpg
+luz_1.jpg | CC BY 2.0 | File:Sao Paulo Railway.jpg
+ponte_0.jpg | CC BY-SA 3.0 | File:Ponte estaiada Octavio Frias - Sao Paulo.jpg
+ponte_1.jpg | CC BY 2.0 | File:Ponte Estaiada Octávio Frias de Oliveira (4266763267).jpg
+tarcisio_0.jpg | CC BY 2.0 | File:Governador do Estado de São Paulo, Tarcísio de Freitas - Foto Oficial.jpg
+tarcisio_1.jpg | CC BY 2.0 | File:Sessão solene de posse do novo governador do estado de São Paulo Tarcísio de Freitas na Assembleia Legislativa de São Paulo 08.jpg
+haddad_0.jpg | CC BY-SA 4.0 | File:Lula e Fernando Haddad na Universidade Estadual de Campinas em 2022.jpg
+haddad_1.jpg | CC BY 2.0 | File:01.01.2023 - Posse de Fernando Haddad, Ministro de Estado da Fazenda (52626557319).jpg
+derrite_0.jpg | CC BY 2.0 | File:Retratos Oficiais - Secretários de Estado de São Paulo em 2023 02.jpg
+derrite_1.jpg | CC BY 3.0 | File:Capitão Derrite.jpg
+nunes_0.jpg | CC BY 2.0 | File:Ricardo Nunes, prefeito de São Paulo.jpg
+nunes_1.jpg | CC BY 2.0 | File:Reunião com Prefeito Municipal de São Paulo, Ricardo Nunes mais participantes (cropped).jpg
+milton_0.jpg | CC BY-SA 2.0 | File:Milton Leite.jpg
+milton_1.jpg | CC BY 2.0 | File:Papo na Redação com PVC e Milton Leite.jpg
+senival_0.jpg | CC BY-SA 3.0 | File:Bancada dos vereadores do PT na Câmara Municipal de São Paulo.JPG
+doria_0.jpg | CC BY 2.0 | File:Foto oficial de João Dória como Governador de São Paulo.jpg
+doria_1.jpg | CC BY 2.0 | File:Governador de SP João Doria em reunião virtual com prefeitos 01.jpg
+covas_0.jpg | CC BY 3.0 br | File:Mário Covas.jpg
+covas_1.jpg | CC BY 2.0 | File:Prêmio Mário Covas - Sala Salão Paulo.jpg
+alckmin_0.jpg | CC BY 2.0 | File:Geraldo Alckmin (8532349687).jpg
+alckmin_1.jpg | CC BY 2.0 | File:Geraldo Alckmin (8533456890).jpg
+js falhou https://www.ipea.gov.br/atlasviolencia/_next/static/chunks/5644-c5b5ccc520a6352c.js <urlopen error timed out>
+JS: ['/atlasviolencia/_next/static/chunks/4bd1b696-cfdaa5f8b51c2ba2.js', '/atlasviolencia/_next/static/chunks/1517-0ae16306a0cb766c.js', '/atlasviolencia/_next/static/chunks/main-app-efbdcbd28c3c2029.js', '/atlasviolencia/_next/static/chunks/2170-ee8fa9ea9e22fd20.js', '/atlasviolencia/_next/static/chunks/app/layout-843df7820c18900f.js', '/atlasviolencia/_next/static/chunks/53c13509-a97add474a5d7dcd.js', '/atlasviolencia/_next/static/chunks/8e1d74a4-45ed0161a54847c1.js', '/atlasviolencia/_next/static/chunks/ca377847-cd1a71709055ac1b.js', '/atlasviolencia/_next/static/chunks/5644-c5b5ccc520a6352c.js', '/atlasviolencia/_next/static/chunks/1723-189899fd1111f445.js', '/atlasviolencia/_next/static/chunks/app/dados-series/%5Bslug%5D/page-fc81d222195ccb4d.js', '/atlasviolencia/_next/static/chunks/polyfills-42372ed130431b0a.js', '/atlasviolencia/_next/static/chunks/webpack-149e89260d0a254f.js']
+PADROES API:
+   cannot be called inside unstable_cache. Call it outside and pass an argument instead. Read more: https://nextjs.org/docs/app/api-reference/functions/unstable_cache
+   should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+   was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context
+  . Read more: https://nextjs.org/docs/app/api-reference/functions/use-search-params#updating-searchparams
+  capitais
+  capitals
+  das capitais
+  https://www.ipea.gov.br/cms/api
+  https://www.ipea.gov.br/dados-api
+  }}}(r)}. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+falhou /atlasviolencia/api/v1/valores-series/20/3 HTTP Error 404: Not Found
+falhou /atlasviolencia/api/v1/valores-series/20/4 HTTP Error 404: Not Found
+falhou /atlasviolencia/api/v1/series/20/valores/3 HTTP Error 404: Not Found
+falhou /atlasviolencia/api/v1/valores-series/20 HTTP Error 404: Not Found
+falhou /atlasviolencia/api/v1/valores-series/328/3 HTTP Error 404: Not Found
+falhou /atlasviolencia/api/v1/valores-series/328/4 HTTP Error 404: Not Found
+falhou /atlasviolencia/api/v1/series/328/valores/3 HTTP Error 404: Not Found
+falhou /atlasviolencia/api/v1/valores-series/328 HTTP Error 404: Not Found
+falhou /atlasviolencia/api/v1/valores-series/329/3 <urlopen error timed out>
+falhou /atlasviolencia/api/v1/valores-series/329/4 HTTP Error 404: Not Found
+falhou /atlasviolencia/api/v1/series/329/valores/3 HTTP Error 404: Not Found
+falhou /atlasviolencia/api/v1/valores-series/329 HTTP Error 404: Not Found
+falhou /atlasviolencia/api/v1/valores-series/330/3 HTTP Error 404: Not Found
+falhou /atlasviolencia/api/v1/valores-series/330/4 HTTP Error 404: Not Found
+falhou /atlasviolencia/api/v1/series/330/valores/3 <urlopen error timed out>
+falhou /atlasviolencia/api/v1/valores-series/330 HTTP Error 404: Not Found
