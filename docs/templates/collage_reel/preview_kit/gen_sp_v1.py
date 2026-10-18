@@ -228,14 +228,14 @@ H.append(scene(s, rail(3)+f'''
 s = 's07b'; CUR['s'] = s
 H.append(scene(s, rail(3)+f'''
 {eb(0, 'QUEM AJUDA A POLÍCIA A MATAR MENOS?', top=300)}
-<div class="el rows" data-flow="m:2" data-gap="34" data-a="fade" data-t="{W(s,'governo',0,-.3)}" style="left:80px">
-  {row('2024 · GOVERNO ATUAL 🦑', 'REGRAS NACIONAIS PARA CÂMERA NA FARDA E USO DA FORÇA', None, Y, 0, sub=f'TARCÍSIO DISSE QUE SP SEGUIRIA')}</div>
-<div class="el rows" data-flow="m:3" data-gap="34" data-a="fade" data-t="{W(s,'bolsonaro',0,-.3)}" style="left:80px">
-  {row('2020 · BOLSONARO', 'REVOGA AS REGRAS DE RASTREAMENTO DE ARMAS E MUNIÇÕES', None, '#5B7CFF', 0, sub=f'PL {EXT}')}
-  {row('2019 · BOLSONARO', 'PROJETO QUE ACABA COM A MARCAÇÃO DAS BALAS DA POLÍCIA', None, '#5B7CFF', 0, sub='PL 3.723/2019', fade=W(s,'projeto',0,-.2))}</div>
-<div class="el h" data-flow="m:4" data-gap="44" data-a="slam" data-t="{W(s,'flávio',0,-.2)}" style="left:80px;width:880px;font-size:62px;color:#fff">FLÁVIO BOLSONARO: <span class="hl">“DETALHEZINHO”</span></div>
-<div class="el fine" data-flow="m:5" data-gap="24" data-a="fade" data-t="{W(s,'outubro',0,-.1)}" style="left:80px">TV GLOBO, 16/10/2026 (PL {EXT}). A MARCAÇÃO AJUDOU A ESCLARECER OS CASOS MARIELLE FRANCO E PATRÍCIA ACIOLI (MPF). EM SP, A POLÍCIA CAUSOU 23,1% DAS MORTES VIOLENTAS EM 2025.</div>
-''', 'pm2', 'MJSP, PORTARIA DE CÂMERAS (MAI/2024) E DECRETO DO USO DA FORÇA (DEZ/2024) · EXÉRCITO/COLOG, ABR/2020 · PODER360 E METRÓPOLES, OUT/2026 · ' + IDS, kbo='50% 50%'))
+<div class="el rows" data-flow="m:2" data-gap="30" data-a="fade" data-t="{W(s,'bolsonaro',0,-.3)}" style="left:80px">
+  {row('2019 · BOLSONARO', 'PROJETO QUE ACABA COM A MARCAÇÃO DAS BALAS DA POLÍCIA', None, '#5B7CFF', 0, sub=f'PL {EXT} · PL 3.723/2019')}
+  {row('2020 · BOLSONARO', 'REVOGA AS REGRAS DE RASTREAMENTO DE ARMAS E MUNIÇÕES', None, '#5B7CFF', 0, sub=f'PL {EXT}', fade=W(s,'revogou',0,-.2))}
+  {row('2024 · GOVERNO ATUAL 🦑', 'REGRAS NACIONAIS PARA CÂMERA NA FARDA E USO DA FORÇA', None, Y, 0, sub='EFEITO: AINDA SEM DADOS', fade=W(s,'atual',0,-.3))}
+  {row('2024–25 · TARCÍSIO', 'CÂMERA QUE SÓ GRAVA QUANDO LIGADA · PEDIU PARA REVOGAR O USO DA FORÇA', None, R, 0, sub=f'REPUBLICANOS {DIR}', fade=W(s,'tarcísio',0,-.3))}</div>
+<div class="el h" data-flow="m:3" data-gap="90" data-a="slam" data-t="{W(s,'flávio',0,-.2)}" style="left:80px;width:880px;font-size:62px;color:#fff">FLÁVIO BOLSONARO: <span class="hl">“DETALHEZINHO”</span></div>
+<div class="el fine" data-flow="m:4" data-gap="24" data-a="fade" data-t="{W(s,'outubro',0,-.1)}" style="left:80px">TV GLOBO, 16/10/2026 (PL {EXT}). A MARCAÇÃO AJUDOU A ESCLARECER OS CASOS MARIELLE FRANCO E PATRÍCIA ACIOLI (MPF). EM SP, A POLÍCIA CAUSOU 23,1% DAS MORTES VIOLENTAS EM 2025. CÂMERAS NOVAS: ACORDO HOMOLOGADO NO STF EM MAI/2025; A REGRA FEDERAL PEDE GRAVAÇÃO “PREFERENCIALMENTE ININTERRUPTA”.</div>
+''', 'pm2', 'MJSP (MAI E DEZ/2024) · EXÉRCITO/COLOG, ABR/2020 · NOTA DO COSUD, DEZ/2024 · PONTE, MAI/2025 · PODER360, OUT/2026 · ' + IDS, kbo='50% 50%'))
 
 s = 's08'; CUR['s'] = s
 YE = [str(y) for y in range(2016, 2024)]
