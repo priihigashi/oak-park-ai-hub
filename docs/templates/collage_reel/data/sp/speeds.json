@@ -1,19 +1,19 @@
 {
- "_doc": "Velocidade (atempo) sobre a voz ORIGINAL de cada cena (gráficos 1,12x; cenas leves 1,22x). Ao trocar a voz (ElevenLabs), rodar build.py de novo.",
+ "_doc": "Velocidade (atempo) sobre a voz ORIGINAL de cada cena. v3: tudo +0,1 a pedido dela (gráficos 1,22x; cenas leves 1,32x; gancho 1,4x). Ao trocar a voz (ElevenLabs), rodar build.py de novo.",
  "speeds": {
-  "s01": 1.3,
-  "s02": 1.22,
-  "s03": 1.12,
-  "s04": 1.22,
-  "s05": 1.22,
-  "s06": 1.22,
-  "s07": 1.12,
-  "s08": 1.22,
-  "s09": 1.22,
-  "s10": 1.22,
-  "s11": 1.22,
-  "s12": 1.12,
-  "s13": 1.22
+  "s01": 1.4,
+  "s02": 1.32,
+  "s03": 1.22,
+  "s04": 1.32,
+  "s05": 1.32,
+  "s06": 1.32,
+  "s07": 1.22,
+  "s08": 1.32,
+  "s09": 1.32,
+  "s10": 1.32,
+  "s11": 1.32,
+  "s12": 1.22,
+  "s13": 1.32
  },
  "order": [
   "s01",
