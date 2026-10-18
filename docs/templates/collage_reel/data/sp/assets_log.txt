@@ -3,9 +3,9 @@ Version: 7.3.1
 s01 24 palavras
 s02 42 palavras
 s03 124 palavras
-s04 39 palavras
-s05 81 palavras
-s06 93 palavras
+s04 31 palavras
+s05 71 palavras
+s06 77 palavras
 s07 76 palavras
 s07b 150 palavras
 s08 62 palavras
