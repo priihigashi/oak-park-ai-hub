@@ -66,7 +66,7 @@ H = []
 
 
 # ---------- gráfico de linhas animado (revela da esquerda pra direita via .bar) ----------
-def chart(sid, years, series, ymax, ticks, t0, dur, marks=(), w=880, h=600, lw=250, stages=None, notes=(), ymin=0, tfmt=None):
+def chart(sid, years, series, ymax, ticks, t0, dur, marks=(), w=880, h=600, lw=250, stages=None, notes=(), ymin=0, tfmt=None, per_line=False):
     px0, px1, py0, py1 = 56, w - lw - 20, 14, h - 46
     def X(i): return px0 + (px1 - px0) * i / (len(years) - 1)
     def Yv(v): return py1 - (py1 - py0) * (v - ymin) / (ymax - ymin)
@@ -79,14 +79,16 @@ def chart(sid, years, series, ymax, ticks, t0, dur, marks=(), w=880, h=600, lw=2
         i = years.index(yr)
         mk += (f'<line x1="{X(i):.1f}" x2="{X(i):.1f}" y1="{py0}" y2="{py1}" stroke="{col}" stroke-width="2" stroke-dasharray="6 6"/>'
                f'<text x="{X(i)+10:.1f}" y="{py1-12}" font-family="JBM" font-weight="700" font-size="18" fill="{col}">{txt}</text>')
-    lines = ''
+    lines = ''; each = []
     for s in series:
+        n0 = len(lines)
         pts = ' '.join(f'{X(i):.1f},{Yv(v):.1f}' for i, v in enumerate(s['v']))
         dash = ' stroke-dasharray="10 8"' if s.get('dash') else ''
         lines += f'<polyline points="{pts}" fill="none" stroke="{s["c"]}" stroke-width="{s.get("w",5)}" stroke-linejoin="round" stroke-linecap="round"{dash}/>'
         for (i, txt) in s.get('dots', []):
             lines += (f'<circle cx="{X(i):.1f}" cy="{Yv(s["v"][i]):.1f}" r="9" fill="{s["c"]}" stroke="#0b0c0e" stroke-width="3"/>'
                       f'<text x="{X(i):.1f}" y="{Yv(s["v"][i])-18:.1f}" text-anchor="middle" font-family="Rub" font-weight="900" font-size="30" fill="{s["c"]}" stroke="#0b0c0e" stroke-width="6" paint-order="stroke">{txt}</text>')
+        each.append((s.get('lt', t0), lines[n0:]))
     labels = ''
     # posições dos rótulos sem colisão: ordena pela altura e garante espaço mínimo
     want = sorted([(Yv(s['v'][-1]), i) for i, s in enumerate(series)])
@@ -101,7 +103,8 @@ def chart(sid, years, series, ymax, ticks, t0, dur, marks=(), w=880, h=600, lw=2
                    f'<b>{s["n"]}</b>{sub}</div>')
     return (f'<div class="el chart" data-flow="{{flow}}" style="left:80px;width:{w}px;height:{h}px">'
             f'<svg class="cgrid" width="{w}" height="{h}">{grid}{mk}</svg>'
-            + (''.join(f'<div class="bar crev" data-t="{st}" data-d="{sd}" data-to="{(X(b)+40 if b < len(years)-1 else px1+48) - (X(a) if a else 0):.0f}" style="height:{h}px;left:{X(a) if a else 0:.0f}px"><svg width="{w}" height="{h}" style="margin-left:-{X(a) if a else 0:.0f}px">{lines}</svg></div>'
+            + (''.join(f'<div class="bar crev" data-t="{lt:.2f}" data-d="1.1" data-to="{px1+12}" style="height:{h}px"><svg width="{w}" height="{h}">{one}</svg></div>' for lt, one in each) if per_line else
+               ''.join(f'<div class="bar crev" data-t="{st}" data-d="{sd}" data-to="{(X(b)+40 if b < len(years)-1 else px1+48) - (X(a) if a else 0):.0f}" style="height:{h}px;left:{X(a) if a else 0:.0f}px"><svg width="{w}" height="{h}" style="margin-left:-{X(a) if a else 0:.0f}px">{lines}</svg></div>'
                        for (a, b, st, sd) in stages) if stages else
                f'<div class="bar crev" data-t="{t0}" data-d="{dur}" data-to="{px1+12}" style="height:{h}px"><svg width="{w}" height="{h}">{lines}</svg></div>')
             + ''.join(f'<div class="clab cnote" data-a="fade" data-t="{nt:.2f}" style="left:{X(ni)+dx:.0f}px;top:{Yv(nv)+dy:.0f}px;color:{nc}">{ntx}</div>' for (ni, nv, ntx, nc, nt, dx, dy) in notes)
@@ -175,20 +178,22 @@ H.append(scene(s, f'''
 
 s = 'v02'; CUR['s'] = s
 def gov(yrs, nome, partido, idl, t, col='#fff', sub=''):
-    sb = f'<small>{sub}</small>' if sub else ''
+    if sub.startswith('!'):   # selo vermelho: entra quando a narração fala de presos/afastados/inelegíveis
+        sb = f'<small class="selo" data-a="pop" data-t="{W(s,"presos",0,-.1)}">{sub[1:]}</small>'
+    else: sb = f'<small>{sub}</small>' if sub else ''
     return f'<div class="row txt" data-a="fade" data-t="{t}"><div class="k">{yrs}{sb}</div><div class="v" style="color:{col}">{nome} <span class="pt">{partido}</span> {idl}</div></div>'
 H.append(scene(s, rail(0)+f'''
 {eb(1, 'QUEM GOVERNOU O ESTADO', top=320)}
 <div class="el rows govs" data-flow="m:2" data-gap="34" style="left:80px">
-  {gov('1999–2002', 'GAROTINHO', 'PDT→PSB', CESQ, W(s,'garotinho',0,-.2), sub='PRESO EM 2016–17')}
+  {gov('1999–2002', 'GAROTINHO', 'PDT→PSB', CESQ, W(s,'garotinho',0,-.2), sub='!PRESO EM 2016–17')}
   {gov('2002', 'BENEDITA', 'PT', ESQ, W(s,'benedita',0,-.2), sub='VICE QUE ASSUMIU')}
-  {gov('2003–2006', 'ROSINHA', 'PSB→MDB', CESQ + DIR, W(s,'rosinha',0,-.2), sub='NO MDB DESDE AGO/2003 · PRESA EM 2017')}
-  {gov('2007–2014', 'CABRAL', 'PMDB', DIR, W(s,'cabral',0,-.2), col=Y, sub='PRESO EM 2016')}
-  {gov('2014–2018', 'PEZÃO', 'MDB', DIR, W(s,'pezão',0,-.2), col=Y, sub='PRESO EM 2018, ABSOLVIDO')}
-  {gov('2019–2020', 'WITZEL', 'PSC', DIR, W(s,'witzel',0,-.2), col=Y, sub='AFASTADO E CASSADO')}
-  {gov('2020–2026', 'CASTRO', 'PSC→PL', DIR, W(s,'castro',0,-.2), col=Y, sub='INELEGÍVEL ATÉ 2030')}</div>
+  {gov('2003–2006', 'ROSINHA', 'PSB→MDB', CESQ + DIR, W(s,'rosinha',0,-.2), sub='!PRESA EM 2017')}
+  {gov('2007–2014', 'CABRAL', 'PMDB', DIR, W(s,'cabral',0,-.2), col=Y, sub='!PRESO EM 2016')}
+  {gov('2014–2018', 'PEZÃO', 'MDB', DIR, W(s,'pezão',0,-.2), col=Y, sub='!PRESO EM 2018 · ABSOLVIDO')}
+  {gov('2019–2020', 'WITZEL', 'PSC', DIR, W(s,'witzel',0,-.2), col=Y, sub='!AFASTADO E CASSADO')}
+  {gov('2020–2026', 'CASTRO', 'PSC→PL', DIR, W(s,'castro',0,-.2), col=Y, sub='!INELEGÍVEL ATÉ 2030')}</div>
 <div class="el h" data-flow="m:3" data-gap="34" data-a="slam" data-t="{W(s,'vinte',0,-.15)}" style="left:80px;width:880px;font-size:64px;color:#fff">23 ANOS DE <span class="hl">DIREITA</span></div>
-<div class="el fine" data-flow="m:4" data-gap="20" data-a="fade" data-t="{W(s,'lados',0,.2)}" style="left:80px">MDB = 7,01 NA ESCALA, NO LIMITE DA DIREITA. O PT TEVE SECRETARIAS NO GOVERNO CABRAL ATÉ NOV/2013. GAROTINHO FOI SECRETÁRIO DE SEGURANÇA DE ROSINHA (2003–04). ANTES DELE: MARCELLO ALENCAR (PSDB, DIREITA) E BRIZOLA (PDT, CENTRO-ESQUERDA). HOJE GOVERNA O INTERINO RICARDO COUTO (TJ-RJ). PREFEITOS DA CAPITAL DESDE 1993: CESAR MAIA (PMDB/PFL/PTB), CONDE (PFL), PAES (MDB/DEM/PSD), CRIVELLA (PRB), CAVALIERE (PSD): DE CENTRO-DIREITA A EXTREMA-DIREITA. PM E POLÍCIA CIVIL SÃO DO ESTADO (CONSTITUIÇÃO, ART. 144).</div>
+<div class="el fine" data-flow="m:4" data-gap="20" data-a="fade" data-t="{W(s,'lados',0,.2)}" style="left:80px">MDB = 7,01 NA ESCALA, NO LIMITE DA DIREITA. ROSINHA ENTROU NO MDB EM AGO/2003. O PT TEVE SECRETARIAS NO GOVERNO CABRAL ATÉ NOV/2013. GAROTINHO FOI SECRETÁRIO DE SEGURANÇA DE ROSINHA (2003–04). ANTES DELE: MARCELLO ALENCAR (PSDB, DIREITA) E BRIZOLA (PDT, CENTRO-ESQUERDA). HOJE GOVERNA O INTERINO RICARDO COUTO (TJ-RJ). PREFEITOS DA CAPITAL DESDE 1993: CESAR MAIA (PMDB/PFL/PTB), CONDE (PFL), PAES (MDB/DEM/PSD), CRIVELLA (PRB), CAVALIERE (PSD): DE CENTRO-DIREITA A EXTREMA-DIREITA. PM E POLÍCIA CIVIL SÃO DO ESTADO (CONSTITUIÇÃO, ART. 144).</div>
 ''', 'i02', 'TSE · TJ-RJ · ' + IDS, kbo='60% 50%'))
 
 s = 'v03'; CUR['s'] = s
@@ -204,10 +209,10 @@ c3 = chart(s, XM, [
     dict(n='CASTRO 2 −13%', sub='3 ANOS', v=[0, -4.8, -15.1, -13.3, -13.3], c='#38BDF8', w=4, dash=True, lt=W(s,'witzel',0,.6)),
 ], 40, [-40, -20, 0, 20, 40], 0, 0, h=640, lw=290, ymin=-40,
    tfmt=lambda v: (f'+{v}%' if v > 0 else f'{v}%'.replace('-', '−')),
-   stages=[(0, 4, W(s,'linha',0,-.2), 1.8)]).replace('{flow}', 'm:3')
+   per_line=True).replace('{flow}', 'm:3')
 H.append(scene(s, rail(1)+f'''
 {eb(2, 'MANDATO POR MANDATO · MORTES VIOLENTAS', top=290)}
-<div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:32px"><b style="color:{L1}">━ ESQUERDA</b> &nbsp;&nbsp; <b style="color:{BLUE}">━ DIREITA</b> &nbsp;&nbsp; <span style="color:#A9A291;font-size:24px">TRACEJADO = 2º MANDATO, MESMA COR DO 1º</span></div>
+<div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:32px"><b style="color:{L1}">━ ESQUERDA</b> &nbsp;&nbsp; <b style="color:{BLUE}">━ DIREITA</b> &nbsp;&nbsp; <span style="color:#A9A291;font-size:24px">┅ 2º MANDATO</span></div>
 {c3}
 <div class="el fine" data-flow="m:4" data-gap="22" data-a="fade" data-t="{W(s,'linha',0,.4)}" style="left:80px">VARIAÇÃO NO NÚMERO DE MORTES VIOLENTAS ATÉ O FIM DO MANDATO, CONTRA O ANO ANTES DA POSSE. MESMA BASE DE 1998 A 2025 (ISP-RJ). BENEDITA (PT) GOVERNOU 9 MESES EM 2002; PEZÃO ASSUMIU EM ABR/2014; CASTRO EM AGO/2020. ANTES DE 1999, MARCELLO ALENCAR (PSDB, DIREITA): −26%. BRASIL ENTRE 2018 E 2022: CERCA DE −17% (FBSP, NÚMERO DE MORTES). OS +26% DE GAROTINHO INCLUEM OS 9 MESES DE BENEDITA (PT).</div>
 ''', 'i03', 'ISP-RJ, LETALIDADE VIOLENTA (1998–2020) · FBSP, ANUÁRIOS 2022–2026 · ' + IDS, kbo='55% 60%'))
@@ -353,8 +358,9 @@ H.append(scene(s, f'''
   {row('É DA UNIÃO', 'FRONTEIRAS E PORTOS POR ONDE ENTRAM ARMAS E DROGAS', None, Y, 0, fade=W(s,'armas',0,-.2))}
   {row('É DO ESTADO', 'AS ESCOLHAS SOBRE A POLÍCIA', None, R, 0, fade=W(s,'escolhas',0,-.2))}
   {row('É DA PREFEITURA', 'GUARDA E ORDEM URBANA', None, WH, 0, fade=W(s,'prefeitura',0,-.2))}</div>
-<div class="el repost" data-flow="m:4" data-gap="44" data-a="slam" data-t="{W(s,'cobraria',0,-.3)}" data-shake="1" style="left:80px;width:880px;font-size:54px">O QUE VOCÊ COBRARIA DO GOVERNADOR ELEITO?<small>Douglas Ruas (PL, direita) · posse em 06/01/2027</small></div>
-<div class="el fine" data-flow="m:5" data-gap="20" data-a="fade" data-t="{W(s,'grupo',0,.2)}" style="left:80px">DESDE AGO/2003 (ROSINHA NO MDB), O RIO É GOVERNADO PELA DIREITA (MDB = DIREITA NA ESCALA, 7,01). RUAS FOI ELEITO NO 1º TURNO DEPOIS QUE O TSE ANULOU OS VOTOS DE GAROTINHO; É DO GRUPO DE CASTRO E BACELLAR, SEGUNDO A IMPRENSA.</div>
+<div class="el h" data-flow="m:4" data-gap="32" data-a="slam" data-t="{W(s,'vinte',0,-.15)}" style="left:80px;width:880px;font-size:54px;color:#fff">23 ANOS DE <span style="color:#5B7CFF">DIREITA.</span><br><span class="hl">E A CULPA É DA ESQUERDA?</span></div>
+<div class="el repost" data-flow="m:5" data-gap="32" data-a="slam" data-t="{W(s,'cobraria',0,-.3)}" data-shake="1" style="left:80px;width:880px;font-size:44px">O QUE VOCÊ COBRARIA DO GOVERNADOR ELEITO?<small>Douglas Ruas (PL, direita) · posse em 06/01/2027</small></div>
+<div class="el fine" data-flow="m:6" data-gap="20" data-a="fade" data-t="{W(s,'grupo',0,.2)}" style="left:80px">DESDE AGO/2003 (ROSINHA NO MDB), O RIO É GOVERNADO PELA DIREITA (MDB = DIREITA NA ESCALA, 7,01). RUAS FOI ELEITO NO 1º TURNO DEPOIS QUE O TSE ANULOU OS VOTOS DE GAROTINHO; É DO GRUPO DE CASTRO E BACELLAR, SEGUNDO A IMPRENSA.</div>
 ''', 'i15', 'TSE · TRE-RJ · FBSP · ISP-RJ · GENI/UFF · SOU DA PAZ', kbo='55% 55%'))
 
 CSS = open(os.path.join(KIT, 'preview_kit/style.css')).read() + '''
@@ -396,7 +402,7 @@ CSS = open(os.path.join(KIT, 'preview_kit/style.css')).read() + '''
 .big23{position:absolute;left:84px;top:-6px;color:#5B7CFF;font-family:Rub,sans-serif;line-height:.95}.big23 b{display:block;font-size:92px;font-weight:900;letter-spacing:-2px}.big23 span{display:block;font-size:30px;font-weight:800;color:#fff;margin-top:6px}.big23 small{display:block;font-family:JBM,monospace;font-size:17px;color:#A9A291;margin-top:6px;letter-spacing:.5px}
 .items.tight .item{padding:14px 0 16px}.items.tight .item .t{font-size:36px}.items.tight .item .kick{font-size:19px}
 .zbg{position:absolute;inset:0;background:radial-gradient(ellipse at 55% 58%,#14192a 0%,#0a0b0e 62%)}
-.govs .row{padding:11px 0}.govs .row.txt .v{font-size:38px}.row .v .pt{font-family:JBM;font-weight:700;font-size:21px;color:#BDB6A6;letter-spacing:1px}
+.govs .row{padding:11px 0}.govs .selo{display:block;width:max-content;margin-top:6px;background:#FF4A3D;color:#0b0c0e!important;font-weight:700;padding:3px 9px;border-radius:5px;letter-spacing:1px}.govs .row.txt .v{font-size:38px}.row .v .pt{font-family:JBM;font-weight:700;font-size:21px;color:#BDB6A6;letter-spacing:1px}
 .row .v .ide{font-size:15px;padding:1px 7px;vertical-align:middle}
 
 .chart{position:absolute}.chart svg{position:absolute;left:0;top:0;overflow:visible}
