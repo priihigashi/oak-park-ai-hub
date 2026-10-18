@@ -1,20 +1,35 @@
 {
- "_doc": "Velocidade (atempo) sobre a voz ORIGINAL de cada cena; reaplicar com build.py ao trocar a voz.",
+ "_doc": "Velocidade (atempo) sobre a voz ORIGINAL de cada cena; build.py reaplica ao trocar a voz e encurta pausas internas (>0,18 s vira 0,10 s). Gráficos de leitura 1,12x; cenas leves 1,22x; gancho 1,35x.",
  "speeds": {
-  "v01": 1.22,
-  "v02": 1.12,
-  "v03": 1.12,
-  "v04": 1.12,
+  "v01": 1.35,
+  "v02": 1.22,
+  "v03": 1.22,
+  "v04": 1.2,
   "v05": 1.12,
   "v06": 1.22,
   "v07": 1.22,
-  "v08": 1.22,
   "v09": 1.22,
-  "v10": 1.12,
+  "v10": 1.2,
   "v11": 1.22,
   "v12": 1.22,
-  "v13": 1.12,
+  "v13": 1.2,
   "v14": 1.22,
   "v15": 1.22
- }
+ },
+ "order": [
+  "v01",
+  "v02",
+  "v03",
+  "v04",
+  "v05",
+  "v06",
+  "v07",
+  "v09",
+  "v10",
+  "v11",
+  "v12",
+  "v13",
+  "v14",
+  "v15"
+ ]
 }

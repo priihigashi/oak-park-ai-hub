@@ -206,31 +206,21 @@ s = 'v07'; CUR['s'] = s
 H.append(scene(s, rail(3)+f'''
 {eb(6, 'PROBLEMA 2 · MILÍCIA E POLÍTICA', top=320)}
 <div class="el items" data-flow="m:2" data-gap="36" style="left:80px">
-  {item('CPI DAS MILÍCIAS · ALERJ, 2008', 'Mais de 200 indiciamentos pedidos. 5 parlamentares.', W(s,'cpi',0,-.2))}
+  {item('CPI DAS MILÍCIAS · ALERJ, 2008', 'Mais de 200 indiciamentos pedidos, entre eles 5 parlamentares.', W(s,'cpi',0,-.2))}
   {item('FLÁVIO BOLSONARO · PL ' + DIR, 'Medalha a Adriano da Nóbrega, depois apontado como chefe do Escritório do Crime. Mãe e ex-mulher dele no gabinete.', W(s,'flávio',0,-.2))}</div>
 <div class="el note" data-flow="m:3" data-gap="24" data-a="fade" data-t="{W(s,'negam',0,-.2)}" style="left:80px">FLÁVIO E JAIR NEGAM LIGAÇÃO COM A MILÍCIA. RACHADINHAS: PROVAS ANULADAS E DENÚNCIA ARQUIVADA, SEM JULGAMENTO DE MÉRITO.</div>
 <div class="el fine" data-flow="m:4" data-gap="18" data-a="fade" data-t="{W(s,'negam',0,.6)}" style="left:80px">DO OUTRO LADO: NÃO ACHAMOS POLÍTICO DO PT, PSOL OU PDT DO RIO LIGADO A MILÍCIA OU FACÇÃO EM REPORTAGEM OU PROCESSO. NA BASE DO GOVERNO ATUAL {SQUID}: CHIQUINHO BRAZÃO FOI SECRETÁRIO DE PAES (PSD {DIR}) ATÉ 2024; O VEREADOR SALVINO (PSD) FOI PRESO EM 2026, SUSPEITO DE LIGAÇÃO COM O CV, E NEGA.</div>
 ''', 'i07', 'ALERJ, CPI 2008 · MP-RJ · CONGRESSO EM FOCO · STF (FEV/2025)', kbo='60% 50%'))
 
-s = 'v08'; CUR['s'] = s
-H.append(scene(s, rail(3)+f'''
-{eb(7, 'CASO MARIELLE · STF, FEV/2026', top=320)}
-<div class="el rows" data-flow="m:2" data-gap="36" data-a="fade" data-t="{W(s,'brazão',0,-.3)}" style="left:80px">
-  {row('IRMÃOS BRAZÃO', 'MANDANTES · 76 ANOS', None, R, 0, sub='EX-MDB E EX-UNIÃO BRASIL · NEGAM')}
-  {row('RIVALDO BARBOSA', 'ATRAPALHOU A INVESTIGAÇÃO · 18 ANOS', None, '#fff', 0, sub='CHEFE DA POLÍCIA CIVIL', fade=W(s,'chefe',0,-.2))}</div>
-<div class="el h" data-flow="m:3" data-gap="44" data-a="slam" data-t="{W(s,'intervenção',0,-.15)}" style="left:80px;width:880px;font-size:60px;color:#fff">NOMEADO NA <span class="hl">INTERVENÇÃO FEDERAL</span></div>
-<div class="el fine" data-flow="m:4" data-gap="20" data-a="fade" data-t="{W(s,'investigação',0,-.1)}" style="left:80px">EM 2018 A SEGURANÇA DO RIO ESTAVA SOB COMANDO FEDERAL (GOVERNO TEMER, MDB {DIR}). RIVALDO TOMOU POSSE UM DIA ANTES DO CRIME E FOI ABSOLVIDO DO HOMICÍDIO.</div>
-''', 'i08', 'STF, 1ª TURMA (25/02/2026) · PF · PODER360', kbo='55% 55%'))
-
 s = 'v09'; CUR['s'] = s
 H.append(scene(s, rail(3)+f'''
-{eb(8, 'O CRIME CHEGOU AO PODER', top=320)}
+{eb(7, 'O CRIME CHEGOU AO PODER', top=320)}
 <div class="el items" data-flow="m:2" data-gap="36" style="left:80px">
-  {item('PRESIDENTE DA ALERJ · UNIÃO ' + UNI, 'Preso pela PF, suspeito de vazar operação para o Comando Vermelho.', W(s,'presidente',0,-.2))}
-  {item('EX-CHEFE DA POLÍCIA CIVIL DE CASTRO', 'Preso, suspeito de propina do jogo do bicho.', W(s,'ex',0,-.2))}</div>
-<div class="el note" data-flow="m:3" data-gap="24" data-a="fade" data-t="{W(s,'negam',0,-.2)}" style="left:80px">OS DOIS NEGAM. UM DEPUTADO (EXPULSO DO MDB) TAMBÉM FOI PRESO, SUSPEITO DE AGIR PARA O CV.</div>
-<div class="el fine" data-flow="m:4" data-gap="18" data-a="fade" data-t="{W(s,'negam',0,.2)}" style="left:80px">UNIÃO BRASIL = FUSÃO DE DEM E PSL. NO OUTRO LADO, O VEREADOR SALVINO (PSD, ALIADO DE PAES) FOI PRESO EM MARÇO DE 2026, SUSPEITO DE NEGOCIAR COM O CV. NEGA.</div>
-''', 'i09', 'PF · MP-RJ · BRASIL DE FATO (2022) · DIÁRIO DO NORDESTE (2026)', kbo='65% 50%'))
+  {item('PRESIDENTE DA ALERJ · UNIÃO ' + UNI + ' · ALIADO DE CASTRO', 'Preso pela PF, suspeito de vazar operação para o Comando Vermelho.', W(s,'presidente',0,-.2))}
+  {item('CASO MARIELLE · STF, FEV/2026', 'Irmãos Brazão condenados como mandantes: 76 anos.', W(s,'supremo',0,-.2), color=R)}</div>
+<div class="el note" data-flow="m:3" data-gap="24" data-a="fade" data-t="{W(s,'negam',0,-.2)}" style="left:80px">TODOS NEGAM. OS BRAZÃO SÃO EX-MDB E EX-UNIÃO BRASIL. O CHEFE DA POLÍCIA CIVIL, NOMEADO NA INTERVENÇÃO FEDERAL (GOVERNO TEMER, MDB {DIR}), PEGOU 18 ANOS POR ATRAPALHAR A INVESTIGAÇÃO.</div>
+<div class="el fine" data-flow="m:4" data-gap="18" data-a="fade" data-t="{W(s,'negam',0,.2)}" style="left:80px">TAMBÉM PRESOS: UM EX-CHEFE DA POLÍCIA CIVIL DE CASTRO (PROPINA DO JOGO DO BICHO, 2022) E UM DEPUTADO EXPULSO DO MDB (SUSPEITO DE AGIR PARA O CV). DO OUTRO LADO, O VEREADOR SALVINO (PSD, ALIADO DE PAES) FOI PRESO EM 2026, SUSPEITO DE NEGOCIAR COM O CV. TODOS NEGAM. UNIÃO BRASIL = FUSÃO DE DEM E PSL.</div>
+''', 'i09', 'PF · STF (FEV/2026) · MP-RJ · BRASIL DE FATO (2022) · DIÁRIO DO NORDESTE (2026)', kbo='65% 50%'))
 
 s = 'v10'; CUR['s'] = s
 c10 = chart(s, YF, [
@@ -238,7 +228,7 @@ c10 = chart(s, YF, [
 ], 2000, [0, 500, 1000, 1500, 2000], 0, 0, h=560, marks=[('2018', 'INTERV.', '#fff'), ('2020', 'STF', Y)],
    stages=[(0, 6, W(s,'chegaram',0,-.2), 2.2), (6, 11, W(s,'caíram',0,-.2), 2.0), (11, 12, W(s,'voltaram',0,-.2), 1.0)]).replace('{flow}', 'm:2')
 H.append(scene(s, rail(4)+f'''
-{eb(9, 'PROBLEMA 3 · A POLÍCIA', top=300)}
+{eb(8, 'PROBLEMA 3 · A POLÍCIA', top=300)}
 {c10}
 <div class="el h" data-flow="m:3" data-gap="30" data-a="up" data-t="{W(s,'três',0,-.25)}" style="left:80px;width:880px;font-size:56px;color:#fff">2019: <span style="color:{R}">3 EM CADA 10</span> MORTES VIOLENTAS</div>
 <div class="el fine" data-flow="m:4" data-gap="22" data-a="fade" data-t="{W(s,'letal',0,.2)}" style="left:80px">AS 6 OPERAÇÕES MAIS LETAIS DESDE 2007 FORAM NO GOVERNO CASTRO (PL {DIR}). POLÍCIA MILITAR E CIVIL SÃO DO ESTADO.</div>
@@ -246,7 +236,7 @@ H.append(scene(s, rail(4)+f'''
 
 s = 'v11'; CUR['s'] = s
 H.append(scene(s, rail(4)+f'''
-{eb(10, 'OPERAÇÃO CONTENÇÃO · 28/10/2025', top=320)}
+{eb(9, 'OPERAÇÃO CONTENÇÃO · 28/10/2025', top=320)}
 <div class="el h" data-flow="m:2" data-gap="30" data-a="slam" data-t="{W(s,'resolveu',0,-.2)}" style="left:80px;width:880px;font-size:96px;color:#fff">NÃO <span class="hl">RESOLVEU.</span></div>
 <div class="el rows" data-flow="m:3" data-gap="36" data-a="fade" data-t="{W(s,'nenhum',0,-.3)}" style="left:80px">
   {row('ALVOS DA LISTA', 'NENHUM DOS 69 ENTRE AS MORTES', None, '#fff', 0)}
@@ -257,7 +247,7 @@ H.append(scene(s, rail(4)+f'''
 
 s = 'v12'; CUR['s'] = s
 H.append(scene(s, rail(4)+f'''
-{eb(11, 'PROBLEMA 4 · INVESTIGAÇÃO', top=320)}
+{eb(10, 'PROBLEMA 4 · INVESTIGAÇÃO', top=320)}
 <div class="el h cnt" data-flow="m:2" data-gap="30" data-t="{W(s,'vinte',0,-.15)}" data-d=".9" data-from="0" data-to="23" data-dec="0" data-suf="%" style="left:72px;font-size:260px;color:{R};width:880px;line-height:.82;height:214px"></div>
 <div class="el body" data-flow="m:3" data-gap="24" data-a="up" data-t="{W(s,'homicídios',0,-.1)}" style="left:80px;width:860px">dos homicídios do Rio são esclarecidos. <b>Investigar é trabalho da Polícia Civil, do estado.</b></div>
 <div class="el rows" data-flow="m:4" data-gap="40" data-a="fade" data-t="{W(s,'contra',0,-.3)}" style="left:80px">
@@ -268,7 +258,7 @@ H.append(scene(s, rail(4)+f'''
 
 s = 'v13'; CUR['s'] = s
 H.append(scene(s, rail(5)+f'''
-{eb(12, 'E O GOVERNO FEDERAL?', top=300)}
+{eb(11, 'E O GOVERNO FEDERAL?', top=300)}
 <div class="el rows" data-flow="m:2" data-gap="34" data-a="fade" data-t="{W(s,'fronteira',0,-.3)}" style="left:80px">
   {row('É DO ESTADO', 'PM, POLÍCIA CIVIL, PRESÍDIOS, INVESTIGAÇÃO', None, '#fff', 0)}
   {row('É DA UNIÃO', 'FRONTEIRA, PORTO, ARMAS, PF, PRF, FUNDOS', None, Y, 0)}</div>
@@ -282,7 +272,7 @@ H.append(scene(s, rail(5)+f'''
 
 s = 'v14'; CUR['s'] = s
 H.append(scene(s, rail(5)+f'''
-{eb(13, 'CHECAGEM', top=320)}
+{eb(12, 'CHECAGEM', top=320)}
 {quote('“O STF PROIBIU OPERAÇÕES.”', W(s,'supremo',0,-.1), 'm:2', gap=26)}
 <div class="el stamp-r" data-flow="m:3" data-gap="30" data-a="stamp" data-t="{W(s,'proibiu',0,.1)}" data-d=".35" data-r="-2" style="left:80px;white-space:nowrap;font-size:46px">DISTORCIDO</div>
 <div class="el rows" data-flow="m:4" data-gap="40" data-a="fade" data-t="{W(s,'limitou',0,-.3)}" style="left:80px">
