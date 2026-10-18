@@ -10,7 +10,7 @@ s07 76 palavras
 s07b 150 palavras
 s08 62 palavras
 s09 59 palavras
-s10 81 palavras
+s10 98 palavras
 s11 38 palavras
-s12 36 palavras
+s12 69 palavras
 s13 35 palavras
