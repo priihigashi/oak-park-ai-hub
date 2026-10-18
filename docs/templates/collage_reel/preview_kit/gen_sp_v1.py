@@ -191,7 +191,7 @@ H.append(scene(s, rail(2)+f'''
 <div class="el h" data-flow="m:3" data-gap="40" data-a="slam" data-t="{W(s,'oito',0,-.15)}" style="left:80px;width:880px;font-size:96px;color:{Y}">R$ 8,67 BILHÕES</div>
 <div class="el note" data-flow="m:4" data-gap="14" data-a="fade" data-t="{W(s,'pagos',0,-.2)}" style="left:80px">EM IMPOSTOS NÃO PAGOS · ESTIMATIVA DA RECEITA FEDERAL</div>
 <div class="el rows" data-flow="m:5" data-gap="40" data-a="fade" data-t="{W(s,'ônibus',0,-.3)}" style="left:80px">
-  {row('FIM DA LINHA<small>ABR/2024</small>', 'ÔNIBUS PAGOS PELA PREFEITURA SOB SUSPEITA DE LAVAR DINHEIRO DA FACÇÃO', None, '#fff', 0)}</div>
+  {row('FIM DA LINHA<small>ABR/2024</small>', 'ÔNIBUS PAGOS PELA PREFEITURA SOB SUSPEITA DE LAVAR DINHEIRO DA FACÇÃO', None, '#fff', 0, sub='INFILTRAÇÃO HÁ QUASE 30 ANOS, SEGUNDO O MP-SP', fade=W(s,'promotores',0,-.2))}</div>
 <div class="el fine" data-flow="m:6" data-gap="22" data-a="fade" data-t="{W(s,'facção',0,.2)}" style="left:80px">CARBONO OCULTO = MP-SP + RECEITA FEDERAL (A PF FEZ AS OPERAÇÕES QUASAR E TANK). A REGRA DA RECEITA QUE APERTAVA AS FINTECHS FOI REVOGADA EM JAN/2025, APÓS VÍDEOS VIRAIS, E REEDITADA DEPOIS DA OPERAÇÃO.</div>
 ''', 'farialima', 'RECEITA FEDERAL E MP-SP, AGO/2025 · MP-SP, OPERAÇÃO FIM DA LINHA', kbo='55% 50%'))
 
