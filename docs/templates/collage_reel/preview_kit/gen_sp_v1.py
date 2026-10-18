@@ -41,7 +41,7 @@ def scene(sid, inner, bg, src, kbo='60% 50%', kb=1.08):
     s = f'<div class="el srcline" data-a="fade" data-t=".4" style="left:130px;top:1640px;width:820px">FONTE: {src}</div>'
     return f'<section class="scene" data-s="{o["s"]}" data-e="{o["e"]}" data-in="cut" data-theme="dark">{b}<div class="safe">{inner}</div>{kar(sid)}{s}</section>\n'
 CUR = {'s': None}
-DIM = {'pm2'}
+DIM = {'pm2', 'viaduto'}
 def eb(n, txt, t=.05, top=None, flow='m:1'):
     top = FT.get(CUR['s'], top)
     ft = f' data-ftop="{top}"' if top else ''
@@ -280,7 +280,7 @@ H.append(scene(s, f'''
   {row('PF E RECEITA', 'NA OPERAÇÃO DOS COMBUSTÍVEIS', None, Y, 0, fade=W(s,'polícia',0,-.2))}</div>
 <div class="el h redtxt" data-flow="m:4" data-gap="44" data-a="slam" data-t="{W(s,'fronteira',0,-.15)}" style="left:80px;width:880px;font-size:66px">FRONTEIRA E PORTO DE SANTOS SÃO DA UNIÃO.</div>
 <div class="el body" data-flow="m:5" data-gap="26" data-a="up" data-t="{W(s,'decretos',0,-.2)}" style="left:80px;width:860px">Com os decretos de armas do governo Bolsonaro, a facção passou a <b>comprar fuzis com nota fiscal.</b></div>
-<div class="el fine" data-flow="m:6" data-gap="22" data-a="fade" data-t="{W(s,'registrados',0,.1)}" style="left:80px">O FUNDO VEM DAS LOTERIAS (LEI DE 2018); O GOVERNO FEDERAL DEFINE A DIVISÃO. EM 2019–2020, SP RECEBEU R$ 93,1 MI (DOIS ANOS); EM 2021 O GOVERNO BOLSONARO MUDOU A FÓRMULA E A FATIA DE SP CAIU DE 6,66% PARA 4,31%. ORÇAMENTO DA PM PAULISTA: R$ 10,3 BI. FUZIL COM NOTA: R$ 12–15 MIL, CONTRA R$ 35–59 MIL NO CONTRABANDO (PROMOTOR LINCOLN GAKIYA, ESTADÃO, 2022). LEI ANTIFACÇÃO: PROPOSTA DO GOVERNO ATUAL 🦑, RELATOR DERRITE (PP {DIR}), SANCIONADA PELO PRESIDENTE. DERRITE RECUSOU APOIO DIRETO DA PF NO CASO RUY FERRAZ (SET/2025); NO SENADO, O RELATOR DISSE QUE A CÂMARA TIROU DO TEXTO PONTOS CONTRA CRIME DE COLARINHO BRANCO.</div>
+<div class="el fine" data-flow="m:6" data-gap="22" data-a="fade" data-t="{W(s,'registrados',0,.1)}" style="left:80px">O FUNDO VEM DAS LOTERIAS (LEI DE 2018); O GOVERNO FEDERAL DEFINE A DIVISÃO. EM 2019–2020, SP RECEBEU R$ 93,1 MI (DOIS ANOS); EM 2021 O GOVERNO BOLSONARO MUDOU A FÓRMULA E A FATIA DE SP CAIU DE 6,66% PARA 4,31%. FUZIL COM NOTA: R$ 12–15 MIL, CONTRA R$ 35–59 MIL NO CONTRABANDO (GAKIYA, ESTADÃO, 2022). LEI ANTIFACÇÃO: PROPOSTA DO GOVERNO ATUAL 🦑, RELATOR DERRITE (PP {DIR}), SANCIONADA PELO PRESIDENTE. NO SENADO, O RELATOR DISSE QUE A CÂMARA TIROU DO TEXTO PONTOS CONTRA CRIME DE COLARINHO BRANCO.</div>
 ''', 'santos', 'MJSP/FNSP, 2024 · GAZETA SP, NOV/2021 · TCE-SP, CONTAS 2023 · CÂMARA DOS DEPUTADOS, 2026', kbo='50% 50%'))
 
 s = 's11'; CUR['s'] = s
