@@ -90,9 +90,10 @@ def chart(sid, years, series, ymax, ticks, t0, dur, marks=(), w=880, h=600, lw=2
         for sg in segs:
             if len(sg) > 1:
                 lines += f'<polyline points="{" ".join(sg)}" fill="none" stroke="{s["c"]}" stroke-width="{s.get("w",5)}" stroke-linejoin="round" stroke-linecap="round"{dash}/>'
-        for (i, txt) in s.get('dots', []):
+        for d_ in s.get('dots', []):
+            i, txt = d_[0], d_[1]; dyl = 44 if len(d_) > 2 else -18; dxl, anc = (-16, 'end') if len(d_) > 2 and d_[2] == 'bl' else (0, 'middle')
             lines += (f'<circle cx="{X(i):.1f}" cy="{Yv(s["v"][i]):.1f}" r="9" fill="{s["c"]}" stroke="#0b0c0e" stroke-width="3"/>'
-                      f'<text x="{X(i):.1f}" y="{Yv(s["v"][i])-18:.1f}" text-anchor="middle" font-family="Rub" font-weight="900" font-size="30" fill="{s["c"]}" stroke="#0b0c0e" stroke-width="6" paint-order="stroke">{txt}</text>')
+                      f'<text x="{X(i)+dxl:.1f}" y="{Yv(s["v"][i])+dyl:.1f}" text-anchor="{anc}" font-family="Rub" font-weight="900" font-size="30" fill="{s["c"]}" stroke="#0b0c0e" stroke-width="6" paint-order="stroke">{txt}</text>')
     labels = ''
     # posições dos rótulos sem colisão: ordena pela altura e garante espaço mínimo
     want = sorted([(Yv(s['v'][-1]), i) for i, s in enumerate(series) if not s.get('nolab')])
@@ -161,7 +162,7 @@ c3 = chart(s, YA, [
     dict(n='SÃO PAULO', sub=f'PSDB {DIR}<br>→ REPUBLICANOS {DIR}', v=AT['sp_b'], c=Y, w=7, lt=W(s,'depois',0), dots=[(iL, '6,6')]),
     dict(n='', v=AT['br_a'], c='rgba(242,236,224,.55)', dash=True, w=4, nolab=True),
     dict(n='BRASIL', v=AT['br_b'], c='rgba(242,236,224,.55)', dash=True, w=4, lt=W(s,'olha',0,.3)),
-], 40, [0, 10, 20, 30, 40], 0, 0,
+], 40, [0, 10, 20, 30, 40], 0, 0, h=540,
    stages=[(0, i10, W(s,'cai',0,-.1), 2.4), (i10, iL, W(s,'depois',0,-.1), 2.6)],
    notes=[(0, 37, '2000: 42,2 · O PICO', '#fff', W(s,'pico',0,-.3), 0, -10),
           (2, 24, '↘ 10 ANOS EM QUEDA', Y, W(s,'dez',0,-.2), 10, 0)]).replace('{flow}', 'm:3')
@@ -171,7 +172,7 @@ H.append(scene(s, rail(1)+f'''
 {c3}
 <div class="el body" data-flow="m:4" data-gap="24" data-a="up" data-t="{W(s,'estatuto',0,-.2)}" style="left:80px;width:900px;font-size:38px">+ AJUDA FEDERAL: <b class="hl">ESTATUTO DO DESARMAMENTO</b>, 2003, sancionado pelo presidente 🦑 · <b>464 mil armas</b> recolhidas</div>
 <div class="el stamp-r" data-flow="m:5" data-gap="30" data-a="stamp" data-t="{W(s,'nenhum',0,-.05)}" data-d=".35" data-r="-2" style="left:80px;white-space:nowrap;font-size:44px">NENHUM GOVERNO FEZ SOZINHO</div>
-<div class="el fine" data-flow="m:6" data-gap="22" data-a="fade" data-t="{W(s,'funcionou',0,-.1)}" style="left:80px">IPEA (CERQUEIRA): EM SP, +1% DE ARMAS = +2% DE HOMICÍDIOS. A QUEDA PAULISTA COMEÇA NO FIM DOS ANOS 1990, ANTES DA LEI (NERY, USP); A LEI FUNCIONOU MELHOR ONDE A PM A APLICOU (PIQUET, USP). ATLAS: EDIÇÕES 2016 E 2024/26, LINHA SEPARADA.</div>
+<div class="el fine" data-flow="m:6" data-gap="22" data-a="fade" data-t="{W(s,'funcionou',0,-.1)}" style="left:80px">IPEA (CERQUEIRA): EM SP, +1% DE ARMAS = +2% DE HOMICÍDIOS. A QUEDA COMEÇA ANTES DA LEI (NERY, USP). ATLAS: EDIÇÕES 2016 E 2024/26, LINHA SEPARADA.</div>
 ''', 'skyline', 'IPEA/FBSP, ATLAS DA VIOLÊNCIA (SIM/DATASUS) · ' + IDS, kbo='50% 60%'))
 
 s = 's04'; CUR['s'] = s
@@ -212,13 +213,13 @@ H.append(scene(s, rail(2)+f'''
 
 s = 's07'; CUR['s'] = s
 c7 = chart(s, YM, [
-    dict(n='SÃO PAULO', sub='MORTES CAUSADAS<br>PELA POLÍCIA', v=MDIP, c=Y, w=7, lt=W(s,'polícia',0,.3), dots=[(3, '940'), (8, '419'), (11, '835')]),
+    dict(n='SÃO PAULO', sub='MORTES CAUSADAS<br>PELA POLÍCIA', v=MDIP, c=Y, w=7, lt=W(s,'polícia',0,.3), dots=[(3, '940'), (8, '419', 'b'), (11, '835')]),
 ], 1000, [0, 250, 500, 750, 1000], 0, 0, h=520, marks=[('2020', 'CÂMERAS', '#fff'), ('2023', 'TARCÍSIO', R)],
    stages=[(0, 6, W(s,'polícia',0,-.1), 2.2), (6, 8, W(s,'câmera',0,-.1), 2.0), (8, 11, W(s,'volta',0,-.2), 1.8)],
    notes=[(4, 470, '↘ CÂMERA<br>NA FARDA', '#fff', W(s,'caíram',0,-.1), -40, 0),
           (9, 330, '↗ VOLTA A<br>SUBIR', R, W(s,'subir',0,-.2), 14, 0)]).replace('{flow}', 'm:3')
 H.append(scene(s, rail(3)+f'''
-{eb(6, 'PROBLEMA 2 · A POLÍCIA (RESPONSABILIDADE DO ESTADO)', top=300)}
+{eb(6, 'PROBLEMA 2 · A POLÍCIA (É DO ESTADO)', top=300)}
 <div class="el h" data-flow="m:2" data-gap="28" data-a="slam" data-t="{W(s,'câmera',0,-.15)}" style="left:80px;width:880px;font-size:64px;color:#fff">COM CÂMERA, AS MORTES <span class="hl">CAÍRAM PELA METADE</span></div>
 {c7}
 <div class="el h" data-flow="m:4" data-gap="30" data-a="up" data-t="{W(s,'quatro',0,-.25)}" style="left:80px;width:880px;font-size:56px;color:#fff">2025: <span style="color:{R}">QUASE 1 EM CADA 4</span> MORTES VIOLENTAS DO ESTADO</div>
@@ -233,20 +234,20 @@ H.append(scene(s, rail(3)+f'''
   {row('2020 · BOLSONARO', 'REVOGA AS REGRAS DE RASTREAMENTO DE ARMAS E MUNIÇÕES', None, '#5B7CFF', 0, sub=f'PL {EXT}', fade=W(s,'revogou',0,-.2))}
   {row('2024 · GOVERNO ATUAL 🦑', 'REGRAS NACIONAIS PARA CÂMERA NA FARDA E USO DA FORÇA', None, Y, 0, sub='EFEITO: AINDA SEM DADOS', fade=W(s,'atual',0,-.3))}
   {row('2024–25 · TARCÍSIO', 'CÂMERA QUE SÓ GRAVA QUANDO LIGADA · PEDIU PARA REVOGAR O USO DA FORÇA', None, R, 0, sub=f'REPUBLICANOS {DIR}', fade=W(s,'tarcísio',0,-.3))}</div>
-<div class="el h" data-flow="m:3" data-gap="64" data-a="slam" data-t="{W(s,'flávio',0,-.2)}" style="left:80px;width:880px;font-size:62px;color:#fff">FLÁVIO BOLSONARO: <span class="hl">“DETALHEZINHO”</span></div>
+<div class="el h" data-flow="m:3" data-gap="44" data-a="slam" data-t="{W(s,'flávio',0,-.2)}" style="left:80px;width:880px;font-size:62px;color:#fff">FLÁVIO BOLSONARO: <span class="hl">“DETALHEZINHO”</span></div>
 <div class="el body" data-flow="m:4" data-gap="22" data-a="up" data-t="{W(s,'país',0,-.2)}" style="left:80px;width:880px;font-size:40px">Num país onde a polícia mata <b class="hl">8× mais</b> que a dos EUA, por habitante.</div>
-<div class="el fine" data-flow="m:5" data-gap="22" data-a="fade" data-t="{W(s,'país',0,.4)}" style="left:80px">FLÁVIO (PL {EXT}) NÃO É O AUTOR: DEFENDEU, NA TV GLOBO, 16/10/2026. MORTOS PELA POLÍCIA EM 2025, POR 100 MIL: BRASIL 3,1 (FBSP) · EUA ~0,4 (MAPPING POLICE VIOLENCE). SP: 23,1% DAS MORTES VIOLENTAS.</div>
+<div class="el fine" data-flow="m:5" data-gap="22" data-a="fade" data-t="{W(s,'país',0,.4)}" style="left:80px">FLÁVIO (PL {EXT}) NÃO É O AUTOR: DEFENDEU, NA TV GLOBO, 16/10/2026. MORTOS PELA POLÍCIA EM 2025, POR 100 MIL: BRASIL 3,1 (FBSP) · EUA ~0,4 (MPV). SP: 23,1% DAS MORTES VIOLENTAS.</div>
 ''', 'pm2', 'MJSP (MAI E DEZ/2024) · EXÉRCITO/COLOG, ABR/2020 · NOTA DO COSUD, DEZ/2024 · PONTE, MAI/2025 · PODER360, OUT/2026 · FBSP, ANUÁRIO 2026 · MAPPING POLICE VIOLENCE · ' + IDS, kbo='50% 50%'))
 
 s = 's08'; CUR['s'] = s
 YE = [str(y) for y in range(2016, 2024)]
 ESC = [51, 54, 46, 34, 42, 47, 40, 31]
 c8 = chart(s, YE, [
-    dict(n='SÃO PAULO', sub='HOMICÍDIOS<br>ESCLARECIDOS (%)', v=ESC, c=R, w=7, lt=W(s,'olha',0,.2), dots=[(1, '54%'), (7, '31%')]),
+    dict(n='SÃO PAULO', sub='HOMICÍDIOS<br>ESCLARECIDOS (%)', v=ESC, c=R, w=7, lt=W(s,'olha',0,.2), dots=[(1, '54%'), (7, '31%', 'bl')]),
 ], 60, [0, 20, 40, 60], 0, 0, h=430, marks=[('2019', 'DORIA', '#fff'), ('2023', 'TARCÍSIO', R)],
    stages=[(0, 1, W(s,'olha',0,-.1), 1.0), (1, 7, W(s,'vinte',0,-.3), 2.6)],
    notes=[(1, 22, '2017: MAIS<br>DA METADE', '#fff', W(s,'metade',0,-.2), -40, 0),
-          (4, 22, '↘ 2023: 3 EM 10', R, W(s,'três',1,-.2), -20, 0)]).replace('{flow}', 'm:2')
+          (4, 13, '↘ 2023: 3 EM 10', R, W(s,'três',1,-.2), -20, 0)]).replace('{flow}', 'm:2')
 H.append(scene(s, rail(4)+f'''
 {eb(7, 'PROBLEMA 3 · HOMICÍDIOS ESCLARECIDOS (%)', top=300)}
 {c8}
@@ -254,7 +255,7 @@ H.append(scene(s, rail(4)+f'''
 <div class="el rows" data-flow="m:4" data-gap="30" data-a="fade" data-t="{W(s,'contando',0,-.3)}" style="left:80px">
   {row('TAXA OFICIAL', '6,6', 6.6/12.8, WH, W(s,'contando',0))}
   {row('COM HOMICÍDIOS OCULTOS', '12,8', 1, R, W(s,'dobra',0,-.2), sub='HOMICÍDIOS POR 100 MIL · 2024')}</div>
-<div class="el fine" data-flow="m:5" data-gap="22" data-a="fade" data-t="{W(s,'campeão',0,.6)}" style="left:80px">ESCLARECIDO = VIROU DENÚNCIA DO MP. 2023 É O DADO MAIS RECENTE: A PESQUISA ESPERA O PROCESSO ANDAR. BRASIL EM 2022: 39%. A QUEDA COMEÇA EM 2018–2019 E VOLTA A CAIR DESDE 2021: NÃO É DE UM GOVERNO SÓ. HOMICÍDIOS OCULTOS: ESTIMATIVA DO ATLAS; SP LIDERA DESDE 2014. INVESTIGAÇÃO É DA POLÍCIA CIVIL (ESTADO).</div>
+<div class="el fine" data-flow="m:5" data-gap="22" data-a="fade" data-t="{W(s,'campeão',0,.6)}" style="left:80px">ESCLARECIDO = VIROU DENÚNCIA DO MP. 2023 É O DADO MAIS RECENTE. BRASIL EM 2022: 39%. A QUEDA COMEÇA EM 2018–2019 E VOLTA A CAIR DESDE 2021: NÃO É DE UM GOVERNO SÓ. OCULTOS: ESTIMATIVA DO ATLAS. INVESTIGAÇÃO É DA POLÍCIA CIVIL (ESTADO).</div>
 ''', 'luz', 'INSTITUTO SOU DA PAZ, ONDE MORA A IMPUNIDADE (EDIÇÃO 2024 E DIAGNÓSTICO DE JUL/2026) · IPEA/FBSP, ATLAS 2026', kbo='50% 50%'))
 
 s = 's09'; CUR['s'] = s
