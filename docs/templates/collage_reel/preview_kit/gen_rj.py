@@ -168,15 +168,15 @@ def gov(yrs, nome, partido, idl, t, col='#fff', sub=''):
 H.append(scene(s, rail(0)+f'''
 {eb(1, 'QUEM GOVERNOU O ESTADO', top=320)}
 <div class="el rows govs" data-flow="m:2" data-gap="34" style="left:80px">
-  {gov('1999–2002', 'GAROTINHO', 'PDT→PSB', CESQ, W(s,'garotinho',0,-.2), sub='PRES. FHC')}
+  {gov('1999–2002', 'GAROTINHO', 'PDT→PSB', CESQ, W(s,'garotinho',0,-.2), sub='PRESO EM 2016–17')}
   {gov('2002', 'BENEDITA', 'PT', ESQ, W(s,'benedita',0,-.2), sub='VICE QUE ASSUMIU')}
-  {gov('2003–2006', 'ROSINHA', 'PSB→PMDB', CESQ, W(s,'rosinha',0,-.2), sub=f'PRES. GOVERNO ATUAL {SQUID}')}
+  {gov('2003–2006', 'ROSINHA', 'PSB→MDB', CESQ + DIR, W(s,'rosinha',0,-.2), sub='NO MDB DESDE AGO/2003 · PRESA EM 2017')}
   {gov('2007–2014', 'CABRAL', 'PMDB', DIR, W(s,'cabral',0,-.2), col=Y, sub='PRESO EM 2016')}
-  {gov('2014–2018', 'PEZÃO', 'MDB', DIR, W(s,'pezão',0,-.2), col=Y, sub='PRESO EM 2018')}
+  {gov('2014–2018', 'PEZÃO', 'MDB', DIR, W(s,'pezão',0,-.2), col=Y, sub='PRESO EM 2018, ABSOLVIDO')}
   {gov('2019–2020', 'WITZEL', 'PSC', DIR, W(s,'witzel',0,-.2), col=Y, sub='AFASTADO E CASSADO')}
   {gov('2020–2026', 'CASTRO', 'PSC→PL', DIR, W(s,'castro',0,-.2), col=Y, sub='INELEGÍVEL ATÉ 2030')}</div>
-<div class="el h" data-flow="m:3" data-gap="34" data-a="slam" data-t="{W(s,'dezenove',0,-.15)}" style="left:80px;width:880px;font-size:70px;color:#fff">19 ANOS DE <span class="hl">DIREITA</span></div>
-<div class="el fine" data-flow="m:4" data-gap="20" data-a="fade" data-t="{W(s,'inelegível',0,.2)}" style="left:80px">MDB = 7,01 NA ESCALA, NO LIMITE DA DIREITA; FOI ALIADO DO PT NO GOVERNO FEDERAL ATÉ 2016. HOJE GOVERNA O INTERINO RICARDO COUTO (TJ-RJ).</div>
+<div class="el h" data-flow="m:3" data-gap="34" data-a="slam" data-t="{W(s,'dezenove',0,-.15)}" style="left:80px;width:880px;font-size:64px;color:#fff">DESDE 2007: <span class="hl">MDB E DIREITA</span></div>
+<div class="el fine" data-flow="m:4" data-gap="20" data-a="fade" data-t="{W(s,'lados',0,.2)}" style="left:80px">MDB = 7,01 NA ESCALA, NO LIMITE DA DIREITA. O PT TEVE SECRETARIAS NO GOVERNO CABRAL ATÉ NOV/2013. GAROTINHO FOI SECRETÁRIO DE SEGURANÇA DE ROSINHA (2003–04) E APOIOU ALCKMIN (PSDB) EM 2006. HOJE GOVERNA O INTERINO RICARDO COUTO (TJ-RJ).</div>
 ''', 'i02', 'TSE · TJ-RJ · ' + IDS, kbo='60% 50%'))
 
 s = 'v03'; CUR['s'] = s
@@ -184,7 +184,7 @@ XM = ['ANTES', '1º ANO', '2º', '3º', '4º']
 L1, L2 = '#FF4A3D', '#FF9C8F'
 c3 = chart(s, XM, [
     dict(n='GAROTINHO +26%', v=[0, .5, 9.8, 11.2, 26.2], c=L1, w=7, lt=W(s,'garotinho',0,-.1)),
-    dict(n='ROSINHA −5%', v=[0, .1, -4.9, -.7, -4.9], c=L2, w=6, lt=W(s,'rosinha',0,-.1)),
+    dict(n='ROSINHA −5%', sub='PSB→MDB', v=[0, .1, -4.9, -.7, -4.9], c=L2, w=6, lt=W(s,'rosinha',0,-.1)),
     dict(n='CABRAL 1 −24%', v=[0, .7, -6.7, -7.1, -23.8], c=BLUE, w=6, lt=W(s,'cabral',0,-.1)),
     dict(n='CABRAL 2 −2%', v=[0, -14.9, -19.9, -8.2, -1.9], c=BLUE, w=4, dash=True, lt=W(s,'cabral',0,.4)),
     dict(n='PEZÃO +17%', v=[0, -12.4, 9.5, 18.0, 17.4], c='#AFC0FF', w=5, lt=W(s,'pezão',0,-.1)),
@@ -197,18 +197,18 @@ H.append(scene(s, rail(1)+f'''
 {eb(2, 'MANDATO POR MANDATO · MORTES VIOLENTAS', top=290)}
 <div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:32px"><b style="color:{L1}">━ ESQUERDA</b> &nbsp;&nbsp; <b style="color:{BLUE}">━ DIREITA</b> &nbsp;&nbsp; <span style="color:#A9A291;font-size:24px">TRACEJADO = 2º MANDATO</span></div>
 {c3}
-<div class="el fine" data-flow="m:4" data-gap="22" data-a="fade" data-t="{W(s,'linha',0,.4)}" style="left:80px">VARIAÇÃO NO NÚMERO DE MORTES VIOLENTAS ATÉ O FIM DO MANDATO, CONTRA O ANO ANTES DA POSSE. MESMA BASE DE 1998 A 2025 (ISP-RJ). BENEDITA (PT) GOVERNOU 9 MESES EM 2002; PEZÃO ASSUMIU EM ABR/2014; CASTRO EM AGO/2020. ANTES DE 1999, MARCELLO ALENCAR (PSDB, DIREITA): −26%. BRASIL ENTRE 2018 E 2022: −19%.</div>
+<div class="el fine" data-flow="m:4" data-gap="22" data-a="fade" data-t="{W(s,'linha',0,.4)}" style="left:80px">VARIAÇÃO NO NÚMERO DE MORTES VIOLENTAS ATÉ O FIM DO MANDATO, CONTRA O ANO ANTES DA POSSE. MESMA BASE DE 1998 A 2025 (ISP-RJ). BENEDITA (PT) GOVERNOU 9 MESES EM 2002; PEZÃO ASSUMIU EM ABR/2014; CASTRO EM AGO/2020. ANTES DE 1999, MARCELLO ALENCAR (PSDB, DIREITA): −26%. BRASIL ENTRE 2018 E 2022: CERCA DE −17% (FBSP, NÚMERO DE MORTES). OS +26% DE GAROTINHO INCLUEM OS 9 MESES DE BENEDITA (PT).</div>
 ''', 'i03', 'ISP-RJ, LETALIDADE VIOLENTA (1998–2020) · FBSP, ANUÁRIOS 2022–2026 · ' + IDS, kbo='55% 60%'))
 
 s = 'v04'; CUR['s'] = s
 YC = [str(y) for y in range(1998, 2026)]
 VC = [6371,6401,6993,7083,8043,8054,7645,7987,7649,7699,7134,7106,5828,4960,4666,5348,5719,5010,6262,6749,6714,5980,4907,4762,4485,4270,3809,3890]
 ix = lambda y: y - 1998
-c4 = segchart(YC, [dict(n='', v=VC, segs=[(0, 1, BLUE), (1, 8, L1), (8, 27, BLUE)], w=7, lt=W(s,'linha',0))],
+c4 = segchart(YC, [dict(n='', v=VC, segs=[(0, 1, BLUE), (1, 5, L1), (5, 27, BLUE)], w=7, lt=W(s,'linha',0))],
     3000, 9000, [3000, 5000, 7000, 9000], W(s,'linha',0,-.2), 5.5, h=680, lw=40, tfmt=lambda v: f"{v:,}".replace(",", "."),
     xl=[ix(1998), ix(2006), ix(2014), ix(2022)],
     plabels=[(0, ix(2002), '8.043<br>GAROTINHO', L1, -62, W(s,'linha',0,.6)),
-             (0, ix(2006), 'ROSINHA<br>7.649', L1, 18, W(s,'rosinha',0,-.2)),
+             (0, ix(2006), 'ROSINHA<br>7.649', BLUE, 18, W(s,'rosinha',0,-.2)),
              (0, ix(2010), 'CABRAL<br>5.828', BLUE, 18, W(s,'cabral',0,-.2)),
              (0, ix(2014), '5.719<br>CABRAL/PEZÃO', BLUE, -62, W(s,'cabral',0,.3)),
              (0, ix(2018), '6.714<br>PEZÃO', BLUE, -62, W(s,'pezão',0,-.2)),
@@ -219,7 +219,7 @@ H.append(scene(s, rail(1)+f'''
 <div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:32px"><b style="color:{L1}">━ ESQUERDA</b> &nbsp;&nbsp; <b style="color:{BLUE}">━ DIREITA</b></div>
 {c4}
 <div class="el h" data-flow="m:4" data-gap="30" data-a="up" data-t="{W(s,'subiu',0,-.2)}" style="left:80px;width:880px;font-size:58px;color:#fff">SUBIU E CAIU <span class="hl">COM OS DOIS LADOS.</span></div>
-<div class="el fine" data-flow="m:5" data-gap="20" data-a="fade" data-t="{W(s,'série',0,.1)}" style="left:80px">MESMA BASE DE 1998 A 2025 (ISP-RJ, NÚMERO DE MORTES VIOLENTAS). 2025: RIO +2,1%, BRASIL −8,2% (FBSP). A QUEDA DEPOIS DE 2018 VEIO COM O RECORDE DE MORTES PELA POLÍCIA (1.814 EM 2019). 1998 = ÚLTIMO ANO DE MARCELLO ALENCAR (PSDB, DIREITA).</div>
+<div class="el fine" data-flow="m:5" data-gap="20" data-a="fade" data-t="{W(s,'série',0,.1)}" style="left:80px">MESMA BASE DE 1998 A 2025 (ISP-RJ, NÚMERO DE MORTES VIOLENTAS). 2025: RIO +2,1% (MORTES PELA POLÍCIA +13%), BRASIL −8,2%, MENOR TAXA DA SÉRIE (FBSP). A QUEDA DEPOIS DE 2018 VEIO COM O RECORDE DE MORTES PELA POLÍCIA (1.814 EM 2019). 1998 = ÚLTIMO ANO DE MARCELLO ALENCAR (PSDB, DIREITA). A LINHA FICA AZUL A PARTIR DE 2003, QUANDO ROSINHA ENTRA NO MDB.</div>
 ''', 'i04', 'ISP-RJ, LETALIDADE VIOLENTA · FBSP, ANUÁRIO 2026', kbo='60% 45%'))
 
 s = 'v05'; CUR['s'] = s
@@ -255,18 +255,18 @@ H.append(scene(s, rail(3)+f'''
 <div class="el items" data-flow="m:2" data-gap="36" style="left:80px">
   {item('CPI DAS MILÍCIAS · ALERJ, 2008', 'Mais de 200 indiciamentos pedidos, entre eles 5 parlamentares.', W(s,'cpi',0,-.2))}
   {item('FLÁVIO BOLSONARO · PL ' + DIR, 'Medalha a Adriano da Nóbrega, depois apontado como chefe do Escritório do Crime. Mãe e ex-mulher dele no gabinete.', W(s,'flávio',0,-.2))}</div>
-<div class="el note" data-flow="m:3" data-gap="24" data-a="fade" data-t="{W(s,'negam',0,-.2)}" style="left:80px">FLÁVIO E JAIR NEGAM LIGAÇÃO COM A MILÍCIA. RACHADINHAS: PROVAS ANULADAS E DENÚNCIA ARQUIVADA, SEM JULGAMENTO DE MÉRITO.</div>
-<div class="el fine" data-flow="m:4" data-gap="18" data-a="fade" data-t="{W(s,'negam',0,.6)}" style="left:80px">DO OUTRO LADO: NÃO ACHAMOS POLÍTICO DO PT, PSOL OU PDT DO RIO LIGADO A MILÍCIA OU FACÇÃO EM REPORTAGEM OU PROCESSO. NA BASE DO GOVERNO ATUAL {SQUID}: CHIQUINHO BRAZÃO FOI SECRETÁRIO DE PAES (PSD {DIR}) ATÉ 2024; O VEREADOR SALVINO (PSD) FOI PRESO EM 2026, SUSPEITO DE LIGAÇÃO COM O CV, E NEGA.</div>
+<div class="el note" data-flow="m:3" data-gap="24" data-a="fade" data-t="{W(s,'nega',0,-.2)}" style="left:80px">FLÁVIO E JAIR NEGAM LIGAÇÃO COM A MILÍCIA (ADRIANO MORREU EM 2020). RACHADINHAS: PROVAS ANULADAS E DENÚNCIA ARQUIVADA, SEM JULGAMENTO DE MÉRITO.</div>
+<div class="el fine" data-flow="m:4" data-gap="18" data-a="fade" data-t="{W(s,'nega',0,.6)}" style="left:80px">DO OUTRO LADO: NÃO ACHAMOS POLÍTICO DO PT, PSOL OU PDT DO RIO LIGADO A MILÍCIA OU FACÇÃO EM REPORTAGEM OU PROCESSO. NA BASE DO GOVERNO ATUAL {SQUID}: CHIQUINHO BRAZÃO FOI SECRETÁRIO DE PAES (PSD {DIR}) ATÉ 2024; O VEREADOR SALVINO (PSD) FOI PRESO EM 2026, SUSPEITO DE LIGAÇÃO COM O CV, E NEGA.</div>
 ''', 'i07', 'ALERJ, CPI 2008 · MP-RJ · CONGRESSO EM FOCO · STF (FEV/2025)', kbo='60% 50%'))
 
 s = 'v09'; CUR['s'] = s
 H.append(scene(s, rail(3)+f'''
 {eb(7, 'O CRIME CHEGOU AO PODER', top=320)}
 <div class="el items" data-flow="m:2" data-gap="36" style="left:80px">
-  {item('PRESIDENTE DA ALERJ · UNIÃO ' + UNI + ' · ALIADO DE CASTRO', 'Preso pela PF, suspeito de vazar operação para o Comando Vermelho.', W(s,'presidente',0,-.2))}
+  {item('PRESIDENTE DA ALERJ · UNIÃO ' + UNI + ' · ALIADO DE CASTRO', 'Preso pela PF, suspeito de avisar um deputado alvo de operação contra o Comando Vermelho.', W(s,'presidente',0,-.2))}
   {item('CASO MARIELLE · STF, FEV/2026', 'Irmãos Brazão condenados como mandantes: 76 anos.', W(s,'supremo',0,-.2), color=R)}</div>
 <div class="el note" data-flow="m:3" data-gap="24" data-a="fade" data-t="{W(s,'negam',0,-.2)}" style="left:80px">TODOS NEGAM. OS BRAZÃO SÃO EX-MDB E EX-UNIÃO BRASIL. O CHEFE DA POLÍCIA CIVIL, NOMEADO NA INTERVENÇÃO FEDERAL (GOVERNO TEMER, MDB {DIR}), PEGOU 18 ANOS POR ATRAPALHAR A INVESTIGAÇÃO.</div>
-<div class="el fine" data-flow="m:4" data-gap="18" data-a="fade" data-t="{W(s,'negam',0,.2)}" style="left:80px">TAMBÉM PRESOS: UM EX-CHEFE DA POLÍCIA CIVIL DE CASTRO (PROPINA DO JOGO DO BICHO, 2022) E UM DEPUTADO EXPULSO DO MDB (SUSPEITO DE AGIR PARA O CV). DO OUTRO LADO, O VEREADOR SALVINO (PSD, ALIADO DE PAES) FOI PRESO EM 2026, SUSPEITO DE NEGOCIAR COM O CV. TODOS NEGAM. UNIÃO BRASIL = FUSÃO DE DEM E PSL.</div>
+<div class="el fine" data-flow="m:4" data-gap="18" data-a="fade" data-t="{W(s,'negam',0,.2)}" style="left:80px">TAMBÉM PRESOS: UM EX-CHEFE DA POLÍCIA CIVIL DE CASTRO (PROPINA DO JOGO DO BICHO, 2022) E UM DEPUTADO EXPULSO DO MDB (SUSPEITO DE AGIR PARA O CV). DO OUTRO LADO, O VEREADOR SALVINO (PSD, ALIADO DE PAES) FOI PRESO EM 2026, SUSPEITO DE NEGOCIAR COM O CV, E SOLTO 2 DIAS DEPOIS (O TJ VIU FUNDAMENTO “PRECÁRIO”). TODOS NEGAM. DOMINGOS BRAZÃO FEZ CAMPANHA PARA DILMA (2014, PELO MDB); CHIQUINHO, PARA BOLSONARO (2022) (COMPROVA). UNIÃO BRASIL = FUSÃO DE DEM E PSL.</div>
 ''', 'i09', 'PF · STF (FEV/2026) · MP-RJ · BRASIL DE FATO (2022) · DIÁRIO DO NORDESTE (2026)', kbo='65% 50%'))
 
 s = 'v10'; CUR['s'] = s
@@ -288,20 +288,20 @@ H.append(scene(s, rail(4)+f'''
 <div class="el rows" data-flow="m:3" data-gap="36" data-a="fade" data-t="{W(s,'nenhum',0,-.3)}" style="left:80px">
   {row('ALVOS DA LISTA', 'NENHUM DOS 69 ENTRE AS MORTES', None, '#fff', 0)}
   {row('CHEFE PRINCIPAL', 'FUGIU', None, '#fff', 0, fade=W(s,'chefe',0,-.2))}
-  {row('3 MESES DEPOIS', '+44% DE MORTES A TIRO', None, R, 0, sub='REGIÃO METROPOLITANA', fade=W(s,'meses',0,-.2))}</div>
-<div class="el fine" data-flow="m:4" data-gap="26" data-a="fade" data-t="{W(s,'quarenta',0,.3)}" style="left:80px">121 MORTES PELA CONTA DO GOVERNO, 132 PELA DEFENSORIA, QUE VÊ INDÍCIOS DE ILEGALIDADE. O GOVERNO DIZ QUE 108 DOS 115 IDENTIFICADOS TINHAM VÍNCULO COM O CV E QUE 4 POLICIAIS MORRERAM. 55% A 70% DOS CARIOCAS APOIARAM.</div>
-''', 'i11', 'REUTERS · FOGO CRUZADO (JAN/2026) · POLÍCIA CIVIL-RJ · DEFENSORIA · DATAFOLHA', kbo='60% 50%'))
+  {row('BALANÇO OFICIAL', '99 PRESOS · 91 FUZIS', None, '#fff', 0, sub='POLÍCIA CIVIL-RJ', fade=W(s,'fugiu',0,.1))}</div>
+<div class="el fine" data-flow="m:4" data-gap="26" data-a="fade" data-t="{W(s,'fugiu',0,.4)}" style="left:80px">121 MORTES PELA CONTA DO GOVERNO, 132 PELA DEFENSORIA, QUE VÊ INDÍCIOS DE ILEGALIDADE. O GOVERNO DIZ QUE 108 DOS 115 IDENTIFICADOS TINHAM VÍNCULO COM O CV E QUE 4 POLICIAIS MORRERAM. 55% A 70% DOS CARIOCAS APOIARAM.</div>
+''', 'i11', 'REUTERS · POLÍCIA CIVIL-RJ · DEFENSORIA · DATAFOLHA', kbo='60% 50%'))
 
 s = 'v11b'; CUR['s'] = s
 H.append(scene(s, rail(4)+f'''
-{eb(10, 'O QUE FACILITA · DOS DOIS LADOS', top=300)}
+{eb(10, 'O QUE INCENTIVA O CONFRONTO', top=300)}
 <div class="el items tight" data-flow="m:2" data-gap="30" style="left:80px">
   {item('2019 · WITZEL · PSC ' + DIR, 'Mortes por policiais saem da conta do bônus das polícias. No mesmo ano: recorde de 1.814.', W(s,'witzel',0,-.2))}
-  {item('2025 · ALERJ · BASE DE CASTRO (PL ' + DIR + ')', 'Volta a gratificação faroeste. Castro vetou por custo; o veto caiu com apoio da liderança do governo.', W(s,'alerj',0,-.2), color=R)}
-  {item('2020 · GOVERNO BOLSONARO · ' + DIR, 'Revoga as regras de rastreio de munição. O projeto que tira a marcação das balas das polícias espera no Senado.', W(s,'bolsonaro',0,-.2))}
-  {item(f'2025 · PREFEITURA PAES · PSD {DIR} · ALIADO DO GOVERNO ATUAL {SQUID}', 'Guarda armada com bônus de R$&nbsp;10.283; câmera só aos poucos.', W(s,'prefeitura',0,-.2))}</div>
-<div class="el fine" data-flow="m:3" data-gap="22" data-a="fade" data-t="{W(s,'reais',0,.1)}" style="left:80px">NOS ANOS 1990, COM A FAROESTE (MARCELLO ALENCAR, PSDB), A PROPORÇÃO DE MORTOS POR FERIDO EM CONFRONTO FOI DE 2 PARA 4. O PROJETO DAS BALAS (PL 3.723/2019) É DO GOVERNO BOLSONARO; FLÁVIO COBROU A VOTAÇÃO E, NO JN, CHAMOU A MARCAÇÃO DE “DETALHEZINHO”. NA OPERAÇÃO CONTENÇÃO, 17,6% DOS POLICIAIS DO BOPE TIRARAM A CÂMERA (MPRJ). CRÉDITO: CASTRO PÔS CÂMERAS NAS FARDAS EM 2022. É FALSO QUE OS FUZIS DA OPERAÇÃO ERAM DE CACS (AOS FATOS).</div>
-''', 'i08', 'JB (2019) · METRÓPOLES E MIGALHAS (DEZ/2025) · CONGRESSO EM FOCO · POLÍCIA CIVIL-RJ · ALMA PRETA · MPRJ', kbo='55% 50%'))
+  {item('2025 · DEPUTADOS DO PL ' + DIR, 'Volta a gratificação faroeste. Castro vetou; a Alerj derrubou o veto.', W(s,'deputados',0,-.2), color=R)}
+  {item('2020 · GOVERNO BOLSONARO · ' + DIR, 'Revoga regras de rastreio de munição. O STF suspendeu em 2021.', W(s,'bolsonaro',0,-.2))}
+  {item('PROJETO DAS BALAS · PL 3.723/2019', 'Tira a marcação das balas das polícias. Parado no Senado.', W(s,'projeto',0,-.2))}</div>
+<div class="el fine" data-flow="m:3" data-gap="22" data-a="fade" data-t="{W(s,'senado',0,.1)}" style="left:80px">NOS ANOS 1990, COM A FAROESTE (MARCELLO ALENCAR, PSDB), DOBROU O NÚMERO DE MORTOS PARA CADA FERIDO EM CONFRONTO. O PSOL ACIONOU O STF EM 2026, SEM DECISÃO. O PL 3.723 FOI ENVIADO PELO GOVERNO BOLSONARO; O FIM DA MARCAÇÃO ENTROU POR EMENDA NA CÂMARA. FLÁVIO, NO JN (16/10/2026), CHAMOU A MARCAÇÃO DE “DETALHEZINHO”. A GUARDA DE PAES (PSD) RECEBE GRATIFICAÇÃO FIXA DE R$ 10,3 MIL POR PORTAR ARMA, NÃO POR MORTE. CÂMERAS NAS FARDAS VIERAM EM 2022, POR ORDEM DO STF. É FALSO QUE OS FUZIS DA OPERAÇÃO ERAM DE CACS (AOS FATOS).</div>
+''', 'i08', 'JB (2019) · AGÊNCIA BRASIL E METRÓPOLES (2025) · CONGRESSO EM FOCO · METRÓPOLES (OUT/2026) · ALMA PRETA', kbo='55% 50%'))
 
 s = 'v12'; CUR['s'] = s
 H.append(scene(s, rail(4)+f'''
@@ -317,16 +317,18 @@ H.append(scene(s, rail(4)+f'''
 s = 'v13'; CUR['s'] = s
 H.append(scene(s, rail(5)+f'''
 {eb(12, 'E O GOVERNO FEDERAL?', top=300)}
-<div class="el rows" data-flow="m:2" data-gap="34" data-a="fade" data-t="{W(s,'fronteira',0,-.3)}" style="left:80px">
-  {row('É DO ESTADO', 'PM, POLÍCIA CIVIL, PRESÍDIOS, INVESTIGAÇÃO', None, '#fff', 0)}
-  {row('É DA UNIÃO', 'FRONTEIRA, PORTO, ARMAS, PF, PRF, FUNDOS', None, Y, 0)}</div>
-<div class="el rows" data-flow="m:3" data-gap="34" data-a="fade" data-t="{W(s,'dinheiro',0,-.3)}" style="left:80px">
+<div class="el rows" data-flow="m:2" data-gap="34" data-a="fade" data-t="{W(s,'porto',0,-.3)}" style="left:80px">
+  {row('É DA UNIÃO', 'FRONTEIRA, PORTO, ARMAS, PF, FUNDOS', None, Y, 0)}</div>
+<div class="el rows" data-flow="m:3" data-gap="34" data-a="fade" data-t="{W(s,'ministério',0,-.3)}" style="left:80px">
   {row('ENVIADO', 'R$ 288 MI', 1, WH, W(s,'mandado',0), sub='FUNDO NACIONAL, DESDE 2019')}
-  {row('PARADO NA CONTA', 'R$ 174 MI', 174/331, R, W(s,'parados',0,-.2), sub='COM RENDIMENTOS')}</div>
-<div class="el body" data-flow="m:4" data-gap="30" data-a="up" data-t="{W(s,'blindados',0,-.2)}" style="left:80px;width:860px">Blindados: negados porque a lei exige <b>GLO, que o estado não pediu.</b></div>
-<div class="el h" data-flow="m:5" data-gap="30" data-a="up" data-t="{W(s,'pouco',0,-.25)}" style="left:80px;width:880px;font-size:50px;color:#fff">O RIO GASTA <span class="hl">R$ 17 BI POR ANO</span></div>
-<div class="el fine" data-flow="m:6" data-gap="20" data-a="fade" data-t="{W(s,'cortou',0,-.1)}" style="left:80px">O GOVERNO ATUAL {SQUID} CONTINGENCIOU CERCA DE R$ 500 MI DOS FUNDOS DE SEGURANÇA. A FORÇA NACIONAL ESTÁ NO RIO DESDE 2023 (11 RENOVAÇÕES ATENDIDAS), COM POUCO RESULTADO NO 1º ANO. AOS FATOS: “GOVERNADOR NÃO PODE PEDIR GLO” É FALSO.</div>
-''', 'i13', 'MJSP (NOTA DE 28/10/2025) · FBSP, ANUÁRIO 2026 · AOS FATOS · FOLHA', kbo='60% 60%'))
+  {row('PARADO NA CONTA', 'R$ 174 MI', 174/331, R, W(s,'parados',0,-.2), sub='COM RENDIMENTOS · MINISTÉRIO DA JUSTIÇA')}</div>
+<div class="el body" data-flow="m:4" data-gap="30" data-a="up" data-t="{W(s,'blindados',0,-.2)}" style="left:80px;width:860px">Blindados: negados porque a lei exige <b>GLO, que o estado não pediu desta vez.</b></div>
+<div class="el rows" data-flow="m:5" data-gap="30" data-a="fade" data-t="{W(s,'mantém',0,-.3)}" style="left:80px">
+  {row('CRÉDITO', 'FORÇA NACIONAL NO RIO DESDE 2023', None, Y, 0, sub=f'GOVERNO ATUAL {SQUID}')}
+  {row('CRÉDITO', 'COMPRA DE ARMAS POR ATIRADORES CAIU 91%', None, Y, 0, sub='448 MIL → 40 MIL · 2022–24', fade=W(s,'atiradores',0,-.2))}
+  {row('CONTA', 'CORTOU VERBA DA SEGURANÇA', None, R, 0, sub='~R$ 500 MI CONTINGENCIADOS', fade=W(s,'cortou',0,-.2))}</div>
+<div class="el fine" data-flow="m:6" data-gap="18" data-a="fade" data-t="{W(s,'segurança',0,.1)}" style="left:80px">O GOVERNO ATUAL DISSE EM 2023 QUE NÃO DECRETARIA GLO NO RIO, MAS DECRETOU GLO NOS PORTOS (2023) E NO BRICS (2025, A PEDIDO DE CASTRO). AOS FATOS: “GOVERNADOR NÃO PODE PEDIR GLO” É FALSO. O RIO GASTA R$ 17 BI POR ANO EM SEGURANÇA (FBSP). LEI ANTIFACÇÃO, SANCIONADA PELO PRESIDENTE.</div>
+''', 'i13', 'MJSP (NOTA DE 28/10/2025) · FBSP, ANUÁRIO 2026 · AOS FATOS · PODER360', kbo='60% 60%'))
 
 s = 'v15'; CUR['s'] = s
 H.append(scene(s, f'''
