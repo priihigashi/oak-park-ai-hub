@@ -274,12 +274,13 @@ H.append(scene(s, f'''
 {eb(9, 'E O GOVERNO FEDERAL?', top=320)}
 {quote('“O GOVERNO FEDERAL NÃO AJUDA.”', W(s,'governo',0), 'm:2', gap=26)}
 <div class="el rows" data-flow="m:3" data-gap="36" data-a="fade" data-t="{W(s,'mandou',0,-.2)}" style="left:80px">
-  {row('FUNDO NACIONAL 2024', 'R$ 45,8 MI · A MAIOR FATIA', None, Y, 0, sub='ORÇAMENTO DA PM PAULISTA: R$ 10,3 BI')}
+  {row('FUNDO NACIONAL', 'R$ 45,8 MI EM 2024 · A MAIOR FATIA', None, Y, 0, sub='GOVERNO ATUAL 🦑')}
+  {row('2021 · BOLSONARO', 'R$ 31,1 MI · +47% AGORA', None, '#5B7CFF', 0, sub=f'PL {EXT}', fade=W(s,'cinquenta',0,-.2))}
   {row('PF E RECEITA', 'NA OPERAÇÃO DOS COMBUSTÍVEIS', None, Y, 0, fade=W(s,'polícia',0,-.2))}</div>
 <div class="el h redtxt" data-flow="m:4" data-gap="44" data-a="slam" data-t="{W(s,'fronteira',0,-.15)}" style="left:80px;width:880px;font-size:66px">FRONTEIRA E PORTO DE SANTOS SÃO DA UNIÃO.</div>
 <div class="el body" data-flow="m:5" data-gap="26" data-a="up" data-t="{W(s,'decretos',0,-.2)}" style="left:80px;width:860px">Com os decretos de armas do governo Bolsonaro, a facção passou a <b>comprar fuzis com nota fiscal.</b></div>
-<div class="el fine" data-flow="m:6" data-gap="22" data-a="fade" data-t="{W(s,'registrados',0,.1)}" style="left:80px">FUZIL COM NOTA: R$ 12–15 MIL, CONTRA R$ 35–59 MIL NO CONTRABANDO (PROMOTOR LINCOLN GAKIYA, ESTADÃO, 2022). LEI ANTIFACÇÃO: PROPOSTA DO GOVERNO ATUAL 🦑, RELATOR DERRITE (PP {DIR}), SANCIONADA PELO PRESIDENTE. DERRITE RECUSOU APOIO DIRETO DA PF NO CASO RUY FERRAZ (SET/2025); NO SENADO, O RELATOR DISSE QUE A CÂMARA TIROU DO TEXTO PONTOS CONTRA CRIME DE COLARINHO BRANCO.</div>
-''', 'santos', 'MJSP/FNSP, 2024 · TCE-SP, CONTAS 2023 · CÂMARA DOS DEPUTADOS, 2026', kbo='50% 50%'))
+<div class="el fine" data-flow="m:6" data-gap="22" data-a="fade" data-t="{W(s,'registrados',0,.1)}" style="left:80px">FUNDO: EM 2019–2020, SP RECEBEU R$ 93,1 MI (DOIS ANOS); EM 2021 O GOVERNO BOLSONARO MUDOU A FÓRMULA E A FATIA DE SP CAIU DE 6,66% PARA 4,31%. ORÇAMENTO DA PM PAULISTA: R$ 10,3 BI. FUZIL COM NOTA: R$ 12–15 MIL, CONTRA R$ 35–59 MIL NO CONTRABANDO (PROMOTOR LINCOLN GAKIYA, ESTADÃO, 2022). LEI ANTIFACÇÃO: PROPOSTA DO GOVERNO ATUAL 🦑, RELATOR DERRITE (PP {DIR}), SANCIONADA PELO PRESIDENTE. DERRITE RECUSOU APOIO DIRETO DA PF NO CASO RUY FERRAZ (SET/2025); NO SENADO, O RELATOR DISSE QUE A CÂMARA TIROU DO TEXTO PONTOS CONTRA CRIME DE COLARINHO BRANCO.</div>
+''', 'santos', 'MJSP/FNSP, 2024 · GAZETA SP, NOV/2021 · TCE-SP, CONTAS 2023 · CÂMARA DOS DEPUTADOS, 2026', kbo='50% 50%'))
 
 s = 's11'; CUR['s'] = s
 H.append(scene(s, f'''
@@ -299,9 +300,11 @@ H.append(scene(s, f'''
   {row('SANTA CATARINA', '7,6', 7.6/36.8, WH, W(s,'santa',0), sub=f'PL {EXT}')}
   {row('SÃO PAULO', '7,8', 7.8/36.8, Y, W(s,'santa',0,.2), sub=f'REPUBLICANOS {DIR}')}
   {row('RIO DE JANEIRO', '22,6', 22.6/36.8, R, W(s,'rio',0), sub=f'PL {EXT}')}</div>
-<div class="el rows" data-flow="m:4" data-gap="36" data-a="fade" data-t="{W(s,'piauí',0,-.3)}" style="left:80px">
-  {row('PIAUÍ', '17,1', 17.1/36.8, WH, W(s,'piauí',0), sub=f'PT {ESQ}')}
-  {row('BAHIA', '36,8', 1, R, W(s,'bahia',0), sub=f'PT {ESQ}')}</div>
+<div class="el rows" data-flow="m:4" data-gap="36" data-a="fade" data-t="{W(s,'típico',0,-.3)}" style="left:80px">
+  {row('ESTADO TÍPICO · DIREITA', '19,9', 19.9/29.1, '#5B7CFF', W(s,'típico',0), sub='MEDIANA DE 20 ESTADOS')}
+  {row('ESTADO TÍPICO · ESQUERDA', '29,1', 1, R, W(s,'esquerda',0), sub=f'MEDIANA DE 7 · PT {ESQ} E PSB {CESQ}')}</div>
+<div class="el body" data-flow="m:5" data-gap="30" data-a="up" data-t="{W(s,'comparando',0,-.2)}" style="left:80px;width:880px;font-size:42px">Só no Nordeste: <b style="color:{R}">esquerda 29,4</b> × <b style="color:#5B7CFF">direita 33,0</b>.</div>
+<div class="el fine" data-flow="m:6" data-gap="22" data-a="fade" data-t="{W(s,'pior',0,.2)}" style="left:80px">PARTIDO DO GOVERNADOR EM 2025. ESQUERDA: BA, CE, PI, RN (PT); ES, MA, PB (PSB). NE DIREITA: AL (MDB), PE E SE (PSD). MEDIANA = O ESTADO DO MEIO DA LISTA; CÁLCULO NOSSO COM DADOS DO FBSP.</div>
 ''', 'marginal', 'FBSP, ANUÁRIO 2026 (MVI, INCLUI MORTES PELA POLÍCIA) · ' + IDS, kbo='50% 50%'))
 
 s = 's13'; CUR['s'] = s
