@@ -13,3 +13,5 @@ Episódio de referência: "Querida amiga" (qamiga.html). Prévia publicada: http
 
 ## Regra de entrega (vale para TODOS os reels: Colagem, Timeline, Desabafos)
 Antes de qualquer MP4: publicar esta prévia como artifact, republicar no MESMO link a cada rodada dizendo o que mudou, e só renderizar depois que ela aprovar. Reel sem narração: usar um mp3 silencioso com a duração do vídeo como relógio (mesmos controles).
+
+- `../fit.js` — ajusta o tamanho de cada título (.h) para ocupar a largura sem palavra órfã (menos linhas quando dá, fonte cresce até encher a linha, text-wrap: balance); listas (.govlist) ficam com cada item numa linha. Carregar ANTES do layout.js.
