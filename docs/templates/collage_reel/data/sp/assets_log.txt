@@ -1,0 +1,64 @@
+Name: edge-tts
+Version: 7.3.1
+s01 24 palavras
+s02 42 palavras
+s03 76 palavras
+s04 39 palavras
+s05 54 palavras
+s06 41 palavras
+s07 76 palavras
+s08 40 palavras
+s09 59 palavras
+s10 61 palavras
+s11 38 palavras
+s12 36 palavras
+s13 35 palavras
+paulista_0.jpg | CC BY-SA 4.0 | File:Santa Catarina Hospital, Avenida Paulista, São Paulo, Brazil.jpg
+paulista_1.jpg | CC BY-SA 4.0 | File:Avenida Paulista at night 03.jpg
+paulista_2.jpg | CC BY-SA 4.0 | File:Avenida Paulista at night 02.jpg
+farialima_0.jpg | CC BY 3.0 | File:Avenida Brigadeiro Faria Lima 1995.jpg
+farialima_1.jpg | CC BY-SA 4.0 | File:Avenida Brigadeiro Faria Lima7.jpg
+bandeirantes_0.jpg | CC BY-SA 4.0 | File:Troféu Palácio dos Bandeirantes do Campeonato Paulista.jpg
+skip File:Palácio dos Bandeirantes Fotos gerais e detalhes do Palácio dos Bandeirantes. (33638921998).jpg HTTP Error 429: Too Many Requests
+skip File:Palácio dos Bandeirantes Fotos gerais e detalhes do Palácio dos Bandeirantes. (47462953362).jpg HTTP Error 429: Too Many Requests
+skip File:Palácio dos Bandeirantes Fotos gerais e detalhes do Palácio dos Bandeirantes. (46600211135).jpg HTTP Error 429: Too Many Requests
+skip File:Palácio dos Bandeirantes 2018 052.jpg HTTP Error 429: Too Many Requests
+skip File:Logo do Palácio dos Bandeirantes.png HTTP Error 429: Too Many Requests
+skip File:Palácio dos Bandeirantes Fotos gerais e detalhes do Palácio dos Bandeirantes. (47515671421).jpg HTTP Error 429: Too Many Requests
+skip File:Palácio dos Bandeirantes Fotos gerais e detalhes do Palácio dos Bandeirantes. (33638922328).jpg HTTP Error 429: Too Many Requests
+skip File:Palácio dos Bandeirantes Fotos gerais e detalhes do Palácio dos Bandeirantes. (46791861994).jpg HTTP Error 429: Too Many Requests
+skip File:Palácio dos Bandeirantes Fotos gerais e detalhes do Palácio dos Bandeirantes. (33638920398).jpg HTTP Error 429: Too Many Requests
+skip File:Palácio dos Bandeirantes Fotos gerais e detalhes do Palácio dos Bandeirantes. (47462957342).jpg HTTP Error 429: Too Many Requests
+Traceback (most recent call last):
+  File "/home/runner/work/oak-park-ai-hub/oak-park-ai-hub/docs/templates/collage_reel/preview_kit/commons_fetch.py", line 23, in <module>
+    r = get(dict(action='query', format='json', list='search', srnamespace=6, srlimit=12,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/oak-park-ai-hub/oak-park-ai-hub/docs/templates/collage_reel/preview_kit/commons_fetch.py", line 14, in get
+    return json.load(urllib.request.urlopen(req, timeout=40))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/urllib/request.py", line 216, in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/urllib/request.py", line 525, in open
+    response = meth(req, response)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/urllib/request.py", line 634, in http_response
+    response = self.parent.error(
+               ^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/urllib/request.py", line 563, in error
+    return self._call_chain(*args)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/urllib/request.py", line 496, in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/urllib/request.py", line 643, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 429: Too Many Requests
+falhou https://www.ipea.gov.br/atlasviolencia/api/v1/valores-series/20/3 HTTP Error 404: Not Found
+falhou https://www.ipea.gov.br/atlasviolencia/api/v1/series/20 HTTP Error 404: Not Found
+falhou https://www.ipea.gov.br/atlasviolencia/api/v1/valores-series/328/3 HTTP Error 404: Not Found
+falhou https://www.ipea.gov.br/atlasviolencia/api/v1/series/328 HTTP Error 404: Not Found
+falhou https://www.ipea.gov.br/atlasviolencia/api/v1/valores-series/329/3 HTTP Error 404: Not Found
+falhou https://www.ipea.gov.br/atlasviolencia/api/v1/series/329 <urlopen error timed out>
+falhou https://www.ipea.gov.br/atlasviolencia/api/v1/valores-series/330/3 HTTP Error 404: Not Found
+falhou https://www.ipea.gov.br/atlasviolencia/api/v1/series/330 HTTP Error 404: Not Found
