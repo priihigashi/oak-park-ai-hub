@@ -27,7 +27,15 @@ for k in range(int(DUR / seg) + 1):
 t = np.arange(N) / SR
 mus *= np.minimum(1, t / 2.0).astype(np.float32); mus[-int(2*SR):] *= np.linspace(1, 0, int(2*SR)).astype(np.float32)
 env = np.abs(voice); k = int(.15 * SR); env = np.convolve(env, np.ones(k) / k, 'same'); duck = 1 - 0.6 * np.clip(env / 0.05, 0, 1)
-mix = voice + mus * duck * 0.8; mix = np.tanh(mix * 1.05); mix /= np.max(np.abs(mix)) / 0.95
+# swoosh baixinho no zoom do mapa (abertura): ruído filtrado com subida e descida suaves
+rng = np.random.default_rng(7); n = int(1.6 * SR); nz = rng.normal(0, 1, n).astype(np.float32)
+lp = np.zeros_like(nz); a_ = 0.0
+cut = np.linspace(.02, .18, n) * np.r_[np.ones(n // 2), np.linspace(1, .3, n - n // 2)]
+for i in range(1, n): a_ += cut[i] * (nz[i] - a_); lp[i] = a_
+envw = np.sin(np.linspace(0, np.pi, n)) ** 2
+sw = lp * envw; sw /= np.max(np.abs(sw)) + 1e-9
+i0 = int((TL[0]['s'] + 0.45) * SR); sfx = np.zeros(N, np.float32); sfx[i0:i0 + n] += sw[:max(0, min(n, N - i0))] * 0.16
+mix = voice + mus * duck * 0.8 + sfx; mix = np.tanh(mix * 1.05); mix /= np.max(np.abs(mix)) / 0.95
 wav = f'{OUT}/_mix.wav'
 with wave.open(wav, 'wb') as w:
     w.setnchannels(1); w.setsampwidth(2); w.setframerate(SR); w.writeframes((mix * 32767).astype(np.int16).tobytes())
@@ -42,9 +50,9 @@ for r in refs:
     s, d = f'{KIT}/{r}', f'{OUT}/{r}'
     if not os.path.exists(s): print('FALTA', r); continue
     os.makedirs(os.path.dirname(d), exist_ok=True)
-    if r.endswith('.jpg'): subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', s, '-vf', 'scale=1080:-2', '-q:v', '5', d])
+    if r.endswith('.jpg') and 'mapa_' not in r: subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', s, '-vf', 'scale=1080:-2', '-q:v', '5', d])
     else: shutil.copy(s, d)
-for f in ['fx.js', 'fx2.js', 'fx.css', 'layout.js', 'fit.js']: shutil.copy(f'{KIT}/{f}', f'{OUT}/{f}')
+for f in ['fx.js', 'fx2.js', 'fx.css', 'layout.js', 'fit.js', 'zoom.js']: shutil.copy(f'{KIT}/{f}', f'{OUT}/{f}')
 e = open(f'{KIT}/engine.js').read()
 e = e.replace("if(!navigator.webdriver){let t0=performance.now();(function loop(){render(((performance.now()-t0)/1000)%DUR);requestAnimationFrame(loop)})()}",
  "(function loop(){const a=document.getElementById('vo');let T=a?a.currentTime:0;render(Math.min(T,DUR-0.01));if(window.__tick)__tick(T);requestAnimationFrame(loop)})();")
@@ -57,6 +65,6 @@ page = page.replace('{int(__import__("time").time())}', str(int(time.time())))
 page = page.replace('{{', '{').replace('}}', '}').replace('@@STYLE@@', style).replace('@@STAGE@@', stage)
 page = page.replace('Querida Amiga · Prévia', 'São Paulo · Prévia').replace('Querida amiga · prévia', 'São Paulo: culpa da esquerda? · prévia')
 page = page.replace('<small id="ver">versão em edição</small>', f'<small id="ver">{VER}</small>')
-page = page.replace('<script src="engine.js"></script><script src="layout.js"></script>', '<script src="engine.js"></script><script src="fit.js"></script><script src="layout.js"></script>')
+page = page.replace('<script src="engine.js"></script><script src="layout.js"></script>', '<script src="engine.js"></script><script src="zoom.js"></script><script src="fit.js"></script><script src="layout.js"></script>')
 open(f'{OUT}/index.html', 'w').write(page)
 print('ok', round(DUR, 1), 's')

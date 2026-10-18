@@ -126,12 +126,20 @@ MDIP = [879, 832, 857, 940, 851, 867, 814, 570, 419, 504, 813, 835]
 def g(v): return f'{v:.1f}'.replace('.', ',')
 
 s = 's01'; CUR['s'] = s
-H.append(scene(s, f'''
+MZ = json.load(open(os.path.join(KIT, 'data/sp/mapa_br.json')))
+bx = MZ['sp_box']; cxs, cys = (bx[0]+bx[2])/2, (bx[1]+bx[3])/2
+zk = f"0,.31,1620,1620,540,1060; .45,.31,1620,1620,540,1060; 2.7,1.3,{cxs:.0f},{cys:.0f},560,1210; {S[s]['e']-S[s]['s']:.2f},1.42,{cxs:.0f},{cys:.0f},560,1210"
+o = S[s]
+H.append(f'''<section class="scene" data-s="{o["s"]}" data-e="{o["e"]}" data-in="cut" data-theme="dark">
+<div class="zoomer" data-z="{zk}" style="position:absolute;left:0;top:0;width:3240px;height:3240px;transform-origin:0 0"><img src="assets/sp/mapa_br.jpg" style="width:3240px;height:3240px;display:block"></div>
+<div class="shadeMap"></div>
+<div class="safe">
 {eb(0, 'SÃO PAULO · O ESTADO MAIS POPULOSO', top=330)}
 <div class="el h" data-flow="m:2" data-gap="34" data-a="slam" data-t="{W(s,'celular',0,-.15)}" data-shake="1" style="left:80px;width:880px;font-size:88px;color:#fff">CELULAR ROUBADO E <span class="hl">CRIME NA FARIA LIMA</span></div>
 <div class="el h redtxt" data-flow="m:3" data-gap="30" data-a="slam" data-t="{W(s,'culpa',0,-.1)}" data-d=".35" style="left:80px;font-size:96px;width:880px">E A CULPA É DA ESQUERDA.</div>
 <div class="el body" data-flow="m:4" data-gap="40" data-a="up" data-t="{W(s,'vamos',0,-.2)}" style="left:80px;width:820px"><b>Vamos aos fatos.</b></div>
-''', 'paulista', 'FBSP, ANUÁRIO 2026 · RECEITA FEDERAL E MP-SP (CARBONO OCULTO, 2025)', kbo='60% 60%'))
+</div>{kar(s)}<div class="el srcline" data-a="fade" data-t=".4" style="left:130px;top:1640px;width:820px">FONTE: FBSP, ANUÁRIO 2026 · RECEITA FEDERAL E MP-SP (CARBONO OCULTO, 2025) · MAPA: IBGE</div></section>
+''')
 
 s = 's02'; CUR['s'] = s
 H.append(scene(s, rail(0)+f'''
@@ -279,6 +287,7 @@ H.append(scene(s, f'''
 ''', 'ponte', 'FBSP · IPEA · SOU DA PAZ · TSE · LUPA', kbo='50% 50%'))
 
 CSS = open(os.path.join(KIT, 'preview_kit/style.css')).read() + '''
+.shadeMap{position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,7,9,.82) 0%,rgba(6,7,9,.35) 34%,rgba(6,7,9,0) 52%,rgba(6,7,9,0) 66%,rgba(6,7,9,.95) 82%)}
 .shadeX{position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,7,9,.9) 0%,rgba(6,7,9,.72) 48%,rgba(6,7,9,.42) 100%),linear-gradient(180deg,rgba(6,7,9,.75) 0%,rgba(6,7,9,0) 22%,rgba(6,7,9,0) 58%,rgba(6,7,9,.96) 80%)}
 .eyebrow{display:flex;align-items:center;gap:14px;font-family:JBM;font-weight:700;font-size:24px;letter-spacing:3px;color:#FFD34D;text-transform:uppercase;white-space:nowrap}
 .eyebrow::before{content:"";width:40px;height:4px;border-radius:2px;background:#FFD34D}
@@ -327,6 +336,6 @@ page = f'''<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>
 <link rel="stylesheet" href="fx.css"><style>{CSS}</style></head><body><div id="stage">
 {"".join(H)}
 <div id="grain"></div><div id="foot">@tentandochegaratevoce</div></div>
-<script>window.DUR={DUR:.2f};</script><script src="fx.js"></script><script src="fx2.js"></script><script src="engine.js"></script><script src="fit.js"></script><script src="layout.js"></script></body></html>'''
+<script>window.DUR={DUR:.2f};</script><script src="fx.js"></script><script src="fx2.js"></script><script src="engine.js"></script><script src="zoom.js"></script><script src="fit.js"></script><script src="layout.js"></script></body></html>'''
 open(os.path.join(KIT, 'sp.html'), 'w').write(page)
 print('ok', DUR)
