@@ -66,13 +66,13 @@ H = []
 
 
 # ---------- gráfico de linhas animado (revela da esquerda pra direita via .bar) ----------
-def chart(sid, years, series, ymax, ticks, t0, dur, marks=(), w=880, h=600, lw=250, stages=None, notes=(), ymin=0):
+def chart(sid, years, series, ymax, ticks, t0, dur, marks=(), w=880, h=600, lw=250, stages=None, notes=(), ymin=0, tfmt=None):
     px0, px1, py0, py1 = 56, w - lw - 20, 14, h - 46
     def X(i): return px0 + (px1 - px0) * i / (len(years) - 1)
     def Yv(v): return py1 - (py1 - py0) * (v - ymin) / (ymax - ymin)
     grid = ''.join(f'<line x1="{px0}" x2="{px1}" y1="{Yv(v):.1f}" y2="{Yv(v):.1f}" stroke="rgba(242,236,224,.14)" stroke-width="1.5"/>'
-                   f'<text x="{px0-12}" y="{Yv(v)+7:.1f}" text-anchor="end" font-family="JBM" font-weight="700" font-size="19" fill="#9F988A">{f"{v:,}".replace(",",".")}</text>' for v in ticks)
-    lab_i = [0, len(years)//2, len(years)-1]
+                   f'<text x="{px0-12}" y="{Yv(v)+7:.1f}" text-anchor="end" font-family="JBM" font-weight="700" font-size="19" fill="#9F988A">{tfmt(v) if tfmt else f"{v:,}".replace(",",".")}</text>' for v in ticks)
+    lab_i = list(range(len(years))) if len(years) <= 6 else [0, len(years)//2, len(years)-1]
     grid += ''.join(f'<text x="{X(i):.1f}" y="{h-12}" text-anchor="middle" font-family="JBM" font-weight="700" font-size="19" fill="#9F988A">{years[i]}</text>' for i in lab_i)
     mk = ''
     for yr, txt, col in marks:
@@ -150,33 +150,36 @@ H.append(scene(s, rail(0)+f'''
 ''', 'i02', 'TSE · TJ-RJ · ' + IDS, kbo='60% 50%'))
 
 s = 'v03'; CUR['s'] = s
-c3 = chart(s, YSIM, [
-    dict(n='RIO', sub='HOMICÍDIOS<br>POR 100 MIL', v=SIM, c=Y, w=7, lt=W(s,'pior',0), dots=[(2, '56,5'), (9, '31,8')]),
-], 70, [0, 20, 40, 60], 0, 0, h=520, marks=[('2002', 'GAROTINHO/BENEDITA', R), ('2007', 'CABRAL', '#fff')],
-   stages=[(0, 2, W(s,'pior',0,-.2), 1.6), (2, 6, W(s,'rosinha',0,-.2), 1.8), (6, 9, W(s,'cabral',0,-.2), 1.8)],
-   notes=[(2, 56.5, 'PICO', R, W(s,'dois',0,.1), -20, -70), (8, 50, '↘ UPPs<br>A PARTIR DE 2008', Y, W(s,'upps',0,-.2), -60, -40)]).replace('{flow}', 'm:3')
+XM = ['ANTES', '1º ANO', '2º', '3º', '4º']
+L1, L2 = '#FF4A3D', '#FF9C8F'
+c3 = chart(s, XM, [
+    dict(n='GAROTINHO +26%', v=[0, .5, 9.8, 11.2, 26.2], c=L1, w=7, lt=W(s,'garotinho',0,-.1)),
+    dict(n='ROSINHA −5%', v=[0, .1, -4.9, -.7, -4.9], c=L2, w=6, lt=W(s,'rosinha',0,-.1)),
+    dict(n='CABRAL 1 −24%', v=[0, .7, -6.7, -7.1, -23.8], c=BLUE, w=6, lt=W(s,'cabral',0,-.1)),
+    dict(n='CABRAL 2 −2%', v=[0, -14.9, -19.9, -8.2, -1.9], c=BLUE, w=4, dash=True, lt=W(s,'cabral',0,.4)),
+    dict(n='PEZÃO +17%', v=[0, -12.4, 9.5, 18.0, 17.4], c='#AFC0FF', w=5, lt=W(s,'pezão',0,-.1)),
+    dict(n='WITZEL/CASTRO −33%', v=[0, -10.9, -26.9, -29.1, -33.2], c='#2F57FF', w=7, lt=W(s,'witzel',0,-.1)),
+    dict(n='CASTRO 2 −13%', sub='3 ANOS', v=[0, -4.8, -15.1, -13.3, -13.3], c='#2F57FF', w=4, dash=True, lt=W(s,'witzel',0,.6)),
+], 40, [-40, -20, 0, 20, 40], 0, 0, h=640, lw=290, ymin=-40,
+   tfmt=lambda v: (f'+{v}%' if v > 0 else f'{v}%'.replace('-', '−')),
+   stages=[(0, 4, W(s,'linha',0,-.2), 1.8)]).replace('{flow}', 'm:3')
 H.append(scene(s, rail(1)+f'''
-{eb(2, 'ANTES DE 2007 · HOMICÍDIOS POR 100 MIL', top=300)}
-<div class="el stamp-r" data-flow="m:2" data-gap="26" data-a="stamp" data-t="{W(s,'ficha',0,-.1)}" data-d=".35" data-r="-2" style="left:80px;white-space:nowrap;font-size:46px">A ESQUERDA TEVE O PIOR ANO</div>
+{eb(2, 'MANDATO POR MANDATO · MORTES VIOLENTAS', top=290)}
+<div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:32px"><b style="color:{L1}">━ ESQUERDA</b> &nbsp;&nbsp; <b style="color:{BLUE}">━ DIREITA</b> &nbsp;&nbsp; <span style="color:#A9A291;font-size:24px">TRACEJADO = 2º MANDATO</span></div>
 {c3}
-<div class="el body" data-flow="m:4" data-gap="34" data-a="up" data-t="{W(s,'rosinha',0,-.2)}" style="left:80px;width:860px">A taxa começa a cair com Rosinha e <b>cai mais rápido com Cabral e as UPPs.</b></div>
-<div class="el fine" data-flow="m:5" data-gap="20" data-a="fade" data-t="{W(s,'upps',0,.2)}" style="left:80px">SÉRIE DO SIM/DATASUS (MAPA DA VIOLÊNCIA). NÃO É A MESMA BASE DO FÓRUM DE SEGURANÇA, POR ISSO FICA EM GRÁFICO SEPARADO.</div>
-''', 'i03', 'WAISELFISZ, MAPA DA VIOLÊNCIA 2012 (SIM/DATASUS)', kbo='55% 60%'))
+<div class="el fine" data-flow="m:4" data-gap="22" data-a="fade" data-t="{W(s,'linha',0,.4)}" style="left:80px">VARIAÇÃO NO NÚMERO DE MORTES VIOLENTAS ATÉ O FIM DO MANDATO, CONTRA O ANO ANTES DA POSSE. MESMA BASE DE 1998 A 2025 (ISP-RJ). BENEDITA (PT) GOVERNOU 9 MESES EM 2002; PEZÃO ASSUMIU EM ABR/2014; CASTRO EM AGO/2020. ANTES DE 1999, MARCELLO ALENCAR (PSDB, DIREITA): −26%. BRASIL ENTRE 2018 E 2022: −19%.</div>
+''', 'i03', 'ISP-RJ, LETALIDADE VIOLENTA (1998–2020) · FBSP, ANUÁRIOS 2022–2026 · ' + IDS, kbo='55% 60%'))
 
 s = 'v04'; CUR['s'] = s
-c4 = chart(s, YF, [
-    dict(n='RIO', sub='MORTES VIOLENTAS<br>POR ANO', v=MVI, c=Y, w=7, lt=W(s,'série',0), dots=[(4, '6.749'), (12, '3.890')]),
-], 7500, [0, 2500, 5000, 7500], 0, 0, h=560, marks=[('2017', 'PICO', '#fff'), ('2025', '', R)],
-   stages=[(0, 4, W(s,'sobe',0,-.2), 2.0), (4, 11, W(s,'depois',0,-.2), 2.4), (11, 12, W(s,'volta',0,-.2), 1.0)],
-   notes=[(1, 6900, '↗ SUBINDO', '#fff', W(s,'sobe',0), 0, 0), (7, 6400, '↘ 7 ANOS<br>EM QUEDA', Y, W(s,'sete',0,-.2), 0, 0),
-          (11, 5600, '↗ 2025', R, W(s,'volta',0), -30, 0)]).replace('{flow}', 'm:2')
 H.append(scene(s, rail(1)+f'''
-{eb(3, 'MORTES VIOLENTAS INTENCIONAIS · RJ', top=300)}
-{c4}
-<div class="el h" data-flow="m:3" data-gap="30" data-a="up" data-t="{W(s,'brasil',0,-.25)}" style="left:80px;width:880px;font-size:54px;color:#fff">2025: RIO <span style="color:{R}">+2,1%</span> · BRASIL <span style="color:{Y}">−8,2%</span></div>
-<div class="el note" data-flow="m:4" data-gap="22" data-a="fade" data-t="{W(s,'brasil',0,.3)}" style="left:80px">COMO LER: NÃO OLHE SÓ O PICO, OLHE A DIREÇÃO. A QUEDA DE 2018 A 2024 FOI NACIONAL.</div>
-<div class="el fine" data-flow="m:5" data-gap="16" data-a="fade" data-t="{W(s,'brasil',0,.6)}" style="left:80px">EM NÚMERO DE MORTES (INCLUI AS MORTES PELA POLÍCIA). A TAXA POR 100 MIL MUDA DE BASE COM O CENSO 2022. O RIO FOI UM DOS 7 ESTADOS QUE SUBIRAM EM 2025.</div>
-''', 'i04', 'FBSP, ANUÁRIOS 2015–2026 (MVI) · ISP-RJ', kbo='60% 45%'))
+{eb(3, 'COMO LER', top=320)}
+<div class="el h" data-flow="m:2" data-gap="34" data-a="up" data-t="{W(s,'subiu',0,-.2)}" style="left:80px;width:880px;font-size:76px;color:#fff">SUBIU E CAIU <span class="hl">COM OS DOIS LADOS.</span></div>
+<div class="el body" data-flow="m:3" data-gap="30" data-a="up" data-t="{W(s,'partido',0,-.2)}" style="left:80px;width:860px">A tendência <b>não dá para colar num partido.</b></div>
+<div class="el rows" data-flow="m:4" data-gap="44" data-a="fade" data-t="{W(s,'perdeu',0,-.3)}" style="left:80px">
+  {row('RIO · 2025', '+2,1%', 2.1/8.2, R, W(s,'subir',0), sub='MORTES VIOLENTAS · FBSP')}
+  {row('BRASIL · 2025', '−8,2%', 1, Y, W(s,'brasil',0), sub='MENOR TAXA DA SÉRIE')}</div>
+<div class="el fine" data-flow="m:5" data-gap="22" data-a="fade" data-t="{W(s,'série',0,.1)}" style="left:80px">A QUEDA COM WITZEL E CASTRO VEIO JUNTO COM O RECORDE DE MORTES PELA POLÍCIA: 1.814 EM 2019. O RIO FOI UM DOS 7 ESTADOS QUE SUBIRAM EM 2025.</div>
+''', 'i04', 'FBSP, ANUÁRIO 2026 · ISP-RJ', kbo='60% 45%'))
 
 s = 'v05'; CUR['s'] = s
 H.append(scene(s, rail(1)+f'''
