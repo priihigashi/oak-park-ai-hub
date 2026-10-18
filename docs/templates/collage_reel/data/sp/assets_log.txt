@@ -1,16 +1,6 @@
 Name: edge-tts
 Version: 7.3.1
-s01 24 palavras
-s02 42 palavras
-s03 124 palavras
-s04 31 palavras
-s05 71 palavras
-s06 77 palavras
-s07 118 palavras
-s07b 150 palavras
-s08 62 palavras
-s09 94 palavras
-s10 98 palavras
-s11 38 palavras
-s12 66 palavras
-s13 35 palavras
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+docs/templates/collage_reel/data/sp/el/partA.mp3 casadas 523 / 523
+docs/templates/collage_reel/data/sp/el/partB.mp3 casadas 510 / 510
+ok
