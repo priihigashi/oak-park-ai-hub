@@ -204,10 +204,10 @@ H.append(scene(s, rail(2)+f'''
   {row('SET/2026', 'DANILO MORGADO · CANDIDATO', None, '#fff', 0, sub=f'PL {EXT}', fade=W(s,'candidato',0,-.2))}</div>
 <div class="el stamp-r" data-flow="m:3" data-gap="30" data-a="stamp" data-t="{W(s,'negam',0,-.1)}" data-d=".35" data-r="-2" style="left:80px;white-space:nowrap;font-size:42px">TODOS NEGAM</div>
 <div class="el eyebrow" data-flow="m:4" data-gap="44" data-a="left" data-t="{W(s,'investigadas',0,-.2)}" style="left:80px">COMO ENTRARAM NA PREFEITURA</div>
-<div class="el rows" data-flow="m:5" data-gap="18" data-a="fade" data-t="{W(s,'perueiros',0,-.3)}" style="left:80px">
+<div class="el rows" data-flow="m:5" data-gap="18" data-a="fade" data-t="{W(s,'transporte',0,-.3)}" style="left:80px">
   {row('2003', 'PERUEIROS VIRAM COOPERATIVAS OFICIAIS', None, '#fff', 0, sub=f'GESTÃO MARTA · PT {ESQ}')}
-  {row('2019', 'AS MESMAS EMPRESAS GANHAM A NOVA LICITAÇÃO', None, '#fff', 0, sub=f'GESTÃO COVAS · PSDB {DIR}', fade=W(s,'licitação',0,-.2))}</div>
-<div class="el fine" data-flow="m:6" data-gap="20" data-a="fade" data-t="{W(s,'covas',0,.2)}" style="left:80px">SEGUNDO O PROMOTOR LINCOLN GAKIYA (GAECO), INTEGRANTES DA FACÇÃO COMPRARAM COTAS DAS COOPERATIVAS. NINGUÉM ACUSA MARTA OU COVAS. CONTRATO DE ÔNIBUS É DA PREFEITURA (HOJE, NUNES, MDB {DIR}). SÓ CASOS COM OPERAÇÃO OU PROCESSO.</div>
+  {row('2019', 'AS MESMAS EMPRESAS GANHAM A NOVA LICITAÇÃO', None, '#fff', 0, sub=f'GESTÃO COVAS · PSDB {DIR}', fade=W(s,'continuaram',0,-.2))}</div>
+<div class="el fine" data-flow="m:6" data-gap="20" data-a="fade" data-t="{W(s,'partido',0,.2)}" style="left:80px">SEGUNDO O PROMOTOR LINCOLN GAKIYA (GAECO), INTEGRANTES DA FACÇÃO COMPRARAM COTAS DAS COOPERATIVAS. NINGUÉM ACUSA MARTA OU COVAS. CONTRATO DE ÔNIBUS É DA PREFEITURA (HOJE, NUNES, MDB {DIR}). SÓ CASOS COM OPERAÇÃO OU PROCESSO.</div>
 ''', 'camara', 'MP-SP E POLÍCIA CIVIL (2024–2026) · DIÁRIO DO TRANSPORTE, MAR/2019 · O TEMPO, SET/2026 · ' + IDS, kbo='50% 50%'))
 
 s = 's07'; CUR['s'] = s
