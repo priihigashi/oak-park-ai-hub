@@ -12,7 +12,10 @@ os.makedirs(f'{D}/tts', exist_ok=True)
 async def one(k, text):
     words = []
     with open(f'{D}/tts/{k}.mp3', 'wb') as f:
-        c = edge_tts.Communicate(text, VOICE, boundary='WordBoundary')
+        try:
+            c = edge_tts.Communicate(text, VOICE, boundary='WordBoundary')
+        except TypeError:
+            c = edge_tts.Communicate(text, VOICE)
         async for ch in c.stream():
             if ch['type'] == 'audio':
                 f.write(ch['data'])

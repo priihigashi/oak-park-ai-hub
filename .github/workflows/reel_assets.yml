@@ -22,7 +22,7 @@ jobs:
         with: { fetch-depth: 2 }
       - uses: actions/setup-python@v5
         with: { python-version: "3.11" }
-      - run: pip install edge-tts==7.0.2
+      - run: pip install -U edge-tts
       - name: Descobre o reel
         id: slug
         run: |
@@ -33,8 +33,12 @@ jobs:
         run: |
           D=docs/templates/collage_reel/data/${{ steps.slug.outputs.slug }}
           K=docs/templates/collage_reel/preview_kit
-          if grep -q tts "$D/REQUEST"; then python3 $K/tts_edge.py "$D"; fi
-          if grep -q images "$D/REQUEST"; then python3 $K/commons_fetch.py "$D"; fi
+          set +e
+          L="$D/assets_log.txt"; pip show edge-tts | head -2 > "$L"
+          if grep -q tts "$D/REQUEST"; then python3 $K/tts_edge.py "$D" >> "$L" 2>&1; fi
+          if grep -q images "$D/REQUEST"; then python3 $K/commons_fetch.py "$D" >> "$L" 2>&1; fi
+          if grep -q atlas "$D/REQUEST"; then python3 $K/atlas_fetch.py "$D" 20 328 329 330 >> "$L" 2>&1; fi
+          tail -40 "$L"; exit 0
       - name: Commit
         run: |
           git config user.name "reel-assets-bot"; git config user.email "actions@github.com"
