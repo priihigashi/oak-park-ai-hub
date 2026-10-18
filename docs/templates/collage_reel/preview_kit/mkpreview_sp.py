@@ -66,5 +66,8 @@ page = page.replace('{{', '{').replace('}}', '}').replace('@@STYLE@@', style).re
 page = page.replace('Querida Amiga · Prévia', 'São Paulo · Prévia').replace('Querida amiga · prévia', 'São Paulo: culpa da esquerda? · prévia')
 page = page.replace('<small id="ver">versão em edição</small>', f'<small id="ver">{VER}</small>')
 page = page.replace('<script src="engine.js"></script><script src="layout.js"></script>', '<script src="engine.js"></script><script src="zoom.js"></script><script src="fit.js"></script><script src="layout.js"></script>')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from post_panel import add_panel
+page = add_panel(page, OUT, D)
 open(f'{OUT}/index.html', 'w').write(page)
 print('ok', round(DUR, 1), 's')

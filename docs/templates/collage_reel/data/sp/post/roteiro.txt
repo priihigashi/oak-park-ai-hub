@@ -1,0 +1,159 @@
+CENA 1
+FALA: São Paulo virou o estado do celular roubado e do crime organizado na Faria Lima. E a culpa é da esquerda. Vamos aos fatos.
+NA TELA:
+- SÃO PAULO · O ESTADO MAIS POPULOSO
+- CELULAR ROUBADO E CRIME NA FARIA LIMA
+- E A CULPA É DA ESQUERDA.
+- Vamos aos fatos.
+- FONTE: FBSP, ANUÁRIO 2026 · RECEITA FEDERAL E MP-SP (CARBONO OCULTO, 2025) · MAPA: IBGE
+
+CENA 2
+FALA: Primeiro: quem manda na polícia é o governador. E desde mil novecentos e noventa e cinco, São Paulo é governado pelo PSDB e agora pelo Republicanos, os dois de direita. A esquerda só teve a prefeitura da capital e o governo federal.
+NA TELA:
+- 01 QUEM MANDA NA POLÍCIA
+- QUEM MANDA NA POLÍCIA É O GOVERNADOR.
+- 1995–2006 PSDB DIREITA · PFL EXTREMA-DIREITA COVAS · ALCKMIN · LEMBO
+- 2007–2018 PSDB DIREITA SERRA · ALCKMIN (2 MANDATOS)
+- 2019–2022 PSDB DIREITA DORIA · RODRIGO GARCIA
+- 2023–2030 REPUBLICANOS DIREITA TARCÍSIO (2 MANDATOS)
+- A esquerda só teve a prefeitura da capital e o governo federal.
+- MÁRCIO FRANÇA (PSB CENTRO-ESQUERDA ) GOVERNOU 9 MESES EM 2018, COMO VICE QUE ASSUMIU. POLÍCIAS CIVIL E MILITAR E PRESÍDIOS SÃO DO ESTADO (CONSTITUIÇÃO, ART. 144).
+- FONTE: TSE · GOVERNO DE SP · IDEOLOGIA: BOLOGNESI ET AL. (DADOS, 2023)
+
+CENA 3
+FALA: Mito um: a direita resolveu. Olha a curva: em dois mil, o estado tinha quarenta e dois homicídios por cem mil, o pico. Ela cai dez anos seguidos, até catorze, e depois desce devagar até seis vírgula seis, a menor do país. Funcionou porque vários governos seguiram a mesma linha: polícia investigando homicídio e crime mapeado por dados. E teve ajuda do governo federal: o Estatuto do Desarmamento, de dois mil e três, sancionado pelo presidente, tirou quase meio milhão de armas das ruas. E em São Paulo, segundo o Ipea, cada um por cento a mais de armas trazia dois por cento a mais de homicídios. A queda começou antes da lei, e a lei ajudou a sustentar. Nenhum governo fez isso sozinho.
+NA TELA:
+- 02 MITO 1 · HOMICÍDIOS POR 100 MIL
+- “A DIREITA RESOLVEU.”
+- [GRÁFICO] 2000: 42,2 · O PICO ↘ 10 ANOS EM QUEDA SÃO PAULO PSDB DIREITA → REPUBLICANOS DIREITA BRASIL
+- + AJUDA FEDERAL: ESTATUTO DO DESARMAMENTO , 2003, sancionado pelo presidente 🦑 · 464 mil armas recolhidas
+- NENHUM GOVERNO FEZ SOZINHO
+- IPEA (CERQUEIRA): EM SP, +1% DE ARMAS = +2% DE HOMICÍDIOS. A QUEDA COMEÇA ANTES DA LEI (NERY, USP). ATLAS: EDIÇÕES 2016 E 2024/26, LINHA SEPARADA.
+- FONTE: IPEA/FBSP, ATLAS DA VIOLÊNCIA (SIM/DATASUS) · IDEOLOGIA: BOLOGNESI ET AL. (DADOS, 2023)
+
+CENA 4
+FALA: Problema um: a polícia. E não é só bandido que morre: a própria Ouvidoria da Polícia de São Paulo analisou as mortes de dois mil e dezessete e achou indício de excesso em três de cada quatro casos. Quase metade dos mortos não tinha antecedente criminal. Em dois mil e vinte, ainda com o PSDB, a PM passou a usar câmera na farda, e as mortes causadas por policiais em serviço caíram mais da metade. Olha a curva: desce até dois mil e vinte e dois. O governo Tarcísio cortou verba das câmeras, e a curva volta a subir. Em dois mil e vinte e cinco, a polícia causou quase uma em cada quatro mortes violentas do estado.
+NA TELA:
+- 03 PROBLEMA 1 · A POLÍCIA (É DO ESTADO)
+- OUVIDORIA DA POLÍCIA, 2017: 3 EM 4 MORTES COM INDÍCIO DE EXCESSO · 46% SEM ANTECEDENTES
+- COM CÂMERA, AS MORTES CAÍRAM PELA METADE
+- [GRÁFICO] ↘ CÂMERA NA FARDA ↗ VOLTA A SUBIR SÃO PAULO MORTES CAUSADAS PELA POLÍCIA
+- 2025: QUASE 1 EM CADA 4 MORTES VIOLENTAS DO ESTADO
+- OUVIDORIA (SSP-SP, 2018): 756 MORTES DE 2017; 43% COM TIRO NA CABEÇA OU NAS COSTAS. 835 DE 3.615 (23,1%). FGV: −57% NOS BATALHÕES COM CÂMERA. O GOVERNO DE SP DIZ QUE A SOMA DO MANDATO É MENOR QUE A DO ANTERIOR; A DIREÇÃO, DESDE 2023, É DE ALTA. OPERAÇÃO VERÃO (2024): A MAIS LETAL DESDE O CARANDIRU.
+- FONTE: SSP-SP (VIA AGÊNCIA BRASIL E FBSP, 2014–2025) · OUVIDORIA DA POLÍCIA SP, 2018 · FGV, 2022 · FBSP, ANUÁRIO 2026
+
+CENA 5
+FALA: E quem ajuda a polícia a matar menos? Primeiro, o governo Bolsonaro mandou ao Congresso o projeto que acaba com a marcação das balas da polícia e revogou as regras de rastreamento de armas e munições. Depois, o governo atual criou regras nacionais para câmera na farda e para o uso da força. Tarcísio disse que seguia, mas trocou a gravação contínua por câmeras que só gravam quando ligadas, e pediu a revogação das regras do uso da força. As regras federais são de dois mil e vinte e quatro, e ainda não dá para medir o efeito. O que já dá para medir é São Paulo: com câmera, as mortes caíram; com o corte, voltaram a subir. E em outubro, Flávio Bolsonaro defendeu esse projeto e chamou o rastreamento das balas de detalhezinho. Num país onde a polícia mata, por habitante, oito vezes mais que a dos Estados Unidos.
+NA TELA:
+- QUEM AJUDA A POLÍCIA A MATAR MENOS?
+- 2019 · BOLSONARO PL EXTREMA-DIREITA · PL 3.723/2019, ENVIADO PELO GOVERNO PROJETO QUE ACABA COM A MARCAÇÃO DAS BALAS DA POLÍCIA
+- 2020 · BOLSONARO PL EXTREMA-DIREITA REVOGA AS REGRAS DE RASTREAMENTO DE ARMAS E MUNIÇÕES
+- 2024 · GOVERNO ATUAL 🦑 EFEITO: AINDA SEM DADOS REGRAS NACIONAIS PARA CÂMERA NA FARDA E USO DA FORÇA
+- 2024–25 · TARCÍSIO REPUBLICANOS DIREITA CÂMERA QUE SÓ GRAVA QUANDO LIGADA · PEDIU PARA REVOGAR O USO DA FORÇA
+- FLÁVIO BOLSONARO: “DETALHEZINHO”
+- Num país onde a polícia mata 8× mais que a dos EUA, por habitante.
+- FLÁVIO (PL EXTREMA-DIREITA ) NÃO É O AUTOR: DEFENDEU, NA TV GLOBO, 16/10/2026. MORTOS PELA POLÍCIA EM 2025, POR 100 MIL: BRASIL 3,1 (FBSP) · EUA ~0,4 (MPV). SP: 23,1% DAS MORTES VIOLENTAS.
+- FONTE: MJSP (MAI E DEZ/2024) · EXÉRCITO/COLOG, ABR/2020 · NOTA DO COSUD, DEZ/2024 · PONTE, MAI/2025 · PODER360, OUT/2026 · FBSP, ANUÁRIO 2026 · MAPPING POLICE VIOLENCE · IDEOLOGIA: BOLOGNESI ET AL. (DADOS, 2023)
+
+CENA 6
+FALA: Problema dois: homicídio sem resposta. Olha a curva: em dois mil e dezessete, São Paulo esclarecia mais da metade dos homicídios. Em dois mil e vinte e três, o dado mais recente, só três em cada dez, o pior índice paulista desde que a pesquisa começou. E São Paulo é campeão de mortes sem causa definida: contando essas, a taxa quase dobra.
+NA TELA:
+- 04 PROBLEMA 2 · HOMICÍDIOS ESCLARECIDOS (%)
+- [GRÁFICO] 2017: MAIS DA METADE ↘ 2023: 3 EM 10 SÃO PAULO HOMICÍDIOS ESCLARECIDOS (%)
+- CAMPEÃO DE MORTES SEM CAUSA DEFINIDA
+- TAXA OFICIAL 6,6
+- COM HOMICÍDIOS OCULTOS HOMICÍDIOS POR 100 MIL · 2024 12,8
+- ESCLARECIDO = VIROU DENÚNCIA DO MP. 2023 É O DADO MAIS RECENTE. BRASIL EM 2022: 39%. A QUEDA COMEÇA EM 2018–2019 E VOLTA A CAIR DESDE 2021: NÃO É DE UM GOVERNO SÓ. OCULTOS: ESTIMATIVA DO ATLAS. INVESTIGAÇÃO É DA POLÍCIA CIVIL (ESTADO).
+- FONTE: INSTITUTO SOU DA PAZ, ONDE MORA A IMPUNIDADE (EDIÇÃO 2024 E DIAGNÓSTICO DE JUL/2026) · IPEA/FBSP, ATLAS 2026
+
+CENA 7
+FALA: Problema três: a rua. A capital tem cinco vírgula seis por cento da população do Brasil e um em cada cinco celulares roubados ou furtados do país. Os roubos caíram, como em quase todo o país, com ajuda do Celular Seguro, programa do governo federal. Mas os furtos e a violência sexual subiram, e o começo de dois mil e vinte e seis teve o maior número de feminicídios desde dois mil e dezoito. E vale para os dois lados: quem governa leva o crédito do que melhora e a conta do que piora.
+NA TELA:
+- 05 PROBLEMA 3 · A RUA
+- A CAPITAL TEM 5,6% DO PAÍS E 1 EM CADA 5 CELULARES ROUBADOS OU FURTADOS
+- ROUBOS CELULAR SEGURO · GOVERNO ATUAL 🦑 CAÍRAM, COMO EM QUASE TODO O PAÍS
+- FURTOS SUBIRAM NA CAPITAL (+3,6%, 2025)
+- VIOLÊNCIA SEXUAL +6% · 1º SEMESTRE DE 2026
+- FEMINICÍDIOS MAIOR 1º TRIMESTRE DESDE 2018
+- CRÉDITO E CONTA: OS DOIS
+- ROUBO DE CELULAR CAIU 18,6% NO PAÍS EM 2025, EM 26 ESTADOS (FBSP); O FÓRUM CITA O CELULAR SEGURO, PROGRAMA FEDERAL, ENTRE OS FATORES. QUEM CUIDA: POLICIAMENTO E INVESTIGAÇÃO = ESTADO. GUARDA CIVIL, ILUMINAÇÃO E URBANISMO = PREFEITURA.
+- FONTE: FBSP, ANUÁRIO 2026 · SSP-SP (2025 E 1º SEM/2026)
+
+CENA 8
+FALA: Problema quatro, e o maior: o PCC. A facção nasceu num presídio paulista em noventa e três, e pesquisadores dizem que ela proíbe mortes sem autorização. Menos homicídio, facção mais rica.
+NA TELA:
+- 06 PROBLEMA 4 · O MAIOR: A FACÇÃO
+- 1993: O PCC NASCE NUM PRESÍDIO PAULISTA
+- Pesquisadores dizem que a facção proíbe mortes sem autorização.
+- MENOS HOMICÍDIO, FACÇÃO MAIS RICA.
+- HIPÓTESE DEBATIDA (NEV-USP, CAMBRIDGE). UM ESTUDO DA UNICAMP NÃO ACHOU EVIDÊNCIA ESTATÍSTICA. PRESÍDIO É RESPONSABILIDADE DO ESTADO.
+- FONTE: C. NUNES DIAS (NEV-USP) · G. WILLIS (CAMBRIDGE) · UNICAMP, TD 276
+
+CENA 9
+FALA: E virou empresa: em dois mil e vinte e cinco, a maior operação da história mirou postos e fintechs da Faria Lima, com oito bilhões e meio em impostos sonegados. Na capital, desde abril de dois mil e vinte e quatro, empresas de ônibus pagas pela prefeitura de Ricardo Nunes, do MDB, de direita, são investigadas por lavar dinheiro da facção. Segundo os promotores, a infiltração vem de quase trinta anos.
+NA TELA:
+- 07 O PCC VIROU EMPRESA
+- CARBONO OCULTO AGO/2025 POSTOS DE COMBUSTÍVEL E FINTECHS · 42 ALVOS NA FARIA LIMA
+- R$ 8,67 BILHÕES
+- EM IMPOSTOS NÃO PAGOS · ESTIMATIVA DA RECEITA FEDERAL
+- FIM DA LINHA ABR/2024 PREFEITO RICARDO NUNES · MDB DIREITA INFILTRAÇÃO HÁ QUASE 30 ANOS, SEGUNDO O MP-SP ÔNIBUS PAGOS PELA PREFEITURA SOB SUSPEITA DE LAVAR DINHEIRO DA FACÇÃO
+- CARBONO OCULTO = MP-SP + RECEITA FEDERAL (A PF FEZ AS OPERAÇÕES QUASAR E TANK). A REGRA DA RECEITA QUE APERTAVA AS FINTECHS FOI REVOGADA EM JAN/2025, APÓS VÍDEOS VIRAIS, E REEDITADA DEPOIS DA OPERAÇÃO.
+- FONTE: RECEITA FEDERAL E MP-SP, AGO/2025 · MP-SP, OPERAÇÃO FIM DA LINHA
+
+CENA 10
+FALA: Tem político dos dois lados: um vereador do PT foi preso em junho e solto por habeas corpus; em setembro, foram presos o ex-presidente da Câmara, do União Brasil, aliado do prefeito, e um candidato do PL. Todos negam. E as empresas investigadas entraram no transporte em dois mil e três, na gestão Marta, do PT, e continuaram em dois mil e dezenove, na gestão Covas, do PSDB: entraram com um partido e ficaram com o outro.
+NA TELA:
+- 08 POLÍTICOS DOS DOIS LADOS · ÔNIBUS DA CAPITAL
+- JUN/2026 PT ESQUERDA · SOLTO POR HC SENIVAL MOURA · VEREADOR
+- SET/2026 UNIÃO BRASIL DIREITA MILTON LEITE · EX-PRES. DA CÂMARA
+- SET/2026 PL EXTREMA-DIREITA DANILO MORGADO · CANDIDATO
+- TODOS NEGAM
+- COMO ENTRARAM NA PREFEITURA
+- 2003 GESTÃO MARTA · PT ESQUERDA PERUEIROS VIRAM COOPERATIVAS OFICIAIS
+- 2019 GESTÃO COVAS · PSDB DIREITA AS MESMAS EMPRESAS GANHAM A NOVA LICITAÇÃO
+- SEGUNDO O PROMOTOR LINCOLN GAKIYA (GAECO), INTEGRANTES DA FACÇÃO COMPRARAM COTAS DAS COOPERATIVAS. NINGUÉM ACUSA MARTA OU COVAS. CONTRATO DE ÔNIBUS É DA PREFEITURA (HOJE, NUNES, MDB DIREITA ). SÓ CASOS COM OPERAÇÃO OU PROCESSO.
+- FONTE: MP-SP E POLÍCIA CIVIL (2024–2026) · DIÁRIO DO TRANSPORTE, MAR/2019 · O TEMPO, SET/2026 · IDEOLOGIA: BOLOGNESI ET AL. (DADOS, 2023)
+
+CENA 11
+FALA: E o governo federal não ajuda? Mandou: em dois mil e vinte e quatro, São Paulo recebeu a maior fatia do fundo nacional de segurança, quase cinquenta por cento a mais que em dois mil e vinte e um, no governo Bolsonaro, e a Polícia Federal e a Receita entraram na operação dos combustíveis. Mas a União também falha: a fronteira e o Porto de Santos, por onde passa a droga do PCC, são federais. E com os decretos de armas do governo Bolsonaro, a facção passou a comprar fuzis com nota fiscal, por meio de atiradores registrados.
+NA TELA:
+- 09 E O GOVERNO FEDERAL?
+- “O GOVERNO FEDERAL NÃO AJUDA.”
+- FUNDO NACIONAL GOVERNO ATUAL 🦑 R$ 45,8 MI EM 2024 · A MAIOR FATIA
+- 2021 · BOLSONARO PL EXTREMA-DIREITA R$ 31,1 MI · +47% AGORA
+- PF E RECEITA NA OPERAÇÃO DOS COMBUSTÍVEIS
+- FRONTEIRA E PORTO DE SANTOS SÃO DA UNIÃO.
+- Com os decretos de armas do governo Bolsonaro, a facção passou a comprar fuzis com nota fiscal.
+- O FUNDO VEM DAS LOTERIAS (LEI DE 2018); O GOVERNO FEDERAL DEFINE A DIVISÃO. EM 2019–2020, SP RECEBEU R$ 93,1 MI (DOIS ANOS); EM 2021 O GOVERNO BOLSONARO MUDOU A FÓRMULA E A FATIA DE SP CAIU DE 6,66% PARA 4,31%. FUZIL COM NOTA: R$ 12–15 MIL, CONTRA R$ 35–59 MIL NO CONTRABANDO (GAKIYA, ESTADÃO, 2022). LEI ANTIFACÇÃO: PROPOSTA DO GOVERNO ATUAL 🦑, RELATOR DERRITE (PP DIREITA ), SANCIONADA PELO PRESIDENTE. NO SENADO, O RELATOR DISSE QUE A CÂMARA TIROU DO TEXTO PONTOS CONTRA CRIME DE COLARINHO BRANCO.
+- FONTE: MJSP/FNSP, 2024 · GAZETA SP, NOV/2021 · TCE-SP, CONTAS 2023 · CÂMARA DOS DEPUTADOS, 2026
+
+CENA 12
+FALA: No debate, Tarcísio disse que São Paulo tem o menor homicídio da história: é verdade. Mas exagerou ao dizer que todos os crimes caíram. Haddad disse que só um em cada três homicídios é esclarecido: também é verdade.
+NA TELA:
+- 10 O DEBATE, CHECADO · GLOBO, 29/09/2026
+- TARCÍSIO · REPUBLICANOS DIREITA “MENOR HOMICÍDIO DA HISTÓRIA” → VERDADE TARCÍSIO · REPUBLICANOS DIREITA “TODOS OS CRIMES CAÍRAM” → EXAGERO HADDAD · PT ESQUERDA “SÓ 1 EM 3 HOMICÍDIOS ESCLARECIDO” → VERDADE
+- SUBIRAM EM 2025: TENTATIVA DE HOMICÍDIO (+5,7%) E LESÃO CORPORAL (+7,5%). “O PAÍS FUNCIONA, SP NÃO” (HADDAD): O PAÍS CAIU 8,2% E SP 3,9%, MAS SP PARTE DE UMA BASE 2,4 VEZES MENOR. “PCC FINANCIOU PESQUISA PARA O PRESIDENTE”: FALSO (AOS FATOS).
+- FONTE: AGÊNCIA LUPA, 29/09/2026 · G1 FATO OU FAKE · AOS FATOS · FBSP, ANUÁRIO 2026
+
+CENA 13
+FALA: E não é o partido. O PL governa Santa Catarina e o Rio: um tem a menor taxa do país, o outro, o triplo. E partidos opostos chegam ao mesmo número: o Espírito Santo, de centro-esquerda, e o Rio, de extrema-direita, quase empatam. Pernambuco, de direita, e o Ceará, do PT, também. O que muda o resultado é o que cada governo faz com a polícia.
+NA TELA:
+- 11 MORTES VIOLENTAS POR 100 MIL · 2025
+- NÃO É O PARTIDO.
+- MESMO PARTIDO, RESULTADO OPOSTO
+- SANTA CATARINA PL EXTREMA-DIREITA 7,6
+- RIO DE JANEIRO PL EXTREMA-DIREITA 22,6
+- PARTIDOS OPOSTOS, MESMO RESULTADO
+- ESPÍRITO SANTO × RIO PSB CENTRO-ESQUERDA × PL EXTREMA-DIREITA 22,0 × 22,6
+- CEARÁ × PERNAMBUCO PT ESQUERDA × PSD DIREITA 34,7 × 33,0
+- PARTIDO DO GOVERNADOR EM 2025. ES E RJ SÃO VIZINHOS; CE E PE TAMBÉM. AS MAIORES TAXAS: AMAPÁ 42,5 (SOLIDARIEDADE CENTRO-DIREITA ) E BAHIA 36,8 (PT ESQUERDA ). AS MENORES: SC 7,6 E SP 7,8, AMBOS DE DIREITA.
+- FONTE: FBSP, ANUÁRIO 2026 (MVI, INCLUI MORTES PELA POLÍCIA) · IDEOLOGIA: BOLOGNESI ET AL. (DADOS, 2023)
+
+CENA 14
+FALA: Resumindo: a esquerda não manda na polícia de São Paulo há trinta anos. A queda dos homicídios foi de vários governos; os problemas de hoje são do estado. O que você cobraria no segundo mandato?
+NA TELA:
+- RESUMINDO
+- A ESQUERDA NÃO MANDA NA POLÍCIA DE SP HÁ 30 ANOS.
+- A QUEDA FOI DE VÁRIOS GOVERNOS. OS PROBLEMAS DE HOJE SÃO DO ESTADO.
+- O QUE VOCÊ COBRARIA NO SEGUNDO MANDATO? Tarcísio foi reeleito em 04/10/2026 (2027–2030)
+- FONTE: FBSP · IPEA · SOU DA PAZ · TSE · LUPA
