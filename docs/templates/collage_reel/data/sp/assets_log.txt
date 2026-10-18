@@ -4,7 +4,7 @@ s01 24 palavras
 s02 42 palavras
 s03 96 palavras
 s04 39 palavras
-s05 74 palavras
+s05 81 palavras
 s06 93 palavras
 s07 76 palavras
 s07b 67 palavras
