@@ -21,37 +21,37 @@ NA TELA:
 - FONTE: TSE · GOVERNO DE SP · IDEOLOGIA: BOLOGNESI ET AL. (DADOS, 2023)
 
 CENA 3
-FALA: Mito um: a direita resolveu. Olha a curva: em dois mil, o estado tinha quarenta e dois homicídios por cem mil, o pico. Ela cai dez anos seguidos, até catorze, e depois desce devagar até seis vírgula seis, a menor do país. Funcionou porque vários governos seguiram a mesma linha: polícia investigando homicídio e crime mapeado por dados. E teve ajuda do governo federal: o Estatuto do Desarmamento, de dois mil e três, sancionado pelo presidente, tirou quase meio milhão de armas das ruas. E em São Paulo, segundo o Ipea, cada um por cento a mais de armas trazia dois por cento a mais de homicídios. A queda começou antes da lei, e a lei ajudou a sustentar. Nenhum governo fez isso sozinho.
+FALA: Mito um: a direita resolveu. Olha a curva: em dois mil, o estado tinha quarenta e dois homicídios por cem mil, o pico. Ela cai forte por dez anos, até catorze, e depois desce devagar até seis vírgula seis, a menor do país. Funcionou porque vários governos seguiram a mesma linha: polícia investigando homicídio e crime mapeado por dados. E teve ajuda do governo federal: o Estatuto do Desarmamento, de dois mil e três, sancionado pelo presidente, tirou quase meio milhão de armas das ruas. E em São Paulo, segundo o Ipea, cada um por cento a mais de armas trazia dois por cento a mais de homicídios. A queda começou antes da lei, e a lei ajudou a sustentar. Nenhum governo fez isso sozinho.
 NA TELA:
 - 02 MITO 1 · HOMICÍDIOS POR 100 MIL
 - “A DIREITA RESOLVEU.”
-- [GRÁFICO] 2000: 42,2 · O PICO ↘ 10 ANOS EM QUEDA SÃO PAULO PSDB DIREITA → REPUBLICANOS DIREITA BRASIL
+- [GRÁFICO] 2000: 42,2 · O PICO ↘ QUEDA FORTE SÃO PAULO PSDB DIREITA → REPUBLICANOS DIREITA BRASIL
 - + AJUDA FEDERAL: ESTATUTO DO DESARMAMENTO , 2003, sancionado pelo presidente 🦑 · 464 mil armas recolhidas
 - NENHUM GOVERNO FEZ SOZINHO
 - IPEA (CERQUEIRA): EM SP, +1% DE ARMAS = +2% DE HOMICÍDIOS. A QUEDA COMEÇA ANTES DA LEI (NERY, USP). ATLAS: EDIÇÕES 2016 E 2024/26, LINHA SEPARADA.
 - FONTE: IPEA/FBSP, ATLAS DA VIOLÊNCIA (SIM/DATASUS) · IDEOLOGIA: BOLOGNESI ET AL. (DADOS, 2023)
 
 CENA 4
-FALA: Problema um: a polícia. E não é só bandido que morre: a própria Ouvidoria da Polícia de São Paulo analisou as mortes de dois mil e dezessete e achou indício de excesso em três de cada quatro casos. Quase metade dos mortos não tinha antecedente criminal. Em dois mil e vinte, ainda com o PSDB, a PM passou a usar câmera na farda, e as mortes causadas por policiais em serviço caíram mais da metade. Olha a curva: desce até dois mil e vinte e dois. O governo Tarcísio cortou verba das câmeras, e a curva volta a subir. Em dois mil e vinte e cinco, a polícia causou quase uma em cada quatro mortes violentas do estado.
+FALA: Problema um: a polícia. E não é só bandido que morre: a própria Ouvidoria da Polícia de São Paulo analisou as mortes de dois mil e dezessete e achou indício de excesso em três de cada quatro casos. Quase metade dos mortos não tinha antecedente criminal. Em dois mil e vinte, ainda com o PSDB, a PM começou a usar câmera na farda, e as mortes causadas por policiais em serviço caíram mais da metade. Olha a curva: desce até dois mil e vinte e dois. O governo Tarcísio cortou verba das câmeras, e a curva volta a subir. Em dois mil e vinte e cinco, a polícia causou quase uma em cada quatro mortes violentas do estado.
 NA TELA:
 - 03 PROBLEMA 1 · A POLÍCIA (É DO ESTADO)
-- OUVIDORIA DA POLÍCIA, 2017: 3 EM 4 MORTES COM INDÍCIO DE EXCESSO · 46% SEM ANTECEDENTES
+- OUVIDORIA DA POLÍCIA, 2017: 3 EM 4 MORTES ANALISADAS COM INDÍCIO DE EXCESSO · 46% SEM ANTECEDENTES
 - COM CÂMERA, AS MORTES CAÍRAM PELA METADE
 - [GRÁFICO] ↘ CÂMERA NA FARDA ↗ VOLTA A SUBIR SÃO PAULO MORTES CAUSADAS PELA POLÍCIA
 - 2025: QUASE 1 EM CADA 4 MORTES VIOLENTAS DO ESTADO
-- OUVIDORIA (SSP-SP, 2018): 756 MORTES DE 2017; 43% COM TIRO NA CABEÇA OU NAS COSTAS. 835 DE 3.615 (23,1%). FGV: −57% NOS BATALHÕES COM CÂMERA. O GOVERNO DE SP DIZ QUE A SOMA DO MANDATO É MENOR QUE A DO ANTERIOR; A DIREÇÃO, DESDE 2023, É DE ALTA. OPERAÇÃO VERÃO (2024): A MAIS LETAL DESDE O CARANDIRU.
+- OUVIDORIA (SSP-SP, 2018): 756 MORTES DE 2017; 43% COM TIRO NA CABEÇA OU NAS COSTAS. 835 DE 3.615 (23,1%). FGV: −57% NOS BATALHÕES ESTUDADOS. CÂMERAS: TESTE EM 2020, AMPLIAÇÃO EM 2021. O GOVERNO DE SP DIZ QUE A SOMA DO MANDATO É MENOR QUE A DO ANTERIOR; A DIREÇÃO, DESDE 2023, É DE ALTA. OPERAÇÃO VERÃO (2024): A MAIS LETAL DESDE O CARANDIRU.
 - FONTE: SSP-SP (VIA AGÊNCIA BRASIL E FBSP, 2014–2025) · OUVIDORIA DA POLÍCIA SP, 2018 · FGV, 2022 · FBSP, ANUÁRIO 2026
 
 CENA 5
-FALA: E quem ajuda a polícia a matar menos? Primeiro, o governo Bolsonaro mandou ao Congresso o projeto que acaba com a marcação das balas da polícia e revogou as regras de rastreamento de armas e munições. Depois, o governo atual criou regras nacionais para câmera na farda e para o uso da força. Tarcísio disse que seguia, mas trocou a gravação contínua por câmeras que só gravam quando ligadas, e pediu a revogação das regras do uso da força. As regras federais são de dois mil e vinte e quatro, e ainda não dá para medir o efeito. O que já dá para medir é São Paulo: com câmera, as mortes caíram; com o corte, voltaram a subir. E em outubro, Flávio Bolsonaro defendeu esse projeto e chamou o rastreamento das balas de detalhezinho. Num país onde a polícia mata, por habitante, oito vezes mais que a dos Estados Unidos.
+FALA: E quem ajuda a reduzir as mortes pela polícia? Primeiro, o governo Bolsonaro mandou ao Congresso o projeto que acaba com a marcação das balas da polícia e revogou as regras de rastreamento de armas e munições. Depois, o governo atual criou regras nacionais para câmera na farda e para o uso da força. Tarcísio disse que seguia, mas trocou a gravação contínua por câmeras que só gravam quando ligadas, e pediu a revogação das regras do uso da força. As regras federais são de dois mil e vinte e quatro, e ainda não dá para medir o efeito. O que já dá para medir é São Paulo: com câmera, as mortes caíram; com o corte, voltaram a subir. E em outubro, Flávio Bolsonaro defendeu esse projeto e chamou o rastreamento das balas de detalhezinho. Num país onde a polícia tira, por habitante, oito vezes mais vidas que a dos Estados Unidos.
 NA TELA:
-- QUEM AJUDA A POLÍCIA A MATAR MENOS?
-- 2019 · BOLSONARO PL EXTREMA-DIREITA · PL 3.723/2019, ENVIADO PELO GOVERNO PROJETO QUE ACABA COM A MARCAÇÃO DAS BALAS DA POLÍCIA
-- 2020 · BOLSONARO PL EXTREMA-DIREITA REVOGA AS REGRAS DE RASTREAMENTO DE ARMAS E MUNIÇÕES
+- QUEM AJUDA A REDUZIR AS MORTES PELA POLÍCIA?
+- 2019 · BOLSONARO PL 3.723/2019, ENVIADO PELO GOVERNO PROJETO QUE ACABA COM A MARCAÇÃO DAS BALAS DA POLÍCIA
+- 2020 · BOLSONARO HOJE NO PL EXTREMA-DIREITA REVOGA AS REGRAS DE RASTREAMENTO DE ARMAS E MUNIÇÕES
 - 2024 · GOVERNO ATUAL 🦑 EFEITO: AINDA SEM DADOS REGRAS NACIONAIS PARA CÂMERA NA FARDA E USO DA FORÇA
 - 2024–25 · TARCÍSIO REPUBLICANOS DIREITA CÂMERA QUE SÓ GRAVA QUANDO LIGADA · PEDIU PARA REVOGAR O USO DA FORÇA
 - FLÁVIO BOLSONARO: “DETALHEZINHO”
-- Num país onde a polícia mata 8× mais que a dos EUA, por habitante.
+- Num país onde a polícia tira 8× mais vidas que a dos EUA, por habitante.
 - FLÁVIO (PL EXTREMA-DIREITA ) NÃO É O AUTOR: DEFENDEU, NA TV GLOBO, 16/10/2026. MORTOS PELA POLÍCIA EM 2025, POR 100 MIL: BRASIL 3,1 (FBSP) · EUA ~0,4 (MPV). SP: 23,1% DAS MORTES VIOLENTAS.
 - FONTE: MJSP (MAI E DEZ/2024) · EXÉRCITO/COLOG, ABR/2020 · NOTA DO COSUD, DEZ/2024 · PONTE, MAI/2025 · PODER360, OUT/2026 · FBSP, ANUÁRIO 2026 · MAPPING POLICE VIOLENCE · IDEOLOGIA: BOLOGNESI ET AL. (DADOS, 2023)
 
@@ -120,7 +120,7 @@ NA TELA:
 - 09 E O GOVERNO FEDERAL?
 - “O GOVERNO FEDERAL NÃO AJUDA.”
 - FUNDO NACIONAL GOVERNO ATUAL 🦑 R$ 45,8 MI EM 2024 · A MAIOR FATIA
-- 2021 · BOLSONARO PL EXTREMA-DIREITA R$ 31,1 MI · +47% AGORA
+- 2021 · BOLSONARO HOJE NO PL EXTREMA-DIREITA R$ 31,1 MI · +47% AGORA
 - PF E RECEITA NA OPERAÇÃO DOS COMBUSTÍVEIS
 - FRONTEIRA E PORTO DE SANTOS SÃO DA UNIÃO.
 - Com os decretos de armas do governo Bolsonaro, a facção passou a comprar fuzis com nota fiscal.
