@@ -215,7 +215,7 @@ s = 's07'; CUR['s'] = s
 c7 = chart(s, YM, [
     dict(n='SÃO PAULO', sub='MORTES CAUSADAS<br>PELA POLÍCIA', v=MDIP, c=Y, w=7, lt=W(s,'polícia',0,.3), dots=[(3, '940'), (8, '419', 'b'), (11, '835')]),
 ], 1000, [0, 250, 500, 750, 1000], 0, 0, h=520, marks=[('2020', 'CÂMERAS', '#fff'), ('2023', 'TARCÍSIO', R)],
-   stages=[(0, 6, W(s,'polícia',0,-.1), 2.2), (6, 8, W(s,'câmera',0,-.1), 2.0), (8, 11, W(s,'volta',0,-.2), 1.8)],
+   stages=[(0, 5, W(s,'polícia',0,-.1), 2.2), (5, 8, W(s,'câmera',0,-.1), 2.2), (8, 11, W(s,'volta',0,-.2), 1.8)],
    notes=[(4, 470, '↘ CÂMERA<br>NA FARDA', '#fff', W(s,'caíram',0,-.1), -40, 0),
           (9, 330, '↗ VOLTA A<br>SUBIR', R, W(s,'subir',0,-.2), 14, 0)]).replace('{flow}', 'm:3')
 H.append(scene(s, rail(2)+f'''
