@@ -1,0 +1,188 @@
+[
+ {
+  "name": "vo_00",
+  "model": "minimax/speech-02-turbo",
+  "status": "succeeded",
+  "error": null,
+  "detail": null,
+  "files": [
+   "out/vo_00.mp3"
+  ]
+ },
+ {
+  "name": "vo_01",
+  "model": "minimax/speech-02-turbo",
+  "status": null,
+  "error": 429,
+  "detail": "{\"detail\":\"Request was throttled. Your rate limit for creating predictions is reduced to 6 requests per minute with a burst of 1 requests while you have less than $5.0 in credit. Your rate limit resets in ~7s.\",\"status\":429,\"retry_after\":7}\n",
+  "files": []
+ },
+ {
+  "name": "vo_02",
+  "model": "minimax/speech-02-turbo",
+  "status": null,
+  "error": 429,
+  "detail": "{\"detail\":\"Request was throttled. Your rate limit for creating predictions is reduced to 6 requests per minute with a burst of 1 requests while you have less than $5.0 in credit. Your rate limit resets in ~6s.\",\"status\":429,\"retry_after\":6}\n",
+  "files": []
+ },
+ {
+  "name": "vo_03",
+  "model": "minimax/speech-02-turbo",
+  "status": null,
+  "error": 429,
+  "detail": "{\"detail\":\"Request was throttled. Your rate limit for creating predictions is reduced to 6 requests per minute with a burst of 1 requests while you have less than $5.0 in credit. Your rate limit resets in ~6s.\",\"status\":429,\"retry_after\":6}\n",
+  "files": []
+ },
+ {
+  "name": "vo_04",
+  "model": "minimax/speech-02-turbo",
+  "status": null,
+  "error": 429,
+  "detail": "{\"detail\":\"Request was throttled. Your rate limit for creating predictions is reduced to 6 requests per minute with a burst of 1 requests while you have less than $5.0 in credit. Your rate limit resets in ~6s.\",\"status\":429,\"retry_after\":6}\n",
+  "files": []
+ },
+ {
+  "name": "vo_05",
+  "model": "minimax/speech-02-turbo",
+  "status": null,
+  "error": 429,
+  "detail": "{\"detail\":\"Request was throttled. Your rate limit for creating predictions is reduced to 6 requests per minute with a burst of 1 requests while you have less than $5.0 in credit. Your rate limit resets in ~6s.\",\"status\":429,\"retry_after\":6}\n",
+  "files": []
+ },
+ {
+  "name": "vo_06",
+  "model": "minimax/speech-02-turbo",
+  "status": null,
+  "error": 429,
+  "detail": "{\"detail\":\"Request was throttled. Your rate limit for creating predictions is reduced to 6 requests per minute with a burst of 1 requests while you have less than $5.0 in credit. Your rate limit resets in ~6s.\",\"status\":429,\"retry_after\":6}\n",
+  "files": []
+ },
+ {
+  "name": "vo_07",
+  "model": "minimax/speech-02-turbo",
+  "status": null,
+  "error": 429,
+  "detail": "{\"detail\":\"Request was throttled. Your rate limit for creating predictions is reduced to 6 requests per minute with a burst of 1 requests while you have less than $5.0 in credit. Your rate limit resets in ~6s.\",\"status\":429,\"retry_after\":6}\n",
+  "files": []
+ },
+ {
+  "name": "vo_08",
+  "model": "minimax/speech-02-turbo",
+  "status": null,
+  "error": 429,
+  "detail": "{\"detail\":\"Request was throttled. Your rate limit for creating predictions is reduced to 6 requests per minute with a burst of 1 requests while you have less than $5.0 in credit. Your rate limit resets in ~6s.\",\"status\":429,\"retry_after\":6}\n",
+  "files": []
+ },
+ {
+  "name": "vo_09",
+  "model": "minimax/speech-02-turbo",
+  "status": null,
+  "error": 429,
+  "detail": "{\"detail\":\"Request was throttled. Your rate limit for creating predictions is reduced to 6 requests per minute with a burst of 1 requests while you have less than $5.0 in credit. Your rate limit resets in ~6s.\",\"status\":429,\"retry_after\":6}\n",
+  "files": []
+ },
+ {
+  "name": "vo_10",
+  "model": "minimax/speech-02-turbo",
+  "status": null,
+  "error": 429,
+  "detail": "{\"detail\":\"Request was throttled. Your rate limit for creating predictions is reduced to 6 requests per minute with a burst of 1 requests while you have less than $5.0 in credit. Your rate limit resets in ~6s.\",\"status\":429,\"retry_after\":6}\n",
+  "files": []
+ },
+ {
+  "name": "vo_11",
+  "model": "minimax/speech-02-turbo",
+  "status": null,
+  "error": 429,
+  "detail": "{\"detail\":\"Request was throttled. Your rate limit for creating predictions is reduced to 6 requests per minute with a burst of 1 requests while you have less than $5.0 in credit. Your rate limit resets in ~6s.\",\"status\":429,\"retry_after\":6}\n",
+  "files": []
+ },
+ {
+  "name": "vo_12",
+  "model": "minimax/speech-02-turbo",
+  "status": null,
+  "error": 429,
+  "detail": "{\"detail\":\"Request was throttled. Your rate limit for creating predictions is reduced to 6 requests per minute with a burst of 1 requests while you have less than $5.0 in credit. Your rate limit resets in ~5s.\",\"status\":429,\"retry_after\":5}\n",
+  "files": []
+ },
+ {
+  "name": "vo_13",
+  "model": "minimax/speech-02-turbo",
+  "status": null,
+  "error": 429,
+  "detail": "{\"detail\":\"Request was throttled. Your rate limit for creating predictions is reduced to 6 requests per minute with a burst of 1 requests while you have less than $5.0 in credit. Your rate limit resets in ~5s.\",\"status\":429,\"retry_after\":5}\n",
+  "files": []
+ },
+ {
+  "name": "vo_14",
+  "model": "minimax/speech-02-turbo",
+  "status": null,
+  "error": 429,
+  "detail": "{\"detail\":\"Request was throttled. Your rate limit for creating predictions is reduced to 6 requests per minute with a burst of 1 requests while you have less than $5.0 in credit. Your rate limit resets in ~5s.\",\"status\":429,\"retry_after\":5}\n",
+  "files": []
+ },
+ {
+  "name": "vo_15",
+  "model": "minimax/speech-02-turbo",
+  "status": null,
+  "error": 429,
+  "detail": "{\"detail\":\"Request was throttled. Your rate limit for creating predictions is reduced to 6 requests per minute with a burst of 1 requests while you have less than $5.0 in credit. Your rate limit resets in ~5s.\",\"status\":429,\"retry_after\":5}\n",
+  "files": []
+ },
+ {
+  "name": "vo_16",
+  "model": "minimax/speech-02-turbo",
+  "status": null,
+  "error": 429,
+  "detail": "{\"detail\":\"Request was throttled. Your rate limit for creating predictions is reduced to 6 requests per minute with a burst of 1 requests while you have less than $5.0 in credit. Your rate limit resets in ~5s.\",\"status\":429,\"retry_after\":5}\n",
+  "files": []
+ },
+ {
+  "name": "vo_17",
+  "model": "minimax/speech-02-turbo",
+  "status": null,
+  "error": 429,
+  "detail": "{\"detail\":\"Request was throttled. Your rate limit for creating predictions is reduced to 6 requests per minute with a burst of 1 requests while you have less than $5.0 in credit. Your rate limit resets in ~5s.\",\"status\":429,\"retry_after\":5}\n",
+  "files": []
+ },
+ {
+  "name": "vo_18",
+  "model": "minimax/speech-02-turbo",
+  "status": null,
+  "error": 429,
+  "detail": "{\"detail\":\"Request was throttled. Your rate limit for creating predictions is reduced to 6 requests per minute with a burst of 1 requests while you have less than $5.0 in credit. Your rate limit resets in ~5s.\",\"status\":429,\"retry_after\":5}\n",
+  "files": []
+ },
+ {
+  "name": "head_trump",
+  "model": "851-labs/background-remover",
+  "status": null,
+  "error": 429,
+  "detail": "{\"detail\":\"Request was throttled. Your rate limit for creating predictions is reduced to 6 requests per minute with a burst of 1 requests while you have less than $5.0 in credit. Your rate limit resets in ~5s.\",\"status\":429,\"retry_after\":5}\n",
+  "files": []
+ },
+ {
+  "name": "head_jair",
+  "model": "851-labs/background-remover",
+  "status": null,
+  "error": 429,
+  "detail": "{\"detail\":\"Request was throttled. Your rate limit for creating predictions is reduced to 6 requests per minute with a burst of 1 requests while you have less than $5.0 in credit. Your rate limit resets in ~4s.\",\"status\":429,\"retry_after\":4}\n",
+  "files": []
+ },
+ {
+  "name": "head_flavio",
+  "model": "851-labs/background-remover",
+  "status": null,
+  "error": 429,
+  "detail": "{\"detail\":\"Request was throttled. Your rate limit for creating predictions is reduced to 6 requests per minute with a burst of 1 requests while you have less than $5.0 in credit. Your rate limit resets in ~4s.\",\"status\":429,\"retry_after\":4}\n",
+  "files": []
+ },
+ {
+  "name": "head_orban",
+  "model": "851-labs/background-remover",
+  "status": null,
+  "error": 429,
+  "detail": "{\"detail\":\"Request was throttled. Your rate limit for creating predictions is reduced to 6 requests per minute with a burst of 1 requests while you have less than $5.0 in credit. Your rate limit resets in ~4s.\",\"status\":429,\"retry_after\":4}\n",
+  "files": []
+ }
+]
