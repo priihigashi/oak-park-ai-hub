@@ -24,9 +24,15 @@ function fitHeads(sc){
     el.style.textWrap='balance';
     const best=n=>{let a=lo,b=hi; set(a); if(lines()>n||over()) return 0;
       for(let i=0;i<14;i++){const m=(a+b)/2; set(m); if(lines()<=n&&!over()) a=m; else b=m;} return Math.floor(a);};
-    const res=[1,2,3,4].map(best);
-    let pick=res.findIndex(f=>f>=f0*.82); if(pick<0){pick=res.indexOf(Math.max(...res))}
-    set(res[pick]||f0);
+    const widths=()=>{const r=document.createRange(); r.selectNodeContents(el); const L={};
+      [...r.getClientRects()].forEach(q=>{if(q.width<2)return; const k=Math.round(q.top/8); L[k]=L[k]||[1e9,-1e9]; L[k][0]=Math.min(L[k][0],q.left); L[k][1]=Math.max(L[k][1],q.right)});
+      return Object.values(L).map(v=>v[1]-v[0]);};
+    const even=()=>{const w=widths(); return w.length<2?1:Math.min(...w)/Math.max(...w)};
+    const res=[1,2,3,4].map(n=>{const f=best(n); if(!f) return {f:0,ev:0}; set(f); return {f,ev:even()}});
+    let pick=res.findIndex(r=>r.f>=f0*.74&&r.ev>=.55);
+    if(pick<0) pick=res.findIndex(r=>r.f>=f0*.82);
+    if(pick<0){const m=Math.max(...res.map(r=>r.f)); pick=res.findIndex(r=>r.f===m)}
+    set(res[pick].f||f0);
   });
 }
 

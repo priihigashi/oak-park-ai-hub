@@ -124,7 +124,7 @@ BR2 = [29.5,28.6,29.9,30.9,27.5,22.7,23.8,23.9,23.6,21.9,20.8,19.1]
 s = 'v01'; CUR['s'] = s
 H.append(scene(s, f'''
 {eb(0, f'BAHIA · PT {ESQ} DESDE 2007', top=330)}
-<div class="el h" data-flow="m:2" data-gap="34" data-a="slam" data-t="{W(s,'mais',0,-.15)}" data-shake="1" style="left:80px;width:880px;font-size:118px;color:#fff">ONDE MAIS SE <span class="hl">MATA</span> NO BRASIL</div>
+<div class="el h" data-flow="m:2" data-gap="34" data-a="slam" data-t="{W(s,'lidera',0,-.15)}" data-shake="1" style="left:80px;width:880px;font-size:92px;color:#fff">LÍDER EM <span class="hl">MORTES VIOLENTAS</span> NO BRASIL</div>
 <div class="el h redtxt" data-flow="m:3" data-gap="30" data-a="slam" data-t="{W(s,'culpa',0,-.1)}" data-d=".35" style="left:80px;font-size:96px;width:880px">E A CULPA É DA ESQUERDA.</div>
 <div class="el body" data-flow="m:4" data-gap="40" data-a="up" data-t="{W(s,'vamos',0,-.2)}" style="left:80px;width:820px"><b>Vamos aos fatos.</b></div>
 <div class="el fine" data-flow="m:5" data-gap="26" data-a="fade" data-t="{W(s,'vamos',0,.2)}" style="left:80px">EM NÚMERO DE MORTES: 5.473 EM 2025, O MAIOR DO PAÍS. EM TAXA POR 100 MIL, É A 2ª, ATRÁS DO AMAPÁ.</div>
@@ -153,6 +153,7 @@ H.append(scene(s, rail(1)+f'''
   {row('2015', 'NASCE O BDM, NA BAHIA', None, Y, 0, fade=W(s,'recrutaram',0,.6))}</div>
 <div class="el h" data-flow="m:3" data-gap="50" data-a="slam" data-t="{W(s,'nordestinação',0,-.2)}" style="left:80px;width:880px;font-size:76px;color:{Y}">A “NORDESTINAÇÃO” DA VIOLÊNCIA.</div>
 <div class="el note" data-flow="m:4" data-gap="22" data-a="fade" data-t="{W(s,'nordestinação',0,.3)}" style="left:80px">TERMO USADO POR PESQUISADORES DA SEGURANÇA PÚBLICA NO NORDESTE</div>
+<div class="el fine" data-flow="m:5" data-gap="20" data-a="fade" data-t="{W(s,'nordestinação',0,.8)}" style="left:80px">QUEM CUIDA DO QUÊ: POLÍCIAS CIVIL E MILITAR, PRESÍDIOS E INVESTIGAÇÃO SÃO DO ESTADO. FRONTEIRAS, PORTOS, CONTROLE DE ARMAS E POLÍCIA FEDERAL SÃO DA UNIÃO.</div>
 ''', 'i10', 'REV. BRAS. DE SEGURANÇA PÚBLICA, 2024 · FÓRUM POPULAR DE SEG. PÚBLICA DO NE, 2019', kbo='60% 55%'))
 
 s = 'v04'; CUR['s'] = s
