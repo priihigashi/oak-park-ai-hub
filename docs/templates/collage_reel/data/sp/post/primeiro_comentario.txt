@@ -15,3 +15,10 @@ COMENTA: o que você cobraria no segundo mandato? 👇
 • Fuzis via CAC: Estadão (2022)
 • Debate checado: Agência Lupa, G1 Fato ou Fake, Aos Fatos
 • Ideologia dos partidos: Bolognesi et al., Revista Dados (2023)
+
+📝 NOTAS
+• Partidos: a sigla mostra a vinculação de hoje. Bolsonaro foi eleito pelo PSL (2018), ficou sem partido em nov/2019 e entrou no PL em nov/2021.
+• Homicídios (Atlas/Ipea), mortes violentas intencionais (FBSP) e homicídios ocultos (estimativa do Atlas) são métricas diferentes; não se misturam no mesmo gráfico.
+• Câmeras: os −57% são dos batalhões estudados pela FGV, não de todo o estado. A PM testou em 2020 e ampliou em 2021.
+• Ouvidoria: 756 mortes de 2017 analisadas; "sem antecedentes" não quer dizer inocente, e "indício de excesso" não é condenação.
+• Investigação, denúncia e prisão não são condenação. A relação entre o PCC e a queda dos homicídios é debatida na academia.

@@ -165,7 +165,7 @@ c3 = chart(s, YA, [
 ], 40, [0, 10, 20, 30, 40], 0, 0, h=540,
    stages=[(0, i10, W(s,'cai',0,-.1), 2.4), (i10, iL, W(s,'depois',0,-.1), 2.6)],
    notes=[(0, 37, '2000: 42,2 · O PICO', '#fff', W(s,'pico',0,-.3), 0, -10),
-          (2, 24, '↘ 10 ANOS EM QUEDA', Y, W(s,'dez',0,-.2), 10, 0)]).replace('{flow}', 'm:3')
+          (2, 24, '↘ QUEDA FORTE', Y, W(s,'dez',0,-.2), 10, 0)]).replace('{flow}', 'm:3')
 H.append(scene(s, rail(1)+f'''
 {eb(2, 'MITO 1 · HOMICÍDIOS POR 100 MIL', top=300)}
 {quote('“A DIREITA RESOLVEU.”', W(s,'mito',0), 'm:2', gap=26)}
@@ -220,23 +220,23 @@ c7 = chart(s, YM, [
           (9, 330, '↗ VOLTA A<br>SUBIR', R, W(s,'subir',0,-.2), 14, 0)]).replace('{flow}', 'm:3')
 H.append(scene(s, rail(2)+f'''
 {eb(3, 'PROBLEMA 1 · A POLÍCIA (É DO ESTADO)', top=300)}
-<div class="el h" data-flow="m:2" data-gap="28" data-a="up" data-t="{W(s,'ouvidoria',0,-.2)}" data-o="{W(s,'câmera',0,-.5)}" style="left:80px;width:880px;font-size:54px;color:#fff">OUVIDORIA DA POLÍCIA, 2017: <span style="color:{R}">3 EM 4 MORTES COM INDÍCIO DE EXCESSO</span> · 46% SEM ANTECEDENTES</div>
+<div class="el h" data-flow="m:2" data-gap="28" data-a="up" data-t="{W(s,'ouvidoria',0,-.2)}" data-o="{W(s,'câmera',0,-.5)}" style="left:80px;width:880px;font-size:54px;color:#fff">OUVIDORIA DA POLÍCIA, 2017: <span style="color:{R}">3 EM 4 MORTES ANALISADAS COM INDÍCIO DE EXCESSO</span> · 46% SEM ANTECEDENTES</div>
 <div class="el h" data-flow="m:2" data-gap="28" data-a="slam" data-t="{W(s,'câmera',0,-.15)}" style="left:80px;width:880px;font-size:64px;color:#fff">COM CÂMERA, AS MORTES <span class="hl">CAÍRAM PELA METADE</span></div>
 {c7}
 <div class="el h" data-flow="m:4" data-gap="30" data-a="up" data-t="{W(s,'quatro',0,-.25)}" style="left:80px;width:880px;font-size:56px;color:#fff">2025: <span style="color:{R}">QUASE 1 EM CADA 4</span> MORTES VIOLENTAS DO ESTADO</div>
-<div class="el fine" data-flow="m:5" data-gap="22" data-a="fade" data-t="{W(s,'quatro',0,.5)}" style="left:80px">OUVIDORIA (SSP-SP, 2018): 756 MORTES DE 2017; 43% COM TIRO NA CABEÇA OU NAS COSTAS. 835 DE 3.615 (23,1%). FGV: −57% NOS BATALHÕES COM CÂMERA. O GOVERNO DE SP DIZ QUE A SOMA DO MANDATO É MENOR QUE A DO ANTERIOR; A DIREÇÃO, DESDE 2023, É DE ALTA. OPERAÇÃO VERÃO (2024): A MAIS LETAL DESDE O CARANDIRU.</div>
+<div class="el fine" data-flow="m:5" data-gap="22" data-a="fade" data-t="{W(s,'quatro',0,.5)}" style="left:80px">OUVIDORIA (SSP-SP, 2018): 756 MORTES DE 2017; 43% COM TIRO NA CABEÇA OU NAS COSTAS. 835 DE 3.615 (23,1%). FGV: −57% NOS BATALHÕES ESTUDADOS. CÂMERAS: TESTE EM 2020, AMPLIAÇÃO EM 2021. O GOVERNO DE SP DIZ QUE A SOMA DO MANDATO É MENOR QUE A DO ANTERIOR; A DIREÇÃO, DESDE 2023, É DE ALTA. OPERAÇÃO VERÃO (2024): A MAIS LETAL DESDE O CARANDIRU.</div>
 ''', 'pm', 'SSP-SP (VIA AGÊNCIA BRASIL E FBSP, 2014–2025) · OUVIDORIA DA POLÍCIA SP, 2018 · FGV, 2022 · FBSP, ANUÁRIO 2026', kbo='50% 55%'))
 
 s = 's07b'; CUR['s'] = s
 H.append(scene(s, rail(2)+f'''
-{eb(0, 'QUEM AJUDA A POLÍCIA A MATAR MENOS?', top=300)}
+{eb(0, 'QUEM AJUDA A REDUZIR AS MORTES PELA POLÍCIA?', top=300)}
 <div class="el rows" data-flow="m:2" data-gap="30" data-a="fade" data-t="{W(s,'bolsonaro',0,-.3)}" style="left:80px">
-  {row('2019 · BOLSONARO', 'PROJETO QUE ACABA COM A MARCAÇÃO DAS BALAS DA POLÍCIA', None, '#5B7CFF', 0, sub=f'PL {EXT} · PL 3.723/2019, ENVIADO PELO GOVERNO')}
-  {row('2020 · BOLSONARO', 'REVOGA AS REGRAS DE RASTREAMENTO DE ARMAS E MUNIÇÕES', None, '#5B7CFF', 0, sub=f'PL {EXT}', fade=W(s,'revogou',0,-.2))}
+  {row('2019 · BOLSONARO', 'PROJETO QUE ACABA COM A MARCAÇÃO DAS BALAS DA POLÍCIA', None, '#5B7CFF', 0, sub='PL 3.723/2019, ENVIADO PELO GOVERNO')}
+  {row('2020 · BOLSONARO', 'REVOGA AS REGRAS DE RASTREAMENTO DE ARMAS E MUNIÇÕES', None, '#5B7CFF', 0, sub=f'HOJE NO PL {EXT}', fade=W(s,'revogou',0,-.2))}
   {row('2024 · GOVERNO ATUAL 🦑', 'REGRAS NACIONAIS PARA CÂMERA NA FARDA E USO DA FORÇA', None, Y, 0, sub='EFEITO: AINDA SEM DADOS', fade=W(s,'atual',0,-.3))}
   {row('2024–25 · TARCÍSIO', 'CÂMERA QUE SÓ GRAVA QUANDO LIGADA · PEDIU PARA REVOGAR O USO DA FORÇA', None, R, 0, sub=f'REPUBLICANOS {DIR}', fade=W(s,'tarcísio',0,-.3))}</div>
 <div class="el h" data-flow="m:3" data-gap="44" data-a="slam" data-t="{W(s,'flávio',0,-.2)}" style="left:80px;width:880px;font-size:62px;color:#fff">FLÁVIO BOLSONARO: <span class="hl">“DETALHEZINHO”</span></div>
-<div class="el body" data-flow="m:4" data-gap="22" data-a="up" data-t="{W(s,'país',0,-.2)}" style="left:80px;width:880px;font-size:40px">Num país onde a polícia mata <b class="hl">8× mais</b> que a dos EUA, por habitante.</div>
+<div class="el body" data-flow="m:4" data-gap="22" data-a="up" data-t="{W(s,'país',0,-.2)}" style="left:80px;width:880px;font-size:40px">Num país onde a polícia tira <b class="hl">8× mais vidas</b> que a dos EUA, por habitante.</div>
 <div class="el fine" data-flow="m:5" data-gap="22" data-a="fade" data-t="{W(s,'país',0,.4)}" style="left:80px">FLÁVIO (PL {EXT}) NÃO É O AUTOR: DEFENDEU, NA TV GLOBO, 16/10/2026. MORTOS PELA POLÍCIA EM 2025, POR 100 MIL: BRASIL 3,1 (FBSP) · EUA ~0,4 (MPV). SP: 23,1% DAS MORTES VIOLENTAS.</div>
 ''', 'pm2', 'MJSP (MAI E DEZ/2024) · EXÉRCITO/COLOG, ABR/2020 · NOTA DO COSUD, DEZ/2024 · PONTE, MAI/2025 · PODER360, OUT/2026 · FBSP, ANUÁRIO 2026 · MAPPING POLICE VIOLENCE · ' + IDS, kbo='50% 50%'))
 
@@ -278,7 +278,7 @@ H.append(scene(s, f'''
 {quote('“O GOVERNO FEDERAL NÃO AJUDA.”', W(s,'governo',0), 'm:2', gap=26)}
 <div class="el rows" data-flow="m:3" data-gap="36" data-a="fade" data-t="{W(s,'mandou',0,-.2)}" style="left:80px">
   {row('FUNDO NACIONAL', 'R$ 45,8 MI EM 2024 · A MAIOR FATIA', None, Y, 0, sub='GOVERNO ATUAL 🦑')}
-  {row('2021 · BOLSONARO', 'R$ 31,1 MI · +47% AGORA', None, '#5B7CFF', 0, sub=f'PL {EXT}', fade=W(s,'cinquenta',0,-.2))}
+  {row('2021 · BOLSONARO', 'R$ 31,1 MI · +47% AGORA', None, '#5B7CFF', 0, sub=f'HOJE NO PL {EXT}', fade=W(s,'cinquenta',0,-.2))}
   {row('PF E RECEITA', 'NA OPERAÇÃO DOS COMBUSTÍVEIS', None, Y, 0, fade=W(s,'polícia',0,-.2))}</div>
 <div class="el h redtxt" data-flow="m:4" data-gap="44" data-a="slam" data-t="{W(s,'fronteira',0,-.15)}" style="left:80px;width:880px;font-size:66px">FRONTEIRA E PORTO DE SANTOS SÃO DA UNIÃO.</div>
 <div class="el body" data-flow="m:5" data-gap="26" data-a="up" data-t="{W(s,'decretos',0,-.2)}" style="left:80px;width:860px">Com os decretos de armas do governo Bolsonaro, a facção passou a <b>comprar fuzis com nota fiscal.</b></div>

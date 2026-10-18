@@ -37,6 +37,7 @@ jobs:
           L="$D/assets_log.txt"; pip show edge-tts | head -2 > "$L"
           if grep -q tts "$D/REQUEST"; then python3 $K/tts_edge.py "$D" >> "$L" 2>&1; fi
           if grep -q images "$D/REQUEST"; then PER=2 python3 $K/commons_fetch.py "$D" >> "$L" 2>&1; fi
+          if grep -q split "$D/REQUEST"; then pip install -q faster-whisper >> "$L" 2>&1; sudo apt-get -qq install -y ffmpeg >/dev/null 2>&1; python3 $K/split_voice.py "$D" $(sed -n 's/^split //p' "$D/REQUEST") >> "$L" 2>&1; fi
           if grep -q atlas "$D/REQUEST"; then python3 $K/atlas_fetch.py "$D" 20 328 329 330 >> "$L" 2>&1; fi
           tail -40 "$L"; exit 0
       - name: Commit
