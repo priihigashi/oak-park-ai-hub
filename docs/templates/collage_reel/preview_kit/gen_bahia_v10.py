@@ -244,15 +244,13 @@ H.append(scene(s, rail(5)+f'''
 s = 'v12'; CUR['s'] = s
 H.append(scene(s, rail(4)+f'''
 {eb(7, 'NORTE · 7 DE 7 GOVERNADORES DE DIREITA', top=320)}
-<div class="el rows" data-flow="m:2" data-gap="36" data-a="fade" data-t="{W(s,'amazonas',0,-.2)}" style="left:80px">
-  {row('AMAZONAS', '18,5', None, '#fff', 0, sub=f'MORTES / 100 MIL · UNIÃO {DIR}')}
-  {row('AMAPÁ', '42,5 · 1º', None, R, 0, sub=f'MAIOR TAXA DO PAÍS · SOLIDARIEDADE {CDIR}', fade=W(s,'amapá',0,-.2))}</div>
-<div class="el h" data-flow="m:3" data-gap="56" data-a="slam" data-t="{W(s,'marajó',0,-.15)}" style="left:80px;font-size:96px;color:#fff">MARAJÓ (PA)</div>
-<div class="el rows" data-flow="m:4" data-gap="26" data-a="fade" data-t="{W(s,'sete',1,-.2)}" style="left:80px">
-  {row('MARAJÓ', '73%', 1, R, W(s,'sete',1), sub='EM SITUAÇÃO DE POBREZA (CADÚNICO)')}
-  {row('BRASIL', '28%', 28/73, WH, W(s,'sete',1,.2))}</div>
-<div class="el fine" data-flow="m:5" data-gap="24" data-a="fade" data-t="{W(s,'pobreza',0,.2)}" style="left:80px">A GAZETA DO POVO CHAMA AMAPÁ E AMAZONAS DE “ALIADOS DO LULA”. AQUI VALE A IDEOLOGIA DO PARTIDO DO GOVERNADOR.</div>
-''', 'i11', 'FBSP, ANUÁRIO 2026 · RELATÓRIO CIDADANIA MARAJÓ (DEZ/2022) · ' + IDS, kbo='50% 60%'))
+<div class="el note" data-flow="m:2" data-gap="30" data-a="fade" data-t="{W(s,'amazonas',0,-.4)}" style="left:80px">MORTES VIOLENTAS A CADA 100 MIL HABITANTES · 2025</div>
+<div class="el rows" data-flow="m:3" data-gap="16" data-a="fade" data-t="{W(s,'amazonas',0,-.3)}" style="left:80px">
+  {row('AMAZONAS', '18,5', 18.5/42.5, '#5B7CFF', W(s,'amazonas',0), sub=f'UNIÃO {DIR}')}
+  {row('AMAPÁ', '42,5', 1, '#5B7CFF', W(s,'amapá',0), sub=f'SOLIDARIEDADE {CDIR}')}</div>
+<div class="el h" data-flow="m:4" data-gap="50" data-a="slam" data-t="{W(s,'dobro',0,-.15)}" style="left:80px;width:880px;font-size:84px;color:#fff">MAIS QUE O <span class="hl">DOBRO</span>, COM O MESMO LADO POLÍTICO.</div>
+<div class="el fine" data-flow="m:5" data-gap="26" data-a="fade" data-t="{W(s,'resultado',0,-.2)}" style="left:80px">A GAZETA DO POVO CHAMA AMAPÁ E AMAZONAS DE “ALIADOS DO LULA”. AQUI VALE A IDEOLOGIA DO PARTIDO DO GOVERNADOR.</div>
+''', 'i11', 'FBSP, ANUÁRIO 2026 · ' + IDS, kbo='50% 60%'))
 
 s = 'v13'; CUR['s'] = s
 H.append(scene(s, f'''
