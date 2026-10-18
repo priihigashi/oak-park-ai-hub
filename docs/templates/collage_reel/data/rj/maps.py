@@ -27,6 +27,32 @@ def proj(lon, lat, c, z, rot):
         a = math.radians(rot); x, y = x*math.cos(a) - y*math.sin(a), x*math.sin(a) + y*math.cos(a)
     return ((W*cx_ + x) * SS, (H*cy_ + y) * SS)
 
+def _draw_features(feats, hi, hi2, dl, de, dh, dh2, center, zoom, rot):
+    for f, uf in feats:
+        nm = f['properties']['name']
+        for r in rings(f):
+            pts = [proj(lon, lat, center, zoom, rot) for lon, lat in r]
+            if len(pts) < 3: continue
+            dl.polygon(pts, fill=255 if uf == 'rj' else 150)
+            de.line(pts + [pts[0]], fill=110 if uf == 'rj' else 50, width=SS)
+            if uf == 'rj' and nm in hi: dh.polygon(pts, fill=255)
+            if uf == 'rj' and nm in hi2: dh2.polygon(pts, fill=255)
+            if uf != 'rj' and uf in hi: dh.polygon(pts, fill=150)
+
+def _apply_highlights(arr, hl, hl2, hicol, hi2col, p1, p2, pats, glow):
+    for m, col, pat in ((hl, hicol, p1), (hl2, hi2col, p2)):
+        M = np.asarray(m, np.float32)/255
+        if M.max() == 0: continue
+        if glow:
+            G = np.asarray(m.filter(ImageFilter.GaussianBlur(30*SS)), np.float32)[..., None]/255
+            arr = arr + np.array(col)*G*.16
+        P = (pats[pat]*.42 + .10)*M
+        arr = arr*(1 - P[..., None]) + np.array(col)*P[..., None]
+        ed = np.asarray(m.filter(ImageFilter.MaxFilter(5)), np.float32)/255 - np.asarray(m.filter(ImageFilter.MinFilter(5)), np.float32)/255
+        ed = np.clip(ed, 0, 1)[..., None]*.95
+        arr = arr*(1 - ed) + np.array(col)*ed
+    return arr
+
 def render(name, center, zoom, hi=(), hi2=(), hicol=(255, 74, 61), hi2col=(255, 211, 77), rot=0, anchor=(.62, .52),
            others=False, tint=(16, 22, 34), line=(242, 236, 224), glow=True, dots=(), p1='hatch', p2='dots'):
     global cx_, cy_
@@ -44,16 +70,7 @@ def render(name, center, zoom, hi=(), hi2=(), hicol=(255, 74, 61), hi2col=(255, 
     feats = [(f, 'rj') for f in RJ]
     if others:
         for k, fs in OTH.items(): feats += [(f, k) for f in fs]
-    for f, uf in feats:
-        nm = f['properties']['name']
-        for r in rings(f):
-            pts = [proj(lon, lat, center, zoom, rot) for lon, lat in r]
-            if len(pts) < 3: continue
-            dl.polygon(pts, fill=255 if uf == 'rj' else 150)
-            de.line(pts + [pts[0]], fill=110 if uf == 'rj' else 50, width=SS)
-            if uf == 'rj' and nm in hi: dh.polygon(pts, fill=255)
-            if uf == 'rj' and nm in hi2: dh2.polygon(pts, fill=255)
-            if uf != 'rj' and uf in hi: dh.polygon(pts, fill=150)
+    _draw_features(feats, hi, hi2, dl, de, dh, dh2, center, zoom, rot)
     arr = np.asarray(img).astype(np.float32)
     L = np.asarray(land, np.float32)[..., None]/255
     arr = arr*(1 - L*.55) + np.array([24, 26, 30])*L*.55
@@ -61,17 +78,7 @@ def render(name, center, zoom, hi=(), hi2=(), hicol=(255, 74, 61), hi2col=(255, 
     pats = {'dots': (((xx2 % (14*SS)) - 7*SS)**2 + ((yy2 % (14*SS)) - 7*SS)**2 < (2.6*SS)**2).astype(np.float32),
             'hatch': (((xx2 + yy2) % (16*SS)) < 3*SS).astype(np.float32),
             'cross': ((((xx2 + yy2) % (22*SS)) < 2*SS) | (((xx2 - yy2) % (22*SS)) < 2*SS)).astype(np.float32)}
-    for m, col, pat in ((hl, hicol, p1), (hl2, hi2col, p2)):
-        M = np.asarray(m, np.float32)/255
-        if M.max() == 0: continue
-        if glow:
-            G = np.asarray(m.filter(ImageFilter.GaussianBlur(30*SS)), np.float32)[..., None]/255
-            arr = arr + np.array(col)*G*.16
-        P = (pats[pat]*.42 + .10)*M
-        arr = arr*(1 - P[..., None]) + np.array(col)*P[..., None]
-        ed = np.asarray(m.filter(ImageFilter.MaxFilter(5)), np.float32)/255 - np.asarray(m.filter(ImageFilter.MinFilter(5)), np.float32)/255
-        ed = np.clip(ed, 0, 1)[..., None]*.95
-        arr = arr*(1 - ed) + np.array(col)*ed
+    arr = _apply_highlights(arr, hl, hl2, hicol, hi2col, p1, p2, pats, glow)
     E = np.asarray(edges, np.float32)[..., None]/255
     arr = arr*(1 - E*.5) + np.array(line)*E*.5
     img = Image.fromarray(np.clip(arr, 0, 255).astype(np.uint8))
