@@ -30,7 +30,7 @@ def kar(sid, per=6):
         toks.append(f"{html.escape(w.replace(':', ''))}:{t}"); n += 1
     return f'<div class="kar karfull el" data-words="{" ".join(toks)}" style="left:130px;top:1410px;width:820px"></div>'
 DUR = TL[-1]['e']
-CH = ["QUEM MANDA", "MITO", "FACÇÃO", "POLÍCIA", "SEM RESPOSTA", "RUA"]
+CH = ["QUEM MANDA", "MITO", "POLÍCIA", "SEM RESPOSTA", "RUA", "FACÇÃO"]
 def rail(active, t=.1):
     xs = [110+i*172 for i in range(6)]
     dots = ''.join(f'<div class="st{" on" if i==active else ""}{" past" if i<active else ""}" style="left:{x}px"><i></i><b>{y}</b></div>' for i, (x, y) in enumerate(zip(xs, CH)))
@@ -176,8 +176,8 @@ H.append(scene(s, rail(1)+f'''
 ''', 'skyline', 'IPEA/FBSP, ATLAS DA VIOLÊNCIA (SIM/DATASUS) · ' + IDS, kbo='50% 60%'))
 
 s = 's04'; CUR['s'] = s
-H.append(scene(s, rail(2)+f'''
-{eb(3, 'O LADO ESCURO DA QUEDA', top=320)}
+H.append(scene(s, rail(5)+f'''
+{eb(6, 'PROBLEMA 4 · O MAIOR: A FACÇÃO', top=320)}
 <div class="el h" data-flow="m:2" data-gap="34" data-a="slam" data-t="{W(s,'pcc',0,-.15)}" style="left:80px;width:880px;font-size:80px;color:#fff">1993: <span class="hl">O PCC NASCE</span> NUM PRESÍDIO PAULISTA</div>
 <div class="el body" data-flow="m:3" data-gap="40" data-a="up" data-t="{W(s,'pesquisadores',0,-.2)}" style="left:80px;width:860px">Pesquisadores dizem que a facção <b>proíbe mortes sem autorização.</b></div>
 <div class="el h redtxt" data-flow="m:4" data-gap="40" data-a="slam" data-t="{W(s,'menos',0,-.1)}" style="left:80px;width:880px;font-size:72px">MENOS HOMICÍDIO, FACÇÃO MAIS RICA.</div>
@@ -185,20 +185,20 @@ H.append(scene(s, rail(2)+f'''
 ''', 'se', 'C. NUNES DIAS (NEV-USP) · G. WILLIS (CAMBRIDGE) · UNICAMP, TD 276', kbo='50% 50%'))
 
 s = 's05'; CUR['s'] = s
-H.append(scene(s, rail(2)+f'''
-{eb(4, 'PROBLEMA 1 · O PCC VIROU EMPRESA', top=320)}
+H.append(scene(s, rail(5)+f'''
+{eb(7, 'O PCC VIROU EMPRESA', top=320)}
 <div class="el rows" data-flow="m:2" data-gap="36" data-a="fade" data-t="{W(s,'operação',0,-.3)}" style="left:80px">
   {row('CARBONO OCULTO<small>AGO/2025</small>', 'POSTOS DE COMBUSTÍVEL E FINTECHS · 42 ALVOS NA FARIA LIMA', None, '#fff', 0)}</div>
 <div class="el h" data-flow="m:3" data-gap="40" data-a="slam" data-t="{W(s,'oito',0,-.15)}" style="left:80px;width:880px;font-size:96px;color:{Y}">R$ 8,67 BILHÕES</div>
-<div class="el note" data-flow="m:4" data-gap="14" data-a="fade" data-t="{W(s,'pagos',0,-.2)}" style="left:80px">EM IMPOSTOS NÃO PAGOS · ESTIMATIVA DA RECEITA FEDERAL</div>
+<div class="el note" data-flow="m:4" data-gap="14" data-a="fade" data-t="{W(s,'sonegados',0,-.2)}" style="left:80px">EM IMPOSTOS NÃO PAGOS · ESTIMATIVA DA RECEITA FEDERAL</div>
 <div class="el rows" data-flow="m:5" data-gap="40" data-a="fade" data-t="{W(s,'capital',0,-.2)}" style="left:80px">
   {row('FIM DA LINHA<small>ABR/2024</small>', 'ÔNIBUS PAGOS PELA PREFEITURA SOB SUSPEITA DE LAVAR DINHEIRO DA FACÇÃO', None, '#fff', 0, sub=f'PREFEITO RICARDO NUNES · MDB {DIR}<br>INFILTRAÇÃO HÁ QUASE 30 ANOS, SEGUNDO O MP-SP')}</div>
 <div class="el fine" data-flow="m:6" data-gap="22" data-a="fade" data-t="{W(s,'facção',0,.2)}" style="left:80px">CARBONO OCULTO = MP-SP + RECEITA FEDERAL (A PF FEZ AS OPERAÇÕES QUASAR E TANK). A REGRA DA RECEITA QUE APERTAVA AS FINTECHS FOI REVOGADA EM JAN/2025, APÓS VÍDEOS VIRAIS, E REEDITADA DEPOIS DA OPERAÇÃO.</div>
 ''', 'farialima', 'RECEITA FEDERAL E MP-SP, AGO/2025 · MP-SP, OPERAÇÃO FIM DA LINHA', kbo='55% 50%'))
 
 s = 's06'; CUR['s'] = s
-H.append(scene(s, rail(2)+f'''
-{eb(5, 'POLÍTICOS DOS DOIS LADOS · ÔNIBUS DA CAPITAL', top=300)}
+H.append(scene(s, rail(5)+f'''
+{eb(8, 'POLÍTICOS DOS DOIS LADOS · ÔNIBUS DA CAPITAL', top=300)}
 <div class="el rows" data-flow="m:2" data-gap="30" data-a="fade" data-t="{W(s,'vereador',0,-.3)}" style="left:80px">
   {row('JUN/2026', 'SENIVAL MOURA · VEREADOR', None, '#fff', 0, sub=f'PT {ESQ} · SOLTO POR HC')}
   {row('SET/2026', 'MILTON LEITE · EX-PRES. DA CÂMARA', None, '#fff', 0, sub=f'UNIÃO BRASIL {DIR}', fade=W(s,'setembro',0,-.2))}
@@ -218,8 +218,8 @@ c7 = chart(s, YM, [
    stages=[(0, 6, W(s,'polícia',0,-.1), 2.2), (6, 8, W(s,'câmera',0,-.1), 2.0), (8, 11, W(s,'volta',0,-.2), 1.8)],
    notes=[(4, 470, '↘ CÂMERA<br>NA FARDA', '#fff', W(s,'caíram',0,-.1), -40, 0),
           (9, 330, '↗ VOLTA A<br>SUBIR', R, W(s,'subir',0,-.2), 14, 0)]).replace('{flow}', 'm:3')
-H.append(scene(s, rail(3)+f'''
-{eb(6, 'PROBLEMA 2 · A POLÍCIA (É DO ESTADO)', top=300)}
+H.append(scene(s, rail(2)+f'''
+{eb(3, 'PROBLEMA 1 · A POLÍCIA (É DO ESTADO)', top=300)}
 <div class="el h" data-flow="m:2" data-gap="28" data-a="slam" data-t="{W(s,'câmera',0,-.15)}" style="left:80px;width:880px;font-size:64px;color:#fff">COM CÂMERA, AS MORTES <span class="hl">CAÍRAM PELA METADE</span></div>
 {c7}
 <div class="el h" data-flow="m:4" data-gap="30" data-a="up" data-t="{W(s,'quatro',0,-.25)}" style="left:80px;width:880px;font-size:56px;color:#fff">2025: <span style="color:{R}">QUASE 1 EM CADA 4</span> MORTES VIOLENTAS DO ESTADO</div>
@@ -227,7 +227,7 @@ H.append(scene(s, rail(3)+f'''
 ''', 'pm', 'SSP-SP (VIA AGÊNCIA BRASIL E FBSP, 2014–2025) · FGV, 2022 · FBSP, ANUÁRIO 2026', kbo='50% 55%'))
 
 s = 's07b'; CUR['s'] = s
-H.append(scene(s, rail(3)+f'''
+H.append(scene(s, rail(2)+f'''
 {eb(0, 'QUEM AJUDA A POLÍCIA A MATAR MENOS?', top=300)}
 <div class="el rows" data-flow="m:2" data-gap="30" data-a="fade" data-t="{W(s,'bolsonaro',0,-.3)}" style="left:80px">
   {row('2019 · BOLSONARO', 'PROJETO QUE ACABA COM A MARCAÇÃO DAS BALAS DA POLÍCIA', None, '#5B7CFF', 0, sub=f'PL {EXT} · PL 3.723/2019, ENVIADO PELO GOVERNO')}
@@ -248,8 +248,8 @@ c8 = chart(s, YE, [
    stages=[(0, 1, W(s,'olha',0,-.1), 1.0), (1, 7, W(s,'vinte',0,-.3), 2.6)],
    notes=[(1, 22, '2017: MAIS<br>DA METADE', '#fff', W(s,'metade',0,-.2), -40, 0),
           (4, 13, '↘ 2023: 3 EM 10', R, W(s,'três',1,-.2), -20, 0)]).replace('{flow}', 'm:2')
-H.append(scene(s, rail(4)+f'''
-{eb(7, 'PROBLEMA 3 · HOMICÍDIOS ESCLARECIDOS (%)', top=300)}
+H.append(scene(s, rail(3)+f'''
+{eb(4, 'PROBLEMA 2 · HOMICÍDIOS ESCLARECIDOS (%)', top=300)}
 {c8}
 <div class="el h" data-flow="m:3" data-gap="40" data-a="slam" data-t="{W(s,'campeão',0,-.15)}" style="left:80px;width:880px;font-size:64px;color:#fff">CAMPEÃO DE MORTES <span class="hl">SEM CAUSA DEFINIDA</span></div>
 <div class="el rows" data-flow="m:4" data-gap="30" data-a="fade" data-t="{W(s,'contando',0,-.3)}" style="left:80px">
@@ -259,8 +259,8 @@ H.append(scene(s, rail(4)+f'''
 ''', 'luz', 'INSTITUTO SOU DA PAZ, ONDE MORA A IMPUNIDADE (EDIÇÃO 2024 E DIAGNÓSTICO DE JUL/2026) · IPEA/FBSP, ATLAS 2026', kbo='50% 50%'))
 
 s = 's09'; CUR['s'] = s
-H.append(scene(s, rail(5)+f'''
-{eb(8, 'PROBLEMA 4 · A RUA', top=320)}
+H.append(scene(s, rail(4)+f'''
+{eb(5, 'PROBLEMA 3 · A RUA', top=320)}
 <div class="el h" data-flow="m:2" data-gap="34" data-a="slam" data-t="{W(s,'cinco',1,-.15)}" style="left:80px;width:880px;font-size:66px;color:#fff">A CAPITAL TEM 5,6% DO PAÍS E <span class="hl">1 EM CADA 5 CELULARES</span> ROUBADOS OU FURTADOS</div>
 <div class="el rows" data-flow="m:3" data-gap="40" data-a="fade" data-t="{W(s,'roubos',0,-.3)}" style="left:80px">
   {row('ROUBOS', 'CAÍRAM, COMO EM QUASE TODO O PAÍS', None, Y, 0, sub='CELULAR SEGURO · GOVERNO ATUAL 🦑')}
