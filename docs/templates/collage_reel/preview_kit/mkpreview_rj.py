@@ -5,6 +5,7 @@ style=re.search(r'<style>(.*?)</style>',h,re.S).group(1)
 style=style.replace('html,body{width:1080px;height:1920px;overflow:hidden;background:#050608}','')
 stage=re.search(r'(<div id="stage">.*?</div></div>)\s*<script>',h,re.S).group(1)
 dur=re.search(r'window.DUR=([\d.]+)',h).group(1)
+ZJS=re.search(r'<script>(\s*/\* zoom da abertura.*?)</script>',h,re.S).group(1)
 # assets
 os.makedirs(f'{OUT}/assets/rj',exist_ok=True)
 refs=set(re.findall(r'assets/[\w/.-]+',h+open(f'{SRC}/fx.css').read()))
@@ -45,14 +46,14 @@ body{{background:var(--bg);color:var(--fg);font-family:system-ui,sans-serif;marg
 .pv-skip{{justify-content:space-between}}.pv-bar .sk{{flex:1;min-width:0;padding:10px 6px;background:transparent;color:var(--fg);border:1px solid var(--line);font-variant-numeric:tabular-nums}}
 .pv-note{{max-width:520px;color:var(--muted);font-size:12px;line-height:1.4;margin:0}}
 </style>
-<div class="pv-head"><h1>Rio é culpa da esquerda? · prévia</h1><small id="ver">v1 · rodada 7</small></div>
+<div class="pv-head"><h1>Rio é culpa da esquerda? · prévia</h1><small id="ver">v1 · rodada 8</small></div>
 <div class="pv-frame" id="frame"><div id="scaler">{stage}</div></div>
 <div class="pv-bar"><button id="play" type="button">▶ Play</button><input id="seek" type="range" min="0" max="{dur}" step="0.05" value="0" aria-label="Posição"><output id="tm">0:00</output></div>
 <div class="pv-bar pv-skip" role="group" aria-label="Pular"><button type="button" class="sk" data-d="-30">↺ 30s</button><button type="button" class="sk" data-d="-10">↺ 10s</button><button type="button" class="sk" data-d="-5">↺ 5s</button><button type="button" class="sk" data-d="5">5s ↻</button><button type="button" class="sk" data-d="10">10s ↻</button><button type="button" class="sk" data-d="30">30s ↻</button></div>
 <div class="pv-bar" role="group" aria-label="Velocidade"><span class="pv-sp-l">Velocidade</span><button type="button" class="sp on" data-r="1">1x</button><button type="button" class="sp" data-r="1.2">1,2x</button><button type="button" class="sp" data-r="1.5">1,5x</button><button type="button" class="sp" data-r="2">2x</button><button type="button" class="sp" data-r="3">3x</button></div>
 <p class="pv-note">Prévia ao vivo do reel (as animações rodam no navegador; o MP4 final sai do mesmo arquivo). Botões pulam 5/10/30s; setas ← → pulam 5s (Shift: 10s), espaço dá play/pausa. Recarregue para ver a última edição. Voz e fundos provisórios.</p>
 <audio id="vo" preload="auto" playsinline></audio>
-<script>window.DUR={dur};window.__ZN={ZN};window.__ZF=k=>"assets/rj/zoom/f"+String(k).padStart(3,"0")+".jpg";for(let k=0;k<window.__ZN;k++){{const i=new Image();i.src=window.__ZF(k)}}</script><script src="fx.js"></script><script src="fx2.js"></script><script src="engine.js"></script><script src="layout.js"></script>
+<script>window.DUR={dur};window.__ZN={ZN};window.__ZF=k=>"assets/rj/zoom/f"+String(k).padStart(3,"0")+".jpg";for(let k=0;k<window.__ZN;k++){{const i=new Image();i.src=window.__ZF(k)}}</script><script src="fx.js"></script><script src="fx2.js"></script><script>{ZJS}</script><script src="engine.js"></script><script src="layout.js"></script>
 <script>
 const fr=document.getElementById('frame'),st=document.getElementById('scaler'),a=document.getElementById('vo'),b=document.getElementById('play'),sk=document.getElementById('seek'),tm=document.getElementById('tm');
 function fit(){{const H=Math.min(innerHeight-130,1920),W=Math.min(document.body.clientWidth-32,520);let s=Math.min(H/1920,W/1080);fr.style.width=1080*s+'px';fr.style.height=1920*s+'px';st.style.transform='scale('+s+')'}}
