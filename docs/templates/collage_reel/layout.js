@@ -3,9 +3,36 @@
    data-ftop no primeiro elemento do grupo = y inicial; data-gap = espaço antes do slot (padrão 40); data-dy = deslocamento extra. */
 (function(){
 const GAP=40;
+/* fitHeads — títulos (.el.h) sempre "cheios": sem palavra órfã, sem linha curta sobrando.
+   Para cada título testa 1..4 linhas, acha o MAIOR tamanho de fonte que cabe naquela quantidade de linhas
+   (com text-wrap:balance para as linhas ficarem parecidas) e escolhe a menor quantidade de linhas que
+   não encolha a fonte mais que 18%. Títulos nowrap só encolhem se estourarem a largura.
+   data-nofit="1" desliga. data-fitmax / data-fitmin = limites (fração da fonte original). */
+(function(){const s=document.createElement('style');s.textContent='.el{text-wrap:pretty}.el.h{text-wrap:balance}';document.head.appendChild(s)})();
+function fitHeads(sc){
+  sc.querySelectorAll('.el.h:not([data-nofit]):not(.cnt)').forEach(el=>{
+    const cs=getComputedStyle(el);
+    if(!el.style.width) return;
+    if(!el.dataset.fs0) el.dataset.fs0=parseFloat(cs.fontSize);
+    const f0=+el.dataset.fs0, W=el.clientWidth||parseFloat(el.style.width)||880;
+    const hi=f0*(+el.dataset.fitmax||1.15), lo=f0*(+el.dataset.fitmin||.55);
+    const set=f=>{el.style.fontSize=f+'px'};
+    const lh=()=>{const v=parseFloat(getComputedStyle(el).lineHeight);return isNaN(v)?parseFloat(el.style.fontSize)*1.1:v};
+    const lines=()=>Math.round(el.offsetHeight/lh());
+    const over=()=>el.scrollWidth>el.clientWidth+1;
+    if(cs.whiteSpace==='nowrap'){ set(f0); let f=f0; while(over()&&f>lo){f-=2;set(f)} return; }
+    el.style.textWrap='balance';
+    const best=n=>{let a=lo,b=hi; set(a); if(lines()>n||over()) return 0;
+      for(let i=0;i<14;i++){const m=(a+b)/2; set(m); if(lines()<=n&&!over()) a=m; else b=m;} return Math.floor(a);};
+    const res=[1,2,3,4].map(best);
+    let pick=res.findIndex(f=>f>=f0*.82); if(pick<0){pick=res.indexOf(Math.max(...res))}
+    set(res[pick]||f0);
+  });
+}
+
 function layout(){
   document.querySelectorAll('.scene').forEach(sc=>{
-    const prev=sc.style.display; sc.style.display='block';
+    const prev=sc.style.display; sc.style.display='block'; fitHeads(sc);
     const els=[...sc.querySelectorAll('[data-flow]')];
     const groups={};
     els.forEach(el=>{const [g,n]=el.dataset.flow.split(':');(groups[g]=groups[g]||{});(groups[g][n]=groups[g][n]||[]).push(el)});
