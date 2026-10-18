@@ -133,9 +133,20 @@ def segchart(years, lines, ymin, ymax, ticks, t0, dur, w=880, h=620, lw=270, tfm
         v = lines[k]['v'][i]
         pl += (f'<div class="clab plab" data-a="fade" data-t="{t:.2f}" style="left:{X(i)-70:.0f}px;width:140px;text-align:center;top:{Yv(v)+dy:.0f}px;color:{col}">{txt}</div>'
                f'<div class="pdot" data-a="fade" data-t="{t:.2f}" style="left:{X(i)-7:.0f}px;top:{Yv(v)-7:.0f}px;background:{col}"></div>')
+    if all('rt' in L for L in lines):
+        rev = ''
+        for L in lines:
+            one = ''
+            dash = ' stroke-dasharray="10 8"' if L.get('dash') else ''
+            for a, b, col in L['segs']:
+                pts = ' '.join(f'{X(i):.1f},{Yv(L["v"][i]):.1f}' for i in range(a, b+1))
+                one += f'<polyline points="{pts}" fill="none" stroke="{col}" stroke-width="{L.get("w",6)}" stroke-linejoin="round" stroke-linecap="round"{dash}/>'
+            rev += f'<div class="bar crev" data-t="{L["rt"]:.2f}" data-d="1.2" data-to="{px1+12}" style="height:{h}px"><svg width="{w}" height="{h}">{one}</svg></div>'
+    else:
+        rev = f'<div class="bar crev" data-t="{t0}" data-d="{dur}" data-to="{px1+12}" style="height:{h}px"><svg width="{w}" height="{h}">{ln}</svg></div>'
     return (f'<div class="el chart" data-flow="{flow}" style="left:80px;width:{w}px;height:{h}px">'
             f'<svg class="cgrid" width="{w}" height="{h}">{g}</svg>'
-            f'<div class="bar crev" data-t="{t0}" data-d="{dur}" data-to="{px1+12}" style="height:{h}px"><svg width="{w}" height="{h}">{ln}</svg></div>{pl}{lab}</div>')
+            f'{rev}{pl}{lab}</div>')
 
 def quote(txt, t, flow, gap=34, size=58):
     return f'<div class="el h quote" data-flow="{flow}" data-gap="{gap}" data-a="up" data-t="{t}" style="left:80px;width:880px;font-size:{size}px">{txt}</div>'
@@ -225,14 +236,14 @@ H.append(scene(s, rail(1)+f'''
 s = 'v05'; CUR['s'] = s
 YS = [str(y) for y in range(2013, 2026)]
 c5 = segchart(YS, [
-    dict(n='RIO 22,6', sub='PL', v=[31.8,33.9,29.5,36.7,39.5,39.2,34.8,28.5,27.7,26.1,24.8,22.1,22.6], segs=[(0, 12, BLUE)], w=8, lc=Y, lt=W(s,'rio',0,-.1)),
-    dict(n='ES 22,0', sub='PSB', v=[43.7,42.9,38.1,33.8,38.6,30.1,26.8,30.1,29.0,27.8,26.9,24.0,22.0], segs=[(0, 2, L1), (2, 6, BLUE), (6, 12, L1)], w=5, dash=True, lt=W(s,'espírito',0,-.1)),
-    dict(n='MINAS 12,9', sub='NOVO', v=[21.0,21.7,21.3,21.2,20.0,15.5,13.5,12.9,11.9,13.9,14.4,15.1,12.9], segs=[(0, 2, BLUE), (2, 6, L1), (6, 12, BLUE)], w=5, lt=W(s,'minas',0,-.1)),
-    dict(n='SP 7,8', sub='REPUBLICANOS', v=[12.6,13.3,11.8,11.1,10.8,9.6,9.0,9.1,8.0,8.2,7.6,8.2,7.8], segs=[(0, 12, BLUE)], w=4, lt=W(s,'paulo',0,-.1)),
+    dict(n='RIO 22,6', sub='PL', v=[31.8,33.9,29.5,36.7,39.5,39.2,34.8,28.5,27.7,26.1,24.8,22.1,22.6], segs=[(0, 12, BLUE)], w=9, lc=Y, lt=W(s,'rio',0,.4), rt=W(s,'rio',0,-.2)),
+    dict(n='ES 22,0', sub='PSB', v=[43.7,42.9,38.1,33.8,38.6,30.1,26.8,30.1,29.0,27.8,26.9,24.0,22.0], segs=[(0, 2, L1), (2, 6, BLUE), (6, 12, L1)], w=6, lt=W(s,'espírito',0,.6), rt=W(s,'espírito',0,-.2)),
+    dict(n='MINAS 12,9', sub='NOVO', v=[21.0,21.7,21.3,21.2,20.0,15.5,13.5,12.9,11.9,13.9,14.4,15.1,12.9], segs=[(0, 2, BLUE), (2, 6, L1), (6, 12, BLUE)], w=6, lt=W(s,'minas',0,.6), rt=W(s,'minas',0,-.2)),
+    dict(n='SP 7,8', sub='REPUBLICANOS', v=[12.6,13.3,11.8,11.1,10.8,9.6,9.0,9.1,8.0,8.2,7.6,8.2,7.8], segs=[(0, 12, BLUE)], w=6, lt=W(s,'paulo',0,.6), rt=W(s,'paulo',0,-.2)),
 ], 0, 45, [0, 15, 30, 45], W(s,'linha',0,-.2), 2.4, h=620, lw=230, xl=[0, 3, 6, 9, 12]).replace('{flow}', 'm:3')
 H.append(scene(s, rail(1)+f'''
 {eb(4, 'SUDESTE · MORTES VIOLENTAS POR 100 MIL', top=290)}
-<div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:30px"><b style="color:{L1}">━ GOVERNO DE ESQUERDA</b> &nbsp; <b style="color:{BLUE}">━ GOVERNO DE DIREITA</b></div>
+<div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:30px"><b style="color:{L1}">━ GOVERNO DE ESQUERDA</b> &nbsp; <b style="color:{BLUE}">━ GOVERNO DE DIREITA</b><br><span style="color:#A9A291;font-size:24px">A COR DA LINHA MUDA QUANDO MUDA O GOVERNO</span></div>
 {c5}
 <div class="el h" data-flow="m:4" data-gap="30" data-a="up" data-t="{W(s,'topo',0,-.3)}" style="left:80px;width:880px;font-size:54px;color:#fff">PARTIDO SOZINHO <span class="hl">NÃO DECIDE.</span></div>
 <div class="el fine" data-flow="m:5" data-gap="20" data-a="fade" data-t="{W(s,'topo',0,.3)}" style="left:80px">ES: CASAGRANDE (PSB, CENTRO-ESQUERDA) 2013–14 E 2019–25; HARTUNG (MDB, DIREITA) 2015–18 — CAIU NOS DOIS. MG: PIMENTEL (PT, ESQUERDA) 2015–18; ZEMA (NOVO, DIREITA) 2019–25. SP: PSDB E REPUBLICANOS (DIREITA); MÁRCIO FRANÇA (PSB) GOVERNOU 9 MESES EM 2018. A REVISTA OESTE (DADOS DO PODER360) DIZ “ESQUERDA 23,4 × DIREITA 14,8”: USA MÉDIA DO PAÍS INTEIRO E TIRA AS MORTES PELA POLÍCIA.</div>
