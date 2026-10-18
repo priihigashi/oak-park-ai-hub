@@ -253,8 +253,8 @@ H.append(scene(s, rail(4)+f'''
 <div class="el rows" data-flow="m:4" data-gap="30" data-a="fade" data-t="{W(s,'contando',0,-.3)}" style="left:80px">
   {row('TAXA OFICIAL', '6,6', 6.6/12.8, WH, W(s,'contando',0))}
   {row('COM HOMICÍDIOS OCULTOS', '12,8', 1, R, W(s,'dobra',0,-.2), sub='HOMICÍDIOS POR 100 MIL · 2024')}</div>
-<div class="el fine" data-flow="m:5" data-gap="22" data-a="fade" data-t="{W(s,'campeão',0,.6)}" style="left:80px">ESCLARECIDO = VIROU DENÚNCIA DO MP. BRASIL EM 2023: 36%. A QUEDA COMEÇA EM 2018–2019 E VOLTA A CAIR DESDE 2021: NÃO É DE UM GOVERNO SÓ. HOMICÍDIOS OCULTOS: ESTIMATIVA DO ATLAS; SP LIDERA DESDE 2014. INVESTIGAÇÃO É DA POLÍCIA CIVIL (ESTADO).</div>
-''', 'luz', 'INSTITUTO SOU DA PAZ, ONDE MORA A IMPUNIDADE (EDIÇÕES 2024 E 2025) · IPEA/FBSP, ATLAS 2026', kbo='50% 50%'))
+<div class="el fine" data-flow="m:5" data-gap="22" data-a="fade" data-t="{W(s,'campeão',0,.6)}" style="left:80px">ESCLARECIDO = VIROU DENÚNCIA DO MP. 2023 É O DADO MAIS RECENTE: A PESQUISA ESPERA O PROCESSO ANDAR. BRASIL EM 2022: 39%. A QUEDA COMEÇA EM 2018–2019 E VOLTA A CAIR DESDE 2021: NÃO É DE UM GOVERNO SÓ. HOMICÍDIOS OCULTOS: ESTIMATIVA DO ATLAS; SP LIDERA DESDE 2014. INVESTIGAÇÃO É DA POLÍCIA CIVIL (ESTADO).</div>
+''', 'luz', 'INSTITUTO SOU DA PAZ, ONDE MORA A IMPUNIDADE (EDIÇÃO 2024 E DIAGNÓSTICO DE JUL/2026) · IPEA/FBSP, ATLAS 2026', kbo='50% 50%'))
 
 s = 's09'; CUR['s'] = s
 H.append(scene(s, rail(5)+f'''
