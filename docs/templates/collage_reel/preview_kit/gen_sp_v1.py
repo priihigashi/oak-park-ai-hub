@@ -220,16 +220,23 @@ H.append(scene(s, rail(3)+f'''
 ''', 'pm', 'SSP-SP (VIA AGÊNCIA BRASIL E FBSP, 2014–2025) · FGV, 2022 · FBSP, ANUÁRIO 2026', kbo='50% 55%'))
 
 s = 's08'; CUR['s'] = s
+YE = [str(y) for y in range(2016, 2024)]
+ESC = [51, 54, 46, 34, 42, 47, 40, 31]
+c8 = chart(s, YE, [
+    dict(n='SÃO PAULO', sub='HOMICÍDIOS<br>ESCLARECIDOS (%)', v=ESC, c=R, w=7, lt=W(s,'olha',0,.2), dots=[(1, '54%'), (7, '31%')]),
+], 60, [0, 20, 40, 60], 0, 0, h=430, marks=[('2019', 'DORIA', '#fff'), ('2023', 'TARCÍSIO', R)],
+   stages=[(0, 1, W(s,'olha',0,-.1), 1.0), (1, 7, W(s,'vinte',0,-.3), 2.6)],
+   notes=[(1, 22, '2017: MAIS<br>DA METADE', '#fff', W(s,'metade',0,-.2), -40, 0),
+          (4, 22, '↘ 2023: 3 EM 10', R, W(s,'três',1,-.2), -20, 0)]).replace('{flow}', 'm:2')
 H.append(scene(s, rail(4)+f'''
-{eb(7, 'PROBLEMA 3 · HOMICÍDIO SEM RESPOSTA', top=320)}
-<div class="el rows" data-flow="m:2" data-gap="36" data-a="fade" data-t="{W(s,'três',1,-.3)}" style="left:80px">
-  {row('ESCLARECIDOS · SP', '31%', .31/.38, R, W(s,'esclarecidos',0), sub='MENOR DE SP DESDE O INÍCIO DO ESTUDO<br>ERA 38% NA 1ª EDIÇÃO (DADOS 2015)')}</div>
-<div class="el h" data-flow="m:3" data-gap="50" data-a="slam" data-t="{W(s,'campeão',0,-.15)}" style="left:80px;width:880px;font-size:68px;color:#fff">CAMPEÃO DE MORTES <span class="hl">SEM CAUSA DEFINIDA</span></div>
-<div class="el rows" data-flow="m:4" data-gap="36" data-a="fade" data-t="{W(s,'contando',0,-.3)}" style="left:80px">
+{eb(7, 'PROBLEMA 3 · HOMICÍDIOS ESCLARECIDOS (%)', top=300)}
+{c8}
+<div class="el h" data-flow="m:3" data-gap="40" data-a="slam" data-t="{W(s,'campeão',0,-.15)}" style="left:80px;width:880px;font-size:64px;color:#fff">CAMPEÃO DE MORTES <span class="hl">SEM CAUSA DEFINIDA</span></div>
+<div class="el rows" data-flow="m:4" data-gap="30" data-a="fade" data-t="{W(s,'contando',0,-.3)}" style="left:80px">
   {row('TAXA OFICIAL', '6,6', 6.6/12.8, WH, W(s,'contando',0))}
   {row('COM HOMICÍDIOS OCULTOS', '12,8', 1, R, W(s,'dobra',0,-.2), sub='HOMICÍDIOS POR 100 MIL · 2024')}</div>
-<div class="el fine" data-flow="m:5" data-gap="22" data-a="fade" data-t="{W(s,'dobra',0,.4)}" style="left:80px">É ESTIMATIVA ESTATÍSTICA DO ATLAS, E SP SEGUE ENTRE OS MENORES. LIDERA ESSE INDICADOR DESDE 2014, NOS GOVERNOS PSDB E TARCÍSIO. INVESTIGAÇÃO É DA POLÍCIA CIVIL (ESTADO).</div>
-''', 'luz', 'INSTITUTO SOU DA PAZ (DADOS 2023) · IPEA/FBSP, ATLAS DA VIOLÊNCIA 2026', kbo='50% 50%'))
+<div class="el fine" data-flow="m:5" data-gap="22" data-a="fade" data-t="{W(s,'campeão',0,.6)}" style="left:80px">ESCLARECIDO = VIROU DENÚNCIA DO MP. BRASIL EM 2023: 36%. A QUEDA COMEÇA EM 2018–2019 E VOLTA A CAIR DESDE 2021: NÃO É DE UM GOVERNO SÓ. HOMICÍDIOS OCULTOS: ESTIMATIVA DO ATLAS; SP LIDERA DESDE 2014. INVESTIGAÇÃO É DA POLÍCIA CIVIL (ESTADO).</div>
+''', 'luz', 'INSTITUTO SOU DA PAZ, ONDE MORA A IMPUNIDADE (EDIÇÕES 2024 E 2025) · IPEA/FBSP, ATLAS 2026', kbo='50% 50%'))
 
 s = 's09'; CUR['s'] = s
 H.append(scene(s, rail(5)+f'''
