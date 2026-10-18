@@ -35,9 +35,9 @@ def rail(active, t=.1):
     xs = [110+i*172 for i in range(6)]
     dots = ''.join(f'<div class="st{" on" if i==active else ""}{" past" if i<active else ""}" style="left:{x}px"><i></i><b>{y}</b></div>' for i, (x, y) in enumerate(zip(xs, CH)))
     return f'<div class="rail el" data-a="fade" data-t="{t}" data-d=".3" style="left:0;top:150px"><div class="line"></div><div class="fill" style="width:{xs[active]-60}px"></div>{dots}</div>'
-def scene(sid, inner, bg, src, kbo='60% 50%', kb=1.08):
+def scene(sid, inner, bg, src, kbo='60% 50%', kb=1.08, bghtml=None):
     o = S[sid]
-    b = f'<img class="bgimg" src="assets/rj/{bg}.jpg" data-kb="{kb}" data-kbo="{kbo}"><div class="shadeX"></div>'
+    b = (bghtml if bghtml else f'<img class="bgimg" src="assets/rj/{bg}.jpg" data-kb="{kb}" data-kbo="{kbo}">') + '<div class="shadeX"></div>'
     s = f'<div class="el srcline" data-a="fade" data-t=".4" style="left:130px;top:1640px;width:820px">FONTE: {src}</div>'
     return f'<section class="scene" data-s="{o["s"]}" data-e="{o["e"]}" data-in="cut" data-theme="dark">{b}<div class="safe">{inner}</div>{kar(sid)}{s}</section>\n'
 CUR = {'s': None}
@@ -129,7 +129,7 @@ H.append(scene(s, f'''
 <div class="el h redtxt" data-flow="m:3" data-gap="30" data-a="slam" data-t="{W(s,'culpa',0,-.1)}" data-d=".35" style="left:80px;font-size:96px;width:880px">E A CULPA É DA ESQUERDA.</div>
 <div class="el body" data-flow="m:4" data-gap="40" data-a="up" data-t="{W(s,'vamos',0,-.2)}" style="left:80px;width:820px"><b>Vamos aos fatos.</b></div>
 <div class="el fine" data-flow="m:5" data-gap="26" data-a="fade" data-t="{W(s,'vamos',0,.2)}" style="left:80px">34,9% DA POPULAÇÃO DA REGIÃO METROPOLITANA VIVE SOB DOMÍNIO OU INFLUÊNCIA DE GRUPOS ARMADOS (DADOS DE 2024).</div>
-''', 'i01', 'GENI/UFF + FOGO CRUZADO, MAPA DOS GRUPOS ARMADOS (DEZ/2025)', kbo='60% 45%'))
+''', None, 'GENI/UFF + FOGO CRUZADO, MAPA DOS GRUPOS ARMADOS (DEZ/2025) · MAPA: IBGE', bghtml='<div class="zbg"></div>'+open('/home/claude/work/rj/geo/zoom_svg.html').read()))
 
 s = 'v02'; CUR['s'] = s
 def gov(yrs, nome, partido, idl, t, col='#fff', sub=''):
@@ -326,6 +326,7 @@ CSS = open(os.path.join(KIT, 'preview_kit/style.css')).read() + '''
 .st i{width:28px;height:28px;left:-14px;top:12px;border-width:5px}
 .st b{font-size:17px;top:50px;letter-spacing:1.5px}.st.on b{font-size:19px}
 .repost{font-size:58px;border-radius:16px;padding:26px 24px 28px}
+.zbg{position:absolute;inset:0;background:radial-gradient(ellipse at 55% 58%,#14192a 0%,#0a0b0e 62%)}
 .govs .row{padding:11px 0}.govs .row.txt .v{font-size:38px}.row .v .pt{font-family:JBM;font-weight:700;font-size:21px;color:#BDB6A6;letter-spacing:1px}
 .row .v .ide{font-size:15px;padding:1px 7px;vertical-align:middle}
 
@@ -342,6 +343,16 @@ page = f'''<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>
 <link rel="stylesheet" href="fx.css"><style>{CSS}</style></head><body><div id="stage">
 {"".join(H)}
 <div id="grain"></div><div id="foot">@tentandochegaratevoce</div></div>
-<script>window.DUR={DUR:.2f};</script><script src="fx.js"></script><script src="fx2.js"></script><script src="engine.js"></script><script src="layout.js"></script></body></html>'''
+<script>window.DUR={DUR:.2f};</script><script src="fx.js"></script><script src="fx2.js"></script><script>
+/* zoom da abertura: Brasil -> estado do RJ (g#zcam data-cam). Roda dentro do FX.frame do motor, então vale na prévia e no MP4. */
+(function(){{const B=window.FX;const ease=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;const cl=x=>Math.max(0,Math.min(1,x));
+window.FX=Object.assign({{}},B,{{frame(sc,t,T,dur){{B.frame(sc,t,T,dur);const g=sc.querySelector('#zcam');if(!g)return;
+const c=g._c||(g._c=JSON.parse(g.dataset.cam));const p=ease(cl((t-.2)/2.7)),pc=ease(cl((t-.2)/2.2));
+const s=c.s0*Math.pow(c.s1/c.s0,p)*(1+.025*Math.max(0,t-2.9)/Math.max(1,dur-2.9));
+const k0={{x:(540-c.x0)/c.s0,y:(1060-c.y0)/c.s0}},k1={{x:(560-c.x1)/c.s1,y:(1130-c.y1)/c.s1}};
+const cx=k0.x+(k1.x-k0.x)*pc,cy=k0.y+(k1.y-k0.y)*pc,ax=540+20*pc,ay=1060+70*pc;
+g.setAttribute('transform',`translate(${{(ax-s*cx).toFixed(2)}},${{(ay-s*cy).toFixed(2)}}) scale(${{s.toFixed(4)}})`);
+const m=g.querySelector('.zmun');if(m)m.setAttribute('opacity',cl((p-.75)/.25).toFixed(3));}}}});}})();
+</script><script src="engine.js"></script><script src="layout.js"></script></body></html>'''
 open(os.path.join(KIT, 'rj.html'), 'w').write(page)
 print('ok', DUR)
