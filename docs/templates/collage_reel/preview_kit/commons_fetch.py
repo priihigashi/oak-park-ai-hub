@@ -1,21 +1,32 @@
 """Baixa candidatas de imagem do Wikimedia Commons com licença registrada.
 Uso: python3 commons_fetch.py <pasta_do_reel>   (lê images.json: {chave: "busca" ou ["File:Nome.jpg", ...]})
 Grava cands/<chave>_<n>.jpg (1600 px de largura) e cands/credits.json (autor, licença, link)."""
-import json, os, re, sys, time, urllib.parse, urllib.request
+import json, os, re, sys, time, urllib.error, urllib.parse, urllib.request
 
 D = sys.argv[1]; N = int(os.environ.get('PER', '3'))
 Q = json.load(open(f'{D}/images.json'))
 os.makedirs(f'{D}/cands', exist_ok=True)
+OLD = json.load(open(f'{D}/cands/credits.json')) if os.path.exists(f'{D}/cands/credits.json') else {}
+Q = {k: v for k, v in Q.items() if not any(f.startswith(k + '_') for f in OLD)}
+os.makedirs(f'{D}/cands', exist_ok=True)
 UA = {'User-Agent': 'tentandochegaratevoce-reel/1.0 (priihigashi/oak-park-ai-hub)'}
 API = 'https://commons.wikimedia.org/w/api.php?'
 
+def fetch(url, timeout=60):
+    for k in range(6):
+        try:
+            return urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=timeout).read()
+        except urllib.error.HTTPError as e:
+            if e.code != 429: raise
+            time.sleep(8 * (k + 1))
+    raise RuntimeError('429 persistente')
+
 def get(params):
-    req = urllib.request.Request(API + urllib.parse.urlencode(params), headers=UA)
-    return json.load(urllib.request.urlopen(req, timeout=40))
+    return json.loads(fetch(API + urllib.parse.urlencode(params)))
 
 def strip(h): return re.sub(r'<[^>]+>', '', h or '').strip()
 
-CR = {}
+CR = dict(OLD)
 for key, q in Q.items():
     if isinstance(q, list):
         titles = q
@@ -36,13 +47,12 @@ for key, q in Q.items():
             if not re.search(r'CC|Public domain|PD', lic, re.I): continue
             url = ii.get('thumburl') or ii['url']
             fn = f'{key}_{n}.jpg'
-            req = urllib.request.Request(url, headers=UA)
-            open(f'{D}/cands/{fn}', 'wb').write(urllib.request.urlopen(req, timeout=60).read())
+            open(f'{D}/cands/{fn}', 'wb').write(fetch(url))
             CR[fn] = dict(title=t, license=lic, artist=strip(m.get('Artist', {}).get('value'))[:120],
                           credit=strip(m.get('Credit', {}).get('value'))[:160],
                           page=ii.get('descriptionurl'))
             print(fn, '|', lic, '|', t); n += 1
-            time.sleep(0.4)
+            time.sleep(2.5)
         except Exception as e:
             print('skip', t, e)
     if n == 0: print('NADA PARA', key, q)
