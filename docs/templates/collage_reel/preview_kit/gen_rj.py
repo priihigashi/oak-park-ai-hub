@@ -175,7 +175,7 @@ H.append(scene(s, rail(0)+f'''
   {gov('2014–2018', 'PEZÃO', 'MDB', DIR, W(s,'pezão',0,-.2), col=Y, sub='PRESO EM 2018, ABSOLVIDO')}
   {gov('2019–2020', 'WITZEL', 'PSC', DIR, W(s,'witzel',0,-.2), col=Y, sub='AFASTADO E CASSADO')}
   {gov('2020–2026', 'CASTRO', 'PSC→PL', DIR, W(s,'castro',0,-.2), col=Y, sub='INELEGÍVEL ATÉ 2030')}</div>
-<div class="el h" data-flow="m:3" data-gap="34" data-a="slam" data-t="{W(s,'dezenove',0,-.15)}" style="left:80px;width:880px;font-size:64px;color:#fff">DESDE 2007: <span class="hl">MDB E DIREITA</span></div>
+<div class="el h" data-flow="m:3" data-gap="34" data-a="slam" data-t="{W(s,'vinte',0,-.15)}" style="left:80px;width:880px;font-size:64px;color:#fff">23 ANOS DE <span class="hl">MDB E DIREITA</span></div>
 <div class="el fine" data-flow="m:4" data-gap="20" data-a="fade" data-t="{W(s,'lados',0,.2)}" style="left:80px">MDB = 7,01 NA ESCALA, NO LIMITE DA DIREITA. O PT TEVE SECRETARIAS NO GOVERNO CABRAL ATÉ NOV/2013. GAROTINHO FOI SECRETÁRIO DE SEGURANÇA DE ROSINHA (2003–04) E APOIOU ALCKMIN (PSDB) EM 2006. HOJE GOVERNA O INTERINO RICARDO COUTO (TJ-RJ).</div>
 ''', 'i02', 'TSE · TJ-RJ · ' + IDS, kbo='60% 50%'))
 
@@ -339,7 +339,7 @@ H.append(scene(s, f'''
   {row('É DA UNIÃO', 'FRONTEIRAS E PORTOS POR ONDE ENTRAM ARMAS E DROGAS', None, Y, 0, fade=W(s,'armas',0,-.2))}
   {row('É DO ESTADO', 'AS ESCOLHAS SOBRE A POLÍCIA', None, R, 0, fade=W(s,'escolhas',0,-.2))}</div>
 <div class="el repost" data-flow="m:4" data-gap="44" data-a="slam" data-t="{W(s,'cobraria',0,-.3)}" data-shake="1" style="left:80px;width:880px;font-size:54px">O QUE VOCÊ COBRARIA DO GOVERNADOR ELEITO?<small>Douglas Ruas (PL, direita) · posse em 06/01/2027</small></div>
-<div class="el fine" data-flow="m:5" data-gap="20" data-a="fade" data-t="{W(s,'grupo',0,.2)}" style="left:80px">HÁ 19 ANOS O RIO É GOVERNADO PELA DIREITA. RUAS FOI ELEITO NO 1º TURNO DEPOIS QUE O TSE ANULOU OS VOTOS DE GAROTINHO; É DO GRUPO DE CASTRO E BACELLAR, SEGUNDO A IMPRENSA.</div>
+<div class="el fine" data-flow="m:5" data-gap="20" data-a="fade" data-t="{W(s,'grupo',0,.2)}" style="left:80px">DESDE AGO/2003 (ROSINHA NO MDB), O RIO É GOVERNADO PELO MDB OU PELA DIREITA. RUAS FOI ELEITO NO 1º TURNO DEPOIS QUE O TSE ANULOU OS VOTOS DE GAROTINHO; É DO GRUPO DE CASTRO E BACELLAR, SEGUNDO A IMPRENSA.</div>
 ''', 'i15', 'TSE · TRE-RJ · FBSP · ISP-RJ · GENI/UFF · SOU DA PAZ', kbo='55% 55%'))
 
 CSS = open(os.path.join(KIT, 'preview_kit/style.css')).read() + '''
