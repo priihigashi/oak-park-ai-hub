@@ -1,0 +1,10 @@
+[
+ {
+  "name": "w_gate_fechado",
+  "model": "black-forest-labs/flux-kontext-pro",
+  "status": null,
+  "error": 402,
+  "detail": "{\"title\":\"Insufficient credit\",\"detail\":\"You have insufficient credit to run this model. Go to https://replicate.com/account/billing#billing to purchase credit. Once you purchase credit, please wait a few minutes before trying again.\",\"status\":402}\n",
+  "files": []
+ }
+]
