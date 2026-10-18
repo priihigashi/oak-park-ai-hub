@@ -201,11 +201,11 @@ c7 = chart(s, YM, [
     dict(n='SÃO PAULO', sub='MORTES CAUSADAS<br>PELA POLÍCIA', v=MDIP, c=Y, w=7, lt=W(s,'olha',0), dots=[(3, '940'), (8, '419'), (11, '835')]),
 ], 1000, [0, 250, 500, 750, 1000], 0, 0, h=520, marks=[('2020', 'CÂMERAS', '#fff'), ('2023', 'TARCÍSIO', R)],
    stages=[(0, 6, W(s,'olha',0,-.2), 1.8), (6, 8, W(s,'desce',0,-.2), 1.6), (8, 11, W(s,'volta',0,-.2), 1.8)],
-   notes=[(6, 700, '↘ CÂMERA<br>NA FARDA', '#fff', W(s,'desce',0,.2), 8, -20),
-          (9, 560, '↗ VOLTA A<br>SUBIR', R, W(s,'subir',0,-.2), -10, 0)]).replace('{flow}', 'm:3')
+   notes=[(4, 470, '↘ CÂMERA<br>NA FARDA', '#fff', W(s,'desce',0,.2), -40, 0),
+          (9, 330, '↗ VOLTA A<br>SUBIR', R, W(s,'subir',0,-.2), 14, 0)]).replace('{flow}', 'm:3')
 H.append(scene(s, rail(3)+f'''
 {eb(6, 'PROBLEMA 2 · A POLÍCIA (RESPONSABILIDADE DO ESTADO)', top=300)}
-<div class="el h" data-flow="m:2" data-gap="28" data-a="slam" data-t="{W(s,'câmera',0,-.15)}" style="left:80px;width:880px;font-size:64px;color:#fff">CÂMERA NA FARDA: <span class="hl">MENOS DA METADE</span></div>
+<div class="el h" data-flow="m:2" data-gap="28" data-a="slam" data-t="{W(s,'câmera',0,-.15)}" style="left:80px;width:880px;font-size:64px;color:#fff">COM CÂMERA, AS MORTES <span class="hl">CAÍRAM PELA METADE</span></div>
 {c7}
 <div class="el h" data-flow="m:4" data-gap="30" data-a="up" data-t="{W(s,'quatro',0,-.25)}" style="left:80px;width:880px;font-size:56px;color:#fff">2025: <span style="color:{R}">QUASE 1 EM CADA 4</span> MORTES VIOLENTAS DO ESTADO</div>
 <div class="el fine" data-flow="m:5" data-gap="22" data-a="fade" data-t="{W(s,'quatro',0,.5)}" style="left:80px">835 DE 3.615 (23,1%). FGV: −57% NOS BATALHÕES COM CÂMERA. O GOVERNO DE SP DIZ QUE A SOMA DO MANDATO É MENOR QUE A DO ANTERIOR; A DIREÇÃO, DESDE 2023, É DE ALTA. OPERAÇÃO VERÃO (2024): A MAIS LETAL DESDE O CARANDIRU.</div>
