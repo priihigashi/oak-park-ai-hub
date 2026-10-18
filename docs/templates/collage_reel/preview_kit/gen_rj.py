@@ -224,7 +224,7 @@ c4 = segchart(YC, [dict(n='', v=VB, segs=[(6, 26, '#8C8C8C')], w=5, dash=True, l
              (1, ix(2003), '8.054<br>ROSINHA', BLUE, -62, W(s,'rosinha',0,-.2)),
              (1, ix(2012), 'CABRAL<br>4.666', BLUE, 18, W(s,'cabral',0,-.2)),
              (1, ix(2017), '6.749<br>PEZÃO', BLUE, -62, W(s,'pezão',0,-.2)),
-             (1, ix(2020), 'WITZEL/CASTRO<br>4.762', BLUE, -62, W(s,'dezoito',0,-.2), 64),
+             (1, ix(2020), 'WITZEL/CASTRO<br>4.762', BLUE, -62, W(s,'witzel',0,-.1), 64),
              (1, ix(2025), 'CASTRO<br>3.890', BLUE, 18, W(s,'voltou',0,-.2)),
              (0, ix(2017), 'BRASIL', '#B5B5B5', -48, W(s,'brasil',0,.2))]).replace('{flow}', 'm:3')
 c4 = c4[:-6] + f'<div class="big23" data-a="up" data-t="{W(s,"rosinha",0,-.1):.2f}"><b>23 ANOS</b><span>DE GOVERNOS DE DIREITA</span><small>DESDE 2003 · MDB CONTA COMO DIREITA</small></div></div>'
