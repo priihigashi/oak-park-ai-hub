@@ -190,8 +190,8 @@ H.append(scene(s, rail(2)+f'''
   {row('CARBONO OCULTO<small>AGO/2025</small>', 'POSTOS DE COMBUSTÍVEL E FINTECHS · 42 ALVOS NA FARIA LIMA', None, '#fff', 0)}</div>
 <div class="el h" data-flow="m:3" data-gap="40" data-a="slam" data-t="{W(s,'oito',0,-.15)}" style="left:80px;width:880px;font-size:96px;color:{Y}">R$ 8,67 BILHÕES</div>
 <div class="el note" data-flow="m:4" data-gap="14" data-a="fade" data-t="{W(s,'pagos',0,-.2)}" style="left:80px">EM IMPOSTOS NÃO PAGOS · ESTIMATIVA DA RECEITA FEDERAL</div>
-<div class="el rows" data-flow="m:5" data-gap="40" data-a="fade" data-t="{W(s,'ônibus',0,-.3)}" style="left:80px">
-  {row('FIM DA LINHA<small>ABR/2024</small>', 'ÔNIBUS PAGOS PELA PREFEITURA SOB SUSPEITA DE LAVAR DINHEIRO DA FACÇÃO', None, '#fff', 0, sub=f'PREFEITO RICARDO NUNES · MDB {DIR}<br>INFILTRAÇÃO HÁ QUASE 30 ANOS, SEGUNDO O MP-SP', fade=W(s,'promotores',0,-.2))}</div>
+<div class="el rows" data-flow="m:5" data-gap="40" data-a="fade" data-t="{W(s,'capital',0,-.2)}" style="left:80px">
+  {row('FIM DA LINHA<small>ABR/2024</small>', 'ÔNIBUS PAGOS PELA PREFEITURA SOB SUSPEITA DE LAVAR DINHEIRO DA FACÇÃO', None, '#fff', 0, sub=f'PREFEITO RICARDO NUNES · MDB {DIR}<br>INFILTRAÇÃO HÁ QUASE 30 ANOS, SEGUNDO O MP-SP')}</div>
 <div class="el fine" data-flow="m:6" data-gap="22" data-a="fade" data-t="{W(s,'facção',0,.2)}" style="left:80px">CARBONO OCULTO = MP-SP + RECEITA FEDERAL (A PF FEZ AS OPERAÇÕES QUASAR E TANK). A REGRA DA RECEITA QUE APERTAVA AS FINTECHS FOI REVOGADA EM JAN/2025, APÓS VÍDEOS VIRAIS, E REEDITADA DEPOIS DA OPERAÇÃO.</div>
 ''', 'farialima', 'RECEITA FEDERAL E MP-SP, AGO/2025 · MP-SP, OPERAÇÃO FIM DA LINHA', kbo='55% 50%'))
 
@@ -233,9 +233,9 @@ H.append(scene(s, rail(3)+f'''
   {row('2020 · BOLSONARO', 'REVOGA AS REGRAS DE RASTREAMENTO DE ARMAS E MUNIÇÕES', None, '#5B7CFF', 0, sub=f'PL {EXT}', fade=W(s,'revogou',0,-.2))}
   {row('2024 · GOVERNO ATUAL 🦑', 'REGRAS NACIONAIS PARA CÂMERA NA FARDA E USO DA FORÇA', None, Y, 0, sub='EFEITO: AINDA SEM DADOS', fade=W(s,'atual',0,-.3))}
   {row('2024–25 · TARCÍSIO', 'CÂMERA QUE SÓ GRAVA QUANDO LIGADA · PEDIU PARA REVOGAR O USO DA FORÇA', None, R, 0, sub=f'REPUBLICANOS {DIR}', fade=W(s,'tarcísio',0,-.3))}</div>
-<div class="el h" data-flow="m:3" data-gap="90" data-a="slam" data-t="{W(s,'flávio',0,-.2)}" style="left:80px;width:880px;font-size:62px;color:#fff">FLÁVIO BOLSONARO: <span class="hl">“DETALHEZINHO”</span></div>
+<div class="el h" data-flow="m:3" data-gap="64" data-a="slam" data-t="{W(s,'flávio',0,-.2)}" style="left:80px;width:880px;font-size:62px;color:#fff">FLÁVIO BOLSONARO: <span class="hl">“DETALHEZINHO”</span></div>
 <div class="el body" data-flow="m:4" data-gap="22" data-a="up" data-t="{W(s,'país',0,-.2)}" style="left:80px;width:880px;font-size:40px">Num país onde a polícia mata <b class="hl">8× mais</b> que a dos EUA, por habitante.</div>
-<div class="el fine" data-flow="m:5" data-gap="22" data-a="fade" data-t="{W(s,'país',0,.4)}" style="left:80px">TV GLOBO, 16/10/2026 (PL {EXT}). FLÁVIO NÃO É O AUTOR DO PROJETO: DEFENDEU. BRASIL 2025: 6.602 MORTOS PELA POLÍCIA, 3,1 POR 100 MIL (FBSP); EUA 2025: 1.314, CERCA DE 0,4 (MAPPING POLICE VIOLENCE). A MARCAÇÃO AJUDOU NOS CASOS MARIELLE E ACIOLI. SP: POLÍCIA CAUSOU 23,1% DAS MORTES VIOLENTAS EM 2025. CÂMERAS NOVAS: STF, MAI/2025.</div>
+<div class="el fine" data-flow="m:5" data-gap="22" data-a="fade" data-t="{W(s,'país',0,.4)}" style="left:80px">FLÁVIO (PL {EXT}) NÃO É O AUTOR: DEFENDEU, NA TV GLOBO, 16/10/2026. MORTOS PELA POLÍCIA EM 2025, POR 100 MIL: BRASIL 3,1 (FBSP) · EUA ~0,4 (MAPPING POLICE VIOLENCE). SP: 23,1% DAS MORTES VIOLENTAS.</div>
 ''', 'pm2', 'MJSP (MAI E DEZ/2024) · EXÉRCITO/COLOG, ABR/2020 · NOTA DO COSUD, DEZ/2024 · PONTE, MAI/2025 · PODER360, OUT/2026 · FBSP, ANUÁRIO 2026 · MAPPING POLICE VIOLENCE · ' + IDS, kbo='50% 50%'))
 
 s = 's08'; CUR['s'] = s
