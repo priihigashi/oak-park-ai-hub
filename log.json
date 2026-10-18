@@ -1,0 +1,10 @@
+[
+ {
+  "name": "head_trump",
+  "model": "851-labs/background-remover",
+  "status": null,
+  "error": 404,
+  "detail": "{\"detail\":\"The requested resource could not be found.\",\"status\":404}\n",
+  "files": []
+ }
+]
