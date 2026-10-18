@@ -41,7 +41,7 @@ body{{background:var(--bg);color:var(--fg);font-family:system-ui,sans-serif;marg
 .pv-skip{{justify-content:space-between}}.pv-bar .sk{{flex:1;min-width:0;padding:10px 6px;background:transparent;color:var(--fg);border:1px solid var(--line);font-variant-numeric:tabular-nums}}
 .pv-note{{max-width:520px;color:var(--muted);font-size:12px;line-height:1.4;margin:0}}
 </style>
-<div class="pv-head"><h1>Rio é culpa da esquerda? · prévia</h1><small id="ver">v1 · rodada 3</small></div>
+<div class="pv-head"><h1>Rio é culpa da esquerda? · prévia</h1><small id="ver">v1 · rodada 4</small></div>
 <div class="pv-frame" id="frame"><div id="scaler">{stage}</div></div>
 <div class="pv-bar"><button id="play" type="button">▶ Play</button><input id="seek" type="range" min="0" max="{dur}" step="0.05" value="0" aria-label="Posição"><output id="tm">0:00</output></div>
 <div class="pv-bar pv-skip" role="group" aria-label="Pular"><button type="button" class="sk" data-d="-30">↺ 30s</button><button type="button" class="sk" data-d="-10">↺ 10s</button><button type="button" class="sk" data-d="-5">↺ 5s</button><button type="button" class="sk" data-d="5">5s ↻</button><button type="button" class="sk" data-d="10">10s ↻</button><button type="button" class="sk" data-d="30">30s ↻</button></div>
