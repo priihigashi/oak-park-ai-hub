@@ -248,9 +248,20 @@ H.append(scene(s, rail(4)+f'''
 <div class="el fine" data-flow="m:4" data-gap="26" data-a="fade" data-t="{W(s,'quarenta',0,.3)}" style="left:80px">121 MORTES PELA CONTA DO GOVERNO, 132 PELA DEFENSORIA, QUE VÊ INDÍCIOS DE ILEGALIDADE. O GOVERNO DIZ QUE 108 DOS 115 IDENTIFICADOS TINHAM VÍNCULO COM O CV E QUE 4 POLICIAIS MORRERAM. 55% A 70% DOS CARIOCAS APOIARAM.</div>
 ''', 'i11', 'REUTERS · FOGO CRUZADO (JAN/2026) · POLÍCIA CIVIL-RJ · DEFENSORIA · DATAFOLHA', kbo='60% 50%'))
 
+s = 'v11b'; CUR['s'] = s
+H.append(scene(s, rail(4)+f'''
+{eb(10, 'O QUE FACILITA · DOS DOIS LADOS', top=300)}
+<div class="el items tight" data-flow="m:2" data-gap="30" style="left:80px">
+  {item('2019 · WITZEL · PSC ' + DIR, 'Mortes por policiais saem da conta do bônus das polícias. No mesmo ano: recorde de 1.814.', W(s,'witzel',0,-.2))}
+  {item('2025 · ALERJ · BASE DE CASTRO (PL ' + DIR + ')', 'Volta a gratificação faroeste. Castro vetou por custo; o veto caiu com apoio da liderança do governo.', W(s,'alerj',0,-.2), color=R)}
+  {item('2020 · GOVERNO BOLSONARO · ' + DIR, 'Revoga as regras de rastreio de munição. O projeto que tira a marcação das balas das polícias espera no Senado.', W(s,'bolsonaro',0,-.2))}
+  {item(f'2025 · PREFEITURA PAES · PSD {DIR} · ALIADO DO GOVERNO ATUAL {SQUID}', 'Guarda armada com bônus de R$&nbsp;10.283; câmera só aos poucos.', W(s,'prefeitura',0,-.2))}</div>
+<div class="el fine" data-flow="m:3" data-gap="22" data-a="fade" data-t="{W(s,'reais',0,.1)}" style="left:80px">NOS ANOS 1990, COM A FAROESTE (MARCELLO ALENCAR, PSDB), A PROPORÇÃO DE MORTOS POR FERIDO EM CONFRONTO FOI DE 2 PARA 4. O PROJETO DAS BALAS (PL 3.723/2019) É DO GOVERNO BOLSONARO; FLÁVIO COBROU A VOTAÇÃO E, NO JN, CHAMOU A MARCAÇÃO DE “DETALHEZINHO”. NA OPERAÇÃO CONTENÇÃO, 17,6% DOS POLICIAIS DO BOPE TIRARAM A CÂMERA (MPRJ). CRÉDITO: CASTRO PÔS CÂMERAS NAS FARDAS EM 2022. É FALSO QUE OS FUZIS DA OPERAÇÃO ERAM DE CACS (AOS FATOS).</div>
+''', 'i08', 'JB (2019) · METRÓPOLES E MIGALHAS (DEZ/2025) · CONGRESSO EM FOCO · POLÍCIA CIVIL-RJ · ALMA PRETA · MPRJ', kbo='55% 50%'))
+
 s = 'v12'; CUR['s'] = s
 H.append(scene(s, rail(4)+f'''
-{eb(10, 'PROBLEMA 4 · INVESTIGAÇÃO', top=320)}
+{eb(11, 'PROBLEMA 4 · INVESTIGAÇÃO', top=320)}
 <div class="el h cnt" data-flow="m:2" data-gap="30" data-t="{W(s,'vinte',0,-.15)}" data-d=".9" data-from="0" data-to="23" data-dec="0" data-suf="%" style="left:72px;font-size:260px;color:{R};width:880px;line-height:.82;height:214px"></div>
 <div class="el body" data-flow="m:3" data-gap="24" data-a="up" data-t="{W(s,'homicídios',0,-.1)}" style="left:80px;width:860px">dos homicídios do Rio são esclarecidos. <b>Investigar é trabalho da Polícia Civil, do estado.</b></div>
 <div class="el rows" data-flow="m:4" data-gap="40" data-a="fade" data-t="{W(s,'contra',0,-.3)}" style="left:80px">
@@ -261,7 +272,7 @@ H.append(scene(s, rail(4)+f'''
 
 s = 'v13'; CUR['s'] = s
 H.append(scene(s, rail(5)+f'''
-{eb(11, 'E O GOVERNO FEDERAL?', top=300)}
+{eb(12, 'E O GOVERNO FEDERAL?', top=300)}
 <div class="el rows" data-flow="m:2" data-gap="34" data-a="fade" data-t="{W(s,'fronteira',0,-.3)}" style="left:80px">
   {row('É DO ESTADO', 'PM, POLÍCIA CIVIL, PRESÍDIOS, INVESTIGAÇÃO', None, '#fff', 0)}
   {row('É DA UNIÃO', 'FRONTEIRA, PORTO, ARMAS, PF, PRF, FUNDOS', None, Y, 0)}</div>
@@ -275,7 +286,7 @@ H.append(scene(s, rail(5)+f'''
 
 s = 'v14'; CUR['s'] = s
 H.append(scene(s, rail(5)+f'''
-{eb(12, 'CHECAGEM', top=320)}
+{eb(13, 'CHECAGEM', top=320)}
 {quote('“O STF PROIBIU OPERAÇÕES.”', W(s,'supremo',0,-.1), 'm:2', gap=26)}
 <div class="el stamp-r" data-flow="m:3" data-gap="30" data-a="stamp" data-t="{W(s,'proibiu',0,.1)}" data-d=".35" data-r="-2" style="left:80px;white-space:nowrap;font-size:46px">DISTORCIDO</div>
 <div class="el rows" data-flow="m:4" data-gap="40" data-a="fade" data-t="{W(s,'limitou',0,-.3)}" style="left:80px">
@@ -329,6 +340,7 @@ CSS = open(os.path.join(KIT, 'preview_kit/style.css')).read() + '''
 .st i{width:28px;height:28px;left:-14px;top:12px;border-width:5px}
 .st b{font-size:17px;top:50px;letter-spacing:1.5px}.st.on b{font-size:19px}
 .repost{font-size:58px;border-radius:16px;padding:26px 24px 28px}
+.items.tight .item{padding:14px 0 16px}.items.tight .item .t{font-size:36px}.items.tight .item .kick{font-size:19px}
 .zbg{position:absolute;inset:0;background:radial-gradient(ellipse at 55% 58%,#14192a 0%,#0a0b0e 62%)}
 .govs .row{padding:11px 0}.govs .row.txt .v{font-size:38px}.row .v .pt{font-family:JBM;font-weight:700;font-size:21px;color:#BDB6A6;letter-spacing:1px}
 .row .v .ide{font-size:15px;padding:1px 7px;vertical-align:middle}
