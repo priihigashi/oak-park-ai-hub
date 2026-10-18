@@ -14,6 +14,10 @@ SAY = {'UPPs': 'upepês', 'CPI': 'cepeí', 'GLO': 'gê éle ó', 'Alerj': 'Alér
 PAUSE = {',': .16, ':': .22, ';': .22, '.': .34, '?': .38, '!': .34}
 os.makedirs(f'{D}/tts', exist_ok=True)
 
+def say(w):
+    b = re.sub(r'[,.;:?!]', '', w)
+    return SAY[b] + (w[-1] if w[-1] in PAUSE else '') if b in SAY else w
+
 def trim(a, sr, th=.012):
     idx = np.where(np.abs(a) > th)[0]
     if not len(idx): return a
@@ -30,13 +34,17 @@ for k in sorted(S):
     if cur: clauses.append(cur)
     audio = []; t = 0.0; words = []; sr = 24000
     for c in clauses:
-        txt = ' '.join(SAY.get(re.sub(r'[,.;:?!]', '', w), w) + (w[-1] if SAY.get(re.sub(r'[,.;:?!]', '', w)) and w[-1] in PAUSE else '') for w in c)
+        txt = ' '.join(say(x) for x in c)
         a, sr = K.create(txt, voice='pf_dora', speed=SPEED, lang='pt-br')
         a = trim(np.asarray(a, np.float32), sr)
         d = len(a)/sr
-        L = sum(len(re.sub(r'[^\wÀ-ú]', '', w)) + 1.5 for w in c); acc = 0
-        for w in c:
-            words.append([w, round(t + .03 + (d - .1)*acc/L, 3)]); acc += len(re.sub(r'[^\wÀ-ú]', '', w)) + 1.5
+        # início de cada palavra = duração da fala do prefixo (oração até a palavra anterior), sintetizado à parte
+        for i, w in enumerate(c):
+            if i == 0: words.append([w, round(t + .02, 3)]); continue
+            pre = ' '.join(say(x) for x in c[:i]).rstrip(',.;:?!')
+            pa, _ = K.create(pre, voice='pf_dora', speed=SPEED, lang='pt-br')
+            pd = len(trim(np.asarray(pa, np.float32), sr))/sr - .08   # tira a cauda/alongamento final
+            words.append([w, round(t + max(.02, min(pd, d - .05)), 3)])
         p = PAUSE.get(c[-1][-1], .12)
         audio += [a, np.zeros(int(p*sr), np.float32)]; t += d + p
     full = np.concatenate(audio[:-1])

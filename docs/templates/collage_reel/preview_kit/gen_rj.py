@@ -188,7 +188,7 @@ H.append(scene(s, rail(0)+f'''
   {gov('2019–2020', 'WITZEL', 'PSC', DIR, W(s,'witzel',0,-.2), col=Y, sub='AFASTADO E CASSADO')}
   {gov('2020–2026', 'CASTRO', 'PSC→PL', DIR, W(s,'castro',0,-.2), col=Y, sub='INELEGÍVEL ATÉ 2030')}</div>
 <div class="el h" data-flow="m:3" data-gap="34" data-a="slam" data-t="{W(s,'vinte',0,-.15)}" style="left:80px;width:880px;font-size:64px;color:#fff">23 ANOS DE <span class="hl">DIREITA</span></div>
-<div class="el fine" data-flow="m:4" data-gap="20" data-a="fade" data-t="{W(s,'lados',0,.2)}" style="left:80px">MDB = 7,01 NA ESCALA, NO LIMITE DA DIREITA. O PT TEVE SECRETARIAS NO GOVERNO CABRAL ATÉ NOV/2013. GAROTINHO FOI SECRETÁRIO DE SEGURANÇA DE ROSINHA (2003–04) E APOIOU ALCKMIN (PSDB) EM 2006. ANTES DE GAROTINHO: MARCELLO ALENCAR (PSDB, 1995–98) E BRIZOLA (PDT, CENTRO-ESQUERDA, 1991–94). HOJE GOVERNA O INTERINO RICARDO COUTO (TJ-RJ).</div>
+<div class="el fine" data-flow="m:4" data-gap="20" data-a="fade" data-t="{W(s,'lados',0,.2)}" style="left:80px">MDB = 7,01 NA ESCALA, NO LIMITE DA DIREITA. O PT TEVE SECRETARIAS NO GOVERNO CABRAL ATÉ NOV/2013. GAROTINHO FOI SECRETÁRIO DE SEGURANÇA DE ROSINHA (2003–04). ANTES DELE: MARCELLO ALENCAR (PSDB, DIREITA) E BRIZOLA (PDT, CENTRO-ESQUERDA). HOJE GOVERNA O INTERINO RICARDO COUTO (TJ-RJ). PREFEITOS DA CAPITAL DESDE 1993: CESAR MAIA (PMDB/PFL/PTB), CONDE (PFL), PAES (MDB/DEM/PSD), CRIVELLA (PRB), CAVALIERE (PSD): DE CENTRO-DIREITA A EXTREMA-DIREITA. PM E POLÍCIA CIVIL SÃO DO ESTADO (CONSTITUIÇÃO, ART. 144).</div>
 ''', 'i02', 'TSE · TJ-RJ · ' + IDS, kbo='60% 50%'))
 
 s = 'v03'; CUR['s'] = s
@@ -249,7 +249,7 @@ H.append(scene(s, rail(1)+f'''
 <div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:30px"><b style="color:{L1}">━ GOVERNO DE ESQUERDA</b> &nbsp; <b style="color:{BLUE}">━ GOVERNO DE DIREITA</b><br><span style="color:#A9A291;font-size:24px">CADA ESTADO TEM SEU TOM</span></div>
 {c5}
 <div class="el h" data-flow="m:4" data-gap="30" data-a="up" data-t="{W(s,'topo',0,-.3)}" style="left:80px;width:880px;font-size:54px;color:#fff">PARTIDO SOZINHO <span class="hl">NÃO DECIDE.</span></div>
-<div class="el fine" data-flow="m:5" data-gap="20" data-a="fade" data-t="{W(s,'topo',0,.3)}" style="left:80px">ES: CASAGRANDE (PSB, CENTRO-ESQUERDA) 2013–14 E 2019–25; HARTUNG (MDB, DIREITA) 2015–18 — CAIU NOS DOIS. MG: PIMENTEL (PT, ESQUERDA) 2015–18; ZEMA (NOVO, DIREITA) 2019–25. SP: PSDB E REPUBLICANOS (DIREITA); MÁRCIO FRANÇA (PSB) GOVERNOU 9 MESES EM 2018. A REVISTA OESTE (DADOS DO PODER360) DIZ “ESQUERDA 23,4 × DIREITA 14,8”: USA MÉDIA DO PAÍS INTEIRO E TIRA AS MORTES PELA POLÍCIA.</div>
+<div class="el fine" data-flow="m:5" data-gap="20" data-a="fade" data-t="{W(s,'topo',0,.3)}" style="left:80px">ES: CASAGRANDE (PSB, CENTRO-ESQUERDA) 2013–14 E 2019–25; HARTUNG (MDB, DIREITA) 2015–18 — CAIU NOS DOIS. MG: PIMENTEL (PT, ESQUERDA) 2015–18; ZEMA (NOVO, DIREITA) 2019–25. SP: PSDB E REPUBLICANOS (DIREITA); MÁRCIO FRANÇA (PSB) GOVERNOU 9 MESES EM 2018. A REVISTA OESTE (DADOS DO PODER360) DIZ “ESQUERDA 23,4 × DIREITA 14,8”: USA MÉDIA DO PAÍS INTEIRO E TIRA AS MORTES PELA POLÍCIA. MESMO PARTIDO, OUTRO RESULTADO: SC (PL) 7,6 × RIO (PL) 22,6.</div>
 ''', 'i05', 'FBSP, ANUÁRIO 2026 (TABELA 02, SÉRIE 2013–2025) · ' + IDS, kbo='55% 50%'))
 
 s = 'v06'; CUR['s'] = s
@@ -351,7 +351,8 @@ H.append(scene(s, f'''
 <div class="el rows" data-flow="m:3" data-gap="34" data-a="fade" data-t="{W(s,'combinação',0,-.2)}" style="left:80px">
   {row('HÁ DÉCADAS', 'FACÇÕES E MILÍCIAS', None, '#fff', 0)}
   {row('É DA UNIÃO', 'FRONTEIRAS E PORTOS POR ONDE ENTRAM ARMAS E DROGAS', None, Y, 0, fade=W(s,'armas',0,-.2))}
-  {row('É DO ESTADO', 'AS ESCOLHAS SOBRE A POLÍCIA', None, R, 0, fade=W(s,'escolhas',0,-.2))}</div>
+  {row('É DO ESTADO', 'AS ESCOLHAS SOBRE A POLÍCIA', None, R, 0, fade=W(s,'escolhas',0,-.2))}
+  {row('É DA PREFEITURA', 'GUARDA E ORDEM URBANA', None, WH, 0, fade=W(s,'prefeitura',0,-.2))}</div>
 <div class="el repost" data-flow="m:4" data-gap="44" data-a="slam" data-t="{W(s,'cobraria',0,-.3)}" data-shake="1" style="left:80px;width:880px;font-size:54px">O QUE VOCÊ COBRARIA DO GOVERNADOR ELEITO?<small>Douglas Ruas (PL, direita) · posse em 06/01/2027</small></div>
 <div class="el fine" data-flow="m:5" data-gap="20" data-a="fade" data-t="{W(s,'grupo',0,.2)}" style="left:80px">DESDE AGO/2003 (ROSINHA NO MDB), O RIO É GOVERNADO PELA DIREITA (MDB = DIREITA NA ESCALA, 7,01). RUAS FOI ELEITO NO 1º TURNO DEPOIS QUE O TSE ANULOU OS VOTOS DE GAROTINHO; É DO GRUPO DE CASTRO E BACELLAR, SEGUNDO A IMPRENSA.</div>
 ''', 'i15', 'TSE · TRE-RJ · FBSP · ISP-RJ · GENI/UFF · SOU DA PAZ', kbo='55% 55%'))
