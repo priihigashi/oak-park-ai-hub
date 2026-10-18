@@ -169,9 +169,9 @@ H.append(scene(s, rail(1)+f'''
 {eb(2, 'MITO 1 · HOMICÍDIOS POR 100 MIL', top=300)}
 {quote('“A DIREITA RESOLVEU.”', W(s,'mito',0), 'm:2', gap=26)}
 {c3}
-<div class="el body" data-flow="m:4" data-gap="30" data-a="up" data-t="{W(s,'estatuto',0,-.2)}" style="left:80px;width:880px;font-size:40px">+ AJUDA FEDERAL: <b class="hl">ESTATUTO DO DESARMAMENTO</b>, 2003, sancionado pelo presidente 🦑 · <b>464 mil armas</b> recolhidas</div>
+<div class="el body" data-flow="m:4" data-gap="24" data-a="up" data-t="{W(s,'estatuto',0,-.2)}" style="left:80px;width:900px;font-size:38px">+ AJUDA FEDERAL: <b class="hl">ESTATUTO DO DESARMAMENTO</b>, 2003, sancionado pelo presidente 🦑 · <b>464 mil armas</b> recolhidas</div>
 <div class="el stamp-r" data-flow="m:5" data-gap="30" data-a="stamp" data-t="{W(s,'nenhum',0,-.05)}" data-d=".35" data-r="-2" style="left:80px;white-space:nowrap;font-size:44px">NENHUM GOVERNO FEZ SOZINHO</div>
-<div class="el fine" data-flow="m:6" data-gap="22" data-a="fade" data-t="{W(s,'funcionou',0,-.1)}" style="left:80px">A QUEDA ATRAVESSA COVAS, ALCKMIN, SERRA, DORIA E TARCÍSIO, E PRESIDENTES DE TODOS OS LADOS. ESTATUTO: BRASIL CAI DE 28,9 (2003) PARA 25,8 (2005) POR 100 MIL (MAPA DA VIOLÊNCIA); 464 MIL ARMAS (EXÉRCITO). OS CONTRA DIZEM QUE A CAUSA NÃO ESTÁ PROVADA. ATLAS (SÓ HOMICÍDIOS): 2004–2011 NA EDIÇÃO 2016; 2012–2024 NAS EDIÇÕES 2024 E 2026, QUE REVISAM A POPULAÇÃO, POR ISSO A LINHA É SEPARADA. PICO DE 2000: MAPA DA VIOLÊNCIA 2012.</div>
+<div class="el fine" data-flow="m:6" data-gap="22" data-a="fade" data-t="{W(s,'funcionou',0,-.1)}" style="left:80px">QUEDA ATRAVESSA COVAS, ALCKMIN, SERRA, DORIA E TARCÍSIO. ESTATUTO: BRASIL 28,9 (2003) → 25,8 (2005), MAPA DA VIOLÊNCIA; A DIREITA DIZ QUE A CAUSA NÃO ESTÁ PROVADA. ATLAS: EDIÇÕES 2016 E 2024/26, LINHA SEPARADA.</div>
 ''', 'skyline', 'IPEA/FBSP, ATLAS DA VIOLÊNCIA (SIM/DATASUS) · ' + IDS, kbo='50% 60%'))
 
 s = 's04'; CUR['s'] = s
