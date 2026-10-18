@@ -20,6 +20,10 @@ e=e.replace("if(!navigator.webdriver){let t0=performance.now();(function loop(){
 "(function loop(){const a=document.getElementById('vo');let T=a?a.currentTime:0;render(Math.min(T,DUR-0.01));if(window.__tick)__tick(T);requestAnimationFrame(loop)})();")
 open(f'{OUT}/engine.js','w').write(e)
 shutil.copy('/home/claude/work/rj/narracao.mp3',f'{OUT}/narracao.mp3')
+ZD='/home/claude/work/rj/zf'; os.makedirs(f'{OUT}/assets/rj/zoom',exist_ok=True)
+ZN=len([f for f in os.listdir(ZD) if f.endswith('.jpg')])
+for f in os.listdir(ZD):
+    if f.endswith('.jpg'): shutil.copy(f'{ZD}/{f}',f'{OUT}/assets/rj/zoom/{f}')
 page=f'''<title>Reel Rio de Janeiro</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="fx.css">
@@ -48,7 +52,7 @@ body{{background:var(--bg);color:var(--fg);font-family:system-ui,sans-serif;marg
 <div class="pv-bar" role="group" aria-label="Velocidade"><span class="pv-sp-l">Velocidade</span><button type="button" class="sp on" data-r="1">1x</button><button type="button" class="sp" data-r="1.2">1,2x</button><button type="button" class="sp" data-r="1.5">1,5x</button><button type="button" class="sp" data-r="2">2x</button><button type="button" class="sp" data-r="3">3x</button></div>
 <p class="pv-note">Prévia ao vivo do reel (as animações rodam no navegador; o MP4 final sai do mesmo arquivo). Botões pulam 5/10/30s; setas ← → pulam 5s (Shift: 10s), espaço dá play/pausa. Recarregue para ver a última edição. Voz e fundos provisórios.</p>
 <audio id="vo" preload="auto" playsinline></audio>
-<script>window.DUR={dur};</script><script src="fx.js"></script><script src="fx2.js"></script><script src="engine.js"></script><script src="layout.js"></script>
+<script>window.DUR={dur};window.__ZN={ZN};window.__ZF=k=>"assets/rj/zoom/f"+String(k).padStart(3,"0")+".jpg";for(let k=0;k<window.__ZN;k++){{const i=new Image();i.src=window.__ZF(k)}}</script><script src="fx.js"></script><script src="fx2.js"></script><script src="engine.js"></script><script src="layout.js"></script>
 <script>
 const fr=document.getElementById('frame'),st=document.getElementById('scaler'),a=document.getElementById('vo'),b=document.getElementById('play'),sk=document.getElementById('seek'),tm=document.getElementById('tm');
 function fit(){{const H=Math.min(innerHeight-130,1920),W=Math.min(document.body.clientWidth-32,520);let s=Math.min(H/1920,W/1080);fr.style.width=1080*s+'px';fr.style.height=1920*s+'px';st.style.transform='scale('+s+')'}}
