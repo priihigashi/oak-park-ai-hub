@@ -220,11 +220,12 @@ c7 = chart(s, YM, [
           (9, 330, '↗ VOLTA A<br>SUBIR', R, W(s,'subir',0,-.2), 14, 0)]).replace('{flow}', 'm:3')
 H.append(scene(s, rail(2)+f'''
 {eb(3, 'PROBLEMA 1 · A POLÍCIA (É DO ESTADO)', top=300)}
+<div class="el h" data-flow="m:2" data-gap="28" data-a="up" data-t="{W(s,'ouvidoria',0,-.2)}" data-o="{W(s,'câmera',0,-.5)}" style="left:80px;width:880px;font-size:54px;color:#fff">OUVIDORIA DA POLÍCIA, 2017: <span style="color:{R}">3 EM 4 MORTES COM INDÍCIO DE EXCESSO</span> · 46% SEM ANTECEDENTES</div>
 <div class="el h" data-flow="m:2" data-gap="28" data-a="slam" data-t="{W(s,'câmera',0,-.15)}" style="left:80px;width:880px;font-size:64px;color:#fff">COM CÂMERA, AS MORTES <span class="hl">CAÍRAM PELA METADE</span></div>
 {c7}
 <div class="el h" data-flow="m:4" data-gap="30" data-a="up" data-t="{W(s,'quatro',0,-.25)}" style="left:80px;width:880px;font-size:56px;color:#fff">2025: <span style="color:{R}">QUASE 1 EM CADA 4</span> MORTES VIOLENTAS DO ESTADO</div>
-<div class="el fine" data-flow="m:5" data-gap="22" data-a="fade" data-t="{W(s,'quatro',0,.5)}" style="left:80px">835 DE 3.615 (23,1%). FGV: −57% NOS BATALHÕES COM CÂMERA. O GOVERNO DE SP DIZ QUE A SOMA DO MANDATO É MENOR QUE A DO ANTERIOR; A DIREÇÃO, DESDE 2023, É DE ALTA. OPERAÇÃO VERÃO (2024): A MAIS LETAL DESDE O CARANDIRU.</div>
-''', 'pm', 'SSP-SP (VIA AGÊNCIA BRASIL E FBSP, 2014–2025) · FGV, 2022 · FBSP, ANUÁRIO 2026', kbo='50% 55%'))
+<div class="el fine" data-flow="m:5" data-gap="22" data-a="fade" data-t="{W(s,'quatro',0,.5)}" style="left:80px">OUVIDORIA (SSP-SP, 2018): 756 MORTES DE 2017; 43% COM TIRO NA CABEÇA OU NAS COSTAS. 835 DE 3.615 (23,1%). FGV: −57% NOS BATALHÕES COM CÂMERA. O GOVERNO DE SP DIZ QUE A SOMA DO MANDATO É MENOR QUE A DO ANTERIOR; A DIREÇÃO, DESDE 2023, É DE ALTA. OPERAÇÃO VERÃO (2024): A MAIS LETAL DESDE O CARANDIRU.</div>
+''', 'pm', 'SSP-SP (VIA AGÊNCIA BRASIL E FBSP, 2014–2025) · OUVIDORIA DA POLÍCIA SP, 2018 · FGV, 2022 · FBSP, ANUÁRIO 2026', kbo='50% 55%'))
 
 s = 's07b'; CUR['s'] = s
 H.append(scene(s, rail(2)+f'''
