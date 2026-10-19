@@ -293,22 +293,24 @@ H.append(scene(s, rail(2)+f'''
 s = 'v07'; CUR['s'] = s
 H.append(scene(s, rail(3)+f'''
 {eb(5, 'PROBLEMA 2 · MILÍCIA E POLÍTICA', top=320)}
-<div class="el items" data-flow="m:2" data-gap="36" style="left:80px">
+<div class="el items tight" data-flow="m:2" data-gap="30" style="left:80px">
   {item('CPI DAS MILÍCIAS · ALERJ, 2008', 'Mais de 200 indiciamentos pedidos, entre eles 5 parlamentares.', W(s,'cpi',0,-.2))}
-  {item('FLÁVIO BOLSONARO · PL ' + DIR, 'Medalha a Adriano da Nóbrega, depois apontado como chefe do Escritório do Crime. Mãe e ex-mulher dele no gabinete.', W(s,'flávio',0,-.2))}</div>
-<div class="el note" data-flow="m:3" data-gap="24" data-a="fade" data-t="{W(s,'nega',0,-.2)}" style="left:80px">FLÁVIO E JAIR NEGAM LIGAÇÃO COM A MILÍCIA (ADRIANO MORREU EM 2020). RACHADINHAS: PROVAS ANULADAS E DENÚNCIA ARQUIVADA, SEM JULGAMENTO DE MÉRITO.</div>
-<div class="el fine" data-flow="m:4" data-gap="18" data-a="fade" data-t="{W(s,'nega',0,.6)}" style="left:80px">DO OUTRO LADO: NÃO ACHAMOS POLÍTICO DO PT, PSOL OU PDT DO RIO LIGADO A MILÍCIA OU FACÇÃO EM REPORTAGEM OU PROCESSO. NA BASE DO GOVERNO ATUAL {SQUID}: CHIQUINHO BRAZÃO FOI SECRETÁRIO DE PAES (PSD {DIR}) ATÉ 2024; O VEREADOR SALVINO (PSD) FOI PRESO EM 2026, SUSPEITO DE LIGAÇÃO COM O CV, E NEGA.</div>
-''', 'i07', 'ALERJ, CPI 2008 · MP-RJ · CONGRESSO EM FOCO · STF (FEV/2025)', kbo='60% 50%'))
+  {item('JAIR E FLÁVIO BOLSONARO · 2007–2008', 'Jair: “o governo deveria apoiá-las”. Flávio: “não se pode estigmatizar as milícias”.', W(s,'jair',0,-.2), color=BLUE)}
+  {item('FLÁVIO BOLSONARO · PL ' + DIR, 'Medalha a Adriano da Nóbrega, depois apontado como chefe do Escritório do Crime. Mãe e ex-mulher dele no gabinete.', W(s,'flávio',1,-.2))}</div>
+<div class="el note" data-flow="m:3" data-gap="24" data-a="fade" data-t="{W(s,'negam',0,-.2)}" style="left:80px">FLÁVIO E JAIR NEGAM LIGAÇÃO COM A MILÍCIA (ADRIANO MORREU EM 2020). RACHADINHAS: PROVAS ANULADAS E DENÚNCIA ARQUIVADA, SEM JULGAMENTO DE MÉRITO.</div>
+<div class="el fine" data-flow="m:4" data-gap="18" data-a="fade" data-t="{W(s,'negam',0,.6)}" style="left:80px">DO OUTRO LADO: NÃO ACHAMOS POLÍTICO DO PT, PSOL OU PDT DO RIO LIGADO A MILÍCIA OU FACÇÃO EM REPORTAGEM OU PROCESSO. NA BASE DO GOVERNO ATUAL {SQUID}: CHIQUINHO BRAZÃO FOI SECRETÁRIO DE PAES (PSD {DIR}) ATÉ 2024; O VEREADOR SALVINO (PSD) FOI PRESO EM 2026, SUSPEITO DE LIGAÇÃO COM O CV, E NEGA.</div>
+''', 'i07', 'ALERJ, CPI 2008 · BBC (2008) E ALERJ (2007) VIA CARTACAPITAL · MP-RJ · CONGRESSO EM FOCO · STF', kbo='60% 50%'))
 
 s = 'v09'; CUR['s'] = s
 H.append(scene(s, rail(3)+f'''
 {eb(6, 'O CRIME CHEGOU AO PODER', top=320)}
-<div class="el items" data-flow="m:2" data-gap="36" style="left:80px">
+<div class="el items tight" data-flow="m:2" data-gap="30" style="left:80px">
   {item('PRESIDENTE DA ALERJ · UNIÃO ' + UNI + ' · ALIADO DE CASTRO', 'Preso pela PF, suspeito de avisar um deputado alvo de operação contra o Comando Vermelho.', W(s,'presidente',0,-.2))}
-  {item('CASO MARIELLE · STF, FEV/2026', 'Irmãos Brazão condenados como mandantes: 76 anos.', W(s,'supremo',0,-.2), color=R)}</div>
+  {item('CASO MARIELLE · STF, FEV/2026', 'Irmãos Brazão condenados como mandantes: 76 anos.', W(s,'supremo',0,-.2), color=R)}
+  {item('EMENDA DE FLÁVIO BOLSONARO · PF, 2026', 'R$ 199,9 mil para ONG ligada aos Brazão, negociada com miliciano condenado no caso Marielle. O gabinete diz que seguiu a lei.', W(s,'emenda',0,-.2), color=BLUE)}</div>
 <div class="el note" data-flow="m:3" data-gap="24" data-a="fade" data-t="{W(s,'negam',0,-.2)}" style="left:80px">TODOS NEGAM. OS BRAZÃO SÃO EX-MDB E EX-UNIÃO BRASIL. O CHEFE DA POLÍCIA CIVIL, NOMEADO NA INTERVENÇÃO FEDERAL (GOVERNO TEMER, MDB {DIR}), PEGOU 18 ANOS POR ATRAPALHAR A INVESTIGAÇÃO.</div>
-<div class="el fine" data-flow="m:4" data-gap="18" data-a="fade" data-t="{W(s,'negam',0,.2)}" style="left:80px">TAMBÉM PRESOS: UM EX-CHEFE DA POLÍCIA CIVIL DE CASTRO (PROPINA DO JOGO DO BICHO, 2022) E UM DEPUTADO EXPULSO DO MDB (SUSPEITO DE AGIR PARA O CV). DO OUTRO LADO, O VEREADOR SALVINO (PSD, ALIADO DE PAES) FOI PRESO EM 2026, SUSPEITO DE NEGOCIAR COM O CV, E SOLTO 2 DIAS DEPOIS (O TJ VIU FUNDAMENTO “PRECÁRIO”). TODOS NEGAM. DOMINGOS BRAZÃO FEZ CAMPANHA PARA DILMA (2014, PELO MDB); CHIQUINHO, PARA BOLSONARO (2022) (COMPROVA). UNIÃO BRASIL = FUSÃO DE DEM E PSL.</div>
-''', 'i09', 'PF · STF (FEV/2026) · MP-RJ · BRASIL DE FATO (2022) · DIÁRIO DO NORDESTE (2026)', kbo='65% 50%'))
+<div class="el fine" data-flow="m:4" data-gap="18" data-a="fade" data-t="{W(s,'negam',0,.2)}" style="left:80px">TAMBÉM PRESOS: UM EX-CHEFE DA POLÍCIA CIVIL DE CASTRO (PROPINA DO JOGO DO BICHO, 2022) E UM DEPUTADO EXPULSO DO MDB (SUSPEITO DE AGIR PARA O CV). DO OUTRO LADO, O VEREADOR SALVINO (PSD, ALIADO DE PAES) FOI PRESO EM 2026, SUSPEITO DE NEGOCIAR COM O CV, E SOLTO 2 DIAS DEPOIS (O TJ VIU FUNDAMENTO “PRECÁRIO”). TODOS NEGAM. UNIÃO BRASIL = FUSÃO DE DEM E PSL.</div>
+''', 'i09', 'PF · STF (FEV/2026) · MP-RJ · ESTADÃO (SET/2026) · CORREIO BRAZILIENSE · DIÁRIO DO NORDESTE', kbo='65% 50%'))
 
 s = 'v10'; CUR['s'] = s
 c10 = chart(s, YF, [
