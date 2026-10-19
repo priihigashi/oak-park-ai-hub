@@ -288,7 +288,7 @@ H.append(scene(s, rail(1)+f'''
 {eb(3, 'SUDESTE · MORTES VIOLENTAS POR 100 MIL', top=290)}
 <div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:60px;width:960px;font-size:30px"><span class="lg"><i style="background:{L1}"></i>ESQUERDA</span><span class="lg"><i style="background:{BLUE}"></i>DIREITA</span><span class="lgn">UM TOM POR ESTADO</span></div>
 {c5}
-<div class="el h" data-flow="m:4" data-gap="30" data-a="up" data-t="{W(s,'topo',0,-.3)}" style="left:60px;width:960px;font-size:54px;color:#fff">PARTIDO SOZINHO <span class="hl">NÃO DECIDE.</span></div>
+<div class="el h" data-flow="m:4" data-gap="30" data-a="up" data-t="{W(s,'partido',0,-.15)}" style="left:60px;width:960px;font-size:54px;color:#fff">PARTIDO SOZINHO <span class="hl">NÃO DECIDE.</span></div>
 <div class="el fine" data-flow="m:5" data-gap="20" data-a="fade" data-t="{W(s,'topo',0,.3)}" style="left:60px">ES: CASAGRANDE <span style="white-space:nowrap">(PSB {CESQ})</span> 2013–14 E 2019–25, HARTUNG <span style="white-space:nowrap">(MDB {DIR})</span> 2015–18: CAIU NOS DOIS. MG: PIMENTEL <span style="white-space:nowrap">(PT {ESQ})</span> 2015–18, ZEMA <span style="white-space:nowrap">(NOVO {DIR})</span> 2019–25. SP: PSDB E REPUBLICANOS <span style="white-space:nowrap">({DIR});</span> FRANÇA <span style="white-space:nowrap">(PSB {CESQ})</span> 9 MESES EM 2018. O “ESQUERDA 23,4 × DIREITA 14,8” (OESTE/PODER360) USA A MÉDIA DO PAÍS E TIRA AS MORTES PELA POLÍCIA. MESMO PARTIDO, OUTRO RESULTADO: SC (PL) 7,6 × RIO (PL) 22,6.</div>
 ''', 'i05', 'FBSP, ANUÁRIO 2026 (TABELA 02, SÉRIE 2013–2025) · ' + IDS, kbo='55% 50%'))
 
