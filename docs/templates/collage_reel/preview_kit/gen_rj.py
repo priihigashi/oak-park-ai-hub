@@ -309,7 +309,7 @@ H.append(scene(s, rail(3)+f'''
 {eb(6, 'O CRIME CHEGOU AO PODER', top=320)}
 <div class="el items tight" data-flow="m:2" data-gap="30" style="left:80px">
   {item('PRESIDENTE DA ALERJ · UNIÃO ' + UNI + ' · ALIADO DE CASTRO', 'Preso pela PF, suspeito de avisar um deputado alvo de operação contra o Comando Vermelho.', W(s,'presidente',0,-.2))}
-  {item('CASO MARIELLE · STF, FEV/2026', 'Irmãos Brazão condenados como mandantes: 76 anos.', W(s,'supremo',0,-.2), color=R)}
+  {item('CASO MARIELLE · STF, FEV/2026 · 76 ANOS', 'Irmãos Brazão condenados como mandantes da morte de Marielle.', W(s,'supremo',0,-.2), color=R)}
   {item('EMENDA DE FLÁVIO BOLSONARO · PF, 2026', 'R$ 199,9 mil para ONG ligada aos Brazão, negociada com miliciano condenado no caso Marielle. O gabinete diz que seguiu a lei.', W(s,'emenda',0,-.2), color=BLUE)}</div>
 <div class="el note" data-flow="m:3" data-gap="24" data-a="fade" data-t="{W(s,'negam',0,-.2)}" style="left:80px">TODOS NEGAM. OS BRAZÃO SÃO EX-MDB E EX-UNIÃO BRASIL. O CHEFE DA POLÍCIA CIVIL, NOMEADO NA INTERVENÇÃO FEDERAL (GOVERNO TEMER, MDB {DIR}), PEGOU 18 ANOS POR ATRAPALHAR A INVESTIGAÇÃO.</div>
 <div class="el fine" data-flow="m:4" data-gap="18" data-a="fade" data-t="{W(s,'negam',0,.2)}" style="left:80px">TAMBÉM PRESOS: EX-CHEFE DA POLÍCIA CIVIL DE CASTRO (JOGO DO BICHO, 2022) E UM DEPUTADO EXPULSO DO MDB (SUSPEITO DE AGIR PARA O CV). VEREADOR SALVINO (PSD, ALIADO DE PAES): PRESO EM 2026 E SOLTO 2 DIAS DEPOIS. TODOS NEGAM.</div>
@@ -347,7 +347,7 @@ H.append(scene(s, rail(4)+f'''
   {item('2020 · GOVERNO BOLSONARO · ' + DIR, 'Revoga regras de rastreio de munição. O STF suspendeu em 2021.', W(s,'bolsonaro',0,-.2))}
   {item('2024 · GOVERNO ATUAL ' + SQUID + ' · ' + ESQ, 'Regras nacionais de câmera na farda e de uso da força. Castro assinou a nota que pediu a revogação.', W(s,'vinte',0,-.2), color=Y)}
   {item('2025 · DEPUTADOS DO PL ' + DIR, 'Volta a gratificação faroeste. Castro vetou; a Alerj derrubou o veto.', W(s,'deputados',0,-.2), color=R)}
-  {item('PROJETO DAS BALAS · PL 3.723/2019', 'Tira a marcação das balas das polícias. Parado no Senado.', W(s,'projeto',0,-.2))}</div>
+  {item('PROJETO DAS BALAS · PL 3.723/2019', 'Tira a marcação das balas usadas pelas polícias. Está parado no Senado.', W(s,'projeto',0,-.2))}</div>
 <div class="el fine" data-flow="m:3" data-gap="22" data-a="fade" data-t="{W(s,'senado',0,.1)}" style="left:80px">A FAROESTE DOS ANOS 1990 (MARCELLO ALENCAR, PSDB) DOBROU OS MORTOS POR FERIDO EM CONFRONTO. PL 3.723: ENVIADO PELO GOVERNO BOLSONARO. A GUARDA DE PAES (PSD) GANHA GRATIFICAÇÃO POR PORTAR ARMA, NÃO POR MORTE. CÂMERAS NAS FARDAS: 2022, POR ORDEM DO STF.</div>
 ''', 'i08', 'JB (2019) · AGÊNCIA BRASIL E METRÓPOLES (2025) · CONGRESSO EM FOCO · METRÓPOLES (OUT/2026) · ALMA PRETA', kbo='55% 50%'))
 
@@ -466,6 +466,8 @@ CSS = open(os.path.join(KIT, 'preview_kit/style.css')).read() + '''
 .note{font-size:24px;letter-spacing:1px}
 .srcline{font-size:22px;letter-spacing:.5px;color:rgba(242,236,224,.72)}
 #foot{font-size:24px;top:1614px}
+/* texto corrido (itens, linhas de tabela, letra miúda) enche a largura até o fim do filete; equilíbrio de linhas só em título */
+.item .t,.item .kick,.row .v,.row .k,.body,.fine,.note{text-wrap:pretty!important}
 .big23.solo{top:auto}
 .row{padding:12px 0}
 .govs .row{padding:7px 0}.govs .row.txt{grid-template-columns:300px 1fr;column-gap:52px}.govs .selo{font-size:18px!important;letter-spacing:.3px!important;padding:2px 8px!important}.govs .row.txt .v{font-size:36px}.govs .row .v .pt{font-size:22px}.govs .row .v .ide{font-size:17px}
