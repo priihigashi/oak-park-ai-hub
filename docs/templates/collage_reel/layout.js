@@ -41,7 +41,7 @@ function fitHeads(sc){
    Ativa com window.VFILL = y limite (em coordenadas da cena, ex. 1390) ou data-vfill na cena; data-vfill="0" desliga na cena.
    O 1º slot (título do capítulo) fica onde está; a sobra vira espaço extra IGUAL entre os slots seguintes
    (até +MAXX px por espaço) e o que ainda sobrar desce o corpo, dividindo metade em cima e metade embaixo. */
-const MAXX=120;
+const MAXX=90;
 function vfill(sc,G,keys,yEnd){
   const lim=+(sc.dataset.vfill!==undefined?sc.dataset.vfill:(window.VFILL||0));
   if(!lim||keys.length<2) return;
