@@ -120,7 +120,7 @@ def chart(sid, years, series, ymax, ticks, t0, dur, marks=(), w=880, h=600, lw=2
 
 
 # ---------- linha com trechos coloridos por governo (vermelho = esquerda, azul = direita) ----------
-def segchart(years, lines, ymin, ymax, ticks, t0, dur, w=880, h=620, lw=270, tfmt=None, xl=None, plabels=(), flow='m:3', bands=(), pings=(), band_top=0):
+def segchart(years, lines, ymin, ymax, ticks, t0, dur, w=880, h=620, lw=270, tfmt=None, xl=None, plabels=(), flow='m:3', bands=(), pings=(), band_top=0, vmarks=()):
     px0, px1, py0, py1 = 70, w - lw - 16, 16, h - 46
     X = lambda i: px0 + (px1 - px0) * i / (len(years) - 1)
     Yv = lambda v: py1 - (py1 - py0) * (v - ymin) / (ymax - ymin)
@@ -161,9 +161,11 @@ def segchart(years, lines, ymin, ymax, ticks, t0, dur, w=880, h=620, lw=270, tfm
                  f' style="left:{X(i0)-8:.0f}px;width:{X(i1)-X(i0)+16:.0f}px;top:{py0+band_top}px;height:{py1-py0-band_top}px"></div>' for i0, i1, t, to in bands)
     pg = ''.join(f'<div class="cping" data-a="pop" data-t="{t:.2f}" data-d=".45"' + (f' data-o="{to:.2f}" data-od=".3"' if to else '') +
                  f' style="left:{X(i)-19:.0f}px;top:{Yv(lines[k]["v"][i])-19:.0f}px;border-color:{c}"></div>' for k, i, t, to, c in pings)
+    vm = ''.join(f'<div class="cvm" data-a="fade" data-t="{t:.2f}" data-d=".3" style="left:{X(i):.0f}px;top:{py0}px;height:{py1-py0}px;border-color:{c}"></div>'
+                 f'<div class="clab cvml" data-a="fade" data-t="{t:.2f}" data-d=".3" style="left:{X(i)+8+dx:.0f}px;top:{(py0+6) if pos=="top" else (py1-58)}px;color:{c}">{txt}</div>' for i, txt, c, t, pos, dx in vmarks)
     return (f'<div class="el chart" data-flow="{flow}" style="left:80px;width:{w}px;height:{h}px">'
             f'<svg class="cgrid" width="{w}" height="{h}">{g}</svg>'
-            f'{bd}{rev}{pl}{pg}{lab}</div>')
+            f'{bd}{vm}{rev}{pl}{pg}{lab}</div>')
 
 def quote(txt, t, flow, gap=34, size=58):
     return f'<div class="el h quote" data-flow="{flow}" data-gap="{gap}" data-a="up" data-t="{t}" style="left:80px;width:880px;font-size:{size}px">{txt}</div>'
@@ -209,70 +211,56 @@ H.append(scene(s, rail(0)+f'''
 <div class="el fine" data-flow="m:4" data-gap="20" data-a="fade" data-t="{W(s,'lados',0,.2)}" style="left:80px">MDB = 7,01 NA ESCALA (DIREITA); ROSINHA NO MDB DESDE AGO/2003. O PT TEVE SECRETARIAS COM CABRAL ATÉ NOV/2013; GAROTINHO FOI SECRETÁRIO DE SEGURANÇA DE ROSINHA (2003–04). ANTES: MARCELLO ALENCAR (PSDB, DIREITA) E BRIZOLA (PDT, CENTRO-ESQUERDA). HOJE: INTERINO RICARDO COUTO (TJ-RJ). PREFEITOS DA CAPITAL DESDE 1993 (MAIA, CONDE, PAES, CRIVELLA, CAVALIERE): DE CENTRO-DIREITA A EXTREMA-DIREITA. PM E POLÍCIA CIVIL SÃO DO ESTADO (CF, ART. 144).</div>
 ''', 'i02', 'TSE · TJ-RJ · ' + IDS, kbo='60% 50%'))
 
-s = 'v03'; CUR['s'] = s
-XM = ['ANTES', '1º ANO', '2º', '3º', '4º']
+# cena v03 (mandato por mandato) removida na rodada 27 — ver git log para o código
 L1, L2 = '#FF4A3D', '#FF9C8F'
-c3 = chart(s, XM, [
-    dict(n='GAROTINHO +26%', v=[0, .5, 9.8, 11.2, 26.2], c=L1, w=7, lt=W(s,'garotinho',0,-.1), glow=W(s,'subiu',0,-.1)),
-    dict(n='ROSINHA −5%', sub='PSB→MDB', v=[0, .1, -4.9, -.7, -4.9], c=L2, w=6, lt=W(s,'rosinha',0,-.1), glow=W(s,'caiu',0,-.1)),  # dupla com Garotinho
-    dict(n='CABRAL 1 −24%', v=[0, .7, -6.7, -7.1, -23.8], c=BLUE, w=6, lt=W(s,'cabral',0,-.1), glow=W(s,'primeiro',0,-.2)),
-    dict(n='CABRAL 2 −2%', v=[0, -14.9, -19.9, -8.2, -1.9], c=BLUE, w=4, dash=True, lt=W(s,'cabral',0,.3), glow=W(s,'segundo',0,-.1)),
-    dict(n='PEZÃO +17%', v=[0, -12.4, 9.5, 18.0, 17.4], c='#AFC0FF', w=5, lt=W(s,'pezão',0,-.1), glow=W(s,'subiu',1,-.1)),
-    dict(n='WITZEL/CASTRO −33%', v=[0, -10.9, -26.9, -29.1, -33.2], c='#38BDF8', w=7, lt=W(s,'witzel',0,-.1), glow=W(s,'caíram',0,-.1)),
-    dict(n='BRASIL −20%', sub='MESMO PERÍODO', v=[0, -21.5, -14.0, -17.4, -19.9], c='#9A9A9A', w=5, dash=True, lt=W(s,'witzel',0,.3), glow=W(s,'brasil',0,-.15), gc='#FFFFFF', lit=True),
-    dict(n='CASTRO 2 −13%', sub='3 ANOS', v=[0, -4.8, -15.1, -13.3, -13.3], c='#38BDF8', w=4, dash=True, lt=W(s,'witzel',0,.3), glow=W(s,'segundo',1,-.1)),
-], 40, [-40, -20, 0, 20, 40], 0, 0, h=640, lw=290, ymin=-40,
-   tfmt=lambda v: (f'+{v}%' if v > 0 else f'{v}%'.replace('-', '−')),
-   per_line=True).replace('{flow}', 'm:3')
-H.append(scene(s, rail(1)+f'''
-{eb(2, 'MANDATO POR MANDATO · MORTES VIOLENTAS', top=290)}
-<div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:32px"><span class="lg"><i style="background:{L1}"></i>ESQUERDA</span><span class="lg"><i style="background:{BLUE}"></i>DIREITA</span><span class="lg"><i style="background:#9A9A9A"></i>BRASIL</span><span class="lgn">TRACEJADO = 2º MANDATO</span></div>
-{c3}
-<div class="el fine" data-flow="m:4" data-gap="22" data-a="fade" data-t="{W(s,'brasil',0,.3)}" style="left:80px">VARIAÇÃO NO NÚMERO DE MORTES VIOLENTAS ATÉ O FIM DO MANDATO, CONTRA O ANO ANTES DA POSSE. MESMA BASE DE 1998 A 2025 (ISP-RJ). BENEDITA (PT) GOVERNOU 9 MESES EM 2002; PEZÃO ASSUMIU EM ABR/2014; CASTRO EM AGO/2020. ANTES DE 1999, MARCELLO ALENCAR (PSDB, DIREITA): −26%. BRASIL ENTRE 2018 E 2022: −20% NO ATLAS DA VIOLÊNCIA (SIM, HOMICÍDIOS); CERCA DE −17% NO FBSP (MORTES VIOLENTAS). OS +26% DE GAROTINHO INCLUEM OS 9 MESES DE BENEDITA (PT).</div>
-''', 'i03', 'ISP-RJ, LETALIDADE VIOLENTA (1998–2020) · FBSP, ANUÁRIOS 2022–2026 · ATLAS DA VIOLÊNCIA · ' + IDS, kbo='55% 60%'))
-
 s = 'v04'; CUR['s'] = s
 YC = [str(y) for y in range(1998, 2026)]
 VC = [6371,6401,6993,7083,8043,8054,7645,7987,7649,7699,7134,7106,5828,4960,4666,5348,5719,5010,6262,6749,6714,5980,4907,4762,4485,4270,3809,3890]
 ix = lambda y: y - 1998
-VB = [None, None, None, None, None, None, 7645, 7524, 7769, 7537, 7919, 8135, 8287, 8254, 8917, 8972, 9453, 9235, 9772, 10254, 9059, 7113, 7795, 7479, 7254, 7151, 6657, None]
-c4 = segchart(YC, [dict(n='', v=VB, segs=[(6, 26, '#8C8C8C')], w=5, dash=True, lt=W(s,'brasil',0)), dict(n='', v=VC, segs=[(0, 1, BLUE), (1, 5, L1), (5, 27, BLUE)], w=7, lt=W(s,'linha',0))],
+# Brasil: homicídios (SIM/Ministério da Saúde), na escala do Rio em 2004. 1998–2003: Mapa da Violência 2006 (41.916 … 51.043); 2004–2024: Atlas da Violência
+K = 7645/48374
+VB = [round(v*K) for v in (41916, 42914, 45343, 47899, 49640, 51043)] + [7645, 7524, 7769, 7537, 7919, 8135, 8287, 8254, 8917, 8972, 9453, 9235, 9772, 10254, 9059, 7113, 7795, 7479, 7254, 7151, 6657, None]
+G = '#E4E4E4'
+c4 = segchart(YC, [dict(n='', v=VB, segs=[(0, 26, '#8C8C8C')], w=5, dash=True, lt=W(s,'brasil',0)), dict(n='', v=VC, segs=[(0, 1, BLUE), (1, 5, L1), (5, 27, BLUE)], w=7, lt=W(s,'linha',0))],
     3000, 11000, [3000, 5000, 7000, 9000, 11000], W(s,'linha',0,-.2), 5.5, h=515, lw=40, tfmt=lambda v: f"{v:,}".replace(",", "."),
     xl=[ix(1998), ix(2006), ix(2014), ix(2022)],
-    plabels=[(1, ix(2002), 'GAROTINHO<br>8.043', L1, -30, W(s,'linha',0,.6), -100),
-             (1, ix(2003), '8.054<br>ROSINHA', BLUE, -62, W(s,'rosinha',0,-.2)),
-             (1, ix(2012), 'CABRAL<br>4.666', BLUE, 18, W(s,'cabral',0,-.2)),
-             (1, ix(2017), '6.749<br>PEZÃO', BLUE, -62, W(s,'pezão',0,-.2)),
-             (1, ix(2020), 'WITZEL/CASTRO<br>4.762', BLUE, -62, W(s,'witzel',0,-.1), 64),
-             (1, ix(2025), 'CASTRO<br>3.890', BLUE, 18, W(s,'voltou',0,-.2)),
-             (0, ix(2017), 'BRASIL', '#B5B5B5', -48, W(s,'brasil',0,.2))],
-    bands=[(ix(2002), ix(2004), W(s,'rosinha',0,-.1), W(s,'cai',0,-.1)),
-           (ix(2007), ix(2012), W(s,'cai',0,-.1), W(s,'volta',0,-.1)),
-           (ix(2014), ix(2017), W(s,'volta',0,-.1), W(s,'cai',1,-.1)),
-           (ix(2018), ix(2024), W(s,'cai',1,-.1), W(s,'cinza',0,-.1)),
-           (ix(2004), ix(2012), W(s,'quatro',0,-.3), W(s,'depois',1,-.1)),
-           (ix(2018), ix(2024), W(s,'depois',1,-.1), W(s,'subiu',0,-.1)),
-           (ix(2024), ix(2025), W(s,'voltou',0,-.2), None)],
-    pings=[(1, ix(2003), W(s,'rosinha',0,-.1), W(s,'cai',0,-.1), Y),
-           (1, ix(2012), W(s,'cai',0,-.1), W(s,'volta',0,-.1), Y),
-           (1, ix(2017), W(s,'volta',0,-.1), W(s,'cai',1,-.1), Y),
-           (1, ix(2024), W(s,'cai',1,-.1), W(s,'cinza',0,-.1), Y),
-           (0, ix(2017), W(s,'cinza',0,-.1), W(s,'quatro',0,-.3), '#E4E4E4'),
-           (0, ix(2012), W(s,'subia',0,-.1), W(s,'depois',1,-.1), '#E4E4E4'),
-           (1, ix(2012), W(s,'caía',0,-.1), W(s,'depois',1,-.1), Y),
-           (0, ix(2024), W(s,'caem',0,-.1), W(s,'subiu',0,-.1), '#E4E4E4'),
-           (1, ix(2024), W(s,'caem',0,-.1), W(s,'subiu',0,-.1), Y),
-           (1, ix(2025), W(s,'voltou',0,-.1), W(s,'brasil',1,-.1), Y),
-           (0, ix(2024), W(s,'menor',0,-.2), None, '#E4E4E4')], band_top=0, flow='m:4')
+    plabels=[(1, ix(2002), 'GAROTINHO<br>+26%', L1, -62, W(s,'garotinho',0,-.1), -40),
+             (0, ix(2002), 'BRASIL<br>+18%', '#B5B5B5', 22, W(s,'brasil',1,-.1), -40),
+             (1, ix(2006), 'ROSINHA<br>−5%', BLUE, -64, W(s,'rosinha',0,-.1), 6),
+             (1, ix(2010), 'CABRAL<br>−24%', BLUE, 20, W(s,'cabral',0,-.1)),
+             (1, ix(2018), 'PEZÃO<br>+17%', BLUE, -64, W(s,'pezão',0,-.1)),
+             (1, ix(2022), 'WITZEL/CASTRO<br>−33%', BLUE, -64, W(s,'witzel',0,-.1), 30),
+             (1, ix(2025), '2025<br>+2,1%', BLUE, 18, W(s,'voltou',1,-.2), -14)],
+    vmarks=[(ix(2003), 'ESTATUTO DO<br>DESARMAMENTO', '#F2ECE0', W(s,'estatuto',0,-.2), 'top', 0),
+            (ix(2008), 'UPPs', '#F2ECE0', W(s,'upps',0,-.2), 'bottom', 0),
+            (ix(2018), 'INTERVENÇÃO<br>FEDERAL', '#F2ECE0', W(s,'intervenção',0,-.2), 'bottom', 0)],
+    bands=[(ix(1998), ix(2002), W(s,'garotinho',0,-.1), W(s,'estatuto',0,-.2)),
+           (ix(2003), ix(2005), W(s,'país',0,-.2), W(s,'cabral',0,-.1)),
+           (ix(2007), ix(2012), W(s,'cabral',0,-.1), W(s,'pezão',0,-.1)),
+           (ix(2014), ix(2018), W(s,'pezão',0,-.1), W(s,'intervenção',0,-.2)),
+           (ix(2018), ix(2024), W(s,'intervenção',0,-.2), W(s,'subiu',0,-.1)),
+           (ix(2024), ix(2025), W(s,'voltou',1,-.2), None)],
+    pings=[(1, ix(2002), W(s,'garotinho',0,-.1), W(s,'estatuto',0,-.2), Y),
+           (0, ix(2002), W(s,'brasil',1,-.1), W(s,'estatuto',0,-.2), G),
+           (0, ix(2004), W(s,'país',0,-.2), W(s,'cabral',0,-.1), G),
+           (1, ix(2004), W(s,'rio',2,-.2), W(s,'cabral',0,-.1), Y),
+           (1, ix(2012), W(s,'caiu',0,-.1), W(s,'pezão',0,-.1), Y),
+           (0, ix(2012), W(s,'brasil',2,-.1), W(s,'pezão',0,-.1), G),
+           (1, ix(2018), W(s,'voltou',0,-.1), W(s,'intervenção',0,-.2), Y),
+           (1, ix(2024), W(s,'caiu',1,-.1), W(s,'subiu',0,-.1), Y),
+           (0, ix(2024), W(s,'brasil',3,-.1), W(s,'subiu',0,-.1), G),
+           (1, ix(2025), W(s,'voltou',1,-.1), W(s,'brasil',4,-.1), Y),
+           (0, ix(2024), W(s,'menor',0,-.2), None, G)], band_top=0, flow='m:4')
 BIG23 = f'<div class="el big23 solo" data-flow="m:3" data-gap="26" data-a="up" data-t="{W(s,"rosinha",0,-.1):.2f}" style="left:80px"><b>23 ANOS</b><span>DE GOVERNOS DE DIREITA</span><small>DESDE 2003 · MDB = DIREITA</small></div>'
 H.append(scene(s, rail(1)+f'''
-{eb(3, 'A LINHA INTEIRA · 1998–2025', top=290)}
+{eb(2, 'A LINHA INTEIRA · 1998–2025', top=290)}
 <div class="el body" data-flow="m:2" data-gap="34" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:32px"><span class="lg"><i style="background:{L1}"></i>ESQUERDA</span><span class="lg"><i style="background:{BLUE}"></i>DIREITA</span><span class="lg"><i style="background:#9A9A9A"></i>BRASIL</span></div>
 {BIG23}
 {c4}
+<div class="el body" data-flow="m:5" data-gap="30" data-a="up" data-t="{W(s,'estatuto',0,-.2)}" data-o="{W(s,'rosinha',0,-.3)}" style="left:80px;width:900px;font-size:30px">+ AJUDA FEDERAL: <b class="hl">ESTATUTO DO DESARMAMENTO</b>, 2003, sancionado pelo presidente {SQUID} · <b>464 mil armas</b> entregues</div>
 <div class="el h" data-flow="m:5" data-gap="30" data-a="up" data-t="{W(s,'subiu',0,-.2)}" style="left:80px;width:880px;font-size:58px;color:#fff">SUBIU E CAIU <span class="hl">COM OS DOIS LADOS.</span></div>
-<div class="el fine" data-flow="m:6" data-gap="20" data-a="fade" data-t="{W(s,'série',0,.1)}" style="left:80px">MESMA BASE DE 1998 A 2025 (ISP-RJ, NÚMERO DE MORTES VIOLENTAS). 2025: RIO +2,1% (MORTES PELA POLÍCIA +13%), BRASIL −8,2%, MENOR TAXA DA SÉRIE (FBSP). A QUEDA DEPOIS DE 2018 VEIO COM O RECORDE DE MORTES PELA POLÍCIA (1.814 EM 2019). BRASIL: ATLAS DA VIOLÊNCIA (SIM), 2004–2024, AJUSTADO À ESCALA DO RIO (SÓ A FORMA DA CURVA). AZUL DESDE AGO/2003.</div>
-''', 'i04', 'ISP-RJ, LETALIDADE VIOLENTA · FBSP, ANUÁRIO 2026', kbo='60% 45%'))
+<div class="el fine" data-flow="m:6" data-gap="20" data-a="fade" data-t="{W(s,'série',0,.1)}" style="left:80px">ISP-RJ, MORTES VIOLENTAS, 1998–2025. % = FIM DO MANDATO × ANO ANTES DA POSSE (GAROTINHO INCLUI OS 9 MESES DE BENEDITA, PT). 2025: RIO +2,1% (MORTES PELA POLÍCIA +13%), BRASIL −8,2% (FBSP). BRASIL: HOMICÍDIOS (SIM) NA ESCALA DO RIO. INTERVENÇÃO FEDERAL: FEV–DEZ/2018.</div>
+''', 'i04', 'ISP-RJ · FBSP, ANUÁRIO 2026 · MAPA DA VIOLÊNCIA 2006 E ATLAS DA VIOLÊNCIA (SIM)', kbo='60% 45%'))
 
 s = 'v05'; CUR['s'] = s
 YS = [str(y) for y in range(2013, 2026)]
@@ -283,7 +271,7 @@ c5 = segchart(YS, [
     dict(n='SP 7,8', sub='REPUBLICANOS', v=[12.6,13.3,11.8,11.1,10.8,9.6,9.0,9.1,8.0,8.2,7.6,8.2,7.8], segs=[(0, 12, '#B9CCFF')], w=6, lc='#B9CCFF', lt=W(s,'paulo',0,.6), rt=W(s,'paulo',0,-.2)),
 ], 0, 45, [0, 15, 30, 45], W(s,'linha',0,-.2), 2.4, h=620, lw=230, xl=[0, 3, 6, 9, 12]).replace('{flow}', 'm:3')
 H.append(scene(s, rail(1)+f'''
-{eb(4, 'SUDESTE · MORTES VIOLENTAS POR 100 MIL', top=290)}
+{eb(3, 'SUDESTE · MORTES VIOLENTAS POR 100 MIL', top=290)}
 <div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:30px"><span class="lg"><i style="background:{L1}"></i>ESQUERDA</span><span class="lg"><i style="background:{BLUE}"></i>DIREITA</span><span class="lgn">UM TOM POR ESTADO</span></div>
 {c5}
 <div class="el h" data-flow="m:4" data-gap="30" data-a="up" data-t="{W(s,'topo',0,-.3)}" style="left:80px;width:880px;font-size:54px;color:#fff">PARTIDO SOZINHO <span class="hl">NÃO DECIDE.</span></div>
@@ -292,7 +280,7 @@ H.append(scene(s, rail(1)+f'''
 
 s = 'v06'; CUR['s'] = s
 H.append(scene(s, rail(2)+f'''
-{eb(5, 'PROBLEMA 1 · TERRITÓRIO', top=320)}
+{eb(4, 'PROBLEMA 1 · TERRITÓRIO', top=320)}
 <div class="el h cnt" data-flow="m:2" data-gap="30" data-t="{W(s,'quatro',0,-.15)}" data-d=".9" data-from="0" data-to="34.9" data-dec="1" data-suf="%" style="left:72px;font-size:230px;color:{R};width:880px;line-height:.82;height:190px"></div>
 <div class="el body" data-flow="m:3" data-gap="24" data-a="up" data-t="{W(s,'metropolitana',0,-.1)}" style="left:80px;width:860px">da região metropolitana vive sob grupos armados, <b>tráfico e milícia: cerca de 4 milhões de pessoas.</b></div>
 <div class="el rows" data-flow="m:4" data-gap="40" data-a="fade" data-t="{W(s,'milícia',0,-.3)}" style="left:80px">
@@ -303,7 +291,7 @@ H.append(scene(s, rail(2)+f'''
 
 s = 'v07'; CUR['s'] = s
 H.append(scene(s, rail(3)+f'''
-{eb(6, 'PROBLEMA 2 · MILÍCIA E POLÍTICA', top=320)}
+{eb(5, 'PROBLEMA 2 · MILÍCIA E POLÍTICA', top=320)}
 <div class="el items" data-flow="m:2" data-gap="36" style="left:80px">
   {item('CPI DAS MILÍCIAS · ALERJ, 2008', 'Mais de 200 indiciamentos pedidos, entre eles 5 parlamentares.', W(s,'cpi',0,-.2))}
   {item('FLÁVIO BOLSONARO · PL ' + DIR, 'Medalha a Adriano da Nóbrega, depois apontado como chefe do Escritório do Crime. Mãe e ex-mulher dele no gabinete.', W(s,'flávio',0,-.2))}</div>
@@ -313,7 +301,7 @@ H.append(scene(s, rail(3)+f'''
 
 s = 'v09'; CUR['s'] = s
 H.append(scene(s, rail(3)+f'''
-{eb(7, 'O CRIME CHEGOU AO PODER', top=320)}
+{eb(6, 'O CRIME CHEGOU AO PODER', top=320)}
 <div class="el items" data-flow="m:2" data-gap="36" style="left:80px">
   {item('PRESIDENTE DA ALERJ · UNIÃO ' + UNI + ' · ALIADO DE CASTRO', 'Preso pela PF, suspeito de avisar um deputado alvo de operação contra o Comando Vermelho.', W(s,'presidente',0,-.2))}
   {item('CASO MARIELLE · STF, FEV/2026', 'Irmãos Brazão condenados como mandantes: 76 anos.', W(s,'supremo',0,-.2), color=R)}</div>
@@ -327,7 +315,7 @@ c10 = chart(s, YF, [
 ], 2000, [0, 500, 1000, 1500, 2000], 0, 0, h=560, marks=[('2018', 'INTERV.', '#fff'), ('2020', 'STF', Y)],
    stages=[(0, 6, W(s,'chegaram',0,-.2), 2.2), (6, 11, W(s,'caíram',0,-.2), 2.0), (11, 12, W(s,'voltaram',0,-.2), 1.0)]).replace('{flow}', 'm:2')
 H.append(scene(s, rail(4)+f'''
-{eb(8, 'PROBLEMA 3 · A POLÍCIA', top=300)}
+{eb(7, 'PROBLEMA 3 · A POLÍCIA', top=300)}
 {c10}
 <div class="el h" data-flow="m:3" data-gap="30" data-a="up" data-t="{W(s,'três',0,-.25)}" style="left:80px;width:880px;font-size:56px;color:#fff">2019: <span style="color:{R}">3 EM CADA 10</span> MORTES VIOLENTAS</div>
 <div class="el fine" data-flow="m:4" data-gap="22" data-a="fade" data-t="{W(s,'letal',0,.2)}" style="left:80px">AS 6 OPERAÇÕES MAIS LETAIS DESDE 2007 FORAM NO GOVERNO CASTRO (PL {DIR}). POLÍCIA MILITAR E CIVIL SÃO DO ESTADO. “O STF PROIBIU OPERAÇÕES” É DISTORCIDO (AOS FATOS): LIMITOU NA PANDEMIA, COM EXCEÇÕES, E EM ABR/2025 DERRUBOU AS PRINCIPAIS RESTRIÇÕES; A OPERAÇÃO MAIS LETAL VEIO DEPOIS.</div>
@@ -335,7 +323,7 @@ H.append(scene(s, rail(4)+f'''
 
 s = 'v11'; CUR['s'] = s
 H.append(scene(s, rail(4)+f'''
-{eb(9, 'OPERAÇÃO CONTENÇÃO · 28/10/2025', top=320)}
+{eb(8, 'OPERAÇÃO CONTENÇÃO · 28/10/2025', top=320)}
 <div class="el h" data-flow="m:2" data-gap="30" data-a="slam" data-t="{W(s,'resolveu',0,-.2)}" style="left:80px;width:880px;font-size:96px;color:#fff">NÃO <span class="hl">RESOLVEU.</span></div>
 <div class="el rows" data-flow="m:3" data-gap="36" data-a="fade" data-t="{W(s,'nenhum',0,-.3)}" style="left:80px">
   {row('ALVOS DA LISTA', 'NENHUM DOS 69 ENTRE AS MORTES', None, '#fff', 0)}
@@ -346,7 +334,7 @@ H.append(scene(s, rail(4)+f'''
 
 s = 'v11b'; CUR['s'] = s
 H.append(scene(s, rail(4)+f'''
-{eb(10, 'O QUE INCENTIVA O CONFRONTO', top=300)}
+{eb(9, 'O QUE INCENTIVA O CONFRONTO', top=300)}
 <div class="el items tight" data-flow="m:2" data-gap="30" style="left:80px">
   {item('2019 · WITZEL · PSC ' + DIR, 'Mortes por policiais saem da conta do bônus das polícias. No mesmo ano: recorde de 1.814.', W(s,'witzel',0,-.2))}
   {item('2025 · DEPUTADOS DO PL ' + DIR, 'Volta a gratificação faroeste. Castro vetou; a Alerj derrubou o veto.', W(s,'deputados',0,-.2), color=R)}
@@ -357,7 +345,7 @@ H.append(scene(s, rail(4)+f'''
 
 s = 'v12'; CUR['s'] = s
 H.append(scene(s, rail(4)+f'''
-{eb(11, 'PROBLEMA 4 · INVESTIGAÇÃO', top=320)}
+{eb(10, 'PROBLEMA 4 · INVESTIGAÇÃO', top=320)}
 <div class="el h cnt" data-flow="m:2" data-gap="30" data-t="{W(s,'vinte',0,-.15)}" data-d=".9" data-from="0" data-to="23" data-dec="0" data-suf="%" style="left:72px;font-size:260px;color:{R};width:880px;line-height:.82;height:214px"></div>
 <div class="el body" data-flow="m:3" data-gap="24" data-a="up" data-t="{W(s,'homicídios',0,-.1)}" style="left:80px;width:860px">dos homicídios do Rio são esclarecidos.<br><b>Investigar é trabalho do estado (Polícia Civil).</b></div>
 <div class="el rows" data-flow="m:4" data-gap="40" data-a="fade" data-t="{W(s,'contra',0,-.3)}" style="left:80px">
@@ -368,7 +356,7 @@ H.append(scene(s, rail(4)+f'''
 
 s = 'v13'; CUR['s'] = s
 H.append(scene(s, rail(5)+f'''
-{eb(12, 'E O GOVERNO FEDERAL?', top=300)}
+{eb(11, 'E O GOVERNO FEDERAL?', top=300)}
 <div class="el rows" data-flow="m:2" data-gap="22" data-a="fade" data-t="{W(s,'porto',0,-.3)}" style="left:80px">
   {row('É DA UNIÃO', 'FRONTEIRA, PORTO, ARMAS, PF, FUNDOS', None, Y, 0)}</div>
 <div class="el rows" data-flow="m:3" data-gap="22" data-a="fade" data-t="{W(s,'ministério',0,-.3)}" style="left:80px">
@@ -444,6 +432,8 @@ CSS = open(os.path.join(KIT, 'preview_kit/style.css')).read() + '''
 .lgn{font-family:Rub;font-weight:600;font-size:26px;color:#BDB6A6;white-space:nowrap}
 .eyebrow::before{display:none}
 .cband{position:absolute;background:linear-gradient(180deg,rgba(255,211,77,.20),rgba(255,211,77,.06));border-top:4px solid #FFD34D;border-radius:4px}
+.cvm{position:absolute;width:0;border-left:3px dashed}
+.cvml{font-size:19px;line-height:1.15;letter-spacing:.5px}
 .cping{position:absolute;width:38px;height:38px;border-radius:50%;border:5px solid #FFD34D;box-shadow:0 0 0 6px rgba(255,211,77,.25),0 0 22px rgba(255,211,77,.7)}
 .cnote{font-size:20px;line-height:1.25}
 .clab{position:absolute;font-family:JBM;font-weight:700;font-size:22px;letter-spacing:1.5px;white-space:nowrap;line-height:1.2;text-shadow:0 2px 10px rgba(0,0,0,.8)}
