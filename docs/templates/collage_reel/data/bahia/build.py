@@ -6,6 +6,14 @@ D=os.path.dirname(os.path.abspath(__file__)); SR=48000
 W=json.load(open(f'{D}/words.json')); S=json.load(open(f'{D}/script.json')); SP=json.load(open(f'{D}/speeds.json'))['speeds']
 KEEP,MINSIL,EDGE,THR=0.10,0.18,0.05,0.012
 norm=lambda w: re.sub(r'[^\wÀ-ú]','',w.lower())
+def _remap_time(t,cmap):
+    prev=(0,0)
+    for i in range(0,len(cmap),2):
+        a,na=cmap[i]; b,nb=cmap[i+1]
+        if t<a: return prev[1]+(t-prev[0])
+        if t<b: return nb
+        prev=(b,nb)
+    return prev[1]+(t-prev[0])
 def squeeze(k):
     raw=subprocess.check_output(['ffmpeg','-v','error','-i',f'{D}/tts/{k}.mp3','-f','s16le','-ac','1','-ar',str(SR),'-'])
     x=np.frombuffer(raw,np.int16).astype(np.float32)/32768
@@ -29,14 +37,7 @@ def squeeze(k):
         out.append(x[int(pos*SR):int(a*SR)]); newt+=a-pos; cmap.append((a,newt))
         k2=min(keep,b-a); out.append(x[int(a*SR):int((a+k2)*SR)]); newt+=k2; pos=b; cmap.append((b,newt))
     out.append(x[int(pos*SR):]); y=np.concatenate(out)
-    def remap(t):
-        prev=(0,0)
-        for i in range(0,len(cmap),2):
-            a,na=cmap[i]; b,nb=cmap[i+1]
-            if t<a: return prev[1]+(t-prev[0])
-            if t<b: return nb
-            prev=(b,nb)
-        return prev[1]+(t-prev[0])
+    remap=lambda t: _remap_time(t,cmap)
     p=f'{D}/seg/{k}_sq.wav'
     with wave.open(p,'wb') as w: w.setnchannels(1); w.setsampwidth(2); w.setframerate(SR); w.writeframes((np.clip(y,-1,1)*32767).astype(np.int16).tobytes())
     return p,remap,dur-len(y)/SR
