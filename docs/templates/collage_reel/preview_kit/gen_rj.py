@@ -225,7 +225,7 @@ c3 = chart(s, XM, [
    per_line=True).replace('{flow}', 'm:3')
 H.append(scene(s, rail(1)+f'''
 {eb(2, 'MANDATO POR MANDATO · MORTES VIOLENTAS', top=290)}
-<div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:32px"><b style="color:{L1}">━ ESQUERDA</b> &nbsp;&nbsp; <b style="color:{BLUE}">━ DIREITA</b> &nbsp;&nbsp; <span style="color:#BDB6A6;font-size:28px">┅ 2º MANDATO</span> &nbsp; <b style="color:#B5B5B5">┅ BRASIL</b></div>
+<div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:32px"><span class="lg"><i style="background:{L1}"></i>ESQUERDA</span><span class="lg"><i style="background:{BLUE}"></i>DIREITA</span><span class="lg"><i style="background:#9A9A9A"></i>BRASIL</span><span class="lgn">TRACEJADO = 2º MANDATO</span></div>
 {c3}
 <div class="el fine" data-flow="m:4" data-gap="22" data-a="fade" data-t="{W(s,'repare',0,-.1)}" style="left:80px">VARIAÇÃO NO NÚMERO DE MORTES VIOLENTAS ATÉ O FIM DO MANDATO, CONTRA O ANO ANTES DA POSSE. MESMA BASE DE 1998 A 2025 (ISP-RJ). BENEDITA (PT) GOVERNOU 9 MESES EM 2002; PEZÃO ASSUMIU EM ABR/2014; CASTRO EM AGO/2020. ANTES DE 1999, MARCELLO ALENCAR (PSDB, DIREITA): −26%. BRASIL ENTRE 2018 E 2022: −20% NO ATLAS DA VIOLÊNCIA (SIM, HOMICÍDIOS); CERCA DE −17% NO FBSP (MORTES VIOLENTAS). OS +26% DE GAROTINHO INCLUEM OS 9 MESES DE BENEDITA (PT).</div>
 ''', 'i03', 'ISP-RJ, LETALIDADE VIOLENTA (1998–2020) · FBSP, ANUÁRIOS 2022–2026 · ATLAS DA VIOLÊNCIA · ' + IDS, kbo='55% 60%'))
@@ -266,7 +266,7 @@ c4 = segchart(YC, [dict(n='', v=VB, segs=[(6, 26, '#8C8C8C')], w=5, dash=True, l
 c4 = c4[:-6] + f'<div class="big23" data-a="up" data-t="{W(s,"rosinha",0,-.1):.2f}"><b>23 ANOS</b><span>DE GOVERNOS DE DIREITA</span><small>DESDE 2003 · MDB CONTA COMO DIREITA</small></div></div>'
 H.append(scene(s, rail(1)+f'''
 {eb(3, 'A LINHA INTEIRA · 1998–2025', top=290)}
-<div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:32px"><b style="color:{L1}">━ ESQUERDA</b> &nbsp;&nbsp; <b style="color:{BLUE}">━ DIREITA</b> &nbsp;&nbsp; <b style="color:#B5B5B5">┅ BRASIL</b></div>
+<div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:32px"><span class="lg"><i style="background:{L1}"></i>ESQUERDA</span><span class="lg"><i style="background:{BLUE}"></i>DIREITA</span><span class="lg"><i style="background:#9A9A9A"></i>BRASIL</span></div>
 {c4}
 <div class="el h" data-flow="m:4" data-gap="30" data-a="up" data-t="{W(s,'subiu',0,-.2)}" style="left:80px;width:880px;font-size:58px;color:#fff">SUBIU E CAIU <span class="hl">COM OS DOIS LADOS.</span></div>
 <div class="el fine" data-flow="m:5" data-gap="20" data-a="fade" data-t="{W(s,'série',0,.1)}" style="left:80px">MESMA BASE DE 1998 A 2025 (ISP-RJ, NÚMERO DE MORTES VIOLENTAS). 2025: RIO +2,1% (MORTES PELA POLÍCIA +13%), BRASIL −8,2%, MENOR TAXA DA SÉRIE (FBSP). A QUEDA DEPOIS DE 2018 VEIO COM O RECORDE DE MORTES PELA POLÍCIA (1.814 EM 2019). BRASIL: ATLAS DA VIOLÊNCIA (SIM), 2004–2024, NA MESMA ESCALA DO RIO EM 2004 (SÓ A FORMA DA CURVA). MDB = DIREITA NA ESCALA DE BOLOGNESI (7,01); AZUL DESDE AGO/2003.</div>
@@ -282,7 +282,7 @@ c5 = segchart(YS, [
 ], 0, 45, [0, 15, 30, 45], W(s,'linha',0,-.2), 2.4, h=620, lw=230, xl=[0, 3, 6, 9, 12]).replace('{flow}', 'm:3')
 H.append(scene(s, rail(1)+f'''
 {eb(4, 'SUDESTE · MORTES VIOLENTAS POR 100 MIL', top=290)}
-<div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:30px"><b style="color:{L1}">━ ESQUERDA</b> &nbsp;&nbsp; <b style="color:{BLUE}">━ DIREITA</b> &nbsp;&nbsp; <span style="color:#BDB6A6;font-size:28px">· UM TOM POR ESTADO</span></div>
+<div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:30px"><span class="lg"><i style="background:{L1}"></i>ESQUERDA</span><span class="lg"><i style="background:{BLUE}"></i>DIREITA</span><span class="lgn">UM TOM POR ESTADO</span></div>
 {c5}
 <div class="el h" data-flow="m:4" data-gap="30" data-a="up" data-t="{W(s,'topo',0,-.3)}" style="left:80px;width:880px;font-size:54px;color:#fff">PARTIDO SOZINHO <span class="hl">NÃO DECIDE.</span></div>
 <div class="el fine" data-flow="m:5" data-gap="20" data-a="fade" data-t="{W(s,'topo',0,.3)}" style="left:80px">ES: CASAGRANDE (PSB, CENTRO-ESQUERDA) 2013–14 E 2019–25, HARTUNG (MDB, DIREITA) 2015–18: CAIU NOS DOIS. MG: PIMENTEL (PT, ESQUERDA) 2015–18, ZEMA (NOVO, DIREITA) 2019–25. SP: PSDB E REPUBLICANOS (DIREITA); FRANÇA (PSB) 9 MESES EM 2018. O “ESQUERDA 23,4 × DIREITA 14,8” (OESTE/PODER360) USA A MÉDIA DO PAÍS E TIRA AS MORTES PELA POLÍCIA. MESMO PARTIDO, OUTRO RESULTADO: SC (PL) 7,6 × RIO (PL) 22,6.</div>
@@ -438,6 +438,9 @@ CSS = open(os.path.join(KIT, 'preview_kit/style.css')).read() + '''
 
 .chart{position:absolute}.chart svg{position:absolute;left:0;top:0;overflow:visible}
 .crev{position:absolute;left:0;top:0;overflow:hidden;width:0}
+.lg{display:inline-flex;align-items:center;gap:12px;margin-right:30px;font-family:Rub;font-weight:800;color:#F2ECE0;white-space:nowrap}.lg i{display:inline-block;width:26px;height:26px;border-radius:6px}
+.lgn{font-family:Rub;font-weight:600;font-size:26px;color:#BDB6A6;white-space:nowrap}
+.eyebrow::before{display:none}
 .cband{position:absolute;background:linear-gradient(180deg,rgba(255,211,77,.20),rgba(255,211,77,.06));border-top:4px solid #FFD34D;border-radius:4px}
 .cping{position:absolute;width:38px;height:38px;border-radius:50%;border:5px solid #FFD34D;box-shadow:0 0 0 6px rgba(255,211,77,.25),0 0 22px rgba(255,211,77,.7)}
 .cnote{font-size:20px;line-height:1.25}
