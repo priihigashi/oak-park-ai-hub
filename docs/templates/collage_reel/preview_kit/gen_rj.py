@@ -299,11 +299,11 @@ H.append(scene(s, rail(2)+f'''
 s = 'v07'; CUR['s'] = s
 H.append(scene(s, rail(3)+f'''
 {eb(5, 'PROBLEMA 2 · MILÍCIA E POLÍTICA', top=FT['v07'])}
-<div class="el items tight" data-flow="m:2" data-gap="30" data-a="fade" data-t="0" data-d=".01" data-o="{W(s,'flávio',1,-.45)}" style="left:60px">
+<div class="el items tight" data-flow="m:2" data-gap="30" data-a="fade" data-t="0" data-d=".01" data-o="{W(s,'adriano',0,-.35)}" style="left:60px">
   {item('CPI DAS MILÍCIAS · ALERJ, 2008 · +200 INDICIAMENTOS PEDIDOS', 'Entre eles, 5 parlamentares da época:<span class="nms"><span class="nm"><b>Natalino</b> · deputado estadual · DEM ' + XDIR + '</span><span class="nm"><b>Jerominho</b> · vereador · PMDB ' + DIR + '</span><span class="nm"><b>Nadinho</b> · vereador · DEM ' + XDIR + '</span><span class="nm"><b>Deco</b> · vereador · PR ' + DIR + '</span><span class="nm"><b>Geiso</b> · vereador (São Gonçalo) · PDT ' + CESQ + '</span></span>', W(s,'cpi',0,-.2))}
   {item('JAIR E FLÁVIO BOLSONARO · HOJE PL ' + DIR + ' · 2007–2008', 'Jair: “o governo deveria apoiá-las”. Flávio: “não se pode estigmatizar as milícias”.', W(s,'jair',0,-.2))}</div>
 <div class="el items tight" data-flow="m:2" data-gap="30" style="left:60px">
-  {item('FLÁVIO BOLSONARO · PL ' + DIR + ' · 2005, MEDALHA TIRADENTES', 'Para Adriano da Nóbrega, preso na época por homicídio e depois apontado como chefe do Escritório do Crime. A mulher dele trabalhou 11 anos no gabinete de Flávio (2007–2018), e a mãe, 2 anos (2016–2018).', W(s,'flávio',1,-.2))}
+  {item('FLÁVIO BOLSONARO · PL ' + DIR + ' · 2005, MEDALHA TIRADENTES', 'Para Adriano da Nóbrega, preso na época por homicídio e depois apontado como chefe do Escritório do Crime. A mulher dele trabalhou 11 anos no gabinete de Flávio (2007–2018), e a mãe, 2 anos (2016–2018).', W(s,'adriano',0,-.15))}
   {item('FLÁVIO BOLSONARO · 2024, COMO ADVOGADO', 'Recurso ao STJ para tirar do júri o PM acusado de matar Ana Clara, 5 anos (Niterói, 2021). Negado.', W(s,'advogado',0,-.2))}</div>
 <div class="el fine" data-flow="m:3" data-gap="28" data-a="fade" data-t="{W(s,'negam',0,-.2)}" style="left:60px">OS DOIS NEGAM LIGAÇÃO COM A MILÍCIA. RACHADINHAS: PROVAS ANULADAS. ANA CLARA: SEM ACUSAÇÃO DE MILÍCIA; JÚRI NÃO FEITO. A CPI TAMBÉM CITOU JORGE BABU <span style="white-space:nowrap">(PT {ESQ}),</span> CONDENADO E EXPULSO DO PT. CHIQUINHO BRAZÃO FOI SECRETÁRIO DE PAES <span style="white-space:nowrap">(PSD {DIR})</span>, BASE DO GOVERNO ATUAL {SQUID}, ATÉ 2024.</div>
 ''', 'i07', 'ALERJ, CPI 2008 · BBC (2008) E ALERJ (2007) VIA CARTACAPITAL · MP-RJ · STJ (2024) · A TARDE', kbo='60% 50%'))
