@@ -69,7 +69,7 @@ H = []
 
 
 # ---------- gráfico de linhas animado (revela da esquerda pra direita via .bar) ----------
-def chart(sid, years, series, ymax, ticks, t0, dur, marks=(), w=880, h=600, lw=250, stages=None, notes=(), ymin=0, tfmt=None, per_line=False):
+def chart(sid, years, series, ymax, ticks, t0, dur, marks=(), w=920, h=600, lw=250, stages=None, notes=(), ymin=0, tfmt=None, per_line=False):
     px0, px1, py0, py1 = 56, w - lw - 20, 14, h - 46
     def X(i): return px0 + (px1 - px0) * i / (len(years) - 1)
     def Yv(v): return py1 - (py1 - py0) * (v - ymin) / (ymax - ymin)
@@ -124,7 +124,7 @@ def chart(sid, years, series, ymax, ticks, t0, dur, marks=(), w=880, h=600, lw=2
 
 
 # ---------- linha com trechos coloridos por governo (vermelho = esquerda, azul = direita) ----------
-def segchart(years, lines, ymin, ymax, ticks, t0, dur, w=880, h=620, lw=270, tfmt=None, xl=None, plabels=(), flow='m:3', bands=(), pings=(), band_top=0, vmarks=()):
+def segchart(years, lines, ymin, ymax, ticks, t0, dur, w=920, h=620, lw=270, tfmt=None, xl=None, plabels=(), flow='m:3', bands=(), pings=(), band_top=0, vmarks=()):
     px0, px1, py0, py1 = 70, w - lw - 16, 16, h - 46
     X = lambda i: px0 + (px1 - px0) * i / (len(years) - 1)
     Yv = lambda v: py1 - (py1 - py0) * (v - ymin) / (ymax - ymin)
@@ -299,21 +299,22 @@ H.append(scene(s, rail(3)+f'''
 <div class="el items tight" data-flow="m:2" data-gap="30" style="left:80px">
   {item('CPI DAS MILÍCIAS · ALERJ, 2008', 'Mais de 200 indiciamentos pedidos, entre eles 5 parlamentares.', W(s,'cpi',0,-.2))}
   {item('JAIR E FLÁVIO BOLSONARO · 2007–2008', 'Jair: “o governo deveria apoiá-las”. Flávio: “não se pode estigmatizar as milícias”.', W(s,'jair',0,-.2), color=BLUE)}
-  {item('FLÁVIO BOLSONARO · PL ' + DIR, 'Medalha a Adriano da Nóbrega, depois apontado como chefe do Escritório do Crime. Mãe e ex-mulher dele no gabinete.', W(s,'flávio',1,-.2))}</div>
-<div class="el note" data-flow="m:3" data-gap="24" data-a="fade" data-t="{W(s,'negam',0,-.2)}" style="left:80px">FLÁVIO E JAIR NEGAM LIGAÇÃO COM A MILÍCIA (ADRIANO MORREU EM 2020). RACHADINHAS: PROVAS ANULADAS E DENÚNCIA ARQUIVADA, SEM JULGAMENTO DE MÉRITO.</div>
-<div class="el fine" data-flow="m:4" data-gap="18" data-a="fade" data-t="{W(s,'negam',0,.6)}" style="left:80px">DO OUTRO LADO: NÃO ACHAMOS POLÍTICO DO PT, PSOL OU PDT DO RIO LIGADO A MILÍCIA OU FACÇÃO EM REPORTAGEM OU PROCESSO. NA BASE DO GOVERNO ATUAL {SQUID}: CHIQUINHO BRAZÃO FOI SECRETÁRIO DE PAES (PSD {DIR}) ATÉ 2024; O VEREADOR SALVINO (PSD) FOI PRESO EM 2026, SUSPEITO DE LIGAÇÃO COM O CV, E NEGA.</div>
-''', 'i07', 'ALERJ, CPI 2008 · BBC (2008) E ALERJ (2007) VIA CARTACAPITAL · MP-RJ · CONGRESSO EM FOCO · STF', kbo='60% 50%'))
+  {item('FLÁVIO BOLSONARO · PL ' + DIR, 'Medalha a Adriano da Nóbrega, depois apontado como chefe do Escritório do Crime. Mãe e ex-mulher dele no gabinete.', W(s,'flávio',1,-.2))}
+  {item('FLÁVIO, COMO ADVOGADO · 2024', 'Recurso ao STJ para tirar do júri o PM acusado de matar Ana Clara, 5 anos (Niterói, 2021). Negado.', W(s,'advogado',0,-.2), color=R)}</div>
+<div class="el note" data-flow="m:3" data-gap="24" data-a="fade" data-t="{W(s,'negam',0,-.2)}" style="left:80px">FLÁVIO E JAIR NEGAM LIGAÇÃO COM A MILÍCIA. RACHADINHAS: PROVAS ANULADAS, DENÚNCIA ARQUIVADA. CASO ANA CLARA: SEM ACUSAÇÃO DE MILÍCIA; JÚRI AINDA NÃO FEITO. FLÁVIO: “NÃO PODE CRIMINALIZAR A ADVOCACIA”.</div>
+<div class="el fine" data-flow="m:4" data-gap="18" data-a="fade" data-t="{W(s,'negam',0,.6)}" style="left:80px">DO OUTRO LADO: NÃO ACHAMOS POLÍTICO DO PT, PSOL OU PDT DO RIO LIGADO A MILÍCIA EM REPORTAGEM OU PROCESSO. NA BASE DO GOVERNO ATUAL {SQUID}: CHIQUINHO BRAZÃO FOI SECRETÁRIO DE PAES (PSD {DIR}) ATÉ 2024.</div>
+''', 'i07', 'ALERJ, CPI 2008 · BBC (2008) E ALERJ (2007) VIA CARTACAPITAL · MP-RJ · STJ (2024) · A TARDE', kbo='60% 50%'))
 
 s = 'v09'; CUR['s'] = s
 H.append(scene(s, rail(3)+f'''
 {eb(6, 'O CRIME CHEGOU AO PODER', top=320)}
 <div class="el items tight" data-flow="m:2" data-gap="30" style="left:80px">
   {item('PRESIDENTE DA ALERJ · UNIÃO ' + UNI + ' · ALIADO DE CASTRO', 'Preso pela PF, suspeito de avisar um deputado alvo de operação contra o Comando Vermelho.', W(s,'presidente',0,-.2))}
-  {item('CASO MARIELLE · STF, FEV/2026 · 76 ANOS', 'Irmãos Brazão condenados como mandantes da morte de Marielle.', W(s,'supremo',0,-.2), color=R)}
-  {item('EMENDA DE FLÁVIO BOLSONARO · PF, 2026', 'R$ 199,9 mil para ONG ligada aos Brazão, negociada com miliciano condenado no caso Marielle. O gabinete diz que seguiu a lei.', W(s,'emenda',0,-.2), color=BLUE)}</div>
+  {item('EMENDA DE FLÁVIO BOLSONARO · 2023 · PF', 'Robson Calixto, o Peixe, homem de confiança de Domingos Brazão: “vê com o nosso senador”. R$ 199,9 mil para ONG ligada aos Brazão.', W(s,'emenda',0,-.2), color=BLUE)}
+  {item('CASO MARIELLE · STF, FEV/2026', 'Irmãos Brazão condenados como mandantes; o Peixe, por organização criminosa armada.', W(s,'supremo',0,-.2), color=R)}</div>
 <div class="el note" data-flow="m:3" data-gap="24" data-a="fade" data-t="{W(s,'negam',0,-.2)}" style="left:80px">TODOS NEGAM. OS BRAZÃO SÃO EX-MDB E EX-UNIÃO BRASIL. O CHEFE DA POLÍCIA CIVIL, NOMEADO NA INTERVENÇÃO FEDERAL (GOVERNO TEMER, MDB {DIR}), PEGOU 18 ANOS POR ATRAPALHAR A INVESTIGAÇÃO.</div>
-<div class="el fine" data-flow="m:4" data-gap="18" data-a="fade" data-t="{W(s,'negam',0,.2)}" style="left:80px">TAMBÉM PRESOS: EX-CHEFE DA POLÍCIA CIVIL DE CASTRO (JOGO DO BICHO, 2022) E UM DEPUTADO EXPULSO DO MDB (SUSPEITO DE AGIR PARA O CV). VEREADOR SALVINO (PSD, ALIADO DE PAES): PRESO EM 2026 E SOLTO 2 DIAS DEPOIS. TODOS NEGAM.</div>
-''', 'i09', 'PF · STF (FEV/2026) · MP-RJ · ESTADÃO (SET/2026) · CORREIO BRAZILIENSE · DIÁRIO DO NORDESTE', kbo='65% 50%'))
+<div class="el fine" data-flow="m:4" data-gap="18" data-a="fade" data-t="{W(s,'negam',0,.2)}" style="left:80px">O GABINETE DE FLÁVIO DIZ QUE A EMENDA SEGUIU A LEI; O PSOL PEDIU INVESTIGAÇÃO À PGR. OS BRAZÃO TINHAM ALIADOS DOS DOIS LADOS: DOMINGOS FEZ CAMPANHA PARA DILMA (2014), CHIQUINHO PARA BOLSONARO (2022). TAMBÉM PRESOS: EX-CHEFE DA POLÍCIA CIVIL DE CASTRO (2022). TODOS NEGAM.</div>
+''', 'i09', 'PF · STF (FEV/2026) · ESTADÃO E ESTADO DE MINAS (SET/2026) · CORREIO BRAZILIENSE', kbo='65% 50%'))
 
 s = 'v10'; CUR['s'] = s
 c10 = chart(s, YF, [
