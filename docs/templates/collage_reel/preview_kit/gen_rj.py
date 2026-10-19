@@ -63,6 +63,15 @@ def row(k, v, frac, color, t, sub='', fade=None):
     return f'<div class="row"{fa}><div class="k">{k}{sb}</div>{bar}<div class="v" style="color:{col}">{v}</div></div>'
 def item(kick, txt, t, color='#fff'):
     return f'<div class="item" data-a="up" data-t="{t}"><div class="kick">{kick}</div><div class="t" style="color:{color}">{txt}</div></div>'
+
+def heads(items, flow, gap=26, extra='', h=250, ih=185):
+    n = len(items); slot = 960 / n; hw = min(230, slot - 16)
+    out = f'<div class="el heads" data-flow="{flow}" data-gap="{gap}" {extra} style="left:60px;width:960px;height:{h}px">'
+    for i, (k, name, chip, t) in enumerate(items):
+        x = int(i * slot + (slot - hw) / 2)
+        out += (f'<div class="hd" data-a="pop" data-bob="1" data-t="{t}" data-r="{(-3 if i % 2 else 3)}" style="left:{x}px;width:{hw}px">'
+                f'<img src="assets/rj/h_{k}.png" style="height:{ih}px"><b>{name}</b><span class="pt">{chip}</span></div>')
+    return out + '</div>'
 IDS = 'IDEOLOGIA: BOLOGNESI ET AL. (DADOS, 2023)'
 FT = json.load(open(os.path.join(KIT, 'data/rj/ftop.json')))
 H = []
@@ -299,14 +308,16 @@ H.append(scene(s, rail(2)+f'''
 s = 'v07'; CUR['s'] = s
 H.append(scene(s, rail(3)+f'''
 {eb(5, 'PROBLEMA 2 · MILÍCIA E POLÍTICA', top=FT['v07'])}
+{heads([('natalino','NATALINO',' DEM '+XDIR,W(s,'cpi',0,.2)),('jerominho','JEROMINHO',' PMDB '+DIR,W(s,'cpi',0,.6)),('jair','JAIR',' HOJE PL '+DIR,W(s,'jair',0,-.15)),('flavio','FLÁVIO',' PL '+DIR,W(s,'flávio',0,-.15))],'m:1.5',h=268,ih=205,extra='data-a="fade" data-t="0" data-d=".01" data-o="'+str(W(s,'adriano',0,-.35))+'"')}
+{heads([('flavio','FLÁVIO',' PL '+DIR,W(s,'adriano',0,-.15)),('adriano','ADRIANO','',W(s,'adriano',0,.1))],'m:1.5',h=268,ih=205)}
 <div class="el items tight" data-flow="m:2" data-gap="30" data-a="fade" data-t="0" data-d=".01" data-o="{W(s,'adriano',0,-.35)}" style="left:60px">
   {item('CPI DAS MILÍCIAS · ALERJ, 2008 · +200 INDICIAMENTOS PEDIDOS', 'Entre eles, 5 parlamentares da época:<span class="nms"><span class="nm"><b>Natalino</b> · deputado estadual · DEM ' + XDIR + '</span><span class="nm"><b>Jerominho</b> · vereador · PMDB ' + DIR + '</span><span class="nm"><b>Nadinho</b> · vereador · DEM ' + XDIR + '</span><span class="nm"><b>Deco</b> · vereador · PR ' + DIR + '</span><span class="nm"><b>Geiso</b> · vereador (São Gonçalo) · PDT ' + CESQ + '</span></span>', W(s,'cpi',0,-.2))}
   {item('JAIR E FLÁVIO BOLSONARO · HOJE PL ' + DIR + ' · 2007–2008', 'Jair: “o governo deveria apoiá-las”. Flávio: “não se pode estigmatizar as milícias”.', W(s,'jair',0,-.2))}</div>
 <div class="el items tight" data-flow="m:2" data-gap="30" style="left:60px">
   {item('FLÁVIO BOLSONARO · PL ' + DIR + ' · 2005, MEDALHA TIRADENTES', 'Para Adriano da Nóbrega, preso na época por homicídio e depois apontado como chefe do Escritório do Crime. A mulher dele trabalhou 11 anos no gabinete de Flávio (2007–2018), e a mãe, 2 anos (2016–2018).', W(s,'adriano',0,-.15))}
-  {item('FLÁVIO BOLSONARO · 2024, COMO ADVOGADO', 'Recurso ao STJ para tirar do júri o PM acusado de matar Ana Clara, 5 anos (Niterói, 2021). Negado.', W(s,'advogado',0,-.2))}</div>
+  {item('FLÁVIO BOLSONARO · 2024, COMO ADVOGADO', 'Recurso ao STJ para tirar do júri o PM acusado de matar Ana Clara, 5 anos (Niterói, 2021). O PM já tinha sido condenado em 1ª instância pela morte de um motociclista (2014). Recurso negado.', W(s,'advogado',0,-.2))}</div>
 <div class="el fine" data-flow="m:3" data-gap="28" data-a="fade" data-t="{W(s,'negam',0,-.2)}" style="left:60px">OS DOIS NEGAM LIGAÇÃO COM A MILÍCIA. RACHADINHAS: PROVAS ANULADAS. ANA CLARA: SEM ACUSAÇÃO DE MILÍCIA; JÚRI NÃO FEITO. A CPI TAMBÉM CITOU JORGE BABU <span style="white-space:nowrap">(PT {ESQ}),</span> CONDENADO E EXPULSO DO PT. CHIQUINHO BRAZÃO FOI SECRETÁRIO DE PAES <span style="white-space:nowrap">(PSD {DIR})</span>, BASE DO GOVERNO ATUAL {SQUID}, ATÉ 2024.</div>
-''', 'i07', 'ALERJ, CPI 2008 · BBC (2008) E ALERJ (2007) VIA CARTACAPITAL · MP-RJ · STJ (2024) · A TARDE', kbo='60% 50%'))
+''', 'i07', 'ALERJ, CPI 2008 · BBC (2008) E ALERJ (2007) VIA CARTACAPITAL · MP-RJ · STJ (2024) · O TEMPO (OUT/2026)', kbo='60% 50%'))
 
 s = 'v09'; CUR['s'] = s
 H.append(scene(s, rail(3)+f'''
@@ -315,6 +326,7 @@ H.append(scene(s, rail(3)+f'''
   {item('RODRIGO BACELLAR · UNIÃO ' + UNI + ' · PRESIDENTE DA ALERJ', 'Aliado de Castro, preso pela PF, suspeito de avisar um deputado alvo de operação contra o Comando Vermelho.', W(s,'presidente',0,-.2))}
   {item('EMENDA DE FLÁVIO BOLSONARO · PL ' + DIR + ' · 2023', 'Robson Calixto, o Peixe, homem de confiança de Domingos Brazão: “vê com o nosso senador”. <span style="white-space:nowrap">R$ 199,9 mil</span> para ONG ligada aos Brazão.', W(s,'segundo',0,-.2))}
   {item('CASO MARIELLE · STF, FEV/2026', 'Irmãos Brazão condenados como mandantes; o Peixe, por organização criminosa armada.', W(s,'supremo',0,-.2))}</div>
+{heads([('bacellar','BACELLAR',' UNIÃO '+UNI,W(s,'presidente',0,-.15)),('domingos','DOMINGOS',' EX-MDB '+DIR,W(s,'domingos',0,-.15)),('flavio','FLÁVIO',' PL '+DIR,W(s,'flávio',0,-.15)),('chiquinho','CHIQUINHO',' EX-UNIÃO '+DIR,W(s,'irmãos',0,-.1))],'m:3',h=320,ih=255,extra='data-a="fade" data-t="0" data-d=".01" data-o="'+str(W(s,'negam',0,-.4))+'"')}
 <div class="el fine" data-flow="m:3" data-gap="28" data-a="fade" data-t="{W(s,'negam',0,-.2)}" style="left:60px">TODOS NEGAM; O GABINETE DE FLÁVIO DIZ QUE A EMENDA SEGUIU A LEI, E O PSOL PEDIU INVESTIGAÇÃO À PGR. OS BRAZÃO, <span style="white-space:nowrap">EX-MDB {DIR}</span> E <span style="white-space:nowrap">EX-UNIÃO {DIR},</span> TINHAM ALIADOS DOS DOIS LADOS: DOMINGOS FEZ CAMPANHA PARA DILMA <span style="white-space:nowrap">(PT {ESQ})</span> EM 2014, CHIQUINHO PARA BOLSONARO <span style="white-space:nowrap">(PL {DIR})</span> EM 2022. O CHEFE DA POLÍCIA CIVIL NOMEADO NA INTERVENÇÃO DE TEMER <span style="white-space:nowrap">(MDB {DIR})</span> PEGOU 18 ANOS POR ATRAPALHAR A INVESTIGAÇÃO. TAMBÉM PRESO: ALLAN TURNOWSKI, EX-CHEFE DA POLÍCIA CIVIL DE CASTRO (2022).</div>
 ''', 'i09', 'PF · STF (FEV/2026) · ESTADÃO E ESTADO DE MINAS (SET/2026) · CORREIO BRAZILIENSE', kbo='65% 50%'))
 
@@ -351,6 +363,7 @@ H.append(scene(s, rail(4)+f'''
   {item('2024 · GOVERNO ATUAL ' + SQUID + ' · ' + ESQ, 'Regras nacionais de câmera na farda e de uso da força. Castro assinou a nota que pediu a revogação.', W(s,'vinte',0,-.2))}
   {item('2025 · DEPUTADOS DO PL ' + DIR, 'Volta a gratificação faroeste. Castro vetou, mas a Alerj derrubou o veto do governador.', W(s,'deputados',0,-.2))}
   {item('PROJETO DAS BALAS · PL 3.723/2019', 'Tira a marcação das balas usadas pelas polícias. Está parado no Senado.', W(s,'projeto',0,-.2))}</div>
+{heads([('witzel','WITZEL',' PSC '+DIR,W(s,'witzel',0,-.15)),('jair','BOLSONARO',' PL '+DIR,W(s,'bolsonaro',0,-.15)),('castro','CASTRO',' PL '+DIR,W(s,'castro',0,-.15)),('flavio','FLÁVIO',' PL '+DIR,W(s,'flávio',0,-.15))],'m:3',h=200,ih=140,extra='data-a="fade" data-t="0" data-d=".01" data-o="'+str(W(s,'senado',0,-.1))+'"')}
 <div class="el fine" data-flow="m:3" data-gap="22" data-a="fade" data-t="{W(s,'senado',0,.1)}" style="left:60px">A FAROESTE DOS ANOS 1990 (MARCELLO ALENCAR, <span style="white-space:nowrap">PSDB {DIR})</span> DOBROU OS MORTOS POR FERIDO EM CONFRONTO. PL 3.723: ENVIADO PELO GOVERNO BOLSONARO. A GUARDA DE PAES <span style="white-space:nowrap">(PSD {DIR})</span> GANHA GRATIFICAÇÃO POR PORTAR ARMA, NÃO POR MORTE. CÂMERAS NAS FARDAS: 2022, POR ORDEM DO STF.</div>
 ''', 'i08', 'JB (2019) · AGÊNCIA BRASIL E METRÓPOLES (2025) · CONGRESSO EM FOCO · METRÓPOLES (OUT/2026) · ALMA PRETA', kbo='55% 50%'))
 
@@ -420,7 +433,7 @@ CSS = open(os.path.join(KIT, 'preview_kit/style.css')).read() + '''
 .item{padding:20px 0 22px;border-top:1px solid rgba(242,236,224,.22)}
 .item:last-child{border-bottom:1px solid rgba(242,236,224,.22)}
 .item .kick{font-family:JBM;font-weight:700;font-size:21px;letter-spacing:2px;color:#FFD34D;text-transform:uppercase}
-.item .kick .ide{font-size:16px;padding:1px 8px;margin-left:6px}.pics .pic{position:absolute;width:466px;height:268px;border:7px solid #F2ECE0;box-shadow:0 14px 30px rgba(0,0,0,.6);background:#16130F;overflow:hidden}.pics .pic img{width:100%;height:100%;object-fit:cover;display:block}.pics .pic b{position:absolute;left:12px;bottom:12px;background:#FFD34D;color:#0E0D0B;font:900 24px Rub;letter-spacing:.5px;padding:4px 10px}.nms{display:block;margin-top:12px}.nms .nm{display:block;font-size:34px;font-weight:500;line-height:1.45;color:#E8E2D6}.nms .nm b{font-weight:800;color:#fff}.item .t .ide,.note .ide{font-size:17px;padding:2px 8px;letter-spacing:.5px;vertical-align:middle}
+.item .kick .ide{font-size:16px;padding:1px 8px;margin-left:6px}.heads .hd{position:absolute;top:0;display:flex;flex-direction:column;align-items:center;gap:4px}.heads .hd img{height:185px;width:auto;filter:drop-shadow(0 10px 18px rgba(0,0,0,.55))}.heads .hd b{font:800 24px Rub;color:#fff;letter-spacing:.3px;white-space:nowrap}.heads .hd .pt{font:700 18px JBM;color:#E8E2D6;white-space:nowrap}.heads .hd .ide{font-size:14px;padding:1px 7px;margin-left:4px}.pics .pic{position:absolute;width:466px;height:268px;border:7px solid #F2ECE0;box-shadow:0 14px 30px rgba(0,0,0,.6);background:#16130F;overflow:hidden}.pics .pic img{width:100%;height:100%;object-fit:cover;display:block}.pics .pic b{position:absolute;left:12px;bottom:12px;background:#FFD34D;color:#0E0D0B;font:900 24px Rub;letter-spacing:.5px;padding:4px 10px}.nms{display:block;margin-top:12px}.nms .nm{display:block;font-size:34px;font-weight:500;line-height:1.45;color:#E8E2D6}.nms .nm b{font-weight:800;color:#fff}.item .t .ide,.note .ide{font-size:17px;padding:2px 8px;letter-spacing:.5px;vertical-align:middle}
 .item .t{font-family:Rub;font-weight:800;font-size:46px;line-height:1.1;margin-top:10px;text-wrap:balance;text-shadow:0 3px 16px rgba(0,0,0,.55)}
 .mut{color:#BDB6A6;font-weight:500}.mut.sm{font-size:30px;line-height:1.3}
 .counter{display:flex;align-items:center;gap:26px}.counter .cnt{font-size:150px}.counter b{font-family:Rub;font-weight:600;font-size:34px;line-height:1.15;color:#E9E4D8;white-space:nowrap}
