@@ -24,6 +24,17 @@ def W(sid, tok, n=0, off=0.0):
                 k += 1
     raise SystemExit(f'word {tok} not in {sid}')
 KAR_MAX = 60   # 2 linhas cheias de 860 px; cor segue a voz palavra por palavra
+def _kar_part(n, N, pre):
+    INF = 1e9; best = [[INF]*(N+1) for _ in range(n+1)]; cut = [[0]*(N+1) for _ in range(n+1)]
+    best[0][0] = 0
+    for k in range(1, n+1):
+        for j in range(1, N+1):
+            for i in range(k-1, j):
+                v = max(best[k-1][i], pre[j]-pre[i])
+                if v < best[k][j]: best[k][j] = v; cut[k][j] = i
+    cuts = []; j = N
+    for k in range(n, 0, -1): i = cut[k][j]; cuts.append(i); j = i
+    return best[n][N], sorted(cuts[:-1])
 def kar(sid):
     """Páginas equilibradas (partição ótima): menor número de páginas com no máximo KAR_MAX caracteres,
     repartidas para todas terem tamanho parecido; nenhuma página com 1 linha curta ou palavra sozinha."""
@@ -31,20 +42,9 @@ def kar(sid):
     ws = S[sid]['words']; L = [len(w) + 1 for w, t in ws]; N = len(L)
     pre = [0]
     for x in L: pre.append(pre[-1] + x)
-    def part(n):
-        INF = 1e9; best = [[INF]*(N+1) for _ in range(n+1)]; cut = [[0]*(N+1) for _ in range(n+1)]
-        best[0][0] = 0
-        for k in range(1, n+1):
-            for j in range(1, N+1):
-                for i in range(k-1, j):
-                    v = max(best[k-1][i], pre[j]-pre[i])
-                    if v < best[k][j]: best[k][j] = v; cut[k][j] = i
-        cuts = []; j = N
-        for k in range(n, 0, -1): i = cut[k][j]; cuts.append(i); j = i
-        return best[n][N], sorted(cuts[:-1])
     n = max(1, math.ceil(pre[-1] / KAR_MAX))
     while True:
-        mx, cuts = part(n)
+        mx, cuts = _kar_part(n, N, pre)
         if mx <= KAR_MAX + 2 or n >= N: break
         n += 1
     cuts = set(cuts); toks = []
@@ -90,28 +90,34 @@ H = []
 
 
 # ---------- gráfico de linhas animado (revela da esquerda pra direita via .bar) ----------
-def chart(sid, years, series, ymax, ticks, t0, dur, marks=(), w=960, h=600, lw=230, stages=None, notes=(), ymin=0):
-    px0, px1, py0, py1 = 56, w - lw - 20, 14, h - 46
+def _colat(i, segs):
+    col = segs[0][1]
+    for a0, cc in segs:
+        if i >= a0: col = cc
+    return col
+def _chart_grid(px0, px1, py0, py1, ticks, years, h, ymin, ymax):
     def X(i): return px0 + (px1 - px0) * i / (len(years) - 1)
     def Yv(v): return py1 - (py1 - py0) * (v - ymin) / (ymax - ymin)
-    grid = ''.join(f'<line x1="{px0}" x2="{px1}" y1="{Yv(v):.1f}" y2="{Yv(v):.1f}" stroke="rgba(242,236,224,.14)" stroke-width="1.5"/>'
-                   f'<text x="{px0-12}" y="{Yv(v)+7:.1f}" text-anchor="end" font-family="JBM" font-weight="700" font-size="19" fill="#9F988A">{v}</text>' for v in ticks)
+    g = ''.join(f'<line x1="{px0}" x2="{px1}" y1="{Yv(v):.1f}" y2="{Yv(v):.1f}" stroke="rgba(242,236,224,.14)" stroke-width="1.5"/>'
+                f'<text x="{px0-12}" y="{Yv(v)+7:.1f}" text-anchor="end" font-family="JBM" font-weight="700" font-size="19" fill="#9F988A">{v}</text>' for v in ticks)
     lab_i = [0, len(years)//2, len(years)-1]
-    grid += ''.join(f'<text x="{X(i):.1f}" y="{h-12}" text-anchor="middle" font-family="JBM" font-weight="700" font-size="19" fill="#9F988A">{years[i]}</text>' for i in lab_i)
+    g += ''.join(f'<text x="{X(i):.1f}" y="{h-12}" text-anchor="middle" font-family="JBM" font-weight="700" font-size="19" fill="#9F988A">{years[i]}</text>' for i in lab_i)
+    return g
+def _chart_marks(marks, years, px0, px1, py0, py1, ymin, ymax):
+    def X(i): return px0 + (px1 - px0) * i / (len(years) - 1)
+    def Yv(v): return py1 - (py1 - py0) * (v - ymin) / (ymax - ymin)
     mk = ''
     for yr, txt, col in marks:
         i = years.index(yr)
         mk += (f'<line x1="{X(i):.1f}" x2="{X(i):.1f}" y1="{py0}" y2="{py1}" stroke="{col}" stroke-width="2" stroke-dasharray="6 6"/>'
                f'<text x="{X(i)+10:.1f}" y="{py1-12}" font-family="JBM" font-weight="700" font-size="18" fill="{col}">{txt}</text>')
+    return mk
+def _chart_series(series, years, px0, px1, py0, py1, ymin, ymax):
+    def X(i): return px0 + (px1 - px0) * i / (len(years) - 1)
+    def Yv(v): return py1 - (py1 - py0) * (v - ymin) / (ymax - ymin)
     lines = ''
     for s in series:
-        # segs = [(índice inicial, cor), ...]: a linha muda de cor quando muda o lado do governo (vermelho = esquerda, azul = direita)
         segs = s.get('segs') or [(0, s['c'])]
-        def colat(i):
-            col = segs[0][1]
-            for a0, cc in segs:
-                if i >= a0: col = cc
-            return col
         if segs: s['c'] = segs[-1][1]
         dash = ' stroke-dasharray="10 8"' if s.get('dash') else (' stroke-dasharray="2 10"' if s.get('dot') else '')
         for k, (a0, cc) in enumerate(segs):
@@ -119,16 +125,27 @@ def chart(sid, years, series, ymax, ticks, t0, dur, marks=(), w=960, h=600, lw=2
             pts = ' '.join(f'{X(i):.1f},{Yv(s["v"][i]):.1f}' for i in range(a0, b0 + 1))
             lines += f'<polyline points="{pts}" fill="none" stroke="{cc}" stroke-width="{s.get("w",5)}" stroke-linejoin="round" stroke-linecap="round"{dash}/>'
         for (i, txt) in s.get('dots', []):
-            cc = colat(i)
+            cc = _colat(i, segs)
             lines += (f'<circle cx="{X(i):.1f}" cy="{Yv(s["v"][i]):.1f}" r="9" fill="{cc}" stroke="#0b0c0e" stroke-width="3"/>'
                       f'<text x="{X(i):.1f}" y="{Yv(s["v"][i])-18:.1f}" text-anchor="middle" font-family="Rub" font-weight="900" font-size="30" fill="{cc}" stroke="#0b0c0e" stroke-width="6" paint-order="stroke">{txt}</text>')
-    labels = ''
-    # posições dos rótulos sem colisão: ordena pela altura e garante espaço mínimo
+    return lines
+def _chart_label_pos(series, py0, py1, ymin, ymax):
+    def Yv(v): return py1 - (py1 - py0) * (v - ymin) / (ymax - ymin)
     want = sorted([(Yv(s['v'][-1]), i) for i, s in enumerate(series)])
     pos = {}; last = -1e9
     for y, i in want:
         sb_ = series[i].get('sub'); hgt = 34 + (28 * (sb_.count('<br>') + 1) if sb_ else 0)
         y = max(y, last); pos[i] = y; last = y + hgt + 8
+    return pos
+def chart(sid, years, series, ymax, ticks, t0, dur, marks=(), w=960, h=600, lw=230, stages=None, notes=(), ymin=0):
+    px0, px1, py0, py1 = 56, w - lw - 20, 14, h - 46
+    def X(i): return px0 + (px1 - px0) * i / (len(years) - 1)
+    def Yv(v): return py1 - (py1 - py0) * (v - ymin) / (ymax - ymin)
+    grid = _chart_grid(px0, px1, py0, py1, ticks, years, h, ymin, ymax)
+    mk = _chart_marks(marks, years, px0, px1, py0, py1, ymin, ymax)
+    lines = _chart_series(series, years, px0, px1, py0, py1, ymin, ymax)
+    pos = _chart_label_pos(series, py0, py1, ymin, ymax)
+    labels = ''
     for i, s in enumerate(series):
         ly = pos[i]
         sub = f'<small>{s["sub"]}</small>' if s.get('sub') else ''
