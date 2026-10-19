@@ -24,6 +24,23 @@ def W(sid, tok, n=0, off=0.0):
                 k += 1
     raise SystemExit(f'word {tok} not in {sid}')
 KAR_MAX = 60   # 2 linhas cheias de 860 px; cor segue a voz palavra por palavra
+def _kar_part(n, N, pre):
+    INF = 1e9
+    best = [[INF] * (N + 1) for _ in range(n + 1)]
+    cut = [[0] * (N + 1) for _ in range(n + 1)]
+    best[0][0] = 0
+    for k in range(1, n + 1):
+        for j in range(1, N + 1):
+            for i in range(k - 1, j):
+                v = max(best[k - 1][i], pre[j] - pre[i])
+                if v < best[k][j]:
+                    best[k][j] = v; cut[k][j] = i
+    cuts = []; j = N
+    for k in range(n, 0, -1):
+        i = cut[k][j]; cuts.append(i); j = i
+    return best[n][N], sorted(cuts[:-1])
+
+
 def kar(sid):
     """Páginas equilibradas (partição ótima): menor número de páginas com no máximo KAR_MAX caracteres,
     repartidas para todas terem tamanho parecido; nenhuma página com 1 linha curta ou palavra sozinha."""
@@ -31,20 +48,9 @@ def kar(sid):
     ws = S[sid]['words']; L = [len(w) + 1 for w, t in ws]; N = len(L)
     pre = [0]
     for x in L: pre.append(pre[-1] + x)
-    def part(n):
-        INF = 1e9; best = [[INF]*(N+1) for _ in range(n+1)]; cut = [[0]*(N+1) for _ in range(n+1)]
-        best[0][0] = 0
-        for k in range(1, n+1):
-            for j in range(1, N+1):
-                for i in range(k-1, j):
-                    v = max(best[k-1][i], pre[j]-pre[i])
-                    if v < best[k][j]: best[k][j] = v; cut[k][j] = i
-        cuts = []; j = N
-        for k in range(n, 0, -1): i = cut[k][j]; cuts.append(i); j = i
-        return best[n][N], sorted(cuts[:-1])
     n = max(1, math.ceil(pre[-1] / KAR_MAX))
     while True:
-        mx, cuts = part(n)
+        mx, cuts = _kar_part(n, N, pre)
         if mx <= KAR_MAX + 2 or n >= N: break
         n += 1
     cuts = set(cuts); toks = []
