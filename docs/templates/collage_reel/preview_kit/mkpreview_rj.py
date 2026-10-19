@@ -51,7 +51,7 @@ body{{background:var(--bg);color:var(--fg);font-family:system-ui,sans-serif;marg
 .pv-note{{max-width:520px;color:var(--muted);font-size:12px;line-height:1.4;margin:0}}
 .pv-copy{{width:100%;max-width:520px;display:flex;flex-direction:column;gap:12px}}.pv-cp{{display:flex;flex-direction:column;gap:6px}}.pv-cp-h{{display:flex;justify-content:space-between;align-items:center;font:600 14px system-ui}}.pv-cp textarea{{width:100%;box-sizing:border-box;background:#141518;color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:10px;font:13px/1.45 system-ui;resize:vertical}}.cpb{{background:transparent;color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font:600 13px system-ui;cursor:pointer}}.cpb:focus-visible{{outline:2px solid var(--accent)}}
 </style>
-<div class="pv-head"><h1>Rio é culpa da esquerda? · prévia</h1><small id="ver">v1 · rodada 21</small></div>
+<div class="pv-head"><h1>Rio é culpa da esquerda? · prévia</h1><small id="ver">v1 · rodada 22</small></div>
 <div class="pv-frame" id="frame"><div id="scaler">{stage}</div></div>
 <div class="pv-bar"><button id="play" type="button">▶ Play</button><input id="seek" type="range" min="0" max="{dur}" step="0.05" value="0" aria-label="Posição"><output id="tm">0:00</output></div>
 <div class="pv-bar pv-skip" role="group" aria-label="Pular"><button type="button" class="sk" data-d="-30">↺ 30s</button><button type="button" class="sk" data-d="-10">↺ 10s</button><button type="button" class="sk" data-d="-5">↺ 5s</button><button type="button" class="sk" data-d="5">5s ↻</button><button type="button" class="sk" data-d="10">10s ↻</button><button type="button" class="sk" data-d="30">30s ↻</button></div>
