@@ -179,6 +179,7 @@ def quote(txt, t, flow, gap=34, size=58):
 CESQ_, DIR_ = CESQ, DIR
 SQUID = '🦑'
 UNI = ide('dir', 'DIREITA')
+XDIR = ide('dir', 'EXTREMA-DIREITA')
 YSIM = [str(y) for y in range(2000, 2010)]
 SIM = [51.0, 50.5, 56.5, 52.7, 49.2, 46.1, 45.8, 40.1, 34.0, 31.8]
 YF = [str(y) for y in range(2013, 2026)]
@@ -212,7 +213,7 @@ H.append(scene(s, rail(0)+f'''
   {gov('2019–2020', 'WITZEL', 'PSC', DIR, W(s,'witzel',0,-.2), col=Y, sub='!AFASTADO E CASSADO')}
   {gov('2020–2026', 'CASTRO', 'PSC→PL', DIR, W(s,'castro',0,-.2), col=Y, sub='!INELEGÍVEL ATÉ 2030')}</div>
 <div class="el h" data-flow="m:3" data-gap="34" data-a="slam" data-t="{W(s,'vinte',0,-.15)}" style="left:60px;width:960px;font-size:64px;color:#fff">23 ANOS DE <span class="hl">DIREITA</span></div>
-<div class="el fine" data-flow="m:4" data-gap="20" data-a="fade" data-t="{W(s,'lados',0,.2)}" style="left:60px">MDB = 7,01 (DIREITA); ROSINHA NO MDB DESDE AGO/2003. PT TEVE SECRETARIAS COM CABRAL ATÉ 2013; GAROTINHO FOI SECRETÁRIO DE SEGURANÇA DE ROSINHA. ANTES: MARCELLO ALENCAR (PSDB, DIREITA) E BRIZOLA (PDT). HOJE: INTERINO RICARDO COUTO (TJ-RJ). PREFEITOS DESDE 1993: DE CENTRO-DIREITA A EXTREMA-DIREITA. POLÍCIAS = ESTADO (CF, ART. 144).</div>
+<div class="el fine" data-flow="m:4" data-gap="20" data-a="fade" data-t="{W(s,'lados',0,.2)}" style="left:60px">MDB = 7,01 (DIREITA); ROSINHA NO MDB DESDE AGO/2003. PT TEVE SECRETARIAS COM CABRAL ATÉ 2013; GAROTINHO FOI SECRETÁRIO DE SEGURANÇA DE ROSINHA. ANTES: MARCELLO ALENCAR <span style="white-space:nowrap">(PSDB {DIR})</span> E BRIZOLA <span style="white-space:nowrap">(PDT {CESQ}).</span> HOJE: INTERINO RICARDO COUTO (TJ-RJ). PREFEITOS DESDE 1993: DE CENTRO-DIREITA A EXTREMA-DIREITA. POLÍCIAS = ESTADO (CF, ART. 144).</div>
 ''', 'i02', 'TSE · TJ-RJ · ' + IDS, kbo='60% 50%'))
 
 # cena v03 (mandato por mandato) removida na rodada 27 — ver git log para o código
@@ -279,7 +280,7 @@ H.append(scene(s, rail(1)+f'''
 <div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:60px;width:960px;font-size:30px"><span class="lg"><i style="background:{L1}"></i>ESQUERDA</span><span class="lg"><i style="background:{BLUE}"></i>DIREITA</span><span class="lgn">UM TOM POR ESTADO</span></div>
 {c5}
 <div class="el h" data-flow="m:4" data-gap="30" data-a="up" data-t="{W(s,'topo',0,-.3)}" style="left:60px;width:960px;font-size:54px;color:#fff">PARTIDO SOZINHO <span class="hl">NÃO DECIDE.</span></div>
-<div class="el fine" data-flow="m:5" data-gap="20" data-a="fade" data-t="{W(s,'topo',0,.3)}" style="left:60px">ES: CASAGRANDE (PSB, CENTRO-ESQUERDA) 2013–14 E 2019–25, HARTUNG (MDB, DIREITA) 2015–18: CAIU NOS DOIS. MG: PIMENTEL (PT, ESQUERDA) 2015–18, ZEMA (NOVO, DIREITA) 2019–25. SP: PSDB E REPUBLICANOS (DIREITA); FRANÇA (PSB) 9 MESES EM 2018. O “ESQUERDA 23,4 × DIREITA 14,8” (OESTE/PODER360) USA A MÉDIA DO PAÍS E TIRA AS MORTES PELA POLÍCIA. MESMO PARTIDO, OUTRO RESULTADO: SC (PL) 7,6 × RIO (PL) 22,6.</div>
+<div class="el fine" data-flow="m:5" data-gap="20" data-a="fade" data-t="{W(s,'topo',0,.3)}" style="left:60px">ES: CASAGRANDE <span style="white-space:nowrap">(PSB {CESQ})</span> 2013–14 E 2019–25, HARTUNG <span style="white-space:nowrap">(MDB {DIR})</span> 2015–18: CAIU NOS DOIS. MG: PIMENTEL <span style="white-space:nowrap">(PT {ESQ})</span> 2015–18, ZEMA <span style="white-space:nowrap">(NOVO {DIR})</span> 2019–25. SP: PSDB E REPUBLICANOS <span style="white-space:nowrap">({DIR});</span> FRANÇA <span style="white-space:nowrap">(PSB {CESQ})</span> 9 MESES EM 2018. O “ESQUERDA 23,4 × DIREITA 14,8” (OESTE/PODER360) USA A MÉDIA DO PAÍS E TIRA AS MORTES PELA POLÍCIA. MESMO PARTIDO, OUTRO RESULTADO: SC (PL) 7,6 × RIO (PL) 22,6.</div>
 ''', 'i05', 'FBSP, ANUÁRIO 2026 (TABELA 02, SÉRIE 2013–2025) · ' + IDS, kbo='55% 50%'))
 
 s = 'v06'; CUR['s'] = s
@@ -291,30 +292,31 @@ H.append(scene(s, rail(2)+f'''
   {row('MILÍCIA', 'QUASE METADE DA ÁREA · RECUA DESDE 2020', None, '#fff', 0, fade=W(s,'policiais',0,-.2), sub='POLICIAIS E EX-POLICIAIS QUE COBRAM<br>TAXA E CONTROLAM GÁS, VAN E INTERNET')}
   {row('COMANDO VERMELHO', 'OCUPA O ESPAÇO · MAIOR POPULAÇÃO DOMINADA', None, R, 0, fade=W(s,'comando',0,-.2))}</div>
 <div class="el note" data-flow="m:5" data-gap="24" data-a="fade" data-t="{W(s,'cresce',0,.2)}" style="left:60px">QUEM CUIDA: POLICIAMENTO E INVESTIGAÇÃO = ESTADO. FRONTEIRA, PORTOS, ARMAS E LAVAGEM = UNIÃO (PF).</div>
-<div class="el fine" data-flow="m:6" data-gap="18" data-a="fade" data-t="{W(s,'chefes',0,-.1)}" style="left:60px">POR QUE RECUA: ECKO, CHEFE DA MAIOR MILÍCIA, MORTO PELA POLÍCIA CIVIL DO RIO (2021, GOVERNO CASTRO). O IRMÃO, ZINHO, SE ENTREGOU À PF (DEZ/2023, GOVERNO ATUAL {SQUID}) APÓS OPERAÇÃO NA CASA DA DEPUTADA <span style="white-space:nowrap">LUCINHA (PSD {DIR}).</span> DEPOIS, BRIGA PELA HERANÇA.</div>
+<div class="el fine" data-flow="m:6" data-gap="18" data-a="fade" data-t="{W(s,'chefes',0,-.1)}" style="left:60px">POR QUE RECUA: ECKO, CHEFE DA MAIOR MILÍCIA, MORTO PELA POLÍCIA CIVIL DO RIO (2021, GOVERNO CASTRO, <span style="white-space:nowrap">PL {DIR}).</span> O IRMÃO, ZINHO, SE ENTREGOU À PF (DEZ/2023, GOVERNO ATUAL {SQUID}) APÓS OPERAÇÃO NA CASA DA DEPUTADA <span style="white-space:nowrap">LUCINHA (PSD {DIR}).</span> DEPOIS, BRIGA PELA HERANÇA.</div>
 ''', 'i06', 'GENI/UFF + FOGO CRUZADO (DEZ/2025) · SBT NEWS · METRÓPOLES (2023) · JB (2021)', kbo='55% 50%'))
 
 s = 'v07'; CUR['s'] = s
 H.append(scene(s, rail(3)+f'''
-{eb(5, 'PROBLEMA 2 · MILÍCIA E POLÍTICA', top=320)}
+{eb(5, 'PROBLEMA 2 · MILÍCIA E POLÍTICA', top=FT['v07'])}
+<div class="el items tight" data-flow="m:2" data-gap="30" data-a="fade" data-t="0" data-d=".01" data-o="{W(s,'flávio',1,-.45)}" style="left:60px">
+  {item('CPI DAS MILÍCIAS · ALERJ, 2008', 'Mais de 200 indiciamentos pedidos, entre eles 5 parlamentares:<span class="nms"><span class="nm"><b>Natalino</b> · deputado estadual · DEM ' + XDIR + '</span><span class="nm"><b>Jerominho</b> · vereador · PMDB ' + DIR + '</span><span class="nm"><b>Nadinho</b> · vereador · DEM ' + XDIR + '</span><span class="nm"><b>Deco</b> · vereador · PR ' + DIR + '</span><span class="nm"><b>Geiso</b> · vereador (São Gonçalo) · PDT ' + CESQ + '</span></span>', W(s,'cpi',0,-.2))}
+  {item('JAIR E FLÁVIO BOLSONARO · HOJE PL ' + DIR + ' · 2007–2008', 'Jair: “o governo deveria apoiá-las”. Flávio: “não se pode estigmatizar as milícias”.', W(s,'jair',0,-.2), color=BLUE)}</div>
 <div class="el items tight" data-flow="m:2" data-gap="30" style="left:60px">
-  {item('CPI DAS MILÍCIAS · ALERJ, 2008', 'Mais de 200 indiciamentos pedidos, entre eles 5 parlamentares.', W(s,'cpi',0,-.2))}
-  {item('JAIR E FLÁVIO BOLSONARO · 2007–2008', 'Jair: “o governo deveria apoiá-las”. Flávio: “não se pode estigmatizar as milícias”.', W(s,'jair',0,-.2), color=BLUE)}
-  {item('FLÁVIO BOLSONARO · PL ' + DIR, 'Medalha a Adriano da Nóbrega, depois apontado como chefe do Escritório do Crime. Mãe e ex-mulher dele no gabinete.', W(s,'flávio',1,-.2))}
-  {item('FLÁVIO, COMO ADVOGADO · 2024', 'Recurso ao STJ para tirar do júri o PM acusado de matar Ana Clara, 5 anos (Niterói, 2021). Negado.', W(s,'advogado',0,-.2), color=R)}</div>
-<div class="el note" data-flow="m:3" data-gap="24" data-a="fade" data-t="{W(s,'negam',0,-.2)}" style="left:60px">FLÁVIO E JAIR NEGAM LIGAÇÃO COM A MILÍCIA. RACHADINHAS: PROVAS ANULADAS, DENÚNCIA ARQUIVADA. CASO ANA CLARA: SEM ACUSAÇÃO DE MILÍCIA; JÚRI AINDA NÃO FEITO. FLÁVIO: “NÃO PODE CRIMINALIZAR A ADVOCACIA”.</div>
-<div class="el fine" data-flow="m:4" data-gap="18" data-a="fade" data-t="{W(s,'negam',0,.6)}" style="left:60px">DO OUTRO LADO: NÃO ACHAMOS POLÍTICO DO PT, PSOL OU PDT DO RIO LIGADO A MILÍCIA EM REPORTAGEM OU PROCESSO. NA BASE DO GOVERNO ATUAL {SQUID}: CHIQUINHO BRAZÃO FOI SECRETÁRIO DE PAES (PSD {DIR}) ATÉ 2024.</div>
+  {item('FLÁVIO BOLSONARO · PL ' + DIR, 'Medalha em 2005 a Adriano da Nóbrega, preso na época por homicídio e depois apontado como chefe do Escritório do Crime. A mulher dele trabalhou 11 anos no gabinete de Flávio (2007–2018), e a mãe, 2 anos (2016–2018).', W(s,'flávio',1,-.2))}
+  {item('FLÁVIO BOLSONARO · PL ' + DIR + ' · ADVOGADO, 2024', 'Recurso ao STJ para tirar do júri o PM acusado de matar Ana Clara, 5 anos (Niterói, 2021). Negado.', W(s,'advogado',0,-.2), color=R)}</div>
+<div class="el note" data-flow="m:3" data-gap="24" data-a="fade" data-t="{W(s,'negam',0,-.2)}" style="left:60px">OS DOIS NEGAM LIGAÇÃO COM A MILÍCIA. RACHADINHAS: PROVAS ANULADAS. ANA CLARA: SEM ACUSAÇÃO DE MILÍCIA; JÚRI NÃO FEITO.</div>
+<div class="el fine" data-flow="m:4" data-gap="18" data-a="fade" data-t="{W(s,'negam',0,.6)}" style="left:60px">A CPI TAMBÉM CITOU JORGE BABU <span style="white-space:nowrap">(PT {ESQ}),</span> CONDENADO E EXPULSO DO PT. CHIQUINHO BRAZÃO FOI SECRETÁRIO DE PAES <span style="white-space:nowrap">(PSD {DIR})</span>, BASE DO GOVERNO ATUAL {SQUID}, ATÉ 2024.</div>
 ''', 'i07', 'ALERJ, CPI 2008 · BBC (2008) E ALERJ (2007) VIA CARTACAPITAL · MP-RJ · STJ (2024) · A TARDE', kbo='60% 50%'))
 
 s = 'v09'; CUR['s'] = s
 H.append(scene(s, rail(3)+f'''
 {eb(6, 'O CRIME CHEGOU AO PODER', top=320)}
 <div class="el items tight" data-flow="m:2" data-gap="30" style="left:60px">
-  {item('PRESIDENTE DA ALERJ · UNIÃO ' + UNI + ' · ALIADO DE CASTRO', 'Preso pela PF, suspeito de avisar um deputado alvo de operação contra o Comando Vermelho.', W(s,'presidente',0,-.2))}
-  {item('EMENDA DE FLÁVIO BOLSONARO · 2023 · PF', 'Robson Calixto, o Peixe, homem de confiança de Domingos Brazão: “vê com o nosso senador”. R$ 199,9 mil para ONG ligada aos Brazão.', W(s,'emenda',0,-.2), color=BLUE)}
+  {item('RODRIGO BACELLAR · UNIÃO ' + UNI + ' · PRES. DA ALERJ, ALIADO DE CASTRO', 'Preso pela PF, suspeito de avisar um deputado alvo de operação contra o Comando Vermelho.', W(s,'presidente',0,-.2))}
+  {item('EMENDA DE FLÁVIO BOLSONARO · PL ' + DIR + ' · 2023', 'Robson Calixto, o Peixe, homem de confiança de Domingos Brazão: “vê com o nosso senador”. R$ 199,9 mil para ONG ligada aos Brazão.', W(s,'segundo',0,-.2), color=BLUE)}
   {item('CASO MARIELLE · STF, FEV/2026', 'Irmãos Brazão condenados como mandantes; o Peixe, por organização criminosa armada.', W(s,'supremo',0,-.2), color=R)}</div>
-<div class="el note" data-flow="m:3" data-gap="24" data-a="fade" data-t="{W(s,'negam',0,-.2)}" style="left:60px">TODOS NEGAM. OS BRAZÃO SÃO EX-MDB E EX-UNIÃO BRASIL. O CHEFE DA POLÍCIA CIVIL, NOMEADO NA INTERVENÇÃO FEDERAL (GOVERNO TEMER, MDB {DIR}), PEGOU 18 ANOS POR ATRAPALHAR A INVESTIGAÇÃO.</div>
-<div class="el fine" data-flow="m:4" data-gap="18" data-a="fade" data-t="{W(s,'negam',0,.2)}" style="left:60px">O GABINETE DE FLÁVIO DIZ QUE A EMENDA SEGUIU A LEI; O PSOL PEDIU INVESTIGAÇÃO À PGR. OS BRAZÃO TINHAM ALIADOS DOS DOIS LADOS: DOMINGOS FEZ CAMPANHA PARA DILMA (2014), CHIQUINHO PARA BOLSONARO (2022). TAMBÉM PRESOS: EX-CHEFE DA POLÍCIA CIVIL DE CASTRO (2022). TODOS NEGAM.</div>
+<div class="el note" data-flow="m:3" data-gap="24" data-a="fade" data-t="{W(s,'negam',0,-.2)}" style="left:60px">TODOS NEGAM. OS BRAZÃO SÃO <span style="white-space:nowrap">EX-MDB {DIR}</span> E <span style="white-space:nowrap">EX-UNIÃO {DIR}.</span> O CHEFE DA POLÍCIA CIVIL, NOMEADO NA INTERVENÇÃO FEDERAL (GOVERNO TEMER, MDB {DIR}), PEGOU 18 ANOS POR ATRAPALHAR A INVESTIGAÇÃO.</div>
+<div class="el fine" data-flow="m:4" data-gap="18" data-a="fade" data-t="{W(s,'negam',0,.2)}" style="left:60px">O GABINETE DE FLÁVIO DIZ QUE A EMENDA SEGUIU A LEI; O PSOL PEDIU INVESTIGAÇÃO À PGR. OS BRAZÃO TINHAM ALIADOS DOS DOIS LADOS: DOMINGOS FEZ CAMPANHA PARA DILMA <span style="white-space:nowrap">(PT {ESQ})</span> EM 2014, CHIQUINHO PARA BOLSONARO <span style="white-space:nowrap">(PL {DIR})</span> EM 2022. TAMBÉM PRESO: ALLAN TURNOWSKI, EX-CHEFE DA POLÍCIA CIVIL DE CASTRO (2022). NEGAM.</div>
 ''', 'i09', 'PF · STF (FEV/2026) · ESTADÃO E ESTADO DE MINAS (SET/2026) · CORREIO BRAZILIENSE', kbo='65% 50%'))
 
 s = 'v10'; CUR['s'] = s
@@ -338,7 +340,7 @@ H.append(scene(s, rail(4)+f'''
   {row('ALVOS DA LISTA', 'NENHUM DOS 69 ENTRE AS MORTES', None, '#fff', 0)}
   {row('CHEFE PRINCIPAL', 'FUGIU', None, '#fff', 0, fade=W(s,'chefe',0,-.2))}
   {row('BALANÇO OFICIAL', '99 PRESOS · 91 FUZIS', None, '#fff', 0, sub='POLÍCIA CIVIL-RJ', fade=W(s,'fugiu',0,.1))}</div>
-<div class="el fine" data-flow="m:4" data-gap="26" data-a="fade" data-t="{W(s,'fugiu',0,.4)}" style="left:60px">121 MORTES PELA CONTA DO GOVERNO, 132 PELA DEFENSORIA, QUE VÊ INDÍCIOS DE ILEGALIDADE. O GOVERNO DIZ QUE 108 DOS 115 IDENTIFICADOS TINHAM VÍNCULO COM O CV E QUE 4 POLICIAIS MORRERAM. 55% A 70% DOS CARIOCAS APOIARAM.</div>
+<div class="el fine" data-flow="m:4" data-gap="26" data-a="fade" data-t="{W(s,'fugiu',0,.4)}" style="left:60px">121 MORTES PELA CONTA DO GOVERNO CASTRO <span style="white-space:nowrap">(PL {DIR}),</span> 132 PELA DEFENSORIA, QUE VÊ INDÍCIOS DE ILEGALIDADE. O GOVERNO DIZ QUE 108 DOS 115 IDENTIFICADOS TINHAM VÍNCULO COM O CV E QUE 4 POLICIAIS MORRERAM. 55% A 70% DOS CARIOCAS APOIARAM.</div>
 ''', 'i11', 'REUTERS · POLÍCIA CIVIL-RJ · DEFENSORIA · DATAFOLHA', kbo='60% 50%'))
 
 s = 'v11b'; CUR['s'] = s
@@ -350,7 +352,7 @@ H.append(scene(s, rail(4)+f'''
   {item('2024 · GOVERNO ATUAL ' + SQUID + ' · ' + ESQ, 'Regras nacionais de câmera na farda e de uso da força. Castro assinou a nota que pediu a revogação.', W(s,'vinte',0,-.2), color=Y)}
   {item('2025 · DEPUTADOS DO PL ' + DIR, 'Volta a gratificação faroeste. Castro vetou, mas a Alerj derrubou o veto do governador.', W(s,'deputados',0,-.2), color=R)}
   {item('PROJETO DAS BALAS · PL 3.723/2019', 'Tira a marcação das balas usadas pelas polícias. Está parado no Senado.', W(s,'projeto',0,-.2))}</div>
-<div class="el fine" data-flow="m:3" data-gap="22" data-a="fade" data-t="{W(s,'senado',0,.1)}" style="left:60px">A FAROESTE DOS ANOS 1990 (MARCELLO ALENCAR, PSDB) DOBROU OS MORTOS POR FERIDO EM CONFRONTO. PL 3.723: ENVIADO PELO GOVERNO BOLSONARO. A GUARDA DE PAES (PSD) GANHA GRATIFICAÇÃO POR PORTAR ARMA, NÃO POR MORTE. CÂMERAS NAS FARDAS: 2022, POR ORDEM DO STF.</div>
+<div class="el fine" data-flow="m:3" data-gap="22" data-a="fade" data-t="{W(s,'senado',0,.1)}" style="left:60px">A FAROESTE DOS ANOS 1990 (MARCELLO ALENCAR, <span style="white-space:nowrap">PSDB {DIR})</span> DOBROU OS MORTOS POR FERIDO EM CONFRONTO. PL 3.723: ENVIADO PELO GOVERNO BOLSONARO. A GUARDA DE PAES <span style="white-space:nowrap">(PSD {DIR})</span> GANHA GRATIFICAÇÃO POR PORTAR ARMA, NÃO POR MORTE. CÂMERAS NAS FARDAS: 2022, POR ORDEM DO STF.</div>
 ''', 'i08', 'JB (2019) · AGÊNCIA BRASIL E METRÓPOLES (2025) · CONGRESSO EM FOCO · METRÓPOLES (OUT/2026) · ALMA PRETA', kbo='55% 50%'))
 
 s = 'v12'; CUR['s'] = s
@@ -377,7 +379,7 @@ H.append(scene(s, rail(5)+f'''
   {row('CRÉDITO', 'FORÇA NACIONAL NO RIO DESDE 2023', None, Y, 0, sub=f'GOVERNO ATUAL {SQUID}')}
   {row('CRÉDITO', 'COMPRA DE ARMAS POR ATIRADORES CAIU 91%', None, Y, 0, sub='448 MIL → 40 MIL · 2022–24', fade=W(s,'atiradores',0,-.2))}
   {row('CONTA', 'CORTOU VERBA DA SEGURANÇA', None, R, 0, sub='~R$ 500 MI CONTINGENCIADOS', fade=W(s,'cortou',0,-.2))}</div>
-<div class="el fine" data-flow="m:6" data-gap="14" data-a="fade" data-t="{W(s,'segurança',0,.1)}" style="left:60px">GLO: O GOVERNO ATUAL DECRETOU NOS PORTOS (2023) E NO BRICS (2025, A PEDIDO DE CASTRO). “GOVERNADOR NÃO PODE PEDIR GLO” É FALSO (AOS FATOS). O RIO GASTA R$ 17 BI/ANO EM SEGURANÇA (FBSP). LEI ANTIFACÇÃO SANCIONADA PELO PRESIDENTE.</div>
+<div class="el fine" data-flow="m:6" data-gap="14" data-a="fade" data-t="{W(s,'segurança',0,.1)}" style="left:60px">GLO: O GOVERNO ATUAL DECRETOU NOS PORTOS (2023) E NO BRICS (2025, A PEDIDO DE CASTRO, <span style="white-space:nowrap">PL {DIR}).</span> “GOVERNADOR NÃO PODE PEDIR GLO” É FALSO (AOS FATOS). O RIO GASTA R$ 17 BI/ANO EM SEGURANÇA (FBSP). LEI ANTIFACÇÃO SANCIONADA PELO PRESIDENTE.</div>
 ''', 'i13', 'MJSP (NOTA DE 28/10/2025) · FBSP, ANUÁRIO 2026 · AOS FATOS · PODER360', kbo='60% 60%'))
 
 s = 'v15'; CUR['s'] = s
@@ -390,8 +392,8 @@ H.append(scene(s, f'''
   {row('É DO ESTADO', 'AS ESCOLHAS SOBRE A POLÍCIA', None, R, 0, fade=W(s,'escolhas',0,-.2))}
   {row('É DA PREFEITURA', 'GUARDA E ORDEM URBANA', None, WH, 0, fade=W(s,'prefeitura',0,-.2))}</div>
 <div class="el h" data-flow="m:4" data-gap="32" data-a="slam" data-t="{W(s,'vinte',0,-.15)}" style="left:60px;width:960px;font-size:54px;color:#fff">23 ANOS DE <span style="color:#5B7CFF">DIREITA.</span><br><span class="hl">E A CULPA É DA ESQUERDA?</span></div>
-<div class="el repost" data-flow="m:5" data-gap="32" data-a="slam" data-t="{W(s,'cobraria',0,-.3)}" data-shake="1" style="left:60px;width:960px;font-size:44px">O QUE VOCÊ COBRARIA DO GOVERNADOR ELEITO?<small>Douglas Ruas (PL, direita) · posse em 06/01/2027</small></div>
-<div class="el fine" data-flow="m:6" data-gap="20" data-a="fade" data-t="{W(s,'grupo',0,.2)}" style="left:60px">DESDE AGO/2003 (ROSINHA NO MDB), O RIO É GOVERNADO PELA DIREITA (MDB = DIREITA NA ESCALA, 7,01). RUAS FOI ELEITO NO 1º TURNO DEPOIS QUE O TSE ANULOU OS VOTOS DE GAROTINHO; É DO GRUPO DE CASTRO E BACELLAR, SEGUNDO A IMPRENSA.</div>
+<div class="el repost" data-flow="m:5" data-gap="32" data-a="slam" data-t="{W(s,'cobraria',0,-.3)}" data-shake="1" style="left:60px;width:960px;font-size:44px">O QUE VOCÊ COBRARIA DO GOVERNADOR ELEITO?<small>Douglas Ruas · PL {DIR} · posse em 06/01/2027</small></div>
+<div class="el fine" data-flow="m:6" data-gap="20" data-a="fade" data-t="{W(s,'grupo',0,.2)}" style="left:60px">DESDE AGO/2003 (ROSINHA NO MDB), O RIO É GOVERNADO PELA DIREITA (MDB = DIREITA NA ESCALA, 7,01). RUAS FOI ELEITO NO 1º TURNO DEPOIS QUE O TSE ANULOU OS VOTOS DE GAROTINHO; É DO GRUPO DE CASTRO (PL) E BACELLAR (UNIÃO), <span style="white-space:nowrap">AMBOS {DIR},</span> SEGUNDO A IMPRENSA.</div>
 ''', 'i15', 'TSE · TRE-RJ · FBSP · ISP-RJ · GENI/UFF · SOU DA PAZ', kbo='55% 55%'))
 
 CSS = open(os.path.join(KIT, 'preview_kit/style.css')).read() + '''
@@ -418,7 +420,7 @@ CSS = open(os.path.join(KIT, 'preview_kit/style.css')).read() + '''
 .item{padding:20px 0 22px;border-top:1px solid rgba(242,236,224,.22)}
 .item:last-child{border-bottom:1px solid rgba(242,236,224,.22)}
 .item .kick{font-family:JBM;font-weight:700;font-size:21px;letter-spacing:2px;color:#FFD34D;text-transform:uppercase}
-.item .kick .ide{font-size:16px;padding:1px 8px;margin-left:6px}
+.item .kick .ide{font-size:16px;padding:1px 8px;margin-left:6px}.nms{display:block;margin-top:12px}.nms .nm{display:block;font-size:34px;font-weight:500;line-height:1.45;color:#E8E2D6}.nms .nm b{font-weight:800;color:#fff}.item .t .ide,.note .ide{font-size:17px;padding:2px 8px;letter-spacing:.5px;vertical-align:middle}
 .item .t{font-family:Rub;font-weight:800;font-size:46px;line-height:1.1;margin-top:10px;text-wrap:balance;text-shadow:0 3px 16px rgba(0,0,0,.55)}
 .mut{color:#BDB6A6;font-weight:500}.mut.sm{font-size:30px;line-height:1.3}
 .counter{display:flex;align-items:center;gap:26px}.counter .cnt{font-size:150px}.counter b{font-family:Rub;font-weight:600;font-size:34px;line-height:1.15;color:#E9E4D8;white-space:nowrap}
