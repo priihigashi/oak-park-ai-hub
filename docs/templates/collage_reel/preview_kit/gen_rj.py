@@ -237,7 +237,7 @@ VC = [6371,6401,6993,7083,8043,8054,7645,7987,7649,7699,7134,7106,5828,4960,4666
 ix = lambda y: y - 1998
 VB = [None, None, None, None, None, None, 7645, 7524, 7769, 7537, 7919, 8135, 8287, 8254, 8917, 8972, 9453, 9235, 9772, 10254, 9059, 7113, 7795, 7479, 7254, 7151, 6657, None]
 c4 = segchart(YC, [dict(n='', v=VB, segs=[(6, 26, '#8C8C8C')], w=5, dash=True, lt=W(s,'brasil',0)), dict(n='', v=VC, segs=[(0, 1, BLUE), (1, 5, L1), (5, 27, BLUE)], w=7, lt=W(s,'linha',0))],
-    3000, 11000, [3000, 5000, 7000, 9000, 11000], W(s,'linha',0,-.2), 5.5, h=680, lw=40, tfmt=lambda v: f"{v:,}".replace(",", "."),
+    3000, 11000, [3000, 5000, 7000, 9000, 11000], W(s,'linha',0,-.2), 5.5, h=515, lw=40, tfmt=lambda v: f"{v:,}".replace(",", "."),
     xl=[ix(1998), ix(2006), ix(2014), ix(2022)],
     plabels=[(1, ix(2002), 'GAROTINHO<br>8.043', L1, -30, W(s,'linha',0,.6), -100),
              (1, ix(2003), '8.054<br>ROSINHA', BLUE, -62, W(s,'rosinha',0,-.2)),
@@ -263,14 +263,15 @@ c4 = segchart(YC, [dict(n='', v=VB, segs=[(6, 26, '#8C8C8C')], w=5, dash=True, l
            (0, ix(2024), W(s,'caem',0,-.1), W(s,'subiu',0,-.1), '#E4E4E4'),
            (1, ix(2024), W(s,'caem',0,-.1), W(s,'subiu',0,-.1), Y),
            (1, ix(2025), W(s,'voltou',0,-.1), W(s,'brasil',1,-.1), Y),
-           (0, ix(2024), W(s,'menor',0,-.2), None, '#E4E4E4')], band_top=170).replace('{flow}', 'm:3')
-c4 = c4[:-6] + f'<div class="big23" data-a="up" data-t="{W(s,"rosinha",0,-.1):.2f}"><b>23 ANOS</b><span>DE GOVERNOS DE DIREITA</span><small>DESDE 2003 · MDB = DIREITA</small></div></div>'
+           (0, ix(2024), W(s,'menor',0,-.2), None, '#E4E4E4')], band_top=0, flow='m:4')
+BIG23 = f'<div class="el big23 solo" data-flow="m:3" data-gap="26" data-a="up" data-t="{W(s,"rosinha",0,-.1):.2f}" style="left:80px"><b>23 ANOS</b><span>DE GOVERNOS DE DIREITA</span><small>DESDE 2003 · MDB = DIREITA</small></div>'
 H.append(scene(s, rail(1)+f'''
 {eb(3, 'A LINHA INTEIRA · 1998–2025', top=290)}
 <div class="el body" data-flow="m:2" data-gap="34" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:32px"><span class="lg"><i style="background:{L1}"></i>ESQUERDA</span><span class="lg"><i style="background:{BLUE}"></i>DIREITA</span><span class="lg"><i style="background:#9A9A9A"></i>BRASIL</span></div>
+{BIG23}
 {c4}
-<div class="el h" data-flow="m:4" data-gap="30" data-a="up" data-t="{W(s,'subiu',0,-.2)}" style="left:80px;width:880px;font-size:58px;color:#fff">SUBIU E CAIU <span class="hl">COM OS DOIS LADOS.</span></div>
-<div class="el fine" data-flow="m:5" data-gap="20" data-a="fade" data-t="{W(s,'série',0,.1)}" style="left:80px">MESMA BASE DE 1998 A 2025 (ISP-RJ, NÚMERO DE MORTES VIOLENTAS). 2025: RIO +2,1% (MORTES PELA POLÍCIA +13%), BRASIL −8,2%, MENOR TAXA DA SÉRIE (FBSP). A QUEDA DEPOIS DE 2018 VEIO COM O RECORDE DE MORTES PELA POLÍCIA (1.814 EM 2019). BRASIL: ATLAS DA VIOLÊNCIA (SIM), 2004–2024, AJUSTADO À ESCALA DO RIO (SÓ A FORMA DA CURVA). AZUL DESDE AGO/2003.</div>
+<div class="el h" data-flow="m:5" data-gap="30" data-a="up" data-t="{W(s,'subiu',0,-.2)}" style="left:80px;width:880px;font-size:58px;color:#fff">SUBIU E CAIU <span class="hl">COM OS DOIS LADOS.</span></div>
+<div class="el fine" data-flow="m:6" data-gap="20" data-a="fade" data-t="{W(s,'série',0,.1)}" style="left:80px">MESMA BASE DE 1998 A 2025 (ISP-RJ, NÚMERO DE MORTES VIOLENTAS). 2025: RIO +2,1% (MORTES PELA POLÍCIA +13%), BRASIL −8,2%, MENOR TAXA DA SÉRIE (FBSP). A QUEDA DEPOIS DE 2018 VEIO COM O RECORDE DE MORTES PELA POLÍCIA (1.814 EM 2019). BRASIL: ATLAS DA VIOLÊNCIA (SIM), 2004–2024, AJUSTADO À ESCALA DO RIO (SÓ A FORMA DA CURVA). AZUL DESDE AGO/2003.</div>
 ''', 'i04', 'ISP-RJ, LETALIDADE VIOLENTA · FBSP, ANUÁRIO 2026', kbo='60% 45%'))
 
 s = 'v05'; CUR['s'] = s
@@ -467,6 +468,7 @@ CSS = open(os.path.join(KIT, 'preview_kit/style.css')).read() + '''
 .note{font-size:24px;letter-spacing:1px}
 .srcline{font-size:22px;letter-spacing:.5px;color:rgba(242,236,224,.72)}
 #foot{font-size:24px}
+.big23.solo{top:auto}
 .row{padding:12px 0}
 .govs .row{padding:7px 0}.govs .row.txt{grid-template-columns:300px 1fr;column-gap:52px}.govs .selo{font-size:18px!important;letter-spacing:.3px!important;padding:2px 8px!important}.govs .row.txt .v{font-size:36px}.govs .row .v .pt{font-size:22px}.govs .row .v .ide{font-size:17px}
 '''
