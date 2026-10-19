@@ -71,14 +71,14 @@ def chart(sid, years, series, ymax, ticks, t0, dur, marks=(), w=880, h=600, lw=2
     def X(i): return px0 + (px1 - px0) * i / (len(years) - 1)
     def Yv(v): return py1 - (py1 - py0) * (v - ymin) / (ymax - ymin)
     grid = ''.join(f'<line x1="{px0}" x2="{px1}" y1="{Yv(v):.1f}" y2="{Yv(v):.1f}" stroke="rgba(242,236,224,.14)" stroke-width="1.5"/>'
-                   f'<text x="{px0-12}" y="{Yv(v)+7:.1f}" text-anchor="end" font-family="JBM" font-weight="700" font-size="19" fill="#9F988A">{tfmt(v) if tfmt else f"{v:,}".replace(",",".")}</text>' for v in ticks)
+                   f'<text x="{px0-12}" y="{Yv(v)+7:.1f}" text-anchor="end" font-family="JBM" font-weight="700" font-size="26" fill="#B5AE9F">{tfmt(v) if tfmt else f"{v:,}".replace(",",".")}</text>' for v in ticks)
     lab_i = list(range(len(years))) if len(years) <= 6 else [0, len(years)//2, len(years)-1]
-    grid += ''.join(f'<text x="{X(i):.1f}" y="{h-12}" text-anchor="middle" font-family="JBM" font-weight="700" font-size="19" fill="#9F988A">{years[i]}</text>' for i in lab_i)
+    grid += ''.join(f'<text x="{X(i):.1f}" y="{h-12}" text-anchor="middle" font-family="JBM" font-weight="700" font-size="26" fill="#B5AE9F">{years[i]}</text>' for i in lab_i)
     mk = ''
     for yr, txt, col in marks:
         i = years.index(yr)
         mk += (f'<line x1="{X(i):.1f}" x2="{X(i):.1f}" y1="{py0}" y2="{py1}" stroke="{col}" stroke-width="2" stroke-dasharray="6 6"/>'
-               f'<text x="{X(i)+10:.1f}" y="{py1-12}" font-family="JBM" font-weight="700" font-size="18" fill="{col}">{txt}</text>')
+               f'<text x="{X(i)+10:.1f}" y="{py1-12}" font-family="JBM" font-weight="700" font-size="24" fill="{col}">{txt}</text>')
     lines = ''; each = []
     for s in series:
         n0 = len(lines)
@@ -94,7 +94,7 @@ def chart(sid, years, series, ymax, ticks, t0, dur, marks=(), w=880, h=600, lw=2
     want = sorted([(Yv(s['v'][-1]), i) for i, s in enumerate(series)])
     pos = {}; last = -1e9
     for y, i in want:
-        sb_ = series[i].get('sub'); hgt = 34 + (28 * (sb_.count('<br>') + 1) if sb_ else 0)
+        sb_ = series[i].get('sub'); hgt = 38 + (26 * (sb_.count('<br>') + 1) if sb_ else 0)
         y = max(y, last); pos[i] = y; last = y + hgt + 8
     for i, s in enumerate(series):
         ly = pos[i]
@@ -117,9 +117,9 @@ def segchart(years, lines, ymin, ymax, ticks, t0, dur, w=880, h=620, lw=270, tfm
     X = lambda i: px0 + (px1 - px0) * i / (len(years) - 1)
     Yv = lambda v: py1 - (py1 - py0) * (v - ymin) / (ymax - ymin)
     g = ''.join(f'<line x1="{px0}" x2="{px1}" y1="{Yv(v):.1f}" y2="{Yv(v):.1f}" stroke="rgba(242,236,224,.14)" stroke-width="1.5"/>'
-                f'<text x="{px0-12}" y="{Yv(v)+7:.1f}" text-anchor="end" font-family="JBM" font-weight="700" font-size="19" fill="#9F988A">{tfmt(v) if tfmt else v}</text>' for v in ticks)
+                f'<text x="{px0-12}" y="{Yv(v)+7:.1f}" text-anchor="end" font-family="JBM" font-weight="700" font-size="26" fill="#B5AE9F">{tfmt(v) if tfmt else v}</text>' for v in ticks)
     for i in (xl if xl is not None else [0, len(years)//2, len(years)-1]):
-        g += f'<text x="{X(i):.1f}" y="{h-12}" text-anchor="middle" font-family="JBM" font-weight="700" font-size="19" fill="#9F988A">{years[i]}</text>'
+        g += f'<text x="{X(i):.1f}" y="{h-12}" text-anchor="middle" font-family="JBM" font-weight="700" font-size="26" fill="#B5AE9F">{years[i]}</text>'
     ln = ''
     for L in lines:
         dash = ' stroke-dasharray="10 8"' if L.get('dash') else ''
@@ -128,14 +128,14 @@ def segchart(years, lines, ymin, ymax, ticks, t0, dur, w=880, h=620, lw=270, tfm
             ln += f'<polyline points="{pts}" fill="none" stroke="{col}" stroke-width="{L.get("w",6)}" stroke-linejoin="round" stroke-linecap="round"{dash}/>'
     want = sorted([(Yv([x for x in L['v'] if x is not None][-1]), k) for k, L in enumerate(lines)]); pos = {}; last = -1e9
     for y, k in want:
-        hh = 30 + (26 if lines[k].get('sub') else 0); y = max(y, last); pos[k] = y; last = y + hh + 6
+        hh = 36 + (26 if lines[k].get('sub') else 0); y = max(y, last); pos[k] = y; last = y + hh + 6
     lab = ''.join(f'<div class="clab" data-a="fade" data-t="{L.get("lt", t0+dur):.2f}" style="left:{px1+16}px;top:{pos[k]-15:.0f}px;color:{L.get("lc","#fff")}"><b>{L["n"]}</b>'
                   + (f'<small>{L["sub"]}</small>' if L.get('sub') else '') + '</div>' for k, L in enumerate(lines))
     pl = ''
     for P_ in plabels:
         k, i, txt, col, dy, t = P_[:6]; dx = P_[6] if len(P_) > 6 else 0
         v = lines[k]['v'][i]
-        pl += (f'<div class="clab plab" data-a="fade" data-t="{t:.2f}" style="left:{X(i)-70+dx:.0f}px;width:140px;text-align:center;top:{Yv(v)+dy:.0f}px;color:{col}">{txt}</div>'
+        pl += (f'<div class="clab plab" data-a="fade" data-t="{t:.2f}" style="left:{X(i)-95+dx:.0f}px;width:190px;text-align:center;top:{Yv(v)+dy:.0f}px;color:{col}">{txt}</div>'
                f'<div class="pdot" data-a="fade" data-t="{t:.2f}" style="left:{X(i)-7:.0f}px;top:{Yv(v)-7:.0f}px;background:{col}"></div>')
     if all('rt' in L for L in lines):
         rev = ''
@@ -212,7 +212,7 @@ c3 = chart(s, XM, [
    per_line=True).replace('{flow}', 'm:3')
 H.append(scene(s, rail(1)+f'''
 {eb(2, 'MANDATO POR MANDATO · MORTES VIOLENTAS', top=290)}
-<div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:32px"><b style="color:{L1}">━ ESQUERDA</b> &nbsp;&nbsp; <b style="color:{BLUE}">━ DIREITA</b> &nbsp;&nbsp; <span style="color:#A9A291;font-size:24px">┅ 2º MANDATO</span></div>
+<div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:32px"><b style="color:{L1}">━ ESQUERDA</b> &nbsp;&nbsp; <b style="color:{BLUE}">━ DIREITA</b> &nbsp;&nbsp; <span style="color:#BDB6A6;font-size:28px">┅ 2º MANDATO</span></div>
 {c3}
 <div class="el fine" data-flow="m:4" data-gap="22" data-a="fade" data-t="{W(s,'linha',0,.4)}" style="left:80px">VARIAÇÃO NO NÚMERO DE MORTES VIOLENTAS ATÉ O FIM DO MANDATO, CONTRA O ANO ANTES DA POSSE. MESMA BASE DE 1998 A 2025 (ISP-RJ). BENEDITA (PT) GOVERNOU 9 MESES EM 2002; PEZÃO ASSUMIU EM ABR/2014; CASTRO EM AGO/2020. ANTES DE 1999, MARCELLO ALENCAR (PSDB, DIREITA): −26%. BRASIL ENTRE 2018 E 2022: CERCA DE −17% (FBSP, NÚMERO DE MORTES). OS +26% DE GAROTINHO INCLUEM OS 9 MESES DE BENEDITA (PT).</div>
 ''', 'i03', 'ISP-RJ, LETALIDADE VIOLENTA (1998–2020) · FBSP, ANUÁRIOS 2022–2026 · ' + IDS, kbo='55% 60%'))
@@ -251,7 +251,7 @@ c5 = segchart(YS, [
 ], 0, 45, [0, 15, 30, 45], W(s,'linha',0,-.2), 2.4, h=620, lw=230, xl=[0, 3, 6, 9, 12]).replace('{flow}', 'm:3')
 H.append(scene(s, rail(1)+f'''
 {eb(4, 'SUDESTE · MORTES VIOLENTAS POR 100 MIL', top=290)}
-<div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:30px"><b style="color:{L1}">━ GOVERNO DE ESQUERDA</b> &nbsp; <b style="color:{BLUE}">━ GOVERNO DE DIREITA</b><br><span style="color:#A9A291;font-size:24px">CADA ESTADO TEM SEU TOM</span></div>
+<div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:30px"><b style="color:{L1}">━ GOVERNO DE ESQUERDA</b> &nbsp; <b style="color:{BLUE}">━ GOVERNO DE DIREITA</b><br><span style="color:#BDB6A6;font-size:28px">CADA ESTADO TEM SEU TOM</span></div>
 {c5}
 <div class="el h" data-flow="m:4" data-gap="30" data-a="up" data-t="{W(s,'topo',0,-.3)}" style="left:80px;width:880px;font-size:54px;color:#fff">PARTIDO SOZINHO <span class="hl">NÃO DECIDE.</span></div>
 <div class="el fine" data-flow="m:5" data-gap="20" data-a="fade" data-t="{W(s,'topo',0,.3)}" style="left:80px">ES: CASAGRANDE (PSB, CENTRO-ESQUERDA) 2013–14 E 2019–25; HARTUNG (MDB, DIREITA) 2015–18 — CAIU NOS DOIS. MG: PIMENTEL (PT, ESQUERDA) 2015–18; ZEMA (NOVO, DIREITA) 2019–25. SP: PSDB E REPUBLICANOS (DIREITA); MÁRCIO FRANÇA (PSB) GOVERNOU 9 MESES EM 2018. A REVISTA OESTE (DADOS DO PODER360) DIZ “ESQUERDA 23,4 × DIREITA 14,8”: USA MÉDIA DO PAÍS INTEIRO E TIRA AS MORTES PELA POLÍCIA. MESMO PARTIDO, OUTRO RESULTADO: SC (PL) 7,6 × RIO (PL) 22,6.</div>
@@ -413,6 +413,24 @@ CSS = open(os.path.join(KIT, 'preview_kit/style.css')).read() + '''
 .quote{color:#F2ECE0;font-weight:800;text-shadow:0 3px 18px rgba(0,0,0,.6)}
 .pull{font-family:Rub;font-weight:700;font-style:italic;font-size:50px;line-height:1.15;color:#fff;padding-left:30px;border-left:6px solid #FFD34D;text-shadow:0 3px 16px rgba(0,0,0,.6)}
 .pull small{display:block;font-family:JBM;font-style:normal;font-weight:700;font-size:20px;letter-spacing:1.5px;color:#BDB6A6;margin-top:16px}
+
+/* ===== TAMANHOS MÍNIMOS DE LEITURA (rodada 15) =====
+   Tudo dentro de .safe ainda encolhe 10%, e no celular 1080px vira ~390pt: 17px virava ~5pt e borrava na compressão.
+   Precisa ser lido (linha do tempo, gráficos, governadores, selos, etiquetas de ideologia): mínimo ~22px.
+   Letra miúda (fonte, ressalvas): continua pequena, mas maior, mais clara e com menos espaço entre letras para não borrar. */
+.st b{font-size:24px;top:48px;letter-spacing:1px}.st.on b{font-size:27px}
+.eyebrow{font-size:28px;letter-spacing:2px}.eyebrow b{font-size:30px}.eyebrow .ide{font-size:21px}
+.clab{font-size:28px;letter-spacing:1px}.clab small{font-size:21px;line-height:1.45;color:#C9C2B3}.clab small .ide{font-size:17px}
+.plab{font-size:22px;line-height:1.15;letter-spacing:0}.cnote{font-size:24px}
+.row .k{font-size:26px;letter-spacing:1px}.row .k small{font-size:21px;color:#BDB6A6;line-height:1.4}.row .k .ide{font-size:18px}
+.row .v .pt{font-size:24px}.row .v .ide{font-size:19px}
+.item .kick{font-size:25px;letter-spacing:1.5px}.items.tight .item .kick{font-size:23px}.item .kick .ide{font-size:19px}
+.big23 small{font-size:21px}.pull small{font-size:24px;letter-spacing:1px}
+.fine{font-size:23px;letter-spacing:.4px;line-height:1.42;color:#B9B2A3}.fine .ide{font-size:16px}
+.note{font-size:24px;letter-spacing:1px}
+.srcline{font-size:22px;letter-spacing:.5px;color:rgba(242,236,224,.72)}
+#foot{font-size:24px}
+.govs .row{padding:7px 0}.govs .selo{font-size:18px!important;letter-spacing:.3px!important;padding:2px 8px!important}.govs .row.txt .v{font-size:36px}.govs .row .v .pt{font-size:22px}.govs .row .v .ide{font-size:17px}
 '''
 page = f'''<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Rio de Janeiro</title>
 <link rel="stylesheet" href="fx.css"><style>{CSS}</style></head><body><div id="stage">
