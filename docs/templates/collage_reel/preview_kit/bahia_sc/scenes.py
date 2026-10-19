@@ -21,10 +21,9 @@ H.append(scene(s, rail(1) + f'''
 {eb(1, 'PONTO DE PARTIDA')}
 <div class="el h" data-flow="m:2" data-gap="30" data-a="up" data-t="{W(s, 'cobrar', 0, -.2)}" style="left:80px;width:920px;font-size:66px;color:#fff">“POR QUE VOCÊ NÃO TEM A <span class="hl">MANSÃO DELE?”</span></div>
 <div class="el" data-flow="m:3" data-gap="40" data-a="drop" data-t="{W(s, 'média', 0, -.25)}" data-d=".6" data-r="-4" data-bob="1" style="left:70px;width:400px">{HOL}<div class="tag2">VOCÊ · MÉDIA DO BRASIL</div></div>
-<div class="el headcut" data-flow="m:3" data-dy="-40" data-a="pop" data-t="{W(s, 'roberto', 0, -.2)}" data-d=".45" data-bob="1" style="left:520px;width:500px"><div class="head"><span>RJ</span></div><div class="tag2 y">ROBERTO JUSTUS</div></div>
+<div class="el headcut" data-flow="m:3" data-dy="-40" data-a="pop" data-t="{W(s, 'roberto', 0, -.2)}" data-d=".45" data-bob="1" style="left:520px;width:500px"><img class="headimg" src="assets/justus_head.png" alt=""><div class="tag2 y">ROBERTO JUSTUS</div></div>
 <div class="el h" data-flow="m:4" data-gap="44" data-a="slam" data-t="{W(s, 'começaram', 0, -.3)}" data-shake="1" style="left:80px;width:920px;font-size:90px;color:#fff">NINGUÉM COMEÇOU <span class="hl">DO MESMO LUGAR.</span></div>
-<div class="el fine" data-flow="m:5" data-gap="24" data-a="fade" data-t="{W(s, 'começaram', 0, .4)}" style="left:80px">RENDIMENTO MÉDIO DO TRABALHO, 1º TRIMESTRE DE 2026 (IBGE, PNAD CONTÍNUA).</div>
-''', 'IBGE, PNAD CONTÍNUA (1º TRI/2026)', bg='#2442E6'))
+''', 'IBGE, PNAD CONTÍNUA (RENDIMENTO MÉDIO DO TRABALHO, 1º TRI/2026) · FOTO: WIKIMEDIA COMMONS (CC0)', bg='#2442E6'))
 
 # ---------- c3 · a história (papel) ----------
 s = 'c3'; o = S[s]

@@ -91,3 +91,5 @@
 .minimap path.msc{fill:rgba(36,66,230,.9);stroke:#fff;stroke-width:1.6}
 .minimap .mlb{position:absolute;font-family:Rub;font-weight:900;font-size:34px;white-space:nowrap}
 .tile .tv{white-space:nowrap}
+
+.headimg{height:520px;width:auto;display:block;margin:0 auto;filter:drop-shadow(9px 0 0 #fff) drop-shadow(-9px 0 0 #fff) drop-shadow(0 9px 0 #fff) drop-shadow(0 -9px 0 #fff) drop-shadow(0 22px 34px rgba(0,0,0,.45))}
