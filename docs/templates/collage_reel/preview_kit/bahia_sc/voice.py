@@ -4,7 +4,7 @@ import json, re, numpy as np, soundfile as sf
 from kokoro_onnx import Kokoro
 K = Kokoro('/home/claude/work/kmodel/kokoro-v1.0.onnx', '/home/claude/work/kmodel/voices-v1.0.bin')
 S = json.load(open('/home/claude/oak-park-ai-hub/docs/templates/collage_reel/data/bahia_sc/script.json'))
-SAY = {r'\bPT\b': 'pê tê', r'\bPL\b': 'pê éle'}
+SAY = {r'\bPT\b': 'pê tê', r'\bPL\b': 'pê éle', r'\bSC\b': 'Santa Catarina'}
 SPEED, SR = 1.25, 24000
 GAP = {',': .10, ':': .14, '.': .18, '?': .22}
 def trim(a, thr=.01):
@@ -14,13 +14,16 @@ def weight(w):  # peso ~ sílabas
     return max(1, len(re.findall(r'[aeiouáéíóúâêôãõà]+', w.lower()))) + .3
 out, TL, t = [], [], 0.0
 for sid, text in S.items():
-    phrases = [p.strip() for p in re.findall(r'[^,.:?]+[,.:?]?', text) if p.strip()]
+    phrases = []
+    for i, part in enumerate(re.split(r'\[M\]', text)):
+        voice = 'pm_alex' if i % 2 else 'pf_dora'
+        phrases += [(p.strip(), voice) for p in re.findall(r'[^,.:?]+[,.:?]?', part) if p.strip()]
     s0 = t; words = []
     lead = np.zeros(int(.12 * SR)); out.append(lead); t += .12
-    for p in phrases:
+    for p, vz in phrases:
         say = p
         for a, b in SAY.items(): say = re.sub(a, b, say)
-        a, sr = K.create(say, voice='pf_dora', speed=SPEED, lang='pt-br'); a = trim(a)
+        a, sr = K.create(say, voice=vz, speed=SPEED, lang='pt-br'); a = trim(a)
         d = len(a) / SR; ws = p.split(); tot = sum(weight(w) for w in ws); acc = 0
         for w in ws:
             words.append([w, round(t - s0 + d * acc / tot, 3)]); acc += weight(w)
