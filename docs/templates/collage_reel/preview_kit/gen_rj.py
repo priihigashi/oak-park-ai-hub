@@ -79,7 +79,7 @@ def chart(sid, years, series, ymax, ticks, t0, dur, marks=(), w=880, h=600, lw=2
         i = years.index(yr)
         mk += (f'<line x1="{X(i):.1f}" x2="{X(i):.1f}" y1="{py0}" y2="{py1}" stroke="{col}" stroke-width="2" stroke-dasharray="6 6"/>'
                f'<text x="{X(i)+10:.1f}" y="{py1-12}" font-family="JBM" font-weight="700" font-size="24" fill="{col}">{txt}</text>')
-    lines = ''; each = []
+    lines = ''; each = []; GLOW = []
     for s in series:
         n0 = len(lines)
         pts = ' '.join(f'{X(i):.1f},{Yv(v):.1f}' for i, v in enumerate(s['v']))
@@ -89,6 +89,12 @@ def chart(sid, years, series, ymax, ticks, t0, dur, marks=(), w=880, h=600, lw=2
             lines += (f'<circle cx="{X(i):.1f}" cy="{Yv(s["v"][i]):.1f}" r="9" fill="{s["c"]}" stroke="#0b0c0e" stroke-width="3"/>'
                       f'<text x="{X(i):.1f}" y="{Yv(s["v"][i])-18:.1f}" text-anchor="middle" font-family="Rub" font-weight="900" font-size="30" fill="{s["c"]}" stroke="#0b0c0e" stroke-width="6" paint-order="stroke">{txt}</text>')
         each.append((s.get('lt', t0), lines[n0:]))
+        if s.get('glow') is not None:
+            g = s['glow']
+            hot = f'<polyline points="{pts}" fill="none" stroke="#FFFFFF" stroke-width="16" stroke-linejoin="round" stroke-linecap="round" opacity=".55" filter="url(#cglow)"/><polyline points="{pts}" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>'
+            lit = f'<polyline points="{pts}" fill="none" stroke="#E4E4E4" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"{dash}/>'
+            GLOW.append(f'<div class="el" data-a="fade" data-t="{g:.2f}" data-d=".12" data-o="{g+1.5:.2f}" data-od=".7" style="left:0;top:0"><div class="bar crev" data-t="{g:.2f}" data-d="1.1" data-to="{px1+12}" style="height:{h}px"><svg width="{w}" height="{h}"><defs><filter id="cglow" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="7"/></filter></defs>{hot}</svg></div></div>'
+                        f'<div class="el" data-a="fade" data-t="{g+1.0:.2f}" data-d=".5" style="left:0;top:0"><svg width="{w}" height="{h}">{lit}</svg></div>')
     labels = ''
     # posições dos rótulos sem colisão: ordena pela altura e garante espaço mínimo
     want = sorted([(Yv(s['v'][-1]), i) for i, s in enumerate(series)])
@@ -107,12 +113,13 @@ def chart(sid, years, series, ymax, ticks, t0, dur, marks=(), w=880, h=600, lw=2
                ''.join(f'<div class="bar crev" data-t="{st}" data-d="{sd}" data-to="{(X(b)+40 if b < len(years)-1 else px1+48) - (X(a) if a else 0):.0f}" style="height:{h}px;left:{X(a) if a else 0:.0f}px"><svg width="{w}" height="{h}" style="margin-left:-{X(a) if a else 0:.0f}px">{lines}</svg></div>'
                        for (a, b, st, sd) in stages) if stages else
                f'<div class="bar crev" data-t="{t0}" data-d="{dur}" data-to="{px1+12}" style="height:{h}px"><svg width="{w}" height="{h}">{lines}</svg></div>')
+            + ''.join(GLOW)
             + ''.join(f'<div class="clab cnote" data-a="fade" data-t="{nt:.2f}" style="left:{X(ni)+dx:.0f}px;top:{Yv(nv)+dy:.0f}px;color:{nc}">{ntx}</div>' for (ni, nv, ntx, nc, nt, dx, dy) in notes)
             + f'{labels}</div>')
 
 
 # ---------- linha com trechos coloridos por governo (vermelho = esquerda, azul = direita) ----------
-def segchart(years, lines, ymin, ymax, ticks, t0, dur, w=880, h=620, lw=270, tfmt=None, xl=None, plabels=(), flow='m:3'):
+def segchart(years, lines, ymin, ymax, ticks, t0, dur, w=880, h=620, lw=270, tfmt=None, xl=None, plabels=(), flow='m:3', bands=(), pings=(), band_top=0):
     px0, px1, py0, py1 = 70, w - lw - 16, 16, h - 46
     X = lambda i: px0 + (px1 - px0) * i / (len(years) - 1)
     Yv = lambda v: py1 - (py1 - py0) * (v - ymin) / (ymax - ymin)
@@ -148,9 +155,14 @@ def segchart(years, lines, ymin, ymax, ticks, t0, dur, w=880, h=620, lw=270, tfm
             rev += f'<div class="bar crev" data-t="{L["rt"]:.2f}" data-d="1.2" data-to="{px1+12}" style="height:{h}px"><svg width="{w}" height="{h}">{one}</svg></div>'
     else:
         rev = f'<div class="bar crev" data-t="{t0}" data-d="{dur}" data-to="{px1+12}" style="height:{h}px"><svg width="{w}" height="{h}">{ln}</svg></div>'
+    # faixa = período que a voz está explicando (entra no tempo t, sai em to); ping = ponto que pulsa na linha
+    bd = ''.join(f'<div class="cband" data-a="fade" data-t="{t:.2f}" data-d=".25"' + (f' data-o="{to:.2f}" data-od=".3"' if to else '') +
+                 f' style="left:{X(i0)-8:.0f}px;width:{X(i1)-X(i0)+16:.0f}px;top:{py0+band_top}px;height:{py1-py0-band_top}px"></div>' for i0, i1, t, to in bands)
+    pg = ''.join(f'<div class="cping" data-a="pop" data-t="{t:.2f}" data-d=".45"' + (f' data-o="{to:.2f}" data-od=".3"' if to else '') +
+                 f' style="left:{X(i)-19:.0f}px;top:{Yv(lines[k]["v"][i])-19:.0f}px;border-color:{c}"></div>' for k, i, t, to, c in pings)
     return (f'<div class="el chart" data-flow="{flow}" style="left:80px;width:{w}px;height:{h}px">'
             f'<svg class="cgrid" width="{w}" height="{h}">{g}</svg>'
-            f'{rev}{pl}{lab}</div>')
+            f'{bd}{rev}{pl}{pg}{lab}</div>')
 
 def quote(txt, t, flow, gap=34, size=58):
     return f'<div class="el h quote" data-flow="{flow}" data-gap="{gap}" data-a="up" data-t="{t}" style="left:80px;width:880px;font-size:{size}px">{txt}</div>'
@@ -206,16 +218,17 @@ c3 = chart(s, XM, [
     dict(n='CABRAL 2 −2%', v=[0, -14.9, -19.9, -8.2, -1.9], c=BLUE, w=4, dash=True, lt=W(s,'segundo',0,-.1)),
     dict(n='PEZÃO +17%', v=[0, -12.4, 9.5, 18.0, 17.4], c='#AFC0FF', w=5, lt=W(s,'pezão',0,-.1)),
     dict(n='WITZEL/CASTRO −33%', v=[0, -10.9, -26.9, -29.1, -33.2], c='#38BDF8', w=7, lt=W(s,'witzel',0,-.1)),
+    dict(n='BRASIL −20%', sub='MESMO PERÍODO', v=[0, -21.5, -14.0, -17.4, -19.9], c='#9A9A9A', w=5, dash=True, lt=W(s,'witzel',0,.3), glow=W(s,'brasil',0,-.15)),
     dict(n='CASTRO 2 −13%', sub='3 ANOS', v=[0, -4.8, -15.1, -13.3, -13.3], c='#38BDF8', w=4, dash=True, lt=W(s,'segundo',1,-.1)),
 ], 40, [-40, -20, 0, 20, 40], 0, 0, h=640, lw=290, ymin=-40,
    tfmt=lambda v: (f'+{v}%' if v > 0 else f'{v}%'.replace('-', '−')),
    per_line=True).replace('{flow}', 'm:3')
 H.append(scene(s, rail(1)+f'''
 {eb(2, 'MANDATO POR MANDATO · MORTES VIOLENTAS', top=290)}
-<div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:32px"><b style="color:{L1}">━ ESQUERDA</b> &nbsp;&nbsp; <b style="color:{BLUE}">━ DIREITA</b> &nbsp;&nbsp; <span style="color:#BDB6A6;font-size:28px">┅ 2º MANDATO</span></div>
+<div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:32px"><b style="color:{L1}">━ ESQUERDA</b> &nbsp;&nbsp; <b style="color:{BLUE}">━ DIREITA</b> &nbsp;&nbsp; <span style="color:#BDB6A6;font-size:28px">┅ 2º MANDATO</span> &nbsp; <b style="color:#B5B5B5">┅ BRASIL</b></div>
 {c3}
-<div class="el fine" data-flow="m:4" data-gap="22" data-a="fade" data-t="{W(s,'repare',0,-.1)}" style="left:80px">VARIAÇÃO NO NÚMERO DE MORTES VIOLENTAS ATÉ O FIM DO MANDATO, CONTRA O ANO ANTES DA POSSE. MESMA BASE DE 1998 A 2025 (ISP-RJ). BENEDITA (PT) GOVERNOU 9 MESES EM 2002; PEZÃO ASSUMIU EM ABR/2014; CASTRO EM AGO/2020. ANTES DE 1999, MARCELLO ALENCAR (PSDB, DIREITA): −26%. BRASIL ENTRE 2018 E 2022: CERCA DE −17% (FBSP, NÚMERO DE MORTES). OS +26% DE GAROTINHO INCLUEM OS 9 MESES DE BENEDITA (PT).</div>
-''', 'i03', 'ISP-RJ, LETALIDADE VIOLENTA (1998–2020) · FBSP, ANUÁRIOS 2022–2026 · ' + IDS, kbo='55% 60%'))
+<div class="el fine" data-flow="m:4" data-gap="22" data-a="fade" data-t="{W(s,'repare',0,-.1)}" style="left:80px">VARIAÇÃO NO NÚMERO DE MORTES VIOLENTAS ATÉ O FIM DO MANDATO, CONTRA O ANO ANTES DA POSSE. MESMA BASE DE 1998 A 2025 (ISP-RJ). BENEDITA (PT) GOVERNOU 9 MESES EM 2002; PEZÃO ASSUMIU EM ABR/2014; CASTRO EM AGO/2020. ANTES DE 1999, MARCELLO ALENCAR (PSDB, DIREITA): −26%. BRASIL ENTRE 2018 E 2022: −20% NO ATLAS DA VIOLÊNCIA (SIM, HOMICÍDIOS); CERCA DE −17% NO FBSP (MORTES VIOLENTAS). OS +26% DE GAROTINHO INCLUEM OS 9 MESES DE BENEDITA (PT).</div>
+''', 'i03', 'ISP-RJ, LETALIDADE VIOLENTA (1998–2020) · FBSP, ANUÁRIOS 2022–2026 · ATLAS DA VIOLÊNCIA · ' + IDS, kbo='55% 60%'))
 
 s = 'v04'; CUR['s'] = s
 YC = [str(y) for y in range(1998, 2026)]
@@ -231,7 +244,25 @@ c4 = segchart(YC, [dict(n='', v=VB, segs=[(6, 26, '#8C8C8C')], w=5, dash=True, l
              (1, ix(2017), '6.749<br>PEZÃO', BLUE, -62, W(s,'pezão',0,-.2)),
              (1, ix(2020), 'WITZEL/CASTRO<br>4.762', BLUE, -62, W(s,'witzel',0,-.1), 64),
              (1, ix(2025), 'CASTRO<br>3.890', BLUE, 18, W(s,'voltou',0,-.2)),
-             (0, ix(2017), 'BRASIL', '#B5B5B5', -48, W(s,'brasil',0,.2))]).replace('{flow}', 'm:3')
+             (0, ix(2017), 'BRASIL', '#B5B5B5', -48, W(s,'brasil',0,.2))],
+    bands=[(ix(2002), ix(2004), W(s,'rosinha',0,-.1), W(s,'cai',0,-.1)),
+           (ix(2007), ix(2012), W(s,'cai',0,-.1), W(s,'volta',0,-.1)),
+           (ix(2014), ix(2017), W(s,'volta',0,-.1), W(s,'cai',1,-.1)),
+           (ix(2018), ix(2024), W(s,'cai',1,-.1), W(s,'cinza',0,-.1)),
+           (ix(2004), ix(2012), W(s,'quatro',0,-.3), W(s,'depois',1,-.1)),
+           (ix(2018), ix(2024), W(s,'depois',1,-.1), W(s,'subiu',0,-.1)),
+           (ix(2024), ix(2025), W(s,'voltou',0,-.2), None)],
+    pings=[(1, ix(2003), W(s,'rosinha',0,-.1), W(s,'cai',0,-.1), Y),
+           (1, ix(2012), W(s,'cai',0,-.1), W(s,'volta',0,-.1), Y),
+           (1, ix(2017), W(s,'volta',0,-.1), W(s,'cai',1,-.1), Y),
+           (1, ix(2024), W(s,'cai',1,-.1), W(s,'cinza',0,-.1), Y),
+           (0, ix(2017), W(s,'cinza',0,-.1), W(s,'quatro',0,-.3), '#E4E4E4'),
+           (0, ix(2012), W(s,'subia',0,-.1), W(s,'depois',1,-.1), '#E4E4E4'),
+           (1, ix(2012), W(s,'caía',0,-.1), W(s,'depois',1,-.1), Y),
+           (0, ix(2024), W(s,'caem',0,-.1), W(s,'subiu',0,-.1), '#E4E4E4'),
+           (1, ix(2024), W(s,'caem',0,-.1), W(s,'subiu',0,-.1), Y),
+           (1, ix(2025), W(s,'voltou',0,-.1), W(s,'brasil',1,-.1), Y),
+           (0, ix(2024), W(s,'menor',0,-.2), None, '#E4E4E4')], band_top=170).replace('{flow}', 'm:3')
 c4 = c4[:-6] + f'<div class="big23" data-a="up" data-t="{W(s,"rosinha",0,-.1):.2f}"><b>23 ANOS</b><span>DE GOVERNOS DE DIREITA</span><small>DESDE 2003 · MDB CONTA COMO DIREITA</small></div></div>'
 H.append(scene(s, rail(1)+f'''
 {eb(3, 'A LINHA INTEIRA · 1998–2025', top=290)}
@@ -407,6 +438,8 @@ CSS = open(os.path.join(KIT, 'preview_kit/style.css')).read() + '''
 
 .chart{position:absolute}.chart svg{position:absolute;left:0;top:0;overflow:visible}
 .crev{position:absolute;left:0;top:0;overflow:hidden;width:0}
+.cband{position:absolute;background:linear-gradient(180deg,rgba(255,211,77,.20),rgba(255,211,77,.06));border-top:4px solid #FFD34D;border-radius:4px}
+.cping{position:absolute;width:38px;height:38px;border-radius:50%;border:5px solid #FFD34D;box-shadow:0 0 0 6px rgba(255,211,77,.25),0 0 22px rgba(255,211,77,.7)}
 .cnote{font-size:20px;line-height:1.25}
 .clab{position:absolute;font-family:JBM;font-weight:700;font-size:22px;letter-spacing:1.5px;white-space:nowrap;line-height:1.2;text-shadow:0 2px 10px rgba(0,0,0,.8)}
 .clab small{display:block;font-size:15px;line-height:1.6;letter-spacing:.5px;color:#BDB6A6;margin-top:4px}.clab small .ide{font-size:13px;padding:1px 6px}
