@@ -288,9 +288,10 @@ H.append(scene(s, rail(2)+f'''
 {eb(4, 'PROBLEMA 1 · TERRITÓRIO', top=320)}
 <div class="el h cnt" data-flow="m:2" data-gap="30" data-t="{W(s,'quatro',0,-.15)}" data-d=".9" data-from="0" data-to="34.9" data-dec="1" data-suf="%" style="left:72px;font-size:230px;color:{R};width:960px;line-height:.82;height:190px"></div>
 <div class="el body" data-flow="m:3" data-gap="24" data-a="up" data-t="{W(s,'metropolitana',0,-.1)}" style="left:60px;width:960px">da região metropolitana vive sob grupos armados, <b>tráfico e milícia: cerca de 4 milhões de pessoas.</b></div>
-<div class="el rows" data-flow="m:4" data-gap="40" data-a="fade" data-t="{W(s,'milícia',0,-.3)}" style="left:60px">
+<div class="el rows" data-flow="m:4" data-gap="40" data-a="fade" data-t="{W(s,'quase',0,-.25)}" style="left:60px">
   {row('MILÍCIA', 'QUASE METADE DA ÁREA · RECUA DESDE 2020', None, '#fff', 0, fade=W(s,'policiais',0,-.2), sub='POLICIAIS E EX-POLICIAIS QUE COBRAM<br>TAXA E CONTROLAM GÁS, VAN E INTERNET')}
   {row('COMANDO VERMELHO', 'OCUPA O ESPAÇO · MAIOR POPULAÇÃO DOMINADA', None, R, 0, fade=W(s,'comando',0,-.2))}</div>
+<div class="el pics" data-flow="m:4" data-nosize="1" data-a="fade" data-d=".01" data-t="{W(s,'grupos',1,-.3)}" data-o="{W(s,'quase',0,-.45)}" style="left:60px;width:960px;height:580px"><div class="pic" data-a="pop" data-t="{W(s,'policiais',0,-.15)}" data-r="-2.2" style="left:0px;top:0px"><img src="assets/rj/ls_pol.jpg"><b>POLICIAIS E EX-POLICIAIS</b></div><div class="pic" data-a="pop" data-t="{W(s,'gás',0,-.15)}" data-r="1.8" style="left:494px;top:10px"><img src="assets/rj/ls_gas.jpg"><b>GÁS</b></div><div class="pic" data-a="pop" data-t="{W(s,'transporte',0,-.15)}" data-r="1.5" style="left:0px;top:292px"><img src="assets/rj/ls_van.jpg"><b>TRANSPORTE</b></div><div class="pic" data-a="pop" data-t="{W(s,'internet',0,-.15)}" data-r="-1.6" style="left:494px;top:302px"><img src="assets/rj/ls_net.jpg"><b>INTERNET</b></div></div>
 <div class="el note" data-flow="m:5" data-gap="24" data-a="fade" data-t="{W(s,'cresce',0,.2)}" style="left:60px">QUEM CUIDA: POLICIAMENTO E INVESTIGAÇÃO = ESTADO. FRONTEIRA, PORTOS, ARMAS E LAVAGEM = UNIÃO (PF).</div>
 <div class="el fine" data-flow="m:6" data-gap="18" data-a="fade" data-t="{W(s,'chefes',0,-.1)}" style="left:60px">POR QUE RECUA: ECKO, CHEFE DA MAIOR MILÍCIA, MORTO PELA POLÍCIA CIVIL DO RIO (2021, GOVERNO CASTRO, <span style="white-space:nowrap">PL {DIR}).</span> O IRMÃO, ZINHO, SE ENTREGOU À PF (DEZ/2023, GOVERNO ATUAL {SQUID}) APÓS OPERAÇÃO NA CASA DA DEPUTADA <span style="white-space:nowrap">LUCINHA (PSD {DIR}).</span> DEPOIS, BRIGA PELA HERANÇA.</div>
 ''', 'i06', 'GENI/UFF + FOGO CRUZADO (DEZ/2025) · SBT NEWS · METRÓPOLES (2023) · JB (2021)', kbo='55% 50%'))
@@ -384,13 +385,14 @@ s = 'v15'; CUR['s'] = s
 H.append(scene(s, f'''
 {eb(0, 'RESUMINDO', top=300)}
 <div class="el h" data-flow="m:2" data-gap="30" data-a="up" data-t="{W(s,'lado',0,-.3)}" style="left:60px;width:960px;font-size:66px;color:#fff">NÃO É CULPA <span class="hl">DE UM LADO SÓ.</span></div>
-<div class="el rows" data-flow="m:3" data-gap="34" data-a="fade" data-t="{W(s,'combinação',0,-.2)}" style="left:60px">
+<div class="el rows" data-flow="m:3" data-gap="34" data-a="fade" data-t="{W(s,'combinação',0,-.2)}" data-o="{W(s,'violência',0,-.35)}" style="left:60px">
   {row('HÁ DÉCADAS', 'FACÇÕES E MILÍCIAS', None, '#fff', 0)}
   {row('É DA UNIÃO', 'FRONTEIRAS E PORTOS POR ONDE ENTRAM ARMAS E DROGAS', None, Y, 0, fade=W(s,'armas',0,-.2))}
   {row('É DO ESTADO', 'AS ESCOLHAS SOBRE A POLÍCIA', None, R, 0, fade=W(s,'escolhas',0,-.2))}
   {row('É DA PREFEITURA', 'GUARDA E ORDEM URBANA', None, WH, 0, fade=W(s,'prefeitura',0,-.2))}</div>
+<div class="el sw15" data-flow="m:3" data-nosize="1" style="left:60px;width:960px"><div class="el h" data-a="up" data-t="{W(s,'violência',0,-.2)}" style="position:relative;left:0;width:960px;font-size:54px;color:#fff">A VIOLÊNCIA CAIU, MAS O RIO SEGUE <span class="hl">ENTRE OS PIORES DO SUDESTE.</span></div><div class="el h" data-a="up" data-t="{W(s,'quem',0,-.2)}" style="position:relative;left:0;margin-top:34px;width:960px;font-size:46px;color:#FFD34D">QUEM GOVERNA LEVA O CRÉDITO DO QUE MELHORA E A CONTA DO QUE PIORA.</div></div>
 <div class="el h" data-flow="m:4" data-gap="32" data-a="slam" data-t="{W(s,'vinte',0,-.15)}" style="left:60px;width:960px;font-size:54px;color:#fff">23 ANOS DE <span style="color:#5B7CFF">DIREITA.</span><br><span class="hl">E A CULPA É DA ESQUERDA?</span></div>
-<div class="el repost" data-flow="m:5" data-gap="32" data-a="slam" data-t="{W(s,'cobraria',0,-.3)}" data-shake="1" style="left:60px;width:960px;font-size:44px">O QUE VOCÊ COBRARIA DO GOVERNADOR ELEITO?<small>Douglas Ruas · PL {DIR} · posse em 06/01/2027</small></div>
+<div class="el repost" data-flow="m:5" data-gap="32" data-a="slam" data-t="{W(s,'eleito',0,-.3)}" data-shake="1" style="left:60px;width:960px;font-size:44px">O QUE VOCÊ COBRARIA DO GOVERNADOR ELEITO?<small>Douglas Ruas · PL {DIR} · posse em 06/01/2027</small></div>
 <div class="el fine" data-flow="m:6" data-gap="20" data-a="fade" data-t="{W(s,'grupo',0,.2)}" style="left:60px">DESDE AGO/2003 (ROSINHA NO MDB), O RIO É GOVERNADO PELA DIREITA (MDB = DIREITA NA ESCALA, 7,01). RUAS FOI ELEITO NO 1º TURNO DEPOIS QUE O TSE ANULOU OS VOTOS DE GAROTINHO; É DO GRUPO DE CASTRO (PL) E BACELLAR (UNIÃO), <span style="white-space:nowrap">AMBOS {DIR},</span> SEGUNDO A IMPRENSA.</div>
 ''', 'i15', 'TSE · TRE-RJ · FBSP · ISP-RJ · GENI/UFF · SOU DA PAZ', kbo='55% 55%'))
 
@@ -418,7 +420,7 @@ CSS = open(os.path.join(KIT, 'preview_kit/style.css')).read() + '''
 .item{padding:20px 0 22px;border-top:1px solid rgba(242,236,224,.22)}
 .item:last-child{border-bottom:1px solid rgba(242,236,224,.22)}
 .item .kick{font-family:JBM;font-weight:700;font-size:21px;letter-spacing:2px;color:#FFD34D;text-transform:uppercase}
-.item .kick .ide{font-size:16px;padding:1px 8px;margin-left:6px}.nms{display:block;margin-top:12px}.nms .nm{display:block;font-size:34px;font-weight:500;line-height:1.45;color:#E8E2D6}.nms .nm b{font-weight:800;color:#fff}.item .t .ide,.note .ide{font-size:17px;padding:2px 8px;letter-spacing:.5px;vertical-align:middle}
+.item .kick .ide{font-size:16px;padding:1px 8px;margin-left:6px}.pics .pic{position:absolute;width:466px;height:268px;border:7px solid #F2ECE0;box-shadow:0 14px 30px rgba(0,0,0,.6);background:#16130F;overflow:hidden}.pics .pic img{width:100%;height:100%;object-fit:cover;display:block}.pics .pic b{position:absolute;left:12px;bottom:12px;background:#FFD34D;color:#0E0D0B;font:900 24px Rub;letter-spacing:.5px;padding:4px 10px}.nms{display:block;margin-top:12px}.nms .nm{display:block;font-size:34px;font-weight:500;line-height:1.45;color:#E8E2D6}.nms .nm b{font-weight:800;color:#fff}.item .t .ide,.note .ide{font-size:17px;padding:2px 8px;letter-spacing:.5px;vertical-align:middle}
 .item .t{font-family:Rub;font-weight:800;font-size:46px;line-height:1.1;margin-top:10px;text-wrap:balance;text-shadow:0 3px 16px rgba(0,0,0,.55)}
 .mut{color:#BDB6A6;font-weight:500}.mut.sm{font-size:30px;line-height:1.3}
 .counter{display:flex;align-items:center;gap:26px}.counter .cnt{font-size:150px}.counter b{font-family:Rub;font-weight:600;font-size:34px;line-height:1.15;color:#E9E4D8;white-space:nowrap}
