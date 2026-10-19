@@ -5,7 +5,7 @@ from kokoro_onnx import Kokoro
 K = Kokoro('/home/claude/work/kmodel/kokoro-v1.0.onnx', '/home/claude/work/kmodel/voices-v1.0.bin')
 S = json.load(open('/home/claude/oak-park-ai-hub/docs/templates/collage_reel/data/bahia_sc/script.json'))
 SAY = {r'\bPT\b': 'pê tê', r'\bPL\b': 'pê éle'}
-SPEED, SR = 1.2, 24000
+SPEED, SR = 1.25, 24000
 GAP = {',': .10, ':': .14, '.': .18, '?': .22}
 def trim(a, thr=.01):
     idx = np.where(np.abs(a) > thr)[0]

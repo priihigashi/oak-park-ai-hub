@@ -42,3 +42,16 @@
 
 .shadeMapF{position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,6,8,.94) 0%,rgba(5,6,8,.9) 52%,rgba(5,6,8,.55) 62%,rgba(5,6,8,.2) 70%,rgba(5,6,8,.8) 77%,rgba(5,6,8,.96) 100%);pointer-events:none}
 .counter b{font-size:46px;line-height:1.1;width:440px}
+
+/* dupla de recortes (você × Justus), contorno branco como nos outros reels */
+.duo{display:flex;align-items:flex-end;justify-content:space-between;width:920px}
+.who2{width:380px;text-align:center}
+.who2 b{display:block;font-family:Rub;font-weight:900;font-size:40px;color:#fff;margin-top:14px;letter-spacing:.5px}
+.who2 small{display:block;font-family:JBM;font-weight:700;font-size:22px;letter-spacing:1px;color:#CFC8B8;margin-top:8px;line-height:1.4}
+.cut{position:relative;width:300px;height:340px;margin:0 auto}
+.cut svg{width:100%;height:100%;overflow:visible}
+.cut svg *{fill:#2a2c33;stroke:#fff;stroke-width:7;paint-order:stroke;filter:drop-shadow(0 0 0 #fff) drop-shadow(0 14px 26px rgba(0,0,0,.6))}
+.cut.jus svg *{fill:#3a3420;stroke:#FFD34D}
+.cut em{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);font-family:JBM;font-style:normal;font-weight:700;font-size:20px;letter-spacing:2px;color:#FFD34D;opacity:.7}
+.vs{font-family:Rub;font-weight:900;font-size:110px;color:#FFD34D;align-self:center;margin-top:-80px}
+.row.txt .v{font-size:38px;line-height:1.12}
