@@ -23,12 +23,15 @@ def W(sid, tok, n=0, off=0.0):
                 if k == n: return round(max(0, t+off), 2)
                 k += 1
     raise SystemExit(f'word {tok} not in {sid}')
-def kar(sid, per=6):
-    ws = S[sid]['words']; toks = []; n = 0
+KAR_CHARS = 64   # ~2 linhas cheias de 860 px na fonte da legenda (regra: sempre 2 linhas cheias, cor seguindo a voz)
+def kar(sid):
+    ws = S[sid]['words']; toks = []; c = 0
     for i, (w, t) in enumerate(ws):
-        if i and (n >= per or (re.search(r'[.?!:;]$', ws[i-1][0]) and n >= 3)): toks.append('/'); n = 0
-        toks.append(f"{html.escape(w.replace(':', ''))}:{t}"); n += 1
-    return f'<div class="kar karfull el" data-words="{" ".join(toks)}" style="left:130px;top:1410px;width:820px"></div>'
+        L = len(w) + 1
+        if i and (c + L > KAR_CHARS or (re.search(r'[.?!]$', ws[i-1][0]) and c >= KAR_CHARS * .6)):
+            toks.append('/'); c = 0
+        toks.append(f"{html.escape(w.replace(':', ''))}:{t}"); c += L
+    return f'<div class="kar karfull el" data-words="{" ".join(toks)}" style="left:110px;top:1438px;width:860px"></div>'
 DUR = TL[-1]['e']
 CH = ["QUEM", "CURVA", "TERRITÓRIO", "POLÍTICA", "POLÍCIA", "UNIÃO"]
 def rail(active, t=.1):
@@ -38,7 +41,7 @@ def rail(active, t=.1):
 def scene(sid, inner, bg, src, kbo='60% 50%', kb=1.08, bghtml=None):
     o = S[sid]
     b = (bghtml if bghtml else f'<img class="bgimg" src="assets/rj/{bg}.jpg" data-kb="{kb}" data-kbo="{kbo}">') + '<div class="shadeX"></div>'
-    s = f'<div class="el srcline" data-a="fade" data-t=".4" style="left:130px;top:1640px;width:820px">FONTE: {src}</div>'
+    s = f'<div class="el srcline" data-a="fade" data-t=".4" style="left:110px;top:1656px;width:860px">FONTE: {src}</div>'
     return f'<section class="scene" data-s="{o["s"]}" data-e="{o["e"]}" data-in="cut" data-theme="dark">{b}<div class="safe">{inner}</div>{kar(sid)}{s}</section>\n'
 CUR = {'s': None}
 def eb(n, txt, t=.05, top=None, flow='m:1'):
@@ -209,7 +212,7 @@ H.append(scene(s, rail(0)+f'''
   {gov('2019–2020', 'WITZEL', 'PSC', DIR, W(s,'witzel',0,-.2), col=Y, sub='!AFASTADO E CASSADO')}
   {gov('2020–2026', 'CASTRO', 'PSC→PL', DIR, W(s,'castro',0,-.2), col=Y, sub='!INELEGÍVEL ATÉ 2030')}</div>
 <div class="el h" data-flow="m:3" data-gap="34" data-a="slam" data-t="{W(s,'vinte',0,-.15)}" style="left:80px;width:880px;font-size:64px;color:#fff">23 ANOS DE <span class="hl">DIREITA</span></div>
-<div class="el fine" data-flow="m:4" data-gap="20" data-a="fade" data-t="{W(s,'lados',0,.2)}" style="left:80px">MDB = 7,01 NA ESCALA (DIREITA); ROSINHA NO MDB DESDE AGO/2003. O PT TEVE SECRETARIAS COM CABRAL ATÉ NOV/2013; GAROTINHO FOI SECRETÁRIO DE SEGURANÇA DE ROSINHA (2003–04). ANTES: MARCELLO ALENCAR (PSDB, DIREITA) E BRIZOLA (PDT, CENTRO-ESQUERDA). HOJE: INTERINO RICARDO COUTO (TJ-RJ). PREFEITOS DA CAPITAL DESDE 1993 (MAIA, CONDE, PAES, CRIVELLA, CAVALIERE): DE CENTRO-DIREITA A EXTREMA-DIREITA. PM E POLÍCIA CIVIL SÃO DO ESTADO (CF, ART. 144).</div>
+<div class="el fine" data-flow="m:4" data-gap="20" data-a="fade" data-t="{W(s,'lados',0,.2)}" style="left:80px">MDB = 7,01 (DIREITA); ROSINHA NO MDB DESDE AGO/2003. PT TEVE SECRETARIAS COM CABRAL ATÉ 2013; GAROTINHO FOI SECRETÁRIO DE SEGURANÇA DE ROSINHA. ANTES: MARCELLO ALENCAR (PSDB, DIREITA) E BRIZOLA (PDT). HOJE: INTERINO RICARDO COUTO (TJ-RJ). PREFEITOS DESDE 1993: DE CENTRO-DIREITA A EXTREMA-DIREITA. POLÍCIAS = ESTADO (CF, ART. 144).</div>
 ''', 'i02', 'TSE · TJ-RJ · ' + IDS, kbo='60% 50%'))
 
 # cena v03 (mandato por mandato) removida na rodada 27 — ver git log para o código
@@ -260,7 +263,7 @@ H.append(scene(s, rail(1)+f'''
 {c4}
 <div class="el body" data-flow="m:5" data-gap="30" data-a="up" data-t="{W(s,'estatuto',0,-.2)}" data-o="{W(s,'rosinha',0,-.3)}" style="left:80px;width:900px;font-size:30px">+ AJUDA FEDERAL: <b class="hl">ESTATUTO DO DESARMAMENTO</b>, 2003, sancionado pelo presidente {SQUID} · <b>464 mil armas</b> entregues</div>
 <div class="el h" data-flow="m:5" data-gap="30" data-a="up" data-t="{W(s,'subiu',0,-.2)}" style="left:80px;width:880px;font-size:58px;color:#fff">SUBIU E CAIU <span class="hl">COM OS DOIS LADOS.</span></div>
-<div class="el fine" data-flow="m:6" data-gap="20" data-a="fade" data-t="{W(s,'série',0,.1)}" style="left:80px">ISP-RJ, MORTES VIOLENTAS, 1998–2025. % = FIM DO MANDATO × ANO ANTES DA POSSE (GAROTINHO INCLUI OS 9 MESES DE BENEDITA, PT). 2025: RIO +2,1% (MORTES PELA POLÍCIA +13%), BRASIL −8,2% (FBSP). BRASIL: HOMICÍDIOS (SIM) NA ESCALA DO RIO. INTERVENÇÃO FEDERAL: FEV–DEZ/2018.</div>
+<div class="el fine" data-flow="m:6" data-gap="20" data-a="fade" data-t="{W(s,'série',0,.1)}" style="left:80px">% = FIM DO MANDATO × ANO ANTES DA POSSE (GAROTINHO INCLUI BENEDITA, PT, 9 MESES). 2025: RIO +2,1% (POLÍCIA +13%), BRASIL −8,2%. BRASIL = HOMICÍDIOS (SIM) NA ESCALA DO RIO.</div>
 ''', 'i04', 'ISP-RJ · FBSP, ANUÁRIO 2026 · MAPA DA VIOLÊNCIA 2006 E ATLAS DA VIOLÊNCIA (SIM)', kbo='60% 45%'))
 
 s = 'v05'; CUR['s'] = s
@@ -309,7 +312,7 @@ H.append(scene(s, rail(3)+f'''
   {item('CASO MARIELLE · STF, FEV/2026', 'Irmãos Brazão condenados como mandantes: 76 anos.', W(s,'supremo',0,-.2), color=R)}
   {item('EMENDA DE FLÁVIO BOLSONARO · PF, 2026', 'R$ 199,9 mil para ONG ligada aos Brazão, negociada com miliciano condenado no caso Marielle. O gabinete diz que seguiu a lei.', W(s,'emenda',0,-.2), color=BLUE)}</div>
 <div class="el note" data-flow="m:3" data-gap="24" data-a="fade" data-t="{W(s,'negam',0,-.2)}" style="left:80px">TODOS NEGAM. OS BRAZÃO SÃO EX-MDB E EX-UNIÃO BRASIL. O CHEFE DA POLÍCIA CIVIL, NOMEADO NA INTERVENÇÃO FEDERAL (GOVERNO TEMER, MDB {DIR}), PEGOU 18 ANOS POR ATRAPALHAR A INVESTIGAÇÃO.</div>
-<div class="el fine" data-flow="m:4" data-gap="18" data-a="fade" data-t="{W(s,'negam',0,.2)}" style="left:80px">TAMBÉM PRESOS: UM EX-CHEFE DA POLÍCIA CIVIL DE CASTRO (PROPINA DO JOGO DO BICHO, 2022) E UM DEPUTADO EXPULSO DO MDB (SUSPEITO DE AGIR PARA O CV). DO OUTRO LADO, O VEREADOR SALVINO (PSD, ALIADO DE PAES) FOI PRESO EM 2026, SUSPEITO DE NEGOCIAR COM O CV, E SOLTO 2 DIAS DEPOIS (O TJ VIU FUNDAMENTO “PRECÁRIO”). TODOS NEGAM. UNIÃO BRASIL = FUSÃO DE DEM E PSL.</div>
+<div class="el fine" data-flow="m:4" data-gap="18" data-a="fade" data-t="{W(s,'negam',0,.2)}" style="left:80px">TAMBÉM PRESOS: EX-CHEFE DA POLÍCIA CIVIL DE CASTRO (JOGO DO BICHO, 2022) E UM DEPUTADO EXPULSO DO MDB (SUSPEITO DE AGIR PARA O CV). VEREADOR SALVINO (PSD, ALIADO DE PAES): PRESO EM 2026 E SOLTO 2 DIAS DEPOIS. TODOS NEGAM.</div>
 ''', 'i09', 'PF · STF (FEV/2026) · MP-RJ · ESTADÃO (SET/2026) · CORREIO BRAZILIENSE · DIÁRIO DO NORDESTE', kbo='65% 50%'))
 
 s = 'v10'; CUR['s'] = s
@@ -322,7 +325,7 @@ H.append(scene(s, rail(4)+f'''
 {c10}
 <div class="el h" data-flow="m:3" data-gap="30" data-a="up" data-t="{W(s,'três',0,-.25)}" style="left:80px;width:880px;font-size:56px;color:#fff">2019: <span style="color:{R}">3 EM CADA 10</span> MORTES VIOLENTAS</div>
 <div class="el body" data-flow="m:3.5" data-gap="22" data-a="up" data-t="{W(s,'ministério',0,-.2)}" style="left:80px;width:880px;font-size:36px"><b>MP-RJ:</b> mais mortes pela polícia <b class="hl">não trouxeram menos homicídios.</b></div>
-<div class="el fine" data-flow="m:4" data-gap="22" data-a="fade" data-t="{W(s,'letal',0,.2)}" style="left:80px">AS 6 OPERAÇÕES MAIS LETAIS DESDE 2007 FORAM NO GOVERNO CASTRO (PL {DIR}). POLÍCIA MILITAR E CIVIL SÃO DO ESTADO. “O STF PROIBIU OPERAÇÕES” É DISTORCIDO (AOS FATOS): LIMITOU NA PANDEMIA E EM ABR/2025 DERRUBOU AS PRINCIPAIS RESTRIÇÕES; A OPERAÇÃO MAIS LETAL VEIO DEPOIS. CENTRO DE PESQUISAS DO MP-RJ (2019): SEM ASSOCIAÇÃO CLARA ENTRE MORTES PELA POLÍCIA E HOMICÍDIOS. 91% DOS INQUÉRITOS DESSAS MORTES FORAM ARQUIVADOS (2011–21, FÓRUM JUSTIÇA/CESEC).</div>
+<div class="el fine" data-flow="m:4" data-gap="22" data-a="fade" data-t="{W(s,'letal',0,.2)}" style="left:80px">AS 6 OPERAÇÕES MAIS LETAIS DESDE 2007 FORAM NO GOVERNO CASTRO (PL {DIR}). “O STF PROIBIU OPERAÇÕES” É DISTORCIDO (AOS FATOS): EM ABR/2025 DERRUBOU AS RESTRIÇÕES, E A OPERAÇÃO MAIS LETAL VEIO DEPOIS. MP-RJ (CENPE, 2019). 91% DOS INQUÉRITOS DESSAS MORTES ARQUIVADOS (2011–21, FÓRUM JUSTIÇA/CESEC).</div>
 ''', 'i10', 'FBSP, ANUÁRIOS 2015–2026 · GENI/UFF · MP-RJ (CENPE, 2019) · FÓRUM JUSTIÇA', kbo='55% 50%'))
 
 s = 'v11'; CUR['s'] = s
@@ -345,7 +348,7 @@ H.append(scene(s, rail(4)+f'''
   {item('2024 · GOVERNO ATUAL ' + SQUID + ' · ' + ESQ, 'Regras nacionais de câmera na farda e de uso da força. Castro assinou a nota que pediu a revogação.', W(s,'vinte',0,-.2), color=Y)}
   {item('2025 · DEPUTADOS DO PL ' + DIR, 'Volta a gratificação faroeste. Castro vetou; a Alerj derrubou o veto.', W(s,'deputados',0,-.2), color=R)}
   {item('PROJETO DAS BALAS · PL 3.723/2019', 'Tira a marcação das balas das polícias. Parado no Senado.', W(s,'projeto',0,-.2))}</div>
-<div class="el fine" data-flow="m:3" data-gap="22" data-a="fade" data-t="{W(s,'senado',0,.1)}" style="left:80px">NOS ANOS 1990, COM A FAROESTE (MARCELLO ALENCAR, PSDB), DOBROU O NÚMERO DE MORTOS PARA CADA FERIDO EM CONFRONTO. O PL 3.723 FOI ENVIADO PELO GOVERNO BOLSONARO; O FIM DA MARCAÇÃO ENTROU POR EMENDA NA CÂMARA. A GUARDA DE PAES (PSD) RECEBE GRATIFICAÇÃO FIXA DE R$ 10,3 MIL POR PORTAR ARMA, NÃO POR MORTE. CÂMERAS NAS FARDAS VIERAM EM 2022, POR ORDEM DO STF. É FALSO QUE OS FUZIS DA OPERAÇÃO ERAM DE CACS (AOS FATOS).</div>
+<div class="el fine" data-flow="m:3" data-gap="22" data-a="fade" data-t="{W(s,'senado',0,.1)}" style="left:80px">A FAROESTE DOS ANOS 1990 (MARCELLO ALENCAR, PSDB) DOBROU OS MORTOS POR FERIDO EM CONFRONTO. PL 3.723: ENVIADO PELO GOVERNO BOLSONARO. A GUARDA DE PAES (PSD) GANHA GRATIFICAÇÃO POR PORTAR ARMA, NÃO POR MORTE. CÂMERAS NAS FARDAS: 2022, POR ORDEM DO STF.</div>
 ''', 'i08', 'JB (2019) · AGÊNCIA BRASIL E METRÓPOLES (2025) · CONGRESSO EM FOCO · METRÓPOLES (OUT/2026) · ALMA PRETA', kbo='55% 50%'))
 
 s = 'v12'; CUR['s'] = s
@@ -372,7 +375,7 @@ H.append(scene(s, rail(5)+f'''
   {row('CRÉDITO', 'FORÇA NACIONAL NO RIO DESDE 2023', None, Y, 0, sub=f'GOVERNO ATUAL {SQUID}')}
   {row('CRÉDITO', 'COMPRA DE ARMAS POR ATIRADORES CAIU 91%', None, Y, 0, sub='448 MIL → 40 MIL · 2022–24', fade=W(s,'atiradores',0,-.2))}
   {row('CONTA', 'CORTOU VERBA DA SEGURANÇA', None, R, 0, sub='~R$ 500 MI CONTINGENCIADOS', fade=W(s,'cortou',0,-.2))}</div>
-<div class="el fine" data-flow="m:6" data-gap="14" data-a="fade" data-t="{W(s,'segurança',0,.1)}" style="left:80px">O GOVERNO ATUAL DISSE EM 2023 QUE NÃO DECRETARIA GLO NO RIO, MAS DECRETOU NOS PORTOS (2023) E NO BRICS (2025, A PEDIDO DE CASTRO). “GOVERNADOR NÃO PODE PEDIR GLO” É FALSO (AOS FATOS). O RIO GASTA R$ 17 BI/ANO EM SEGURANÇA (FBSP). LEI ANTIFACÇÃO SANCIONADA PELO PRESIDENTE.</div>
+<div class="el fine" data-flow="m:6" data-gap="14" data-a="fade" data-t="{W(s,'segurança',0,.1)}" style="left:80px">GLO: O GOVERNO ATUAL DECRETOU NOS PORTOS (2023) E NO BRICS (2025, A PEDIDO DE CASTRO). “GOVERNADOR NÃO PODE PEDIR GLO” É FALSO (AOS FATOS). O RIO GASTA R$ 17 BI/ANO EM SEGURANÇA (FBSP). LEI ANTIFACÇÃO SANCIONADA PELO PRESIDENTE.</div>
 ''', 'i13', 'MJSP (NOTA DE 28/10/2025) · FBSP, ANUÁRIO 2026 · AOS FATOS · PODER360', kbo='60% 60%'))
 
 s = 'v15'; CUR['s'] = s
@@ -462,7 +465,7 @@ CSS = open(os.path.join(KIT, 'preview_kit/style.css')).read() + '''
 .fine{font-size:23px;letter-spacing:.4px;line-height:1.42;color:#B9B2A3}.fine .ide{font-size:16px}
 .note{font-size:24px;letter-spacing:1px}
 .srcline{font-size:22px;letter-spacing:.5px;color:rgba(242,236,224,.72)}
-#foot{font-size:24px}
+#foot{font-size:24px;top:1614px}
 .big23.solo{top:auto}
 .row{padding:12px 0}
 .govs .row{padding:7px 0}.govs .row.txt{grid-template-columns:300px 1fr;column-gap:52px}.govs .selo{font-size:18px!important;letter-spacing:.3px!important;padding:2px 8px!important}.govs .row.txt .v{font-size:36px}.govs .row .v .pt{font-size:22px}.govs .row .v .ide{font-size:17px}
