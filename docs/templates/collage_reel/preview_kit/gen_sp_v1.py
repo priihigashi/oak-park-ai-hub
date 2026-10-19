@@ -224,7 +224,7 @@ H.append(scene(s, rail(2)+f'''
 <div class="el h" data-flow="m:2" data-gap="28" data-a="slam" data-t="{W(s,'câmera',0,-.15)}" style="left:80px;width:880px;font-size:64px;color:#fff">COM CÂMERA, AS MORTES <span class="hl">CAÍRAM PELA METADE</span></div>
 {c7}
 <div class="el h" data-flow="m:4" data-gap="30" data-a="up" data-t="{W(s,'quatro',0,-.25)}" style="left:80px;width:880px;font-size:56px;color:#fff">2025: <span style="color:{R}">QUASE 1 EM CADA 4</span> MORTES VIOLENTAS DO ESTADO</div>
-<div class="el fine" data-flow="m:5" data-gap="22" data-a="fade" data-t="{W(s,'quatro',0,.5)}" style="left:80px">OUVIDORIA (SSP-SP, 2018): 756 MORTES DE 2017; 43% COM TIRO NA CABEÇA OU NAS COSTAS. 835 DE 3.615 (23,1%). FGV: −57% NOS BATALHÕES ESTUDADOS. CÂMERAS: TESTE EM 2020, AMPLIAÇÃO EM 2021. O GOVERNO DE SP DIZ QUE A SOMA DO MANDATO É MENOR QUE A DO ANTERIOR; A DIREÇÃO, DESDE 2023, É DE ALTA. OPERAÇÃO VERÃO (2024): A MAIS LETAL DESDE O CARANDIRU.</div>
+<div class="el fine" data-flow="m:5" data-gap="22" data-a="fade" data-t="{W(s,'quatro',0,.5)}" style="left:80px">OUVIDORIA (SSP-SP, 2018): 756 MORTES DE 2017; 43% COM TIRO NA CABEÇA OU NAS COSTAS. 835 DE 3.615 (23,1%). FGV: −57% NOS BATALHÕES ESTUDADOS. CÂMERAS: TESTE EM 2020, AMPLIAÇÃO EM 2021. O GOVERNO DIZ QUE A SOMA DO MANDATO É MENOR; A DIREÇÃO, DESDE 2023, É DE ALTA.</div>
 ''', 'pm', 'SSP-SP (VIA AGÊNCIA BRASIL E FBSP, 2014–2025) · OUVIDORIA DA POLÍCIA SP, 2018 · FGV, 2022 · FBSP, ANUÁRIO 2026', kbo='50% 55%'))
 
 s = 's07b'; CUR['s'] = s
@@ -237,7 +237,7 @@ H.append(scene(s, rail(2)+f'''
   {row('2024–25 · TARCÍSIO', 'CÂMERA QUE SÓ GRAVA QUANDO LIGADA · PEDIU PARA REVOGAR O USO DA FORÇA', None, R, 0, sub=f'REPUBLICANOS {DIR}', fade=W(s,'tarcísio',0,-.3))}</div>
 <div class="el h" data-flow="m:3" data-gap="44" data-a="slam" data-t="{W(s,'flávio',0,-.2)}" style="left:80px;width:880px;font-size:62px;color:#fff">FLÁVIO BOLSONARO: <span class="hl">“DETALHEZINHO”</span></div>
 <div class="el body" data-flow="m:4" data-gap="22" data-a="up" data-t="{W(s,'país',0,-.2)}" style="left:80px;width:880px;font-size:40px">Num país onde a polícia tira <b class="hl">8× mais vidas</b> que a dos EUA, por habitante.</div>
-<div class="el fine" data-flow="m:5" data-gap="22" data-a="fade" data-t="{W(s,'país',0,.4)}" style="left:80px">FLÁVIO (PL {EXT}) NÃO É O AUTOR: DEFENDEU, NA TV GLOBO, 16/10/2026. MORTOS PELA POLÍCIA EM 2025, POR 100 MIL: BRASIL 3,1 (FBSP) · EUA ~0,4 (MPV). SP: 23,1% DAS MORTES VIOLENTAS.</div>
+<div class="el fine" data-flow="m:5" data-gap="22" data-a="fade" data-t="{W(s,'país',0,.4)}" style="left:80px">FLÁVIO (PL {EXT}) NÃO É O AUTOR: DEFENDEU NA TV GLOBO (16/10/2026). POR 100 MIL, 2025: BRASIL 3,1 (FBSP) · EUA ~0,4 (MPV).</div>
 ''', 'pm2', 'MJSP (MAI E DEZ/2024) · EXÉRCITO/COLOG, ABR/2020 · NOTA DO COSUD, DEZ/2024 · PONTE, MAI/2025 · PODER360, OUT/2026 · FBSP, ANUÁRIO 2026 · MAPPING POLICE VIOLENCE · ' + IDS, kbo='50% 50%'))
 
 s = 's08'; CUR['s'] = s
@@ -256,7 +256,7 @@ H.append(scene(s, rail(3)+f'''
 <div class="el rows" data-flow="m:4" data-gap="30" data-a="fade" data-t="{W(s,'contando',0,-.3)}" style="left:80px">
   {row('TAXA OFICIAL', '6,6', 6.6/12.8, WH, W(s,'contando',0))}
   {row('COM HOMICÍDIOS OCULTOS', '12,8', 1, R, W(s,'dobra',0,-.2), sub='HOMICÍDIOS POR 100 MIL · 2024')}</div>
-<div class="el fine" data-flow="m:5" data-gap="22" data-a="fade" data-t="{W(s,'campeão',0,.6)}" style="left:80px">ESCLARECIDO = VIROU DENÚNCIA DO MP. 2023 É O DADO MAIS RECENTE. BRASIL EM 2022: 39%. A QUEDA COMEÇA EM 2018–2019 E VOLTA A CAIR DESDE 2021: NÃO É DE UM GOVERNO SÓ. OCULTOS: ESTIMATIVA DO ATLAS. INVESTIGAÇÃO É DA POLÍCIA CIVIL (ESTADO).</div>
+<div class="el fine" data-flow="m:5" data-gap="22" data-a="fade" data-t="{W(s,'campeão',0,.6)}" style="left:80px">ESCLARECIDO = VIROU DENÚNCIA DO MP. 2023 É O DADO MAIS RECENTE. BRASIL EM 2022: 39%. A QUEDA ATRAVESSA MAIS DE UM GOVERNO. INVESTIGAÇÃO É DA POLÍCIA CIVIL (ESTADO).</div>
 ''', 'luz', 'INSTITUTO SOU DA PAZ, ONDE MORA A IMPUNIDADE (EDIÇÃO 2024 E DIAGNÓSTICO DE JUL/2026) · IPEA/FBSP, ATLAS 2026', kbo='50% 50%'))
 
 s = 's09'; CUR['s'] = s
@@ -282,7 +282,7 @@ H.append(scene(s, f'''
   {row('PF E RECEITA', 'NA OPERAÇÃO DOS COMBUSTÍVEIS', None, Y, 0, fade=W(s,'polícia',0,-.2))}</div>
 <div class="el h redtxt" data-flow="m:4" data-gap="44" data-a="slam" data-t="{W(s,'fronteira',0,-.15)}" style="left:80px;width:880px;font-size:66px">FRONTEIRA E PORTO DE SANTOS SÃO DA UNIÃO.</div>
 <div class="el body" data-flow="m:5" data-gap="26" data-a="up" data-t="{W(s,'decretos',0,-.2)}" style="left:80px;width:860px">Com os decretos de armas do governo Bolsonaro, a facção passou a <b>comprar fuzis com nota fiscal.</b></div>
-<div class="el fine" data-flow="m:6" data-gap="22" data-a="fade" data-t="{W(s,'registrados',0,.1)}" style="left:80px">O FUNDO VEM DAS LOTERIAS (LEI DE 2018); O GOVERNO FEDERAL DEFINE A DIVISÃO. EM 2019–2020, SP RECEBEU R$ 93,1 MI (DOIS ANOS); EM 2021 O GOVERNO BOLSONARO MUDOU A FÓRMULA E A FATIA DE SP CAIU DE 6,66% PARA 4,31%. FUZIL COM NOTA: R$ 12–15 MIL, CONTRA R$ 35–59 MIL NO CONTRABANDO (GAKIYA, ESTADÃO, 2022). LEI ANTIFACÇÃO: PROPOSTA DO GOVERNO ATUAL 🦑, RELATOR DERRITE (PP {DIR}), SANCIONADA PELO PRESIDENTE. NO SENADO, O RELATOR DISSE QUE A CÂMARA TIROU DO TEXTO PONTOS CONTRA CRIME DE COLARINHO BRANCO.</div>
+<div class="el fine" data-flow="m:6" data-gap="22" data-a="fade" data-t="{W(s,'registrados',0,.1)}" style="left:80px">O FUNDO VEM DAS LOTERIAS; O GOVERNO FEDERAL DEFINE A DIVISÃO. 2019–2020: R$ 93,1 MI (DOIS ANOS); EM 2021 A FÓRMULA MUDOU E A FATIA DE SP CAIU DE 6,66% PARA 4,31%. LEI ANTIFACÇÃO: PROPOSTA DO GOVERNO ATUAL 🦑, RELATOR DERRITE (PP {DIR}), SANCIONADA PELO PRESIDENTE.</div>
 ''', 'santos', 'MJSP/FNSP, 2024 · GAZETA SP, NOV/2021 · TCE-SP, CONTAS 2023 · CÂMARA DOS DEPUTADOS, 2026', kbo='50% 50%'))
 
 s = 's11'; CUR['s'] = s
@@ -327,13 +327,13 @@ CSS = open(os.path.join(KIT, 'preview_kit/style.css')).read() + '''
 .eyebrow .ide{font-size:19px;padding:2px 9px;letter-spacing:1px}
 .body{font-family:Rub;font-weight:500;font-size:40px;line-height:1.22;color:#E9E4D8;text-shadow:0 2px 14px rgba(0,0,0,.6);text-wrap:pretty}
 .body b{font-weight:800;color:#fff}
-.fine{font-family:JBM;font-weight:500;font-size:20px;letter-spacing:1px;line-height:1.5;color:#A39C8E;width:860px;text-transform:uppercase}.fine .ide{font-size:13px}
-.note{font-family:JBM;font-weight:700;font-size:21px;letter-spacing:1.5px;line-height:1.5;color:#BDB6A6;width:860px}
+.fine{font-family:JBM;font-weight:500;font-size:23px;letter-spacing:1px;line-height:1.5;color:#A39C8E;width:860px;text-transform:uppercase}.fine .ide{font-size:16px}
+.note{font-family:JBM;font-weight:700;font-size:24px;letter-spacing:1.5px;line-height:1.5;color:#BDB6A6;width:860px}
 .rows{width:880px;display:flex;flex-direction:column}
 .row{display:grid;grid-template-columns:300px 340px 1fr;align-items:center;column-gap:22px;padding:16px 0;border-top:1px solid rgba(242,236,224,.2)}
 .row:last-child{border-bottom:1px solid rgba(242,236,224,.2)}
 .row .k{font-family:JBM;font-weight:700;font-size:23px;letter-spacing:1.5px;color:#E9E4D8;line-height:1.25}
-.row .k small{display:block;font-size:17px;letter-spacing:1px;color:#A9A291;margin-top:6px;line-height:1.5}
+.row .k small{display:block;font-size:20px;letter-spacing:1px;color:#A9A291;margin-top:6px;line-height:1.5}
 .row .k .ide{font-size:15px;padding:1px 7px;margin-left:4px;letter-spacing:.5px}
 .row .track{height:20px;width:330px;background:rgba(242,236,224,.1);border-radius:3px;overflow:hidden}
 .row .track .bar{height:20px;border-radius:3px}
@@ -347,7 +347,7 @@ CSS = open(os.path.join(KIT, 'preview_kit/style.css')).read() + '''
 .item .t{font-family:Rub;font-weight:800;font-size:46px;line-height:1.1;margin-top:10px;text-wrap:balance;text-shadow:0 3px 16px rgba(0,0,0,.55)}
 .mut{color:#BDB6A6;font-weight:500}.mut.sm{font-size:30px;line-height:1.3}
 .counter{display:flex;align-items:center;gap:26px}.counter .cnt{font-size:150px}.counter b{font-family:Rub;font-weight:600;font-size:34px;line-height:1.15;color:#E9E4D8;white-space:nowrap}
-.srcline{font-family:JBM;font-weight:500;font-size:19px;letter-spacing:1px;line-height:1.45;color:rgba(242,236,224,.62);text-align:center;text-transform:uppercase}
+.srcline{font-family:JBM;font-weight:500;font-size:22px;letter-spacing:1px;line-height:1.45;color:rgba(242,236,224,.62);text-align:center;text-transform:uppercase}
 #foot{bottom:auto;top:1592px;font-size:22px;opacity:.85}
 .kar{font-size:48px}
 .rail .line,.rail .fill{height:4px;top:24px}
