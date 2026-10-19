@@ -61,7 +61,7 @@ def row(k, v, frac, color, t, sub='', fade=None):
 def item(kick, txt, t, color='#fff'):
     return f'<div class="item" data-a="up" data-t="{t}"><div class="kick">{kick}</div><div class="t" style="color:{color}">{txt}</div></div>'
 IDS = 'IDEOLOGIA: BOLOGNESI ET AL. (DADOS, 2023)'
-FT = json.load(open('/home/claude/work/rj/ftop.json')) if os.path.exists('/home/claude/work/rj/ftop.json') else {}
+FT = json.load(open(os.path.join(KIT, 'data/rj/ftop.json')))
 H = []
 
 
@@ -193,7 +193,7 @@ H.append(scene(s, rail(0)+f'''
   {gov('2019–2020', 'WITZEL', 'PSC', DIR, W(s,'witzel',0,-.2), col=Y, sub='!AFASTADO E CASSADO')}
   {gov('2020–2026', 'CASTRO', 'PSC→PL', DIR, W(s,'castro',0,-.2), col=Y, sub='!INELEGÍVEL ATÉ 2030')}</div>
 <div class="el h" data-flow="m:3" data-gap="34" data-a="slam" data-t="{W(s,'castro',0,.5)}" style="left:80px;width:880px;font-size:64px;color:#fff">23 ANOS DE <span class="hl">DIREITA</span></div>
-<div class="el fine" data-flow="m:4" data-gap="20" data-a="fade" data-t="{W(s,'lados',0,.2)}" style="left:80px">MDB = 7,01 NA ESCALA, NO LIMITE DA DIREITA. ROSINHA ENTROU NO MDB EM AGO/2003. O PT TEVE SECRETARIAS NO GOVERNO CABRAL ATÉ NOV/2013. GAROTINHO FOI SECRETÁRIO DE SEGURANÇA DE ROSINHA (2003–04). ANTES DELE: MARCELLO ALENCAR (PSDB, DIREITA) E BRIZOLA (PDT, CENTRO-ESQUERDA). HOJE GOVERNA O INTERINO RICARDO COUTO (TJ-RJ). PREFEITOS DA CAPITAL DESDE 1993: CESAR MAIA (PMDB/PFL/PTB), CONDE (PFL), PAES (MDB/DEM/PSD), CRIVELLA (PRB), CAVALIERE (PSD): DE CENTRO-DIREITA A EXTREMA-DIREITA. PM E POLÍCIA CIVIL SÃO DO ESTADO (CONSTITUIÇÃO, ART. 144).</div>
+<div class="el fine" data-flow="m:4" data-gap="20" data-a="fade" data-t="{W(s,'lados',0,.2)}" style="left:80px">MDB = 7,01 NA ESCALA (DIREITA); ROSINHA NO MDB DESDE AGO/2003. O PT TEVE SECRETARIAS COM CABRAL ATÉ NOV/2013; GAROTINHO FOI SECRETÁRIO DE SEGURANÇA DE ROSINHA (2003–04). ANTES: MARCELLO ALENCAR (PSDB, DIREITA) E BRIZOLA (PDT, CENTRO-ESQUERDA). HOJE: INTERINO RICARDO COUTO (TJ-RJ). PREFEITOS DA CAPITAL DESDE 1993 (MAIA, CONDE, PAES, CRIVELLA, CAVALIERE): DE CENTRO-DIREITA A EXTREMA-DIREITA. PM E POLÍCIA CIVIL SÃO DO ESTADO (CF, ART. 144).</div>
 ''', 'i02', 'TSE · TJ-RJ · ' + IDS, kbo='60% 50%'))
 
 s = 'v03'; CUR['s'] = s
@@ -251,10 +251,10 @@ c5 = segchart(YS, [
 ], 0, 45, [0, 15, 30, 45], W(s,'linha',0,-.2), 2.4, h=620, lw=230, xl=[0, 3, 6, 9, 12]).replace('{flow}', 'm:3')
 H.append(scene(s, rail(1)+f'''
 {eb(4, 'SUDESTE · MORTES VIOLENTAS POR 100 MIL', top=290)}
-<div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:30px"><b style="color:{L1}">━ GOVERNO DE ESQUERDA</b> &nbsp; <b style="color:{BLUE}">━ GOVERNO DE DIREITA</b><br><span style="color:#BDB6A6;font-size:28px">CADA ESTADO TEM SEU TOM</span></div>
+<div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:30px"><b style="color:{L1}">━ ESQUERDA</b> &nbsp;&nbsp; <b style="color:{BLUE}">━ DIREITA</b> &nbsp;&nbsp; <span style="color:#BDB6A6;font-size:28px">· UM TOM POR ESTADO</span></div>
 {c5}
 <div class="el h" data-flow="m:4" data-gap="30" data-a="up" data-t="{W(s,'topo',0,-.3)}" style="left:80px;width:880px;font-size:54px;color:#fff">PARTIDO SOZINHO <span class="hl">NÃO DECIDE.</span></div>
-<div class="el fine" data-flow="m:5" data-gap="20" data-a="fade" data-t="{W(s,'topo',0,.3)}" style="left:80px">ES: CASAGRANDE (PSB, CENTRO-ESQUERDA) 2013–14 E 2019–25; HARTUNG (MDB, DIREITA) 2015–18 — CAIU NOS DOIS. MG: PIMENTEL (PT, ESQUERDA) 2015–18; ZEMA (NOVO, DIREITA) 2019–25. SP: PSDB E REPUBLICANOS (DIREITA); MÁRCIO FRANÇA (PSB) GOVERNOU 9 MESES EM 2018. A REVISTA OESTE (DADOS DO PODER360) DIZ “ESQUERDA 23,4 × DIREITA 14,8”: USA MÉDIA DO PAÍS INTEIRO E TIRA AS MORTES PELA POLÍCIA. MESMO PARTIDO, OUTRO RESULTADO: SC (PL) 7,6 × RIO (PL) 22,6.</div>
+<div class="el fine" data-flow="m:5" data-gap="20" data-a="fade" data-t="{W(s,'topo',0,.3)}" style="left:80px">ES: CASAGRANDE (PSB, CENTRO-ESQUERDA) 2013–14 E 2019–25, HARTUNG (MDB, DIREITA) 2015–18: CAIU NOS DOIS. MG: PIMENTEL (PT, ESQUERDA) 2015–18, ZEMA (NOVO, DIREITA) 2019–25. SP: PSDB E REPUBLICANOS (DIREITA); FRANÇA (PSB) 9 MESES EM 2018. O “ESQUERDA 23,4 × DIREITA 14,8” (OESTE/PODER360) USA A MÉDIA DO PAÍS E TIRA AS MORTES PELA POLÍCIA. MESMO PARTIDO, OUTRO RESULTADO: SC (PL) 7,6 × RIO (PL) 22,6.</div>
 ''', 'i05', 'FBSP, ANUÁRIO 2026 (TABELA 02, SÉRIE 2013–2025) · ' + IDS, kbo='55% 50%'))
 
 s = 'v06'; CUR['s'] = s
@@ -326,7 +326,7 @@ s = 'v12'; CUR['s'] = s
 H.append(scene(s, rail(4)+f'''
 {eb(11, 'PROBLEMA 4 · INVESTIGAÇÃO', top=320)}
 <div class="el h cnt" data-flow="m:2" data-gap="30" data-t="{W(s,'vinte',0,-.15)}" data-d=".9" data-from="0" data-to="23" data-dec="0" data-suf="%" style="left:72px;font-size:260px;color:{R};width:880px;line-height:.82;height:214px"></div>
-<div class="el body" data-flow="m:3" data-gap="24" data-a="up" data-t="{W(s,'homicídios',0,-.1)}" style="left:80px;width:860px">dos homicídios do Rio são esclarecidos. <b>Investigar é trabalho da Polícia Civil, do estado.</b></div>
+<div class="el body" data-flow="m:3" data-gap="24" data-a="up" data-t="{W(s,'homicídios',0,-.1)}" style="left:80px;width:860px">dos homicídios do Rio são esclarecidos.<br><b>Investigar é trabalho do estado (Polícia Civil).</b></div>
 <div class="el rows" data-flow="m:4" data-gap="40" data-a="fade" data-t="{W(s,'contra',0,-.3)}" style="left:80px">
   {row('RIO', '23%', 23/36, R, W(s,'contra',0))}
   {row('SÃO PAULO', '31%', 31/36, WH, W(s,'contra',0,.2))}
@@ -336,17 +336,17 @@ H.append(scene(s, rail(4)+f'''
 s = 'v13'; CUR['s'] = s
 H.append(scene(s, rail(5)+f'''
 {eb(12, 'E O GOVERNO FEDERAL?', top=300)}
-<div class="el rows" data-flow="m:2" data-gap="34" data-a="fade" data-t="{W(s,'porto',0,-.3)}" style="left:80px">
+<div class="el rows" data-flow="m:2" data-gap="22" data-a="fade" data-t="{W(s,'porto',0,-.3)}" style="left:80px">
   {row('É DA UNIÃO', 'FRONTEIRA, PORTO, ARMAS, PF, FUNDOS', None, Y, 0)}</div>
-<div class="el rows" data-flow="m:3" data-gap="34" data-a="fade" data-t="{W(s,'ministério',0,-.3)}" style="left:80px">
+<div class="el rows" data-flow="m:3" data-gap="22" data-a="fade" data-t="{W(s,'ministério',0,-.3)}" style="left:80px">
   {row('ENVIADO', 'R$ 288 MI', 1, WH, W(s,'mandado',0), sub='FUNDO NACIONAL, DESDE 2019')}
-  {row('PARADO NA CONTA', 'R$ 174 MI', 174/331, R, W(s,'parados',0,-.2), sub='COM RENDIMENTOS · MINISTÉRIO DA JUSTIÇA')}</div>
-<div class="el body" data-flow="m:4" data-gap="30" data-a="up" data-t="{W(s,'blindados',0,-.2)}" style="left:80px;width:860px">Blindados: negados porque a lei exige <b>GLO, que o estado não pediu desta vez.</b></div>
-<div class="el rows" data-flow="m:5" data-gap="30" data-a="fade" data-t="{W(s,'mantém',0,-.3)}" style="left:80px">
+  {row('PARADO NA CONTA', 'R$ 174 MI', 174/331, R, W(s,'parados',0,-.2), sub='COM RENDIMENTOS (MJSP)')}</div>
+<div class="el body" data-flow="m:4" data-gap="20" data-a="up" data-t="{W(s,'blindados',0,-.2)}" style="left:80px;width:860px">Blindados: negados porque a lei exige <b>GLO, que o estado não pediu desta vez.</b></div>
+<div class="el rows" data-flow="m:5" data-gap="20" data-a="fade" data-t="{W(s,'mantém',0,-.3)}" style="left:80px">
   {row('CRÉDITO', 'FORÇA NACIONAL NO RIO DESDE 2023', None, Y, 0, sub=f'GOVERNO ATUAL {SQUID}')}
   {row('CRÉDITO', 'COMPRA DE ARMAS POR ATIRADORES CAIU 91%', None, Y, 0, sub='448 MIL → 40 MIL · 2022–24', fade=W(s,'atiradores',0,-.2))}
   {row('CONTA', 'CORTOU VERBA DA SEGURANÇA', None, R, 0, sub='~R$ 500 MI CONTINGENCIADOS', fade=W(s,'cortou',0,-.2))}</div>
-<div class="el fine" data-flow="m:6" data-gap="18" data-a="fade" data-t="{W(s,'segurança',0,.1)}" style="left:80px">O GOVERNO ATUAL DISSE EM 2023 QUE NÃO DECRETARIA GLO NO RIO, MAS DECRETOU GLO NOS PORTOS (2023) E NO BRICS (2025, A PEDIDO DE CASTRO). AOS FATOS: “GOVERNADOR NÃO PODE PEDIR GLO” É FALSO. O RIO GASTA R$ 17 BI POR ANO EM SEGURANÇA (FBSP). LEI ANTIFACÇÃO, SANCIONADA PELO PRESIDENTE.</div>
+<div class="el fine" data-flow="m:6" data-gap="14" data-a="fade" data-t="{W(s,'segurança',0,.1)}" style="left:80px">O GOVERNO ATUAL DISSE EM 2023 QUE NÃO DECRETARIA GLO NO RIO, MAS DECRETOU NOS PORTOS (2023) E NO BRICS (2025, A PEDIDO DE CASTRO). “GOVERNADOR NÃO PODE PEDIR GLO” É FALSO (AOS FATOS). O RIO GASTA R$ 17 BI/ANO EM SEGURANÇA (FBSP). LEI ANTIFACÇÃO SANCIONADA PELO PRESIDENTE.</div>
 ''', 'i13', 'MJSP (NOTA DE 28/10/2025) · FBSP, ANUÁRIO 2026 · AOS FATOS · PODER360', kbo='60% 60%'))
 
 s = 'v15'; CUR['s'] = s
@@ -418,7 +418,7 @@ CSS = open(os.path.join(KIT, 'preview_kit/style.css')).read() + '''
    Tudo dentro de .safe ainda encolhe 10%, e no celular 1080px vira ~390pt: 17px virava ~5pt e borrava na compressão.
    Precisa ser lido (linha do tempo, gráficos, governadores, selos, etiquetas de ideologia): mínimo ~22px.
    Letra miúda (fonte, ressalvas): continua pequena, mas maior, mais clara e com menos espaço entre letras para não borrar. */
-.st b{font-size:24px;top:48px;letter-spacing:1px}.st.on b{font-size:27px}
+.st b{font-size:23px;top:48px;letter-spacing:0}.st.on b{font-size:25px}
 .eyebrow{font-size:28px;letter-spacing:2px}.eyebrow b{font-size:30px}.eyebrow .ide{font-size:21px}
 .clab{font-size:28px;letter-spacing:1px}.clab small{font-size:21px;line-height:1.45;color:#C9C2B3}.clab small .ide{font-size:17px}
 .plab{font-size:22px;line-height:1.15;letter-spacing:0}.cnote{font-size:24px}
@@ -430,6 +430,7 @@ CSS = open(os.path.join(KIT, 'preview_kit/style.css')).read() + '''
 .note{font-size:24px;letter-spacing:1px}
 .srcline{font-size:22px;letter-spacing:.5px;color:rgba(242,236,224,.72)}
 #foot{font-size:24px}
+.row{padding:12px 0}
 .govs .row{padding:7px 0}.govs .selo{font-size:18px!important;letter-spacing:.3px!important;padding:2px 8px!important}.govs .row.txt .v{font-size:36px}.govs .row .v .pt{font-size:22px}.govs .row .v .ide{font-size:17px}
 '''
 page = f'''<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Rio de Janeiro</title>
@@ -447,5 +448,11 @@ const cx=k0.x+(k1.x-k0.x)*pc,cy=k0.y+(k1.y-k0.y)*pc,ax=540+60*pc,ay=1060+40*pc;
 g.setAttribute('transform',`translate(${{(ax-s*cx).toFixed(2)}},${{(ay-s*cy).toFixed(2)}}) scale(${{s.toFixed(4)}})`);
 const m=g.querySelector('.zmun');if(m)m.setAttribute('opacity',cl((p-.75)/.25).toFixed(3));}}}});}})();
 </script><script src="engine.js"></script><script src="layout.js"></script></body></html>'''
+# rodada 16: TODAS as fontes um pouco maiores. Texto pequeno cresce mais (+12%), médio +8%, títulos grandes +4%.
+def _up(v):
+    v = float(v); f = 1.12 if v <= 30 else (1.08 if v <= 60 else 1.04)
+    return f'{v*f:.0f}'
+page = re.sub(r'font-size:(\d+(?:\.\d+)?)px', lambda m: f'font-size:{_up(m.group(1))}px', page)
+page = re.sub(r'font-size="(\d+(?:\.\d+)?)"', lambda m: f'font-size="{_up(m.group(1))}"', page)
 open(os.path.join(KIT, 'rj.html'), 'w').write(page)
 print('ok', DUR)
