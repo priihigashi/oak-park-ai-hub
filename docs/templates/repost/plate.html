@@ -60,8 +60,10 @@ if(S.mode==='cover'){
 } else {
   html='<div id="bg"></div>';
   if(S.mode==='main'){
-    const sc=S.scale||.80, vw=Math.round(W*sc/2)*2, vh=Math.round(H*sc/2)*2, pad=16, top=54;
-    const cw=vw+2*pad, ch=vh+pad+top, x=(W-cw)/2, y=S.y||110;
+    // aspect (opcional): moldura segue a proporção do vídeo/imagem, centralizada na vertical
+    const sc=S.scale||.80, pad=16, top=54; let vw=Math.round(W*sc/2)*2, vh=Math.round(H*sc/2)*2;
+    if(S.aspect){ vw=Math.round(Math.min(W*.86, (H*sc)*S.aspect)/2)*2; vh=Math.round(vw/S.aspect/2)*2; if(vh>H*sc){vh=Math.round(H*sc/2)*2; vw=Math.round(vh*S.aspect/2)*2} }
+    const cw=vw+2*pad, ch=vh+pad+top, x=(W-cw)/2, y=S.aspect?Math.round((H-ch-60)/2):(S.y||110);
     html+=card(x,y,cw,ch)+`<div id="slot" style="left:${x+pad}px;top:${y+top}px;width:${vw}px;height:${vh}px"></div>`+handle(y+ch+34);
   } else {
     html+=(S.kick?`<div class="kick">${S.kick}</div>`:'')+`<div class="count">${S.i}/${S.n}</div>`;
