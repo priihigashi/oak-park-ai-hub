@@ -201,12 +201,12 @@ XM = ['ANTES', '1º ANO', '2º', '3º', '4º']
 L1, L2 = '#FF4A3D', '#FF9C8F'
 c3 = chart(s, XM, [
     dict(n='GAROTINHO +26%', v=[0, .5, 9.8, 11.2, 26.2], c=L1, w=7, lt=W(s,'garotinho',0,-.1)),
-    dict(n='ROSINHA −5%', sub='PSB→MDB', v=[0, .1, -4.9, -.7, -4.9], c=L2, w=6, lt=W(s,'rosinha',0,-.1)),
+    dict(n='ROSINHA −5%', sub='PSB→MDB', v=[0, .1, -4.9, -.7, -4.9], c=L2, w=6, lt=W(s,'rosinha',0,-.1)),  # dupla com Garotinho
     dict(n='CABRAL 1 −24%', v=[0, .7, -6.7, -7.1, -23.8], c=BLUE, w=6, lt=W(s,'cabral',0,-.1)),
-    dict(n='CABRAL 2 −2%', v=[0, -14.9, -19.9, -8.2, -1.9], c=BLUE, w=4, dash=True, lt=W(s,'cabral',0,.4)),
+    dict(n='CABRAL 2 −2%', v=[0, -14.9, -19.9, -8.2, -1.9], c=BLUE, w=4, dash=True, lt=W(s,'segundo',0,-.1)),
     dict(n='PEZÃO +17%', v=[0, -12.4, 9.5, 18.0, 17.4], c='#AFC0FF', w=5, lt=W(s,'pezão',0,-.1)),
     dict(n='WITZEL/CASTRO −33%', v=[0, -10.9, -26.9, -29.1, -33.2], c='#38BDF8', w=7, lt=W(s,'witzel',0,-.1)),
-    dict(n='CASTRO 2 −13%', sub='3 ANOS', v=[0, -4.8, -15.1, -13.3, -13.3], c='#38BDF8', w=4, dash=True, lt=W(s,'castro',0,-.1)),
+    dict(n='CASTRO 2 −13%', sub='3 ANOS', v=[0, -4.8, -15.1, -13.3, -13.3], c='#38BDF8', w=4, dash=True, lt=W(s,'segundo',1,-.1)),
 ], 40, [-40, -20, 0, 20, 40], 0, 0, h=640, lw=290, ymin=-40,
    tfmt=lambda v: (f'+{v}%' if v > 0 else f'{v}%'.replace('-', '−')),
    per_line=True).replace('{flow}', 'm:3')
@@ -214,7 +214,7 @@ H.append(scene(s, rail(1)+f'''
 {eb(2, 'MANDATO POR MANDATO · MORTES VIOLENTAS', top=290)}
 <div class="el body" data-flow="m:2" data-gap="22" data-a="fade" data-t=".2" style="left:80px;width:880px;font-size:32px"><b style="color:{L1}">━ ESQUERDA</b> &nbsp;&nbsp; <b style="color:{BLUE}">━ DIREITA</b> &nbsp;&nbsp; <span style="color:#BDB6A6;font-size:28px">┅ 2º MANDATO</span></div>
 {c3}
-<div class="el fine" data-flow="m:4" data-gap="22" data-a="fade" data-t="{W(s,'linha',0,.4)}" style="left:80px">VARIAÇÃO NO NÚMERO DE MORTES VIOLENTAS ATÉ O FIM DO MANDATO, CONTRA O ANO ANTES DA POSSE. MESMA BASE DE 1998 A 2025 (ISP-RJ). BENEDITA (PT) GOVERNOU 9 MESES EM 2002; PEZÃO ASSUMIU EM ABR/2014; CASTRO EM AGO/2020. ANTES DE 1999, MARCELLO ALENCAR (PSDB, DIREITA): −26%. BRASIL ENTRE 2018 E 2022: CERCA DE −17% (FBSP, NÚMERO DE MORTES). OS +26% DE GAROTINHO INCLUEM OS 9 MESES DE BENEDITA (PT).</div>
+<div class="el fine" data-flow="m:4" data-gap="22" data-a="fade" data-t="{W(s,'repare',0,-.1)}" style="left:80px">VARIAÇÃO NO NÚMERO DE MORTES VIOLENTAS ATÉ O FIM DO MANDATO, CONTRA O ANO ANTES DA POSSE. MESMA BASE DE 1998 A 2025 (ISP-RJ). BENEDITA (PT) GOVERNOU 9 MESES EM 2002; PEZÃO ASSUMIU EM ABR/2014; CASTRO EM AGO/2020. ANTES DE 1999, MARCELLO ALENCAR (PSDB, DIREITA): −26%. BRASIL ENTRE 2018 E 2022: CERCA DE −17% (FBSP, NÚMERO DE MORTES). OS +26% DE GAROTINHO INCLUEM OS 9 MESES DE BENEDITA (PT).</div>
 ''', 'i03', 'ISP-RJ, LETALIDADE VIOLENTA (1998–2020) · FBSP, ANUÁRIOS 2022–2026 · ' + IDS, kbo='55% 60%'))
 
 s = 'v04'; CUR['s'] = s

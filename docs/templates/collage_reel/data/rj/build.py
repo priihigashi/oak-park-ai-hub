@@ -46,7 +46,7 @@ for k in ORDER:
     sp=SP[k]; p,remap,cut=squeeze(k); saved+=cut/sp
     subprocess.run(['ffmpeg','-v','error','-y','-i',p,'-filter:a',f'atempo={sp}','-ar',str(SR),f'{D}/seg/{k}.wav'],check=True); os.remove(p)
     d=float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',f'{D}/seg/{k}.wav']))
-    tail=1.3 if k==ORDER[-1] else 0.4
+    tail=1.3 if k==ORDER[-1] else json.load(open(f'{D}/speeds.json')).get('tails',{}).get(k,0.4)
     out=[];j=0;ws=W[k]
     for tk in S[k].split():
         if j<len(ws) and (norm(ws[j][0])==norm(tk) or norm(tk).startswith(norm(ws[j][0])) or norm(ws[j][0]).startswith(norm(tk))):
