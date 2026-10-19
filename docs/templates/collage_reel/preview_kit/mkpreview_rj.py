@@ -51,7 +51,7 @@ body{{background:var(--bg);color:var(--fg);font-family:system-ui,sans-serif;marg
 .pv-note{{max-width:520px;color:var(--muted);font-size:12px;line-height:1.4;margin:0}}
 .pv-copy{{width:100%;max-width:520px;display:flex;flex-direction:column;gap:12px}}.pv-cp{{display:flex;flex-direction:column;gap:6px}}.pv-cp-h{{display:flex;justify-content:space-between;align-items:center;font:600 14px system-ui}}.pv-cp textarea{{width:100%;box-sizing:border-box;background:#141518;color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:10px;font:13px/1.45 system-ui;resize:vertical}}.cpb{{background:transparent;color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font:600 13px system-ui;cursor:pointer}}.cpb:focus-visible{{outline:2px solid var(--accent)}}
 </style>
-<div class="pv-head"><h1>Rio é culpa da esquerda? · prévia</h1><small id="ver">v1 · rodada 33</small></div>
+<div class="pv-head"><h1>Rio é culpa da esquerda? · prévia</h1><small id="ver">v1 · rodada 35</small></div>
 <div class="pv-frame" id="frame"><div id="scaler">{stage}</div></div>
 <div class="pv-bar"><button id="play" type="button">▶ Play</button><input id="seek" type="range" min="0" max="{dur}" step="0.05" value="0" aria-label="Posição"><output id="tm">0:00</output></div>
 <div class="pv-bar pv-skip" role="group" aria-label="Pular"><button type="button" class="sk" data-d="-30">↺ 30s</button><button type="button" class="sk" data-d="-10">↺ 10s</button><button type="button" class="sk" data-d="-5">↺ 5s</button><button type="button" class="sk" data-d="5">5s ↻</button><button type="button" class="sk" data-d="10">10s ↻</button><button type="button" class="sk" data-d="30">30s ↻</button></div>
@@ -102,7 +102,7 @@ Dados, metodologia e fontes completas no primeiro comentário.
 • Prisão e afastamento não são condenação; Pezão foi absolvido. Investigação e denúncia também não são condenação. Todos os citados negam irregularidades.
 • Siglas: quando o político mudou de partido, aparecem as duas (Castro: PSC → PL).</textarea></div><p class="pv-note">Download do vídeo: aparece aqui quando o MP4 for gerado, depois da sua aprovação.</p></section>
 <audio id="vo" preload="auto" playsinline></audio>
-<script>window.DUR={dur};window.__ZN={ZN};window.__ZF=k=>"assets/rj/zoom/f"+String(k).padStart(3,"0")+".jpg";for(let k=0;k<window.__ZN;k++){{const i=new Image();i.src=window.__ZF(k)}}</script><script src="fx.js"></script><script src="fx2.js"></script><script>{ZJS}</script><script src="engine.js"></script><script src="layout.js"></script>
+<script>window.DUR={dur};window.VFILL=1390;window.__ZN={ZN};window.__ZF=k=>"assets/rj/zoom/f"+String(k).padStart(3,"0")+".jpg";for(let k=0;k<window.__ZN;k++){{const i=new Image();i.src=window.__ZF(k)}}</script><script src="fx.js"></script><script src="fx2.js"></script><script>{ZJS}</script><script src="engine.js"></script><script src="layout.js"></script>
 <script>
 const fr=document.getElementById('frame'),st=document.getElementById('scaler'),a=document.getElementById('vo'),b=document.getElementById('play'),sk=document.getElementById('seek'),tm=document.getElementById('tm');
 function fit(){{const H=Math.min(innerHeight-130,1920),W=Math.min(document.body.clientWidth-32,520);let s=Math.min(H/1920,W/1080);fr.style.width=1080*s+'px';fr.style.height=1920*s+'px';st.style.transform='scale('+s+')'}}

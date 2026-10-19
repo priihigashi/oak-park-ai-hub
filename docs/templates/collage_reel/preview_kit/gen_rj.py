@@ -289,9 +289,10 @@ H.append(scene(s, rail(2)+f'''
 <div class="el body" data-flow="m:3" data-gap="24" data-a="up" data-t="{W(s,'metropolitana',0,-.1)}" style="left:60px;width:960px">da região metropolitana vive sob grupos armados, <b>tráfico e milícia: cerca de 4 milhões de pessoas.</b></div>
 <div class="el rows" data-flow="m:4" data-gap="40" data-a="fade" data-t="{W(s,'milícia',0,-.3)}" style="left:60px">
   {row('MILÍCIA', 'QUASE METADE DA ÁREA · RECUA DESDE 2020', None, '#fff', 0, fade=W(s,'policiais',0,-.2), sub='POLICIAIS E EX-POLICIAIS QUE COBRAM<br>TAXA E CONTROLAM GÁS, VAN E INTERNET')}
-  {row('COMANDO VERMELHO', 'CRESCE · MAIOR POPULAÇÃO DOMINADA', None, R, 0, fade=W(s,'comando',0,-.2))}</div>
+  {row('COMANDO VERMELHO', 'OCUPA O ESPAÇO · MAIOR POPULAÇÃO DOMINADA', None, R, 0, fade=W(s,'comando',0,-.2))}</div>
 <div class="el note" data-flow="m:5" data-gap="24" data-a="fade" data-t="{W(s,'cresce',0,.2)}" style="left:60px">QUEM CUIDA: POLICIAMENTO E INVESTIGAÇÃO = ESTADO. FRONTEIRA, PORTOS, ARMAS E LAVAGEM = UNIÃO (PF).</div>
-''', 'i06', 'GENI/UFF + FOGO CRUZADO (DEZ/2025)', kbo='55% 50%'))
+<div class="el fine" data-flow="m:6" data-gap="18" data-a="fade" data-t="{W(s,'chefes',0,-.1)}" style="left:60px">POR QUE RECUA: ECKO, CHEFE DA MAIOR MILÍCIA, MORTO PELA POLÍCIA CIVIL DO RIO (2021, GOVERNO CASTRO). O IRMÃO, ZINHO, SE ENTREGOU À PF (DEZ/2023, GOVERNO ATUAL {SQUID}) APÓS OPERAÇÃO NA CASA DA DEPUTADA <span style="white-space:nowrap">LUCINHA (PSD {DIR}).</span> DEPOIS, BRIGA PELA HERANÇA.</div>
+''', 'i06', 'GENI/UFF + FOGO CRUZADO (DEZ/2025) · SBT NEWS · METRÓPOLES (2023) · JB (2021)', kbo='55% 50%'))
 
 s = 'v07'; CUR['s'] = s
 H.append(scene(s, rail(3)+f'''
@@ -478,7 +479,7 @@ page = f'''<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>
 <link rel="stylesheet" href="fx.css"><style>{CSS}</style></head><body><div id="stage">
 {"".join(H)}
 <div id="grain"></div><div id="foot">@tentandochegaratevoce</div></div>
-<script>window.DUR={DUR:.2f};</script><script src="fx.js"></script><script src="fx2.js"></script><script>
+<script>window.DUR={DUR:.2f};window.VFILL=1390;</script><script src="fx.js"></script><script src="fx2.js"></script><script>
 /* zoom da abertura: Brasil -> estado do RJ (g#zcam data-cam). Roda dentro do FX.frame do motor, então vale na prévia e no MP4. */
 (function(){{const B=window.FX;const ease=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;const cl=x=>Math.max(0,Math.min(1,x));
 window.FX=Object.assign({{}},B,{{frame(sc,t,T,dur){{B.frame(sc,t,T,dur);const g=sc.querySelector('#zcam');if(!g)return;const zi=sc.querySelector('.zseq');if(zi&&window.__ZN&&!navigator.webdriver&&!window.__ZLIVE){{const k=Math.max(0,Math.min(__ZN-1,Math.round(t*24)));if(zi._k!==k){{zi._k=k;zi.src=__ZF(k)}}zi.style.display='block';sc.querySelector('.zmap').style.display='none';return}}

@@ -36,6 +36,23 @@ function fitHeads(sc){
   });
 }
 
+
+/* vfill — distribui o bloco na ALTURA livre (ela, 19/out/2026: "tá tudo apertado lá em cima e sobra espaço antes da legenda").
+   Ativa com window.VFILL = y limite (em coordenadas da cena, ex. 1390) ou data-vfill na cena; data-vfill="0" desliga na cena.
+   O 1º slot (título do capítulo) fica onde está; a sobra vira espaço extra IGUAL entre os slots seguintes
+   (até +MAXX px por espaço) e o que ainda sobrar desce o corpo, dividindo metade em cima e metade embaixo. */
+const MAXX=120;
+function vfill(sc,G,keys,yEnd){
+  const lim=+(sc.dataset.vfill!==undefined?sc.dataset.vfill:(window.VFILL||0));
+  if(!lim||keys.length<2) return;
+  const free=lim-yEnd; if(free<12) return;
+  const n=keys.length-1, per=Math.min(MAXX,free/n), rest=free-per*n;
+  const top0=rest>0?rest/2:0;
+  keys.forEach((k,i)=>{ if(!i) return; const add=top0+per*i;
+    G[k].forEach(e=>{e.style.top=(parseFloat(e.style.top)+add)+"px"}); });
+  sc.dataset.vfillAdd=Math.round(free);
+}
+
 function layout(){
   document.querySelectorAll('.scene').forEach(sc=>{
     const prev=sc.style.display; sc.style.display='block'; fitHeads(sc);
@@ -50,6 +67,7 @@ function layout(){
         let h=0; slot.forEach(e=>{e.style.top=(y+(+e.dataset.dy||0))+"px"; if(!e.dataset.nosize) h=Math.max(h,e.offsetHeight,+(e.dataset.minh||0))});
         y+=h;
       });
+      vfill(sc,G,keys,y);
       sc.dataset.flowEnd=(sc.dataset.flowEnd?Math.max(+sc.dataset.flowEnd,y):y);
     });
     sc.style.display=prev;
