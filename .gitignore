@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+.env
+*.log
+.DS_Store
+node_modules/
+docs/templates/repost/assets/
