@@ -20,10 +20,14 @@ e=open(f'{SRC}/engine.js').read()
 e=e.replace("if(!navigator.webdriver){let t0=performance.now();(function loop(){render(((performance.now()-t0)/1000)%DUR);requestAnimationFrame(loop)})()}",
 "(function loop(){const a=document.getElementById('vo');let T=a?a.currentTime:0;render(Math.min(T,DUR-0.01));if(window.__tick)__tick(T);requestAnimationFrame(loop)})();")
 open(f'{OUT}/engine.js','w').write(e)
-shutil.copy('/home/claude/work/rj/narracao.mp3',f'{OUT}/narracao.mp3')
+# a narração vem SEMPRE do mix.py (data/rj): antes copiava um MP3 velho de /home/claude/work/rj e a voz ficava 30 s fora da linha do tempo
+NARR=f'{SRC}/data/rj/narracao.mp3'
+shutil.copy(NARR,f'{OUT}/narracao.mp3')
+_d=float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',NARR]))
+assert abs(_d-float(dur))<0.3, f'narracao.mp3 tem {_d:.2f}s mas a linha do tempo tem {dur}s: rode build.py e mix.py de novo'
 ZD='/home/claude/work/rj/zf'; os.makedirs(f'{OUT}/assets/rj/zoom',exist_ok=True)
-ZN=len([f for f in os.listdir(ZD) if f.endswith('.jpg')])
-for f in os.listdir(ZD):
+ZN=int(os.environ.get('ZN','0')) or len([f for f in os.listdir(ZD) if f.endswith('.jpg')])
+for f in (os.listdir(ZD) if os.path.isdir(ZD) else []):
     if f.endswith('.jpg'): shutil.copy(f'{ZD}/{f}',f'{OUT}/assets/rj/zoom/{f}')
 page=f'''<title>Reel Rio de Janeiro</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -47,13 +51,13 @@ body{{background:var(--bg);color:var(--fg);font-family:system-ui,sans-serif;marg
 .pv-note{{max-width:520px;color:var(--muted);font-size:12px;line-height:1.4;margin:0}}
 .pv-copy{{width:100%;max-width:520px;display:flex;flex-direction:column;gap:12px}}.pv-cp{{display:flex;flex-direction:column;gap:6px}}.pv-cp-h{{display:flex;justify-content:space-between;align-items:center;font:600 14px system-ui}}.pv-cp textarea{{width:100%;box-sizing:border-box;background:#141518;color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:10px;font:13px/1.45 system-ui;resize:vertical}}.cpb{{background:transparent;color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font:600 13px system-ui;cursor:pointer}}.cpb:focus-visible{{outline:2px solid var(--accent)}}
 </style>
-<div class="pv-head"><h1>Rio é culpa da esquerda? · prévia</h1><small id="ver">v1 · rodada 13</small></div>
+<div class="pv-head"><h1>Rio é culpa da esquerda? · prévia</h1><small id="ver">v1 · rodada 14</small></div>
 <div class="pv-frame" id="frame"><div id="scaler">{stage}</div></div>
 <div class="pv-bar"><button id="play" type="button">▶ Play</button><input id="seek" type="range" min="0" max="{dur}" step="0.05" value="0" aria-label="Posição"><output id="tm">0:00</output></div>
 <div class="pv-bar pv-skip" role="group" aria-label="Pular"><button type="button" class="sk" data-d="-30">↺ 30s</button><button type="button" class="sk" data-d="-10">↺ 10s</button><button type="button" class="sk" data-d="-5">↺ 5s</button><button type="button" class="sk" data-d="5">5s ↻</button><button type="button" class="sk" data-d="10">10s ↻</button><button type="button" class="sk" data-d="30">30s ↻</button></div>
 <div class="pv-bar" role="group" aria-label="Velocidade"><span class="pv-sp-l">Velocidade</span><button type="button" class="sp on" data-r="1">1x</button><button type="button" class="sp" data-r="1.2">1,2x</button><button type="button" class="sp" data-r="1.5">1,5x</button><button type="button" class="sp" data-r="2">2x</button><button type="button" class="sp" data-r="3">3x</button></div>
 <p class="pv-note">Prévia ao vivo do reel (as animações rodam no navegador; o MP4 final sai do mesmo arquivo). Botões pulam 5/10/30s; setas ← → pulam 5s (Shift: 10s), espaço dá play/pausa. Recarregue para ver a última edição. Voz e fundos provisórios.</p>
-<section class="pv-copy" aria-label="Textos do post"><div class="pv-cp"><div class="pv-cp-h"><b>Legenda</b><button type="button" class="cpb" data-for="cap">Copiar</button></div><textarea id="cap" readonly rows="6">O Rio está assim por culpa da esquerda? Fomos aos números, mandato por mandato. Não é culpa de um lado só: facções e milícias existem há décadas, armas e drogas entram por fronteiras e portos (que são da União), e cada governador escolhe como usar a polícia. Há 19 anos o Rio é governado pelo MDB e pela direita. Fontes no primeiro comentário.
+<section class="pv-copy" aria-label="Textos do post"><div class="pv-cp"><div class="pv-cp-h"><b>Legenda</b><button type="button" class="cpb" data-for="cap">Copiar</button></div><textarea id="cap" readonly rows="6">O Rio está assim por culpa da esquerda? Fomos aos números, mandato por mandato. Não é culpa de um lado só: facções e milícias existem há décadas, armas e drogas entram por fronteiras e portos (que são da União), e cada governador escolhe como usar a polícia. Há 23 anos o Rio é governado pela direita, e a culpa ainda vai para a esquerda. Fontes no primeiro comentário.
 
 O que você cobraria do governador eleito? Compartilha nos Stories e manda pro grupo dos Melhores Amigos.</textarea></div><div class="pv-cp"><div class="pv-cp-h"><b>Primeiro comentário</b><button type="button" class="cpb" data-for="com">Copiar</button></div><textarea id="com" readonly rows="4">Fontes: ISP-RJ (letalidade violenta, 1998–2025) · FBSP, Anuário Brasileiro de Segurança Pública 2026 · GENI/UFF + Fogo Cruzado, Mapa dos Grupos Armados (dez/2025) · Instituto Sou da Paz, Onde Mora a Impunidade (2025) · Ministério da Justiça, nota de 28/10/2025 · STF (caso Marielle, fev/2026) · Aos Fatos · Comprova · Ideologia dos partidos: Bolognesi, Ribeiro e Codato (Dados, 2023).</textarea></div><p class="pv-note">Download do vídeo: aparece aqui quando o MP4 for gerado, depois da sua aprovação.</p></section>
 <audio id="vo" preload="auto" playsinline></audio>

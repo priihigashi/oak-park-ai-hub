@@ -3,7 +3,7 @@ sem caixas (texto direto sobre a foto escurecida), eyebrow numerado por capítul
 fonte da informação embaixo do @, sem aviso de IA na tela. Gera ../bahia.html."""
 import json, html, re, os
 KIT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TL = json.load(open('/home/claude/work/rj/timeline.json'))
+TL = json.load(open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data/rj/timeline.json')))
 S = {o['id']: o for o in TL}
 def norm(w): return re.sub(r'[^\wÀ-ú]', '', w.lower())
 for o in TL:
@@ -206,7 +206,7 @@ c3 = chart(s, XM, [
     dict(n='CABRAL 2 −2%', v=[0, -14.9, -19.9, -8.2, -1.9], c=BLUE, w=4, dash=True, lt=W(s,'cabral',0,.4)),
     dict(n='PEZÃO +17%', v=[0, -12.4, 9.5, 18.0, 17.4], c='#AFC0FF', w=5, lt=W(s,'pezão',0,-.1)),
     dict(n='WITZEL/CASTRO −33%', v=[0, -10.9, -26.9, -29.1, -33.2], c='#38BDF8', w=7, lt=W(s,'witzel',0,-.1)),
-    dict(n='CASTRO 2 −13%', sub='3 ANOS', v=[0, -4.8, -15.1, -13.3, -13.3], c='#38BDF8', w=4, dash=True, lt=W(s,'witzel',0,.6)),
+    dict(n='CASTRO 2 −13%', sub='3 ANOS', v=[0, -4.8, -15.1, -13.3, -13.3], c='#38BDF8', w=4, dash=True, lt=W(s,'castro',0,-.1)),
 ], 40, [-40, -20, 0, 20, 40], 0, 0, h=640, lw=290, ymin=-40,
    tfmt=lambda v: (f'+{v}%' if v > 0 else f'{v}%'.replace('-', '−')),
    per_line=True).replace('{flow}', 'm:3')
