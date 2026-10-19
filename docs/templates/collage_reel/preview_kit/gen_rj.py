@@ -75,10 +75,11 @@ def chart(sid, years, series, ymax, ticks, t0, dur, marks=(), w=880, h=600, lw=2
     lab_i = list(range(len(years))) if len(years) <= 6 else [0, len(years)//2, len(years)-1]
     grid += ''.join(f'<text x="{X(i):.1f}" y="{h-12}" text-anchor="middle" font-family="JBM" font-weight="700" font-size="26" fill="#B5AE9F">{years[i]}</text>' for i in lab_i)
     mk = ''
-    for yr, txt, col in marks:
+    for m_ in marks:
+        yr, txt, col = m_[:3]; top = len(m_) > 3 and m_[3] == 'top'
         i = years.index(yr)
         mk += (f'<line x1="{X(i):.1f}" x2="{X(i):.1f}" y1="{py0}" y2="{py1}" stroke="{col}" stroke-width="2" stroke-dasharray="6 6"/>'
-               f'<text x="{X(i)+10:.1f}" y="{py1-12}" font-family="JBM" font-weight="700" font-size="24" fill="{col}">{txt}</text>')
+               f'<text x="{X(i)+10:.1f}" y="{(py0+22) if top else (py1-12)}" font-family="JBM" font-weight="700" font-size="24" fill="{col}">{txt}</text>')
     lines = ''; each = []; GLOW = []
     for s in series:
         n0 = len(lines)
@@ -198,7 +199,7 @@ def gov(yrs, nome, partido, idl, t, col='#fff', sub=''):
     else: sb = f'<small>{sub}</small>' if sub else ''
     return f'<div class="row txt" data-a="fade" data-t="{t}"><div class="k">{yrs}{sb}</div><div class="v" style="color:{col}">{nome} <span class="pt">{partido}</span> {idl}</div></div>'
 H.append(scene(s, rail(0)+f'''
-{eb(1, 'QUEM GOVERNOU O ESTADO', top=320)}
+{eb(1, 'QUEM MANDA NA POLÍCIA: O GOVERNADOR', top=320)}
 <div class="el rows govs" data-flow="m:2" data-gap="34" style="left:80px">
   {gov('1999–2002', 'GAROTINHO', 'PDT→PSB', CESQ, W(s,'garotinho',0,-.2), sub='!PRESO EM 2016–17')}
   {gov('2002', 'BENEDITA', 'PT', ESQ, W(s,'benedita',0,-.2), sub='VICE QUE ASSUMIU')}
@@ -312,14 +313,15 @@ H.append(scene(s, rail(3)+f'''
 s = 'v10'; CUR['s'] = s
 c10 = chart(s, YF, [
     dict(n='AÇÕES', sub='POLICIAIS · RJ<br>MORTES POR ANO', v=MDIP, c=R, w=7, lt=W(s,'polícia',0), dots=[(6, '1.814'), (12, '798')]),
-], 2000, [0, 500, 1000, 1500, 2000], 0, 0, h=560, marks=[('2018', 'INTERV.', '#fff'), ('2020', 'STF', Y)],
+], 2000, [0, 500, 1000, 1500, 2000], 0, 0, h=520, marks=[('2018', 'INTERV.', '#fff'), ('2020', 'STF', Y, 'top')],
    stages=[(0, 6, W(s,'chegaram',0,-.2), 2.2), (6, 11, W(s,'caíram',0,-.2), 2.0), (11, 12, W(s,'voltaram',0,-.2), 1.0)]).replace('{flow}', 'm:2')
 H.append(scene(s, rail(4)+f'''
 {eb(7, 'PROBLEMA 3 · A POLÍCIA', top=300)}
 {c10}
 <div class="el h" data-flow="m:3" data-gap="30" data-a="up" data-t="{W(s,'três',0,-.25)}" style="left:80px;width:880px;font-size:56px;color:#fff">2019: <span style="color:{R}">3 EM CADA 10</span> MORTES VIOLENTAS</div>
-<div class="el fine" data-flow="m:4" data-gap="22" data-a="fade" data-t="{W(s,'letal',0,.2)}" style="left:80px">AS 6 OPERAÇÕES MAIS LETAIS DESDE 2007 FORAM NO GOVERNO CASTRO (PL {DIR}). POLÍCIA MILITAR E CIVIL SÃO DO ESTADO. “O STF PROIBIU OPERAÇÕES” É DISTORCIDO (AOS FATOS): LIMITOU NA PANDEMIA, COM EXCEÇÕES, E EM ABR/2025 DERRUBOU AS PRINCIPAIS RESTRIÇÕES; A OPERAÇÃO MAIS LETAL VEIO DEPOIS.</div>
-''', 'i10', 'FBSP, ANUÁRIOS 2015–2026 · GENI/UFF', kbo='55% 50%'))
+<div class="el body" data-flow="m:3.5" data-gap="22" data-a="up" data-t="{W(s,'ministério',0,-.2)}" style="left:80px;width:880px;font-size:36px"><b>MP-RJ:</b> mais mortes pela polícia <b class="hl">não trouxeram menos homicídios.</b></div>
+<div class="el fine" data-flow="m:4" data-gap="22" data-a="fade" data-t="{W(s,'letal',0,.2)}" style="left:80px">AS 6 OPERAÇÕES MAIS LETAIS DESDE 2007 FORAM NO GOVERNO CASTRO (PL {DIR}). POLÍCIA MILITAR E CIVIL SÃO DO ESTADO. “O STF PROIBIU OPERAÇÕES” É DISTORCIDO (AOS FATOS): LIMITOU NA PANDEMIA E EM ABR/2025 DERRUBOU AS PRINCIPAIS RESTRIÇÕES; A OPERAÇÃO MAIS LETAL VEIO DEPOIS. CENTRO DE PESQUISAS DO MP-RJ (2019): SEM ASSOCIAÇÃO CLARA ENTRE MORTES PELA POLÍCIA E HOMICÍDIOS. 91% DOS INQUÉRITOS DESSAS MORTES FORAM ARQUIVADOS (2011–21, FÓRUM JUSTIÇA/CESEC).</div>
+''', 'i10', 'FBSP, ANUÁRIOS 2015–2026 · GENI/UFF · MP-RJ (CENPE, 2019) · FÓRUM JUSTIÇA', kbo='55% 50%'))
 
 s = 'v11'; CUR['s'] = s
 H.append(scene(s, rail(4)+f'''
@@ -334,13 +336,14 @@ H.append(scene(s, rail(4)+f'''
 
 s = 'v11b'; CUR['s'] = s
 H.append(scene(s, rail(4)+f'''
-{eb(9, 'O QUE INCENTIVA O CONFRONTO', top=300)}
+{eb(9, 'O QUE INCENTIVA E O QUE FREIA O CONFRONTO', top=300)}
 <div class="el items tight" data-flow="m:2" data-gap="30" style="left:80px">
   {item('2019 · WITZEL · PSC ' + DIR, 'Mortes por policiais saem da conta do bônus das polícias. No mesmo ano: recorde de 1.814.', W(s,'witzel',0,-.2))}
-  {item('2025 · DEPUTADOS DO PL ' + DIR, 'Volta a gratificação faroeste. Castro vetou; a Alerj derrubou o veto.', W(s,'deputados',0,-.2), color=R)}
   {item('2020 · GOVERNO BOLSONARO · ' + DIR, 'Revoga regras de rastreio de munição. O STF suspendeu em 2021.', W(s,'bolsonaro',0,-.2))}
+  {item('2024 · GOVERNO ATUAL ' + SQUID + ' · ' + ESQ, 'Regras nacionais de câmera na farda e de uso da força. Castro assinou a nota que pediu a revogação.', W(s,'vinte',0,-.2), color=Y)}
+  {item('2025 · DEPUTADOS DO PL ' + DIR, 'Volta a gratificação faroeste. Castro vetou; a Alerj derrubou o veto.', W(s,'deputados',0,-.2), color=R)}
   {item('PROJETO DAS BALAS · PL 3.723/2019', 'Tira a marcação das balas das polícias. Parado no Senado.', W(s,'projeto',0,-.2))}</div>
-<div class="el fine" data-flow="m:3" data-gap="22" data-a="fade" data-t="{W(s,'senado',0,.1)}" style="left:80px">NOS ANOS 1990, COM A FAROESTE (MARCELLO ALENCAR, PSDB), DOBROU O NÚMERO DE MORTOS PARA CADA FERIDO EM CONFRONTO. O PSOL ACIONOU O STF EM 2026, SEM DECISÃO. O PL 3.723 FOI ENVIADO PELO GOVERNO BOLSONARO; O FIM DA MARCAÇÃO ENTROU POR EMENDA NA CÂMARA. FLÁVIO, NO JN (16/10/2026), CHAMOU A MARCAÇÃO DE “DETALHEZINHO”. A GUARDA DE PAES (PSD) RECEBE GRATIFICAÇÃO FIXA DE R$ 10,3 MIL POR PORTAR ARMA, NÃO POR MORTE. CÂMERAS NAS FARDAS VIERAM EM 2022, POR ORDEM DO STF. É FALSO QUE OS FUZIS DA OPERAÇÃO ERAM DE CACS (AOS FATOS).</div>
+<div class="el fine" data-flow="m:3" data-gap="22" data-a="fade" data-t="{W(s,'senado',0,.1)}" style="left:80px">NOS ANOS 1990, COM A FAROESTE (MARCELLO ALENCAR, PSDB), DOBROU O NÚMERO DE MORTOS PARA CADA FERIDO EM CONFRONTO. O PL 3.723 FOI ENVIADO PELO GOVERNO BOLSONARO; O FIM DA MARCAÇÃO ENTROU POR EMENDA NA CÂMARA. A GUARDA DE PAES (PSD) RECEBE GRATIFICAÇÃO FIXA DE R$ 10,3 MIL POR PORTAR ARMA, NÃO POR MORTE. CÂMERAS NAS FARDAS VIERAM EM 2022, POR ORDEM DO STF. É FALSO QUE OS FUZIS DA OPERAÇÃO ERAM DE CACS (AOS FATOS).</div>
 ''', 'i08', 'JB (2019) · AGÊNCIA BRASIL E METRÓPOLES (2025) · CONGRESSO EM FOCO · METRÓPOLES (OUT/2026) · ALMA PRETA', kbo='55% 50%'))
 
 s = 'v12'; CUR['s'] = s

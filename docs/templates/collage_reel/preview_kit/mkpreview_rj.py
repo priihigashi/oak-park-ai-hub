@@ -51,15 +51,56 @@ body{{background:var(--bg);color:var(--fg);font-family:system-ui,sans-serif;marg
 .pv-note{{max-width:520px;color:var(--muted);font-size:12px;line-height:1.4;margin:0}}
 .pv-copy{{width:100%;max-width:520px;display:flex;flex-direction:column;gap:12px}}.pv-cp{{display:flex;flex-direction:column;gap:6px}}.pv-cp-h{{display:flex;justify-content:space-between;align-items:center;font:600 14px system-ui}}.pv-cp textarea{{width:100%;box-sizing:border-box;background:#141518;color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:10px;font:13px/1.45 system-ui;resize:vertical}}.cpb{{background:transparent;color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font:600 13px system-ui;cursor:pointer}}.cpb:focus-visible{{outline:2px solid var(--accent)}}
 </style>
-<div class="pv-head"><h1>Rio é culpa da esquerda? · prévia</h1><small id="ver">v1 · rodada 27</small></div>
+<div class="pv-head"><h1>Rio é culpa da esquerda? · prévia</h1><small id="ver">v1 · rodada 28</small></div>
 <div class="pv-frame" id="frame"><div id="scaler">{stage}</div></div>
 <div class="pv-bar"><button id="play" type="button">▶ Play</button><input id="seek" type="range" min="0" max="{dur}" step="0.05" value="0" aria-label="Posição"><output id="tm">0:00</output></div>
 <div class="pv-bar pv-skip" role="group" aria-label="Pular"><button type="button" class="sk" data-d="-30">↺ 30s</button><button type="button" class="sk" data-d="-10">↺ 10s</button><button type="button" class="sk" data-d="-5">↺ 5s</button><button type="button" class="sk" data-d="5">5s ↻</button><button type="button" class="sk" data-d="10">10s ↻</button><button type="button" class="sk" data-d="30">30s ↻</button></div>
 <div class="pv-bar" role="group" aria-label="Velocidade"><span class="pv-sp-l">Velocidade</span><button type="button" class="sp on" data-r="1">1x</button><button type="button" class="sp" data-r="1.2">1,2x</button><button type="button" class="sp" data-r="1.5">1,5x</button><button type="button" class="sp" data-r="2">2x</button><button type="button" class="sp" data-r="3">3x</button></div>
 <p class="pv-note">Prévia ao vivo do reel (as animações rodam no navegador; o MP4 final sai do mesmo arquivo). Botões pulam 5/10/30s; setas ← → pulam 5s (Shift: 10s), espaço dá play/pausa. Recarregue para ver a última edição. Voz e fundos provisórios.</p>
-<section class="pv-copy" aria-label="Textos do post"><div class="pv-cp"><div class="pv-cp-h"><b>Legenda</b><button type="button" class="cpb" data-for="cap">Copiar</button></div><textarea id="cap" readonly rows="6">O Rio está assim por culpa da esquerda? Fomos aos números, mandato por mandato. Não é culpa de um lado só: facções e milícias existem há décadas, armas e drogas entram por fronteiras e portos (que são da União), e cada governador escolhe como usar a polícia. Há 23 anos o Rio é governado pela direita, e a culpa ainda vai para a esquerda. Fontes no primeiro comentário.
+<section class="pv-copy" aria-label="Textos do post"><div class="pv-cp"><div class="pv-cp-h"><b>Legenda</b><button type="button" class="cpb" data-for="cap">Copiar</button></div><textarea id="cap" readonly rows="14">COMPARTILHA NOS STORIES 🔁 e manda pros Melhores Amigos ⭐
 
-O que você cobraria do governador eleito? Compartilha nos Stories e manda pro grupo dos Melhores Amigos.</textarea></div><div class="pv-cp"><div class="pv-cp-h"><b>Primeiro comentário</b><button type="button" class="cpb" data-for="com">Copiar</button></div><textarea id="com" readonly rows="4">Fontes: ISP-RJ (letalidade violenta, 1998–2025) · FBSP, Anuário Brasileiro de Segurança Pública 2026 · GENI/UFF + Fogo Cruzado, Mapa dos Grupos Armados (dez/2025) · Instituto Sou da Paz, Onde Mora a Impunidade (2025) · Ministério da Justiça, nota de 28/10/2025 · STF (caso Marielle, fev/2026) · Aos Fatos · Comprova · Ideologia dos partidos: Bolognesi, Ribeiro e Codato (Dados, 2023).</textarea></div><p class="pv-note">Download do vídeo: aparece aqui quando o MP4 for gerado, depois da sua aprovação.</p></section>
+O Rio é governado pela direita há 23 anos. Então a violência no estado é culpa da esquerda? 🤔
+
+Fomos aos dados: quem manda na polícia, o que melhorou, o que piorou, quem ajudou e quem atrapalhou — dos dois lados.
+
+✔️ A violência subiu e caiu com os dois lados, e depois de 2018 caiu junto com o Brasil
+✔️ Com Rosinha e Cabral, o Rio caiu enquanto o país subia: ali o estado fez diferença
+✔️ Em 2025, o Rio voltou a subir, puxado pelas mortes em ações policiais
+✔️ 6 dos 7 governadores desde 1999 foram presos, afastados ou ficaram inelegíveis — dos dois lados
+
+Quem governa leva o crédito do que melhora e a conta do que piora.
+
+E você: o que cobraria do governador eleito? 👇
+
+Dados, metodologia e fontes completas no primeiro comentário.
+
+#RioDeJaneiro #SegurançaPública #FactCheck #Eleições2026 #DadosAbertos</textarea></div><div class="pv-cp"><div class="pv-cp-h"><b>Primeiro comentário</b><button type="button" class="cpb" data-for="com">Copiar</button></div><textarea id="com" readonly rows="14">COMENTA: o que você cobraria do governador eleito? 👇
+.
+.
+📚 FONTES
+• Mortes violentas no RJ (1998–2025): ISP-RJ, letalidade violenta; FBSP, Anuário Brasileiro de Segurança Pública 2026
+• Homicídios no Brasil: Mapa da Violência 2006 e Atlas da Violência (SIM/Ministério da Saúde)
+• Sudeste por 100 mil (2013–2025): FBSP, Anuário 2026 (tabela 02)
+• Estatuto do Desarmamento e armas entregues: Senado/Exército (2004–2005)
+• Grupos armados: GENI/UFF + Fogo Cruzado, Mapa dos Grupos Armados (dez/2025)
+• Milícia e política: CPI das Milícias da Alerj (2008); MP-RJ; STF, caso Marielle (fev/2026)
+• Mortes pela polícia: FBSP; MP-RJ/Cenpe, Letalidade Policial no RJ em 10 pontos (2019); Fórum Justiça/CESeC (2011–2021)
+• Operação Contenção: Reuters; Polícia Civil-RJ; Defensoria Pública; Datafolha
+• Câmeras e uso da força: MJSP (portaria mai/2024, decreto dez/2024); nota do Cosud (Poder360, dez/2024)
+• Rastreio de munição e PL 3.723/2019: Exército/Colog (2020); STF; Congresso em Foco
+• Esclarecimento de homicídios: Instituto Sou da Paz, Onde Mora a Impunidade (2025)
+• Dinheiro federal: Ministério da Justiça, nota de 28/10/2025
+• Checagens: Aos Fatos, Comprova
+• Rosinha, 1ª governadora eleita do RJ: Poder360
+• Ideologia dos partidos: Bolognesi, Ribeiro e Codato, Revista Dados (2023)
+
+📝 NOTAS
+• Governo do RJ: esquerda e centro-esquerda de 1999 a ago/2003 (Garotinho, PDT→PSB; Benedita, PT, 9 meses; Rosinha até entrar no MDB). Desde ago/2003, direita (MDB = 7,01 na escala de Bolognesi). Capital: nenhum prefeito de esquerda desde 1993.
+• Polícia Militar, Polícia Civil e investigação são do estado (Constituição, art. 144). Fronteiras, portos, armas e Polícia Federal são da União. Guarda municipal e ordem urbana, da prefeitura.
+• % de cada governador = mortes violentas no fim do mandato contra o ano antes da posse. Os +26% de Garotinho incluem os 9 meses de Benedita (PT).
+• A linha do Brasil é de homicídios (SIM), ajustada à escala do Rio só para comparar a forma da curva. Mortes violentas (ISP/FBSP) e homicídios (SIM) são métricas diferentes.
+• Prisão e afastamento não são condenação; Pezão foi absolvido. Investigação e denúncia também não são condenação. Todos os citados negam irregularidades.
+• Siglas: quando o político mudou de partido, aparecem as duas (Castro: PSC → PL).</textarea></div><p class="pv-note">Download do vídeo: aparece aqui quando o MP4 for gerado, depois da sua aprovação.</p></section>
 <audio id="vo" preload="auto" playsinline></audio>
 <script>window.DUR={dur};window.__ZN={ZN};window.__ZF=k=>"assets/rj/zoom/f"+String(k).padStart(3,"0")+".jpg";for(let k=0;k<window.__ZN;k++){{const i=new Image();i.src=window.__ZF(k)}}</script><script src="fx.js"></script><script src="fx2.js"></script><script>{ZJS}</script><script src="engine.js"></script><script src="layout.js"></script>
 <script>
