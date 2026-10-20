@@ -1,0 +1,80 @@
+# Skill distribution manifest — ALLOWLIST ONLY
+#
+# Purpose: fix the root distribution problem once. Skills listed here are the ONLY
+# ones `scripts/skills_sync.py` will install. There is deliberately no wildcard and
+# no "sync everything" mode — a bulk import is what produced the drift this repairs.
+#
+# Origin: 2026-07-31 skill-capability audit found 7 skills that exist canonically here
+# but were not installed on the Mac, while CLAUDE.md routed to all 7. Root cause was a
+# missing distribution step, not 7 broken skills.
+#
+# Adding an entry is a deliberate act: it must name a real SKILL.md in this repo and be
+# approved. The sync tool refuses anything not listed.
+
+version: 1
+canonical_repo: priihigashi/oak-park-ai-hub
+
+# Where the shared copy is installed, and which runtimes symlink to it.
+install:
+  shared_root: ~/.agents/skills
+  runtime_links:
+    - ~/.claude/skills     # Claude Code
+    - ~/.codex/skills      # Codex
+
+# Safety rules the sync tool enforces in code (not just documented here):
+#  - dry-run is the DEFAULT; --apply is required to write anything
+#  - an existing directory that is not byte-identical is NEVER silently overwritten;
+#    it is backed up and reported, and only replaced with --approve-overwrite
+#  - every install is verified by re-hashing the destination after the copy
+#  - runtime links must resolve to the shared copy or the run fails
+safety:
+  dry_run_default: true
+  backup_dir: ~/.agents/skills/_backups
+  never_silent_overwrite: true
+  verify_hash_after_write: true
+
+skills:
+  - id: pipeline-fix
+    source: skills/pipeline-fix
+    reason: "CLAUDE.md PIPELINE FAILURE LOG section routes here (8 references)"
+  - id: session-start
+    source: skills/shared/session-start
+    reason: "CLAUDE.md SESSION START routes here (8 references)"
+  - id: session-exit
+    source: skills/shared/session-exit
+    reason: "CLAUDE.md SESSION EXIT LOG + context-full handoff route here (10 references)"
+  - id: drive-upload
+    source: skills/shared/drive-upload
+    reason: "CLAUDE.md DRIVE UPLOAD correct-method section routes here (4 references)"
+  - id: calendar-create
+    source: skills/shared/calendar-create
+    reason: "CLAUDE.md CALENDAR section routes here (4 references)"
+  - id: template-carousel
+    source: skills/shared/template-carousel
+    reason: "CLAUDE.md CAROUSEL OUTPUT ROUTING + MOTION IS DEFAULT ON route here (8 references)"
+  - id: email-send
+    source: skills/shared/email-send
+    reason: "CLAUDE.md EMAIL SENDING routes here (4 references)"
+
+# Explicitly NOT distributed by this manifest, and why.
+excluded:
+  - id: opc-carousel-creator
+    reason: "already installed and locally maintained; migration decision pending (audit: not-assessed)"
+  - id: opc-carousel-reviewer
+    reason: "already installed and locally maintained; migration decision pending (audit: not-assessed)"
+  - id: organize-project
+    reason: "canonical here but not currently referenced by CLAUDE.md; no approved need to install"
+  - id: website-reference-rebuild
+    reason: "canonical here but not currently referenced by CLAUDE.md; no approved need to install"
+  - id: find-skills
+    reason: "not referenced by instruction files; out of approved scope"
+  - id: flow-plans-log
+    reason: "not referenced by instruction files; out of approved scope"
+  - id: nano-banana-2
+    reason: "not referenced by instruction files; out of approved scope"
+  - id: remotion-best-practices
+    reason: "not referenced by instruction files; out of approved scope"
+  - id: sheets-automation
+    reason: "not referenced by instruction files; out of approved scope"
+  - id: sheets-hub-log
+    reason: "not referenced by instruction files; out of approved scope"
