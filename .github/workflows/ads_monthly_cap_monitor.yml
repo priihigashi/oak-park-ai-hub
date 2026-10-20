@@ -1,0 +1,62 @@
+name: OPC Ads Monthly Cap Monitor (Read Only)
+
+on:
+  workflow_dispatch:
+    inputs:
+      warning_dollars:
+        description: "Review threshold; no automatic pause"
+        required: false
+        default: "1450"
+      cap_dollars:
+        description: "Monthly cap target"
+        required: false
+        default: "1500"
+      customer_id:
+        description: "Oak Park Ads customer ID without dashes"
+        required: false
+        default: "8945889168"
+
+permissions:
+  contents: read
+
+jobs:
+  monthly-cap-monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run read-only monthly cap monitor
+        env:
+          GOOGLE_ADS_DEVELOPER_TOKEN: ${{ secrets.GOOGLE_ADS_DEVELOPER_TOKEN }}
+          GOOGLE_ADS_MCC_ID: ${{ secrets.GOOGLE_ADS_MCC_ID }}
+          GOOGLE_ADS_CUSTOMER_ID: ${{ inputs.customer_id }}
+          PRI_OP_ADS_TOKEN: ${{ secrets.PRI_OP_ADS_TOKEN }}
+          ADS_WARNING_DOLLARS: ${{ inputs.warning_dollars }}
+          ADS_CAP_DOLLARS: ${{ inputs.cap_dollars }}
+        run: python scripts/ads_monthly_cap_monitor.py
+
+      - name: Add status to workflow summary
+        if: always()
+        run: |
+          STATUS_FILE="artifacts/ads-monthly-cap-monitor/monthly_cap_status.md"
+          if [ -f "$STATUS_FILE" ]; then
+            cat "$STATUS_FILE" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "No monthly cap status was generated." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload status artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: opc-ads-monthly-cap-status
+          path: artifacts/ads-monthly-cap-monitor/
+          if-no-files-found: warn
