@@ -1,0 +1,82 @@
+[
+ {
+  "name": "plate_fronteira",
+  "status": null,
+  "err": 402,
+  "detail": "{\"title\":\"Insufficient credit\",\"detail\":\"You have insufficient credit to run this model. Go to https://replicate.com/account/billing#billing to purchase credit. Once you purchase credit, please wait a few minutes before trying again.\",\"status\":402}\n",
+  "files": []
+ },
+ {
+  "name": "plate_canopy",
+  "status": null,
+  "err": 429,
+  "detail": "{\"detail\":\"Request was throttled. Your rate limit for creating predictions is reduced to 6 requests per minute with a burst of 1 requests while you have less than $5.0 in credit. Your rate limit resets in ~10s.\",\"status\":429,\"retry_after\":10}\n",
+  "files": []
+ },
+ {
+  "name": "plate_queimada",
+  "status": null,
+  "err": 429,
+  "detail": "{\"detail\":\"Request was throttled. Your rate limit for creating predictions is reduced to 6 requests per minute with a burst of 1 requests while you have less than $5.0 in credit. Your rate limit resets in ~10s.\",\"status\":429,\"retry_after\":10}\n",
+  "files": []
+ },
+ {
+  "name": "plate_cerca",
+  "status": null,
+  "err": 429,
+  "detail": "{\"detail\":\"Request was throttled. Your rate limit for creating predictions is reduced to 6 requests per minute with a burst of 1 requests while you have less than $5.0 in credit. Your rate limit resets in ~10s.\",\"status\":429,\"retry_after\":10}\n",
+  "files": []
+ },
+ {
+  "name": "el_nelore",
+  "status": null,
+  "err": 429,
+  "detail": "{\"detail\":\"Request was throttled. Your rate limit for creating predictions is reduced to 6 requests per minute with a burst of 1 requests while you have less than $5.0 in credit. Your rate limit resets in ~10s.\",\"status\":429,\"retry_after\":10}\n",
+  "files": []
+ },
+ {
+  "name": "el_castanheira",
+  "status": null,
+  "err": 429,
+  "detail": "{\"detail\":\"Request was throttled. Your rate limit for creating predictions is reduced to 6 requests per minute with a burst of 1 requests while you have less than $5.0 in credit. Your rate limit resets in ~10s.\",\"status\":429,\"retry_after\":10}\n",
+  "files": []
+ },
+ {
+  "name": "el_titulo",
+  "status": null,
+  "err": 429,
+  "detail": "{\"detail\":\"Request was throttled. Your rate limit for creating predictions is reduced to 6 requests per minute with a burst of 1 requests while you have less than $5.0 in credit. Your rate limit resets in ~10s.\",\"status\":429,\"retry_after\":10}\n",
+  "files": []
+ },
+ {
+  "name": "el_motosserra",
+  "status": null,
+  "err": 429,
+  "detail": "{\"detail\":\"Request was throttled. Your rate limit for creating predictions is reduced to 6 requests per minute with a burst of 1 requests while you have less than $5.0 in credit. Your rate limit resets in ~9s.\",\"status\":429,\"retry_after\":9}\n",
+  "files": []
+ },
+ {
+  "name": "cut_nelore",
+  "skip": "missing dep"
+ },
+ {
+  "name": "cut_castanheira",
+  "skip": "missing dep"
+ },
+ {
+  "name": "cut_titulo",
+  "skip": "missing dep"
+ },
+ {
+  "name": "cut_motosserra",
+  "skip": "missing dep"
+ },
+ {
+  "name": "depth_fronteira",
+  "skip": "missing dep"
+ },
+ {
+  "name": "depth_cerca",
+  "skip": "missing dep"
+ }
+]
