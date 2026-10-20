@@ -1,0 +1,40 @@
+name: media-branch-fetch
+on:
+  push:
+    branches: ["media/**"]
+    paths: ["media/*/photos.txt"]
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - name: Fetch Wikipedia lead photos
+        run: |
+          pip install -q requests
+          python - <<'PY'
+          import glob, os, requests, json
+          H={"User-Agent":"tentandochegaratevoce-factcheck/1.0 (priscila@oakpark-construction.com)"}
+          for f in glob.glob("media/*/photos.txt"):
+              d=os.path.dirname(f); os.makedirs(d+"/photos",exist_ok=True); credits={}
+              for line in open(f):
+                  line=line.strip()
+                  if not line: continue
+                  key,lang,title=line.split("|")
+                  r=requests.get(f"https://{lang}.wikipedia.org/api/rest_v1/page/summary/{title}",headers=H).json()
+                  src=(r.get("originalimage") or r.get("thumbnail") or {}).get("source")
+                  if not src: print("no image",title); continue
+                  img=requests.get(src,headers=H).content
+                  ext=src.rsplit(".",1)[-1].split("?")[0].lower()
+                  open(f"{d}/photos/{key}.{ext}","wb").write(img)
+                  fname=src.split("/")[-1]
+                  meta=requests.get("https://commons.wikimedia.org/w/api.php",params={"action":"query","titles":"File:"+fname,"prop":"imageinfo","iiprop":"extmetadata","format":"json"},headers=H).json()
+                  credits[key]={"src":src,"meta":json.dumps(meta)[:1500]}
+                  print(key,len(img),src)
+              json.dump(credits,open(d+"/photos/credits.json","w"),ensure_ascii=False,indent=1)
+          PY
+      - name: Commit
+        run: |
+          git config user.name media-bot; git config user.email media-bot@users.noreply.github.com
+          git add media/*/photos; git commit -qm "photos" && git push
