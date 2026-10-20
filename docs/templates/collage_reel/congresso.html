@@ -1,0 +1,225 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
+<!-- DEMO v2 "Quem governa de verdade?" — corrida de barras da Câmara por espectro (1995→2023).
+     Visual premium (ref_13: fundo quase branco, serifa no título, barras suaves arredondadas, ano grande no canto, etiqueta de evento, régua do tempo).
+     Ano conta no MESMO lugar, ano a ano; pausa ~2,5s no 1º ano de cada mandato (com som); barras TROCAM de posição pelo tamanho.
+     Dados: data/camara_ideologia_1995_2023.json — bancadas ELEITAS (TSE) + classificação Bolognesi, Ribeiro & Codato (2023). -->
+<style>
+@font-face{font-family:Fraunces;font-weight:900;src:url(assets/fraunces-latin-900-normal.woff2)}
+@font-face{font-family:Fraunces;font-weight:700;font-style:italic;src:url(assets/fraunces-latin-700-italic.woff2)}
+@font-face{font-family:IT;font-weight:900;src:url(assets/inter-tight-latin-900-normal.woff2)}
+@font-face{font-family:IT;font-weight:800;src:url(assets/inter-tight-latin-800-normal.woff2)}
+@font-face{font-family:JBM;font-weight:500;src:url(assets/jetbrains-mono-latin-500-normal.woff2)}
+@font-face{font-family:JBM;font-weight:700;src:url(assets/jetbrains-mono-latin-700-normal.woff2)}
+:root{--ink:#151515;--mute:#8a8a86;--line:#dcdad4;--bg:#f6f5f2}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);color:var(--ink)}
+#flag{position:absolute;left:0;top:0;width:1080px;height:14px;background:linear-gradient(90deg,#009c3b 0 50%,#ffdf00 50% 75%,#2b5fc4 75%)}
+#grain{position:absolute;inset:-40px;background:url(assets/grain.png);opacity:.07;mix-blend-mode:multiply;pointer-events:none}
+#t1{position:absolute;left:80px;top:130px;font:900 96px/1 Fraunces;letter-spacing:-1.5px}
+#t1 em{font-style:italic;font-weight:700;color:#009c3b}
+#t2{position:absolute;left:84px;top:345px;font:700 21px JBM;letter-spacing:4px;color:var(--mute)}
+#axis{position:absolute;left:380px;top:415px;width:620px;height:40px;font:500 20px JBM;color:var(--mute)}
+#axis span{position:absolute;transform:translateX(-50%)}
+#grid{position:absolute;left:380px;top:450px;width:560px;height:690px}
+#grid i{position:absolute;top:0;bottom:0;border-left:1px solid var(--line)}
+#maj{position:absolute;top:450px;height:690px;border-left:2px dashed var(--ink)}
+#majl{position:absolute;top:1145px;font:700 19px JBM;letter-spacing:1px;transform:translateX(-50%);background:var(--bg);padding:0 8px}
+.row{position:absolute;left:80px;width:940px;height:96px}
+.row .lab{position:absolute;left:0;top:22px;width:285px;text-align:right;font:800 25px/1.05 IT;text-transform:uppercase;letter-spacing:.3px}
+.row .lab small{display:block;font:500 18px JBM;letter-spacing:1px;color:var(--mute);text-transform:none;margin-top:4px}
+.row .bar{position:absolute;left:300px;top:24px;height:46px;border-radius:0 23px 23px 0}
+.row .val{position:absolute;top:24px;font:900 38px/46px IT;white-space:nowrap}
+.row .val b{font:500 23px JBM;color:var(--mute);margin-left:10px;vertical-align:4px}
+.row.grp .lab{font-size:29px}
+.row.grp .bar{height:54px;top:20px;border-radius:0 27px 27px 0}
+#year{position:absolute;right:80px;top:1215px;font:900 168px/1 IT;letter-spacing:-6px;font-variant-numeric:tabular-nums}
+#tag{position:absolute;right:84px;top:1182px;font:700 22px JBM;letter-spacing:2px;padding:8px 14px;color:#fff;white-space:nowrap}
+#pres{position:absolute;left:80px;top:1232px;width:470px}
+#pres .k{font:700 19px JBM;letter-spacing:4px;color:var(--mute)}
+#pres .n{font:900 46px/1.05 IT;margin-top:8px}
+#pres .sp{display:inline-block;font:700 18px JBM;letter-spacing:2px;color:#fff;padding:5px 10px;margin-left:10px;border-radius:4px;vertical-align:1px}
+#pres .note{font:500 18px/1.3 JBM;color:var(--mute);margin-top:8px}
+#rank{position:absolute;left:80px;top:1440px;width:920px}
+#rank .h{font:700 19px JBM;letter-spacing:4px;color:var(--mute);padding-bottom:12px;border-bottom:2px solid var(--ink)}
+#rank .r{display:flex;align-items:center;height:70px;border-bottom:1px solid var(--line);font:900 34px/70px IT}
+#rank .r .p{width:150px;font:700 19px JBM;letter-spacing:2px;color:var(--mute)}
+#rank .r .nm{flex:1;overflow:hidden;height:70px;position:relative}
+#rank .r .nm span{position:absolute;left:0;top:0;white-space:nowrap;line-height:70px}
+.row.grp .lab small{color:inherit;opacity:.75}
+#rank .r .v{font-variant-numeric:tabular-nums}
+#rank .r .v b{font:500 22px JBM;color:var(--mute);margin-left:10px}
+#neg{position:absolute;left:80px;top:1700px;width:920px;font:700 italic 36px/1.25 Fraunces}
+#neg u{text-decoration:none;box-shadow:inset 0 -14px 0 #ffdf00}
+#tl{position:absolute;left:80px;top:1800px;width:920px;height:30px}
+#tl .base{position:absolute;left:0;right:0;top:14px;height:2px;background:var(--line)}
+#tl .fill{position:absolute;left:0;top:13px;height:4px;background:var(--ink)}
+#tl i{position:absolute;top:8px;width:2px;height:16px;background:var(--mute)}
+#src{position:absolute;left:80px;top:1836px;width:920px;font:500 18px/1.3 JBM;color:var(--mute)}
+
+.ov{position:absolute;inset:0;display:none;overflow:hidden;z-index:20}
+#hook{background:#151515;color:#f6f5f2}
+#hook .a{position:absolute;left:80px;top:700px;font:900 96px/1 Fraunces;letter-spacing:-2px;white-space:nowrap}
+#hook .b{position:absolute;left:80px;top:830px;font:700 italic 96px/1 Fraunces;color:#ffdf00;white-space:nowrap}
+#hook .c{position:absolute;left:84px;top:1000px;font:700 24px JBM;letter-spacing:4px;color:#9a9a96}
+#crown{background:#151515;color:#f6f5f2}
+#crown .q{position:absolute;left:80px;top:170px;width:920px;font:900 76px/1.05 Fraunces;letter-spacing:-1px}
+#crown .q em{font-style:italic;font-weight:700;color:#ffdf00}
+#crown svg{position:absolute;left:0;top:0}
+#crown .wall{position:absolute;left:190px;width:700px;height:96px;background:#2b5fc4;border-radius:10px;color:#fff;font:900 46px/96px IT;text-align:center;letter-spacing:6px;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+#crown .pw{position:absolute;left:80px;width:920px;font:800 40px/1 IT;display:flex;align-items:center;gap:22px}
+#crown .pw i{display:inline-block;width:46px;height:46px;border-radius:50%;background:#ffdf00;color:#151515;font:900 30px/46px IT;text-align:center;font-style:normal}
+#crown .src{position:absolute;left:80px;top:1830px;font:500 18px JBM;color:#9a9a96}
+#win{background:#f6f5f2;color:#151515}
+#conf{position:absolute;inset:0;z-index:0}
+#win .q{position:absolute;z-index:2;left:80px;top:420px;width:920px;font:900 76px/1.05 Fraunces;letter-spacing:-1px}
+#win .q em{font-style:italic;font-weight:700;color:#009c3b}
+#win .big{position:absolute;z-index:2;left:80px;top:820px;width:920px;font:900 150px/.95 IT;letter-spacing:-4px;color:#2b5fc4}
+#win .sub{position:absolute;z-index:2;left:64px;top:1180px;width:940px;padding:18px 20px;border-radius:14px;background:rgba(246,245,242,.94);font:700 30px/1.35 JBM;color:#151515}
+#win .sub b{background:linear-gradient(transparent 58%,#ffdf00 58%,#ffdf00 92%,transparent 92%)}
+#win .dr{position:absolute;z-index:2;left:80px;top:820px;font:900 150px/1 IT;color:#d9d6cf;letter-spacing:10px}
+.slip{position:absolute;left:0;top:0;z-index:1;width:46px;height:30px;border-radius:3px;box-shadow:0 2px 4px rgba(0,0,0,.15)}
+.slip:after{content:"✕";position:absolute;left:0;right:0;top:0;text-align:center;font:900 20px/30px IT;color:rgba(0,0,0,.55)}
+#close{background:#151515;color:#f6f5f2}
+#close .a{position:absolute;left:80px;top:620px;font:900 96px/1.05 Fraunces;letter-spacing:-2px}
+#close .a em{font-style:italic;font-weight:700;color:#ffdf00}
+#close .b{position:absolute;left:84px;top:1020px;width:900px;font:700 italic 52px/1.2 Fraunces}
+#close .b u{text-decoration:none;box-shadow:inset 0 -16px 0 #009c3b}
+</style></head><body>
+<div id="flag"></div>
+<div id="t1">Quem <em>governa</em><br>de verdade?</div>
+<div id="t2">E QUEM PRECISA NEGOCIAR COM QUEM · CÂMARA 1995–2027</div>
+<div id="axis"></div><div id="grid"></div><div id="maj"></div><div id="majl">MAIORIA · 257</div>
+<div id="rows"></div>
+<div id="tag"></div><div id="year">1995</div>
+<div id="pres"><div class="k">PRESIDENTE<span class="sp"></span></div><div class="n"></div><div class="note"></div></div>
+<div id="rank"><div class="h">PLACAR DA CÂMARA · QUEM ESTÁ EM CIMA, NO MEIO E EMBAIXO</div>
+ <div class="r"><div class="p">1º MAIORIA</div><div class="nm"><span></span></div><div class="v"></div></div>
+ <div class="r"><div class="p">2º</div><div class="nm"><span></span></div><div class="v"></div></div>
+ <div class="r"><div class="p">3º</div><div class="nm"><span></span></div><div class="v"></div></div></div>
+<div id="neg"></div>
+<div id="tl"><div class="base"></div><div class="fill"></div></div>
+<div id="src">Bancadas eleitas: TSE (2026: Câmara/SGM, 99,99% apurado) · Espectro: Bolognesi, Ribeiro &amp; Codato (2023), pesquisa com cientistas políticos — mesma régua pra todos os partidos.</div>
+<div id="grain"></div>
+
+<div id="hook" class="ov"><div class="a">O presidente muda.</div><div class="b">A Câmara, não.</div><div class="c">QUEM MANDA DE VERDADE NO BRASIL · 1995–2027</div></div>
+<div id="crown" class="ov"><div class="q">A Câmara existe pra que<br><em>nenhum presidente<br>vire rei.</em></div>
+ <svg width="1080" height="1920"><g id="kingfig"><circle cx="540" cy="1000" r="120" fill="#3a3a38"/><path d="M330,1330 C330,1150 750,1150 750,1330 Z" fill="#3a3a38"/></g>
+ <g id="crownS"><path d="M440,0 L460,-110 L500,-50 L540,-130 L580,-50 L620,-110 L640,0 Z" fill="#ffdf00" stroke="#151515" stroke-width="6" stroke-linejoin="round"/><rect x="440" y="-6" width="200" height="26" rx="6" fill="#ffdf00" stroke="#151515" stroke-width="6"/></g></svg>
+ <div class="wall">CÂMARA</div>
+ <div class="pw" id="pw1"><i>1</i>aprova — ou barra — as leis</div>
+ <div class="pw" id="pw2"><i>2</i>vota o orçamento do país</div>
+ <div class="pw" id="pw3"><i>3</i>com o Senado, derruba vetos</div>
+ <div class="pw" id="pw4"><i>4</i>autoriza o impeachment</div>
+ <div class="src">Constituição Federal, arts. 48, 51, 66 e 166</div></div>
+<div id="win" class="ov"><div class="q">E quem teve a maioria<br>da Câmara <em>de 1995 a 2027?</em></div>
+ <div class="dr">· · ·</div><div class="big">BLOCO DA<br>DIREITA</div>
+ <div class="sub"><b>9 de 9</b> Câmaras eleitas · em média <b>71%</b> das cadeiras.<br>Com presidente de esquerda ou de direita.</div><div id="conf"></div></div>
+<div id="close" class="ov"><div class="a">O presidente muda.<br><em>A Câmara, não.</em></div>
+ <div class="b">Em quem você votou pra <u>deputado</u> na última eleição?</div></div>
+<script>
+const T=[ // ano de início, presidente, espectro do presidente, E,CE,C,CD,D  (bancada eleita)
+ [1995,'FHC · PSDB','D',59,49,3,35,363],[1999,'FHC · PSDB','D',65,44,3,33,364],
+ [2003,'LULA · PT','E',103,43,20,27,313],[2007,'LULA · PT','E',99,51,34,28,300],
+ [2011,'DILMA · PT','E',106,62,27,30,288],[2015,'DILMA · PT','E',84,53,18,49,309],
+ [2016,'TEMER · MDB','D',84,53,18,49,309],[2019,'BOLSONARO · PSL','D',75,60,13,39,326],
+ [2023,'LULA · PT','E',95,31,0,12,375],
+ [2027,'EM DISPUTA','?',103,21,0,12,376]]; // eleita em 04/10/2026; 99,99% apurado, TSE ainda diplomando; Missão (1) não classificado
+const END=2027;
+const COL={gD:'#2b5fc4',D:'#5b86d6',CD:'#a9c1ec',C:'#e3b23c',CE:'#f2aaa1',E:'#e2675c',gE:'#c63b33'};
+const ROWS=[['gD','Bloco direita','Dir. + Centro-dir.',v=>v.D+v.CD,1],['D','Direita','pura',v=>v.D,0],['CD','Centro-direita','pura',v=>v.CD,0],
+ ['C','Centro','',v=>v.C,0],['CE','Centro-esquerda','pura',v=>v.CE,0],['E','Esquerda','pura',v=>v.E,0],['gE','Bloco esquerda','Esq. + Centro-esq.',v=>v.E+v.CE,1]];
+const X0=380, W=520/420, RH=98, TOP=455;
+[0,100,200,300,400].forEach(n=>{axis.insertAdjacentHTML('beforeend',`<span style="left:${n*W}px">${n}</span>`); grid.insertAdjacentHTML('beforeend',`<i style="left:${n*W}px"></i>`)});
+maj.style.left=(X0+257*W)+'px'; majl.style.left=(X0+257*W)+'px';
+ROWS.forEach(r=>rows.insertAdjacentHTML('beforeend',`<div class="row${r[4]?' grp':''}" id="r_${r[0]}"><div class="lab" style="${r[4]?'color:'+COL[r[0]]:''}">${r[1]}${r[2]?`<small>(${r[2]})</small>`:''}</div><div class="bar" style="background:${COL[r[0]]}"></div><div class="val"></div></div>`));
+for(const a of T){const x=(a[0]-1995)/(END-1995)*920; tl.insertAdjacentHTML('beforeend',`<i style="left:${x}px"></i>`)}
+const TR=.9, HOLD=2.6, YR=.2, INTRO=1.6, HOOK=3.8;
+const S=[]; let t=HOOK+INTRO;
+T.forEach((a,i)=>{const y1=i+1<T.length?T[i+1][0]:END; S.push({t,k:i,year:a[0],start:1}); t+=TR+HOLD;
+  for(let y=a[0]+1;y<y1;y++){S.push({t,k:i,year:y,start:0}); t+=YR;} });
+const RACE_END=t+.6, CROWN=7, WIN=6.5, CLOSE=5; const DUR=RACE_END+CROWN+WIN+CLOSE; window.DUR=DUR;
+window.EVENTS={whoosh:[],thud:[],slap:[],tick:[],pop:[],glitch:[]};
+S.forEach((s,i)=>{ if(s.start) EVENTS.thud.push(s.t+TR*.6); else if(S[i-1].start){let j=i; while(S[j+1]&&!S[j+1].start) j++; EVENTS.tick.push([s.t,S[j].t+YR]);} });
+EVENTS.thud.push(.35,1.7); EVENTS.whoosh.push(HOOK, RACE_END, RACE_END+.4); EVENTS.slap.push(RACE_END+2.05); [3.2,3.9,4.6,5.3].forEach(x=>EVENTS.thud.push(RACE_END+x));
+{const w=RACE_END+CROWN; EVENTS.whoosh.push(w); EVENTS.tick.push([w+.6,w+2.2]); EVENTS.slap.push(w+2.25); [2.3,2.45,2.6,2.8].forEach(x=>EVENTS.pop.push(w+x)); const c=w+WIN; EVENTS.whoosh.push(c); EVENTS.thud.push(c+.4,c+1.8);}
+const V=a=>({E:a[3],CE:a[4],C:a[5],CD:a[6],D:a[7]});
+const ease=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const ranks=v=>{const o=ROWS.map((r,i)=>[i,r[3](v)]).sort((a,b)=>b[1]-a[1]||a[0]-b[0]); const R={}; o.forEach((e,pos)=>R[e[0]]=pos); return R};
+const grp=v=>[['Bloco direita',v.D+v.CD],['Bloco esquerda',v.E+v.CE],['Centro',v.C]].sort((x,y)=>y[1]-x[1]);
+const SP={E:'esquerda',D:'direita'};
+function raceRender(T_){
+  let cur=S[0]; for(const s of S) if(T_>=s.t) cur=s;
+  const k=cur.k, a=T[k], b=T[Math.max(0,k-1)];
+  const startT=S.find(s=>s.k===k&&s.start).t; const p=T_<HOOK+INTRO?0:ease(Math.min(1,(T_-startT)/TR));
+  const va=V(a), vb=V(b), v={}; for(const s in va) v[s]=vb[s]+(va[s]-vb[s])*(k?p:1);
+  const ra=ranks(va), rb=ranks(vb), intro=Math.min(1,Math.max(0,(T_-HOOK)/INTRO));
+  ROWS.forEach((r,i)=>{const el=document.getElementById('r_'+r[0]); const n=r[3](v);
+    const pos=(k?rb[i]+(ra[i]-rb[i])*p:ra[i]); el.style.top=(TOP+pos*RH)+'px';
+    el.style.opacity=Math.min(1,Math.max(0,intro*5-i*.35));
+    const w=Math.max(6,n*W*Math.min(1,intro*1.2)); el.children[1].style.width=w+'px';
+    el.children[2].style.left=(300+w+16)+'px';
+    el.children[2].innerHTML=`${Math.round(n)}<b>(${(n/513*100).toFixed(0)}%)</b>`;});
+  year.textContent=T_<HOOK+INTRO?1995:cur.year;
+  const dy=cur.start?0:Math.max(0,1-(T_-cur.t)/.08)*-18; year.style.transform=`translateY(${dy}px)`;
+  tag.textContent=a[2]==='?'?'NOVA CÂMARA ELEITA':a[1].split(' · ')[0]+' ASSUME'; tag.style.background=a[2]==='E'?COL.gE:(a[2]==='D'?COL.gD:'#151515');
+  tag.style.opacity=(cur.start&&T_>=HOOK+INTRO)?Math.min(1,(T_-startT)/.3):0;
+  const g=grp(v).map(x=>[x[0],Math.round(x[1])]), gb=grp(vb);
+  rank.querySelectorAll('.r').forEach((row,i)=>{const sp=row.querySelector('.nm span'); const changed=k&&gb[i][0]!==g[i][0];
+    sp.textContent=g[i][0]; sp.style.color=g[i][0]==='Bloco direita'?COL.gD:(g[i][0]==='Bloco esquerda'?COL.gE:'#151515'); sp.style.transform=changed?`translateY(${((1-p)*70).toFixed(1)}px)`:'none';
+    row.querySelector('.v').innerHTML=`${g[i][1]}<b>${(g[i][1]/513*100).toFixed(0)}%</b>`;});
+  const half=k&&p<.5, A0=a, A=half?b:a, VA=half?vb:va;
+  pres.children[1].textContent=A0[1];
+  { const sp=pres.querySelector('.sp'); sp.textContent=A0[2]==='?'?'':SP[A0[2]].toUpperCase(); sp.style.display=A0[2]==='?'?'none':'inline-block'; sp.style.background=A0[2]==='E'?COL.gE:COL.gD;
+    pres.querySelector('.note').textContent=A0[2]==='?'?'2º turno em 25/10/2026. Câmara eleita em 04/10 (99,99% apurado; 1 cadeira do Missão sem classificação).':''; }
+  const dir=VA.D+VA.CD, esq=VA.E+VA.CE, cong=dir>=257?'direita':(esq>=257?'esquerda':'sem maioria');
+  neg.innerHTML=A[2]==='?'?`Quem vencer o 2º turno vai governar com uma Câmara de <u>${cong}</u> — ${dir} de 513 cadeiras.`:SP[A[2]]===cong?`Presidente de <u>${SP[A[2]]}</u> com Câmara de <u>${cong}</u>: maioria própria, não depende da oposição.`
+    :`Presidente de <u>${SP[A[2]]}</u> precisa negociar com uma Câmara de <u>${cong}</u> — ${dir} de 513 cadeiras.`;
+  neg.style.opacity=T_<HOOK+INTRO?0:(k&&p<1?Math.max(.0,Math.abs(p-.5)*2):1);
+  tl.querySelector('.fill').style.width=Math.min(920,(cur.year-1995+(T_<HOOK+INTRO?0:.5))/(END-1995)*920)+'px';
+}
+
+// ===== cenas extras: gancho, coroa, vencedora, fecho =====
+const cl=x=>Math.max(0,Math.min(1,x)), eo=x=>1-Math.pow(1-x,3), eb=x=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
+const rnd=s=>{const x=Math.sin(s*12.9898+78.233)*43758.5453;return x-Math.floor(x)};
+const slips=[]; for(let i=0;i<70;i++){const d=document.createElement('div'); d.className='slip'; d.style.background=['#2b5fc4','#009c3b','#ffdf00','#ffffff','#2b5fc4'][i%5]; conf.appendChild(d); slips.push(d)}
+function show(id,on,a){const el=document.getElementById(id); el.style.display=on?'block':'none'; if(on&&a!==undefined) el.style.opacity=a;}
+function scenes(T_){
+  // gancho
+  const hk=T_<HOOK; show('hook',hk||T_<HOOK+.35, T_<HOOK?1:1-(T_-HOOK)/.35);
+  if(T_<HOOK+.35){const h=document.getElementById('hook'); const A=h.children;
+    A[0].style.opacity=cl(T_/.3); A[0].style.transform=`translateY(${(1-eo(cl(T_/.4)))*40}px)`;
+    A[1].style.opacity=cl((T_-1.4)/.3); A[1].style.transform=`scale(${1.25-.25*eb(cl((T_-1.4)/.45))})`; A[1].style.transformOrigin='0 50%';
+    A[2].style.opacity=cl((T_-2.3)/.4);}
+  // coroa
+  const c0=RACE_END, c=T_-c0; show('crown',c>=0&&c<CROWN+.2);
+  if(c>=0&&c<CROWN+.2){const q=document.querySelector('#crown .q'); q.style.opacity=cl(c/.4); q.style.transform=`translateY(${(1-eo(cl(c/.5)))*30}px)`;
+    const kf=document.getElementById('kingfig'); kf.style.opacity=cl((c-.3)/.4);
+    // coroa desce até a parede e quica pra trás
+    const wallY=760; let cy;
+    if(c<2) cy=-150+(wallY-40+150)*Math.pow(cl((c-.6)/1.4),2); else {const k=c-2; cy=wallY-40-Math.abs(Math.sin(k*5))*90*Math.exp(-k*2.2);}
+    document.getElementById('crownS').setAttribute('transform',`translate(0,${cy.toFixed(1)}) rotate(${c>2?(Math.sin((c-2)*6)*8*Math.exp(-(c-2)*2)).toFixed(2):0} 540 0)`);
+    const w=document.querySelector('#crown .wall'); const wp=eb(cl((c-1.4)/.5)); w.style.top=(760+20)+'px'; w.style.transform=`translateX(${((1-wp)*-1200).toFixed(0)}px)`;
+    ['pw1','pw2','pw3','pw4'].forEach((id,i)=>{const e=document.getElementById(id); const t0=3.1+i*.7; e.style.top=(1420+i*90)+'px'; e.style.opacity=cl((c-t0)/.2); e.style.transform=`scale(${1.4-.4*eo(cl((c-t0)/.25))})`; e.style.transformOrigin='0 50%';});
+    document.querySelector('#crown .src').style.opacity=cl((c-5.6)/.4);
+    document.getElementById('crown').style.opacity=c>CROWN-.2?cl((CROWN+.2-c)/.4):1;}
+  // vencedora
+  const w0=RACE_END+CROWN, v=T_-w0; show('win',v>=0&&v<WIN+.2);
+  if(v>=0&&v<WIN+.2){const q=document.querySelector('#win .q'); q.style.opacity=cl(v/.4);
+    const dr=document.querySelector('#win .dr'); dr.style.opacity=v>.6&&v<2.25?1:0; dr.textContent='·'.repeat(1+(Math.max(0,Math.floor((v-.6)*6))%4));
+    const bg=document.querySelector('#win .big'); const bp=cl((v-2.25)/.35); bg.style.opacity=v>=2.25?1:0; bg.style.transform=`scale(${(1.6-.6*eb(bp)).toFixed(3)})`; bg.style.transformOrigin='0 50%';
+    document.querySelector('#win .sub').style.opacity=cl((v-3.1)/.4);
+    // confete de cédulas (12 fps, cai e gira)
+    const vq=Math.floor(v*12)/12;
+    slips.forEach((d,i)=>{const t0=2.3+rnd(i)*.5, k=vq-t0; if(k<0){d.style.opacity=0;return}
+      const side=i%2?1:-1, x0=side>0?1100:-20, vx=-side*(250+rnd(i+3)*650), vy=-1500-rnd(i+11)*900;
+      const x=x0+vx*k, y=1950+vy*k+1500*k*k; d.style.opacity=y>1950?0:1;
+      d.style.transform=`translate(${x.toFixed(0)}px,${y.toFixed(0)}px) rotate(${((rnd(i+5)-.5)*1400*k).toFixed(0)}deg)`;});
+    document.getElementById('win').style.opacity=v>WIN-.2?cl((WIN+.2-v)/.4):1;}
+  // fecho
+  const f0=RACE_END+CROWN+WIN, f=T_-f0; show('close',f>=0);
+  if(f>=0){const A=document.querySelector('#close .a'), B=document.querySelector('#close .b');
+    A.style.opacity=cl(f/.4); A.style.transform=`translateY(${(1-eo(cl(f/.5)))*30}px)`;
+    B.style.opacity=cl((f-1.6)/.4); B.style.transform=`translateY(${(1-eo(cl((f-1.6)/.5)))*30}px)`;}
+}
+window.render=(T_)=>{raceRender(Math.min(T_,RACE_END)); scenes(T_);}; window.render(0); window.READY=document.fonts.ready;
+</script></body></html>

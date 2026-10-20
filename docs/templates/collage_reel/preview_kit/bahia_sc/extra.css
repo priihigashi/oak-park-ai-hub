@@ -1,0 +1,95 @@
+
+/* ---- Parte 2: mapa escuro atrás das cenas (estilo Reel Rio) ---- */
+.scene.mapsc{background:transparent}
+#mapwrap{position:absolute;inset:0;overflow:hidden;background:radial-gradient(ellipse at 50% 58%,#15171d 0%,#0a0b0e 55%,#050608 100%)}
+#map{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}
+#map svg{display:block;overflow:visible}
+#map path{fill:rgba(242,236,224,.04);stroke:rgba(242,236,224,.30);stroke-width:var(--sw,.3);stroke-linejoin:round;transition:none}
+#map path.on.esq{fill:url(#hR);stroke:#FF4A3D;filter:drop-shadow(0 0 1.4px rgba(255,74,61,.95))}
+#map path.on.dir{fill:url(#hB);stroke:#6E87FF;filter:drop-shadow(0 0 1.4px rgba(77,107,255,.95))}
+#map path.on.yel{fill:url(#hY);stroke:#FFD34D;filter:drop-shadow(0 0 1.4px rgba(255,211,77,.95))}
+.mapvig{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 60%,transparent 45%,rgba(5,6,8,.75) 100%);pointer-events:none}
+#maplabs{position:absolute;inset:0;pointer-events:none;z-index:5}
+.mlab{position:absolute;left:0;top:0;font-family:JBM;font-weight:700;font-size:26px;letter-spacing:1.5px;padding:8px 16px;border-radius:10px;background:rgba(7,8,10,.84);border:2px solid;white-space:nowrap;text-align:center;line-height:1.2}
+.mlab.r{color:#FF7A6E;border-color:#FF4A3D}.mlab.b{color:#9DB0FF;border-color:#5B7CFF}.mlab.y{color:#FFD34D;border-color:#FFD34D}
+.mlab small{display:block;font-size:20px;color:#CFC8B8;margin-top:4px;letter-spacing:1px}.mlab small .ide{font-size:16px;padding:1px 7px}
+.mlab.big{font-size:30px;padding:10px 20px}.mlab.big b{font-family:Rub;font-weight:900;font-size:50px;letter-spacing:0;margin-left:8px}
+.shadeMapT{position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,6,8,.92) 0%,rgba(5,6,8,.82) 30%,rgba(5,6,8,.35) 46%,rgba(5,6,8,0) 56%,rgba(5,6,8,0) 66%,rgba(5,6,8,.8) 76%,rgba(5,6,8,.96) 100%);pointer-events:none}
+.shadeMapH{position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,6,8,.85) 0%,rgba(5,6,8,.4) 26%,rgba(5,6,8,0) 40%,rgba(5,6,8,0) 62%,rgba(5,6,8,.85) 76%,rgba(5,6,8,.96) 100%);pointer-events:none}
+/* comentário (cartão estilo rede social, sem @) */
+.cmt{display:flex;gap:24px;align-items:flex-start;background:rgba(250,248,242,.97);color:#111;border-radius:28px;padding:28px 32px 32px;box-shadow:0 24px 60px rgba(0,0,0,.55)}
+.cmt .av{flex:0 0 74px;height:74px;border-radius:50%;background:linear-gradient(135deg,#c9c3b6,#8d877b);filter:blur(1px)}
+.cmt .who{display:flex;align-items:center;gap:14px;font-family:JBM;font-weight:500;font-size:22px;color:#77736b;margin-bottom:10px}
+.cmt .who span{display:inline-block;width:190px;height:20px;border-radius:10px;background:#cfcabf}
+.cmt .ct{font-family:Rub;font-weight:700;font-size:44px;line-height:1.16;letter-spacing:-.01em;text-wrap:balance}
+/* placar lado a lado: números começam na mesma altura */
+.tiles{display:flex;gap:50px;width:920px}
+.tile{width:435px;position:relative}
+.tile .tk{font-family:JBM;font-weight:700;font-size:25px;letter-spacing:1.5px;color:#F2ECE0;min-height:104px;line-height:1.25}
+.tile .tk small{display:block;font-size:20px;letter-spacing:1px;color:#BDB6A6;margin-top:8px;line-height:1.45}
+.tile .tk small .ide{font-size:16px;padding:1px 7px}
+.tile .tv{font-family:Rub;font-weight:900;font-size:150px;line-height:.92;margin-top:6px;text-shadow:0 6px 30px rgba(0,0,0,.5)}
+.tile .ttrack{margin-top:18px;height:24px;width:400px;background:rgba(242,236,224,.12);border-radius:4px;overflow:hidden}
+.tile .ttrack .bar{height:24px;border-radius:4px}
+.counter .big{font-family:Rub;font-weight:900;font-size:180px;line-height:.9;color:#FFD34D;white-space:nowrap;text-shadow:0 6px 30px rgba(0,0,0,.5)}
+.counter b{font-size:40px;white-space:normal}
+.stamp-o{text-wrap:balance;line-height:1.1;padding:12px 26px}
+/* tamanhos novos do kit (ela, 19/out): letra pequena 23, notas 24, fonte 22, subrótulos 20 */
+.fine{font-size:23px;width:920px}.note{font-size:24px;width:920px}.srcline{font-size:22px}
+.row .k small{font-size:20px}.rows{width:920px}
+.kar{font-size:50px}
+.rail .line{width:960px;left:60px}
+
+.shadeMapF{position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,6,8,.86) 0%,rgba(5,6,8,.62) 30%,rgba(5,6,8,.38) 50%,rgba(5,6,8,.12) 64%,rgba(5,6,8,.1) 70%,rgba(5,6,8,.82) 77%,rgba(5,6,8,.96) 100%);pointer-events:none}
+.mapsc .h,.mapsc .row,.mapsc .tile,.mapsc .who2,.mapsc .fine,.mapsc .note{text-shadow:0 3px 18px rgba(0,0,0,.95),0 0 6px rgba(0,0,0,.9)}
+.counter b{font-size:46px;line-height:1.1;width:440px}
+
+/* dupla de recortes (você × Justus), contorno branco como nos outros reels */
+.duo{display:flex;align-items:flex-end;justify-content:space-between;width:920px}
+.who2{width:380px;text-align:center}
+.who2 b{display:block;font-family:Rub;font-weight:900;font-size:40px;color:#fff;margin-top:14px;letter-spacing:.5px}
+.who2 small{display:block;font-family:JBM;font-weight:700;font-size:22px;letter-spacing:1px;color:#CFC8B8;margin-top:8px;line-height:1.4}
+.cut{position:relative;width:300px;height:340px;margin:0 auto}
+.cut svg{width:100%;height:100%;overflow:visible}
+.cut svg *{fill:#2a2c33;stroke:#fff;stroke-width:7;paint-order:stroke;filter:drop-shadow(0 0 0 #fff) drop-shadow(0 14px 26px rgba(0,0,0,.6))}
+.cut.jus svg *{fill:#3a3420;stroke:#FFD34D}
+.cut em{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);font-family:JBM;font-style:normal;font-weight:700;font-size:20px;letter-spacing:2px;color:#FFD34D;opacity:.7}
+.vs{font-family:Rub;font-weight:900;font-size:110px;color:#FFD34D;align-self:center;margin-top:-80px}
+.row.txt .v{font-size:38px;line-height:1.12}
+
+/* contracheque (pessoa comum) */
+.hol{width:330px;height:340px;margin:0 auto;background:#F4F1E8;color:#1a1a1a;border-radius:10px;padding:24px 24px 20px;box-shadow:0 0 0 6px #fff,0 18px 40px rgba(0,0,0,.6);transform:rotate(-3deg);font-family:JBM;font-weight:700;text-align:left;display:flex;flex-direction:column;gap:14px;text-shadow:none}
+.hol .ht{font-size:20px;letter-spacing:3px;color:#6b665b;border-bottom:2px dashed #b9b3a5;padding-bottom:10px}
+.hol .hl1{display:flex;justify-content:space-between;font-size:18px;letter-spacing:.5px}
+.hol .hl1.m{color:#8a8576}
+.hol .hliq{margin-top:auto;border-top:3px solid #1a1a1a;padding-top:12px;display:flex;justify-content:space-between;align-items:baseline;font-size:18px}
+.hol .hliq b{font-family:Rub;font-weight:900;font-size:40px;letter-spacing:0;color:#1a1a1a;margin:0}
+
+/* cenas de cor viva (fora do crime) */
+.flat{position:absolute;inset:0}
+.paper{position:absolute;inset:-40px;background:url(assets/grain.png);opacity:.22;mix-blend-mode:multiply;pointer-events:none}
+.capband{position:absolute;left:0;right:0;top:1360px;bottom:0;background:linear-gradient(180deg,rgba(10,10,14,0) 0%,rgba(10,10,14,.78) 18%,rgba(10,10,14,.9) 100%)}
+.flatsc .h,.flatsc .row,.flatsc .tile,.flatsc .fine,.flatsc .note{text-shadow:none}
+.lite .eyebrow{color:#111}.lite .eyebrow::before{background:#111}.lite .eyebrow b{color:#111}
+.lite .h{text-shadow:none}
+.lite .hl{background:linear-gradient(transparent 12%,#111 12%,#111 92%,transparent 92%);color:#FFD34D}
+.lite .row{border-color:rgba(17,17,17,.25)}.lite .row .k{color:#111}.lite .row .k small{color:#5b564b}.lite .row.txt .v{color:#111}
+.lite .fine{color:#4a463d}.lite .note{color:#3a362e}
+.lite .tile .tk{color:#111}.lite .tile .tk small{color:#4a463d}.lite .tile .ttrack{background:rgba(17,17,17,.12)}
+.lite .rail .line{background:rgba(17,17,17,.25)}.lite .rail .fill{background:#111}.lite .st b{color:#111}.lite .st i{border-color:#111;background:#F1EADB}.lite .st.on i,.lite .st.past i{background:#111}
+.lite .stamp-r{box-shadow:none}
+.flatsc .srcline{color:rgba(242,236,224,.72)}
+/* cabeça grande recortada, contorno branco, tremidinha */
+.headcut{text-align:center}
+.head{width:400px;height:440px;margin:0 auto;border-radius:48% 48% 46% 46%/52% 52% 44% 44%;background:linear-gradient(160deg,#f0c9a0,#c98f63);box-shadow:0 0 0 14px #fff,0 26px 50px rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center}
+.head span{font-family:Rub;font-weight:900;font-size:120px;color:rgba(80,40,20,.55)}
+.tag2{display:inline-block;margin-top:26px;font-family:JBM;font-weight:700;font-size:24px;letter-spacing:2px;color:#111;background:#fff;padding:8px 16px;border-radius:8px}
+.tag2.y{background:#FFD34D}
+.hol{box-shadow:0 0 0 12px #fff,0 22px 44px rgba(0,0,0,.45)}
+.minimap path{fill:rgba(17,17,17,.06);stroke:rgba(17,17,17,.35);stroke-width:.6}
+.minimap path.mba{fill:rgba(216,50,42,.85);stroke:#fff;stroke-width:1.6}
+.minimap path.msc{fill:rgba(36,66,230,.9);stroke:#fff;stroke-width:1.6}
+.minimap .mlb{position:absolute;font-family:Rub;font-weight:900;font-size:34px;white-space:nowrap}
+.tile .tv{white-space:nowrap}
+
+.headimg{height:520px;width:auto;display:block;margin:0 auto;filter:drop-shadow(9px 0 0 #fff) drop-shadow(-9px 0 0 #fff) drop-shadow(0 9px 0 #fff) drop-shadow(0 -9px 0 #fff) drop-shadow(0 22px 34px rgba(0,0,0,.45))}

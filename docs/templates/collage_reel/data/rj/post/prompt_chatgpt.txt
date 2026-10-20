@@ -1,0 +1,125 @@
+Você é um checador de fatos. Abaixo está o roteiro completo de um vídeo curto (Reel) sobre segurança pública no Rio de Janeiro: a FALA (narração) e o que aparece NA TELA em cada cena.
+Instruções:
+- Só cheque fatos: números, datas, nomes, partidos, cargos, decisões judiciais, quem fez o quê.
+- Não procure argumentos para defender nenhum lado e não sugira incluir 'o outro lado'.
+- Responda SÓ o que estiver errado ou impreciso: a frase, o erro, o dado correto e a fonte com link. Não liste o que está certo.
+- 'Governo atual' com o emoji 🦑 é proposital (o nome do presidente atual não aparece).
+- A ideologia dos partidos segue Bolognesi, Ribeiro e Codato (Dados, 2023): MDB 7,01 = direita; PSB e PDT = centro-esquerda; PT = esquerda; DEM = extrema-direita; PR/PL = direita.
+
+=== CENA 1 ===
+FALA: Quatro milhões de pessoas no Rio vivem sob o comando de facções e milícias. E a culpa é da esquerda. Vamos aos fatos.
+NA TELA:
+- RIO DE JANEIRO · SEGURANÇA
+- 4 MILHÕES SOB FACÇÕES E MILÍCIAS
+- E A CULPA É DA ESQUERDA.
+- Vamos aos fatos.
+- 34,9% DA POPULAÇÃO DA REGIÃO METROPOLITANA VIVE SOB DOMÍNIO OU INFLUÊNCIA DE GRUPOS ARMADOS (DADOS DE 2024).
+
+=== CENA 2 ===
+FALA: Primeiro: quem manda na polícia é o governador. A esquerda teve o Rio com Garotinho e Benedita, e com Rosinha só até ela ir para o MDB, ainda em dois mil e três. Contando daí, são vinte e três anos de governos de direita. Lembra dos vinte anos de PT? Pois é. Rosinha, Cabral, Pezão, Witzel e Castro: todos de direita. Seis dos sete foram presos, afastados ou ficaram inelegíveis, dos dois lados. Na capital, nenhum prefeito de esquerda desde noventa e três.
+NA TELA:
+- 01 QUEM MANDA NA POLÍCIA: O GOVERNADOR
+- 1999–2002 PRESO EM 2016–17 GAROTINHO PDT→PSB CENTRO-ESQUERDA 2002 VICE QUE ASSUMIU BENEDITA PT ESQUERDA 2003–2006 PRESA EM 2017 ROSINHA PSB→MDB CENTRO-ESQUERDA DIREITA 2007–2014 PRESO EM 2016 CABRAL PMDB DIREITA 2014–2018 PRESO EM 2018 · ABSOLVIDO PEZÃO MDB DIREITA 2019–2020 AFASTADO E CASSADO WITZEL PSC DIREITA 2020–2026 INELEGÍVEL ATÉ 2030 CASTRO PSC→PL DIREITA
+- 23 ANOS DE DIREITA
+- MDB = 7,01 (DIREITA); ROSINHA NO MDB DESDE AGO/2003. PT TEVE SECRETARIAS COM CABRAL ATÉ 2013; GAROTINHO FOI SECRETÁRIO DE SEGURANÇA DE ROSINHA. ANTES: MARCELLO ALENCAR (PSDB DIREITA ) E BRIZOLA (PDT CENTRO-ESQUERDA ). HOJE: INTERINO RICARDO COUTO (TJ-RJ). PREFEITOS DESDE 1993: DE CENTRO-DIREITA A EXTREMA-DIREITA. POLÍCIAS = ESTADO (CF, ART. 144).
+
+=== CENA 3 ===
+FALA: Agora, a linha inteira, com o Brasil junto. Com Garotinho, as mortes no Rio subiram vinte e seis por cento, mas o Brasil também subia, dezoito. Em dois mil e três veio o Estatuto do Desarmamento, sancionado pelo presidente, e quase meio milhão de armas foram entregues. O país parou de subir. Com Rosinha, a primeira governadora eleita do Rio, o Rio também parou. Com Cabral e as UPPs, caiu rápido, enquanto o Brasil subia: ali o estado fez diferença. Com Pezão, voltou a subir. Em dois mil e dezoito veio a intervenção federal, e depois, com Witzel e Castro, caiu, mas o Brasil inteiro também caía, porque lei, armas e fronteira dependem também do Congresso e da União. Subiu e caiu com os dois lados. E em dois mil e vinte e cinco, o Rio voltou a subir, puxado pelas mortes em ações policiais, enquanto o Brasil chegou à menor taxa da série.
+NA TELA:
+- 02 A LINHA INTEIRA · 1998–2025
+- ESQUERDA DIREITA BRASIL
+- 23 ANOS DE GOVERNOS DE DIREITA DESDE 2003 · MDB = DIREITA
+- 3.000 5.000 7.000 9.000 11.000 1998 2006 2014 2022 ESTATUTO DO DESARMAMENTO UPPs INTERVENÇÃO FEDERAL GAROTINHO +26% BRASIL +18% ROSINHA −5% CABRAL −24% PEZÃO +17% WITZEL/CASTRO −33% 2025 +2,1%
+- + AJUDA FEDERAL: ESTATUTO DO DESARMAMENTO , 2003, sancionado pelo presidente 🦑 · 464 mil armas entregues
+- SUBIU E CAIU COM OS DOIS LADOS.
+- % = FIM DO MANDATO × ANO ANTES DA POSSE (GAROTINHO INCLUI BENEDITA, PT, 9 MESES). 2025: RIO +2,1% (POLÍCIA +13%), BRASIL −8,2%. BRASIL = HOMICÍDIOS (SIM) NA ESCALA DO RIO.
+
+=== CENA 4 ===
+FALA: Por isso, compare com os vizinhos, na mesma linha do tempo. O Espírito Santo era o pior do Sudeste em dois mil e treze e caiu pela metade, com centro-esquerda e com direita. Minas caiu no fim do governo do PT, como o país, e seguiu caindo mais devagar com o Novo. São Paulo, sempre com a direita, é o mais baixo. E o Rio, também sempre com a direita, caiu menos e hoje divide o topo com o Espírito Santo. Ou seja: partido sozinho não decide. E no Rio, governado pela direita há vinte e três anos, fica difícil pôr a culpa na esquerda.
+NA TELA:
+- 03 SUDESTE · MORTES VIOLENTAS POR 100 MIL
+- ESQUERDA DIREITA UM TOM POR ESTADO
+- 0 15 30 45 2013 2016 2019 2022 2025 RIO 22,6 PL ES 22,0 PSB MINAS 12,9 NOVO SP 7,8 REPUBLICANOS
+- PARTIDO SOZINHO NÃO DECIDE.
+- ES: CASAGRANDE (PSB CENTRO-ESQUERDA ) 2013–14 E 2019–25, HARTUNG (MDB DIREITA ) 2015–18: CAIU NOS DOIS. MG: PIMENTEL (PT ESQUERDA ) 2015–18, ZEMA (NOVO DIREITA ) 2019–25. SP: PSDB E REPUBLICANOS ( DIREITA ); FRANÇA (PSB CENTRO-ESQUERDA ) 9 MESES EM 2018. O “ESQUERDA 23,4 × DIREITA 14,8” (OESTE/PODER360) USA A MÉDIA DO PAÍS E TIRA AS MORTES PELA POLÍCIA. MESMO PARTIDO, OUTRO RESULTADO: SC (PL) 7,6 × RIO (PL) 22,6.
+
+=== CENA 5 ===
+FALA: O primeiro problema é território. Quatro milhões de pessoas da região metropolitana vivem sob grupos armados: o tráfico e as milícias, grupos formados por policiais e ex-policiais que cobram taxa de segurança e controlam gás, transporte e internet. A milícia ainda domina quase metade da área, mas recua desde dois mil e vinte: perdeu os chefes, um morto pela Polícia Civil do estado e outro que se entregou à Polícia Federal, e os grupos passaram a brigar entre si. O Comando Vermelho ocupou o espaço e cresce.
+NA TELA:
+- 04 PROBLEMA 1 · TERRITÓRIO
+- da região metropolitana vive sob grupos armados, tráfico e milícia: cerca de 4 milhões de pessoas.
+- MILÍCIA POLICIAIS E EX-POLICIAIS QUE COBRAM TAXA E CONTROLAM GÁS, VAN E INTERNET QUASE METADE DA ÁREA · RECUA DESDE 2020 COMANDO VERMELHO OCUPA O ESPAÇO · MAIOR POPULAÇÃO DOMINADA
+- POLICIAIS E EX-POLICIAIS GÁS TRANSPORTE INTERNET
+- QUEM CUIDA: POLICIAMENTO E INVESTIGAÇÃO = ESTADO. FRONTEIRA, PORTOS, ARMAS E LAVAGEM = UNIÃO (PF).
+- POR QUE RECUA: ECKO, CHEFE DA MAIOR MILÍCIA, MORTO PELA POLÍCIA CIVIL DO RIO (2021, GOVERNO CASTRO, PL DIREITA ). O IRMÃO, ZINHO, SE ENTREGOU À PF (DEZ/2023, GOVERNO ATUAL 🦑) APÓS OPERAÇÃO NA CASA DA DEPUTADA LUCINHA (PSD DIREITA ). DEPOIS, BRIGA PELA HERANÇA.
+
+=== CENA 6 ===
+FALA: O segundo é a política. A milícia nasceu com policiais e cresceu com apoio de políticos: a CPI da Alerj pediu o indiciamento de mais de duzentas pessoas. Na época, Jair Bolsonaro disse que o governo deveria apoiar as milícias, e Flávio Bolsonaro, que não se podia estigmatizá-las. Flávio deu medalha a Adriano da Nóbrega, depois apontado como chefe do Escritório do Crime, e empregou a mãe e a ex-mulher dele. E, em dois mil e vinte e quatro, como advogado, Flávio recorreu para tirar do júri o policial acusado de matar Ana Clara, de cinco anos, em Niterói. O policial já tinha sido condenado por outro homicídio. Os dois negam ligação com a milícia.
+NA TELA:
+- 05 PROBLEMA 2 · MILÍCIA E POLÍTICA
+- NATALINO DEM EXTREMA-DIREITA JEROMINHO PMDB DIREITA JAIR HOJE PL DIREITA FLÁVIO PL DIREITA
+- FLÁVIO PL DIREITA ADRIANO
+- CPI DAS MILÍCIAS · ALERJ, 2008 · +200 INDICIAMENTOS PEDIDOS Entre eles, 5 parlamentares da época: Natalino · deputado estadual · DEM EXTREMA-DIREITA Jerominho · vereador · PMDB DIREITA Nadinho · vereador · DEM EXTREMA-DIREITA Deco · vereador · PR DIREITA Geiso · vereador (São Gonçalo) · PDT CENTRO-ESQUERDA JAIR E FLÁVIO BOLSONARO · HOJE PL DIREITA · 2007–2008 Jair: “o governo deveria apoiá-las”. Flávio: “não se pode estigmatizar as milícias”.
+- FLÁVIO BOLSONARO · PL DIREITA · 2005, MEDALHA TIRADENTES Para Adriano da Nóbrega, preso na época por homicídio e depois apontado como chefe do Escritório do Crime. A mulher dele trabalhou 11 anos no gabinete de Flávio (2007–2018), e a mãe, 2 anos (2016–2018). FLÁVIO BOLSONARO · 2024, COMO ADVOGADO Recurso ao STJ para tirar do júri o PM acusado de matar Ana Clara, 5 anos (Niterói, 2021). O PM já tinha sido condenado em 1ª instância pela morte de um motociclista (2014). Recurso negado.
+- OS DOIS NEGAM LIGAÇÃO COM A MILÍCIA. RACHADINHAS: PROVAS ANULADAS. ANA CLARA: SEM ACUSAÇÃO DE MILÍCIA; JÚRI NÃO FEITO. A CPI TAMBÉM CITOU JORGE BABU (PT ESQUERDA ), CONDENADO E EXPULSO DO PT. CHIQUINHO BRAZÃO FOI SECRETÁRIO DE PAES (PSD DIREITA ) , BASE DO GOVERNO ATUAL 🦑, ATÉ 2024.
+
+=== CENA 7 ===
+FALA: O crime também chegou ao poder: o presidente da Alerj, aliado de Castro, foi preso suspeito de avisar um deputado alvo de operação contra o Comando Vermelho. Em dois mil e vinte e três, segundo a PF, Robson Calixto, o Peixe, homem de confiança de Domingos Brazão, pediu uma emenda ao gabinete de Flávio Bolsonaro, para uma ONG ligada aos Brazão, e o dinheiro saiu. E o Supremo condenou os irmãos Brazão como mandantes da morte de Marielle, e o Peixe por organização criminosa. Todos negam.
+NA TELA:
+- 06 O CRIME CHEGOU AO PODER
+- RODRIGO BACELLAR · UNIÃO DIREITA · PRESIDENTE DA ALERJ Aliado de Castro, preso pela PF, suspeito de avisar um deputado alvo de operação contra o Comando Vermelho. EMENDA DE FLÁVIO BOLSONARO · PL DIREITA · 2023 Robson Calixto, o Peixe, homem de confiança de Domingos Brazão: “vê com o nosso senador”. R$ 199,9 mil para ONG ligada aos Brazão. CASO MARIELLE · STF, FEV/2026 Irmãos Brazão condenados como mandantes; o Peixe, por organização criminosa armada.
+- BACELLAR UNIÃO DIREITA DOMINGOS EX-MDB DIREITA FLÁVIO PL DIREITA CHIQUINHO EX-UNIÃO DIREITA
+- TODOS NEGAM; O GABINETE DE FLÁVIO DIZ QUE A EMENDA SEGUIU A LEI, E O PSOL PEDIU INVESTIGAÇÃO À PGR. OS BRAZÃO, EX-MDB DIREITA E EX-UNIÃO DIREITA , TINHAM ALIADOS DOS DOIS LADOS: DOMINGOS FEZ CAMPANHA PARA DILMA (PT ESQUERDA ) EM 2014, CHIQUINHO PARA BOLSONARO (PL DIREITA ) EM 2022. O CHEFE DA POLÍCIA CIVIL NOMEADO NA INTERVENÇÃO DE TEMER (MDB DIREITA ) PEGOU 18 ANOS POR ATRAPALHAR A INVESTIGAÇÃO. TAMBÉM PRESO: ALLAN TURNOWSKI, EX-CHEFE DA POLÍCIA CIVIL DE CASTRO (2022).
+
+=== CENA 8 ===
+FALA: O terceiro problema é a polícia. As mortes em ações policiais chegaram a mil oitocentas e catorze em dois mil e dezenove, três em cada dez mortes violentas. Caíram com as regras do Supremo e voltaram a subir em dois mil e vinte e cinco, com a operação mais letal da história. E o próprio Ministério Público do Rio concluiu que mais mortes pela polícia não trouxeram menos homicídios.
+NA TELA:
+- 07 PROBLEMA 3 · A POLÍCIA
+- 0 500 1.000 1.500 2.000 2013 2019 2025 INTERV. STF 1.814 798 1.814 798 1.814 798 AÇÕES POLICIAIS · RJ MORTES POR ANO
+- 2019: 3 EM CADA 10 MORTES VIOLENTAS
+- MP-RJ: mais mortes pela polícia não trouxeram menos homicídios.
+- AS 6 OPERAÇÕES MAIS LETAIS DESDE 2007 FORAM NO GOVERNO CASTRO (PL DIREITA ). “O STF PROIBIU OPERAÇÕES” É DISTORCIDO (AOS FATOS): EM ABR/2025 DERRUBOU AS RESTRIÇÕES, E A OPERAÇÃO MAIS LETAL VEIO DEPOIS. MP-RJ (CENPE, 2019). 91% DOS INQUÉRITOS DESSAS MORTES ARQUIVADOS (2011–21, FÓRUM JUSTIÇA/CESEC).
+
+=== CENA 9 ===
+FALA: E ela não resolveu: nenhum dos sessenta e nove alvos da lista morreu, e o principal chefe fugiu.
+NA TELA:
+- 08 OPERAÇÃO CONTENÇÃO · 28/10/2025
+- NÃO RESOLVEU.
+- ALVOS DA LISTA NENHUM DOS 69 ENTRE AS MORTES CHEFE PRINCIPAL FUGIU BALANÇO OFICIAL POLÍCIA CIVIL-RJ 99 PRESOS · 91 FUZIS
+- 121 MORTES PELA CONTA DO GOVERNO CASTRO (PL DIREITA ), 132 PELA DEFENSORIA, QUE VÊ INDÍCIOS DE ILEGALIDADE. O GOVERNO DIZ QUE 108 DOS 115 IDENTIFICADOS TINHAM VÍNCULO COM O CV E QUE 4 POLICIAIS MORRERAM. 55% A 70% DOS CARIOCAS APOIARAM.
+
+=== CENA 10 ===
+FALA: E tem medida que incentiva o confronto, e medida que tenta frear. Witzel tirou as mortes por policiais da conta do bônus das polícias, no ano do recorde. O governo Bolsonaro revogou regras de rastreio de munição, e o Supremo suspendeu. Em dois mil e vinte e quatro, o governo atual criou regras nacionais de câmera na farda e de uso da força, e Castro assinou a nota de governadores que pediu a revogação. Em dois mil e vinte e cinco, deputados do PL recriaram a gratificação faroeste: Castro vetou, e a Alerj derrubou o veto. E o projeto que tira a marcação das balas das polícias, que Flávio chamou de detalhezinho, está parado no Senado.
+NA TELA:
+- 09 O QUE INCENTIVA E O QUE FREIA O CONFRONTO
+- 2019 · WITZEL · PSC DIREITA Mortes por policiais saem da conta do bônus das polícias. No mesmo ano: recorde de 1.814. 2020 · GOVERNO BOLSONARO · DIREITA Revoga regras de rastreio de munição. O STF suspendeu em 2021. 2024 · GOVERNO ATUAL 🦑 · ESQUERDA Regras nacionais de câmera na farda e de uso da força. Castro assinou a nota que pediu a revogação. 2025 · DEPUTADOS DO PL DIREITA Volta a gratificação faroeste. Castro vetou, mas a Alerj derrubou o veto do governador. PROJETO DAS BALAS · PL 3.723/2019 Tira a marcação das balas usadas pelas polícias. Está parado no Senado.
+- WITZEL PSC DIREITA BOLSONARO PL DIREITA CASTRO PL DIREITA FLÁVIO PL DIREITA
+- A FAROESTE DOS ANOS 1990 (MARCELLO ALENCAR, PSDB DIREITA ) DOBROU OS MORTOS POR FERIDO EM CONFRONTO. PL 3.723: ENVIADO PELO GOVERNO BOLSONARO. A GUARDA DE PAES (PSD DIREITA ) GANHA GRATIFICAÇÃO POR PORTAR ARMA, NÃO POR MORTE. CÂMERAS NAS FARDAS: 2022, POR ORDEM DO STF.
+
+=== CENA 11 ===
+FALA: O quarto é investigação: só vinte e três por cento dos homicídios do Rio são esclarecidos, contra trinta e seis no Brasil. E investigar é trabalho do estado.
+NA TELA:
+- 10 PROBLEMA 4 · INVESTIGAÇÃO
+- dos homicídios do Rio são esclarecidos. Investigar é trabalho do estado (Polícia Civil).
+- RIO 23% SÃO PAULO 31% BRASIL 36%
+
+=== CENA 12 ===
+FALA: E o governo federal? Porto, fronteira, armas e Polícia Federal são da União. Segundo o Ministério da Justiça, o dinheiro foi mandado e o Rio deixou cento e setenta e quatro milhões parados. Os blindados foram negados porque exigem uma GLO, que o estado não pediu desta vez. O governo atual mantém a Força Nacional no Rio desde dois mil e vinte e três e cortou a compra de armas por atiradores, mas também cortou verba da segurança.
+NA TELA:
+- 11 E O GOVERNO FEDERAL?
+- É DA UNIÃO FRONTEIRA, PORTO, ARMAS, PF, FUNDOS
+- ENVIADO FUNDO NACIONAL, DESDE 2019 R$ 288 MI PARADO NA CONTA COM RENDIMENTOS (MJSP) R$ 174 MI
+- Blindados: negados porque a lei exige GLO, que o estado não pediu desta vez.
+- CRÉDITO GOVERNO ATUAL 🦑 FORÇA NACIONAL NO RIO DESDE 2023 CRÉDITO 448 MIL → 40 MIL · 2022–24 COMPRA DE ARMAS POR ATIRADORES CAIU 91% CONTA ~R$ 500 MI CONTINGENCIADOS CORTOU VERBA DA SEGURANÇA
+- GLO: O GOVERNO ATUAL DECRETOU NOS PORTOS (2023) E NO BRICS (2025, A PEDIDO DE CASTRO, PL DIREITA ). “GOVERNADOR NÃO PODE PEDIR GLO” É FALSO (AOS FATOS). O RIO GASTA R$ 17 BI/ANO EM SEGURANÇA (FBSP). LEI ANTIFACÇÃO SANCIONADA PELO PRESIDENTE.
+
+=== CENA 13 ===
+FALA: Resumindo: não é culpa de um lado só. É uma combinação de facções e milícias que existem há décadas, armas e drogas que entram por fronteiras e portos, que são da União, e escolhas de cada governador sobre a polícia. A prefeitura cuida da guarda e da ordem urbana. Há vinte e três anos, o Rio é governado pela direita. A violência caiu nesse tempo, mas o Rio segue entre os piores do Sudeste, e a culpa ainda vai para a esquerda, que não governa o estado desde dois mil e três. Quem governa leva o crédito do que melhora e a conta do que piora. E o governador eleito é do mesmo grupo. O que você cobraria dele?
+NA TELA:
+- RESUMINDO
+- NÃO É CULPA DE UM LADO SÓ.
+- HÁ DÉCADAS FACÇÕES E MILÍCIAS É DA UNIÃO FRONTEIRAS E PORTOS POR ONDE ENTRAM ARMAS E DROGAS É DO ESTADO AS ESCOLHAS SOBRE A POLÍCIA É DA PREFEITURA GUARDA E ORDEM URBANA
+- A VIOLÊNCIA CAIU, MAS O RIO SEGUE ENTRE OS PIORES DO SUDESTE. QUEM GOVERNA LEVA O CRÉDITO DO QUE MELHORA E A CONTA DO QUE PIORA.
+- 23 ANOS DE DIREITA. E A CULPA É DA ESQUERDA?
+- O QUE VOCÊ COBRARIA DO GOVERNADOR ELEITO? Douglas Ruas · PL DIREITA · posse em 06/01/2027
+- DESDE AGO/2003 (ROSINHA NO MDB), O RIO É GOVERNADO PELA DIREITA (MDB = DIREITA NA ESCALA, 7,01). RUAS FOI ELEITO NO 1º TURNO DEPOIS QUE O TSE ANULOU OS VOTOS DE GAROTINHO; É DO GRUPO DE CASTRO (PL) E BACELLAR (UNIÃO), AMBOS DIREITA , SEGUNDO A IMPRENSA.

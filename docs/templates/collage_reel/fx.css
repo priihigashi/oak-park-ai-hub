@@ -1,0 +1,37 @@
+/* fx.css — estilos do repertório extra (usar junto com fx.js) */
+@font-face{font-family:Grot;font-weight:900;src:url(assets/inter-tight-latin-900-normal.woff2)}
+@font-face{font-family:Grot;font-weight:800;src:url(assets/inter-tight-latin-800-normal.woff2)}
+@font-face{font-family:Cap;font-weight:800;font-style:italic;src:url(assets/inter-latin-800-italic.woff2)}
+@font-face{font-family:Bebas;src:url(assets/bebas-neue-latin-400-normal.woff2)}
+/* palavra única gigante com ponto final ("FATO.") */
+.grot{font-family:Grot;font-weight:900;letter-spacing:-.045em;line-height:.86;text-transform:uppercase}
+.bebas{font-family:Bebas;line-height:.95;letter-spacing:.5px;text-transform:uppercase}
+/* legenda karaokê */
+.kar{font-family:Cap;font-weight:800;font-style:italic;font-size:46px;line-height:1.18;text-align:center;color:var(--kar-lit,#F2D21B);
+     text-shadow:0 3px 10px rgba(0,0,0,.55)}
+.kar span{transition:none;color:var(--kar-dim,rgba(242,210,27,.45))}
+.kar span.kar-lit{color:var(--kar-lit,#F2D21B)}
+.kar span.kar-now{color:var(--kar-dim,rgba(242,210,27,.45))}
+/* palavra empilhada */
+.stack{font-family:Grot;font-weight:900;letter-spacing:-.045em;line-height:.8;text-transform:uppercase;color:#fff}
+.stack .row{white-space:nowrap}
+/* knockout */
+.knock{mix-blend-mode:difference;color:#fff}
+/* balão estrelado */
+.burst{display:flex;align-items:center;justify-content:center;text-align:center;color:#111;font-family:Bebas;padding:12%}
+.burst>.burst-bg{position:absolute;inset:0;z-index:-1}
+.burst{isolation:isolate}
+/* papel rasgado */
+.torn{background:#efece4;color:#111;font-family:Bebas;letter-spacing:1px;display:flex;align-items:center;justify-content:center;
+      box-shadow:0 -4px 0 rgba(0,0,0,.08) inset}
+/* cartão de manchete web (print de site, refeito por nós) */
+.webcard{background:#fff;color:#111;font-family:Grot;font-weight:800;box-shadow:0 18px 40px rgba(0,0,0,.45)}
+.webcard .wbar{height:14px;width:auto;background:var(--red,#C8352B)}
+.webcard .src{font-family:JBM;font-size:22px;color:#666;padding:14px 26px 0}
+.webcard .hd{font-size:46px;line-height:1.08;padding:10px 26px 26px;letter-spacing:-.01em}
+/* VHS */
+.fx-vhs{position:absolute;left:0;right:0;height:6px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.9) 20%,rgba(255,255,255,.6) 80%,transparent);
+        filter:blur(1px);z-index:40;pointer-events:none}
+.scene[data-vhs]::after{background:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 2px,transparent 2px 4px),radial-gradient(ellipse at 50% 45%,transparent 55%,rgba(0,0,0,.35))}
+/* silhueta: qualquer PNG/SVG vira forma chapada */
+.sil{filter:brightness(0) invert(1)}

@@ -1,0 +1,37 @@
+{
+ "_doc": "Velocidade (atempo) sobre a voz ORIGINAL de cada cena; build.py reaplica ao trocar a voz e encurta pausas internas (>0,18 s vira 0,10 s). Gráficos de leitura 1,12x; cenas leves 1,22x; gancho 1,35x. tails: segundos de tela parada depois da voz, por cena (padrão 0,4). ATENÇÃO (ela, 19/out/2026): todas as cenas ganharam +0,2 de velocidade. Quando trocar para a voz final (ElevenLabs), manter o mesmo ritmo acelerado: comparar a duração por cena com a voz provisória e acelerar a voz nova até bater (ou somar +0,2 ao ritmo natural dela).",
+ "speeds": {
+  "v01": 1.65,
+  "v02": 1.52,
+  "v03": 1.32,
+  "v04": 1.38,
+  "v05": 1.42,
+  "v06": 1.52,
+  "v07": 1.52,
+  "v09": 1.52,
+  "v10": 1.5,
+  "v11": 1.52,
+  "v12": 1.52,
+  "v13": 1.5,
+  "v15": 1.52,
+  "v11b": 1.52
+ },
+ "order": [
+  "v01",
+  "v02",
+  "v04",
+  "v05",
+  "v06",
+  "v07",
+  "v09",
+  "v10",
+  "v11",
+  "v11b",
+  "v12",
+  "v13",
+  "v15"
+ ],
+ "tails": {
+  "v03": 1.4
+ }
+}

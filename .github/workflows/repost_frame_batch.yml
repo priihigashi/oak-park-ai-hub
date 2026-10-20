@@ -1,0 +1,88 @@
+name: Repost frame batch (moldura de vidro em vários vídeos/imagens)
+# Push de docs/templates/repost/frame_batch/<slug>.json → baixa cada arquivo do Drive, põe a moldura de vidro
+# (proporção do original), transcreve os vídeos e sobe pro Drive News › Reels_Shorts › v<N>_<slug>/{motion,png,resources}.
+# Prévias + report.json vão num branch tmp-frame-* (apagar depois). Nenhuma mídia de terceiros é commitada.
+on:
+  push:
+    paths: ["docs/templates/repost/frame_batch/*.json"]
+  workflow_dispatch:
+    inputs:
+      batch: { description: "caminho do batch json", required: true }
+permissions:
+  contents: write
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4.2.2
+        with: { fetch-depth: 2 }
+      - uses: actions/setup-python@v5.6.0
+        with: { python-version: "3.11" }
+      - name: Install
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          pip install -q faster-whisper pillow google-api-python-client google-auth
+          cd docs/templates/repost && npm init -y >/dev/null && npm i -s playwright @fontsource-variable/outfit @fontsource-variable/figtree && npx playwright install --with-deps chromium >/dev/null
+          mkdir -p assets && cp node_modules/@fontsource-variable/outfit/files/outfit-latin-wght-normal.woff2 assets/outfit.woff2 && cp node_modules/@fontsource-variable/figtree/files/figtree-latin-wght-normal.woff2 assets/figtree.woff2
+      - name: Pick batch
+        run: |
+          B="${{ github.event.inputs.batch }}"
+          [ -z "$B" ] && B=$(git diff --name-only HEAD~1 HEAD -- 'docs/templates/repost/frame_batch/*.json' | head -1)
+          echo "BATCH=$B" >> $GITHUB_ENV
+      - name: Download from Drive
+        env: { SHEETS_TOKEN: "${{ secrets.SHEETS_TOKEN }}" }
+        run: |
+          python - <<'PY'
+          import os, json, io, urllib.request, urllib.parse
+          from google.oauth2.credentials import Credentials
+          from googleapiclient.discovery import build
+          from googleapiclient.http import MediaIoBaseDownload
+          td=json.loads(os.environ["SHEETS_TOKEN"])
+          r=json.loads(urllib.request.urlopen(urllib.request.Request("https://oauth2.googleapis.com/token",data=urllib.parse.urlencode({"client_id":td["client_id"],"client_secret":td["client_secret"],"refresh_token":td["refresh_token"],"grant_type":"refresh_token"}).encode())).read())
+          d=build("drive","v3",credentials=Credentials(token=r["access_token"]))
+          job=json.load(open(os.environ["BATCH"])); os.makedirs("work/src",exist_ok=True)
+          for it in job["items"]:
+              ext=os.path.splitext(it["name"])[1].lower() or ".bin"
+              p=f"work/src/{it['drive_id']}{ext}"; fh=io.FileIO(p,"wb")
+              dl=MediaIoBaseDownload(fh,d.files().get_media(fileId=it["drive_id"],supportsAllDrives=True),chunksize=32*1024*1024)
+              done=False
+              while not done: _,done=dl.next_chunk()
+              print("ok",it["name"],os.path.getsize(p))
+          PY
+      - name: Render
+        run: python docs/templates/repost/frame_batch/render_frame.py "$BATCH" work
+      - name: Upload to Drive
+        env: { SHEETS_TOKEN: "${{ secrets.SHEETS_TOKEN }}" }
+        run: |
+          python - <<'PY'
+          import os, json, glob, re, urllib.request, urllib.parse
+          from google.oauth2.credentials import Credentials
+          from googleapiclient.discovery import build
+          from googleapiclient.http import MediaFileUpload
+          td=json.loads(os.environ["SHEETS_TOKEN"])
+          r=json.loads(urllib.request.urlopen(urllib.request.Request("https://oauth2.googleapis.com/token",data=urllib.parse.urlencode({"client_id":td["client_id"],"client_secret":td["client_secret"],"refresh_token":td["refresh_token"],"grant_type":"refresh_token"}).encode())).read())
+          d=build("drive","v3",credentials=Credentials(token=r["access_token"]))
+          job=json.load(open(os.environ["BATCH"])); slug=job["slug"]; ROOT="1IY4TJyv9Dk1qJPdhskyn4flj1g1jp0Kl"
+          def ls(q): return d.files().list(q=q,supportsAllDrives=True,includeItemsFromAllDrives=True,fields="files(id,name)").execute()["files"]
+          def mk(n,p): return d.files().create(body={"name":n,"mimeType":"application/vnd.google-apps.folder","parents":[p]},supportsAllDrives=True,fields="id").execute()["id"]
+          ex=ls(f"'{ROOT}' in parents and trashed=false and mimeType='application/vnd.google-apps.folder' and name contains '_{slug}'")
+          vers=sorted(int(m.group(1)) for f in ex for m in [re.match(rf"v(\d+)_{re.escape(slug)}$",f["name"])] if m)
+          name=f"v{(vers[-1]+1) if vers else 1}_{slug}"; vid=mk(name,ROOT)
+          sub={s:mk(s,vid) for s in ("motion","png","resources")}
+          rep=json.load(open("work/out/report.json")); ids={}
+          for p in sorted(glob.glob("work/out/*")):
+              n=os.path.basename(p)
+              tgt=sub["motion"] if n.endswith(".mp4") else sub["png"] if n.endswith("_frame.png") else sub["resources"]
+              o=d.files().create(body={"name":n,"parents":[tgt]},media_body=MediaFileUpload(p,resumable=True,chunksize=32*1024*1024),supportsAllDrives=True,fields="id,name,size").execute(num_retries=5)
+              ids[n]=o["id"]; print("UP",o)
+          for x in rep: x["out_drive_id"]=ids.get(x.get("out"))
+          json.dump({"version_folder":vid,"name":name,"subfolders":sub,"items":rep},open("work/out/drive.json","w"),ensure_ascii=False,indent=1)
+          PY
+      - name: Report branch
+        run: |
+          B="tmp-frame-${{ github.run_id }}"
+          mkdir -p /tmp/rep && cp work/out/*.jpg work/out/*.json /tmp/rep/ 2>/dev/null || true
+          git config user.name "repost-bot"; git config user.email "repost-bot@users.noreply.github.com"
+          git checkout --orphan "$B"; git rm -rq --cached . ; rm -rf ./* .github 2>/dev/null || true
+          cp /tmp/rep/* . ; git add -A; git commit -qm "frame report ${{ github.run_id }}"; git push -q origin "$B"

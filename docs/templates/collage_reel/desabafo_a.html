@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<title>Desabafo vira mural — versão A</title>
+<link rel="stylesheet" href="fx.css">
+<style>
+@font-face{font-family:Anton;src:url(assets/anton-latin-400-normal.woff2)}
+@font-face{font-family:Fraunces;font-weight:900;src:url(assets/fraunces-latin-900-normal.woff2)}
+@font-face{font-family:Fraunces;font-weight:700;font-style:italic;src:url(assets/fraunces-latin-700-italic.woff2)}
+@font-face{font-family:JBM;font-weight:500;src:url(assets/jetbrains-mono-latin-500-normal.woff2)}
+@font-face{font-family:JBM;font-weight:700;src:url(assets/jetbrains-mono-latin-700-normal.woff2)}
+:root{--ink:#0E0D0B;--paper:#F2ECE0;--gold:#C9A84C;--red:#C8352B;--slate:#3B5470;--true:#2E8B57}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:#00873E}
+.scene{position:absolute;inset:0;display:none;overflow:hidden}
+.scene::before{content:"";position:absolute;inset:0;background:url(assets/fibers.png);opacity:.22;mix-blend-mode:multiply;pointer-events:none}
+#grain{position:absolute;inset:-40px;background:url(assets/grain.png);opacity:.18;mix-blend-mode:overlay;pointer-events:none;z-index:50}
+#vig{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,transparent 50%,rgba(0,0,0,.4));pointer-events:none;z-index:49}
+#field{position:absolute;inset:0;overflow:hidden;z-index:0}
+.scene{z-index:2}
+#lines{position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 3px,transparent 3px 9px);mix-blend-mode:multiply;pointer-events:none}
+.stk{position:absolute}
+.stk .cut{position:relative;filter:drop-shadow(9px 0 0 #fbf8f0) drop-shadow(-9px 0 0 #fbf8f0) drop-shadow(0 9px 0 #fbf8f0) drop-shadow(0 -9px 0 #fbf8f0) drop-shadow(1px 1px 0 rgba(0,0,0,.12)) drop-shadow(0 22px 22px rgba(0,30,10,.45)) drop-shadow(0 4px 4px rgba(0,0,0,.25))}
+.stk img{filter:saturate(.82) contrast(1.06)}
+.stk img{width:100%;display:block}
+.stk .lb{position:absolute;left:50%;bottom:30px;transform:translateX(-50%) rotate(-4deg);white-space:nowrap;background:var(--ink);color:#FFDF00;font:700 21px JBM;letter-spacing:2px;padding:8px 14px 7px;border:3px solid #fbf8f0;box-shadow:0 10px 14px rgba(0,0,0,.35)}
+.tk{position:absolute;white-space:nowrap;font:700 30px JBM;letter-spacing:4px;color:var(--gold);opacity:.35}
+.el{position:absolute;will-change:transform}
+.anton{font-family:Anton;line-height:.92;text-transform:uppercase}
+.fr{font-family:Fraunces;font-weight:900;line-height:.98}
+.it{font-family:Fraunces;font-style:italic;font-weight:700;line-height:1.16}
+.mono{font-family:JBM;font-weight:500}
+#card{position:absolute;left:60px;top:300px;width:960px;transform-origin:0 0}
+.paper{background:#f7f3ea;color:var(--ink);padding:44px 50px 48px;box-shadow:14px 18px 0 rgba(0,0,0,.3)}
+.paper .mast{font:700 22px JBM;letter-spacing:3px;display:flex;justify-content:space-between;border-bottom:3px solid var(--ink);padding-bottom:12px;margin-bottom:22px}
+.tape{position:absolute;width:180px;height:54px;background:rgba(232,220,180,.85);box-shadow:0 2px 4px rgba(0,0,0,.15)}
+.ln{position:relative;font-size:41px;margin-bottom:14px}
+.ln b{font-family:Fraunces;font-weight:900;font-style:normal}
+.hl{background:linear-gradient(transparent 55%,rgba(201,168,76,.7) 55%)}
+.myth{background:var(--red);color:var(--paper);font-family:Anton;text-transform:uppercase;font-size:50px;padding:10px 22px 6px;box-shadow:8px 10px 0 rgba(0,0,0,.3)}
+.myth:before{content:"“";font-family:Fraunces;font-weight:900;margin-right:6px}
+.deb{background:var(--paper);color:var(--ink);padding:22px 26px 18px;box-shadow:10px 12px 0 rgba(0,0,0,.3)}
+.deb .k{font-family:Anton;font-size:46px;line-height:1;text-transform:uppercase}
+.deb .it{font-size:31px;margin-top:8px}
+.deb .src{font:500 18px JBM;opacity:.75;margin-top:10px;letter-spacing:.5px}
+.stp{border:9px solid currentColor;font-family:Anton;padding:4px 20px 0;border-radius:10px;font-size:52px;line-height:1.1;mix-blend-mode:multiply}
+#foot{position:absolute;left:0;right:0;top:1748px;text-align:center;font:500 26px JBM;letter-spacing:2px;z-index:60;color:var(--paper);opacity:.85}
+</style></head>
+<body><div id="stage">
+<div id="field"></div><div id="lines"></div>
+
+<!-- S1 desabafo + mural --------------------------------->
+<section class="scene" data-s="0" data-e="48" data-in="cut" data-theme="dark">
+ <div id="card"><div class="paper">
+  <div class="mast"><span>DESABAFO · COMENTÁRIO</span><span>OUT/2026</span></div>
+  <div class="el ln it" data-a="up" data-t=".3" data-d=".35" style="position:relative"><b>Por isso não voto em quem tem proposta pra um grupo só.</b></div>
+  <div class="el ln it" data-a="up" data-t=".9" data-d=".35" style="position:relative">Discordo de como eles acham que vão combater a desigualdade.</div>
+  <div class="el ln it" data-a="up" data-t="1.5" data-d=".35" style="position:relative">E não aceito que o Brasil tá assim por causa de <span class="hl">13 anos de esquerda.</span> Depois vieram 6 de direita e centro-direita, e mais 4.</div>
+  <div class="el ln it" data-a="up" data-t="2.2" data-d=".35" style="position:relative">E o Congresso? Sempre uns <span class="hl">60%</span> de centro à direita. Agora, <span class="hl">75%.</span></div>
+  <div class="el ln it" data-a="up" data-t="2.9" data-d=".35" style="position:relative">Vcs não tão trazendo mudança. Tão votando do mesmo jeito, só que com mais força.</div>
+  <div class="el ln it" data-a="up" data-t="3.6" data-d=".35" style="position:relative">Esse Congresso derrubou uma presidente. Só aí dá pra ver o poder que tem.</div>
+  <div class="el ln" data-a="slam" data-t="4.4" data-d=".3" style="position:relative;font-family:Anton;font-size:62px;line-height:1;text-transform:uppercase;margin:6px 0 16px">Presidente com 75% do Congresso do lado <span style="color:var(--red)">não é presidente. É rei.</span></div>
+  <div class="el ln it" data-a="up" data-t="5.2" data-d=".35" style="position:relative;margin-bottom:0">Brasil soberano é equilíbrio. Não um lado só mandando, sem contraponto.</div>
+ </div>
+ <div class="tape" style="left:-36px;top:-18px;transform:rotate(-22deg)"></div>
+ <div class="tape" style="right:-36px;top:-12px;transform:rotate(17deg)"></div></div>
+
+ <!-- P1 -->
+ <div class="el myth" data-a="slam" data-t="22.0" data-d=".3" data-r="-2" style="left:480px;top:290px;font-size:44px">É só se esforçar.</div>
+ <div class="el deb" data-a="glitch" data-t="23.1" data-d=".45" data-r="1" style="left:470px;top:385px;width:560px">
+  <div class="k">Sair da base leva <span style="color:var(--red)">9 gerações</span> no Brasil.</div>
+  <div class="it">Não é falta de capacidade: fome na infância, estresse, escola fraca, nenhuma rede.</div>
+  <div class="src">OCDE · A Broken Social Elevator? · 2018</div></div>
+ <!-- P2 -->
+ <div class="el myth" data-a="slam" data-t="26.6" data-d=".3" data-r="1.5" style="left:60px;top:830px">Nórdico é socialismo.</div>
+ <div class="el deb" data-a="left" data-t="27.6" data-d=".35" data-r="-1" style="left:90px;top:925px;width:930px">
+  <div class="k">É capitalismo com <span style="color:var(--slate)">Estado forte.</span></div>
+  <div class="it">Saúde, escola e renda mínima pra todo mundo. Chama social-democracia.</div>
+  <div class="src">Noruega · Suécia · Dinamarca · economias de mercado</div></div>
+ <!-- P3 -->
+ <div class="el myth" data-a="slam" data-t="31.2" data-d=".3" data-r="-2" style="left:50px;top:1150px;font-size:42px">Mais pena resolve.</div>
+ <div class="el deb" data-a="dissolve" data-t="32.2" data-d=".45" data-r="1.2" style="left:50px;top:1235px;width:480px">
+  <div class="k" style="font-size:38px">Cadeia cheia. Crime não caiu junto.</div>
+  <div class="it" style="font-size:27px">Na Noruega, foco em reabilitação: só ~20% voltam ao crime em 2 anos.</div>
+  <div class="src">SENAPPEN · World Prison Brief · Kristoffersen 2010</div></div>
+ <!-- P4 -->
+ <div class="el myth" data-a="slam" data-t="35.6" data-d=".3" data-r="2" style="left:560px;top:1150px;font-size:40px">Já tentaram reduzir!</div>
+ <div class="el deb" data-a="scatter" data-t="36.6" data-d=".55" data-r="-1.2" style="left:555px;top:1235px;width:480px">
+  <div class="k" style="font-size:38px">PEC 171 não era pra todo crime.</div>
+  <div class="it" style="font-size:27px">16 anos só p/ hediondo, homicídio e lesão seguida de morte. Parou no Senado.</div>
+  <div class="src">Câmara dos Deputados · PEC 171/1993 · 2015</div></div>
+ <!-- P5 -->
+ <div class="el myth" data-a="slam" data-t="40.2" data-d=".3" data-r="-1.5" style="left:60px;top:1500px">Bolsa Família vicia.</div>
+ <div class="el deb" data-a="glitch" data-t="41.2" data-d=".45" data-r=".8" style="left:120px;top:1590px;width:900px;padding:16px 24px 12px">
+  <div class="k" style="font-size:40px">Arrumou emprego? <span style="color:var(--true)">Não perde na hora.</span></div>
+  <div class="src">MDS · Regra de Proteção do Bolsa Família</div></div>
+ <div class="el stp" data-a="stamp" data-t="44.6" data-d=".3" data-r="-12" style="left:690px;top:1445px;color:var(--red);background:rgba(242,236,224,.85)">CONTRAPONTO</div>
+</section>
+
+<!-- S2 fecho ------------------------------------------>
+<section class="scene" data-s="48" data-e="56" data-in="glitch" data-theme="dark" style="background:rgba(14,13,11,.86)">
+ <div class="el anton" data-a="slam" data-t=".1" data-d=".3" data-shake="1" style="left:60px;top:520px;font-size:120px;color:var(--paper);width:960px">Equilíbrio não é ficar em cima do muro.</div>
+ <div class="el anton" data-a="glitch" data-t="1.4" data-d=".45" style="left:60px;top:1000px;font-size:150px;color:var(--gold);width:960px">É ter contraponto.</div>
+ <div class="el it" data-a="up" data-t="3.0" data-d=".35" style="left:60px;top:1330px;font-size:46px;color:var(--paper);width:960px">E pra você, o que falta no debate? Comenta.</div>
+</section>
+
+<div id="vig"></div><div id="grain"></div>
+<div id="foot">@tentandochegaratevoce</div>
+</div>
+<script>
+window.DUR=56;
+const STK=[['1f48a','FARMÁCIA POPULAR'],['1f3e0','MINHA CASA MINHA VIDA'],['1f372','MERENDA'],['1f3e5','SUS'],['1f68c',''],['1f3f3-fe0f-200d-1f308',''],
+['26ea',''],['1f64f','N. SRA. APARECIDA'],['1f54c',''],['1f54d',''],['2721',''],['262a',''],['1f549',''],['1f1e7-1f1f7',''],['1f4da','ESCOLA PÚBLICA'],
+['1f477',''],['1f9fa','FEIRA'],['1f941',''],['26bd',''],['1f35e',''],['1f33d',''],['1f469-200d-1f373',''],['1f9d1-200d-1f33e','AGRICULTURA FAMILIAR'],
+['1f393','PROUNI'],['1f6d2',''],['1f4ff',''],['2764',''],['1f91d',''],['1f37c',''],['1f9d2','BOLSA FAMÍLIA'],['1f48a',''],['1f1e7-1f1f7',''],['1f3e0',''],['1f64f','']];
+const r=s=>{const x=Math.sin(s*12.9898+78.233)*43758.5453;return x-Math.floor(x)};
+const field=document.getElementById('field'); const items=[];
+STK.forEach(([c,l],i)=>{const d=document.createElement('div');d.className='stk';const w=(120+r(i+1)*110)*1.36;d.style.width=w+'px';
+ const far=i%3==0;d.innerHTML=`<img src="assets/stk/${c}${far?"_b":""}.png" style="width:100%;display:block">`+(l?`<div class="lb">${l}</div>`:'');field.appendChild(d);
+ if(far){d.style.width=(w*.6)+'px';d.style.zIndex=0}else d.style.zIndex=1;items.push({d,x:(i*0.6180339%1)*1000-60,per:(far?26:16)+r(i+9)*10,ph:r(i+3),w,rs:(r(i+5)-.5)*40});});
+const TK=['9 GERAÇÕES · 513 DEPUTADOS · 81 SENADORES · 2003–2016 · 2016–2022 · 2023–2026 · ','PEC 171/1993 · REGRA DE PROTEÇÃO · SUS · FARMÁCIA POPULAR · MINHA CASA MINHA VIDA · ','DESIGUALDADE · CONTRAPONTO · EQUILÍBRIO · SOBERANIA · CONGRESSO · VOTO · '];
+const tks=[];[260,1010,1690].forEach((y,i)=>{const d=document.createElement('div');d.className='tk';d.style.top=y+'px';d.textContent=TK[i].repeat(6);field.appendChild(d);tks.push(d)});
+function bg(T){
+ const st=document.getElementById('stage');
+ st.style.background=T<48?'#00873E':'#0E0D0B';
+ const dim=T<6?1:T<20?.75:T<48?.42:.3; const step=Math.floor(T*12);
+ items.forEach((o,i)=>{const p=((T/o.per)+o.ph)%1;const y=1980-p*2400;const x=o.x+Math.sin(T*.7+i)*30;
+  const j=(r(step*3+i)-.5)*1.6;o.d.style.transform=`translate(${x}px,${y}px) rotate(${o.rs+Math.sin(T*.9+i)*8+j}deg)`;o.d.style.opacity=dim;});
+ tks.forEach((d,i)=>{d.style.transform=`translateX(${-((T*(60+i*35))%1400)-(i%2?0:200)}px)`});
+ // cartão encolhe pro canto aos 20 s
+ const c=document.getElementById('card'); const q=Math.max(0,Math.min(1,(T-20)/1.1)); const e=q<.5?4*q*q*q:1-Math.pow(-2*q+2,3)/2;
+ const sc=1-.58*e; c.style.transform=`translate(${-25*e}px,${-15*e}px) scale(${sc}) rotate(${-3*e}deg)`;
+}
+</script>
+<script src="fx.js"></script>
+<script src="engine.js"></script>
+<script>const _r=window.render;window.render=function(T){bg(T);_r(T)};render(0);</script>
+</body></html>

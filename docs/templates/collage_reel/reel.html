@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<title>Comida subiu mais com o Lula? — colagem v1</title>
+<style>
+@font-face{font-family:Anton;src:url(assets/anton-latin-400-normal.woff2)}
+@font-face{font-family:Fraunces;font-weight:900;src:url(assets/fraunces-latin-900-normal.woff2)}
+@font-face{font-family:Fraunces;font-weight:700;font-style:italic;src:url(assets/fraunces-latin-700-italic.woff2)}
+@font-face{font-family:JBM;font-weight:500;src:url(assets/jetbrains-mono-latin-500-normal.woff2)}
+@font-face{font-family:JBM;font-weight:700;src:url(assets/jetbrains-mono-latin-700-normal.woff2)}
+:root{--ink:#0E0D0B;--paper:#F2ECE0;--gold:#C9A84C;--red:#C8352B;--slate:#3B5470;--true:#2E8B57;--mute:#7A7267}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden}
+.scene{position:absolute;inset:0;display:none;overflow:hidden}
+.bg-red{background:var(--red)}.bg-ink{background:var(--ink)}.bg-gold{background:var(--gold)}.bg-paper{background:var(--paper)}.bg-slate{background:var(--slate)}
+.scene::before{content:"";position:absolute;inset:0;background:url(assets/fibers.png);opacity:.22;mix-blend-mode:multiply;pointer-events:none}
+.scene::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,transparent 55%,rgba(0,0,0,.28));pointer-events:none}
+#grain{position:absolute;inset:-40px;background:url(assets/grain.png);opacity:.16;mix-blend-mode:overlay;pointer-events:none;z-index:50}
+.el{position:absolute;will-change:transform}
+.anton{font-family:Anton;line-height:.92;text-transform:uppercase;letter-spacing:.5px}
+.fr{font-family:Fraunces;font-weight:900;line-height:.95}
+.it{font-family:Fraunces;font-style:italic;font-weight:700;line-height:1.1}
+.mono{font-family:JBM;font-weight:500;letter-spacing:.5px}
+.c-ink{color:var(--ink)}.c-paper{color:var(--paper)}.c-gold{color:var(--gold)}.c-red{color:var(--red)}
+.sticker{filter:drop-shadow(6px 0 0 #fff) drop-shadow(-6px 0 0 #fff) drop-shadow(0 6px 0 #fff) drop-shadow(0 -6px 0 #fff) drop-shadow(10px 14px 0 rgba(0,0,0,.28))}
+.face{}
+.face img{width:100%;display:block}
+.clip{background:#f7f3ea;color:var(--ink);padding:46px 52px 50px;box-shadow:12px 16px 0 rgba(0,0,0,.25)}
+.clip .rule{border-top:3px solid var(--ink);border-bottom:1px solid var(--ink);height:9px;margin-bottom:22px}
+.clip .mast{font-family:JBM;font-weight:700;font-size:24px;letter-spacing:3px;display:flex;justify-content:space-between;margin-bottom:12px}
+.tape{position:absolute;width:190px;height:58px;background:rgba(232,220,180,.82);box-shadow:0 2px 4px rgba(0,0,0,.15)}
+.tag{display:inline-block;padding:10px 18px;font-family:JBM;font-weight:700;font-size:26px;letter-spacing:1px}
+.src{font-family:JBM;font-weight:500;font-size:24px;opacity:.85}
+.stamp{border:12px solid currentColor;padding:6px 34px 0;font-family:Anton;text-transform:uppercase;line-height:1;text-align:center;border-radius:14px;mix-blend-mode:multiply}
+.stamp small{display:block;font-family:JBM;font-weight:700;font-size:30px;letter-spacing:2px;padding:4px 0 14px}
+.receipt{background:#fffdf7;color:var(--ink);padding:44px 48px 70px;font-family:JBM;font-weight:500;font-size:34px;box-shadow:12px 16px 0 rgba(0,0,0,.22)}
+.receipt .row{display:flex;align-items:center;gap:18px;padding:16px 0;border-bottom:2px dashed #bbb}
+.receipt .row img{width:70px}
+.receipt .row .nm{flex:1}
+.receipt .row .v{font-family:Anton;font-size:64px;color:var(--red)}
+.chip{display:inline-flex;align-items:center;gap:10px;background:var(--paper);color:var(--ink);font-family:JBM;font-weight:700;font-size:28px;padding:10px 16px;box-shadow:5px 6px 0 rgba(0,0,0,.25)}
+.chip img{width:44px}
+.bar{position:absolute;height:110px;width:0}
+.col{position:absolute;width:96px;height:0}
+#prog{position:absolute;left:60px;right:60px;top:206px;height:8px;background:rgba(255,255,255,.22);z-index:60;border-radius:4px;overflow:hidden}
+#prog i{position:absolute;left:0;top:0;bottom:0;background:var(--gold);width:0}
+#prog.dark{background:rgba(0,0,0,.15)}
+#foot{position:absolute;left:0;right:0;top:1748px;text-align:center;font-family:JBM;font-weight:500;font-size:26px;letter-spacing:2px;z-index:60;opacity:.85}
+#tick{position:absolute;left:60px;top:228px;font-family:JBM;font-weight:700;font-size:22px;letter-spacing:3px;z-index:60;opacity:.8}
+</style></head>
+<body><div id="stage">
+
+<!-- S1 HOOK ------------------------------------------------>
+<section class="scene bg-red" data-s="0" data-e="3.4" data-theme="dark">
+  <div class="el face sticker" data-a="pop" data-t="0" data-d=".35" data-bob="1" data-r="-3" style="left:250px;top:330px;width:560px"><img src="assets/lula.png"></div>
+  <div class="el clip" data-a="slam" data-t=".45" data-d=".32" data-r="-2.5" data-shake="1" style="left:60px;top:930px;width:960px">
+    <div class="mast"><span>PLANTÃO</span><span>OUT/2026</span></div><div class="rule"></div>
+    <div class="fr" style="font-size:112px">COM O LULA, A COMIDA SUBIU MAIS.</div>
+    <div class="it" style="font-size:46px;margin-top:18px;color:#5a534a">(do que no governo Bolsonaro)</div>
+    <div class="tape" style="left:-40px;top:-20px;transform:rotate(-24deg)"></div>
+    <div class="tape" style="right:-40px;top:-14px;transform:rotate(18deg)"></div>
+  </div>
+  <div class="el anton c-paper" data-a="up" data-t="1.9" data-d=".3" style="left:60px;top:1500px;font-size:74px;width:960px;text-align:center">será que é verdade? 👀</div>
+</section>
+
+<!-- S2 SERÁ? ----------------------------------------------->
+<section class="scene bg-ink" data-s="3.4" data-e="6.0" data-theme="dark">
+  <div class="el" data-a="pop" data-t=".25" data-d=".4" data-r="12" data-bob="1" style="left:760px;top:330px;width:220px"><img class="sticker" src="assets/1f50e.svg" style="width:100%"></div>
+  <div class="el anton c-gold" data-a="slam" data-t="0" data-d=".28" data-shake="1" style="left:60px;top:470px;font-size:300px">SERÁ?</div>
+  <div class="el anton c-paper" data-a="up" data-t=".85" data-d=".28" style="left:66px;top:830px;font-size:150px">BORA OLHAR</div>
+  <div class="el anton c-paper" data-a="up" data-t="1.15" data-d=".28" style="left:66px;top:980px;font-size:150px">OS <span class="c-gold">NÚMEROS.</span></div>
+  <div class="el mono c-paper" data-a="fade" data-t="1.6" data-d=".4" style="left:70px;top:1190px;font-size:32px;opacity:.8">dados oficiais: IBGE · DIEESE · FAO · Min. Agricultura</div>
+</section>
+
+<!-- S3 TÁ CARO MESMO? -------------------------------------->
+<section class="scene bg-gold" data-s="6.0" data-e="11.0" data-theme="light">
+  <div class="el anton c-ink" data-a="left" data-t="0" data-d=".3" style="left:60px;top:290px;font-size:84px">PRIMEIRO:</div>
+  <div class="el anton c-ink" data-a="left" data-t=".2" data-d=".3" style="left:60px;top:380px;font-size:140px">TÁ CARO MESMO?</div>
+  <div class="el receipt" data-a="up" data-t=".5" data-d=".4" data-r="1.5" style="left:130px;top:600px;width:820px">
+    <div style="text-align:center;font-weight:700;letter-spacing:3px">*** MERCADO 2026 ***</div>
+    <div style="text-align:center;font-size:26px;margin:6px 0 14px">alta acumulada · jan–set</div>
+    <div class="row"><img src="assets/1f345.svg"><span class="nm">TOMATE</span><span class="v cnt" data-from="0" data-to="58.7" data-dec="1" data-pre="+" data-suf="%" data-t="1.0" data-d=".8"></span></div>
+    <div class="row"><img src="assets/1f9c5.svg"><span class="nm">CEBOLA</span><span class="v cnt" data-from="0" data-to="61.8" data-dec="1" data-pre="+" data-suf="%" data-t="1.5" data-d=".8"></span></div>
+    <div class="row"><img src="assets/1fad8.svg"><span class="nm">FEIJÃO-PRETO</span><span class="v cnt" data-from="0" data-to="27.8" data-dec="1" data-pre="+" data-suf="%" data-t="2.0" data-d=".8"></span></div>
+    <div style="font-size:24px;margin-top:20px;opacity:.75">FONTE: IBGE · IPCA (SIDRA) · SET/2026</div>
+  </div>
+  <div class="el stamp" data-a="stamp" data-t="3.1" data-d=".22" data-r="-11" data-shake="1" style="left:300px;top:1290px;color:var(--true);font-size:120px;background:rgba(255,255,255,.0)">VERDADE<small>TÁ CARO SIM</small></div>
+</section>
+
+<!-- S4 NÃO É DE HOJE ---------------------------------------->
+<section class="scene bg-paper" data-s="11.0" data-e="15.5" data-theme="light">
+  <div class="el anton c-ink" data-a="left" data-t="0" data-d=".3" style="left:60px;top:290px;font-size:120px">E NÃO É DE HOJE.</div>
+  <div class="el" data-a="up" data-t=".35" data-d=".35" data-r="-1.5" style="left:60px;top:470px;width:960px;height:430px;background:var(--slate);box-shadow:12px 14px 0 rgba(0,0,0,.2);padding:36px 44px;color:var(--paper)">
+    <div class="mono" style="font-size:30px;font-weight:700">2024 · COMIDA EM CASA</div>
+    <div class="anton cnt" data-from="0" data-to="8.2" data-dec="1" data-pre="+" data-suf="%" data-t=".7" data-d=".9" style="font-size:200px;margin-top:6px"></div>
+    <div style="display:flex;gap:16px;margin-top:4px">
+      <span class="chip">seca + calor</span><span class="chip">dólar a R$ 6</span><span class="chip">ciclo do boi</span>
+    </div>
+  </div>
+  <div class="el" data-a="drop" data-t="1.5" data-d=".5" data-r="10" data-bob="1" style="left:70px;top:960px;width:250px"><img class="sticker" src="assets/2615.svg" style="width:100%"></div>
+  <div class="el anton c-red cnt" data-from="0" data-to="72" data-dec="0" data-pre="+" data-suf="%" data-t="1.8" data-d=".8" style="left:360px;top:950px;font-size:210px"></div>
+  <div class="el it c-ink" data-a="fade" data-t="2.2" data-d=".4" style="left:370px;top:1160px;font-size:44px;width:640px">café desde 2023 — mais que no governo anterior (+70%)</div>
+  <div class="el tag" data-a="pop" data-t="2.9" data-d=".3" data-r="-3" style="left:60px;top:1330px;background:var(--ink);color:var(--gold);font-size:34px">✔ PONTO PRA CRÍTICA</div>
+  <div class="el src c-ink" data-a="fade" data-t=".5" style="left:60px;top:1450px">IBGE/IPCA · 2024: alimentação no domicílio; café: jan/23–dez/25</div>
+</section>
+
+<!-- S5 COMPARADO COM O QUÊ? -------------------------------->
+<section class="scene bg-ink" data-s="15.5" data-e="19.0" data-theme="dark">
+  <div class="el anton c-paper" data-a="slam" data-t="0" data-d=".26" style="left:60px;top:290px;font-size:130px">MAS SUBIU <span class="c-gold">MAIS</span></div>
+  <div class="el anton c-paper" data-a="slam" data-t=".25" data-d=".26" style="left:60px;top:420px;font-size:130px">QUE ANTES?</div>
+  <div class="el face sticker" data-a="drop" data-t=".5" data-d=".45" data-r="-5" data-bob="1" style="left:50px;top:640px;width:430px"><img src="assets/bolsonaro.png"></div>
+  <div class="el face sticker" data-a="drop" data-t=".7" data-d=".45" data-r="5" data-bob="1" style="left:610px;top:600px;width:400px"><img src="assets/lula.png"></div>
+  <div class="el anton" data-a="pop" data-t="1.1" data-d=".3" style="left:440px;top:930px;width:200px;height:200px;border-radius:50%;background:var(--gold);color:var(--ink);font-size:110px;text-align:center;line-height:200px;box-shadow:8px 10px 0 rgba(0,0,0,.4)">VS</div>
+  <div class="el tag" data-a="up" data-t="1.4" data-d=".3" style="left:70px;top:1300px;background:var(--slate);color:var(--paper)">2019 – 2022</div>
+  <div class="el tag" data-a="up" data-t="1.55" data-d=".3" style="left:600px;top:1300px;background:var(--gold);color:var(--ink)">2023 – SET/2026</div>
+  <div class="el it c-paper" data-a="fade" data-t="2.1" data-d=".4" style="left:60px;top:1430px;font-size:52px;width:960px;text-align:center">vamos comparar igual com igual.</div>
+</section>
+
+<!-- S6 GOVERNO ANTERIOR: ITENS ------------------------------>
+<section class="scene bg-slate" data-s="19.0" data-e="29.0" data-theme="dark">
+  <div class="el mono c-paper" data-a="fade" data-t="0" style="left:60px;top:290px;font-size:30px;font-weight:700">GOVERNO ANTERIOR · JAN/2019 – DEZ/2022</div>
+  <div class="el anton c-paper" data-a="left" data-t="0" data-d=".3" style="left:60px;top:340px;font-size:104px">O QUE MAIS SUBIU</div>
+  <div class="el face sticker" data-a="pop" data-t=".2" data-d=".3" data-r="6" data-bob="1" style="left:830px;top:240px;width:200px"><img src="assets/bolsonaro.png"></div>
+
+  <div class="el" data-a="drop" data-t=".6" data-d=".45" data-o="2.8" data-r="-8" data-bob="1" style="left:330px;top:540px;width:420px"><img class="sticker" src="assets/1f34c.svg" style="width:100%"></div>
+  <div class="el anton c-paper cnt" data-from="0" data-to="98.5" data-dec="1" data-pre="+" data-suf="%" data-t=".8" data-d="1.1" data-o="2.8" style="left:0;width:1080px;text-align:center;top:1000px;font-size:230px"></div>
+  <div class="el it c-gold" data-a="fade" data-t="1.0" data-o="2.8" style="left:0;width:1080px;text-align:center;top:1230px;font-size:66px">banana-prata — quase dobrou</div>
+
+  <div class="el" data-a="drop" data-t="2.9" data-d=".45" data-o="5.1" data-r="6" data-bob="1" style="left:330px;top:540px;width:420px"><img class="sticker" src="assets/1f33e.svg" style="width:100%"></div>
+  <div class="el anton c-paper cnt" data-from="0" data-to="56.9" data-dec="1" data-pre="+" data-suf="%" data-t="3.1" data-d="1.0" data-o="5.1" style="left:0;width:1080px;text-align:center;top:1000px;font-size:230px"></div>
+  <div class="el it c-gold" data-a="fade" data-t="3.3" data-o="5.1" style="left:0;width:1080px;text-align:center;top:1230px;font-size:66px">arroz</div>
+
+  <div class="el" data-a="drop" data-t="5.2" data-d=".45" data-o="7.4" data-r="-5" data-bob="1" style="left:330px;top:540px;width:420px"><img class="sticker" src="assets/1fad7.svg" style="width:100%"></div>
+  <div class="el anton c-paper cnt" data-from="0" data-to="140.7" data-dec="1" data-pre="+" data-suf="%" data-t="5.4" data-d="1.1" data-o="7.4" style="left:0;width:1080px;text-align:center;top:1000px;font-size:230px"></div>
+  <div class="el it c-gold" data-a="fade" data-t="5.6" data-o="7.4" style="left:0;width:1080px;text-align:center;top:1230px;font-size:66px">óleo de soja</div>
+
+  <div class="el" data-a="drop" data-t="7.5" data-d=".45" data-r="7" data-bob="1" style="left:330px;top:540px;width:420px"><img class="sticker" src="assets/1f9c5.svg" style="width:100%"></div>
+  <div class="el anton c-red cnt" data-from="0" data-to="183" data-dec="0" data-pre="+" data-suf="%" data-t="7.7" data-d="1.2" data-shake-end="1" style="left:0;width:1080px;text-align:center;top:1000px;font-size:260px;color:#ff6b5e"></div>
+  <div class="el it c-gold" data-a="fade" data-t="7.9" style="left:0;width:1080px;text-align:center;top:1250px;font-size:66px">cebola — quase triplicou</div>
+
+  <div class="el" style="left:60px;top:1400px;display:flex;gap:14px">
+    <span class="chip el2" data-a="pop" data-t="2.7" data-d=".25"><img src="assets/1f34c.svg">+98,5%</span>
+    <span class="chip el2" data-a="pop" data-t="5.0" data-d=".25"><img src="assets/1f33e.svg">+56,9%</span>
+    <span class="chip el2" data-a="pop" data-t="7.3" data-d=".25"><img src="assets/1fad7.svg">+140,7%</span>
+  </div>
+  <div class="el src c-paper" data-a="fade" data-t=".4" style="left:60px;top:1500px">IBGE/IPCA · alta acumulada por item · jan/19–dez/22</div>
+</section>
+
+<!-- S7 COMPARAÇÃO PRINCIPAL --------------------------------->
+<section class="scene bg-paper" data-s="29.0" data-e="37.0" data-theme="light">
+  <div class="el anton c-ink" data-a="left" data-t="0" data-d=".3" style="left:60px;top:290px;font-size:130px">COMIDA EM CASA</div>
+  <div class="el it c-ink" data-a="fade" data-t=".2" style="left:62px;top:430px;font-size:46px">quanto subiu em cada governo</div>
+  <div class="el bar" data-to="760" data-t=".8" data-d="1.4" style="left:60px;top:730px;background:var(--slate)"></div>
+  <div class="el anton c-ink cnt" data-from="0" data-to="56.2" data-dec="1" data-pre="+" data-suf="%" data-t=".8" data-d="1.4" style="left:60px;top:855px;font-size:130px"></div>
+  <div class="el face sticker" data-a="pop" data-t=".4" data-d=".3" data-r="-4" style="left:60px;top:545px;width:130px;z-index:2"><img src="assets/bolsonaro.png"></div>
+  <div class="el mono c-ink" data-a="fade" data-t=".5" style="left:220px;top:600px;font-size:32px;font-weight:700">2019–2022 · 48 meses</div>
+  <div class="el bar" data-to="191" data-t="2.6" data-d=".8" style="left:60px;top:1230px;background:var(--gold)"></div>
+  <div class="el anton c-ink cnt" data-from="0" data-to="14.1" data-dec="1" data-pre="+" data-suf="%" data-t="2.6" data-d=".8" style="left:290px;top:1215px;font-size:130px"></div>
+  <div class="el face sticker" data-a="pop" data-t="2.2" data-d=".3" data-r="4" style="left:60px;top:1030px;width:130px;z-index:2"><img src="assets/lula.png"></div>
+  <div class="el mono c-ink" data-a="fade" data-t="2.3" style="left:220px;top:1090px;font-size:32px;font-weight:700">jan/2023–set/2026 · 45 meses</div>
+  <div class="el" data-a="pop" data-t="4.3" data-d=".35" data-r="-1.5" style="left:60px;top:1400px;width:960px;background:var(--ink);color:var(--paper);padding:22px 30px;box-shadow:10px 12px 0 rgba(0,0,0,.2);display:flex;align-items:center;justify-content:space-between">
+    <div class="mono" style="font-size:28px;font-weight:700;color:var(--gold)">MÉDIA<br>POR ANO</div>
+    <div class="anton" style="font-size:80px">≈11,8% <span style="font-size:50px;opacity:.6">×</span> <span class="c-gold">≈3,6%</span></div>
+  </div>
+  <div class="el src c-ink" data-a="fade" data-t=".4" style="left:60px;top:1590px">IBGE/SIDRA · IPCA alimentação no domicílio · acumulado</div>
+</section>
+
+<!-- S8 ANO A ANO -------------------------------------------->
+<section class="scene bg-ink" data-s="37.0" data-e="44.0" data-theme="dark" id="s8">
+  <div class="el anton c-paper" data-a="left" data-t="0" data-d=".3" style="left:60px;top:290px;font-size:130px">ANO A ANO</div>
+  <div class="el it c-paper" data-a="fade" data-t=".2" style="left:62px;top:430px;font-size:46px;opacity:.85">comida em casa · alta no ano (%)</div>
+  <div class="el" data-a="fade" data-t=".3" style="left:50px;top:1270px;width:980px;height:3px;background:var(--paper);opacity:.6"></div>
+  <div class="el" data-a="fade" data-t=".3" style="left:546px;top:560px;width:0;height:800px;border-left:3px dashed rgba(242,236,224,.45)"></div>
+  <div class="el mono" data-a="fade" data-t=".4" style="left:150px;top:1350px;font-size:26px;font-weight:700;color:#9fb4cf">← GOV. ANTERIOR</div>
+  <div class="el mono c-gold" data-a="fade" data-t=".4" style="left:640px;top:1350px;font-size:26px;font-weight:700">GOV. ATUAL →</div>
+  <div id="cols"></div>
+  <div class="el tag" data-a="pop" data-t="3.4" data-d=".3" data-r="-4" data-shake="1" style="left:420px;top:1420px;background:var(--red);color:var(--paper);font-size:34px">2023: CAIU (−0,5%) ↑</div>
+  <div class="el src c-paper" data-a="fade" data-t=".4" style="left:60px;top:1560px">IBGE/SIDRA · *2026 = jan–set</div>
+</section>
+
+<!-- S9 CESTA BÁSICA ----------------------------------------->
+<section class="scene bg-gold" data-s="44.0" data-e="50.0" data-theme="light">
+  <div class="el anton c-ink" data-a="left" data-t="0" data-d=".3" style="left:60px;top:290px;font-size:96px">HORAS DE TRABALHO</div>
+  <div class="el anton c-ink" data-a="left" data-t=".15" data-d=".3" style="left:60px;top:390px;font-size:96px">PRA PAGAR A CESTA BÁSICA</div>
+  <div class="el it c-ink" data-a="fade" data-t=".3" style="left:62px;top:500px;font-size:44px">ganhando um salário mínimo</div>
+  <div class="el" data-a="pop" data-t=".4" data-d=".35" data-r="-10" data-bob="1" style="left:770px;top:560px;width:230px"><img class="sticker" src="assets/23f0.svg" style="width:100%"></div>
+  <div class="el mono c-ink" data-a="fade" data-t=".6" style="left:70px;top:640px;font-size:34px;font-weight:700">DEZ/2022</div>
+  <div class="el anton c-ink" style="left:60px;top:690px;font-size:220px"><span class="cnt" data-from="0" data-to="122" data-dec="0" data-t=".6" data-d="1.0"></span><span class="el2" data-a="fade" data-t="1.5" style="font-size:120px">h32</span></div>
+  <div class="el mono c-ink" data-a="fade" data-t="1.8" style="left:70px;top:960px;font-size:34px;font-weight:700">SET/2026</div>
+  <div class="el anton" style="left:60px;top:1010px;font-size:220px;color:var(--paper);text-shadow:6px 7px 0 rgba(0,0,0,.25)"><span class="cnt" data-from="0" data-to="102" data-dec="0" data-t="1.8" data-d=".9"></span><span class="el2" data-a="fade" data-t="2.6" style="font-size:120px">h11</span></div>
+  <div class="el stamp" data-a="stamp" data-t="3.3" data-d=".22" data-r="-8" data-shake="1" style="left:470px;top:1250px;color:var(--ink);font-size:86px">≈20 HORAS<small>A MENOS</small></div>
+  <div class="el src c-ink" data-a="fade" data-t=".5" style="left:60px;top:1500px">DIEESE · cesta básica · % do mínimo líquido: 60,2% → 50,2%</div>
+</section>
+
+<!-- S10 AGRO ------------------------------------------------>
+<section class="scene bg-paper" data-s="50.0" data-e="57.0" data-theme="light">
+  <div class="el anton c-ink" data-a="slam" data-t="0" data-d=".26" data-shake="1" style="left:60px;top:290px;font-size:150px">E O AGRO?</div>
+  <div class="el it c-ink" data-a="fade" data-t=".3" style="left:62px;top:450px;font-size:48px">"tá abandonado pelo governo"?</div>
+  <div class="el" data-a="drop" data-t=".4" data-d=".5" data-r="-6" data-bob="1" style="left:720px;top:250px;width:290px"><img class="sticker" src="assets/1f69c.svg" style="width:100%"></div>
+  <div class="el mono c-ink" data-a="fade" data-t=".9" style="left:60px;top:590px;font-size:30px;font-weight:700">PLANO SAFRA (crédito rural)</div>
+  <div class="el mono c-ink" data-a="fade" data-t="1.0" style="left:60px;top:650px;font-size:28px">2022/23</div>
+  <div class="el bar" data-to="420" data-t="1.0" data-d=".8" style="left:60px;top:690px;height:90px;background:var(--slate)"></div>
+  <div class="el anton c-ink" data-a="fade" data-t="1.6" style="left:505px;top:695px;font-size:78px">R$ 340,9 BI</div>
+  <div class="el mono c-ink" data-a="fade" data-t="1.9" style="left:60px;top:810px;font-size:28px">2025/26</div>
+  <div class="el bar" data-to="636" data-t="1.9" data-d="1.0" style="left:60px;top:850px;height:90px;background:var(--gold)"></div>
+  <div class="el anton c-ink" data-a="fade" data-t="2.8" style="left:720px;top:855px;font-size:78px">R$ 516 BI*</div>
+  <div class="el" data-a="pop" data-t="3.4" data-d=".3" data-r="-2" style="left:60px;top:1000px;width:960px;background:var(--ink);color:var(--paper);padding:26px 32px;box-shadow:10px 12px 0 rgba(0,0,0,.2)">
+    <div class="mono c-gold" style="font-size:26px;font-weight:700">EXPORTAÇÕES DO AGRO · 2025</div>
+    <div class="anton" style="font-size:96px;margin-top:6px">US$ 169,2 BI <span class="c-gold">RECORDE</span></div>
+  </div>
+  <div class="el it c-ink" data-a="up" data-t="4.6" data-d=".35" style="left:60px;top:1250px;font-size:62px;width:960px">Abandonado? <span class="c-red">Os números dizem outra coisa.</span></div>
+  <div class="el src c-ink" data-a="fade" data-t="2.8" style="left:60px;top:1450px;font-size:21px;width:960px">*conta nova inclui CPR/LCA; não é 100% comparável · MAPA · Congresso em Foco</div>
+</section>
+
+<!-- S11 MAPA DA FOME ---------------------------------------->
+<section class="scene bg-ink" data-s="57.0" data-e="60.5" data-theme="dark">
+  <div class="el" data-a="pop" data-t="0" data-d=".35" data-r="-6" data-bob="1" style="left:380px;top:330px;width:320px"><img class="sticker" src="assets/1f37d.svg" style="width:100%"></div>
+  <div class="el anton c-paper" data-a="up" data-t=".3" data-d=".3" style="left:60px;top:760px;font-size:120px;width:960px;text-align:center">O BRASIL SAIU DO</div>
+  <div class="el anton c-paper" data-a="up" data-t=".5" data-d=".3" style="left:60px;top:880px;font-size:120px;width:960px;text-align:center">MAPA DA FOME</div>
+  <div class="el anton" data-a="slam" data-t="1.1" data-d=".26" data-r="-4" data-shake="1" style="left:300px;top:1030px;font-size:130px;background:var(--gold);color:var(--ink);padding:10px 34px">DE NOVO.</div>
+  <div class="el src c-paper" data-a="fade" data-t="1.5" style="left:0;width:1080px;text-align:center;top:1260px">FAO · SOFI 2025 · média 2022–2024</div>
+</section>
+
+<!-- S12 VEREDITO -------------------------------------------->
+<section class="scene bg-red" data-s="60.5" data-e="66.0" data-theme="dark">
+  <div class="el clip" data-a="slam" data-t="0" data-d=".28" data-r="-2.5" style="left:60px;top:420px;width:960px">
+    <div class="mast"><span>PLANTÃO</span><span>OUT/2026</span></div><div class="rule"></div>
+    <div class="fr" style="font-size:112px">COM O LULA, A COMIDA SUBIU MAIS.</div>
+    <div class="it" style="font-size:46px;margin-top:18px;color:#5a534a">(do que no governo Bolsonaro)</div>
+    <div class="tape" style="left:-40px;top:-20px;transform:rotate(-24deg)"></div>
+    <div class="tape" style="right:-40px;top:-14px;transform:rotate(18deg)"></div>
+  </div>
+  <div class="el stamp" data-a="stamp" data-t=".9" data-d=".22" data-r="-13" data-shake="2" style="left:250px;top:640px;color:#8f0f0a;font-size:210px;background:rgba(255,255,255,0)">FALSO</div>
+  <div class="el anton c-paper" data-a="up" data-t="2.0" data-d=".3" style="left:60px;top:1150px;font-size:110px;width:960px">O TÍTULO DESTE</div>
+  <div class="el anton c-paper" data-a="up" data-t="2.3" data-d=".3" style="left:60px;top:1270px;font-size:110px;width:960px">VÍDEO TAVA <span style="background:var(--ink);padding:0 14px">ERRADO.</span></div>
+  <div class="el it c-paper" data-a="fade" data-t="3.2" style="left:60px;top:1420px;font-size:46px;width:960px">+56% antes × +14% agora. A comida subiu — mas bem menos.</div>
+</section>
+
+<!-- S13 FECHAMENTO ------------------------------------------>
+<section class="scene bg-ink" data-s="66.0" data-e="72.0" data-theme="dark">
+  <div class="el it c-paper" data-a="left" data-t="0" data-d=".3" style="left:60px;top:300px;font-size:64px">Comida cara?</div>
+  <div class="el tag" data-a="pop" data-t=".3" data-d=".25" data-r="-3" style="left:520px;top:300px;background:var(--true);color:#fff;font-size:36px">VERDADE</div>
+  <div class="el it c-paper" data-a="left" data-t=".9" data-d=".3" style="left:60px;top:410px;font-size:64px">Subiu mais que antes?</div>
+  <div class="el tag" data-a="pop" data-t="1.2" data-d=".25" data-r="3" style="left:740px;top:410px;background:var(--red);color:#fff;font-size:36px">FALSO</div>
+  <div class="el anton c-gold" data-a="up" data-t="2.0" data-d=".3" style="left:60px;top:620px;font-size:130px">ANTES DE REPASSAR,</div>
+  <div class="el anton c-paper" data-a="up" data-t="2.3" data-d=".3" style="left:60px;top:760px;font-size:130px">CONFERE O PERÍODO</div>
+  <div class="el anton c-paper" data-a="up" data-t="2.6" data-d=".3" style="left:60px;top:900px;font-size:130px">E A FONTE.</div>
+  <div class="el it c-paper" data-a="fade" data-t="3.6" style="left:60px;top:1130px;font-size:50px;width:960px">E aí: no seu mercado, você sentiu diferença? Comenta 👇</div>
+  <div class="el src c-paper" data-a="fade" data-t="4.2" style="left:60px;top:1400px;font-size:22px;width:960px">Fontes: IBGE (IPCA/SIDRA) · DIEESE · Min. Agricultura · FAO (SOFI 2025)</div>
+</section>
+
+<div id="grain"></div>
+<div id="prog"><i></i></div>
+<div id="tick">CHECAGEM · PREÇO DA COMIDA</div>
+<div id="foot">@tentandochegaratevoce</div>
+</div>
+
+<script>
+window.DUR=72;
+const years=[[2019,7.84],[2020,18.15],[2021,8.24],[2022,13.23],[2023,-0.52],[2024,8.23],[2025,1.43],['2026*',4.44]];
+(function buildCols(){
+  const host=document.getElementById('cols'); const base=1270, k=36, x0=78, step=124;
+  years.forEach(([y,v],i)=>{
+    const prev=i<4; const c=document.createElement('div');
+    c.className='el col'; c.dataset.v=v; c.dataset.t=(.6+i*.22).toFixed(2); c.dataset.d='.55';
+    c.style.left=(x0+i*step)+'px'; c.style.background= prev?'#6f8db3':'#C9A84C'; c.dataset.base=base; c.dataset.k=k;
+    host.appendChild(c);
+    const lab=document.createElement('div'); lab.className='el mono c-paper'; lab.dataset.a='fade'; lab.dataset.t=(.5+i*.22).toFixed(2);
+    lab.style.cssText=`left:${x0+i*step-12}px;top:${base+(v<0?40:16)}px;width:120px;text-align:center;font-size:26px;font-weight:700`; lab.textContent=y; host.appendChild(lab);
+    const val=document.createElement('div'); val.className='el anton'; val.dataset.a='pop'; val.dataset.t=(1.0+i*.22).toFixed(2); val.dataset.d='.25';
+    val.style.cssText=`left:${x0+i*step-22}px;top:${v<0? base-70 : base-v*k-72}px;width:140px;text-align:center;font-size:56px;color:${v<0?'#ff6b5e':(prev?'#cfe0f5':'#F2ECE0')}`;
+    val.textContent=(v>0?'+':'')+v.toFixed(1).replace('.',','); host.appendChild(val);
+  });
+})();
+
+</script>
+<script src="fx.js"></script>
+<script src="engine.js"></script>
+</body></html>

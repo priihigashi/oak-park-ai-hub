@@ -1,0 +1,47 @@
+name: Drive → web preview (MP4 leve pra tocar no artifact)
+# Push de docs/templates/repost/web_preview/<slug>.json {"items":[{"drive_id","name"}]} → baixa do Drive,
+# reduz pra 720×1280 (~6–12 MB) e põe num branch tmp-web-* pra virar asset do artifact. Apagar o branch depois.
+on:
+  push:
+    paths: ["docs/templates/repost/web_preview/*.json"]
+permissions:
+  contents: write
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4.2.2
+        with: { fetch-depth: 2 }
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg && pip install -q google-api-python-client google-auth
+      - name: Download + transcode
+        env: { SHEETS_TOKEN: "${{ secrets.SHEETS_TOKEN }}" }
+        run: |
+          J=$(git diff --name-only HEAD~1 HEAD -- 'docs/templates/repost/web_preview/*.json' | head -1)
+          python - "$J" <<'PY'
+          import os, sys, json, io, subprocess, urllib.request, urllib.parse
+          from google.oauth2.credentials import Credentials
+          from googleapiclient.discovery import build
+          from googleapiclient.http import MediaIoBaseDownload
+          td=json.loads(os.environ["SHEETS_TOKEN"])
+          r=json.loads(urllib.request.urlopen(urllib.request.Request("https://oauth2.googleapis.com/token",data=urllib.parse.urlencode({"client_id":td["client_id"],"client_secret":td["client_secret"],"refresh_token":td["refresh_token"],"grant_type":"refresh_token"}).encode())).read())
+          d=build("drive","v3",credentials=Credentials(token=r["access_token"]))
+          os.makedirs("web",exist_ok=True)
+          for it in json.load(open(sys.argv[1]))["items"]:
+              src=f"/tmp/{it['drive_id']}.mp4"; fh=io.FileIO(src,"wb")
+              dl=MediaIoBaseDownload(fh,d.files().get_media(fileId=it["drive_id"],supportsAllDrives=True),chunksize=32*1024*1024); done=False
+              while not done: _,done=dl.next_chunk()
+              fh.close()
+              dur=float(subprocess.run(["ffprobe","-v","error","-show_entries","format=duration","-of","csv=p=0",src],capture_output=True,text=True).stdout)
+              vb=max(350,int(9.5*8*1024/dur)-96)  # alvo ~10 MB
+              out=f"web/{it['name']}"
+              subprocess.run(["ffmpeg","-y","-loglevel","error","-i",src,"-vf","scale=720:1280","-c:v","libx264","-preset","slow","-b:v",f"{vb}k","-maxrate",f"{int(vb*1.4)}k","-bufsize",f"{vb*2}k","-c:a","aac","-b:a","96k","-movflags","+faststart",out],check=True)
+              subprocess.run(["ffmpeg","-y","-loglevel","error","-ss","1.5","-i",out,"-frames:v","1","-q:v","4",out.replace(".mp4",".jpg")],check=True)
+              print(out, os.path.getsize(out))
+          PY
+      - name: Push branch
+        run: |
+          B="tmp-web-${{ github.run_id }}"; cp -r web /tmp/web
+          git config user.name "repost-bot"; git config user.email "repost-bot@users.noreply.github.com"
+          git checkout --orphan "$B"; git rm -rq --cached . ; rm -rf ./* .github 2>/dev/null || true
+          cp /tmp/web/* . ; git add -A; git commit -qm "web preview ${{ github.run_id }}"; git push -q origin "$B"

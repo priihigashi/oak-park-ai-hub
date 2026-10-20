@@ -1,0 +1,99 @@
+name: Reel reference fetch (collage template study)
+# Push a list of reel URLs to docs/templates/collage_reel/ref_urls.txt on a branch →
+# downloads each with yt-dlp (IG cookies from secret) → short-lived artifact for analysis.
+on:
+  push:
+    paths:
+      - "docs/templates/collage_reel/ref_urls.txt"
+permissions:
+  contents: read
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: actions/setup-python@v5.6.0
+        with: { python-version: "3.11" }
+      - name: Install
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+          pip install -q faster-whisper yt-dlp google-api-python-client google-auth
+      - name: Download
+        env:
+          PRI_OP_IG_COOKIES: ${{ secrets.PRI_OP_IG_COOKIES }}
+        run: |
+          mkdir -p out
+          python - <<'EOF'
+          import os, base64
+          v = os.environ.get("PRI_OP_IG_COOKIES","")
+          if v:
+              try:
+                  t = base64.b64decode(v).decode()
+                  if "\t" not in t: t = v
+              except Exception:
+                  t = v
+              open("/tmp/ig_cookies.txt","w").write(t)
+          EOF
+          i=0
+          grep -v '^#' docs/templates/collage_reel/ref_urls.txt | while read -r name url; do
+            [ -z "$url" ] && continue
+            C=""; [ -s /tmp/ig_cookies.txt ] && C="--cookies /tmp/ig_cookies.txt"
+            ok=0
+            for k in 1 2 3; do
+              yt-dlp $C -f "bv*+ba/b" --merge-output-format mp4 -o "out/${name}.%(ext)s" "$url" && { ok=1; break; }
+              yt-dlp -f "b" -o "out/${name}.%(ext)s" "$url" && { ok=1; break; }
+              sleep 25
+            done
+            [ $ok = 1 ] || echo "FAIL $name $url" >> out/errors.txt
+          done
+          ls -la out
+      - name: Frames + contact sheets + transcript
+        run: |
+          for v in out/*.mp4; do
+            n=$(basename "$v" .mp4); mkdir -p "out/${n}_frames"
+            ffmpeg -loglevel error -i "$v" -vf "fps=4,scale=270:-2" "out/${n}_frames/f_%04d.jpg"
+            ffmpeg -loglevel error -i "$v" -vf "fps=2,scale=216:-2,tile=8x4" "out/${n}_sheet_%02d.jpg"
+          done
+          python - <<'EOF3'
+          import glob, os
+          from faster_whisper import WhisperModel
+          m = WhisperModel("small", compute_type="int8")
+          for v in sorted(glob.glob("out/*.mp4")):
+              segs,_ = m.transcribe(v)
+              with open(v[:-4]+"_transcript.txt","w") as f:
+                  for s in segs: f.write(f"[{s.start:6.2f}-{s.end:6.2f}] {s.text.strip()}\n")
+          EOF3
+          for v in out/*.mp4; do ffmpeg -loglevel error -y -i "$v" -vn -c:a libmp3lame -q:a 3 "${v%.mp4}_audio.mp3"; done
+          rm -rf out/*_frames
+      - name: Upload to Drive (template library › repertorio › _entrada)
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: |
+          python - <<'EOF2'
+          import os, json, glob, urllib.request, urllib.parse
+          from google.oauth2.credentials import Credentials
+          from googleapiclient.discovery import build
+          from googleapiclient.http import MediaFileUpload
+          td=json.loads(os.environ["SHEETS_TOKEN"])
+          r=json.loads(urllib.request.urlopen(urllib.request.Request("https://oauth2.googleapis.com/token",data=urllib.parse.urlencode({"client_id":td["client_id"],"client_secret":td["client_secret"],"refresh_token":td["refresh_token"],"grant_type":"refresh_token"}).encode())).read())
+          c=Credentials(token=r["access_token"])
+          d=build("drive","v3",credentials=c)
+          ROOT="13OJNMGCR6oFHYuX_xsLznlSr3qwQdC8a"
+          q=f"'{ROOT}' in parents and name='_entrada_refs' and trashed=false"
+          f=d.files().list(q=q,supportsAllDrives=True,includeItemsFromAllDrives=True,fields="files(id)").execute()["files"]
+          fid=f[0]["id"] if f else d.files().create(body={"name":"_entrada_refs","mimeType":"application/vnd.google-apps.folder","parents":[ROOT]},supportsAllDrives=True,fields="id").execute()["id"]
+          print("FOLDER",fid)
+          for p in sorted(glob.glob("out/*")):
+              if os.path.isdir(p): continue
+              n=os.path.basename(p)
+              ex=d.files().list(q=f"'{fid}' in parents and name='{n}' and trashed=false",supportsAllDrives=True,includeItemsFromAllDrives=True,fields="files(id)").execute()["files"]
+              if ex: print("skip",n); continue
+              o=d.files().create(body={"name":n,"parents":[fid]},media_body=MediaFileUpload(p,resumable=True),supportsAllDrives=True,fields="id,name").execute()
+              print("UP",o)
+          EOF2
+      - uses: actions/upload-artifact@v4.6.2
+        with:
+          name: ref-reels
+          path: out/
+          retention-days: 2

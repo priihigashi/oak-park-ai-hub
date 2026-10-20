@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<title>Desabafo v2 — vidro</title>
+<style>
+@font-face{font-family:FrS;src:url(assets/fraunces-latin-full-normal.woff2);font-weight:100 900}
+@font-face{font-family:FrS;src:url(assets/fraunces-latin-full-italic.woff2);font-weight:100 900;font-style:italic}
+@font-face{font-family:Int;src:url(assets/inter-latin-wght-normal.woff2);font-weight:100 900}
+:root{--gold:#F2C94C;--coral:#FF6B5B}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden}
+#bg{position:absolute;inset:0}
+#light{position:absolute;width:1600px;height:1600px;border-radius:50%;background:radial-gradient(circle,rgba(255,214,120,.38),rgba(255,214,120,0) 62%);mix-blend-mode:soft-light;pointer-events:none}
+#field{position:absolute;inset:0}
+.glass,#close{z-index:5}
+.il{position:absolute;left:0;top:0;will-change:transform}
+.il img{width:100%;display:block}
+#grain{position:absolute;inset:-40px;background:url(assets/grain.png);opacity:.14;mix-blend-mode:overlay;pointer-events:none;z-index:50}
+#vig{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 42%,transparent 48%,rgba(0,20,10,.45));pointer-events:none;z-index:49}
+.soft{font-family:FrS;font-variation-settings:"SOFT" 100,"WONK" 0,"opsz" 72}
+.glass{position:absolute;border-radius:46px;background:linear-gradient(160deg,rgba(255,255,255,.26),rgba(255,255,255,.08) 45%,rgba(255,255,255,.14));
+ backdrop-filter:blur(22px) saturate(1.7) brightness(.92);-webkit-backdrop-filter:blur(22px) saturate(1.7) brightness(.92);
+ border:1.5px solid rgba(255,255,255,.5);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.75),inset 0 -1px 0 rgba(255,255,255,.18),0 30px 60px rgba(0,25,15,.35);color:#fff;transform-origin:0 0}
+.glass:after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(115deg,rgba(255,255,255,.0) 30%,rgba(255,255,255,.22) 42%,rgba(255,255,255,0) 54%);background-size:300% 100%;background-position:var(--sh,120%) 0;pointer-events:none}
+#main{left:60px;top:170px;width:960px;padding:46px 56px 46px}
+#main p{font-family:FrS;font-variation-settings:"SOFT" 100,"opsz" 36;font-weight:520;font-size:27px;line-height:1.28;margin-bottom:16px;text-shadow:0 2px 14px rgba(0,30,15,.35)}
+#main p:last-child{margin-bottom:0}
+#main .h{font-weight:760;font-size:36px;line-height:1.14;font-variation-settings:"SOFT" 100,"opsz" 72}
+#main .rei{font-weight:850;font-size:48px;line-height:1.04;font-variation-settings:"SOFT" 100,"opsz" 144;color:#fff}
+#main .rei em{font-style:normal;color:var(--gold)}
+.g{color:var(--gold)}
+#main .tag{font-family:Int;font-weight:700;font-size:21px;letter-spacing:4px;opacity:.8;margin-bottom:26px;display:flex;justify-content:space-between}
+.fl{height:38px;vertical-align:-6px;margin-left:4px}
+.myth small{font-family:Int;font-style:normal;font-weight:700;font-size:16px;letter-spacing:2px;opacity:.85;margin-right:10px;vertical-align:4px}
+.myth{padding:16px 30px 18px;border-radius:999px;background:linear-gradient(160deg,rgba(255,107,91,.62),rgba(200,53,43,.45));font-family:FrS;font-variation-settings:"SOFT" 100,"opsz" 72;font-weight:780;font-size:40px;font-style:italic;white-space:nowrap}
+.deb{padding:30px 34px 28px;border-radius:38px}
+.deb .k{font-family:FrS;font-variation-settings:"SOFT" 100,"opsz" 72;font-weight:820;font-size:46px;line-height:1.05}
+.deb .t{font-family:FrS;font-variation-settings:"SOFT" 100,"opsz" 36;font-weight:480;font-size:29px;line-height:1.25;margin-top:12px;opacity:.95}
+.deb .s{font-family:Int;font-weight:600;font-size:17px;letter-spacing:1.5px;margin-top:14px;opacity:.7;text-transform:uppercase}
+#close{position:absolute;left:70px;right:70px;top:640px;text-align:center;color:#fff}
+#close .a{font-family:FrS;font-variation-settings:"SOFT" 100,"opsz" 144;font-weight:800;font-size:96px;line-height:1.02;text-shadow:0 6px 40px rgba(0,20,10,.5)}
+#close .b{font-family:FrS;font-variation-settings:"SOFT" 100,"opsz" 144;font-weight:850;font-size:124px;line-height:1;color:var(--gold);margin-top:40px;text-shadow:0 6px 40px rgba(0,20,10,.5)}
+#close .c{font-family:FrS;font-variation-settings:"SOFT" 100,"opsz" 36;font-style:italic;font-weight:500;font-size:44px;margin-top:70px}
+#foot{position:absolute;left:0;right:0;top:1748px;text-align:center;font:600 25px Int;letter-spacing:3px;z-index:60;color:#fff;opacity:.85}
+</style></head>
+<body><div id="stage">
+<div id="bg"></div><div id="light"></div><div id="field"></div>
+
+<div id="main" class="glass">
+ <div class="tag"><span>DESABAFO</span><span>OUT · 2026</span></div>
+ <p class="h">Não voto em quem faz proposta descaradamente para um grupo só.</p>
+ <p>Discordo da forma como dizem que vão combater a desigualdade. Também rejeito a premissa de que o Brasil está assim por culpa da esquerda.</p>
+ <p>Desde a volta da democracia, foram <span class="g">18</span> anos de centro e direita, sempre maioria. Depois, <span class="g">13</span> de esquerda, quando o Brasil saiu do Mapa da Fome. Vieram então <span class="g">6</span> anos de centro-direita e direita. Esses não contam? Só depois houve mais <span class="g">4</span> de esquerda, com um Congresso cada vez mais à direita.</p>
+ <p>O Congresso sempre teve cerca de <span class="g">60%</span> de centro-direita e direita, contando o Centrão. Agora serão <span class="g">75%</span>. Você tem noção do <b>PODER</b> que isso representa?</p>
+ <p class="h">Isso não é mudança. É mais do mesmo, com ainda mais força.</p>
+ <p>Foi o Congresso que derrubou uma presidente. E você continua isentando esse poder de qualquer culpa, enquanto lhe dá de presente mais cadeiras em 2027.</p>
+ <p class="rei">Um presidente de extrema direita com 75% do Congresso a seu lado não governa: <em>reina.</em></p>
+ <p>Eu vejo como esses novos líderes falam de quem é diferente: com desprezo. Brasil, EUA… a história se repete. Palavras têm peso. Normalizar essas atitudes tem consequências. Somos criaturas de hábitos.</p>
+ <p class="h">Quero um país onde você possa ser mãe, dona de casa, dono de casa, evangélica, católica, da umbanda, gostar de homem ou de mulher e ter seus direitos garantidos. Casar sem mijar nas calças.</p>
+ <p class="h">Dia 25, não vou de Flávio. <img class="fl" src="node_modules/@twemoji/svg/1f1e7-1f1f7.svg"> <span style="white-space:nowrap">O Congresso formado</span> precisa de contraponto, não de um <span class="g">REI!</span> Brasil soberano, Brasil para Todos!</p>
+</div>
+
+<div id="notas"></div>
+<div id="scrim" style="position:absolute;inset:0;z-index:4;opacity:0;backdrop-filter:blur(16px) brightness(.7);-webkit-backdrop-filter:blur(16px) brightness(.7)"></div>
+<div id="close">
+ <div class="a">Equilíbrio não é ficar em cima do muro.</div>
+ <div class="b">É ter contraponto.</div>
+ <div class="c">E pra você, o que falta no debate?</div>
+</div>
+
+<div id="vig"></div><div id="grain"></div>
+<div id="foot">@tentandochegaratevoce</div>
+</div>
+<script>window.NOTAS=[["É só se esforçar.", "Uma família pobre leva <span class='g'>9 gerações</span> pra chegar à renda média.", "Não é preguiça. É fome na infância, escola fraca e nenhuma rede de apoio.", "OCDE · A Broken Social Elevator · 2018"], ["Socialismo nunca deu certo.", "O SUS atende de graça <span class='g'>3 em cada 4 brasileiros.</span>", "Remédio, vacina, transplante pra quem nunca poderia pagar. Política pública brasileira, e funciona.", "Constituição de 1988 · ANS"], ["Ninguém tira direito de ninguém.", "No 1º dia de governo, a população <span class='g'>LGBT</span> saiu das diretrizes de Direitos Humanos.", "Foi uma canetada só, na reorganização dos ministérios.", "MP 870 · 01/01/2019"], ["Ele é só sincero.", "Disse em vídeo: <span class='g'>“Sou homofóbico, sim, com muito orgulho.”</span>", "Quando um líder diz isso, ele autoriza o desprezo.", "Jair Bolsonaro, em vídeo (Catraca Livre)"], ["Feminicídio não existe.", "<span class='g'>1.492 mulheres</span> mortas por serem mulheres em 2024. Quatro por dia.", "A lei que tornou isso crime hediondo foi sancionada por governo de esquerda.", "Anuário FBSP 2025 · Lei 13.104/2015"], ["Mais pena resolve.", "Prender mais <span class='g'>não diminuiu o crime</span> no Brasil.", "A Noruega faz o contrário: trata o preso pra ele não voltar. Lá, só 1 em cada 5 volta a cometer crime.", "World Prison Brief · Noruega: Kristoffersen 2010"], ["Eles defendem a família.", "O governo <span class='g'>vetou absorvente grátis</span> pra meninas pobres.", "O Congresso teve que derrubar o veto.", "Lei 14.214/2021 · veto derrubado em 2022"], ["Cuidam de todos os brasileiros.", "Na pandemia, ele <span class='g'>vetou água potável</span> garantida pras aldeias indígenas.", "O Congresso derrubou o veto.", "Lei 14.021/2020 · vetos derrubados"], ["Esquerda passa pano.", "<span class='g'>Maria da Penha, Ficha Limpa e delação premiada.</span>", "As três leis foram sancionadas por governos de esquerda.", "Lei 11.340/2006 · LC 135/2010 · Lei 12.850/2013"], ["Congresso forte é bom pro povo.", "A Câmara aprovou a <span class='g'>PEC da Blindagem</span>: deputado só seria processado se os colegas deixassem.", "O Senado só enterrou depois que o povo foi pra rua.", "PEC da Blindagem · CCJ do Senado 26×0 · set/2025"], ["Bolsa Família vicia.", "Arrumou emprego? <span class='g'>Não perde o benefício na hora.</span>", "A Regra de Proteção mantém parte do valor por um tempo.", "MDS · Regra de Proteção"]];
+(function(){const h=document.getElementById('notas');NOTAS.forEach((n,i)=>{const t=30.2+i*1.8,o=t+3.5,top=i%2?1010:300;
+h.insertAdjacentHTML('beforeend',`<div class="glass myth" data-t="${t.toFixed(2)}" data-o="${o.toFixed(2)}" style="left:60px;top:${top}px;font-size:40px"><small>DIZEM:</small> “${n[0]}”</div><div class="glass deb" data-t="${(t+.45).toFixed(2)}" data-o="${o.toFixed(2)}" style="left:60px;top:${top+104}px;width:960px"><div class="k" style="font-size:50px">${n[1]}</div><div class="t" style="font-size:31px">${n[2]}</div><div class="s">${n[3]}</div></div>`)})})();</script>
+<script>window.IMGS=['aparecida', 'casal_h', 'farmacia2', 'arara', 'chaves', 'vaqueiro', 'bonfim', 'indigena', 'casal_m', 'sus', 'igreja', 'merenda', 'baiana2', 'gaucho', 'onca', 'arcoiris', 'evangelica', 'nissei', 'caju', 'feira', 'motoboy', 'formanda', 'agricultora', 'casa', 'bandeira', 'operario', 'futebol', 'monstera'];</script>
+<script>
+window.DUR=59;
+const C=(x,a=0,b=1)=>Math.max(a,Math.min(b,x)), O3=t=>1-Math.pow(1-t,3), IO=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+const BK=t=>{const c1=1.5,c3=c1+1;return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2)};
+const R=s=>{const x=Math.sin(s*12.9898+78.233)*43758.5453;return x-Math.floor(x)};
+const IMG=window.IMGS||[];
+const field=document.getElementById('field'), items=[];
+const N=IMG.length;
+for(let i=0;i<N;i++){const name=IMG[i%IMG.length]; const layer=name==='aparecida'?2:i%3; // 0 far 1 mid 2 near
+ const d=document.createElement('div'); d.className='il';
+ const w=layer==0?200+R(i)*60:layer==1?280+R(i)*70:360+R(i)*90; const W2=name==='aparecida'?w*1.45:w; d.style.width=W2+'px';
+ d.innerHTML=`<img src="assets/v2/${name}${layer==0?'_b':''}.png">`; d.style.zIndex=layer; d.style.opacity=layer==0?.75:1;
+ field.appendChild(d); items.push({d,w,layer,x:(i%3)*360+R(i*13+5)*300-w*.35,per:layer==0?59:29.5,ph:(Math.floor(i/3)/Math.ceil(N/3)+(i%3)*.11)%1,rs:(R(i+3)-.5)*24});}
+const cards=[...document.querySelectorAll('.myth,.deb')], main=document.getElementById('main'), ps=[...main.querySelectorAll('p')];
+const close=document.getElementById('close'), cl=[...close.children];
+function enter(el,t,t0,d,kind){ // glass cards: rise + scale + blur-in + shine sweep
+ const p=C((t-t0)/d); if(p<=0){el.style.opacity=0;return}
+ const q=kind==='pop'?BK(p):O3(p);
+ el.style.opacity=C(p*2.2); el.style.filter=p<1?`blur(${(1-p)*14}px)`:'none';
+ el.style.transform=`translateY(${(1-q)*70}px) scale(${.86+.14*q})`;
+ el.style.setProperty('--sh',(120-C((t-t0-d*.4)/1.1)*220)+'%');
+}
+function render(T){
+ // fundo: verde-bandeira que respira para azul royal no meio e volta
+ const m=(Math.sin(T/59*Math.PI*2-Math.PI/2)+1)/2;
+ const g1=[0,140,69],g2=[20,60,170]; const c=g1.map((v,i)=>Math.round(v+(g2[i]-v)*m*.85));
+ document.getElementById('bg').style.background=`radial-gradient(ellipse at 50% 30%,rgb(${c.map(v=>Math.min(255,v+38))}) 0%,rgb(${c}) 55%,rgb(${c.map(v=>v*.55|0)}) 100%)`;
+ const L=document.getElementById('light'); L.style.transform=`translate(${-260+Math.sin(T*2*Math.PI/59*2)*380}px,${-300+Math.cos(T*2*Math.PI/59)*420}px)`;
+ // ilustrações flutuando (parallax de 3 camadas)
+ items.forEach((o,i)=>{const p=((T/o.per)+o.ph)%1; const y=1960-p*2600; const x=o.x+Math.sin(T*2*Math.PI/59*3+i)*22*(o.layer+1);
+  const r=o.rs+Math.sin(T*2*Math.PI/59*5+i*1.7)*4; const s=1+Math.sin(T*2*Math.PI/59*6+i)*.025;
+  o.d.style.transform=`translate(${x}px,${y}px) rotate(${r}deg) scale(${s})`;});
+ // cartão principal
+ const t=T; {const q=C((t-.4)/.5); main.style.opacity=q; main.style.filter=q<1?`blur(${(1-q)*8}px)`:'none';
+  if(t<29.5) main.style.transform='none'; main.style.zIndex=t<1.0?2:5;
+  items.forEach(o=>{if(o.layer==2){o.d.style.zIndex=t<1.0?7:2;}});}
+ ps.forEach((p,i)=>{const t0=.7+i*.06, q=C((t-t0)/.5); p.style.opacity=q; p.style.transform=`translateY(${(1-O3(q))*18}px)`; p.style.filter=q<1?`blur(${(1-q)*6}px)`:'none';});
+ if(t>=29.4){const f=C((t-29.4)/.9); main.style.opacity=1-f; main.style.filter=`blur(${f*16}px)`; main.style.transform=`scale(${1-.04*f})`;}
+ // pares mito/desmentido
+ cards.forEach(el=>{enter(el,t,+el.dataset.t,el.classList.contains('myth')?.45:.8,el.classList.contains('myth')?'pop':'ease'); const x=C((t-(+el.dataset.o))/.6); if(x>0){el.style.opacity=1-x; el.style.filter=`blur(${x*14}px)`; el.style.transform=`translateY(${-x*40}px)`;}});
+ // saída de tudo e fecho
+ const out=C((t-51.3)/1.0);
+ if(out>0){[main,...cards].forEach((el,i)=>{el.style.opacity=(1-out); el.style.filter=`blur(${out*18}px)`;});}
+ document.getElementById('scrim').style.opacity=C((t-51.4)/1.0)*(1-C((t-56.8)/1.6));
+ cl.forEach((el,i)=>{const t0=52.0+i*1.0,q=C((t-t0)/.8),z=C((t-56.8)/1.6); el.style.opacity=q*(1-z); el.style.transform=`translateY(${(1-O3(q))*50}px)`; el.style.filter=(q<1||z>0)?`blur(${(1-q)*16+z*18}px)`:'none';});
+ if(t>=29.4){main.style.opacity=Math.min(+main.style.opacity||0,1-C((t-29.4)/.9));}
+ if(t<.6){main.style.opacity=0;}
+}
+window.render=render; window.EVENTS={whoosh:[],thud:[],slap:[],tick:[],pop:[],glitch:[]};
+window.READY=document.fonts.ready.then(()=>Promise.all([...document.images].map(i=>i.complete?1:new Promise(r=>{i.onload=i.onerror=r})))).then(()=>{render(0);return true});
+</script>
+</body></html>
