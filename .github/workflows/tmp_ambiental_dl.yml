@@ -1,0 +1,51 @@
+name: tmp ambiental dl
+on:
+  push:
+    branches: [tmp-ambiental-dl]
+    paths: [tmp_dl/urls.txt]
+permissions:
+  contents: write
+jobs:
+  dl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg >/dev/null
+      - run: pip install -q yt-dlp faster-whisper numpy
+      - name: download
+        run: |
+          mkdir -p tmp_dl/out
+          i=0
+          while read -r url; do
+            [ -z "$url" ] && continue
+            i=$((i+1))
+            yt-dlp --no-warnings --write-info-json -f "bv*[height<=1280]+ba/b" --merge-output-format mp4 -o "tmp_dl/out/raw_$i.%(ext)s" "$url" || echo "FAIL $url" >> tmp_dl/out/fails.txt
+            if [ -f tmp_dl/out/raw_$i.mp4 ]; then
+              ffmpeg -nostdin -y -loglevel error -i tmp_dl/out/raw_$i.mp4 -vf "scale='min(720,iw)':-2" -c:v libx264 -crf 22 -preset veryfast -c:a aac -b:a 128k tmp_dl/out/clip_$i.mp4
+              rm tmp_dl/out/raw_$i.mp4
+            fi
+          done < tmp_dl/urls.txt
+          ls -la tmp_dl/out
+      - name: transcribe
+        run: |
+          cat > /tmp/tr.py <<'PY'
+          import glob, json, subprocess, numpy as np
+          from faster_whisper import WhisperModel
+          m = WhisperModel("small", device="cpu", compute_type="int8")
+          for f in sorted(glob.glob("tmp_dl/out/clip_*.mp4")):
+              pcm = subprocess.run(["ffmpeg","-nostdin","-i",f,"-f","s16le","-ac","1","-ar","16000","-"],capture_output=True).stdout
+              a = np.frombuffer(pcm, np.int16).astype(np.float32)/32768
+              segs,_ = m.transcribe(a, language="pt", word_timestamps=True)
+              out=[]
+              for s in segs:
+                  out.append({"s":s.start,"e":s.end,"t":s.text,"w":[[w.start,w.end,w.word] for w in s.words]})
+              json.dump(out, open(f.replace(".mp4",".json"),"w"), ensure_ascii=False, indent=0)
+          PY
+          python /tmp/tr.py
+      - name: commit
+        run: |
+          git config user.name "tmp-bot"; git config user.email "tmp@bot"
+          git add tmp_dl/out
+          git commit -m "tmp: downloads" || true
+          git push
