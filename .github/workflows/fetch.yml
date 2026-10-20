@@ -1,0 +1,38 @@
+name: tmp fetch reel audio
+on:
+  push:
+    branches: [tmp-gregorio-audio]
+permissions:
+  contents: write
+jobs:
+  fetch:
+    if: "!contains(github.event.head_commit.message, '[out]')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - run: pip install -q yt-dlp faster-whisper
+      - name: download
+        run: |
+          mkdir -p out
+          yt-dlp -f "bv*+ba/b" --merge-output-format mp4 -o out/ref.mp4 "https://www.instagram.com/reel/Des11ovxTSz/"
+          ffmpeg -nostdin -y -i out/ref.mp4 -vn -ac 1 -ar 44100 -b:a 128k out/voz.mp3
+          ffmpeg -nostdin -y -i out/ref.mp4 -vf "fps=1,scale=270:-2" -q:v 6 out/f_%03d.jpg
+      - name: words
+        run: |
+          python - <<'PY'
+          import json, subprocess, numpy as np
+          from faster_whisper import WhisperModel
+          raw = subprocess.run(["ffmpeg","-nostdin","-i","out/voz.mp3","-f","s16le","-ac","1","-ar","16000","-"],capture_output=True).stdout
+          audio = np.frombuffer(raw,np.int16).astype(np.float32)/32768
+          m = WhisperModel("large-v3", device="cpu", compute_type="int8")
+          segs,_ = m.transcribe(audio, language="pt", word_timestamps=True, beam_size=5)
+          words=[{"w":w.word.strip(),"s":round(w.start,3),"e":round(w.end,3)} for s in segs for w in s.words]
+          json.dump(words, open("out/words.json","w"), ensure_ascii=False)
+          print(len(words))
+          PY
+      - name: commit
+        run: |
+          git config user.name "claude-tmp"; git config user.email "noreply@anthropic.com"
+          rm -f out/ref.mp4
+          git add out && git commit -m "[out] reel audio" && git push
