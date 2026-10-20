@@ -1,0 +1,43 @@
+name: tmp flow jetski clip
+on:
+  push:
+    branches: [tmp-flow-jetski]
+    paths: ['.github/workflows/tmp_flow_jetski.yml']
+permissions:
+  contents: write
+jobs:
+  dl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: tmp-flow-jetski}
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - run: pip install -q -U yt-dlp faster-whisper numpy
+      - name: find + download
+        run: |
+          mkdir -p tmp
+          yt-dlp --no-update --flat-playlist --print "%(id)s | %(duration)s | %(channel)s | %(title)s" "ytsearch8:BOLSONARO EX-PRESIDENTE DO BRASIL Flow #89" > tmp/search.txt 2>&1 || true
+          cat tmp/search.txt
+          ID=$(awk -F' \\| ' '$2>15000 {print $1; exit}' tmp/search.txt)
+          echo "ID=$ID"; echo "$ID" > tmp/id.txt
+          yt-dlp --no-update -f "bv*[height<=480][ext=mp4]+ba[ext=m4a]/b[height<=480]" --merge-output-format mp4 --download-sections "*3:12:30-3:22:30" -o "tmp/flow.%(ext)s" "https://www.youtube.com/watch?v=$ID" 2>&1 | tail -5 || true
+          ls -la tmp
+      - name: transcribe
+        run: |
+          python3 - <<'PY'
+          import os,json,subprocess,numpy as np
+          f='tmp/flow.mp4'
+          if os.path.exists(f):
+              from faster_whisper import WhisperModel
+              raw=subprocess.run(["ffmpeg","-nostdin","-v","error","-i",f,"-ac","1","-ar","16000","-f","s16le","-"],capture_output=True).stdout
+              A=np.frombuffer(raw,np.int16).astype(np.float32)/32768
+              m=WhisperModel("small",device="cpu",compute_type="int8")
+              segs,_=m.transcribe(A,language="pt",word_timestamps=True)
+              json.dump([{"s":s.start,"e":s.end,"t":s.text,"w":[(w.start,w.end,w.word) for w in s.words]} for s in segs],open("tmp/flow.json","w"),ensure_ascii=False)
+          PY
+      - name: commit
+        run: |
+          git config user.name "github-actions"; git config user.email "actions@github.com"
+          git add tmp || true
+          git commit -m "tmp: flow jetski download" || echo nothing
+          git push origin tmp-flow-jetski
