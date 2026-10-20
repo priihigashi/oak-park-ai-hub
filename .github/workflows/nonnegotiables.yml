@@ -22,7 +22,7 @@ jobs:
       pull-requests: write   # helper opens+merges a PR (see scripts/ci/push_prevalidated_main.sh)
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0   # full history: push_prevalidated_main.sh may rebase onto a moved main
