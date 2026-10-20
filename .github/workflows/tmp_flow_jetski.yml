@@ -32,7 +32,23 @@ jobs:
           cmd = ["yt-dlp","--no-update",*args,"-f","bv*[height<=480][ext=mp4]+ba[ext=m4a]/b[height<=480]/b",
                  "--merge-output-format","mp4","--download-sections","*3:12:30-3:22:30","-o","tmp/flow.%(ext)s",url]
           r = subprocess.run(cmd, capture_output=True, text=True)
-          print(r.stdout[-2000:]); print(r.stderr[-2000:])
+          print(r.stderr[-600:])
+          import os
+          if not os.path.exists("tmp/flow.mp4"):
+              print("trying apify route")
+              items = vd._apify_run_items("apidojo~youtube-scraper", {"startUrls":[{"url":url}],"maxItems":1}, limit=1)
+              print("items:", len(items))
+              mu = vd._extract_media_url(items[0]) if items else ""
+              print("media url found:", bool(mu))
+              if mu:
+                  r2 = subprocess.run(["ffmpeg","-nostdin","-v","error","-y","-ss","3:12:30","-i",mu,"-t","600","-c","copy","tmp/flow.mp4"],capture_output=True,text=True)
+                  print("ffmpeg:", r2.returncode, r2.stderr[-400:])
+                  if r2.returncode!=0 or not os.path.exists("tmp/flow.mp4"):
+                      t=__import__("pathlib").Path("tmp")
+                      print("full download:", vd._download_http_media(mu, t/"full.mp4", min_bytes=100000))
+                      if (t/"full.mp4").exists():
+                          subprocess.run(["ffmpeg","-nostdin","-v","error","-y","-ss","3:12:30","-i","tmp/full.mp4","-t","600","-c","copy","tmp/flow.mp4"])
+                          (t/"full.mp4").unlink()
           PY
           ls -la tmp
       - name: transcribe
