@@ -12,17 +12,28 @@ jobs:
       - uses: actions/checkout@v4
         with: {ref: tmp-flow-jetski}
       - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
-      - run: pip install -q -U yt-dlp faster-whisper numpy
-      - name: find + download
+      - uses: denoland/setup-deno@v2
+        with: {deno-version: v2.x}
+      - run: pip install -q -U yt-dlp faster-whisper numpy requests
+      - name: download section via project downloader
+        env:
+          PRI_OP_YT_COOKIES: ${{ secrets.PRI_OP_YT_COOKIES }}
+          APIFY_API_KEY: ${{ secrets.APIFY_API_KEY }}
+          CI: "1"
         run: |
           mkdir -p tmp
-          yt-dlp --no-update --flat-playlist --print "%(id)s | %(duration)s | %(channel)s | %(title)s" "ytsearch8:BOLSONARO EX-PRESIDENTE DO BRASIL Flow #89" > tmp/search.txt 2>&1 || true
-          cat tmp/search.txt
-          ID=$(awk -F' \\| ' '$2>15000 {print $1; exit}' tmp/search.txt)
-          echo "ID=$ID"; echo "$ID" > tmp/id.txt
-          ID=EToS1HBw64Q
-          yt-dlp --no-update -f "bv*[height<=480][ext=mp4]+ba[ext=m4a]/b[height<=480]/b" --merge-output-format mp4 --download-sections "*3:12:30-3:22:30" -o "tmp/flow.%(ext)s" "https://www.youtube.com/watch?v=$ID" > tmp/dl.log 2>&1 || true
-          tail -30 tmp/dl.log
+          python3 - <<'PY' > tmp/dl.log 2>&1 || true
+          import sys, subprocess
+          sys.path.insert(0, "scripts/capture")
+          import video_downloader as vd
+          url = "https://www.youtube.com/watch?v=EToS1HBw64Q"
+          args = vd._cookie_args(url, prefer_browser=False)
+          print("cookie args present:", bool(args))
+          cmd = ["yt-dlp","--no-update",*args,"-f","bv*[height<=480][ext=mp4]+ba[ext=m4a]/b[height<=480]/b",
+                 "--merge-output-format","mp4","--download-sections","*3:12:30-3:22:30","-o","tmp/flow.%(ext)s",url]
+          r = subprocess.run(cmd, capture_output=True, text=True)
+          print(r.stdout[-2000:]); print(r.stderr[-2000:])
+          PY
           ls -la tmp
       - name: transcribe
         run: |
@@ -35,11 +46,11 @@ jobs:
               A=np.frombuffer(raw,np.int16).astype(np.float32)/32768
               m=WhisperModel("small",device="cpu",compute_type="int8")
               segs,_=m.transcribe(A,language="pt",word_timestamps=True)
-              json.dump([{"s":s.start,"e":s.end,"t":s.text,"w":[(w.start,w.end,w.word) for w in s.words]} for s in segs],open("tmp/flow.json","w"),ensure_ascii=False)
+              json.dump([{"s":s.start,"e":s.end,"t":s.text} for s in segs],open("tmp/flow.json","w"),ensure_ascii=False)
           PY
       - name: commit
         run: |
           git config user.name "github-actions"; git config user.email "actions@github.com"
           git add -f tmp || true
           git commit -m "tmp: flow jetski download" || echo nothing
-          git push origin tmp-flow-jetski
+          for i in 1 2 3; do git pull -q --rebase -X theirs origin tmp-flow-jetski && git push && break; done
