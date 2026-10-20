@@ -1,25 +1,110 @@
-+ pip install -q 'rembg[cpu]' transformers torch --extra-index-url https://download.pytorch.org/whl/cpu
-+ mkdir -p tmp_job/out
-+ python3 tmp_job/proc.py
-[0;93m2026-10-20 17:32:23.321286797 [W:onnxruntime:Default, device_discovery.cc:95 GetPciBusId] Skipping pci_bus_id for PCI path at "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/5620e0c7-8062-4dce-aeb7-520c7ef76171" because filename "5620e0c7-8062-4dce-aeb7-520c7ef76171" did not match expected pattern of [0-9a-f]+:[0-9a-f]+:[0-9a-f]+[.][0-9a-f]+[m
-Downloading data from 'https://github.com/danielgatis/rembg/releases/download/v0.0.0/isnet-general-use.onnx' to file '/home/runner/.rembg/models/isnet-general-use/isnet-general-use.onnx'.
-  0%|                                               | 0.00/179M [00:00<?, ?B/s]  1%|▍                                     | 2.05M/179M [00:00<00:08, 20.2MB/s]  3%|█▎                                    | 6.24M/179M [00:00<00:05, 32.9MB/s]  8%|██▉                                   | 13.8M/179M [00:00<00:03, 52.4MB/s] 13%|█████                                 | 23.6M/179M [00:00<00:02, 70.2MB/s] 19%|███████                               | 33.5M/179M [00:00<00:01, 80.5MB/s] 24%|█████████▏                            | 43.3M/179M [00:00<00:01, 86.5MB/s] 30%|███████████▎                          | 53.2M/179M [00:00<00:01, 90.6MB/s] 35%|█████████████▍                        | 63.1M/179M [00:00<00:01, 93.4MB/s] 41%|███████████████▌                      | 73.0M/179M [00:00<00:01, 95.2MB/s] 46%|█████████████████▋                    | 83.0M/179M [00:01<00:00, 96.5MB/s] 52%|███████████████████▋                  | 92.7M/179M [00:01<00:00, 96.8MB/s] 57%|██████████████████████▍                | 103M/179M [00:01<00:00, 97.2MB/s] 63%|████████████████████████▌              | 112M/179M [00:01<00:00, 97.7MB/s] 68%|██████████████████████████▋            | 122M/179M [00:01<00:00, 97.7MB/s] 74%|████████████████████████████▊          | 132M/179M [00:01<00:00, 98.3MB/s] 80%|███████████████████████████████        | 142M/179M [00:01<00:00, 98.6MB/s] 85%|█████████████████████████████████▏     | 152M/179M [00:01<00:00, 98.8MB/s] 91%|███████████████████████████████████▎   | 162M/179M [00:01<00:00, 98.9MB/s] 96%|█████████████████████████████████████▌ | 172M/179M [00:01<00:00, 99.0MB/s]  0%|                                               | 0.00/179M [00:00<?, ?B/s]100%|████████████████████████████████████████| 179M/179M [00:00<00:00, 932GB/s]
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-Loading weights:   0%|          | 0/287 [00:00<?, ?it/s]Loading weights: 100%|██████████| 287/287 [00:00<00:00, 3690.56it/s]
++ pip install -q yt-dlp
++ mkdir -p tmp_job/out/v
 + PER=3
 + python3 tmp_job/commons_fetch.py tmp_job
-NADA PARA apy Apyterewa desintrusão
-NADA PARA boi gado nelore pasto Amazônia
-pasto_0.jpg | CC BY-SA 2.0 | File:Deforestation at Novo Progresso, Pará State, in Brazilian Amazon.jpg
-NADA PARA castanha castanheira isolada pasto Pará
-gado2_0.jpg | Public domain | File:Fires in the Amazon (MODIS 2024-02-22).jpg
-gado2_1.jpg | CC BY-SA 2.0 | File:Wildfires at Manuel Urbano, Acre, Brazil.jpg
-gado2_2.jpg | CC BY-SA 2.0 | File:Queimada em Canutama, AM, ás margens da Rodovia Transamazônica Activelly burning fire yesterday at Canutama, along Transamazônica "highway" (48551456541).jpg
-terrameio_0.jpg | CC BY-SA 4.0 | File:Rio Novo, Estação Ecológica Terra do Meio 2.jpg
-terrameio_1.jpg | CC BY-SA 4.0 | File:Rio Novo, Estacao Ecologica Terra do Meio.jpg
-terrameio_2.jpg | CC BY 2.0 | File:CMA - Comissão de Meio Ambiente, Defesa do Consumidor e Fiscalização e Controle (18429543241).jpg
-saofelix_0.jpg | CC BY-SA 2.0 | File:Burn scar at Triunfo do Xingú Environmental Protection Area, at São Félix do Xingú.jpg
-saofelix_1.jpg | CC BY 3.0 br | File:SaoFelixdoXingu32.jpg
-saofelix_2.jpg | CC BY 3.0 | File:São Félix do Xingu - State of Pará, Brazil - panoramio.jpg
-+ rm -rf tmp_job/out/cands2
-+ mv tmp_job/cands tmp_job/out/cands2
+salles_0.jpg | Public domain | File:Andrew Wheeler and Ricardo de Aquino Salles in January 2020 (1).jpg
+salles_1.jpg | Public domain | File:Andrew Wheeler and Ricardo de Aquino Salles in January 2020 (3).jpg
+salles_2.jpg | Public domain | File:Andrew Wheeler and Ricardo de Aquino Salles in January 2020 (2).jpg
+boiapy_0.jpg | CC BY-SA 3.0 | File:ParqueNacionalSerraDoPardo Esperando a chuva no Rio Xingu Ricardo Dagnino 2008.JPG
+NADA PARA gadoibama Ibama gado apreendido
++ mv tmp_job/cands tmp_job/out/cands3
++ for u in "https://agenciagov.ebc.com.br/noticias/202409/pf-em-acao-conjunta-realiza-operacao-para-a-retirada-de-gados-criados-ilegalmente-na-terra-indigena-apyterewa-pa" "https://sbtnews.sbt.com.br/noticia/brasil/operacao-retira-158-bois-e-25-cavalos-criados-ilegalmente-em-terra-indigena-no-para" "https://www.canalrural.com.br/seguranca/mais-de-7-mil-cabecas-de-gado-sao-apreendidas-em-areas-de-desmatamento-ilegal/" "https://www.canalrural.com.br/pecuaria/ibama-apreende-1-730-cabecas-de-gado-em-operacao/" "https://www.canalrural.com.br/seguranca/forca-tarefa-retira-2-mil-cabecas-de-gado-ilegais-no-sudoeste-do-para/" "https://www.cnnbrasil.com.br/politica/assista-ao-video-da-reuniao-ministerial-com-bolsonaro/" "https://www.instagram.com/ibamagov/reels/"
+++ echo https://agenciagov.ebc.com.br/noticias/202409/pf-em-acao-conjunta-realiza-operacao-para-a-retirada-de-gados-criados-ilegalmente-na-terra-indigena-apyterewa-pa
+++ md5sum
+++ cut -c1-6
++ n=f9aeaf
++ timeout 240 yt-dlp --no-warnings --playlist-items 1-6 -f 'bv*[height<=720]+ba/b[height<=720]/b' --merge-output-format mp4 --write-info-json -o 'tmp_job/out/v/f9aeaf_%(playlist_index|0)s.%(ext)s' https://agenciagov.ebc.com.br/noticias/202409/pf-em-acao-conjunta-realiza-operacao-para-a-retirada-de-gados-criados-ilegalmente-na-terra-indigena-apyterewa-pa
+[generic] Extracting URL: https://agenciagov.ebc.com.br/noticias/202409/pf-em-acao-conjunta-realiza-operacao-para-a-retirad...ndigena-apyterewa-pa
+[generic] pf-em-acao-conjunta-realiza-operacao-para-a-retirada-de-gados-criados-ilegalmente-na-terra-indigena-apyterewa-pa: Downloading webpage
+[redirect] Following redirect to https://agenciagov.ebc.com.br/login?came_from=/noticias/202409/pf-em-acao-conjunta-realiza-operacao-para-a-retirada-de-gados-criados-ilegalmente-na-terra-indigena-apyterewa-pa
+[generic] Extracting URL: https://agenciagov.ebc.com.br/login?came_from=/noticias/202409/pf-em-acao-conjunta-realiza-operac...ndigena-apyterewa-pa
+[generic] pf-em-acao-conjunta-realiza-operacao-para-a-retirada-de-gados-criados-ilegalmente-na-terra-indigena-apyterewa-pa: Downloading webpage
+[generic] pf-em-acao-conjunta-realiza-operacao-para-a-retirada-de-gados-criados-ilegalmente-na-terra-indigena-apyterewa-pa: Extracting information
+ERROR: Unsupported URL: https://agenciagov.ebc.com.br/login?came_from=/noticias/202409/pf-em-acao-conjunta-realiza-operacao-para-a-retirada-de-gados-criados-ilegalmente-na-terra-indigena-apyterewa-pa
++ echo 'FAIL https://agenciagov.ebc.com.br/noticias/202409/pf-em-acao-conjunta-realiza-operacao-para-a-retirada-de-gados-criados-ilegalmente-na-terra-indigena-apyterewa-pa'
+FAIL https://agenciagov.ebc.com.br/noticias/202409/pf-em-acao-conjunta-realiza-operacao-para-a-retirada-de-gados-criados-ilegalmente-na-terra-indigena-apyterewa-pa
++ for u in "https://agenciagov.ebc.com.br/noticias/202409/pf-em-acao-conjunta-realiza-operacao-para-a-retirada-de-gados-criados-ilegalmente-na-terra-indigena-apyterewa-pa" "https://sbtnews.sbt.com.br/noticia/brasil/operacao-retira-158-bois-e-25-cavalos-criados-ilegalmente-em-terra-indigena-no-para" "https://www.canalrural.com.br/seguranca/mais-de-7-mil-cabecas-de-gado-sao-apreendidas-em-areas-de-desmatamento-ilegal/" "https://www.canalrural.com.br/pecuaria/ibama-apreende-1-730-cabecas-de-gado-em-operacao/" "https://www.canalrural.com.br/seguranca/forca-tarefa-retira-2-mil-cabecas-de-gado-ilegais-no-sudoeste-do-para/" "https://www.cnnbrasil.com.br/politica/assista-ao-video-da-reuniao-ministerial-com-bolsonaro/" "https://www.instagram.com/ibamagov/reels/"
+++ echo https://sbtnews.sbt.com.br/noticia/brasil/operacao-retira-158-bois-e-25-cavalos-criados-ilegalmente-em-terra-indigena-no-para
+++ md5sum
+++ cut -c1-6
++ n=becda0
++ timeout 240 yt-dlp --no-warnings --playlist-items 1-6 -f 'bv*[height<=720]+ba/b[height<=720]/b' --merge-output-format mp4 --write-info-json -o 'tmp_job/out/v/becda0_%(playlist_index|0)s.%(ext)s' https://sbtnews.sbt.com.br/noticia/brasil/operacao-retira-158-bois-e-25-cavalos-criados-ilegalmente-em-terra-indigena-no-para
+[generic] Extracting URL: https://sbtnews.sbt.com.br/noticia/brasil/operacao-retira-158-bois-e-25-cavalos-criados-ilegalmen...rra-indigena-no-para
+[generic] operacao-retira-158-bois-e-25-cavalos-criados-ilegalmente-em-terra-indigena-no-para: Downloading webpage
+[generic] operacao-retira-158-bois-e-25-cavalos-criados-ilegalmente-em-terra-indigena-no-para: Extracting information
+ERROR: Unsupported URL: https://sbtnews.sbt.com.br/noticia/brasil/operacao-retira-158-bois-e-25-cavalos-criados-ilegalmente-em-terra-indigena-no-para
++ echo 'FAIL https://sbtnews.sbt.com.br/noticia/brasil/operacao-retira-158-bois-e-25-cavalos-criados-ilegalmente-em-terra-indigena-no-para'
+FAIL https://sbtnews.sbt.com.br/noticia/brasil/operacao-retira-158-bois-e-25-cavalos-criados-ilegalmente-em-terra-indigena-no-para
++ for u in "https://agenciagov.ebc.com.br/noticias/202409/pf-em-acao-conjunta-realiza-operacao-para-a-retirada-de-gados-criados-ilegalmente-na-terra-indigena-apyterewa-pa" "https://sbtnews.sbt.com.br/noticia/brasil/operacao-retira-158-bois-e-25-cavalos-criados-ilegalmente-em-terra-indigena-no-para" "https://www.canalrural.com.br/seguranca/mais-de-7-mil-cabecas-de-gado-sao-apreendidas-em-areas-de-desmatamento-ilegal/" "https://www.canalrural.com.br/pecuaria/ibama-apreende-1-730-cabecas-de-gado-em-operacao/" "https://www.canalrural.com.br/seguranca/forca-tarefa-retira-2-mil-cabecas-de-gado-ilegais-no-sudoeste-do-para/" "https://www.cnnbrasil.com.br/politica/assista-ao-video-da-reuniao-ministerial-com-bolsonaro/" "https://www.instagram.com/ibamagov/reels/"
+++ echo https://www.canalrural.com.br/seguranca/mais-de-7-mil-cabecas-de-gado-sao-apreendidas-em-areas-de-desmatamento-ilegal/
+++ md5sum
+++ cut -c1-6
++ n=501303
++ timeout 240 yt-dlp --no-warnings --playlist-items 1-6 -f 'bv*[height<=720]+ba/b[height<=720]/b' --merge-output-format mp4 --write-info-json -o 'tmp_job/out/v/501303_%(playlist_index|0)s.%(ext)s' https://www.canalrural.com.br/seguranca/mais-de-7-mil-cabecas-de-gado-sao-apreendidas-em-areas-de-desmatamento-ilegal/
+[generic] Extracting URL: https://www.canalrural.com.br/seguranca/mais-de-7-mil-cabecas-de-gado-sao-apreendidas-em-areas-de-desmatamento-ilegal/
+[generic] mais-de-7-mil-cabecas-de-gado-sao-apreendidas-em-areas-de-desmatamento-ilegal: Downloading webpage
+ERROR: [generic] Got HTTP Error 403 caused by Cloudflare anti-bot challenge; see  https://github.com/yt-dlp/yt-dlp#impersonation  for how to install the required impersonation dependency, and try again with  --extractor-args "generic:impersonate"
++ echo 'FAIL https://www.canalrural.com.br/seguranca/mais-de-7-mil-cabecas-de-gado-sao-apreendidas-em-areas-de-desmatamento-ilegal/'
+FAIL https://www.canalrural.com.br/seguranca/mais-de-7-mil-cabecas-de-gado-sao-apreendidas-em-areas-de-desmatamento-ilegal/
++ for u in "https://agenciagov.ebc.com.br/noticias/202409/pf-em-acao-conjunta-realiza-operacao-para-a-retirada-de-gados-criados-ilegalmente-na-terra-indigena-apyterewa-pa" "https://sbtnews.sbt.com.br/noticia/brasil/operacao-retira-158-bois-e-25-cavalos-criados-ilegalmente-em-terra-indigena-no-para" "https://www.canalrural.com.br/seguranca/mais-de-7-mil-cabecas-de-gado-sao-apreendidas-em-areas-de-desmatamento-ilegal/" "https://www.canalrural.com.br/pecuaria/ibama-apreende-1-730-cabecas-de-gado-em-operacao/" "https://www.canalrural.com.br/seguranca/forca-tarefa-retira-2-mil-cabecas-de-gado-ilegais-no-sudoeste-do-para/" "https://www.cnnbrasil.com.br/politica/assista-ao-video-da-reuniao-ministerial-com-bolsonaro/" "https://www.instagram.com/ibamagov/reels/"
+++ echo https://www.canalrural.com.br/pecuaria/ibama-apreende-1-730-cabecas-de-gado-em-operacao/
+++ md5sum
+++ cut -c1-6
++ n=525e03
++ timeout 240 yt-dlp --no-warnings --playlist-items 1-6 -f 'bv*[height<=720]+ba/b[height<=720]/b' --merge-output-format mp4 --write-info-json -o 'tmp_job/out/v/525e03_%(playlist_index|0)s.%(ext)s' https://www.canalrural.com.br/pecuaria/ibama-apreende-1-730-cabecas-de-gado-em-operacao/
+[generic] Extracting URL: https://www.canalrural.com.br/pecuaria/ibama-apreende-1-730-cabecas-de-gado-em-operacao/
+[generic] ibama-apreende-1-730-cabecas-de-gado-em-operacao: Downloading webpage
+ERROR: [generic] Got HTTP Error 403 caused by Cloudflare anti-bot challenge; see  https://github.com/yt-dlp/yt-dlp#impersonation  for how to install the required impersonation dependency, and try again with  --extractor-args "generic:impersonate"
++ echo 'FAIL https://www.canalrural.com.br/pecuaria/ibama-apreende-1-730-cabecas-de-gado-em-operacao/'
+FAIL https://www.canalrural.com.br/pecuaria/ibama-apreende-1-730-cabecas-de-gado-em-operacao/
++ for u in "https://agenciagov.ebc.com.br/noticias/202409/pf-em-acao-conjunta-realiza-operacao-para-a-retirada-de-gados-criados-ilegalmente-na-terra-indigena-apyterewa-pa" "https://sbtnews.sbt.com.br/noticia/brasil/operacao-retira-158-bois-e-25-cavalos-criados-ilegalmente-em-terra-indigena-no-para" "https://www.canalrural.com.br/seguranca/mais-de-7-mil-cabecas-de-gado-sao-apreendidas-em-areas-de-desmatamento-ilegal/" "https://www.canalrural.com.br/pecuaria/ibama-apreende-1-730-cabecas-de-gado-em-operacao/" "https://www.canalrural.com.br/seguranca/forca-tarefa-retira-2-mil-cabecas-de-gado-ilegais-no-sudoeste-do-para/" "https://www.cnnbrasil.com.br/politica/assista-ao-video-da-reuniao-ministerial-com-bolsonaro/" "https://www.instagram.com/ibamagov/reels/"
+++ echo https://www.canalrural.com.br/seguranca/forca-tarefa-retira-2-mil-cabecas-de-gado-ilegais-no-sudoeste-do-para/
+++ md5sum
+++ cut -c1-6
++ n=bec13b
++ timeout 240 yt-dlp --no-warnings --playlist-items 1-6 -f 'bv*[height<=720]+ba/b[height<=720]/b' --merge-output-format mp4 --write-info-json -o 'tmp_job/out/v/bec13b_%(playlist_index|0)s.%(ext)s' https://www.canalrural.com.br/seguranca/forca-tarefa-retira-2-mil-cabecas-de-gado-ilegais-no-sudoeste-do-para/
+[generic] Extracting URL: https://www.canalrural.com.br/seguranca/forca-tarefa-retira-2-mil-cabecas-de-gado-ilegais-no-sudoeste-do-para/
+[generic] forca-tarefa-retira-2-mil-cabecas-de-gado-ilegais-no-sudoeste-do-para: Downloading webpage
+ERROR: [generic] Got HTTP Error 403 caused by Cloudflare anti-bot challenge; see  https://github.com/yt-dlp/yt-dlp#impersonation  for how to install the required impersonation dependency, and try again with  --extractor-args "generic:impersonate"
++ echo 'FAIL https://www.canalrural.com.br/seguranca/forca-tarefa-retira-2-mil-cabecas-de-gado-ilegais-no-sudoeste-do-para/'
+FAIL https://www.canalrural.com.br/seguranca/forca-tarefa-retira-2-mil-cabecas-de-gado-ilegais-no-sudoeste-do-para/
++ for u in "https://agenciagov.ebc.com.br/noticias/202409/pf-em-acao-conjunta-realiza-operacao-para-a-retirada-de-gados-criados-ilegalmente-na-terra-indigena-apyterewa-pa" "https://sbtnews.sbt.com.br/noticia/brasil/operacao-retira-158-bois-e-25-cavalos-criados-ilegalmente-em-terra-indigena-no-para" "https://www.canalrural.com.br/seguranca/mais-de-7-mil-cabecas-de-gado-sao-apreendidas-em-areas-de-desmatamento-ilegal/" "https://www.canalrural.com.br/pecuaria/ibama-apreende-1-730-cabecas-de-gado-em-operacao/" "https://www.canalrural.com.br/seguranca/forca-tarefa-retira-2-mil-cabecas-de-gado-ilegais-no-sudoeste-do-para/" "https://www.cnnbrasil.com.br/politica/assista-ao-video-da-reuniao-ministerial-com-bolsonaro/" "https://www.instagram.com/ibamagov/reels/"
+++ echo https://www.cnnbrasil.com.br/politica/assista-ao-video-da-reuniao-ministerial-com-bolsonaro/
+++ md5sum
+++ cut -c1-6
++ n=d5966f
++ timeout 240 yt-dlp --no-warnings --playlist-items 1-6 -f 'bv*[height<=720]+ba/b[height<=720]/b' --merge-output-format mp4 --write-info-json -o 'tmp_job/out/v/d5966f_%(playlist_index|0)s.%(ext)s' https://www.cnnbrasil.com.br/politica/assista-ao-video-da-reuniao-ministerial-com-bolsonaro/
+[generic] Extracting URL: https://www.cnnbrasil.com.br/politica/assista-ao-video-da-reuniao-ministerial-com-bolsonaro/
+[generic] assista-ao-video-da-reuniao-ministerial-com-bolsonaro: Downloading webpage
+[generic] assista-ao-video-da-reuniao-ministerial-com-bolsonaro: Extracting information
+[youtube] Extracting URL: https://www.youtube.com/watch?v=v8fm8-eMrhw#__youtubedl_smuggle=%7B%22force_videoid%22%3A+%22assi...m-bolsonaro%2F%22%7D
+[youtube] v8fm8-eMrhw: Downloading webpage
+[youtube] v8fm8-eMrhw: Downloading visionos player API JSON
+ERROR: [youtube] v8fm8-eMrhw: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
++ echo 'FAIL https://www.cnnbrasil.com.br/politica/assista-ao-video-da-reuniao-ministerial-com-bolsonaro/'
+FAIL https://www.cnnbrasil.com.br/politica/assista-ao-video-da-reuniao-ministerial-com-bolsonaro/
++ for u in "https://agenciagov.ebc.com.br/noticias/202409/pf-em-acao-conjunta-realiza-operacao-para-a-retirada-de-gados-criados-ilegalmente-na-terra-indigena-apyterewa-pa" "https://sbtnews.sbt.com.br/noticia/brasil/operacao-retira-158-bois-e-25-cavalos-criados-ilegalmente-em-terra-indigena-no-para" "https://www.canalrural.com.br/seguranca/mais-de-7-mil-cabecas-de-gado-sao-apreendidas-em-areas-de-desmatamento-ilegal/" "https://www.canalrural.com.br/pecuaria/ibama-apreende-1-730-cabecas-de-gado-em-operacao/" "https://www.canalrural.com.br/seguranca/forca-tarefa-retira-2-mil-cabecas-de-gado-ilegais-no-sudoeste-do-para/" "https://www.cnnbrasil.com.br/politica/assista-ao-video-da-reuniao-ministerial-com-bolsonaro/" "https://www.instagram.com/ibamagov/reels/"
+++ echo https://www.instagram.com/ibamagov/reels/
+++ md5sum
+++ cut -c1-6
++ n=31c4d6
++ timeout 240 yt-dlp --no-warnings --playlist-items 1-6 -f 'bv*[height<=720]+ba/b[height<=720]/b' --merge-output-format mp4 --write-info-json -o 'tmp_job/out/v/31c4d6_%(playlist_index|0)s.%(ext)s' https://www.instagram.com/ibamagov/reels/
+[generic] Extracting URL: https://www.instagram.com/ibamagov/reels/
+[generic] reels: Downloading webpage
+[redirect] Following redirect to https://www.instagram.com/accounts/login/?next=https%3A%2F%2Fwww.instagram.com%2Fibamagov%2Freels%2F&is_from_rle
+[generic] Extracting URL: https://www.instagram.com/accounts/login/?next=https%3A%2F%2Fwww.instagram.com%2Fibamagov%2Freels%2F&is_from_rle
+[generic] ?next=https://www.instagram: Downloading webpage
+[generic] ?next=https://www.instagram: Extracting information
+ERROR: Unsupported URL: https://www.instagram.com/accounts/login/?next=https%3A%2F%2Fwww.instagram.com%2Fibamagov%2Freels%2F&is_from_rle
++ echo 'FAIL https://www.instagram.com/ibamagov/reels/'
+FAIL https://www.instagram.com/ibamagov/reels/
++ for f in tmp_job/out/v/*.mp4
++ ffmpeg -nostdin -v error -y -i 'tmp_job/out/v/*.mp4' -vf 'scale='\''min(720,iw)'\'':-2' -c:v libx264 -crf 24 -c:a aac -b:a 96k 'tmp_job/out/v/*_s.mp4'
+[in#0 @ 0x555959f67e00] Error opening input: No such file or directory
+Error opening input file tmp_job/out/v/*.mp4.
+Error opening input files: No such file or directory
++ find tmp_job/out/v -size +45M -delete
++ ls -la tmp_job/out/v
+total 8
+drwxr-xr-x 2 runner runner 4096 Oct 20 18:08 .
+drwxr-xr-x 6 runner runner 4096 Oct 20 18:08 ..
