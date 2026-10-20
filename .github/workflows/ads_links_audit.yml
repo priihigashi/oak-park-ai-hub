@@ -1,0 +1,36 @@
+name: OPC Ads Links & Phone Audit (read-only)
+
+on:
+  workflow_dispatch:
+    inputs:
+      customer_id:
+        description: "Oak Park Ads customer ID without dashes"
+        required: false
+        default: "8945889168"
+      expected_phone:
+        description: "Phone number the ads SHOULD use"
+        required: false
+        default: "9542586769"
+
+permissions:
+  contents: read
+
+jobs:
+  links-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run read-only links + phone audit
+        env:
+          GOOGLE_ADS_DEVELOPER_TOKEN: ${{ secrets.GOOGLE_ADS_DEVELOPER_TOKEN }}
+          GOOGLE_ADS_MCC_ID: ${{ secrets.GOOGLE_ADS_MCC_ID }}
+          GOOGLE_ADS_CUSTOMER_ID: ${{ inputs.customer_id }}
+          GOOGLE_ADS_DATE_RANGE: LAST_30_DAYS
+          PRI_OP_ADS_TOKEN: ${{ secrets.PRI_OP_ADS_TOKEN }}
+          ADS_EXPECTED_PHONE: ${{ inputs.expected_phone }}
+        working-directory: scripts
+        run: python ads_links_audit.py
