@@ -1,0 +1,18 @@
+name: tmp ambiental job
+on:
+  push:
+    branches: [tmp-ambiental-dl]
+    paths: [tmp_job/run.sh]
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg >/dev/null
+      - run: bash tmp_job/run.sh 2>&1 | tee tmp_job/run.log; mkdir -p tmp_job/out; cp tmp_job/run.log tmp_job/out/
+      - run: |
+          git config user.name tmp-bot; git config user.email tmp@bot
+          git add -f tmp_job/out && git commit -qm "tmp: job out" && for i in 1 2 3; do git pull -q --rebase && git push && break; sleep 5; done
