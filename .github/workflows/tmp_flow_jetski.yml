@@ -20,7 +20,9 @@ jobs:
           cat tmp/search.txt
           ID=$(awk -F' \\| ' '$2>15000 {print $1; exit}' tmp/search.txt)
           echo "ID=$ID"; echo "$ID" > tmp/id.txt
-          yt-dlp --no-update -f "bv*[height<=480][ext=mp4]+ba[ext=m4a]/b[height<=480]" --merge-output-format mp4 --download-sections "*3:12:30-3:22:30" -o "tmp/flow.%(ext)s" "https://www.youtube.com/watch?v=$ID" 2>&1 | tail -5 || true
+          ID=EToS1HBw64Q
+          yt-dlp --no-update -f "bv*[height<=480][ext=mp4]+ba[ext=m4a]/b[height<=480]/b" --merge-output-format mp4 --download-sections "*3:12:30-3:22:30" -o "tmp/flow.%(ext)s" "https://www.youtube.com/watch?v=$ID" > tmp/dl.log 2>&1 || true
+          tail -30 tmp/dl.log
           ls -la tmp
       - name: transcribe
         run: |
