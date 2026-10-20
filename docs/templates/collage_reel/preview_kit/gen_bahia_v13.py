@@ -188,13 +188,14 @@ c1 = chart(s, YRS1, [
     dict(n='BAHIA', sub=f'PFL {PFLX}<br>→ PT {ESQ}', v=BA1, c=Y, w=7, segs=[(0,'#5B7CFF'),(7,'#FF4A3D')], lt=W(s,'bahia',0,-.1), ly=-8),
     dict(n='MARANHÃO', sub=f'PFL/PMDB {DIR}<br>→ PDT {CESQ}', v=MA1, c='#fff', segs=[(0,'#5EC8FF'),(7,'#FF5C8A'),(9,'#5EC8FF')], lt=W(s,'maranhão',0,-.1), ly=14),
     dict(n='BRASIL', v=BR1, c='rgba(242,236,224,.55)', dash=True, w=4, lt=W(s,'olha',0,.6), ly=24),
-], 80, [0, 25, 50, 75], W(s,'olha',0,-.1), 4.2, marks=[('2007', 'PT ASSUME A BAHIA', '#fff')]).replace('{flow}', 'm:3')
+], 80, [0, 25, 50, 75], W(s,'olha',0,-.1), 4.2, h=640, marks=[('2007', 'PT ASSUME A BAHIA', '#fff')]).replace('{flow}', 'm:3')
 H.append(scene(s, rail(0)+f'''
 {eb(1, 'MITO 1 · HOMICÍDIOS POR 100 MIL', top=300)}
 {quote('“A ESQUERDA CAUSOU A VIOLÊNCIA.”', W(s,'mito',0), 'm:2', gap=26)}
 <div class="el body" data-flow="m:2.5" data-gap="20" data-a="fade" data-t=".3" style="left:60px;width:960px;font-size:26px"><span class="lg"><i style="background:#FF4A3D"></i>ESQUERDA</span><span class="lg"><i style="background:#5B7CFF"></i>DIREITA</span><span class="lg"><i style="background:#9A9A9A"></i>BRASIL</span><span class="lgn">A COR MUDA QUANDO MUDA O GOVERNO</span></div>
 {c1}
 <div class="el stamp-r" data-flow="m:4" data-gap="36" data-a="stamp" data-t="{W(s,'mesmo',0,-.05)}" data-d=".35" data-r="-2" style="left:60px;white-space:nowrap;font-size:46px">OS DADOS NÃO SUSTENTAM</div>
+<div class="el fine" data-flow="m:5" data-gap="26" data-a="fade" data-t="{W(s,'qualquer',0)}" style="left:60px">2000–2014: OS 9 ESTADOS DO NE TIVERAM OS DOIS LADOS (64 ANOS DE ESQUERDA, 71 DE DIREITA). SUBIU EM 8 DOS 9. SÓ CAIU EM PE, COM O PSB {CESQ}.</div>
 ''', 'i04', 'IPEA/FBSP, ATLAS DA VIOLÊNCIA (SIM/DATASUS) · ' + IDS, kbo='50% 70%'))
 
 s = 'v03'; CUR['s'] = s
