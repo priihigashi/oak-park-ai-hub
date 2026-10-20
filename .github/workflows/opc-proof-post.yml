@@ -44,7 +44,7 @@ jobs:
 
       - name: Set up Node 24
         if: ${{ github.event.inputs.run_phase == '2' || github.event.inputs.run_phase == 'both' }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '24'
 
