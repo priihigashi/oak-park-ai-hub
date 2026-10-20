@@ -1,0 +1,25 @@
++ pip install -q 'rembg[cpu]' transformers torch --extra-index-url https://download.pytorch.org/whl/cpu
++ mkdir -p tmp_job/out
++ python3 tmp_job/proc.py
+[0;93m2026-10-20 17:32:23.321286797 [W:onnxruntime:Default, device_discovery.cc:95 GetPciBusId] Skipping pci_bus_id for PCI path at "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/5620e0c7-8062-4dce-aeb7-520c7ef76171" because filename "5620e0c7-8062-4dce-aeb7-520c7ef76171" did not match expected pattern of [0-9a-f]+:[0-9a-f]+:[0-9a-f]+[.][0-9a-f]+[m
+Downloading data from 'https://github.com/danielgatis/rembg/releases/download/v0.0.0/isnet-general-use.onnx' to file '/home/runner/.rembg/models/isnet-general-use/isnet-general-use.onnx'.
+  0%|                                               | 0.00/179M [00:00<?, ?B/s]  1%|▍                                     | 2.05M/179M [00:00<00:08, 20.2MB/s]  3%|█▎                                    | 6.24M/179M [00:00<00:05, 32.9MB/s]  8%|██▉                                   | 13.8M/179M [00:00<00:03, 52.4MB/s] 13%|█████                                 | 23.6M/179M [00:00<00:02, 70.2MB/s] 19%|███████                               | 33.5M/179M [00:00<00:01, 80.5MB/s] 24%|█████████▏                            | 43.3M/179M [00:00<00:01, 86.5MB/s] 30%|███████████▎                          | 53.2M/179M [00:00<00:01, 90.6MB/s] 35%|█████████████▍                        | 63.1M/179M [00:00<00:01, 93.4MB/s] 41%|███████████████▌                      | 73.0M/179M [00:00<00:01, 95.2MB/s] 46%|█████████████████▋                    | 83.0M/179M [00:01<00:00, 96.5MB/s] 52%|███████████████████▋                  | 92.7M/179M [00:01<00:00, 96.8MB/s] 57%|██████████████████████▍                | 103M/179M [00:01<00:00, 97.2MB/s] 63%|████████████████████████▌              | 112M/179M [00:01<00:00, 97.7MB/s] 68%|██████████████████████████▋            | 122M/179M [00:01<00:00, 97.7MB/s] 74%|████████████████████████████▊          | 132M/179M [00:01<00:00, 98.3MB/s] 80%|███████████████████████████████        | 142M/179M [00:01<00:00, 98.6MB/s] 85%|█████████████████████████████████▏     | 152M/179M [00:01<00:00, 98.8MB/s] 91%|███████████████████████████████████▎   | 162M/179M [00:01<00:00, 98.9MB/s] 96%|█████████████████████████████████████▌ | 172M/179M [00:01<00:00, 99.0MB/s]  0%|                                               | 0.00/179M [00:00<?, ?B/s]100%|████████████████████████████████████████| 179M/179M [00:00<00:00, 932GB/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/287 [00:00<?, ?it/s]Loading weights: 100%|██████████| 287/287 [00:00<00:00, 3690.56it/s]
++ PER=3
++ python3 tmp_job/commons_fetch.py tmp_job
+NADA PARA apy Apyterewa desintrusão
+NADA PARA boi gado nelore pasto Amazônia
+pasto_0.jpg | CC BY-SA 2.0 | File:Deforestation at Novo Progresso, Pará State, in Brazilian Amazon.jpg
+NADA PARA castanha castanheira isolada pasto Pará
+gado2_0.jpg | Public domain | File:Fires in the Amazon (MODIS 2024-02-22).jpg
+gado2_1.jpg | CC BY-SA 2.0 | File:Wildfires at Manuel Urbano, Acre, Brazil.jpg
+gado2_2.jpg | CC BY-SA 2.0 | File:Queimada em Canutama, AM, ás margens da Rodovia Transamazônica Activelly burning fire yesterday at Canutama, along Transamazônica "highway" (48551456541).jpg
+terrameio_0.jpg | CC BY-SA 4.0 | File:Rio Novo, Estação Ecológica Terra do Meio 2.jpg
+terrameio_1.jpg | CC BY-SA 4.0 | File:Rio Novo, Estacao Ecologica Terra do Meio.jpg
+terrameio_2.jpg | CC BY 2.0 | File:CMA - Comissão de Meio Ambiente, Defesa do Consumidor e Fiscalização e Controle (18429543241).jpg
+saofelix_0.jpg | CC BY-SA 2.0 | File:Burn scar at Triunfo do Xingú Environmental Protection Area, at São Félix do Xingú.jpg
+saofelix_1.jpg | CC BY 3.0 br | File:SaoFelixdoXingu32.jpg
+saofelix_2.jpg | CC BY 3.0 | File:São Félix do Xingu - State of Pará, Brazil - panoramio.jpg
++ rm -rf tmp_job/out/cands2
++ mv tmp_job/cands tmp_job/out/cands2
