@@ -223,11 +223,11 @@ H.append(scene(s, rail(0)+f'''
   {gov('2002', 'BENEDITA', 'PT', ESQ, W(s,'benedita',0,-.2), sub='VICE QUE ASSUMIU')}
   {gov('2003–2006', 'ROSINHA', 'PSB→MDB', '<span style="white-space:nowrap">' + CESQ + DIR + '</span>', W(s,'rosinha',0,-.2), sub='!PRESA EM 2017')}
   {gov('2007–2014', 'CABRAL', 'PMDB', DIR, W(s,'cabral',0,-.2), col=Y, sub='!PRESO EM 2016')}
-  {gov('2014–2018', 'PEZÃO', 'MDB', DIR, W(s,'pezão',0,-.2), col=Y, sub='!PRESO EM 2018 · ABSOLVIDO')}
-  {gov('2019–2020', 'WITZEL', 'PSC', DIR, W(s,'witzel',0,-.2), col=Y, sub='!AFASTADO E CASSADO')}
-  {gov('2020–2026', 'CASTRO', 'PSC→PL', DIR, W(s,'castro',0,-.2), col=Y, sub='!INELEGÍVEL ATÉ 2030')}</div>
+  {gov('2014–2018', 'PEZÃO', 'MDB', DIR, W(s,'pezão',0,-.2), col=Y, sub='!PRESO 2018 · ABSOLVIDO 2023')}
+  {gov('2019–2020', 'WITZEL', 'PSC', DIR, W(s,'witzel',0,-.2), col=Y, sub='!AFASTADO 2020 · CASSADO 2021')}
+  {gov('2020–MAR/2026', 'CASTRO', 'PSC→PL', DIR, W(s,'castro',0,-.2), col=Y, sub='!RENUNCIOU · INELEGÍVEL ATÉ 2030')}</div>
 <div class="el h" data-flow="m:3" data-gap="34" data-a="slam" data-t="{W(s,'vinte',0,-.15)}" style="left:60px;width:960px;font-size:64px;color:#fff">23 ANOS DE <span class="hl">DIREITA</span></div>
-<div class="el fine" data-flow="m:4" data-gap="20" data-a="fade" data-t="{W(s,'lados',0,.2)}" style="left:60px">MDB = 7,01 (DIREITA); ROSINHA NO MDB DESDE AGO/2003. PT TEVE SECRETARIAS COM CABRAL ATÉ 2013; GAROTINHO FOI SECRETÁRIO DE SEGURANÇA DE ROSINHA. ANTES: MARCELLO ALENCAR <span style="white-space:nowrap">(PSDB {DIR})</span> E BRIZOLA <span style="white-space:nowrap">(PDT {CESQ}).</span> HOJE: INTERINO RICARDO COUTO (TJ-RJ). PREFEITOS DESDE 1993: DE CENTRO-DIREITA A EXTREMA-DIREITA. POLÍCIAS = ESTADO (CF, ART. 144).</div>
+<div class="el fine" data-flow="m:4" data-gap="20" data-a="fade" data-t="{W(s,'lados',0,.2)}" style="left:60px">MDB = 7,01: “A DIREITA, QUE COMEÇA COM MDB” (BOLOGNESI ET AL., DADOS, 2023); ESTUDOS ANTIGOS: CENTRO. ROSINHA NO MDB DESDE AGO/2003. PT TEVE SECRETARIAS COM CABRAL ATÉ 2013; GAROTINHO FOI SECRETÁRIO DE SEGURANÇA DE ROSINHA. ANTES: MARCELLO ALENCAR <span style="white-space:nowrap">(PSDB {DIR})</span> E BRIZOLA <span style="white-space:nowrap">(PDT {CESQ}).</span> DESDE MAR/2026: INTERINO RICARDO COUTO (TJ-RJ, SEM PARTIDO). PREFEITOS DESDE 1993: DE CENTRO-DIREITA A EXTREMA-DIREITA. CF, ART. 144.</div>
 ''', 'i02', 'TSE · TJ-RJ · ' + IDS, kbo='60% 50%'))
 
 # cena v03 (mandato por mandato) removida na rodada 27 — ver git log para o código
@@ -491,7 +491,7 @@ CSS = open(os.path.join(KIT, 'preview_kit/style.css')).read() + '''
 .items.tight .item .t{font-size:40px!important}.items .item .t{font-size:48px}
 .big23.solo{top:auto}
 .row{padding:12px 0}
-.govs .row{padding:7px 0}.govs .row.txt{grid-template-columns:300px 1fr;column-gap:52px}.govs .selo{font-size:18px!important;letter-spacing:.3px!important;padding:2px 8px!important}.govs .row.txt .v{font-size:36px}.govs .row .v .pt{font-size:22px}.govs .row .v .ide{font-size:17px}
+.govs .row{padding:7px 0}.govs .row.txt{grid-template-columns:370px 1fr;column-gap:28px}.govs .selo{font-size:18px!important;letter-spacing:.3px!important;padding:2px 8px!important}.govs .row.txt .v{font-size:36px}.govs .row .v .pt{font-size:22px}.govs .row .v .ide{font-size:17px}
 '''
 page = f'''<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Rio de Janeiro</title>
 <link rel="stylesheet" href="fx.css"><style>{CSS}</style></head><body><div id="stage">
