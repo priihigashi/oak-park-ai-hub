@@ -1,0 +1,35 @@
++ pip install -q yt-dlp edge-tts
++ mkdir -p tmp_job/out
++ python3 tmp_job/commons_fetch.py tmp_job PER=3
+desmat_0.jpg | CC BY 2.0 | File:SOBREVVO EM RONDONIA DIA 07-08-2020 (FOTO BRUNO KELLY) (62) (50224604772).jpg
+gado_0.jpg | CC BY-SA 2.0 | File:CBERS 4 AWFI 20191028 178 117 RGB151413 Lagos no Beni by Oton Barros.jpg
+gado_1.jpg | Public domain | File:Fires in South America (MODIS 2020-08-01).jpg
+queimada_0.jpg | CC BY-SA 2.0 | File:Burn scar at Triunfo do Xingú Environmental Protection Area, at São Félix do Xingú.jpg
+queimada_1.jpg | CC BY 2.0 | File:Desmatamento e Queimdas 2020 (50209159656).jpg
+queimada_2.jpg | CC BY 2.0 | File:Desmatamento e Queimdas 2020 (50209160011).jpg
+ibama_0.jpg | CC BY 2.0 | File:Operação Onda Verde, 2014 (28766173584).jpg
+ibama_1.jpg | CC BY 2.0 | File:Operação Onda Verde, 2014 (28766149834).jpg
+ibama_2.jpg | CC BY 2.0 | File:Operação Onda Verde, 2014 (29102194990).jpg
+maraba_0.jpg | CC BY-SA 3.0 | File:Marabá - Pará - panoramio (31).jpg
+maraba_1.jpg | CC BY-SA 4.0 | File:Vista panorâmica da Nova Marabá.jpg
+maraba_2.jpg | CC BY-SA 4.0 | File:Marabá - Pará - Brasil 61.jpg
+NADA PARA castanheira Bertholletia excelsa pasture
+floresta_0.jpg | Public domain | File:Afternoon Clouds over the Amazon Rainforest.jpg
+NADA PARA rios Amazon rainforest mist clouds
+flavio_0.jpg | CC BY 2.0 | File:Entrevistas - Senador Flávio Bolsonaro (Republicanos-RJ) e advogado Frederick Wassef.jpg
+flavio_1.jpg | Public domain | File:Donald Trump, Eduardo Bolsonaro, Flávio Bolsonaro, and Paulo Figueiredo.jpg
+flavio_2.jpg | CC BY 2.0 | File:Pedro Guimarães, Jair Bolsonaro e Flávio Bolsonaro.jpg
+helder_0.jpg | CC BY 2.0 | File:Helder Barbalho em junho de 2019 (2).jpg
+helder_1.jpg | CC BY 2.0 | File:Helder Barbalho em junho de 2019 (1).jpg
+helder_2.jpg | CC BY 2.0 | File:Helder Barbalho ministro.jpg
+jair_0.jpg | CC BY 2.0 | File:Jair Bolsonaro em 24 de abril de 2019 (1) (cropped).jpg
+jair_1.jpg | CC BY 2.0 | File:Jair Bolsonaro 2019 Portrait (3x4 cropped center).jpg
+jair_2.jpg | CC BY 2.0 | File:Jair Bolsonaro 2019 Portrait (3x4 cropped).jpg
+agricultor_0.jpg | CC BY-SA 2.0 | File:Agricultura familiar (16075907888).jpg
+agricultor_1.jpg | CC BY-SA 2.0 | File:Agricultura familiar (15643548663).jpg
+agricultor_2.jpg | CC BY 2.0 | File:Expo Alagoinhas dinamiza agricultura familiar (3987203842).jpg
++ PER=3
++ python3 tmp_job/commons_fetch.py tmp_job
+NADA PARA castanheira Bertholletia excelsa pasture
+NADA PARA rios Amazon rainforest mist clouds
++ mv tmp_job/cands tmp_job/out/cands
