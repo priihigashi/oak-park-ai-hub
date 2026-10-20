@@ -40,6 +40,6 @@ jobs:
       - name: commit
         run: |
           git config user.name "github-actions"; git config user.email "actions@github.com"
-          git add tmp || true
+          git add -f tmp || true
           git commit -m "tmp: flow jetski download" || echo nothing
           git push origin tmp-flow-jetski
