@@ -1,0 +1,60 @@
+name: tmp ambiental img
+on:
+  push:
+    branches: [tmp-ambiental-dl]
+    paths: [tmp_img/jobs.json]
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: replicate
+        env:
+          REPLICATE_API_TOKEN: ${{ secrets.PRI_OP_REPLICATE_API_KEY }}
+        run: |
+          mkdir -p tmp_img/out
+          python3 - <<'PY'
+          import os, json, time, urllib.request, urllib.error
+          jobs = json.load(open("tmp_img/jobs.json"))
+          H = {"Authorization": "Bearer " + os.environ["REPLICATE_API_TOKEN"], "Content-Type": "application/json", "Prefer": "wait=60"}
+          def call(m, u, b=None):
+              r = urllib.request.Request(u, method=m, headers=H, data=json.dumps(b).encode() if b is not None else None)
+              try:
+                  with urllib.request.urlopen(r, timeout=180) as x: return json.loads(x.read())
+              except urllib.error.HTTPError as e:
+                  return {"http_error": e.code, "detail": e.read().decode()[:800]}
+          urls, log = {}, []
+          for j in jobs:
+              name, model = j["name"], j["model"]
+              inp = {k: (urls.get(v[1:]) if isinstance(v, str) and v.startswith("@") else v) for k, v in j["input"].items()}
+              if any(v is None for v in inp.values()):
+                  log.append({"name": name, "skip": "missing dep"}); continue
+              p = call("POST", f"https://api.replicate.com/v1/models/{model}/predictions", {"input": inp})
+              if p.get("http_error") in (404, 422):
+                  m = call("GET", f"https://api.replicate.com/v1/models/{model}")
+                  v = (m.get("latest_version") or {}).get("id")
+                  if v: p = call("POST", "https://api.replicate.com/v1/predictions", {"version": v, "input": inp})
+              t0 = time.time()
+              while p.get("status") not in ("succeeded", "failed", "canceled") and "http_error" not in p and time.time() - t0 < 600:
+                  time.sleep(3); p = call("GET", p["urls"]["get"])
+              out = p.get("output")
+              if isinstance(out, dict): out = [v for v in out.values() if isinstance(v, str)]
+              lst = out if isinstance(out, list) else ([out] if isinstance(out, str) else [])
+              files = []
+              for k, u in enumerate(lst):
+                  if not (isinstance(u, str) and u.startswith("http")): continue
+                  if k == 0: urls[name] = u
+                  ext = u.split("?")[0].rsplit(".", 1)[-1][:5]
+                  fn = f"tmp_img/out/{name}{'' if k == 0 else '_' + str(k)}.{ext}"
+                  urllib.request.urlretrieve(u, fn); files.append(fn)
+              e = {"name": name, "status": p.get("status"), "err": p.get("error") or p.get("http_error"), "detail": p.get("detail"), "files": files}
+              print(json.dumps(e)); log.append(e)
+          json.dump(log, open("tmp_img/out/log.json", "w"), indent=1)
+          PY
+      - run: |
+          git config user.name tmp-bot; git config user.email tmp@bot
+          git pull -q --rebase || true
+          git add tmp_img/out && git commit -qm "tmp: images" && git push
