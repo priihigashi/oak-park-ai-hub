@@ -84,7 +84,7 @@ def row(k, v, frac, color, t, sub='', fade=None):
     return f'<div class="row"{fa}><div class="k">{k}{sb}</div>{bar}<div class="v" style="color:{col}">{v}</div></div>'
 def item(kick, txt, t, color='#fff'):
     return f'<div class="item" data-a="up" data-t="{t}"><div class="kick">{kick}</div><div class="t" style="color:{color}">{txt}</div></div>'
-IDS = 'IDEOLOGIA: BOLOGNESI ET AL. (DADOS, 2023)'
+IDS = 'IDEOLOGIA DO PARTIDO, NÃO DA ALIANÇA: BOLOGNESI, 2023'
 FT = json.load(open('/home/claude/work/v9/ftop.json')) if os.path.exists('/home/claude/work/v9/ftop.json') else {}
 H = []
 
@@ -251,7 +251,7 @@ H.append(scene(s, rail(3)+f'''
   {row('PARAÍBA', '42,6 → 23,4', None, '#fff', 0, sub=f'2011–2019 · PSB {CESQ}', fade=W(s,'paraíba',0,-.2))}
   {row('PARÁ', '56,6 → 29,5', None, '#fff', 0, sub=f'2018–2024 · MDB {DIR}', fade=W(s,'pará',0,-.2))}</div>
 <div class="el note" data-flow="m:5" data-gap="22" data-a="fade" data-t="{W(s,'pará',0,.3)}" style="left:60px">POR 100 MIL · HOMICÍDIOS (PE, PB) E MORTES VIOLENTAS (PA)</div>
-''', 'i03', 'ATLAS DA VIOLÊNCIA · FBSP (GAZETA DO POVO, 2019) · FBSP, ANUÁRIO 2025 · ' + IDS, kbo='40% 55%'))
+''', 'i03', 'ATLAS DA VIOLÊNCIA · FBSP 2025 · GAZETA DO POVO, 2019 · ' + IDS, kbo='40% 55%'))
 
 s = 'v07'; CUR['s'] = s
 YPE = [str(y) for y in range(2004, 2014)]
@@ -313,7 +313,7 @@ H.append(scene(s, f'''
 <div class="el rows" data-flow="m:2" data-gap="36" data-a="fade" data-t="{W(s,'estudos',0,-.2)}" style="left:60px">
   {row('BOLSA FAMÍLIA', '+1% → −0,3%', None, Y, 0, sub='COBERTURA → HOMICÍDIOS · PLOS ONE, 2018')}
   {row('EDUCAÇÃO', '+1 PONTO → −25%', None, Y, 0, sub='INDICADOR → HOMICÍDIOS · INSPER, 2022')}</div>
-<div class="el note" data-flow="m:3" data-gap="18" data-a="fade" data-t="{W(s,'homicídio',0,-.2)}" style="left:60px">ASSOCIAÇÃO, NÃO PROVA DE CAUSA</div>
+<div class="el note" data-flow="m:3" data-gap="18" data-a="fade" data-t="{W(s,'homicídio',0,-.2)}" style="left:60px">ASSOCIAÇÃO, NÃO PROVA DE CAUSA. NO GOVERNO BOLSONARO, O PROGRAMA SEGUIU COMO AUXÍLIO BRASIL.</div>
 <div class="el h" data-flow="m:4" data-gap="50" data-a="slam" data-t="{W(s,'quarto',0,-.15)}" style="left:60px;width:960px;font-size:84px;color:#fff">BAHIA: 4º ESTADO EM <span class="hl">TEMPO INTEGRAL</span></div>
 <div class="el body" data-flow="m:5" data-gap="24" data-a="up" data-t="{W(s,'efeito',0,-.2)}" style="left:60px;width:960px"><b>140 mil alunos</b>, 34% da rede estadual. <b>O&nbsp;efeito leva anos, mas já&nbsp;começou.</b></div>
 ''', 'i14', 'PLOS ONE (MACHADO ET AL., 2018) · INSPER/INST. NATURA, 2022 · MEC, CENSO ESCOLAR 2025', kbo='60% 55%'))
