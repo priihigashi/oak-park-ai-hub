@@ -2,45 +2,14 @@
 + mkdir -p tmp_voice/out/v
 + VOICE=pt-BR-AntonioNeural
 + python3 tmp_voice/tts_edge.py tmp_voice
-n1 11 palavras
-n2 27 palavras
-n3 38 palavras
-n4 31 palavras
-n5 31 palavras
-n6 34 palavras
-n7 40 palavras
-n8 34 palavras
-n9 35 palavras
+n1 25 palavras
+n2 37 palavras
+n3 16 palavras
+n4 20 palavras
+n5 32 palavras
 + mv tmp_voice/tts tmp_voice/out/tts
 + mv tmp_voice/words.json tmp_voice/out/
-+ for u in https://www.youtube.com/watch?v=nnZdP2cvwvw https://www.youtube.com/watch?v=-Fk2-WvnS2E https://www.youtube.com/watch?v=uhLUEQ-zBzM
-+ id=nnZdP2cvwvw
-+ yt-dlp --no-warnings -f 'bv*[height<=720]+ba/b[height<=720]' --merge-output-format mp4 -o 'tmp_voice/out/v/nnZdP2cvwvw.%(ext)s' 'https://www.youtube.com/watch?v=nnZdP2cvwvw'
-[youtube] Extracting URL: https://www.youtube.com/watch?v=nnZdP2cvwvw
-[youtube] nnZdP2cvwvw: Downloading webpage
-[youtube] nnZdP2cvwvw: Downloading visionos player API JSON
-ERROR: [youtube] nnZdP2cvwvw: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
-+ echo 'FAIL https://www.youtube.com/watch?v=nnZdP2cvwvw'
-FAIL https://www.youtube.com/watch?v=nnZdP2cvwvw
-+ for u in https://www.youtube.com/watch?v=nnZdP2cvwvw https://www.youtube.com/watch?v=-Fk2-WvnS2E https://www.youtube.com/watch?v=uhLUEQ-zBzM
-+ id=-Fk2-WvnS2E
-+ yt-dlp --no-warnings -f 'bv*[height<=720]+ba/b[height<=720]' --merge-output-format mp4 -o 'tmp_voice/out/v/-Fk2-WvnS2E.%(ext)s' 'https://www.youtube.com/watch?v=-Fk2-WvnS2E'
-[youtube] Extracting URL: https://www.youtube.com/watch?v=-Fk2-WvnS2E
-[youtube] -Fk2-WvnS2E: Downloading webpage
-[youtube] -Fk2-WvnS2E: Downloading visionos player API JSON
-ERROR: [youtube] -Fk2-WvnS2E: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
-+ echo 'FAIL https://www.youtube.com/watch?v=-Fk2-WvnS2E'
-FAIL https://www.youtube.com/watch?v=-Fk2-WvnS2E
-+ for u in https://www.youtube.com/watch?v=nnZdP2cvwvw https://www.youtube.com/watch?v=-Fk2-WvnS2E https://www.youtube.com/watch?v=uhLUEQ-zBzM
-+ id=uhLUEQ-zBzM
-+ yt-dlp --no-warnings -f 'bv*[height<=720]+ba/b[height<=720]' --merge-output-format mp4 -o 'tmp_voice/out/v/uhLUEQ-zBzM.%(ext)s' 'https://www.youtube.com/watch?v=uhLUEQ-zBzM'
-[youtube] Extracting URL: https://www.youtube.com/watch?v=uhLUEQ-zBzM
-[youtube] uhLUEQ-zBzM: Downloading webpage
-[youtube] uhLUEQ-zBzM: Downloading visionos player API JSON
-ERROR: [youtube] uhLUEQ-zBzM: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
-+ echo 'FAIL https://www.youtube.com/watch?v=uhLUEQ-zBzM'
-FAIL https://www.youtube.com/watch?v=uhLUEQ-zBzM
 + ls -la tmp_voice/out/v
 total 8
-drwxr-xr-x 2 runner runner 4096 Oct 20 17:33 .
-drwxr-xr-x 4 runner runner 4096 Oct 20 17:33 ..
+drwxr-xr-x 2 runner runner 4096 Oct 20 18:08 .
+drwxr-xr-x 4 runner runner 4096 Oct 20 18:08 ..
