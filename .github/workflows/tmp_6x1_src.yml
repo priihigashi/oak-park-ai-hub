@@ -15,38 +15,28 @@ jobs:
           ref: tmp-6x1-src
       - name: all
         run: |
-          mkdir -p out
-          exec > >(tee out/log.txt) 2>&1
-          set -x
-          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg imagemagick
-          pip install -q -U "yt-dlp[default,curl-cffi]" faster-whisper
-          URL="https://www.instagram.com/reel/DeuhdZvzrW8/"
-          yt-dlp --impersonate chrome -f "bv*+ba/b" --merge-output-format mp4 -o "out/src.%(ext)s" --write-info-json "$URL" || true
-          ls out/src.* || yt-dlp -v -f "bv*+ba/b" --merge-output-format mp4 -o "out/src.%(ext)s" --write-info-json "$URL" || true
-          ls -la out
-          V=$(ls out/src.* 2>/dev/null | grep -v json | head -1)
-          if [ -n "$V" ]; then
-          python - "$V" <<'EOF'
-          import json,sys
+          exec > >(tee out/log2.txt) 2>&1
+          sudo apt-get install -y -qq ffmpeg >/dev/null
+          pip install -q faster-whisper numpy
+          ffmpeg -loglevel error -y -i out/src.mp4 -ac 1 -ar 16000 -f s16le out/a.raw
+          python - <<'EOF'
+          import json, numpy as np
           from faster_whisper import WhisperModel
-          m = WhisperModel("large-v3", device="cpu", compute_type="int8")
-          segs, info = m.transcribe(sys.argv[1], language="pt", word_timestamps=True, vad_filter=True)
+          a = np.frombuffer(open('out/a.raw','rb').read(), np.int16).astype(np.float32)/32768.0
+          m = WhisperModel('large-v3', device='cpu', compute_type='int8')
+          segs, info = m.transcribe(a, language='pt', word_timestamps=True, vad_filter=True)
           out=[]; txt=[]
           for s in segs:
-              out.append({"start":s.start,"end":s.end,"text":s.text,"words":[{"w":w.word,"s":w.start,"e":w.end} for w in (s.words or [])]})
+              out.append({'start':s.start,'end':s.end,'text':s.text,'words':[{'w':w.word,'s':w.start,'e':w.end} for w in (s.words or [])]})
               txt.append(f"[{s.start:6.1f}-{s.end:6.1f}] {s.text.strip()}")
-          json.dump(out,open("out/transcript.json","w"),ensure_ascii=False,indent=1)
-          open("out/transcript.txt","w").write("\n".join(txt))
+          json.dump(out,open('out/transcript.json','w'),ensure_ascii=False,indent=1)
+          open('out/transcript.txt','w').write('\n'.join(txt))
           EOF
-          mkdir -p out/frames
-          ffmpeg -loglevel error -i "$V" -vf "fps=1,scale=270:-1" out/frames/f_%03d.jpg
-          montage out/frames/f_*.jpg -tile 6x -geometry +4+4 -background black out/sheet.jpg || true
-          ffprobe -v error -show_entries format=duration -of csv=p=0 "$V" > out/duration.txt
-          fi
-          ls -la out
+          rm -f out/a.raw
       - name: commit
         if: always()
         run: |
           git config user.name bot && git config user.email bot@users.noreply.github.com
           git pull --rebase origin tmp-6x1-src || true
-          git add out && git commit -m "out: 6x1 source" && git push
+          rm -f out/a.raw
+          git add out && git commit -m "out: transcript" && git push
