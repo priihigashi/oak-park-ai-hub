@@ -6,15 +6,11 @@
  "narr": [
   {
    "id": "n0",
-   "spoken": "O deputado mais votado da história foi explicar o problema fiscal do Brasil. Presta atenção em três frases."
+   "spoken": "O deputado mais votado da história foi explicar o problema fiscal do Brasil. Presta atenção em duas frases."
   },
   {
    "id": "n1",
-   "spoken": "O arcabouço fiscal é do governo atual, aprovado em dois mil e vinte e três. E o Nikolas votou contra."
-  },
-  {
-   "id": "n2",
-   "spoken": "Furar o teto, todo governo furou. Com Bolsonaro, foram quase oitocentos bilhões acima do teto, em quatro anos. Com o governo atual, cento e quarenta e cinco bilhões, em dois mil e vinte e três."
+   "spoken": "Em dois mil e vinte e três, o governo atual gastou acima do teto, sim, com aval do Congresso. Mas o arcabouço é proposta do governo atual, feito pra substituir o teto. A Câmara endureceu as regras, e o Nikolas votou contra."
   },
   {
    "id": "n3",
@@ -22,23 +18,8 @@
   },
   {
    "id": "n4",
-   "spoken": "Quem tem o cargo dele precisa saber pelo menos o básico. Ninguém sabe tudo, mas falar com certeza, pra milhões, do que não sabe, é o problema. Mas e o presidente atual? Você sabia que ele já recebeu mais de quarenta títulos de doutor honoris causa, de universidades do Brasil e de fora? É um reconhecimento raro na carreira de um político. Mas esse vídeo não é sobre ele. Na próxima eleição, vamos aceitar que talvez a gente não saiba, e pesquisar antes de acreditar em vídeo da internet."
+   "spoken": "Quem tem o cargo dele precisa saber pelo menos o básico, ainda mais falando com certeza pra milhões. Mas e o presidente atual? Você sabia que ele já recebeu mais de quarenta títulos de doutor honoris causa, de universidades do Brasil e de fora? É um reconhecimento raro na carreira de um político. Mas esse vídeo não é sobre ele. Na próxima eleição, vamos aceitar que talvez a gente não saiba, e pesquisar antes de acreditar em vídeo da internet."
   }
  ],
- "heads": [
-  {
-   "id": "nik",
-   "queries": [
-    "Nikolas Ferreira",
-    "Nikolas Ferreira deputado",
-    "Nikolas Ferreira Câmara dos Deputados",
-    "Nikolas Ferreira 2024",
-    "Nikolas Ferreira 2025"
-   ],
-   "max": 10,
-   "must": [
-    "nikolas"
-   ]
-  }
- ]
+ "heads": []
 }
