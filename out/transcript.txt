@@ -1,0 +1,37 @@
+[   0.0-   2.8] Vocês vão ter um dia a mais de folga.
+[   2.9-   3.7] Estão felizes?
+[   3.9-   4.2] Sim.
+[   5.0-   6.5] Olha o sorriso delas.
+[   7.3-  11.1] Quem de vocês três recebe menos de 3 mil reais de salário?
+[  11.2-  13.3] Quem recebe menos de 3 mil, levanta o braço.
+[  16.6-  17.8] Olha o sorriso delas.
+[  17.9-  19.4] Então, vamos fazer o seguinte.
+[  20.2-  23.8] Vamos ter que reduzir um dia de trabalho, não é isso?
+[  24.0-  24.3] Sim.
+[  24.5-  26.7] Com isso, vamos ter que reduzir o salário de vocês.
+[  27.0-  30.4] Vocês vão receber o salário comercial mínimo.
+[  30.4-  38.0] Isso vai fazer com que vocês consigam trabalhar 5 dias,
+[  38.2-  40.4] receber por 5 dias,
+[  40.5-  44.2] que o obrigatório de uma empresa é pagar no mínimo o salário mínimo.
+[  44.9-  47.2] O salário mínimo vai dar para vocês,
+[  47.2-  49.4] se você receber o salário mínimo,
+[  49.5-  51.8] dá para você comprar sua casa quitada,
+[  52.3-  54.6] dá para você comprar sua moto quitada,
+[  54.6-  57.9] e se você continuar daqui para frente recebendo um salário mínimo,
+[  58.0-  61.2] você vai conseguir comprar o seu carro quitado como você quer.
+[  62.4-  64.2] Joice, se você receber um salário mínimo,
+[  64.3-  66.8] você consegue realizar os seus planos, os seus sonhos?
+[  67.9-  69.8] Miley, se você receber um salário mínimo,
+[  69.9-  73.0] vai dar para você ter uma qualidade de vida com a sua família?
+[  74.2-  75.7] Agora eu vou até perguntar para vocês.
+[  75.9-  78.6] Hoje, a carga de morada de vocês é escrava?
+[  78.8-  81.5] Vocês trabalham como escravo, a carga de morada que vocês têm hoje?
+[  83.4-  87.3] Vocês acham interessante reduzir para 5 dias e reduzir o salário,
+[  87.3-  89.0] para conseguir contratar mais pessoas,
+[  89.2-  91.9] porque, tipo, a empresa vai ter mais custos,
+[  91.9-  95.1] e todo o comércio vai aumentar o preço dos produtos.
+[  95.2-  97.6] Com isso, vocês vão receber um salário mínimo,
+[  97.8-  99.5] o preço dos produtos vai aumentar.
+[  99.6- 101.8] Vocês acham que vocês conseguem sobreviver?
+[ 104.6- 108.9] Depende muito de cada empresa fazer a sua escala e o seu salário.
+[ 109.1- 113.8] Realmente, tem empresas que exploram o horário do funcionário.
