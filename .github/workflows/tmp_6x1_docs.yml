@@ -1,0 +1,30 @@
+name: tmp-6x1-docs
+on:
+  push:
+    branches: [tmp-6x1-src]
+    paths: [docs.txt]
+permissions:
+  contents: write
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: tmp-6x1-src
+      - run: |
+          sudo apt-get install -y -qq poppler-utils html2text >/dev/null
+          mkdir -p docs
+          UA='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/126 Safari/537.36'
+          while read -r name url; do
+            [ -z "$name" ] && continue
+            curl -sSL -A "$UA" -m 90 -o "docs/$name" "$url" || echo "FAIL $name"
+          done < docs.txt
+          cd docs
+          for f in *.pdf; do [ -f "$f" ] && pdftotext -layout "$f" "${f%.pdf}.txt"; done
+          for f in *.htm *.html; do [ -f "$f" ] && (iconv -f latin1 -t utf-8 "$f" 2>/dev/null || cat "$f") | html2text -utf8 > "${f%.*}.txt"; done
+          ls -la
+      - run: |
+          git config user.name bot && git config user.email bot@users.noreply.github.com
+          git pull --rebase origin tmp-6x1-src || true
+          git add docs && git commit -m docs && git push
