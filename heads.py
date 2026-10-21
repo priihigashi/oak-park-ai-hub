@@ -44,6 +44,11 @@ def cut(img):
     fh = chin - top
     if fh < 260:
         return None, f'face too small ({fh:.0f}px)'
+    fw = abs(f[454].x - f[234].x) * W
+    yaw = ((f[1].x * W) - (f[234].x + f[454].x) / 2 * W) / fw
+    mouth = abs(f[14].y - f[13].y) * H / fh
+    smile = abs(f[291].x - f[61].x) * W / fw
+    global SCORE; SCORE = dict(yaw=round(yaw, 3), mouth=round(mouth, 3), smile=round(smile, 3), face=round(fh))
     # push jaw points outward/down a little (4-6% of face height) so the chin is kept whole
     cx = pts[:, 0].mean(); cy = (top + chin) / 2
     v = pts - [cx, cy]; v /= (np.linalg.norm(v, axis=1, keepdims=True) + 1e-6)
@@ -52,7 +57,9 @@ def cut(img):
                      alpha_matting_foreground_threshold=240, alpha_matting_background_threshold=10,
                      alpha_matting_erode_size=10)
     keep = Image.new('L', (W, H), 0)
-    poly = [(0, 0), (0, pts[0][1])] + [tuple(p) for p in pts] + [(W, pts[-1][1]), (W, 0)]
+    # JAW[3]=58 and JAW[-4]=288 sit below the earlobes: leave the sides open down to there so ears stay whole
+    yl, yr = pts[3][1], pts[-4][1]
+    poly = [(0, 0), (0, yl)] + [tuple(p) for p in pts[3:-3]] + [(W, yr), (W, 0)]
     ImageDraw.Draw(keep).polygon(poly, fill=255)
     keep = keep.filter(ImageFilter.GaussianBlur(1.5))
     a = np.minimum(np.array(cut_img.split()[-1]), np.array(keep))
@@ -78,6 +85,7 @@ def outline(im, px=12):
     return w
 
 report = []
+SCORE = {}
 for h in JOB['heads']:
     cands = []
     for q in h['queries']:
@@ -87,7 +95,7 @@ for h in JOB['heads']:
             print('search fail', q, e)
     seen = set(); n = 0
     for title, url in cands:
-        if url in seen or n >= h.get('max', 4):
+        if url in seen or n >= h.get('max', 4) or not all(k.lower() in title.lower() for k in h.get('must', [])):
             continue
         seen.add(url)
         try:
@@ -100,7 +108,7 @@ for h in JOB['heads']:
         except Exception as e:
             res, msg = None, f'err {e}'
         print(h['id'], title, msg)
-        report.append({'id': h['id'], 'title': title, 'url': url, 'msg': msg})
+        report.append({'id': h['id'], 'n': n, 'title': title, 'url': url, 'msg': msg, **(SCORE if res is not None else {})})
         if res is None:
             continue
         name = f"{h['id']}_{n}"

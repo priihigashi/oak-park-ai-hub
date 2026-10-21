@@ -10,37 +10,35 @@
   },
   {
    "id": "n1",
-   "spoken": "O arcabouço fiscal foi proposta do governo atual, aprovada em dois mil e vinte e três. E o Nikolas votou contra."
+   "spoken": "O arcabouço fiscal é do governo atual, aprovado em dois mil e vinte e três. E o Nikolas votou contra."
   },
   {
    "id": "n2",
-   "spoken": "Furar o teto, todo governo furou. Com Bolsonaro, foram quase oitocentos bilhões acima do teto, em quatro anos. O governo atual também passou: cento e quarenta e cinco bilhões, em dois mil e vinte e três."
+   "spoken": "Furar o teto, todo governo furou. Com Bolsonaro, foram quase oitocentos bilhões acima do teto, em quatro anos. Com o governo atual, cento e quarenta e cinco bilhões, em dois mil e vinte e três."
   },
   {
    "id": "n3",
-   "spoken": "Mas o erro maior é esse. A questão fiscal não tem nada a ver com fiscal de cargo. É a conta do governo, igual a da sua casa: quanto entra, quanto sai, e quanto fica devendo. Se sai mais do que entra, a dívida cresce, e os juros sobem pra todo mundo."
+   "spoken": "Mas o erro maior é esse: fiscal não é fiscal de cargo. É a conta do governo, igual a da sua casa: quanto entra, quanto sai, e quanto fica devendo. Se sai mais do que entra, a dívida cresce, e os juros sobem pra todo mundo."
   },
   {
    "id": "n4",
-   "spoken": "Ninguém sabe tudo. O problema é falar com certeza, pra milhões, do que não sabe. E o presidente atual? Tem dezenas de títulos honorários, mas esse vídeo não é sobre ele. Na próxima eleição, vamos aceitar que talvez a gente não saiba, e pesquisar antes de acreditar em vídeo da internet."
+   "spoken": "Quem tem o cargo dele precisa saber pelo menos o básico. Ninguém sabe tudo, mas falar com certeza, pra milhões, do que não sabe, é o problema. Mas e o presidente atual? Você sabia que ele já recebeu mais de quarenta títulos de doutor honoris causa, de universidades do Brasil e de fora? É um reconhecimento raro na carreira de um político. Mas esse vídeo não é sobre ele. Na próxima eleição, vamos aceitar que talvez a gente não saiba, e pesquisar antes de acreditar em vídeo da internet."
   }
  ],
  "heads": [
   {
-   "id": "nikolas",
+   "id": "nik",
    "queries": [
-    "Nikolas Ferreira"
+    "Nikolas Ferreira",
+    "Nikolas Ferreira deputado",
+    "Nikolas Ferreira Câmara dos Deputados",
+    "Nikolas Ferreira 2024",
+    "Nikolas Ferreira 2025"
    ],
-   "max": 4
-  },
-  {
-   "id": "renan",
-   "queries": [
-    "Renan Santos MBL",
-    "Renan Santos Missão",
-    "Renan Santos"
-   ],
-   "max": 4
+   "max": 10,
+   "must": [
+    "nikolas"
+   ]
   }
  ]
 }
