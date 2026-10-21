@@ -1,0 +1,38 @@
+name: tmp-nordeste-esquecido
+on:
+  push:
+    branches: [tmp-nordeste-esquecido]
+    paths: ['tmp/ne/run.txt']
+permissions:
+  contents: write
+jobs:
+  go:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - run: pip install -q "yt-dlp[default,curl-cffi]" edge-tts faster-whisper "rembg[cpu]" "mediapipe==0.10.14" pillow numpy scipy
+      - name: tts
+        run: python tmp/ne/tts.py tmp/ne
+      - name: download
+        continue-on-error: true
+        run: bash tmp/ne/dl.sh
+      - name: commons
+        continue-on-error: true
+        run: |
+          curl -sL -o tmp/ne/commons_fetch.py https://raw.githubusercontent.com/priihigashi/oak-park-ai-hub/feat/sp-reel/docs/templates/collage_reel/preview_kit/commons_fetch.py || true
+          PER=3 python tmp/ne/commons_fetch.py tmp/ne
+      - name: heads
+        continue-on-error: true
+        run: python tmp/ne/heads.py tmp/ne
+      - name: asr
+        continue-on-error: true
+        run: python tmp/ne/asr.py tmp/ne
+      - name: commit
+        run: |
+          mkdir -p tmp/ne/out && cp -r tmp/ne/cands tmp/ne/out/ 2>/dev/null || true
+          git config user.name bot && git config user.email bot@users.noreply.github.com
+          git add -f tmp/ne/out && git commit -m "out" && git push
