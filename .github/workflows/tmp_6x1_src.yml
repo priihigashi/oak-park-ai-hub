@@ -1,0 +1,50 @@
+name: tmp-6x1-src
+on:
+  push:
+    branches: [tmp-6x1-src]
+    paths: [run.txt]
+permissions:
+  contents: write
+jobs:
+  grab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: tmp-6x1-src
+      - name: deps
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg imagemagick
+          pip install -q "yt-dlp[default,curl-cffi]" faster-whisper
+      - name: download
+        run: |
+          mkdir -p out
+          URL="https://www.instagram.com/reel/DeuhdZvzrW8/"
+          yt-dlp --impersonate chrome -f "bv*+ba/b" --merge-output-format mp4 -o "out/src.%(ext)s" --write-info-json "$URL" \
+          || yt-dlp -f "bv*+ba/b" --merge-output-format mp4 -o "out/src.%(ext)s" --write-info-json "$URL"
+          ls -la out
+      - name: transcribe + frames
+        run: |
+          python - <<'EOF'
+          import json
+          from faster_whisper import WhisperModel
+          m = WhisperModel("large-v3", device="cpu", compute_type="int8")
+          segs, info = m.transcribe("out/src.mp4", language="pt", word_timestamps=True, vad_filter=True)
+          out = []; txt = []
+          for s in segs:
+              out.append({"start": s.start, "end": s.end, "text": s.text,
+                          "words": [{"w": w.word, "s": w.start, "e": w.end} for w in (s.words or [])]})
+              txt.append(f"[{s.start:6.1f}-{s.end:6.1f}] {s.text.strip()}")
+          json.dump(out, open("out/transcript.json", "w"), ensure_ascii=False, indent=1)
+          open("out/transcript.txt", "w").write("\n".join(txt))
+          EOF
+          mkdir -p out/frames
+          ffmpeg -loglevel error -i out/src.mp4 -vf "fps=1,scale=270:-1" out/frames/f_%03d.jpg
+          montage out/frames/f_*.jpg -tile 6x -geometry +4+4 -background black out/sheet.jpg || true
+          ffprobe -v error -show_entries format=duration -of csv=p=0 out/src.mp4 > out/duration.txt
+          ls -la out
+      - name: commit
+        run: |
+          git config user.name "bot" && git config user.email "bot@users.noreply.github.com"
+          git add out && git commit -m "out: 6x1 source" && git push
