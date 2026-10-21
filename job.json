@@ -1,0 +1,46 @@
+{
+ "voice": "pt-BR-FranciscaNeural",
+ "rate": "+12%",
+ "sources": [],
+ "clips": [],
+ "narr": [
+  {
+   "id": "n0",
+   "spoken": "O deputado mais votado da história foi explicar o problema fiscal do Brasil. Presta atenção em três frases."
+  },
+  {
+   "id": "n1",
+   "spoken": "O arcabouço fiscal foi proposta do governo atual, aprovada em dois mil e vinte e três. E o Nikolas votou contra."
+  },
+  {
+   "id": "n2",
+   "spoken": "Furar o teto, todo governo furou. Com Bolsonaro, foram quase oitocentos bilhões acima do teto, em quatro anos. O governo atual também passou: cento e quarenta e cinco bilhões, em dois mil e vinte e três."
+  },
+  {
+   "id": "n3",
+   "spoken": "Mas o erro maior é esse. A questão fiscal não tem nada a ver com fiscal de cargo. É a conta do governo, igual a da sua casa: quanto entra, quanto sai, e quanto fica devendo. Se sai mais do que entra, a dívida cresce, e os juros sobem pra todo mundo."
+  },
+  {
+   "id": "n4",
+   "spoken": "Ninguém sabe tudo. O problema é falar com certeza, pra milhões, do que não sabe. E o presidente atual? Tem dezenas de títulos honorários, mas esse vídeo não é sobre ele. Na próxima eleição, vamos aceitar que talvez a gente não saiba, e pesquisar antes de acreditar em vídeo da internet."
+  }
+ ],
+ "heads": [
+  {
+   "id": "nikolas",
+   "queries": [
+    "Nikolas Ferreira"
+   ],
+   "max": 4
+  },
+  {
+   "id": "renan",
+   "queries": [
+    "Renan Santos MBL",
+    "Renan Santos Missão",
+    "Renan Santos"
+   ],
+   "max": 4
+  }
+ ]
+}
