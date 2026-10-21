@@ -1,6 +1,6 @@
 import asyncio,json,os,sys,edge_tts
 D=sys.argv[1]; S=json.load(open(f'{D}/script.json')); os.makedirs(f'{D}/out/tts',exist_ok=True)
-V=os.environ.get('VOICE','pt-BR-AntonioNeural'); R=os.environ.get('RATE','+10%')
+V=os.environ.get('VOICE','pt-BR-AntonioNeural'); R=os.environ.get('RATE','+20%')
 async def one(k,t):
     w=[]
     with open(f'{D}/out/tts/{k}.mp3','wb') as f:
