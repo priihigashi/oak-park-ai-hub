@@ -13,38 +13,40 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: tmp-6x1-src
-      - name: deps
-        run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg imagemagick
-          pip install -q "yt-dlp[default,curl-cffi]" faster-whisper
-      - name: download
+      - name: all
         run: |
           mkdir -p out
+          exec > >(tee out/log.txt) 2>&1
+          set -x
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg imagemagick
+          pip install -q -U "yt-dlp[default,curl-cffi]" faster-whisper
           URL="https://www.instagram.com/reel/DeuhdZvzrW8/"
-          yt-dlp --impersonate chrome -f "bv*+ba/b" --merge-output-format mp4 -o "out/src.%(ext)s" --write-info-json "$URL" \
-          || yt-dlp -f "bv*+ba/b" --merge-output-format mp4 -o "out/src.%(ext)s" --write-info-json "$URL"
+          yt-dlp --impersonate chrome -f "bv*+ba/b" --merge-output-format mp4 -o "out/src.%(ext)s" --write-info-json "$URL" || true
+          ls out/src.* || yt-dlp -v -f "bv*+ba/b" --merge-output-format mp4 -o "out/src.%(ext)s" --write-info-json "$URL" || true
           ls -la out
-      - name: transcribe + frames
-        run: |
-          python - <<'EOF'
-          import json
+          V=$(ls out/src.* 2>/dev/null | grep -v json | head -1)
+          if [ -n "$V" ]; then
+          python - "$V" <<'EOF'
+          import json,sys
           from faster_whisper import WhisperModel
           m = WhisperModel("large-v3", device="cpu", compute_type="int8")
-          segs, info = m.transcribe("out/src.mp4", language="pt", word_timestamps=True, vad_filter=True)
-          out = []; txt = []
+          segs, info = m.transcribe(sys.argv[1], language="pt", word_timestamps=True, vad_filter=True)
+          out=[]; txt=[]
           for s in segs:
-              out.append({"start": s.start, "end": s.end, "text": s.text,
-                          "words": [{"w": w.word, "s": w.start, "e": w.end} for w in (s.words or [])]})
+              out.append({"start":s.start,"end":s.end,"text":s.text,"words":[{"w":w.word,"s":w.start,"e":w.end} for w in (s.words or [])]})
               txt.append(f"[{s.start:6.1f}-{s.end:6.1f}] {s.text.strip()}")
-          json.dump(out, open("out/transcript.json", "w"), ensure_ascii=False, indent=1)
-          open("out/transcript.txt", "w").write("\n".join(txt))
+          json.dump(out,open("out/transcript.json","w"),ensure_ascii=False,indent=1)
+          open("out/transcript.txt","w").write("\n".join(txt))
           EOF
           mkdir -p out/frames
-          ffmpeg -loglevel error -i out/src.mp4 -vf "fps=1,scale=270:-1" out/frames/f_%03d.jpg
+          ffmpeg -loglevel error -i "$V" -vf "fps=1,scale=270:-1" out/frames/f_%03d.jpg
           montage out/frames/f_*.jpg -tile 6x -geometry +4+4 -background black out/sheet.jpg || true
-          ffprobe -v error -show_entries format=duration -of csv=p=0 out/src.mp4 > out/duration.txt
+          ffprobe -v error -show_entries format=duration -of csv=p=0 "$V" > out/duration.txt
+          fi
           ls -la out
       - name: commit
+        if: always()
         run: |
-          git config user.name "bot" && git config user.email "bot@users.noreply.github.com"
+          git config user.name bot && git config user.email bot@users.noreply.github.com
+          git pull --rebase origin tmp-6x1-src || true
           git add out && git commit -m "out: 6x1 source" && git push
