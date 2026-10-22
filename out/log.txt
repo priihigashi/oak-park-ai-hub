@@ -1,13 +1,37 @@
-yt android_vr rc=2 /bin/sh: 1: Syntax error: "(" unexpected
+H5z1Pzx8Fm4KYMLEj SUCCEEDED
+items [{" note": "THE FILE IN KEY-VALUE STORE WILL EXPIRE IN ~3 DAYS. Make sure to download it before that.", "audioOnlyUrl": "https://manifest.googlevideo.com/api/manifest/hls_playlist/expire/1792727457/ei/QYXaasXaCa2Cut0PsaqrmQk/ip/196.247.16.14/id/37a7fa2fcd295e7b/itag/234/source/youtube/requiressl/yes/ratebypass/yes/pfa/1/goi/133/sgoap/clen%3D22062559%3Bdur%3D1363.173%3Bgir%3Dyes%3Bitag%3D140%3Blmt%3D1791471058406915/rqh/1/hls_chunk_host/rr3---sn-5ualdns7.googlevideo.com/xpc/EgVo2aDSNQ%3D%3D/cps/674/met/1792705857,/mh/yE/mm/18,29/mn/sn-5ualdns7,sn-5uaeznld/ms/aub,rdu/mv/u/mvi/3/pl/24/rms/aub,aub/force_finished/1/bui/AWzQHwqEYj0Sq3X0hU-3zvTfckT8Dr8l8Z7yyd2w793Z_1oXFzGByHXBJ6CNgc1oFqnFovuKpw4MZYzb/spc/mpRQ_y8F1g_tWxXhm70VFxO9PbTAP-r1sVhzFxUwLRPyXIgnRBoiQnuKt5Ajg2I/vprv/1/playlist_type/DVR/dover/13/txp/5532234/epbp/1/mt/1792705026/fvip/3/short_key/1/keepalive/yes/fexp/51565116/sparams/expire,
+try audioOnlyUrl 331635
+dl err FileNotFoundError(2, 'No such file or directory')
+try downloadedFileUrl 131007300
+dl err FileNotFoundError(2, 'No such file or directory')
+try videoOnlyUrl 330332
+dl err FileNotFoundError(2, 'No such file or directory')
+LOG alDurationMillis":206603,"requestsTotal":4,"crawlerRuntimeMillis":270398}
+2026-10-22T21:55:20.584Z INFO  BasicCrawler: Finished! Total 4 requests: 4 succeeded, 0 failed. {"terminal":true}
+2026-10-22T21:55:20.767Z INFO  CheerioCrawler: Crawler's custom isFinishedFunction() returned true, the crawler will shut down.
+2026-10-22T21:55:20.769Z INFO  Persisting state for comments...
+2026-10-22T21:55:20.770Z INFO  Persisting state for videos...
+2026-10-22T21:55:20.772Z INFO  Persisting AI enrichment state {"inFlightVideos":0}
+2026-10-22T21:55:20.936Z INFO  CheerioCrawler: Final request statistics: {"requestsFinished":0,"requestsFailed":0,"retryHistogram":[],"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":null,"requestsFinishedPerMinute":0,"requestsFailedPerMinute":0,"requestTotalDurationMillis":0,"requestsTotal":0,"crawlerRuntimeMillis":271326}
+2026-10-22T21:55:20.938Z INFO  CheerioCrawler: Finished! Total 0 requests: 0 succeeded, 0 failed. {"terminal":true}
+2026-10-22T21:55:20.994Z INFO  Persisting state for comments...
+2026-10-22T21:55:20.999Z INFO  Persisting state for videos...
+2026-10-22T21:55:21.002Z INFO  Persisting AI enrichment state {"inFlightVideos":0}
 
-yt ios rc=2 /bin/sh: 1: Syntax error: "(" unexpected
+cm5KTGBGEeFOeR5pG SUCCEEDED
+items [{"inputSource": "https://www.youtube.com/watch?v=N6f6L80pXns", "videoId": "N6f6L80pXns", "quality": "720", "jobId": "155b2c95-0b13-49d1-98c5-f855819e69a7", "status": "succeeded", "storageType": "apify", "output": {"url": "https://api.apify.com/v2/key-value-stores/UqAEGFsjAQNiJbQ1C/records/N6f6L80pXns.mp4?signature=1L1wOuzZdKWmS9cNt0asf"}, "durationSeconds": 1363, "unitPricePerSecond": 0.00045, "totalCost": 0.61335, "error": null}]
+LOG process for video with ID: N6f6L80pXns | status=uploading (uploading) | progress=100 | updatedAt=21:53:34
+2026-10-22T21:53:49.886Z INFO  Download process for video with ID: N6f6L80pXns | status=uploading (uploading) | progress=100 | updatedAt=21:53:44
+2026-10-22T21:53:55.094Z INFO  Download process for video with ID: N6f6L80pXns | status=uploading (uploading) | progress=100 | updatedAt=21:53:54
+2026-10-22T21:54:00.273Z INFO  Download process for video with ID: N6f6L80pXns | status=uploading (uploading) | progress=100 | updatedAt=21:53:54
+2026-10-22T21:54:05.451Z INFO  Download process for video with ID: N6f6L80pXns | status=uploading (uploading) | progress=100 | updatedAt=21:54:04
+2026-10-22T21:54:10.627Z INFO  Download process for video with ID: N6f6L80pXns | status=uploading (uploading) | progress=100 | updatedAt=21:54:04
+2026-10-22T21:54:15.803Z INFO  Download process for video with ID: N6f6L80pXns | status=uploading (uploading) | progress=100 | updatedAt=21:54:14
+2026-10-22T21:54:20.991Z INFO  Download process for video with ID: N6f6L80pXns | status=succeeded (completed) | progress=100 | updatedAt=21:54:16
+2026-10-22T21:54:21.125Z INFO  [Status message]: Your run has finished.
 
-yt tv_embedded rc=2 /bin/sh: 1: Syntax error: "(" unexpected
+yt android_vr rc=1 See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
 
-yt android rc=2 /bin/sh: 1: Syntax error: "(" unexpected
+yt ios rc=1 See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
 
-streamers~youtube-video-downloader resp {"data": {"id": "H5z1Pzx8Fm4KYMLEj", "actId": "UUhJDfKJT2SsXdclR", "userId": "DTNhuSdKczBCMhIMl", "startedAt": "2026-10-22T21:50:45.715Z", "finishedAt": null, "status": "READY", "meta": {"origin": "API", "userAgent": "python-requests/2.34.2"}, "stats": {"inputBodyLen": 252, "migrationCount": 0, "rebootCount": 0, "restartCount": 0, "resurrectCount": 0, "computeUnits": 0}, "options": {"build": "late
-items []
-epctex~youtube-video-downloader resp {"data": {"id": "cm5KTGBGEeFOeR5pG", "actId": "y1IMcEPawMQPafm02", "userId": "DTNhuSdKczBCMhIMl", "startedAt": "2026-10-22T21:51:46.141Z", "finishedAt": null, "status": "READY", "meta": {"origin": "API", "userAgent": "python-requests/2.34.2"}, "stats": {"inputBodyLen": 138, "migrationCount": 0, "rebootCount": 0, "restartCount": 0, "resurrectCount": 0, "computeUnits": 0}, "options": {"build": "late
-items []
-apilabs~youtube-downloader resp {"error": {"type": "insufficient-permissions", "message": "Insufficient permissions for the Actor. Make sure you're passing a correct API token and that it has the required permissions."}}
+yt tv_embedded rc=1 See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
