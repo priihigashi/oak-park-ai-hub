@@ -1,11 +1,10 @@
-tts s1 36720B 20w
-tts s2 43920B 25w
-tts s3 43776B 20w
-tts s4 30672B 14w
-tts s5 52704B 26w
-tts s6 43920B 21w
-tts s7 25776B 17w
-img flavio https://upload.wikimedia.org/wikipedia/commons/b/b3/Foto_oficial_do_senador_Fl%C3%A1vio_Bolsonaro_%28v._AgSen%29_%283x4%29.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled (1082, 1441)
-head flavio ok (544, 748)
-img mae https://anaclara.info/assets/img/frames/mae.webp (1600, 720)
-head mae ok (663, 748)
+tts s1 33552B 20w
+tts s2 40464B 25w
+tts s3 42048B 22w
+tts s4 27936B 14w
+tts s5 49536B 26w
+tts s6 39888B 21w
+tts s7 23472B 17w
+tts s8 29808B 19w
+img bruno https://images.metroimg.com/2026/10/foto-bruno-dias.jpg (1200, 800)
+head bruno ok (583, 748)
