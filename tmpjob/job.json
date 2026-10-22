@@ -1,0 +1,21 @@
+{
+ "voice": "pt-BR-ThalitaMultilingualNeural",
+ "rate": "+8%",
+ "tts": [
+  {"id":"s1","text":"Todo acusado tem direito a advogado. Isso é verdade. Mas não é isso que a mãe da Ana Clara pergunta."},
+  {"id":"s2","text":"Ana Clara tinha cinco anos e brincava na porta de casa, em Niterói, quando foi atingida por um disparo de fuzil numa ação da PM."},
+  {"id":"s3","text":"A perícia só achou cápsulas iguais às do fuzil do cabo Bruno Delaroli, e nenhuma de pistola. Nada indicava troca de tiros."},
+  {"id":"s4","text":"E ele já era acusado de outro homicídio: um homem atingido pelas costas, anos antes."},
+  {"id":"s5","text":"A Justiça mandou o cabo a júri popular. Em 2024, o senador Flávio Bolsonaro entrou na defesa e assinou um recurso pra tirar o caso do júri."},
+  {"id":"s6","text":"O STJ negou, o Supremo também, mas o julgamento já foi adiado duas vezes e agora ficou pra maio de 2027."},
+  {"id":"s7","text":"Por isso a mãe pergunta: por que um senador lutou pra esse caso não ir a júri?"}
+ ],
+ "images": [
+  {"name":"flavio","wiki":"Flávio_Bolsonaro","head":true},
+  {"name":"mae","url":"https://anaclara.info/assets/img/frames/mae.webp","head":true},
+  {"name":"mae_justica","url":"https://anaclara.info/assets/img/frames/mae-justica.webp","head":false},
+  {"name":"ana_retrato","url":"https://anaclara.info/assets/img/frames/ana-retrato.webp","head":false},
+  {"name":"ana_parquinho","url":"https://anaclara.info/assets/img/frames/ana-parquinho.webp","head":false},
+  {"name":"irmaos","url":"https://anaclara.info/assets/img/frames/irmaos.webp","head":false}
+ ]
+}
