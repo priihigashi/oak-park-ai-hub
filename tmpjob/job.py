@@ -1,13 +1,13 @@
 import requests,os,json,subprocess
 os.makedirs('out/athena',exist_ok=True); log=[]
-r=requests.get("https://storage.googleapis.com/xi-backend/database/workspace/cfd0c30d08bb461c800962f2f06538b3/content_generation/LgspkjOjyxQVZQob1Pjs/qU5EuSOrxF0GedgS6fkr/content.mp3?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=xi-backend-prod%40xi-labs.iam.gserviceaccount.com%2F20261022%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20261022T224904Z&X-Goog-Expires=7200&X-Goog-SignedHeaders=host&X-Goog-Signature=41a250e85f66f4fdccd8679276e159cee028b3de1be0e6f621645aadd85e0d95a3a769cabe7bb0e8bd4ac9353cfb0f86a13aa4095e5bb966c7c3afaf65db21dab49f1b8065fa0e0581b0f64c9eeeb8717e9b0dc70a54d757a2e30388258c27637e6447700cb36183445c7ae5a6587bf972c774de06793d5921fdeac18f5b922ed2df98107e2ec60265acfb31194fefd9136051c2f32211fef86c3a9c8ecc4d5565ec8cdbd24c8d14786d7163b435881533e0aaafbf3d0121850633a8c92fa8b173cffa06713829f23eed3f420e0729bf751b73fdfbfdebcf1ac19517d36e7784042c36ca29ffed4bd2c4cd3b3914080523da87a5bd38f4c8ab89560b1b550a89",timeout=120); open('out/athena/full.mp3','wb').write(r.content); log.append(f'dl {r.status_code} {len(r.content)}')
+r=requests.get("https://storage.googleapis.com/xi-backend/database/workspace/cfd0c30d08bb461c800962f2f06538b3/content_generation/Z0wvaRegsRY0hRaj9sod/pI8aZHgyl1bSrucDETsY/content.mp3?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=xi-backend-prod%40xi-labs.iam.gserviceaccount.com%2F20261022%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20261022T225435Z&X-Goog-Expires=7200&X-Goog-SignedHeaders=host&X-Goog-Signature=2a53696075bb6c96dd3ccd74479b4eeb3f55fa0d5b340388e553d9a11875c84a95f67a8689a26b4163e1970ecf2070aab7813912e28386c4dcefac7f005326bd6d52858fe97b966e433b1514b97a94c0e34cd42ff717a6148ce724e905785ff6dcaac7d73a76d3278f7b160e702f7cf4511865be6a941de55533eed8f782e56165e2a591fde9a3091f12062c49761d4ffda71522d6fac9b4046d918df79752e1bd23f0dd3de752b3ffd048a8332a934d028b8e17c512720cb55684563f3b52d67fd1c728567f7f12265ccba3f312a4c91cdbfc39bc14f4a556e425fcff6af684951d85457df122f8d31f9c16f58226d6c6e5217fa1f844d15a1e16570114a26b",timeout=120); open('out/athena/s2_new.mp3','wb').write(r.content); log.append(f'dl {r.status_code} {len(r.content)}')
 subprocess.run('pip install -q faster-whisper',shell=True)
 from faster_whisper import WhisperModel
 m=WhisperModel('small',device='cpu',compute_type='int8')
-segs,info=m.transcribe('out/athena/full.mp3',language='pt',word_timestamps=True,vad_filter=False)
+segs,info=m.transcribe('out/athena/s2_new.mp3',language='pt',word_timestamps=True,vad_filter=False)
 W=[]
 for s in segs:
     for w in s.words: W.append({'w':w.word.strip(),'s':round(w.start,3),'e':round(w.end,3)})
-json.dump(W,open('out/athena/words.json','w'),ensure_ascii=False)
-log.append(f'words {len(W)}')
+json.dump(W,open('out/athena/s2_new_words.json','w'),ensure_ascii=False)
+log.append(f'words {len(W)} '+' '.join(w['w'] for w in W))
 open('out/log.txt','w').write('\n'.join(log)); print(log)
