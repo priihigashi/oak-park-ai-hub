@@ -1,10 +1,2 @@
-tts s1 33552B 20w
-tts s2 40464B 25w
-tts s3 42048B 22w
-tts s4 27936B 14w
-tts s5 49536B 26w
-tts s6 39888B 21w
-tts s7 23472B 17w
-tts s8 29808B 19w
-img bruno https://images.metroimg.com/2026/10/foto-bruno-dias.jpg (1200, 800)
-head bruno ok (583, 748)
+tts s2 56736B 27w
+tts s3 30384B 17w
