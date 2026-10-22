@@ -1,10 +1,1 @@
-cm5KTGBGEeFOeR5pG url 78426382
-ff rc 0 38% 21% 19%  3%  4%  5%  4%  4%  3%
-[libx264 @ 0x840b580] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 31% 22% 12%  5%  7%  7%  6%  5%  5%
-[libx264 @ 0x840b580] i8c dc,h,v,p: 58% 19% 19%  4%
-[libx264 @ 0x840b580] Weighted P-Frames: Y:0.0% UV:0.0%
-[libx264 @ 0x840b580] kb/s:619.60
-[aac @ 0x897e6c0] Qavg: 2069.134
-
-tts s6 45792 19w
-tts s8 41040 24w
+tts s1 65088B 42w
