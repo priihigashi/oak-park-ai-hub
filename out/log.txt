@@ -1,2 +1,18 @@
-dl 200 164290
-words 24 A perícia só achou cápsulas iguaisas do fuzil do cabo Bruno Delaroli e nenhuma de pistola, ou seja, nenhum sinal de troca de tiros.
+run IOjZ1kXDsSRCxiDhk
+SUCCEEDED
+[{"inputSource": "https://www.youtube.com/watch?v=N6f6L80pXns", "videoId": "N6f6L80pXns", "quality": "1080", "jobId": "d0b5a391-623b-4c15-a13d-5aa763d97cd8", "status": "succeeded", "storageType": "apify", "output": {"url": "https://api.apify.com/v2/key-value-stores/RtX3tGwCjPPEMl9Zh/records/N6f6L80pXns.mp4?signature=1Loxr8lk3RSaWZeUjEyyD"}, "durationSeconds": 1363, "unitPricePerSecond": 0.00075, "totalCost": 1.02225, "error": null}]
+size 208287107
+: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1920x1080 [SAR 1:1 DAR 16:9], 1091 kb/s, 24 fps, 24 tbr, 90k tbn (default)
+      Metadata:
+        handler_name    : VideoHandler
+        vendor_id       : [0][0][0][0]
+  Stream #0:1[0x2](und): Audio: aac (mp4a / 0x6134706D), 44100 Hz, stereo, fltp, 128 kb/s (default)
+      Metadata:
+        handler_name    : SoundHandler
+        vendor_id       : [0][0][0][0]
+  Stream #0:2[0x3](eng): Data: bin_data (text / 0x74786574), 0 kb/s
+      Metadata:
+        handler_name    : SubtitleHandler
+At least one output file must be specified
+
+sheets ['src.json']
