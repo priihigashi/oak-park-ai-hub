@@ -1,1 +1,70 @@
-tts s5 84384B 40w
+$ pip install -q -U yt-dlp
+
+[notice] A new release of pip is available: 26.2.1 -> 26.2.2
+[notice] To update, run: pip install --upgrade pip
+
+$ yt-dlp  --skip-download --write-auto-subs --write-subs --sub-langs "pt.*" --convert-subs srt -o "out/clip/j4cghMn_i_k.%(ext)s" https://www.youtube.com
+[youtube] Extracting URL: https://www.youtube.com/watch?v=j4cghMn_i_k
+[youtube] j4cghMn_i_k: Downloading webpage
+[youtube] j4cghMn_i_k: Downloading visionos player API JSON
+WARNING: [youtube] No supported JavaScript runtime could be found. Only deno is enabled by default; to use another runtime add  --js-runtimes RUNTIME[:PATH]  to your command/config. YouTube extraction without a JS runtime has been deprecated, and some formats may be missing. See  https://github.com/yt-dlp/yt-dlp/wiki/EJS  for details on installing one
+WARNING: [youtube] No title found in player responses; falling back to title from initial data. Other metadata may also be missing
+ERROR: [youtube] j4cghMn_i_k: Sign in to confirm you’re not a bot. This helps protect our community. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+
+$ yt-dlp --extractor-args "youtube:player_client=mweb" --skip-download --write-auto-subs --write-subs --sub-langs "pt.*" --convert-subs srt -o "out/clip
+[youtube] Extracting URL: https://www.youtube.com/watch?v=j4cghMn_i_k
+[youtube] j4cghMn_i_k: Downloading webpage
+[youtube] j4cghMn_i_k: Downloading mweb client config
+[youtube] j4cghMn_i_k: Downloading mweb player API JSON
+WARNING: [youtube] No title found in player responses; falling back to title from initial data. Other metadata may also be missing
+ERROR: [youtube] j4cghMn_i_k: Sign in to confirm you’re not a bot. This helps protect our community. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+
+$ yt-dlp --extractor-args "youtube:player_client=tv" --skip-download --write-auto-subs --write-subs --sub-langs "pt.*" --convert-subs srt -o "out/clip/j
+[youtube] Extracting URL: https://www.youtube.com/watch?v=j4cghMn_i_k
+[youtube] j4cghMn_i_k: Downloading webpage
+[youtube] j4cghMn_i_k: Downloading tv client config
+[youtube] j4cghMn_i_k: Downloading player dce23b30-main
+[youtube] j4cghMn_i_k: Downloading tv player API JSON
+WARNING: [youtube] No title found in player responses; falling back to title from initial data. Other metadata may also be missing
+ERROR: [youtube] j4cghMn_i_k: Sign in to confirm you’re not a bot. This helps protect our community. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+
+$ yt-dlp --extractor-args "youtube:player_client=web_safari" --skip-download --write-auto-subs --write-subs --sub-langs "pt.*" --convert-subs srt -o "ou
+[youtube] Extracting URL: https://www.youtube.com/watch?v=j4cghMn_i_k
+[youtube] j4cghMn_i_k: Downloading webpage
+[youtube] j4cghMn_i_k: Downloading web safari client config
+[youtube] j4cghMn_i_k: Downloading web safari player API JSON
+WARNING: [youtube] No title found in player responses; falling back to title from initial data. Other metadata may also be missing
+ERROR: [youtube] j4cghMn_i_k: Sign in to confirm you’re not a bot. This helps protect our community. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+
+$ yt-dlp  --skip-download --write-auto-subs --write-subs --sub-langs "pt.*" --convert-subs srt -o "out/clip/N6f6L80pXns.%(ext)s" https://www.youtube.com
+[youtube] Extracting URL: https://www.youtube.com/watch?v=N6f6L80pXns
+[youtube] N6f6L80pXns: Downloading webpage
+[youtube] N6f6L80pXns: Downloading visionos player API JSON
+WARNING: [youtube] No supported JavaScript runtime could be found. Only deno is enabled by default; to use another runtime add  --js-runtimes RUNTIME[:PATH]  to your command/config. YouTube extraction without a JS runtime has been deprecated, and some formats may be missing. See  https://github.com/yt-dlp/yt-dlp/wiki/EJS  for details on installing one
+WARNING: [youtube] No title found in player responses; falling back to title from initial data. Other metadata may also be missing
+ERROR: [youtube] N6f6L80pXns: Sign in to confirm you’re not a bot. This helps protect our community. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+
+$ yt-dlp --extractor-args "youtube:player_client=mweb" --skip-download --write-auto-subs --write-subs --sub-langs "pt.*" --convert-subs srt -o "out/clip
+[youtube] Extracting URL: https://www.youtube.com/watch?v=N6f6L80pXns
+[youtube] N6f6L80pXns: Downloading webpage
+[youtube] N6f6L80pXns: Downloading mweb client config
+[youtube] N6f6L80pXns: Downloading mweb player API JSON
+WARNING: [youtube] No title found in player responses; falling back to title from initial data. Other metadata may also be missing
+ERROR: [youtube] N6f6L80pXns: Sign in to confirm you’re not a bot. This helps protect our community. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+
+$ yt-dlp --extractor-args "youtube:player_client=tv" --skip-download --write-auto-subs --write-subs --sub-langs "pt.*" --convert-subs srt -o "out/clip/N
+[youtube] Extracting URL: https://www.youtube.com/watch?v=N6f6L80pXns
+[youtube] N6f6L80pXns: Downloading webpage
+[youtube] N6f6L80pXns: Downloading tv client config
+[youtube] N6f6L80pXns: Downloading player cbcfbf2f-main
+[youtube] N6f6L80pXns: Downloading tv player API JSON
+WARNING: [youtube] No title found in player responses; falling back to title from initial data. Other metadata may also be missing
+ERROR: [youtube] N6f6L80pXns: Sign in to confirm you’re not a bot. This helps protect our community. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+
+$ yt-dlp --extractor-args "youtube:player_client=web_safari" --skip-download --write-auto-subs --write-subs --sub-langs "pt.*" --convert-subs srt -o "ou
+[youtube] Extracting URL: https://www.youtube.com/watch?v=N6f6L80pXns
+[youtube] N6f6L80pXns: Downloading webpage
+[youtube] N6f6L80pXns: Downloading web safari client config
+[youtube] N6f6L80pXns: Downloading web safari player API JSON
+WARNING: [youtube] No title found in player responses; falling back to title from initial data. Other metadata may also be missing
+ERROR: [youtube] N6f6L80pXns: Sign in to confirm you’re not a bot. This helps protect our community. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
