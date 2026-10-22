@@ -1,13 +1,5 @@
-import asyncio, os, json, edge_tts
-os.makedirs('out/voz',exist_ok=True); log=[]
-T="Se você é mãe ou pai, talvez com um filho pequeno, escuta essa história. Ela não questiona o direito de defesa. Não quer vingança. Só quer que a justiça seja feita."
-V=[('ava','en-US-AvaMultilingualNeural'),('emma','en-US-EmmaMultilingualNeural'),('vivienne','fr-FR-VivienneMultilingualNeural'),('seraphina','de-DE-SeraphinaMultilingualNeural'),('thalita_calma','pt-BR-ThalitaMultilingualNeural')]
-async def go():
-    for n,v in V:
-        try:
-            rate='+5%' 
-            c=edge_tts.Communicate(T,v,rate=rate,pitch='-2Hz')
-            await c.save(f'out/voz/{n}.mp3'); log.append(f'ok {n} {os.path.getsize(f"out/voz/{n}.mp3")}')
-        except Exception as e: log.append(f'fail {n} {e!r}')
-asyncio.run(go())
-open('out/log.txt','w').write('\n'.join(log)); print('\n'.join(log))
+import requests,os
+os.makedirs('out/voz',exist_ok=True)
+r=requests.get("https://api.us.elevenlabs.io/v1/voices/fpqzllOdDmER4wwFESLO/previews/audio?payload=eyJ2b2ljZV9zb3VyY2UiOiJjdXN0b20iLCJ3b3Jrc3BhY2VfaWQiOiJjMzQ5MTRjZDZiYTI0NzhmODZkZjE4ZWI1MDZkOTU2MSIsImZpbGVuYW1lIjoiNzE0MTAwYTgtYzY1Ny00NTA0LWI2ZTgtZDgwOWU4MmVjY2YwLm1wMyIsInRpbWVzdGFtcCI6MTc5MjcwNjQwMDAwMDAwMH0%3D",timeout=60,headers={'User-Agent':'Mozilla/5.0'})
+open('out/voz/athena_preview.mp3','wb').write(r.content)
+open('out/log.txt','w').write(f'athena {r.status_code} {len(r.content)} {r.headers.get("content-type")}')
