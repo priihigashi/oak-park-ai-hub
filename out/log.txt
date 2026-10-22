@@ -1,3 +1,13 @@
-N6f6L80pXns transcript 183 keys ['search_metadata', 'search_parameters', 'transcript', 'chapters']
-HIT N6f6L80pXns {'start_ms': 24000, 'snippet': 'Eu não quero vingança, sabe? Eu não desejo mal. Eu só quero que a justiça seja feita. troca de tiro, como eles alegam que teve, não teve.', 'start_time_text': '0:24', 'start_time_label': '24 seconds'}
-apify err KeyError('data')
+yt android_vr rc=2 /bin/sh: 1: Syntax error: "(" unexpected
+
+yt ios rc=2 /bin/sh: 1: Syntax error: "(" unexpected
+
+yt tv_embedded rc=2 /bin/sh: 1: Syntax error: "(" unexpected
+
+yt android rc=2 /bin/sh: 1: Syntax error: "(" unexpected
+
+streamers~youtube-video-downloader resp {"data": {"id": "H5z1Pzx8Fm4KYMLEj", "actId": "UUhJDfKJT2SsXdclR", "userId": "DTNhuSdKczBCMhIMl", "startedAt": "2026-10-22T21:50:45.715Z", "finishedAt": null, "status": "READY", "meta": {"origin": "API", "userAgent": "python-requests/2.34.2"}, "stats": {"inputBodyLen": 252, "migrationCount": 0, "rebootCount": 0, "restartCount": 0, "resurrectCount": 0, "computeUnits": 0}, "options": {"build": "late
+items []
+epctex~youtube-video-downloader resp {"data": {"id": "cm5KTGBGEeFOeR5pG", "actId": "y1IMcEPawMQPafm02", "userId": "DTNhuSdKczBCMhIMl", "startedAt": "2026-10-22T21:51:46.141Z", "finishedAt": null, "status": "READY", "meta": {"origin": "API", "userAgent": "python-requests/2.34.2"}, "stats": {"inputBodyLen": 138, "migrationCount": 0, "rebootCount": 0, "restartCount": 0, "resurrectCount": 0, "computeUnits": 0}, "options": {"build": "late
+items []
+apilabs~youtube-downloader resp {"error": {"type": "insufficient-permissions", "message": "Insufficient permissions for the Actor. Make sure you're passing a correct API token and that it has the required permissions."}}
