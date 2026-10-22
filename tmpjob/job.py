@@ -80,8 +80,9 @@ it_bright={x['name']:x.get('bright') for x in J['images']}
 def head(im,name):
     from rembg import remove, new_session
     import mediapipe as mp
+    im.thumbnail((1100,1100))
     sess=new_session('birefnet-portrait')
-    cut=remove(im,session=sess,alpha_matting=True,alpha_matting_foreground_threshold=240,alpha_matting_background_threshold=10,alpha_matting_erode_size=10)
+    cut=remove(im,session=sess,post_process_mask=True)
     cut.save(f'out/img/{name}_full.png')
     a=np.array(cut); H,W=a.shape[:2]
     fm=mp.solutions.face_mesh.FaceMesh(static_image_mode=True,max_num_faces=1,refine_landmarks=False)
