@@ -1,6 +1,6 @@
 import json, os, asyncio, io, sys, traceback
 import requests
-J=json.loads(r'''{"voice": "pt-BR-ThalitaMultilingualNeural", "rate": "+18%", "tts": [{"id": "s2", "text": "Ana Clara tinha cinco anos e brincava na porta de casa, em Niterói. Não havia confronto. Moradores gritaram que ali tinha família, e o PM continuou atirando."}, {"id": "s3", "text": "A perícia só achou cápsulas iguais às do fuzil do cabo Bruno Delaroli, e nenhuma de pistola."}], "images": []}''')
+J=json.loads(r'''{"voice": "pt-BR-ThalitaMultilingualNeural", "rate": "+18%", "tts": [{"id": "s5", "text": "A Justiça mandou o cabo a júri popular. Em 2024, mesmo sendo senador, Flávio Bolsonaro entrou na defesa e assinou um recurso pra tirar o caso do júri."}], "images": []}''')
 os.makedirs('out/tts',exist_ok=True); os.makedirs('out/img',exist_ok=True)
 log=[]
 async def tts_one(it):
