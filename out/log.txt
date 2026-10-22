@@ -1,0 +1,24 @@
+tts s1 36720B 20w
+tts s2 43920B 25w
+tts s3 46224B 22w
+tts s4 31536B 15w
+tts s5 52704B 26w
+tts s6 43920B 21w
+tts s7 25776B 17w
+IMG FAIL flavio ast):
+  File "/home/runner/work/oak-park-ai-hub/oak-park-ai-hub/tmpjob/job.py", line 67, in <module>
+    im=fetch(it)
+       ^^^^^^^^^
+  File "/home/runner/work/oak-park-ai-hub/oak-park-ai-hub/tmpjob/job.py", line 30, in fetch
+    im=Image.open(io.BytesIO(b)).convert('RGB'); log.append(f"img {it['name']} {url} {im.size}")
+       ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/PIL/Image.py", line 3730, in open
+    raise UnidentifiedImageError(msg)
+PIL.UnidentifiedImageError: cannot identify image file <_io.BytesIO object at 0x7f50e0b1cae0>
+
+img mae https://anaclara.info/assets/img/frames/mae.webp (1600, 720)
+head mae ok (902, 748)
+img mae_justica https://anaclara.info/assets/img/frames/mae-justica.webp (1600, 720)
+img ana_retrato https://anaclara.info/assets/img/frames/ana-retrato.webp (850, 446)
+img ana_parquinho https://anaclara.info/assets/img/frames/ana-parquinho.webp (540, 720)
+img irmaos https://anaclara.info/assets/img/frames/irmaos.webp (1000, 700)
