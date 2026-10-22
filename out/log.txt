@@ -1,2 +1,2 @@
-tts s1 47088B 31w
-tts s7 23904B 13w
+tts s1 69840B 46w
+tts s7 32976B 17w
