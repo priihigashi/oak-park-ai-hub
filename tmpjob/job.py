@@ -1,6 +1,6 @@
 import json, os, asyncio, io, sys, traceback
 import requests
-J=json.loads(r'''{"voice": "pt-BR-ThalitaMultilingualNeural", "rate": "+18%", "tts": [{"id": "s1", "text": "Todo acusado tem direito a advogado. Isso é verdade. Mas o que a mãe da Ana Clara questiona é: por que um senador lutou pra esse caso não ir a júri?"}, {"id": "s7", "text": "A mãe dela não quer vingança. Só quer que a justiça seja feita."}], "images": []}''')
+J=json.loads(r'''{"voice": "pt-BR-ThalitaMultilingualNeural", "rate": "+18%", "tts": [{"id": "s1", "text": "Se você é mãe ou pai, talvez com um filho pequeno aí do seu lado, escuta essa história. Cristiane é mãe da Ana Clara. E ela pergunta: por que um senador lutou pra que o policial acusado pela morte da filha dela não fosse a júri?"}, {"id": "s7", "text": "Ela não questiona o direito de defesa. Não quer vingança. Só quer que a justiça seja feita."}], "images": []}''')
 os.makedirs('out/tts',exist_ok=True); os.makedirs('out/img',exist_ok=True)
 log=[]
 async def tts_one(it):
