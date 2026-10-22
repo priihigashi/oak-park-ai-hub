@@ -1,6 +1,52 @@
 import json, os, asyncio, io, sys, traceback
 import requests
-J=json.load(open('tmpjob/job.json'))
+J=json.loads(r'''{
+ "voice": "pt-BR-ThalitaMultilingualNeural",
+ "rate": "+8%",
+ "tts": [
+  {
+   "id": "s1",
+   "text": "Todo acusado tem direito a advogado. Isso é verdade. Mas não é isso que a mãe da Ana Clara pergunta."
+  },
+  {
+   "id": "s2",
+   "text": "Ana Clara tinha cinco anos e brincava na porta de casa, em Niterói, quando foi atingida por um disparo de fuzil numa ação da PM."
+  },
+  {
+   "id": "s3",
+   "text": "A perícia só achou cápsulas iguais às do fuzil do cabo Bruno Delaroli, e nenhuma de pistola. Nada indicava confronto."
+  },
+  {
+   "id": "s4",
+   "text": "E ele já respondia por outra morte: um homem atingido pelas costas, anos antes."
+  },
+  {
+   "id": "s5",
+   "text": "A Justiça mandou o cabo a júri popular. Em 2024, o senador Flávio Bolsonaro entrou na defesa e assinou um recurso pra tirar o caso do júri."
+  },
+  {
+   "id": "s6",
+   "text": "O STJ negou, o Supremo também, mas o julgamento já foi adiado duas vezes e agora ficou pra maio de 2027."
+  },
+  {
+   "id": "s7",
+   "text": "Por isso a mãe pergunta: por que um senador lutou pra esse caso não ir a júri?"
+  }
+ ],
+ "images": [
+  {
+   "name": "flavio",
+   "wiki": "Flávio_Bolsonaro",
+   "head": true
+  },
+  {
+   "name": "mae",
+   "url": "https://anaclara.info/assets/img/frames/mae.webp",
+   "head": true,
+   "bright": 1.35
+  }
+ ]
+}''')
 os.makedirs('out/tts',exist_ok=True); os.makedirs('out/img',exist_ok=True)
 log=[]
 async def tts_one(it):
@@ -19,16 +65,18 @@ async def tts_all():
 try: asyncio.run(tts_all())
 except Exception: log.append('TTS FAIL '+traceback.format_exc())
 UA={'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/124 Safari/537.36'}
-from PIL import Image, ImageFilter
+WUA={'User-Agent':'ReelPreviewBot/1.0 (https://github.com/priihigashi/oak-park-ai-hub)'}
+from PIL import Image, ImageFilter, ImageEnhance
 import numpy as np
 def fetch(it):
     url=it.get('url')
     if it.get('wiki'):
-        r=requests.get('https://pt.wikipedia.org/api/rest_v1/page/summary/'+it['wiki'],headers=UA,timeout=30).json()
-        url=(r.get('originalimage') or r.get('thumbnail'))['source']
-    b=requests.get(url,headers=UA,timeout=60).content
+        r=requests.get('https://pt.wikipedia.org/w/api.php',params={'action':'query','titles':it['wiki'].replace('_',' '),'prop':'pageimages','pithumbsize':1400,'format':'json'},headers=WUA,timeout=30).json()
+        url=list(r['query']['pages'].values())[0]['thumbnail']['source']
+    b=requests.get(url,headers=WUA if 'wiki' in url else UA,timeout=60).content
     im=Image.open(io.BytesIO(b)).convert('RGB'); log.append(f"img {it['name']} {url} {im.size}")
     return im
+it_bright={x['name']:x.get('bright') for x in J['images']}
 def head(im,name):
     from rembg import remove, new_session
     import mediapipe as mp
@@ -48,12 +96,22 @@ def head(im,name):
     o=np.argsort(xs); xs,ys=xs[o],ys[o]
     yy=np.arange(H)[:,None]; xx=np.arange(W)[None,:]
     jy=np.interp(np.arange(W),xs,ys)+off
-    # outside face span: cut at ear level + 30% face height
-    lim=np.where((np.arange(W)<xs[0])|(np.arange(W)>xs[-1]), min(ys[0],ys[-1])+0.30*fh, jy)
-    keep=(yy<=lim[None,:])
+    X=np.arange(W).astype(float)
+    lim=np.interp(X,xs,ys)+off
+    left=X<xs[0]; right=X>xs[-1]
+    lim[left]=ys[0]+off+(xs[0]-X[left])*0.9
+    lim[right]=ys[-1]+off+(X[right]-xs[-1])*0.9
+    k=np.exp(-np.linspace(-2,2,41)**2); k/=k.sum()
+    lim=np.convolve(np.pad(lim,20,mode='edge'),k,mode='valid')
+    alpha0=a[:,:,3]; rows=np.where(alpha0.max(1)>40)[0]; topy=rows[0] if len(rows) else top[1]-0.6*fh
+    cx=(xs[0]+xs[-1])/2; fw=xs[-1]-xs[0]; rx=0.92*fw; bot=chin[1]+off; cy=(topy+bot)/2; ry=(bot-topy)/2*1.08
+    ell=((xx-cx)/rx)**2+((yy-cy)/ry)**2<=1
+    keep=(yy<=lim[None,:])&ell
     al=a[:,:,3].astype(float)*keep
     a[:,:,3]=al.astype(np.uint8)
     img=Image.fromarray(a)
+    if it_bright.get(name):
+        rgb=img.convert('RGB'); rgb=ImageEnhance.Brightness(rgb).enhance(it_bright[name]); rgb=ImageEnhance.Contrast(rgb).enhance(1.08); rgb.putalpha(img.split()[3]); img=rgb
     alpha=img.split()[3].filter(ImageFilter.GaussianBlur(1.2)); img.putalpha(alpha)
     bb=img.getbbox(); img=img.crop(bb)
     s=700/img.height; img=img.resize((int(img.width*s),700),Image.LANCZOS)
