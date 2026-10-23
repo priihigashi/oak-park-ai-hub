@@ -3,18 +3,10 @@
  "rate": "+15%",
  "tts": [
   {
-   "name": "s06a",
-   "text": "Agora, a desoneração. É um desconto pros dezessete setores que mais empregam, como construção e transporte: em vez de pagar vinte por cento de INSS sobre os salários, a empresa paga de um a quatro e meio por cento do que vende."
-  },
-  {
-   "name": "s06",
-   "text": "Os dois presidentes tentaram acabar com esse desconto: vetaram a prorrogação. E o Congresso derrubou os dois vetos, de lavada."
-  },
-  {
-   "name": "s07",
-   "text": "Depois, o governo atual fechou um acordo pra tirar esse desconto aos poucos, até dois mil e vinte e oito. Aí o INSS desses setores volta a subir, até os vinte por cento."
+   "name": "s03",
+   "text": "Pro pequeno, o Simples começou em mil novecentos e noventa e seis, com o Fernando Henrique. Em dois mil e seis e dois mil e oito, o presidente sancionou o Simples Nacional e o MEI, que paga só três por cento de INSS pelo funcionário. E a história de que o PT votou contra os direitos do trabalhador em oitenta e oito engana: o partido votou contra o texto final da Constituição, mas assinou. Um dos motivos: queria quarenta horas por semana, e a Constituição deu quarenta e quatro."
   }
  ],
  "faces": [],
- "run": 2
+ "run": 3
 }
