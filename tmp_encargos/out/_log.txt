@@ -1,1 +1,5 @@
-tts ok s01 91
+tts ok s09 52
+tts ok s09b 56
+tts ok s09c 51
+face ok marinho (282, 351)
+face ok guedes (714, 789)
