@@ -3,10 +3,10 @@
  "rate": "+15%",
  "tts": [
   {
-   "name": "s03",
-   "text": "Pro pequeno, o Simples começou em mil novecentos e noventa e seis, com o Fernando Henrique. Em dois mil e seis e dois mil e oito, o presidente sancionou o Simples Nacional e o MEI, que paga só três por cento de INSS pelo funcionário. E a história de que o PT votou contra os direitos do trabalhador em oitenta e oito engana: o partido votou contra o texto final da Constituição, mas assinou. Um dos motivos: queria quarenta horas por semana, e a Constituição deu quarenta e quatro."
+   "name": "s01",
+   "text": "Ele já paga: de sete e meio a quatorze por cento de INSS saem do salário todo mês. O patrão paga mais vinte por cento de INSS e oito por cento de FGTS, e o FGTS é dinheiro do próprio trabalhador. E quem decide tudo isso é Brasília, não o governador. E nos Estados Unidos, que ela usa de exemplo, o trabalhador desconta sete vírgula sessenta e cinco por cento, e o patrão paga quase o mesmo, cerca de oito por cento. Aqui, o patrão paga bem mais que o trabalhador."
   }
  ],
  "faces": [],
- "run": 3
+ "run": 4
 }
