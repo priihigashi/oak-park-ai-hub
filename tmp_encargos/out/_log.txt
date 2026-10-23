@@ -1,12 +1,3 @@
-tts ok s01 51
-tts ok s02 36
-tts ok s03 45
-tts ok s04 24
-tts ok s05 40
+tts ok s06a 42
 tts ok s06 20
-tts ok s07 28
-tts ok s08 33
-tts ok s09 40
-tts ok s10 45
-face ok dilma (516, 698)
-face ok fhc (185, 255)
+tts ok s07 33
