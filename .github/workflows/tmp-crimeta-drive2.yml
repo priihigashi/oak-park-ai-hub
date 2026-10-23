@@ -1,0 +1,21 @@
+name: tmp-crimeta-drive2
+on:
+  push:
+    branches: [tmp-crimeta-drive2]
+    paths: ["tmp_crimeta_drive2/upload.py"]
+permissions:
+  contents: write
+jobs:
+  up:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - run: pip install google-auth google-api-python-client
+      - env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: python tmp_crimeta_drive2/upload.py
+      - run: |
+          git config user.name bot && git config user.email bot@users.noreply.github.com
+          git add tmp_crimeta_drive2/out && git commit -m "tmp: drive upload report" && git push
