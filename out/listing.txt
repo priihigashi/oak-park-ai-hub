@@ -1,0 +1,4 @@
+-rw-r--r-- 1 runner runner 6903 Oct 23 16:35 cap/NWS-202610231558_DdU3ADIuEba_transcript.txt
+-rw-r--r-- 1 runner runner 12441 Oct 23 16:35 cap/NWS-202610231558_captions.srt
+-rw-r--r-- 1 runner runner 3261 Oct 23 16:35 cap/NWS-202610231558_news.txt
+video: cap/dl.mp4
