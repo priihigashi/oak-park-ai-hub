@@ -1,0 +1,20 @@
+name: tmp-nd-voice
+on:
+  push:
+    branches: [tmp-transcribe-nordeste]
+    paths: ['tmp/nd/script.json']
+permissions:
+  contents: write
+jobs:
+  v:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: tmp-transcribe-nordeste}
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - run: pip install -q edge-tts faster-whisper numpy
+      - run: python3 tmp/nd/tts.py
+      - run: python3 tmp/nd/clipwords.py
+      - run: |
+          git config user.name "github-actions"; git config user.email "actions@github.com"
+          git add tmp/nd/out && git commit -m "tmp: nd voice" && git pull --rebase -q origin tmp-transcribe-nordeste; git push origin tmp-transcribe-nordeste
