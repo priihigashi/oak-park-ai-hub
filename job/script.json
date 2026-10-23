@@ -2,11 +2,11 @@
  "voice": "pt-BR-ThalitaMultilingualNeural",
  "rate": "+15%",
  "scenes": {
-  "n01": "O Brasil gasta mais do que arrecada, e por isso a dívida não para de crescer. Só que, sem contar os juros, as contas do país quase empatam.",
-  "n02": "Pensa num cartão de crédito. Seu salário paga o mês inteiro, mas tem uma dívida antiga no cartão, e o juro dela cresce sozinho. Você não gastou nada a mais, e a fatura só aumenta. Em {2025|dois mil e vinte e cinco}, o rombo das contas do dia a dia foi de {0,4%|zero vírgula quatro por cento} do PIB. Os juros custaram cerca de {1 trilhão|um trilhão} de reais: quase {20|vinte} vezes mais.",
-  "n03": "E o juro que um país paga mostra o quanto o mercado confia que vai receber de volta. O Brasil tem um dos maiores juros reais do mundo. Em janeiro, era o segundo, atrás só da Rússia, que está em guerra. Nos Estados Unidos e na China, fica perto de {1,5%|um e meio por cento}.",
+  "n01": "O governo gasta mais do que arrecada, e a dívida só cresce. É verdade, mas olha o tamanho de cada parte. Em {2025|dois mil e vinte e cinco}, o rombo das contas do dia a dia foi de {55 bilhões|cinquenta e cinco bilhões}. Os juros da dívida custaram {1 trilhão|um trilhão}: quase {20|vinte} vezes mais.",
+  "n02": "Funciona igual a um cartão de crédito. Seu salário paga o mês inteiro, mas tem uma dívida antiga no cartão, e o juro dela cresce sozinho. Você não gastou nada a mais, e a fatura só aumenta.",
+  "n02b": "E esse rombo não é de agora. Com Bolsonaro, em {2019|dois mil e dezenove}, as contas também fecharam no vermelho. Os dois anos no azul, {2021|vinte e um} e {2022|vinte e dois}, vieram com petróleo caro e com dívidas da Justiça empurradas pra frente. Parte delas foi paga em {2023|vinte e três}, o pior ano do governo atual. E os impostos já eram altos: {33%|trinta e três por cento} do PIB em {2022|dois mil e vinte e dois}, parecido com hoje. Dá pra criticar o rombo, mas ele não começou agora, e não é o que mais pesa na dívida.",
+  "n03": "E o juro que um país paga mostra o quanto o mercado confia que vai receber de volta. O Brasil tem um dos maiores juros reais do mundo. Em janeiro, era o segundo, atrás só da Rússia, que está em guerra. Já os Estados Unidos e a China gastam mais do que arrecadam há anos, e pagam juro real perto de {1,5%|um e meio por cento}.",
   "n04": "E não foi falta de economizar. De {1999|mil novecentos e noventa e nove} a {2013|dois mil e treze}, foram {15|quinze} anos seguidos guardando dinheiro, em governos de direita e de esquerda. A Selic caiu, mas seguiu entre as mais caras do mundo.",
-  "n05": "Enquanto isso, os Estados Unidos gastam mais do que arrecadam há mais de {20|vinte} anos seguidos, e a China também vive no vermelho. E os dois pagam juro baixo.",
   "n06": "Na sua casa, a resposta é sim. Mas o país não é uma casa. Ele faz o próprio dinheiro e pega emprestado vendendo títulos, como o Tesouro Direto que você mesmo pode comprar. E quase toda essa dívida é em real.",
   "n07": "O Banco Central tem uma ferramenta principal: subir os juros, pra esfriar as compras. Funciona quando sobra dinheiro na praça. Mas se o feijão subiu porque choveu pouco, juro alto não faz chover. Só encarece a dívida e o crediário.",
   "n08": "Desde {2021|dois mil e vinte e um}, por uma lei sancionada por Bolsonaro, o presidente não manda mais nos juros. Em {2022|dois mil e vinte e dois}, o mercado esperava juros de {8%|oito por cento} em {2025|dois mil e vinte e cinco}. Chegou a {15%|quinze}. A alta começou com Campos Neto, indicado por Bolsonaro, e chegou ao topo com Galípolo, indicado pelo governo atual. Não dá pra culpar um presidente só.",
@@ -14,6 +14,26 @@
   "n10": "E produtividade anda junto com a indústria. Em {1985|mil novecentos e oitenta e cinco}, a indústria era {36%|trinta e seis por cento} da economia. Em {2021|dois mil e vinte e um}, {11%|onze}. É como vender o café em grão e comprar de volta a cápsula, bem mais cara.",
   "n11": "A Coreia do Sul ficou rica investindo em escola e em indústria. Resumindo: sem os juros, as contas quase empatam. O juro alto atravessou governos de direita e de esquerda. E produtividade se ganha com indústria e escola. Da próxima vez que alguém disser que o governo gasta demais, pergunta: e os juros?"
  },
- "windows": {"c1":[25.5,34.5],"c2":[142.5,152.5],"c3":[219.0,229.5],"c4":[193.5,200.5]},
- "heads": {"camposneto":"Roberto Campos Neto","galipolo":"Gabriel Galípolo"}
+ "windows": {
+  "c1": [
+   25.5,
+   34.5
+  ],
+  "c2": [
+   142.5,
+   152.5
+  ],
+  "c3": [
+   219.0,
+   229.5
+  ],
+  "c4": [
+   193.5,
+   200.5
+  ]
+ },
+ "heads": {
+  "camposneto": "Roberto Campos Neto",
+  "galipolo": "Gabriel Galípolo"
+ }
 }

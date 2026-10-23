@@ -101,7 +101,7 @@ def do_heads():
         except Exception:
             traceback.print_exc()
 
-for f in (do_heads,):
+for f in (do_tts,):
     try:
         f()
     except Exception:
