@@ -22,7 +22,7 @@ jobs:
           echo "$D" >> $GITHUB_PATH
       - name: run
         continue-on-error: true
-        run: python job/full.py 2>&1 | tee res_log.txt; mkdir -p res; mv res_log.txt res/log.txt
+        run: bash job/meta.sh 2>&1 | tee res_log.txt; mkdir -p res; mv res_log.txt res/log.txt
       - name: commit
         run: |
           git config user.name bot && git config user.email bot@users.noreply.github.com
