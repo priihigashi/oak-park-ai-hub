@@ -49,13 +49,16 @@ def do_heads():
     from rembg import remove, new_session
     import numpy as np
     sess = new_session('isnet-general-use')
-    H = {'User-Agent': 'reel-bot/1.0 (priihigashi)'}
+    H = {'User-Agent': 'TentandoChegarReelBot/1.0 (https://github.com/priihigashi/oak-park-ai-hub; bot@users.noreply.github.com) python-requests'}
     for k, title in J['heads'].items():
         try:
+            url = None
             for lang in ('pt', 'en'):
-                r = requests.get(f'https://{lang}.wikipedia.org/api/rest_v1/page/summary/' + title.replace(' ', '_'), headers=H, timeout=30).json()
-                url = (r.get('originalimage') or r.get('thumbnail') or {}).get('source')
+                r = requests.get(f'https://{lang}.wikipedia.org/w/api.php', params={'action':'query','titles':title,'prop':'pageimages','piprop':'thumbnail','pithumbsize':1400,'format':'json','redirects':1}, headers=H, timeout=30).json()
+                for pg in r['query']['pages'].values():
+                    url = (pg.get('thumbnail') or {}).get('source')
                 if url: break
+            print('url', k, url)
             img = requests.get(url, headers=H, timeout=60).content
             open(f'res/{k}_src.jpg', 'wb').write(img)
             im = Image.open(f'res/{k}_src.jpg').convert('RGB')
@@ -98,7 +101,7 @@ def do_heads():
         except Exception:
             traceback.print_exc()
 
-for f in (do_tts, do_whisper, do_heads):
+for f in (do_heads,):
     try:
         f()
     except Exception:
