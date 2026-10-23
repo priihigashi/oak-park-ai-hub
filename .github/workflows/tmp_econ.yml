@@ -7,7 +7,8 @@ permissions:
   actions: read
 jobs:
   work:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
     if: "!contains(github.event.head_commit.message, '[out]')"
     steps:
       - uses: actions/checkout@v4
@@ -19,8 +20,10 @@ jobs:
           path: cap
       - name: tools
         run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg >/dev/null
-          pip install -q faster-whisper edge-tts
+          pip install -q faster-whisper edge-tts static-ffmpeg
+          static_ffmpeg_paths
+          D=$(python -c "import static_ffmpeg,os;from static_ffmpeg import run;f,p=run.get_or_fetch_platform_executables_else_raise();print(os.path.dirname(f))")
+          echo "$D" >> $GITHUB_PATH
       - name: process
         run: |
           mkdir -p out
