@@ -1,0 +1,57 @@
+{
+ "voice": "pt-BR-ThalitaMultilingualNeural",
+ "rate": "+15%",
+ "tts": [
+  {
+   "name": "s01",
+   "text": "Ele já paga: de sete e meio a quatorze por cento de INSS saem do salário todo mês. O patrão paga mais vinte por cento de INSS e oito por cento de FGTS, e o FGTS é dinheiro do próprio trabalhador. E quem decide tudo isso é Brasília, não o governador."
+  },
+  {
+   "name": "s02",
+   "text": "O pagamento por hora que ela quer tá numa proposta que o Flávio Bolsonaro defende. E o plano dele promete baixar encargo, sem dizer quanto. Então bora ver quem já baixou e quem subiu esse custo."
+  },
+  {
+   "name": "s03",
+   "text": "Pro pequeno, o Simples começou em mil novecentos e noventa e seis, com o Fernando Henrique. Em dois mil e seis e dois mil e oito, o presidente sancionou o Simples Nacional e o MEI, que paga só três por cento de INSS pelo funcionário."
+  },
+  {
+   "name": "s04",
+   "text": "Com o Bolsonaro, a Previdência fez quem ganha um mínimo descontar sete e meio por cento em vez de oito. Ponto pro governo anterior."
+  },
+  {
+   "name": "s05",
+   "text": "Mas a Carteira Verde e Amarela tirava encargo do patrão e cobrava sete e meio por cento do seguro-desemprego de quem foi demitido. A Câmara aprovou com a direita a favor e a esquerda contra, e o próprio governo revogou."
+  },
+  {
+   "name": "s06",
+   "text": "Na desoneração dos grandes setores, os dois presidentes vetaram a prorrogação, e o Congresso derrubou os dois vetos de lavada."
+  },
+  {
+   "name": "s07",
+   "text": "Agora o governo atual tá tirando esse desconto aos poucos, até dois mil e vinte e oito. Aí o encargo sobe pra dezessete setores, como construção e transporte."
+  },
+  {
+   "name": "s08",
+   "text": "E neste mês o presidente sancionou o Prospera MEI: o MEI pode ter dois funcionários, e o teto sobe pra cento e quarenta mil. Passou por quatrocentos e sessenta e um a quatro."
+  },
+  {
+   "name": "s09",
+   "text": "E aprovou mesmo: o Flávio votou a favor do fim da escala seis por um, que passou no Senado por setenta e cinco a um. Na Câmara, os vinte e dois deputados contra eram todos de direita ou de centro."
+  },
+  {
+   "name": "s10",
+   "text": "Resumindo: encargo é federal. O maior alívio pro pequeno veio do Simples e do MEI, e o Bolsonaro aliviou o desconto de quem ganha pouco. Promessa de baixar sem dizer quanto, a gente já viu em dois mil e dezenove: a conta ia pro desempregado."
+  }
+ ],
+ "faces": [
+  {
+   "name": "dilma",
+   "wiki": "Dilma_Rousseff"
+  },
+  {
+   "name": "fhc",
+   "wiki": "Fernando_Henrique_Cardoso"
+  }
+ ],
+ "run": 1
+}
