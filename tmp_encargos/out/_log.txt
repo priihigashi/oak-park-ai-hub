@@ -1,3 +1,1 @@
-tts ok s06a 42
-tts ok s06 20
-tts ok s07 33
+tts ok s03 89
