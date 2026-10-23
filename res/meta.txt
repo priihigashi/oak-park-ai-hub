@@ -1,0 +1,10 @@
+uploader: Matheus Krepe
+uploader_id: 40866021103
+channel: matheus_krepe
+title: Video by matheus_krepe
+description: Chefe de economia do Flávio Bolsonaro não consegue sustentar seus argumentos e puxa celular !
+#debate #economía #bolsonaro #flavio
+timestamp: 1789514968
+upload_date: 20260915
+like_count: 83744
+comment_count: 13989
