@@ -1,0 +1,404 @@
+<title>Crimeta Russa Carrossel</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: 9 slides 1080x1350 (pontilhado, cores da bandeira), viewer de celular por cima */
+@font-face{font-family:Figtree;font-weight:700;src:url(fonts/figtree-latin-700-normal.woff2) format("woff2")}
+@font-face{font-family:Figtree;font-weight:800;src:url(fonts/figtree-latin-800-normal.woff2) format("woff2")}
+@font-face{font-family:Figtree;font-weight:900;src:url(fonts/figtree-latin-900-normal.woff2) format("woff2")}
+@font-face{font-family:"Instrument Serif";font-style:italic;font-weight:400;src:url(fonts/instrument-serif-latin-400-italic.woff2) format("woff2")}
+:root{
+  --verde:#009C3B;--verde-esc:#00752C;--amarelo:#FFDF00;--azul:#002776;--azul2:#0B3FA6;
+  --branco:#F6F6F4;--preto:#121214;--vermelho:#FF4A3D;--pele:#C98B5E;
+  --ui-bg:#ECECEA;--ui-fg:#141416;--ui-card:#FFFFFF;--ui-mute:#5E5E66;--ui-line:#D6D6D2;
+  --display:Figtree,"Nunito","Arial Rounded MT Bold",system-ui,sans-serif;
+  --serif:"Instrument Serif",Georgia,serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ui-bg:#141416;--ui-fg:#F2F2F0;--ui-card:#1E1E22;--ui-mute:#A0A0A8;--ui-line:#33333A;color-scheme:dark}}
+:root[data-theme="dark"]{--ui-bg:#141416;--ui-fg:#F2F2F0;--ui-card:#1E1E22;--ui-mute:#A0A0A8;--ui-line:#33333A;color-scheme:dark}
+body{background:var(--ui-bg);color:var(--ui-fg);font-family:var(--display);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 40px}
+
+/* ---------- viewer ---------- */
+.wrap{max-width:440px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.wrap h1{font-size:22px;font-weight:900;margin:0;text-wrap:balance}
+.wrap .sub{color:var(--ui-mute);font-size:14px;margin:-8px 0 0}
+.track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:10px;border-radius:14px;scrollbar-width:none}
+.track::-webkit-scrollbar{display:none}
+.frame{flex:0 0 100%;scroll-snap-align:center;aspect-ratio:4/5;position:relative;overflow:hidden;border-radius:14px;max-width:100%}
+.frame>.slide{position:absolute;left:0;top:0;transform-origin:0 0}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.nav button,.btn{font:800 15px var(--display);border:1px solid var(--ui-line);background:var(--ui-card);color:var(--ui-fg);border-radius:999px;padding:10px 16px;cursor:pointer}
+.nav button:focus-visible,.btn:focus-visible,textarea:focus-visible{outline:3px solid var(--verde);outline-offset:2px}
+.dots{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.dots i{width:8px;height:8px;border-radius:50%;background:var(--ui-line)}
+.dots i.on{background:var(--verde)}
+.box{background:var(--ui-card);border:1px solid var(--ui-line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.box h2{font-size:15px;margin:0;font-weight:900;letter-spacing:.02em}
+.box p{margin:0;white-space:pre-wrap;font:700 15px/1.45 var(--display);min-width:0;overflow-wrap:anywhere}
+.box .row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+textarea{width:100%;box-sizing:border-box;min-height:90px;max-height:260px;overflow-y:auto;resize:vertical;font:600 15px/1.4 var(--display);background:var(--ui-bg);color:var(--ui-fg);border:1px solid var(--ui-line);border-radius:10px;padding:10px}
+.note{font-size:13px;color:var(--ui-mute);margin:0}
+
+/* ---------- slides (palco fixo) ---------- */
+.slide{width:1080px;height:1350px;position:relative;overflow:hidden;font-family:var(--display);color:var(--preto)}
+.slide::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(20,20,20,.16) 1.4px,transparent 1.8px);background-size:10px 10px;pointer-events:none;z-index:0}
+.slide.dk::before{background-image:radial-gradient(rgba(255,255,255,.11) 1.4px,transparent 1.8px)}
+.slide::after{content:"";position:absolute;inset:0;opacity:.10;mix-blend-mode:multiply;pointer-events:none;z-index:50;
+ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E")}
+.slide>*{position:absolute;z-index:2}
+.bg-verde{background:var(--verde)}.bg-azul{background:var(--azul)}.bg-amarelo{background:var(--amarelo)}.bg-branco{background:var(--branco)}
+.dk{color:#fff}
+.kick{left:108px;top:92px;font-size:40px;font-weight:900;letter-spacing:.06em;text-transform:uppercase}
+.kick b{display:inline-block;background:var(--preto);color:var(--amarelo);border-radius:12px;padding:4px 16px 2px;margin-right:12px}
+.dk .kick b{background:var(--amarelo);color:var(--preto)}
+.ttl{left:108px;width:864px;top:166px;font-size:82px;line-height:1.02;font-weight:900;letter-spacing:-.01em}
+.ttl::first-letter,.guide::first-letter,.bub::first-letter{text-transform:uppercase}
+.hl{position:relative;display:inline-block;z-index:0;white-space:nowrap}
+.hl::before{content:"";position:absolute;left:-8px;right:-8px;bottom:.04em;height:.5em;background:var(--hlc,var(--amarelo));border-radius:6px;z-index:-1;transform:rotate(-1deg)}
+.hl.blk{color:var(--preto)}
+.hl.full::before{height:.92em;bottom:-.02em}
+.guide{font-family:var(--serif);font-style:italic;font-weight:400;font-size:62px;line-height:1.08}
+.handle{left:108px;bottom:44px;font-size:28px;font-weight:800;opacity:.75}
+.swipe{right:108px;bottom:40px;font-size:30px;font-weight:900;display:flex;align-items:center;gap:10px}
+.swipe svg{width:44px;height:30px}
+
+/* stickers: contorno branco + sombra + balanço */
+.stk{filter:drop-shadow(6px 0 0 #fff) drop-shadow(-6px 0 0 #fff) drop-shadow(0 6px 0 #fff) drop-shadow(0 -6px 0 #fff) drop-shadow(0 14px 18px rgba(0,0,0,.28))}
+.wob{animation:wob 3.2s ease-in-out infinite;transform-origin:50% 90%}
+@keyframes wob{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2.5deg)}}
+@media (prefers-reduced-motion:reduce){.wob,.spin,.pulse{animation:none!important}}
+
+/* balão do vizinho */
+.bub{background:#fff;color:var(--preto);border-radius:34px;padding:26px 30px 28px;font-size:44px;line-height:1.1;font-weight:800;box-shadow:0 10px 0 rgba(0,0,0,.14)}
+.bub::after{content:"";position:absolute;width:44px;height:44px;background:#fff;bottom:-18px;left:var(--tail,60px);transform:rotate(45deg);border-radius:6px}
+.bub em{font-family:var(--serif);font-weight:400;font-size:1.12em}
+
+/* ---------- celular ---------- */
+.phone{left:560px;top:418px;width:412px;height:866px;border-radius:62px;background:#0b0b0d;box-shadow:0 0 0 6px #2a2a30 inset,0 26px 40px rgba(0,0,0,.30);padding:14px;box-sizing:border-box}
+.scr{position:relative;width:384px;height:838px;border-radius:50px;overflow:hidden;background:#000;color:#fff;font-family:var(--display)}
+.scr :not(.mini,.mini *){position:absolute;box-sizing:border-box}
+.scr .mini{position:absolute}
+.isl{left:142px;top:12px;width:100px;height:30px;border-radius:20px;background:#000;z-index:9}
+.stat{left:34px;top:14px;font-size:17px;font-weight:800;z-index:8}
+.stat2{right:30px;top:16px;width:70px;height:14px;z-index:8}
+.ib{width:52px;height:52px;border-radius:50%;background:rgba(40,40,44,.72);display:flex;align-items:center;justify-content:center}
+.ib svg{position:static;width:28px;height:28px}
+.tgt{box-shadow:0 0 0 6px var(--amarelo),0 0 0 12px rgba(255,223,0,.35)}
+.finger{width:96px;height:120px;z-index:20;pointer-events:none}
+.ring{width:96px;height:96px;border-radius:50%;border:6px solid var(--amarelo);z-index:19;animation:pulse 1.4s ease-out infinite}
+@keyframes pulse{0%{transform:scale(.7);opacity:1}100%{transform:scale(1.25);opacity:.25}}
+.mini{overflow:hidden}
+.mini>.slide{position:absolute;left:0;top:0;transform-origin:0 0}
+.mini>.slide *{animation:none!important}
+.chip{position:static!important;display:inline-flex;align-items:center;gap:6px;background:#fff;color:#111;border-radius:12px;padding:7px 12px;font-size:19px;font-weight:700;box-shadow:0 2px 0 rgba(0,0,0,.25)}
+.chip svg{position:static;width:20px;height:20px}
+.chips{left:12px;right:12px;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 8px}
+.kb{left:0;right:0;bottom:0;height:290px;background:#2c2c2f;border-radius:30px 30px 0 0;padding:14px 6px 0}
+.kr{position:static!important;display:flex;gap:6px;justify-content:center;margin-bottom:10px}
+.k{position:static!important;flex:0 0 31px;height:46px;border-radius:8px;background:#6a6a6e;color:#fff;font-size:22px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.spin{animation:spin 18s linear infinite;transform-origin:540px 700px}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+
+<div class="wrap" id="viewer">
+  <h1>Crimeta Russa: reposta e põe o link</h1>
+  <p class="sub">Carrossel de 9 cards, 1080×1350. Arrasta pro lado.</p>
+  <div class="track" id="track"></div>
+  <div class="nav"><button id="prev" type="button">← Voltar</button><div class="dots" id="dots"></div><button id="next" type="button">Próximo →</button></div>
+  <div class="box"><div class="row"><h2>Legenda do post</h2><button class="btn" data-copy="cap" type="button">Copiar</button></div>
+    <p id="cap">Qual caso do Flávio Bolsonaro você vai conhecer hoje? Gire a Crimeta Russa e descubra!
+
+Acesse crimetarussa.com
+
+Arrasta pro lado: o vizinho ensina a colocar o link no seu story, que fica muito mais fácil pro povo clicar.
+
+EXPLODE!</p></div>
+  <div class="box"><div class="row"><h2>1º comentário</h2><button class="btn" data-copy="com" type="button">Copiar</button></div>
+    <p id="com">O link é crimetarussa.com 🔗 Reposta no story com a figurinha de Link e marca a gente!</p></div>
+  <div class="box"><div class="row"><h2>Suas anotações</h2><button class="btn" id="cpn" type="button">Copiar</button></div>
+    <textarea id="notes" placeholder="Digite aqui o que quer mudar, card por card"></textarea></div>
+  <p class="note">Os PNGs dos 9 cards vão como arquivos na conversa.</p>
+</div>
+
+<div id="deck" hidden>
+
+<!-- 1 · MENSAGEM (bandeira) -->
+<section class="slide bg-verde dk" id="s1">
+  <div class="ttl" style="top:96px;font-size:86px;text-align:center">Qual caso do <span class="hl blk full">Flávio Bolsonaro</span> você vai conhecer hoje?</div>
+  <svg style="left:0;top:0;width:1080px;height:1350px;z-index:1" viewBox="0 0 1080 1350">
+    <defs><clipPath id="cc"><circle cx="540" cy="738" r="228"/></clipPath>
+      <path id="arc" d="M 300 770 Q 540 640 780 770"/></defs>
+    <polygon points="540,400 990,738 540,1076 90,738" fill="#FFDF00"/>
+    <g clip-path="url(#cc)">
+      <g class="spin" style="transform-origin:540px 738px">
+        <g id="wedges"></g>
+      </g>
+      <path d="M 300 770 Q 540 640 780 770" stroke="#fff" stroke-width="64" fill="none"/>
+    </g>
+    <circle cx="540" cy="738" r="228" fill="none" stroke="#fff" stroke-width="10"/>
+    <g id="bulbs"></g>
+    <text font-family="Figtree" font-weight="900" font-size="34" fill="#009C3B" letter-spacing="2"><textPath href="#arc" startOffset="50%" text-anchor="middle">GIRE A CRIMETA RUSSA</textPath></text>
+    <g transform="translate(540 498)"><path d="M-34 -30 L34 -30 L0 34 Z" fill="#FF4A3D" stroke="#fff" stroke-width="8" stroke-linejoin="round"/></g>
+  </svg>
+  <div class="guide" style="left:108px;width:864px;top:1094px;text-align:center;font-size:64px">E descubra!</div>
+  <div style="left:108px;width:864px;top:1170px;text-align:center;font-size:40px;font-weight:800">Acesse <span class="hl blk full" style="font-size:72px;font-weight:900">crimetarussa.com</span></div>
+  <div style="right:96px;top:1028px;transform:rotate(-8deg);background:#FF4A3D;color:#fff;font-size:52px;font-weight:900;padding:8px 22px 4px;border-radius:12px;box-shadow:0 0 0 6px #fff,0 12px 18px rgba(0,0,0,.25)">EXPLODE!</div>
+  <div class="handle">@tentandochegaratevoce</div>
+</section>
+
+<!-- 2 · VIZINHO -->
+<section class="slide bg-azul dk" id="s2">
+  <div class="kick"><b>Ô vizinho!</b>Repostou?</div>
+  <div class="ttl" style="top:178px;font-size:104px">Agora põe o <span class="hl blk full">link</span> no seu story</div>
+  <div class="guide" style="left:108px;width:520px;top:440px">Fica muito mais fácil pro povo clicar e girar a Crimeta.</div>
+  <div class="bub" style="left:108px;width:430px;top:760px;--tail:330px">Vem que eu te mostro, <em>é rapidinho!</em></div>
+  <div class="stk wob" style="left:540px;top:520px;width:440px;height:600px" data-neighbor="wave"></div>
+  <div style="left:0;top:1080px;width:1080px;height:270px;background:var(--amarelo);z-index:3;background-image:radial-gradient(rgba(20,20,20,.16) 1.4px,transparent 1.8px);background-size:10px 10px;border-top:10px solid #fff"></div>
+  <div style="left:108px;top:1120px;z-index:4;color:var(--preto);font-size:44px;font-weight:900">São 6 passos</div>
+  <div class="swipe" style="z-index:4;color:var(--preto);bottom:146px">Arrasta <svg viewBox="0 0 44 30"><path d="M2 15H38M26 3l13 12-13 12" stroke="currentColor" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <div class="handle" style="z-index:4;color:var(--preto)">@tentandochegaratevoce</div>
+</section>
+
+<!-- 3 · PASSO 1 -->
+<section class="slide bg-amarelo" id="s3">
+  <div class="kick"><b>Passo 1</b>de 6</div>
+  <div class="ttl">Toca no <span class="hl" style="--hlc:#fff">+</span> lá no cantinho de cima</div>
+  <div class="bub" style="left:108px;width:400px;top:520px;--tail:250px">Ou toca na <em>sua foto</em>, que diz “Seu story”.</div>
+  <div class="stk wob" style="left:108px;top:900px;width:300px;height:330px" data-neighbor="point"></div>
+  <div class="phone"><div class="scr" data-screen="home"></div></div>
+  <div class="handle">@tentandochegaratevoce</div>
+</section>
+
+<!-- 4 · PASSO 2 -->
+<section class="slide bg-branco" id="s4">
+  <div class="kick"><b>Passo 2</b>de 6</div>
+  <div class="ttl">Escolhe a imagem <span class="hl">da Crimeta</span></div>
+  <div class="bub" style="left:108px;width:400px;top:470px;--tail:250px">Antes, tira um <em>print</em> do primeiro card desse post.</div>
+  <div class="stk wob" style="left:108px;top:900px;width:300px;height:330px" data-neighbor="point"></div>
+  <div class="phone"><div class="scr" data-screen="gallery"></div></div>
+  <div class="handle">@tentandochegaratevoce</div>
+</section>
+
+<!-- 5 · PASSO 3 -->
+<section class="slide bg-verde dk" id="s5">
+  <div class="kick"><b>Passo 3</b>de 6</div>
+  <div class="ttl">Toca no <span class="hl blk full">quadradinho</span> com carinha</div>
+  <div class="bub" style="left:108px;width:400px;top:520px;--tail:250px">Fica na <em>coluninha</em> da direita, em cima.</div>
+  <div class="stk wob" style="left:108px;top:900px;width:300px;height:330px" data-neighbor="point"></div>
+  <div class="phone"><div class="scr" data-screen="editor"></div></div>
+  <div class="handle">@tentandochegaratevoce</div>
+</section>
+
+<!-- 6 · PASSO 4 -->
+<section class="slide bg-amarelo" id="s6">
+  <div class="kick"><b>Passo 4</b>de 6</div>
+  <div class="ttl">Nas figurinhas, escolhe a do <span class="hl" style="--hlc:#fff">Link</span></div>
+  <div class="bub" style="left:108px;width:400px;top:520px;--tail:250px">É a que tem o <em>desenho de corrente</em> azul.</div>
+  <div class="stk wob" style="left:108px;top:900px;width:300px;height:330px" data-neighbor="point"></div>
+  <div class="phone"><div class="scr" data-screen="tray"></div></div>
+  <div class="handle">@tentandochegaratevoce</div>
+</section>
+
+<!-- 7 · PASSO 5 -->
+<section class="slide bg-branco" id="s7">
+  <div class="kick"><b>Passo 5</b>de 6</div>
+  <div class="ttl">Escreve <span class="hl">crimetarussa.com</span> e toca no ✔︎</div>
+  <div class="bub" style="left:108px;width:400px;top:520px;--tail:250px">Escreve <em>certinho</em>, sem espaço e sem acento.</div>
+  <div class="stk wob" style="left:108px;top:900px;width:300px;height:330px" data-neighbor="point"></div>
+  <div class="phone"><div class="scr" data-screen="link"></div></div>
+  <div class="handle">@tentandochegaratevoce</div>
+</section>
+
+<!-- 8 · PASSO 6 -->
+<section class="slide bg-azul dk" id="s8">
+  <div class="kick"><b>Passo 6</b>de 6</div>
+  <div class="ttl">Arrasta o link pra cima da imagem e toca em <span class="hl blk full">Seus stories</span></div>
+  <div class="bub" style="left:108px;width:400px;top:560px;--tail:250px">Dá pra <em>aumentar</em> com dois dedos. Quanto maior, melhor!</div>
+  <div class="stk wob" style="left:108px;top:930px;width:300px;height:330px" data-neighbor="point"></div>
+  <div class="phone" style="top:438px"><div class="scr" data-screen="final"></div></div>
+  <div class="handle">@tentandochegaratevoce</div>
+</section>
+
+<!-- 9 · PRONTO -->
+<section class="slide bg-verde dk" id="s9">
+  <div class="ttl" style="top:110px;font-size:170px;line-height:.95"><span class="hl blk full">Pronto!</span></div>
+  <div class="guide" style="left:108px;width:864px;top:330px;font-size:66px">Agora quem vê seu story toca no link e gira a Crimeta.</div>
+  <div class="stk" style="left:108px;top:560px;transform:rotate(-4deg);display:flex;align-items:center;gap:18px;background:#fff;color:#111;border-radius:30px;padding:26px 40px;font-size:60px;font-weight:800">
+    <svg viewBox="0 0 24 24" style="position:static;width:64px;height:64px"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1.2 1.2M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1.2-1.2" fill="none" stroke="#2F7BF5" stroke-width="2.4" stroke-linecap="round"/></svg>Crimetarussa.com</div>
+  <div class="stk wob" style="left:500px;top:700px;width:480px;height:560px" data-neighbor="thumb"></div>
+  <div style="left:108px;top:860px;transform:rotate(-8deg);background:#FF4A3D;color:#fff;font-size:76px;font-weight:900;padding:10px 30px 6px;border-radius:14px;box-shadow:0 0 0 7px #fff,0 14px 20px rgba(0,0,0,.25)">EXPLODE!</div>
+  <div style="left:108px;top:1060px;width:380px;font-size:40px;font-weight:800;line-height:1.15">Marca a gente que a gente reposta.</div>
+  <div class="handle">@tentandochegaratevoce</div>
+</section>
+</div>
+
+<script>
+(function(){
+/* ---------- roleta do card 1 ---------- */
+const W=document.getElementById('wedges'),B=document.getElementById('bulbs'),N=16,cx=540,cy=738,r=228;
+let w='';for(let i=0;i<N;i++){const a0=i*2*Math.PI/N-Math.PI/2,a1=(i+1)*2*Math.PI/N-Math.PI/2;
+ const x0=cx+r*1.2*Math.cos(a0),y0=cy+r*1.2*Math.sin(a0),x1=cx+r*1.2*Math.cos(a1),y1=cy+r*1.2*Math.sin(a1);
+ w+=`<path d="M${cx} ${cy}L${x0} ${y0}L${x1} ${y1}Z" fill="${i%2?'#0B3FA6':'#002776'}" stroke="#fff" stroke-opacity=".35" stroke-width="2"/>`;}
+const stars=[[460,640,7],[600,600,5],[650,850,8],[430,870,6],[540,900,9],[700,720,5],[380,760,6],[560,820,4],[480,800,5],[620,780,6]];
+stars.forEach(s=>w+=`<circle cx="${s[0]}" cy="${s[1]}" r="${s[2]}" fill="#fff"/>`);
+W.innerHTML=w;
+let b='';for(let i=0;i<24;i++){const a=i*2*Math.PI/24;b+=`<circle cx="${cx+r*Math.cos(a)}" cy="${cy+r*Math.sin(a)}" r="9" fill="${i%2?'#FFDF00':'#fff'}" stroke="#002776" stroke-width="3"/>`;}
+B.innerHTML=b;
+
+/* ---------- vizinho (desenho original) ---------- */
+function head(){return `
+ <path d="M28 470 C28 360 90 318 200 318 C310 318 372 360 372 470Z" fill="#FFDF00"/>
+ <path d="M150 322 L200 380 L250 322Z" fill="#009C3B"/>
+ <path d="M60 400 C110 380 290 380 340 400" stroke="#009C3B" stroke-width="10" fill="none" opacity=".5"/>
+ <rect x="168" y="270" width="64" height="70" rx="20" fill="#B87A50"/>
+ <circle cx="82" cy="190" r="26" fill="#C98B5E"/><circle cx="318" cy="190" r="26" fill="#C98B5E"/>
+ <ellipse cx="200" cy="180" rx="118" ry="132" fill="#C98B5E"/>
+ <g fill="#2A1D17"><circle cx="110" cy="92" r="40"/><circle cx="160" cy="62" r="44"/><circle cx="215" cy="56" r="44"/><circle cx="268" cy="74" r="42"/><circle cx="300" cy="118" r="30"/><circle cx="96" cy="130" r="26"/></g>
+ <path d="M126 150 Q150 136 176 148" stroke="#2A1D17" stroke-width="12" fill="none" stroke-linecap="round"/>
+ <path d="M224 148 Q250 136 274 150" stroke="#2A1D17" stroke-width="12" fill="none" stroke-linecap="round"/>
+ <circle cx="152" cy="184" r="20" fill="#fff"/><circle cx="248" cy="184" r="20" fill="#fff"/>
+ <circle cx="157" cy="187" r="10" fill="#1a1a1a"/><circle cx="253" cy="187" r="10" fill="#1a1a1a"/>
+ <circle cx="160" cy="183" r="3.5" fill="#fff"/><circle cx="256" cy="183" r="3.5" fill="#fff"/>
+ <path d="M200 196 Q190 226 202 232" stroke="#8E5A36" stroke-width="7" fill="none" stroke-linecap="round"/>
+ <path d="M146 262 Q200 316 254 262 Q200 282 146 262Z" fill="#7A1F1F"/>
+ <path d="M158 264 Q200 278 242 264 L238 272 Q200 284 162 272Z" fill="#fff"/>
+ <path d="M140 250 Q170 228 200 244 Q230 228 260 250 Q230 262 200 252 Q170 262 140 250Z" fill="#2A1D17"/>
+ <circle cx="120" cy="236" r="16" fill="#E0735A" opacity=".35"/><circle cx="280" cy="236" r="16" fill="#E0735A" opacity=".35"/>`;}
+const handPoint=`<g transform="translate(300 300) rotate(-35)"><rect x="-14" y="-90" width="34" height="92" rx="17" fill="#C98B5E" stroke="#8E5A36" stroke-width="4"/><rect x="-36" y="-10" width="80" height="74" rx="30" fill="#C98B5E" stroke="#8E5A36" stroke-width="4"/></g>`;
+const handWave=`<g transform="translate(330 250) rotate(18)"><rect x="-40" y="-60" width="84" height="96" rx="34" fill="#C98B5E" stroke="#8E5A36" stroke-width="4"/><rect x="-36" y="-118" width="20" height="70" rx="10" fill="#C98B5E" stroke="#8E5A36" stroke-width="4"/><rect x="-12" y="-128" width="20" height="78" rx="10" fill="#C98B5E" stroke="#8E5A36" stroke-width="4"/><rect x="12" y="-122" width="20" height="74" rx="10" fill="#C98B5E" stroke="#8E5A36" stroke-width="4"/><rect x="34" y="-100" width="18" height="60" rx="9" fill="#C98B5E" stroke="#8E5A36" stroke-width="4"/></g>`;
+const handThumb=`<g transform="translate(330 300)"><rect x="-44" y="-30" width="92" height="88" rx="30" fill="#C98B5E" stroke="#8E5A36" stroke-width="4"/><rect x="-24" y="-120" width="36" height="104" rx="18" fill="#C98B5E" stroke="#8E5A36" stroke-width="4"/></g>`;
+document.querySelectorAll('[data-neighbor]').forEach(el=>{
+  const k=el.dataset.neighbor;
+  const extra=k==='wave'?handWave:k==='thumb'?handThumb:'';
+  const vb=k==='point'?'0 0 400 470':'0 -40 420 520';
+  el.innerHTML=`<svg viewBox="${vb}" width="100%" height="100%" preserveAspectRatio="xMidYMax meet">${head()}${extra}</svg>`;
+});
+
+/* ---------- telas do celular ---------- */
+const ic={
+ x:'<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>',
+ aa:'<svg viewBox="0 0 24 24"><text x="2" y="18" font-family="Figtree" font-weight="700" font-size="17" fill="#fff">Aa</text></svg>',
+ stk:'<svg viewBox="0 0 24 24"><path d="M5 4h11l4 4v8a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V5a1 1 0 0 1 1-1z" fill="none" stroke="#fff" stroke-width="2"/><path d="M14 20c0-4 2-6 6-6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="9.5" cy="10" r="1.3" fill="#fff"/><circle cx="14.5" cy="10" r="1.3" fill="#fff"/><path d="M9 14q2 2 4 .5" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>',
+ mus:'<svg viewBox="0 0 24 24"><path d="M9 18V5l10-2v13" fill="none" stroke="#fff" stroke-width="2"/><circle cx="7" cy="18" r="2.6" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17" cy="16" r="2.6" fill="none" stroke="#fff" stroke-width="2"/></svg>',
+ sp:'<svg viewBox="0 0 24 24"><path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6zM18 14l.8 2.2L21 17l-2.2.8L18 20l-.8-2.2L15 17l2.2-.8zM6 15l.7 1.8L8.5 17.5l-1.8.7L6 20l-.7-1.8L3.5 17.5l1.8-.7z" fill="#fff"/></svg>',
+ dn:'<svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>',
+ link:'<svg viewBox="0 0 24 24"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1.2 1.2M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1.2-1.2" fill="none" stroke="#2F7BF5" stroke-width="2.4" stroke-linecap="round"/></svg>',
+ chk:'<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="#111" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>',
+ arr:'<svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round"/></svg>',
+ dot:c=>`<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6" fill="none" stroke="${c}" stroke-width="2.4"/></svg>`
+};
+const finger=(x,y)=>`<div class="ring" style="left:${x-48}px;top:${y-48}px"></div>
+ <div class="finger stk" style="left:${x-34}px;top:${y-6}px"><svg viewBox="0 0 96 120" width="96" height="120"><rect x="22" y="2" width="26" height="70" rx="13" fill="#E9B48A" stroke="#6B4429" stroke-width="4"/><path d="M10 64q0-12 12-12h50q16 0 16 18v18q0 30-30 30H40Q10 118 10 90z" fill="#E9B48A" stroke="#6B4429" stroke-width="4"/><path d="M48 56v18M66 56v18" stroke="#6B4429" stroke-width="3" opacity=".5"/></svg></div>`;
+const status=`<div class="isl"></div><div class="stat">18:33</div><svg class="stat2" viewBox="0 0 70 14"><rect x="0" y="8" width="4" height="6" rx="1" fill="#fff"/><rect x="6" y="5" width="4" height="9" rx="1" fill="#fff"/><rect x="12" y="2" width="4" height="12" rx="1" fill="#fff"/><rect x="40" y="1" width="26" height="12" rx="4" fill="none" stroke="#fff" stroke-width="1.6"/><rect x="42.5" y="3.5" width="14" height="7" rx="2" fill="#FFDF00"/></svg>`;
+const mini=(x,y,w)=>`<div class="mini" data-mini style="left:${x}px;top:${y}px;width:${w}px;height:${w*1.25}px"></div>`;
+const editorBase=(extra)=>`<div style="inset:0;background:linear-gradient(#0a6a2c,#003d18 70%,#000)"></div>
+ ${mini(0,150,384)}
+ <div class="ib" style="left:16px;top:58px">${ic.x}</div>
+ <div class="ib" style="right:14px;top:58px">${ic.aa}</div>
+ <div class="ib" data-t="stk" style="right:14px;top:122px">${ic.stk}</div>
+ <div class="ib" style="right:14px;top:186px">${ic.mus}</div>
+ <div class="ib" style="right:14px;top:250px">${ic.sp}</div>
+ <div class="ib" style="right:14px;top:314px;height:34px;border-radius:17px">${ic.dn}</div>
+ <div style="left:22px;top:716px;font-size:16px;font-weight:700;opacity:.85">Adicione uma legenda...</div>
+ <div data-t="ys" style="left:10px;top:760px;width:168px;height:52px;border-radius:26px;background:#262629;display:flex;align-items:center;gap:8px;padding-left:10px;font-size:16px;font-weight:800"><span style="position:static;width:30px;height:30px;border-radius:50%;background:#FFDF00;display:inline-block"></span>Seus stories</div>
+ <div style="left:186px;top:760px;width:132px;height:52px;border-radius:26px;background:#262629;display:flex;align-items:center;gap:6px;padding-left:10px;font-size:14px;font-weight:800"><span style="position:static;width:26px;height:26px;border-radius:50%;background:#3BC34A;display:inline-block"></span>Melhores amigos</div>
+ <div class="ib" style="right:12px;top:760px;background:#4C5BF5">${ic.arr}</div>${extra||''}`;
+const screens={
+ home:()=>`<div style="inset:0;background:#000"></div>
+  <div class="ib" data-t="plus" style="left:12px;top:52px;background:transparent"><svg viewBox="0 0 24 24"><path d="M12 4v16M4 12h16" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg></div>
+  <div style="left:120px;top:62px;font-size:24px;font-weight:900;letter-spacing:-.02em">Para você ⌄</div>
+  <svg style="right:20px;top:62px;width:30px;height:30px" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" fill="none" stroke="#fff" stroke-width="2"/></svg>
+  <div style="left:12px;top:118px;width:360px;height:120px;display:flex;gap:14px">
+   ${['Seu story','vizinha.ana','seu.zé','tia.cida'].map((n,i)=>`<div style="position:static;width:80px;text-align:center;font-size:13px;font-weight:700">
+     <div style="position:relative;width:80px;height:80px;border-radius:50%;${i?'background:conic-gradient(#FFDF00,#009C3B,#002776,#FFDF00);padding:4px':'background:#333'}">
+      <div style="position:static;width:100%;height:100%;border-radius:50%;background:${['#444','#b58a6b','#8a6b4f','#6b8a9e'][i]};border:3px solid #000"></div>
+      ${i?'':'<div style="right:-2px;bottom:-2px;width:28px;height:28px;border-radius:50%;background:#2F7BF5;border:3px solid #000;color:#fff;font-size:22px;line-height:20px;text-align:center;font-weight:900">+</div>'}
+     </div><div style="position:static;margin-top:6px;white-space:nowrap">${n}</div></div>`).join('')}
+  </div>
+  <div style="left:12px;top:262px;width:36px;height:36px;border-radius:50%;background:#6b8a9e"></div>
+  <div style="left:58px;top:268px;font-size:16px;font-weight:800">vizinha.ana</div>
+  <div style="left:0;top:310px;width:384px;height:400px;background:linear-gradient(160deg,#ffb36b,#e4572e 60%,#5a2a6b)"></div>
+  <div style="left:0;top:772px;width:384px;height:66px;border-top:1px solid #222;display:flex;justify-content:space-around;align-items:center">${'<i style="position:static;width:26px;height:26px;border:2.4px solid #fff;border-radius:7px;display:block"></i>'.repeat(5)}</div>`,
+ gallery:()=>`<div style="inset:0;background:#000"></div>
+  <div class="ib" style="left:12px;top:52px;background:transparent">${ic.x}</div>
+  <div style="left:0;right:0;top:64px;text-align:center;font-size:19px;font-weight:800">Adicionar ao story</div>
+  <div style="left:14px;top:128px;font-size:18px;font-weight:800">Recentes ⌄</div>
+  ${mini(2,166,126)}
+  ${['#7d9fb8','#d9a35e','#59755a','#c26b7d','#3f4f7a','#a9b3a0','#e2c48f','#6e5847','#87a4c4','#b46a4f','#4e6b63','#c9b6d6'].map((c,i)=>{const n=i+1,col=n%3,row=Math.floor(n/3);return `<div style="left:${2+col*128}px;top:${166+row*160}px;width:126px;height:158px;background:linear-gradient(150deg,${c},#1a1a1a)"></div>`}).join('')}
+  <div style="left:2px;top:166px;width:126px;height:158px;border:5px solid #FFDF00" data-t="g1"></div>`,
+ editor:()=>editorBase(),
+ tray:()=>`${editorBase()}<div style="inset:0;background:rgba(0,0,0,.35)"></div>
+  <div style="left:0;right:0;top:66px;bottom:0;background:#3b3b3e;border-radius:28px 28px 0 0"></div>
+  <div style="left:166px;top:78px;width:52px;height:5px;border-radius:3px;background:#888"></div>
+  <div style="left:12px;right:12px;top:96px;height:38px;border-radius:12px;background:#5a5a5e;font-size:17px;padding:8px 0 0 40px;color:#ddd">Pesquisar</div>
+  <div class="chips" style="top:150px">
+   ${[['Local','#8A3BEF'],['@menção','#F37021'],['Música','#E3207A'],['GIF','#2DB84B'],['Adicione o seu','#E3207A'],['Molduras','#555'],['Foto','#2DB84B'],['Recortes','#2DB84B'],['Perguntas','#C21FA0'],['Notificar','#2F7BF5'],['Enquete','#C21FA0'],['LINK','#2F7BF5'],['#hashtag','#8A3BEF'],['Doação','#2F7BF5'],['Contagem','#8A3BEF'],['Produto','#2F7BF5']].map(([t,c])=>t==='LINK'
+     ?`<span class="chip tgt" data-t="lk" style="font-size:24px;padding:9px 16px">${ic.link}Link</span>`
+     :`<span class="chip">${ic.dot(c)}${t}</span>`).join('')}
+  </div>
+  ${['#FFDF00','#E3207A','#8A3BEF','#F37021','#2DB84B','#2F7BF5','#C21FA0','#FF4A3D'].map((c,i)=>`<div style="left:${28+(i%4)*90}px;top:${560+Math.floor(i/4)*110}px;width:70px;height:70px;border-radius:${i%2?'50%':'18px'};background:${c};transform:rotate(${i*13-20}deg);opacity:.9"></div>`).join('')}`,
+ link:()=>`<div style="inset:0;background:linear-gradient(#3b3b3e,#26302a 60%,#2c2c2f)"></div>
+  <div style="left:166px;top:52px;width:52px;height:5px;border-radius:3px;background:#888"></div>
+  <div class="ib" style="left:16px;top:70px;background:#111">${ic.x}</div>
+  <div style="left:0;right:0;top:84px;text-align:center;font-size:19px;font-weight:900">Adicionar link</div>
+  <div class="ib tgt" data-t="ok" style="right:16px;top:70px;background:#fff">${ic.chk}</div>
+  <div style="left:18px;top:150px;font-size:14px;font-weight:700;color:#aaa">URL</div>
+  <div style="left:18px;top:172px;font-size:23px;font-weight:700">crimetarussa.com<span style="position:static;display:inline-block;width:3px;height:24px;background:#2F7BF5;vertical-align:-4px;margin-left:2px"></span></div>
+  <div style="left:18px;right:18px;top:208px;height:2px;background:#555"></div>
+  <div style="left:18px;right:18px;top:220px;font-size:14px;line-height:1.35;color:#aaa;font-weight:700">Quem vir seu story pode tocar na figurinha para acessar o link.</div>
+  <div style="left:18px;top:282px;font-size:18px;font-weight:800">+&nbsp; Personalizar texto da figurinha</div>
+  <div class="kb">${['qwertyuiop','asdfghjkl','zxcvbnm'].map(r=>`<div class="kr">${[...r].map(c=>`<div class="k">${c}</div>`).join('')}</div>`).join('')}
+   <div class="kr"><div class="k" style="flex-basis:52px;font-size:16px">123</div><div class="k" style="flex-basis:60px">.</div><div class="k" style="flex-basis:60px">/</div><div class="k" style="flex-basis:76px;font-size:18px">.com</div><div class="k" style="flex-basis:80px">⏎</div></div></div>`,
+ final:()=>editorBase(`<div data-t="pill" class="stk" style="left:70px;top:420px;transform:rotate(-3deg);display:flex;align-items:center;gap:8px;background:#fff;color:#111;border-radius:14px;padding:10px 16px;font-size:24px;font-weight:700;filter:drop-shadow(0 6px 10px rgba(0,0,0,.35))">${ic.link.replace('<svg ','<svg width="26" height="26" style="position:static" ')}Crimetarussa.com</div>`)
+};
+const targets={home:'plus',gallery:'g1',editor:'stk',tray:'lk',link:'ok',final:'ys'};
+document.querySelectorAll('[data-screen]').forEach(scr=>{
+  const k=scr.dataset.screen;scr.innerHTML=status+screens[k]();
+  const t=scr.querySelector(`[data-t="${targets[k]}"]`);
+  t.classList.add('tgt');
+});
+})();
+</script>
+<script>
+(function(){
+const deck=document.getElementById('deck');
+const exp=location.search.includes('export');
+/* deck precisa estar visível pra medir as telas */
+deck.hidden=false;deck.style.cssText='position:absolute;left:-99999px;top:0';
+const slides=[...deck.querySelectorAll('.slide')];
+/* dedo no alvo de cada tela (medido sem escala) */
+slides.forEach(s=>s.querySelectorAll('[data-screen]').forEach(scr=>{
+  const sr=scr.getBoundingClientRect();const t=scr.querySelector('.tgt');const tr=t.getBoundingClientRect();
+  const x=tr.left-sr.left+tr.width/2,y=tr.top-sr.top+tr.height/2;
+  const f=document.createElement('div');f.style.cssText='inset:0;z-index:20';
+  f.innerHTML=`<div class="ring" style="left:${x-48}px;top:${y-48}px"></div><div class="finger stk" style="left:${x-14}px;top:${y+14}px"><svg viewBox="0 0 96 120" width="96" height="120"><rect x="22" y="2" width="26" height="70" rx="13" fill="#E9B48A" stroke="#6B4429" stroke-width="4"/><path d="M10 64q0-12 12-12h50q16 0 16 18v18q0 30-30 30H40Q10 118 10 90z" fill="#E9B48A" stroke="#6B4429" stroke-width="4"/><path d="M48 56v18M66 56v18" stroke="#6B4429" stroke-width="3" opacity=".5"/></svg></div>`;
+  scr.appendChild(f);
+}));
+/* miniaturas do card 1 dentro dos celulares */
+const s1=document.getElementById('s1');
+deck.querySelectorAll('[data-mini]').forEach(m=>{const c=s1.cloneNode(true);c.removeAttribute('id');
+  c.querySelectorAll('[id]').forEach(e=>{e.id=e.id+'_m'+Math.random().toString(36).slice(2,6)});
+  /* refs internas do svg */
+  const cp=c.querySelector('clipPath'),ap=c.querySelector('path[id^="arc"]');
+  c.querySelector('g[clip-path]').setAttribute('clip-path',`url(#${cp.id})`);c.querySelector('textPath').setAttribute('href','#'+ap.id);
+  c.style.transform=`scale(${parseFloat(m.style.width)/1080})`;m.appendChild(c);});
+if(exp){document.getElementById('viewer').remove();deck.style.cssText='';document.body.style.cssText='margin:0;padding:0;background:#000';
+  slides.forEach(s=>s.style.marginBottom='0');document.documentElement.dataset.ready='1';return;}
+deck.remove();
+const track=document.getElementById('track'),dots=document.getElementById('dots');
+slides.forEach((s,i)=>{const f=document.createElement('div');f.className='frame';f.appendChild(s);track.appendChild(f);dots.appendChild(document.createElement('i'));});
+function fit(){track.querySelectorAll('.frame').forEach(f=>{f.firstElementChild.style.transform=`scale(${f.clientWidth/1080})`;});}
+fit();addEventListener('resize',fit);
+const ds=[...dots.children];
+function cur(){return Math.round(track.scrollLeft/(track.clientWidth+10));}
+function mark(){const c=cur();ds.forEach((d,i)=>d.classList.toggle('on',i===c));}
+track.addEventListener('scroll',mark,{passive:true});mark();
+const go=d=>track.scrollTo({left:(cur()+d)*(track.clientWidth+10),behavior:'smooth'});
+document.getElementById('prev').onclick=()=>go(-1);document.getElementById('next').onclick=()=>go(1);
+function copy(txt,btn){const done=()=>{const o=btn.textContent;btn.textContent='Copiado';setTimeout(()=>btn.textContent=o,1400)};
+  navigator.clipboard?navigator.clipboard.writeText(txt).then(done,()=>{}):0;}
+document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>copy(document.getElementById(b.dataset.copy).textContent,b));
+const ta=document.getElementById('notes');try{ta.value=localStorage.getItem('crimeta-notes')||''}catch(e){}
+ta.addEventListener('input',()=>{try{localStorage.setItem('crimeta-notes',ta.value)}catch(e){}});
+document.getElementById('cpn').onclick=e=>copy(ta.value,e.target);
+})();
+</script>
