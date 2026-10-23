@@ -1,0 +1,20 @@
+name: tmp-encargos (public narration TTS + public face cutouts)
+on:
+  push:
+    branches: [tmp-encargos]
+    paths: [tmp_encargos/job.json]
+permissions:
+  contents: write
+jobs:
+  assets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install -q -U edge-tts requests "rembg[cpu]" "mediapipe==0.10.14" opencv-python-headless pillow numpy
+      - run: cd tmp_encargos && python build.py
+      - run: |
+          git config user.name tts-bot && git config user.email tts@bot
+          git add tmp_encargos/out && git commit -m "tts out" && git pull --rebase && git push
