@@ -25,13 +25,16 @@ jobs:
           D=$(python -c "import static_ffmpeg,os;from static_ffmpeg import run;f,p=run.get_or_fetch_platform_executables_else_raise();print(os.path.dirname(f))")
           echo "$D" >> $GITHUB_PATH
       - name: process
+        continue-on-error: true
         run: |
           mkdir -p out
+          set +e
           find cap -type f -exec ls -la {} \; > out/listing.txt
+          find cap -type f -size -400k \( -name '*.txt' -o -name '*.srt' -o -name '*.json' -o -name '*.md' \) -exec cp {} out/ \;
           V=$(find cap -type f \( -name '*.mp4' -o -name '*.mov' -o -name '*.webm' \) | head -1)
+          if [ -z "$V" ]; then pip install -q yt-dlp; yt-dlp -q -o cap/dl.mp4 -f 'mp4/best' 'https://www.instagram.com/reel/DdU3ADIuEba/' >> out/listing.txt 2>&1; V=cap/dl.mp4; fi
+          set -e
           echo "video: $V" >> out/listing.txt
-          cp cap/*.txt out/ 2>/dev/null || true
-          find cap -name '*.txt' -o -name '*.srt' -o -name '*.json' | head -20 | xargs -I{} cp {} out/ 2>/dev/null || true
           ffprobe -v error -show_entries format=duration -of csv=p=0 "$V" > out/duration.txt
           cp "$V" out/orig.mp4
           ffmpeg -y -loglevel error -i "$V" -vf scale=432:768,fps=24 -c:v libx264 -preset slow -crf 32 -g 48 -pix_fmt yuv420p -c:a aac -b:a 64k -ac 1 -movflags +faststart out/original_leve.mp4
@@ -54,4 +57,4 @@ jobs:
       - name: commit
         run: |
           git config user.name bot && git config user.email bot@users.noreply.github.com
-          git add out && git commit -m "[out] results" && git push
+          git add out && git commit -q -m "[out] results" && git push
