@@ -1,0 +1,126 @@
+{
+ "png/01_crimeta.png": {
+  "id": "153suvBYdvk9rZ1cIVzIk2fwA3CsQ313o",
+  "name": "01_crimeta.png",
+  "size": "881407"
+ },
+ "png/03_checagem_debate.png": {
+  "id": "1hzKvq0ZSFoJP7iGCY8ySO1zuBgaVmcEi",
+  "name": "03_checagem_debate.png",
+  "size": "796492"
+ },
+ "png/v1-9cards_slide_01.png": {
+  "id": "1vc_VPbllGRg1iprTmtdyi3hw1ZZOXa6W",
+  "name": "v1-9cards_slide_01.png",
+  "size": "888109"
+ },
+ "png/v1-9cards_slide_02.png": {
+  "id": "1HnjRK4oDcqbd8LFQNi2FoyqkZwQNP2-8",
+  "name": "v1-9cards_slide_02.png",
+  "size": "750797"
+ },
+ "png/v1-9cards_slide_03.png": {
+  "id": "1fuwjcdxQBclT47Su3dFeWbbzZAmdYejJ",
+  "name": "v1-9cards_slide_03.png",
+  "size": "1001176"
+ },
+ "png/v1-9cards_slide_04.png": {
+  "id": "12i49vzrZ-JglTLO2FDEX0jaZPYZqfD6K",
+  "name": "v1-9cards_slide_04.png",
+  "size": "1154137"
+ },
+ "png/v1-9cards_slide_05.png": {
+  "id": "1Xmn8XvPmZtYRwyUOXOczpTXS8CzqalXF",
+  "name": "v1-9cards_slide_05.png",
+  "size": "1041162"
+ },
+ "png/v1-9cards_slide_06.png": {
+  "id": "1WFVd8Gv4JPg7YkYoQQov0g2jpWno0Y7j",
+  "name": "v1-9cards_slide_06.png",
+  "size": "1046235"
+ },
+ "png/v1-9cards_slide_07.png": {
+  "id": "1qP0fZHQ4X6kp17Uz4eJiJiFAPiSzSj-7",
+  "name": "v1-9cards_slide_07.png",
+  "size": "1178876"
+ },
+ "png/v1-9cards_slide_08.png": {
+  "id": "1GuEwLJDnE_TJ6B3HLU6GtlkxeGrSuJuc",
+  "name": "v1-9cards_slide_08.png",
+  "size": "1031044"
+ },
+ "png/v1-9cards_slide_09.png": {
+  "id": "15pkPiCiys_LGRHD4PBh0_tM4hZRPFvja",
+  "name": "v1-9cards_slide_09.png",
+  "size": "912300"
+ },
+ "motion/reel_crimeta-russa.mp4": {
+  "id": "1CfSTb_DwEMcWtN5vE_8qGOTHkzTv-egv",
+  "name": "reel_crimeta-russa.mp4",
+  "size": "6608038"
+ },
+ "motion/slide_01.png": {
+  "id": "1_ZUV8oURynNLv4Jt3c_E9kRLx6v1nN_f",
+  "name": "slide_01.png",
+  "size": "881407"
+ },
+ "motion/slide_02.mp4": {
+  "id": "1wYZ77NvkmshaR_kAKpiWNpzZD9VJN084",
+  "name": "slide_02.mp4",
+  "size": "4433036"
+ },
+ "motion/slide_03.png": {
+  "id": "1FFsZQcAcqlnJ1mBjJigzO4JkvQ-UlgBV",
+  "name": "slide_03.png",
+  "size": "796492"
+ },
+ "resources/preview_3cards_video.html": {
+  "id": "1c-WlUga370N8O8ZbVXBmHo2HSVKkxeb5",
+  "name": "preview_3cards_video.html",
+  "size": "128081"
+ },
+ "resources/preview_9cards.html": {
+  "id": "145yrsomSMoAOq0cKyf_yyUeZ31l0rBWu",
+  "name": "preview_9cards.html",
+  "size": "111347"
+ },
+ "resources/render.py": {
+  "id": "1JdIqwpzoWbkdJKoQDDgRt_wDm_empz_2",
+  "name": "render.py",
+  "size": "1313"
+ },
+ "resources/render_parts.py": {
+  "id": "1lVZqX8mUxpVK1knXc0lOJKyFxVbuONV-",
+  "name": "render_parts.py",
+  "size": "1260"
+ },
+ "resources/s1.html": {
+  "id": "1J4fNHW6KQi9okCgdlVmjWDOgVJoWlXOL",
+  "name": "s1.html",
+  "size": "1803"
+ },
+ "resources/sfx.wav": {
+  "id": "1Og0W9-LyEsJx7dCiGVkkxzCE3JMuHTmL",
+  "name": "sfx.wav",
+  "size": "2910644"
+ },
+ "resources/src_9cards.html": {
+  "id": "1fSkTUwR5DHvh3kg2UdII18nQUIQ0Paoz",
+  "name": "src_9cards.html",
+  "size": "36844"
+ },
+ "resources/src_video.html": {
+  "id": "1IkMezFo0Ik07MEma7M8A6kknuhJXUMh-",
+  "name": "src_video.html",
+  "size": "43213"
+ },
+ "resources/style.css": {
+  "id": "1XjtDF9vheblD3lUfMWSbX53MkDhtOSzy",
+  "name": "style.css",
+  "size": "8577"
+ },
+ "story": {
+  "id": "1lrkMtUyXwOK8rCtWUCU5lj7yIlm_z54DpySUhCQ5Obw",
+  "name": "story · Crimeta Russa v1"
+ }
+}
