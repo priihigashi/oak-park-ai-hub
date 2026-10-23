@@ -3,10 +3,27 @@
  "rate": "+15%",
  "tts": [
   {
-   "name": "s01",
-   "text": "Ele já paga: de sete e meio a quatorze por cento de INSS saem do salário todo mês. O patrão paga mais vinte por cento de INSS e oito por cento de FGTS, e o FGTS é dinheiro do próprio trabalhador. E quem decide tudo isso é Brasília, não o governador. E nos Estados Unidos, que ela usa de exemplo, o trabalhador desconta sete vírgula sessenta e cinco por cento, e o patrão paga quase o mesmo, cerca de oito por cento. Aqui, o patrão paga bem mais que o trabalhador."
+   "name": "s09",
+   "text": "Votou, mas à distância, e só depois de mudar de ideia na reta final da eleição. Em maio, ele disse que a proposta ia engessar quem quer trabalhar mais. No dia do voto, sinalizou a empresários que pode revisar se for eleito. Dois dias depois, na Globo, disse que não vai desfazer."
+  },
+  {
+   "name": "s09b",
+   "text": "E o que ele assinou vai pra outro lado: a PEC do Rogério Marinho, coordenador da campanha dele, deixa contratar por hora, com salário proporcional às horas. É o mesmo Marinho que, na equipe do Paulo Guedes, explicou a cobrança no seguro-desemprego. E o Flávio diz que quer manter a espinha dorsal da economia do Guedes."
+  },
+  {
+   "name": "s09c",
+   "text": "O plano dele promete contrato mais barato pra jovens, sem dizer qual direito encolhe. Em dois mil e dezenove, o contrato parecido baixava o FGTS de oito pra dois por cento. E na Câmara, os vinte e dois deputados contra o fim da escala eram todos de direita ou de centro."
   }
  ],
- "faces": [],
- "run": 4
+ "faces": [
+  {
+   "name": "marinho",
+   "wiki": "Rogério_Marinho"
+  },
+  {
+   "name": "guedes",
+   "wiki": "Paulo_Guedes"
+  }
+ ],
+ "run": 5
 }
