@@ -1,0 +1,27 @@
+name: tmp-motoboys-job
+on:
+  push:
+    branches: [tmp-motoboys]
+jobs:
+  run:
+    if: "!contains(github.event.head_commit.message, '[out]')"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - name: Install
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          pip install -q -U edge-tts requests
+          if grep -q '"whisper"' tmp_motoboys/job.json; then pip install -q faster-whisper; fi
+      - name: Run
+        run: cd tmp_motoboys && python run.py
+      - name: Commit
+        if: always()
+        run: |
+          git config user.name bridge-bot && git config user.email bridge@users.noreply.github.com
+          git add -f tmp_motoboys/out && git commit -qm "[out] $(date +%s)" || exit 0
+          for i in 1 2 3; do git pull -q --rebase -X theirs origin tmp-motoboys && git push -q && break; sleep 3; done

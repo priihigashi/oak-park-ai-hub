@@ -1,0 +1,8 @@
+{"faces":[
+ {"name":"flavio","q":"Flávio Bolsonaro senador"},
+ {"name":"jair","q":"Jair Bolsonaro presidente retrato oficial"},
+ {"name":"guedes","q":"Paulo Guedes ministro"},
+ {"name":"marinho","q":"Rogério Marinho senador"},
+ {"name":"boulos","q":"Guilherme Boulos"}
+],
+"whisper":{"file":"jones.mp3","out":"jones_words.json","model":"medium"}}
