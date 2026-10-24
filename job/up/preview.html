@@ -1,0 +1,290 @@
+<meta charset="utf-8">
+<title>O Peixe do Flávio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+@font-face{font-family:Figtree;font-weight:600;src:url(figtree-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:Figtree;font-weight:800;src:url(figtree-latin-800-normal.woff2) format('woff2')}
+@font-face{font-family:Figtree;font-weight:900;src:url(figtree-latin-900-normal.woff2) format('woff2')}
+@font-face{font-family:'Instrument Serif';font-style:italic;font-weight:400;src:url(instrument-serif-latin-400-italic.woff2) format('woff2')}
+:root{--tema:#B48CFF;--preto:#121214;--branco:#F6F6F4;--vermelho:#FF4A3D;--azul:#2D55D6;
+--shell:#0c0c0e;--shell-2:#1a1a1e;--shell-fg:#f1eef0;--muted:#a8a29a;
+--display:'Figtree',system-ui,-apple-system,'Segoe UI',sans-serif;--serif:'Instrument Serif',Georgia,serif;color-scheme:dark}
+:root:not([data-theme="light"]){color-scheme:dark}
+html,body{background:var(--shell);color:var(--shell-fg);margin:0}
+body{font-family:var(--display);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 40px}
+.wrap{max-width:440px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.hd{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.hd h1{font:900 17px/1.2 var(--display);margin:0}.hd small{font:600 12px var(--display);color:var(--muted)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tabs button{flex:1;min-width:0;background:var(--shell-2);color:var(--shell-fg);border:1px solid #2c2a2e;border-radius:10px;padding:9px 4px;font:700 12px var(--display);cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--tema);color:var(--preto);border-color:var(--tema)}
+button:focus-visible,textarea:focus-visible{outline:2px solid var(--tema);outline-offset:2px}
+.view{display:flex;flex-direction:column;gap:12px}
+.frame{position:relative;width:100%;aspect-ratio:9/16;overflow:hidden;border-radius:14px;background:var(--preto)}
+.stage{position:absolute;left:0;top:0;width:1080px;height:1920px;transform-origin:0 0;overflow:hidden;background:var(--preto)}
+.dots{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(rgba(20,20,20,.16) 1.4px,transparent 1.8px);background-size:10px 10px}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.10;mix-blend-mode:multiply;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E")}
+.scene{position:absolute;inset:0;opacity:0;transition:opacity .2s}.scene.on{opacity:1}
+.bg-tema{background:var(--tema)}.bg-preto{background:var(--preto)}.bg-branco{background:var(--branco)}.bg-vermelho{background:var(--vermelho)}
+.bg-preto .dots{background-image:radial-gradient(rgba(255,255,255,.09) 1.4px,transparent 1.8px)}
+.ink-claro{color:var(--branco)}.ink-escuro{color:var(--preto)}
+.el{position:absolute;left:108px;width:864px;opacity:0;transform:translateY(34px);transition:opacity .3s ease,transform .42s cubic-bezier(.2,.9,.25,1.15)}
+.el.on{opacity:1;transform:none}
+.el.pop{transform:scale(.6)}.el.pop.on{transform:none}
+.el.slam{transform:scale(1.45)}.el.slam.on{transform:none;transition:opacity .15s,transform .28s cubic-bezier(.3,1.4,.4,1)}
+.kicker{font:800 44px/1.1 var(--display);letter-spacing:.02em}
+.guia{font:italic 400 62px/1.1 var(--serif)}
+.giga{font:900 160px/.95 var(--display);letter-spacing:-.02em}
+.medio{font:800 88px/1.02 var(--display);letter-spacing:-.01em;text-wrap:balance}
+.miuda{font:600 28px/1.3 var(--display)}.el.miuda.on{opacity:.9}
+.lbl{font:800 30px/1.15 var(--display)}
+.kicker::first-letter,.guia::first-letter,.medio::first-letter,.giga::first-letter,.chip::first-letter,.miuda::first-letter,.lbl::first-letter{text-transform:uppercase}
+.cont::first-letter{text-transform:none!important}
+.mk{position:relative;z-index:0;white-space:nowrap}
+.mk::after{content:"";position:absolute;left:-8px;right:-8px;bottom:.06em;height:.42em;z-index:-1;background:var(--mk,var(--branco));transform:scaleX(0);transform-origin:left;transition:transform .55s .15s ease}
+.on .mk::after,.mk.on::after{transform:scaleX(1)}
+.bg-preto .mk{--mk:var(--vermelho)}
+.stamp{display:inline-block;padding:8px 26px;border:8px solid currentColor;border-radius:14px;transform:rotate(-3deg)}
+.head{position:absolute;opacity:0;transform:scale(.5);transition:opacity .25s,transform .4s cubic-bezier(.3,1.5,.4,1);filter:drop-shadow(0 0 0 #fff) drop-shadow(0 14px 18px rgba(0,0,0,.28))}
+.head.on{opacity:1;transform:none}
+.head img{display:block;height:100%;width:auto;animation:wob 3.2s ease-in-out infinite;filter:drop-shadow(7px 0 0 #fff) drop-shadow(-7px 0 0 #fff) drop-shadow(0 7px 0 #fff) drop-shadow(0 -7px 0 #fff)}
+@keyframes wob{0%,100%{rotate:-1.6deg}50%{rotate:1.6deg}}
+.chip{display:inline-flex;align-items:center;gap:12px;background:var(--preto);color:var(--branco);border-radius:999px;padding:12px 24px;font:800 34px/1 var(--display);white-space:nowrap;width:auto}
+.bg-preto .chip{background:var(--branco);color:var(--preto)}
+.ide{display:inline-block;padding:6px 14px;border-radius:999px;font:900 26px/1 var(--display);color:#fff}
+.ide.dir{background:var(--azul)}.ide.esq{background:var(--vermelho)}.ide.neu{background:#6b6560}.ide.cen{background:#8a7f3a}
+.tv{border-radius:22px;overflow:hidden;border:6px solid var(--branco);box-shadow:10px 12px 0 var(--tema)}
+.tv{position:absolute}.tvtag{position:absolute;right:18px;top:228px;background:var(--preto);color:var(--branco);font:800 26px/1 var(--display);padding:12px 16px;border-radius:10px}
+.tv video,.tv img{width:100%;height:100%;object-fit:cover;display:block;background:#000}
+.bubble{background:#dcf8c6;color:#111;border-radius:28px 28px 28px 6px;padding:26px 34px;box-shadow:0 10px 0 rgba(0,0,0,.12);width:800px}
+.bubble .who{font:800 28px var(--display);color:#1f7a4d;margin-bottom:10px}
+.bubble .msg{font:600 52px/1.15 var(--display)}
+.map{position:absolute;left:108px;width:864px;height:330px}
+.node{position:absolute;top:0;width:244px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;font:900 38px/1.05 var(--display)}
+.node .head{left:auto}
+.arr{position:absolute;top:70px;width:60px;font:900 80px/1 var(--display)}
+.cash{width:200px;height:200px;border-radius:50%;background:var(--tema);color:var(--preto);display:grid;place-items:center;font:900 76px var(--display);border:8px solid var(--branco)}
+.photo{border:12px solid var(--branco);box-shadow:12px 14px 0 var(--tema);rotate:-2deg;overflow:hidden;background:#222}
+.photo img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(.15)}
+.cap{position:absolute;left:108px;width:864px;top:1420px;text-align:center;font:800 58px/1.18 var(--display);z-index:5}
+.cap .ln{display:block;white-space:nowrap}.cap .w{padding:0 4px;border-radius:8px}
+.cap.escuro{color:var(--preto)}.cap.claro{color:var(--branco)}
+.cap.escuro .w.act{background:var(--preto);color:var(--tema)}
+.cap.claro .w.act{background:var(--tema);color:var(--preto)}
+.cap.vermelho .w.act{background:var(--preto);color:var(--branco)}
+.handle{position:absolute;left:0;right:0;top:1626px;text-align:center;font:800 30px var(--display);z-index:5;opacity:.9}
+.fonte{position:absolute;left:108px;right:108px;top:1668px;text-align:center;font:600 23px/1.25 var(--display);z-index:5;opacity:.8}
+.serie{position:absolute;left:108px;top:150px;font:800 26px/1 var(--display);letter-spacing:.08em;text-transform:uppercase;opacity:.75;width:auto}
+.ctl{display:flex;flex-direction:column;gap:8px}
+.row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.row button,.dl{background:var(--shell-2);color:var(--shell-fg);border:1px solid #2c2a2e;border-radius:9px;padding:8px 10px;font:700 13px var(--display);cursor:pointer;font-variant-numeric:tabular-nums;text-decoration:none}
+.row button.play{background:var(--tema);color:var(--preto);border-color:var(--tema);min-width:74px}
+.row button.sel{background:var(--branco);color:var(--preto)}
+input[type=range]{width:100%;accent-color:var(--tema)}
+.time{font:600 12px var(--display);color:var(--muted);font-variant-numeric:tabular-nums}
+.note{font:500 13px/1.45 var(--display);color:var(--muted);margin:0}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field label{font:800 12px var(--display);letter-spacing:.06em;text-transform:uppercase;color:var(--tema)}
+.field textarea{box-sizing:border-box;width:100%;min-height:150px;background:var(--shell-2);color:var(--shell-fg);border:1px solid #2c2a2e;border-radius:10px;padding:10px;font:500 14px/1.45 var(--display);resize:vertical}
+#notas{min-height:90px;max-height:260px;overflow-y:auto}
+.copy{align-self:flex-start;background:var(--tema);color:var(--preto);border:0;border-radius:9px;padding:8px 14px;font:800 13px var(--display);cursor:pointer}
+.btns{display:flex;gap:6px;flex-wrap:wrap}
+.orig video{width:100%;border-radius:12px;background:#000}
+.capa img{width:100%;border-radius:12px;display:block}
+.opts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.opts figure{margin:0;display:flex;flex-direction:column;gap:4px;min-width:0}
+.opts figcaption{font:700 12px var(--display);color:var(--muted)}
+a{color:var(--tema)}
+@media (prefers-reduced-motion:reduce){.el,.scene,.mk::after,.head{transition:none}.head img{animation:none}}
+</style>
+<div class="wrap">
+  <div class="hd"><h1>O Peixe do Flávio · final</h1><small>Antes do dia 25 · prévia</small></div>
+  <div class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-v="v-prev">Prévia</button>
+    <button role="tab" aria-selected="false" data-v="v-capa">Capa e legenda</button>
+    <button role="tab" aria-selected="false" data-v="v-orig">Vídeo original</button>
+    <button role="tab" aria-selected="false" data-v="v-opc">Outras opções</button>
+  </div>
+  <section class="view" id="v-prev">
+    <div class="frame" id="frame"><div class="stage" id="stage">
+<div class="scene bg-preto ink-claro" data-key="s1" data-in="0.000" data-out="7.619" data-cap="claro"><div class="dots"></div><div class="grain"></div>
+  <div class="serie el on">Antes do dia 25 · Ep. Peixe</div>
+  <div class="head" style="left:96px;top:215px;height:240px" data-in="1.215"><img src="lessa.png" alt="Ronnie Lessa"></div>
+  <div class="el pop chip" style="left:108px;top:475px;font-size:30px" data-in="1.215">Ronnie Lessa <span class="ide neu">ex-PM</span></div>
+  <div class="head" style="left:640px;top:215px;height:240px" data-in="1.615"><img src="marielle.png" alt="Marielle Franco" style="animation-delay:-1.5s"></div>
+  <div class="el pop chip" style="left:560px;top:475px;width:auto;font-size:30px" data-in="1.615">Marielle <span class="ide esq">PSOL · esquerda</span></div>
+  <div class="el lbl" style="top:550px;font-size:33px;white-space:nowrap" data-in="1.615">Lessa matou Marielle e Anderson em 2018 e confessou.</div>
+  <div class="el guia" style="top:640px" data-in="2.415">Segundo ele, um homem</div>
+  <div class="el slam giga" style="top:720px;width:560px;font-size:132px" data-in="2.785">Arrumou <span class="mk" style="--mk:var(--vermelho)">a arma.</span></div>
+  <div class="head" style="left:690px;top:722px;height:258px" data-in="2.415"><img src="peixe.png" alt="Robson Calixto, o Peixe" style="animation-delay:-.7s"></div>
+  <div class="el pop chip" style="left:700px;top:990px;width:auto;font-size:30px" data-in="2.415">O Peixe <span class="ide neu">ex-PM</span></div>
+  <div class="el medio" style="top:1050px;font-size:64px" data-in="3.785">E pediu uma emenda pro <span class="mk" style="--mk:var(--vermelho)">gabinete do Flávio.</span></div>
+  <div class="el slam medio" style="top:1210px;width:auto;font-size:80px" data-in="7.077"><span class="stamp" style="background:var(--tema);color:var(--preto);border-color:var(--tema)">A emenda saiu.</span></div>
+ <div class="fonte">Fonte: PF via O Globo (mai/2026) · delação de Ronnie Lessa (2024)</div></div>
+<div class="scene bg-preto ink-claro" data-key="clip" data-in="7.619" data-out="15.369" data-cap="claro"><div class="dots"></div><div class="grain"></div>
+  <div class="el kicker" style="top:200px;color:var(--tema)" data-in="7.619">Até a TV lembrou:</div>
+  <div class="tv el pop" style="left:108px;top:270px;width:864px;height:912px" data-in="7.619"><video id="clipv" src="clip.mp4" poster="clip.jpg" muted playsinline preload="auto"></video><div class="tvtag">Vídeo: GloboNews</div></div>
+  <div class="el pop chip" style="left:108px;top:1215px" data-in="8.419">Ana Flor <span class="ide neu">comentarista · GloboNews</span></div>
+ <div class="fonte">Vídeo: GloboNews (out/2026). Recorte: Lessa citou uma submetralhadora, e não um fuzil.</div></div>
+<div class="scene bg-tema ink-escuro" data-key="s3" data-in="15.369" data-out="23.066" data-cap="escuro"><div class="dots"></div><div class="grain"></div>
+  <div class="head" style="left:96px;top:210px;height:380px" data-in="15.738"><img src="peixe.png" alt="Robson Calixto, o Peixe"></div>
+  <div class="el medio" style="left:470px;top:230px;width:502px;font-size:56px;white-space:nowrap" data-in="15.738">Robson Calixto,</div>
+  <div class="el slam giga cont" style="left:470px;top:310px;width:502px;font-size:140px" data-in="16.723"><span class="mk">o Peixe</span></div>
+  <div class="el pop chip" style="left:470px;top:490px" data-in="16.723">Ex-PM <span class="ide neu">sem partido</span></div>
+  <div class="head" style="left:96px;top:640px;height:230px" data-in="17.938"><img src="domingos.png" alt="Domingos Brazão"></div>
+  <div class="el lbl" style="left:330px;top:660px;width:640px;font-size:44px" data-in="17.338">Braço direito de</div>
+  <div class="el pop chip" style="left:330px;top:725px" data-in="17.938">Domingos Brazão <span class="ide cen">ex-MDB · centro</span></div>
+  <div class="el slam medio" style="top:920px;width:auto;font-size:70px" data-in="19.277"><span class="stamp" style="background:var(--preto);color:var(--branco);border-color:var(--preto)">Condenado pelo STF</span></div>
+  <div class="el lbl" style="top:1050px;font-size:40px" data-in="19.815">Organização criminosa armada · caso Marielle</div>
+  <div class="head" style="left:96px;top:1120px;height:190px" data-in="21.384"><img src="domingos.png" alt="Domingos Brazão" style="animation-delay:-1s"></div>
+  <div class="head" style="left:270px;top:1120px;height:190px" data-in="21.384"><img src="chiquinho.png" alt="Chiquinho Brazão" style="animation-delay:-2s"></div>
+  <div class="el lbl" style="left:470px;top:1140px;width:502px;font-size:40px" data-in="22.415">Irmãos Brazão: <span class="mk" style="--mk:var(--branco)">mandantes</span> do crime</div>
+  <div class="el pop chip" style="left:470px;top:1240px;font-size:26px" data-in="22.415">Chiquinho <span class="ide dir">ex-União Brasil · direita</span></div>
+ <div class="fonte">Fontes: STF, 1ª Turma (fev/2026) · Agência Brasil · O Globo</div></div>
+<div class="scene bg-branco ink-escuro" data-key="s4" data-in="23.066" data-out="32.618" data-cap="escuro"><div class="dots"></div><div class="grain"></div>
+  <div class="el kicker" style="top:200px" data-in="23.266">24/10/2023 · celular do Peixe, apreendido pela PF</div>
+  <div class="bubble el pop" style="top:330px" data-in="25.128"><div class="who">Peixe → “Fafá Flávio Bolsonaro”</div><div class="msg">Amiga, vê com o <b>nosso senador</b> se consegue nos ajudar</div></div>
+  <div class="el lbl" style="top:600px;font-size:36px" data-in="25.743">Assessora do gabinete do Flávio respondeu: “Manda a solicitação.”</div>
+  <div class="head" style="left:96px;top:720px;height:240px" data-in="26.158"><img src="flavio.png" alt="Flávio Bolsonaro"></div>
+  <div class="el pop chip" style="left:360px;top:760px" data-in="26.158">Flávio Bolsonaro <span class="ide dir">PL · direita</span></div>
+  <div class="el lbl" style="left:364px;top:840px;width:600px;font-size:36px" data-in="26.158">Senador, candidato a presidente</div>
+  <div class="el guia" style="top:1000px" data-in="28.681">Um mês depois, 29/11/2023:</div>
+  <div class="el slam giga" style="top:1090px;font-size:116px" data-in="30.312"><span class="mk" style="--mk:var(--tema)" data-count="199999.79">R$ 199.999,79</span></div>
+  <div class="el lbl" style="top:1250px;font-size:34px" data-in="31.343">Pra uma ONG indicada pelo Peixe (Ifop, Rio)</div>
+ <div class="fonte">Fontes: PF via O Globo e BNC Amazonas (mai/2026) · Portal da Transparência</div></div>
+<div class="scene bg-vermelho ink-claro" data-key="s5" data-in="32.618" data-out="40.602" data-cap="vermelho"><div class="dots"></div><div class="grain"></div>
+  <div class="el slam medio" style="top:200px;font-size:96px" data-in="32.618">Qual é o <span class="mk" style="--mk:var(--preto)">problema?</span></div>
+  <div class="map" style="top:420px">
+    <div class="node el pop" style="left:0" data-in="34.587"><div class="head on" style="position:relative;height:200px"><img src="peixe.png" alt=""></div><span>Condenado<br><span class="cont">pediu</span></span></div>
+    <div class="arr el" style="left:250px" data-in="36.372">→</div>
+    <div class="node el pop" style="left:310px" data-in="36.372"><div class="head on" style="position:relative;height:200px"><img src="flavio.png" alt=""></div><span>Gabinete<br><span class="cont">mandou</span></span></div>
+    <div class="arr el" style="left:560px" data-in="36.941">→</div>
+    <div class="node el pop" style="left:620px" data-in="36.941"><div class="cash">R$</div><span>ONG que<br><span class="cont">ele indicou</span></span></div>
+  </div>
+  <div class="el medio" style="top:820px;font-size:64px" data-in="33.956">Dinheiro público foi parar onde ele pediu.</div>
+  <div class="el slam medio" style="top:1010px;width:auto;font-size:50px" data-in="38.603"><span class="stamp" style="background:var(--preto);color:var(--branco);border-color:var(--preto)">TCU: indícios de irregularidade</span></div>
+  <div class="el miuda" style="top:1170px" data-in="39.772">O presidente da ONG também tinha o escritório contratado pra coordenar o projeto. Flávio diz que a emenda seguiu a lei; a ONG nega ligação com o Peixe, que nega ter fornecido a arma.</div>
+ <div class="fonte">Fontes: TCU, relatório técnico · O Globo (mai/2026)</div></div>
+<div class="scene bg-preto ink-claro" data-key="s6" data-in="40.602" data-out="50.441" data-cap="claro"><div class="dots"></div><div class="grain"></div>
+  <div class="el kicker" style="top:200px;color:var(--tema)" data-in="41.110">02/02/2021 · Niterói (RJ)</div>
+  <div class="photo el pop" style="left:108px;top:280px;width:380px;height:470px" data-in="41.110"><img src="ana_retrato.jpg" alt="Ana Clara"></div>
+  <div class="el slam giga" style="left:530px;top:300px;width:442px;font-size:150px" data-in="41.556"><span style="color:var(--tema)">5</span> <span class="cont" style="font-size:90px">anos</span></div>
+  <div class="el lbl" style="left:530px;top:480px;width:442px;font-size:40px" data-in="43.340">Ana Clara, atingida por tiro de fuzil numa ação da PM</div>
+  <div class="head" style="left:96px;top:800px;height:220px" data-in="45.787"><img src="flavio.png" alt="Flávio Bolsonaro" style="animation-delay:-1.3s"></div>
+  <div class="el pop chip" style="left:340px;top:830px;background:var(--branco);color:var(--preto)" data-in="46.171">Flávio, advogado do PM <span class="ide dir">PL · direita</span></div>
+  <div class="el lbl" style="left:344px;top:910px;width:628px;font-size:38px" data-in="47.494">Tentou tirar o caso do <span class="mk" style="--mk:var(--vermelho)">júri popular</span></div>
+  <div class="el slam medio" style="top:1110px;width:auto;font-size:84px" data-in="49.940"><span class="stamp" style="background:var(--tema);color:var(--preto);border-color:var(--tema)">STJ negou</span></div>
+  <div class="el miuda" style="left:590px;top:1125px;width:382px" data-in="49.940">O cabo Bruno Delaroli responde por homicídio. O júri ainda não aconteceu.</div>
+ <div class="fonte">Fontes: MP-RJ · STJ · Diario de Pernambuco e Metrópoles (out/2026)</div></div>
+<div class="scene bg-tema ink-escuro" data-key="s7" data-in="50.441" data-out="59.001" data-cap="escuro"><div class="dots"></div><div class="grain"></div>
+  <div class="el kicker" style="top:200px;font-size:36px" data-in="50.595">No debate da Band, segundo a GloboNews:</div>
+  <div class="el medio" style="top:270px;font-size:80px" data-in="51.779">“Quero ajudar a Ana Clara.”</div>
+  <div class="el slam giga" style="top:480px;font-size:116px;white-space:nowrap" data-in="53.333"><span class="mk">Ela está morta.</span></div>
+  <div class="el medio" style="top:740px;font-size:66px" data-in="54.841">Se ele ganhar, escolhe o chefe da PF,</div>
+  <div class="el medio cont" style="top:900px;font-size:66px" data-in="56.595">que <span class="mk" style="--mk:var(--preto);color:var(--branco)">investiga ele.</span></div>
+  <div class="el slam giga" style="top:1110px;font-size:118px;width:auto" data-in="57.933"><span class="stamp" style="background:var(--preto);color:var(--tema);border-color:var(--preto)">Tem certeza?</span></div>
+ <div class="fonte">Fonte: GloboNews (out/2026) · Constituição, art. 84</div></div>
+      <div class="cap escuro" id="cap"></div>
+      <div class="handle" id="handle">@tentandochegaratevoce</div>
+    </div></div>
+    <div class="ctl">
+      <input type="range" id="seek" min="0" max="59.001" step="0.05" value="0" aria-label="Posição">
+      <div class="row" style="justify-content:space-between"><span class="time" id="tm">0:00</span><span class="time">Voz final: Mark, 1,3x</span></div>
+      <div class="row"><button class="play" id="play">▶ Play</button>
+        <button data-sk="-30">↺30s</button><button data-sk="-10">↺10s</button><button data-sk="-5">↺5s</button>
+        <button data-sk="5">5s↻</button><button data-sk="10">10s↻</button><button data-sk="30">30s↻</button></div>
+      <div class="row" id="speeds"></div>
+      <div class="field"><label for="notas">Suas anotações</label><textarea id="notas" placeholder="Escreve aqui enquanto assiste"></textarea>
+        <div class="btns"><button class="copy" id="marca" type="button" style="background:var(--shell-2);color:var(--shell-fg)">+ Marcar tempo</button><button class="copy" data-c="notas" type="button">Copiar</button></div></div>
+      <div class="row"><a class="dl" href="video.mp4" target="_blank" rel="noopener">▶ Abrir o MP4 final (segure pra salvar)</a></div>
+    </div>
+    <audio id="aud" src="narracao.mp3" preload="auto"></audio>
+  </section>
+  <section class="view capa" id="v-capa" hidden>
+    <img src="capa.jpg" alt="Capa do reel">
+    <p class="note">Toque e segure na capa pra salvar.</p>
+    <div class="field"><label for="leg">Legenda do post</label><textarea id="leg" style="min-height:260px">COMPARTILHA NOS STORIES 🔁 E cria uma lista de Melhores Amigos pra chegar na família.
+
+Fact check: quem é o Peixe e como o pedido dele chegou ao gabinete do Flávio Bolsonaro. E o caso Ana Clara.
+
+Amanhã é segundo turno. Assiste até o fim e comenta.
+
+Vídeo: GloboNews.
+Com: @projeto.contraponto @seuvotodecide @politica.essencial
+
+#Eleições2026 #Checagem #Marielle
+</textarea><button class="copy" data-c="leg" type="button">Copiar legenda</button></div>
+    <div class="field"><label for="com">1º comentário</label><textarea id="com" style="min-height:220px">COMENTA: você já conhecia essa história? 👇
+.
+.
+📚 FONTES
+PF, via O Globo e InfoMoney (mai/2026)
+TCU, relatório técnico sobre a emenda
+STF, julgamento do caso Marielle (2026)
+MP-RJ e STJ, caso Ana Clara
+Flávio diz que a emenda seguiu a lei. O Peixe nega ter fornecido a arma.
+</textarea><button class="copy" data-c="com" type="button">Copiar comentário</button></div>
+    <div class="field"><label for="col">Collabs</label><textarea id="col" style="min-height:60px">@brasilforadacaverna @designativista</textarea><button class="copy" data-c="col" type="button">Copiar</button></div>
+  </section>
+  <section class="view orig" id="v-orig" hidden>
+    <video id="origv" src="original_leve.mp4" poster="original_leve.jpg" controls playsinline preload="none"></video>
+    <p class="note">Vídeo inteiro da GloboNews (versão leve) pra você achar outros trechos.</p>
+  </section>
+  <section class="view" id="v-opc" hidden>
+    <p class="note">A cena da mensagem + dinheiro em 3 estilos. Se gostar de outro, eu refaço nele.</p>
+    <div class="opts" id="opts"></div>
+  </section>
+</div>
+<script>
+const CAP=[{"s": 0.0, "lines": [[["O", 0.0], ["homem", 0.154], ["que,", 0.4], ["segundo", 0.892]], [["o", 1.062], ["assassino", 1.215]]], "e": 1.477}, {"s": 1.477, "lines": [[["da", 1.477], ["Marielle,", 1.615]], [["arrumou", 2.415], ["a", 2.662], ["arma", 2.785]]], "e": 2.892}, {"s": 2.892, "lines": [[["do", 2.892], ["crime,", 3.062]], [["pediu", 3.785], ["uma", 3.862], ["emenda", 4.062]]], "e": 4.369}, {"s": 4.369, "lines": [[["pro", 4.369], ["gabinete", 4.569]], [["do", 4.923], ["Flávio Bolsonaro.", 5.108]]], "e": 6.323}, {"s": 6.323, "lines": [[["E", 6.323], ["a", 6.431], ["emenda", 6.523], ["saiu.", 7.077]]], "e": 7.659}, {"s": 7.659, "lines": [[["Flávio", 7.659], ["enviou", 8.459]], [["dinheiro", 9.459], ["de", 9.959], ["emenda,", 10.279]]], "e": 10.799}, {"s": 10.799, "lines": [[["200 mil reais,", 10.799], ["para", 12.079], ["um", 12.299]], [["miliciano", 12.459], ["chamado", 13.459], ["Peixe…", 14.239]]], "e": 15.369}, {"s": 15.369, "lines": [[["Ele", 15.369], ["é", 15.523], ["o", 15.631], ["Robson Calixto,", 15.738]], [["o", 16.631], ["Peixe,", 16.723]]], "e": 17.338}, {"s": 17.338, "lines": [[["braço", 17.338], ["direito", 17.538]], [["do", 17.754], ["Domingos Brazão.", 17.938]]], "e": 19.184}, {"s": 19.184, "lines": [[["Foi", 19.184], ["condenado", 19.277], ["pelo", 19.661]], [["Supremo", 19.815], ["no", 20.138], ["caso", 20.246], ["Marielle,", 20.431]]], "e": 20.907}, {"s": 20.907, "lines": [[["junto", 20.907], ["com", 21.123], ["os", 21.277], ["irmãos", 21.384]], [["Brazão,", 21.554], ["os", 22.307], ["mandantes.", 22.415]]], "e": 23.066}, {"s": 23.066, "lines": [[["Em", 23.066], ["outubro", 23.266], ["de", 23.712], ["2023,", 23.912]], [["o", 24.835], ["Peixe", 24.958], ["escreveu", 25.128]]], "e": 25.574}, {"s": 25.574, "lines": [[["pra", 25.574], ["assessora", 25.743], ["do", 25.989], ["Flávio:", 26.158]], [["“vê", 27.081], ["com", 27.189], ["o", 27.297], ["nosso", 27.404], ["senador”.", 27.604]]], "e": 28.681}, {"s": 28.681, "lines": [[["Um", 28.681], ["mês", 28.774], ["depois,", 28.881], ["saíram", 29.374]], [["cerca", 29.881], ["de", 30.128], ["200 mil reais", 30.312]]], "e": 31.02}, {"s": 31.02, "lines": [[["pra", 31.02], ["uma", 31.189], ["ONG", 31.343]], [["indicada", 31.604], ["por", 32.02], ["ele.", 32.251]]], "e": 32.618}, {"s": 32.618, "lines": [[["Qual", 32.618], ["é", 32.833], ["o", 32.987], ["problema?", 33.095]]], "e": 33.956}, {"s": 33.956, "lines": [[["Dinheiro", 33.956], ["público,", 34.249]], [["pedido", 34.587], ["por", 35.049], ["um", 35.187], ["condenado", 35.356]]], "e": 35.741}, {"s": 35.741, "lines": [[["da", 35.741], ["milícia,", 35.849]], [["foi", 36.372], ["parar", 36.603], ["onde", 36.941], ["ele", 37.387], ["pediu.", 37.572]]], "e": 38.433}, {"s": 38.433, "lines": [[["E", 38.433], ["o", 38.51], ["TCU", 38.603], ["viu", 38.941], ["indícios", 39.172]], [["de", 39.572], ["irregularidade.", 39.772]]], "e": 40.602}, {"s": 40.602, "lines": [[["E", 40.602], ["tem", 40.787], ["a", 40.971], ["Ana Clara,", 41.11]], [["cinco anos,", 41.556]]], "e": 42.848}, {"s": 42.848, "lines": [[["morta", 42.848], ["por", 43.033], ["um", 43.202], ["tiro", 43.34]], [["de", 43.464], ["fuzil", 43.633], ["numa", 44.14], ["ação", 44.294], ["da", 44.494], ["PM.", 44.664]]], "e": 45.787}, {"s": 45.787, "lines": [[["Flávio", 45.787], ["virou", 45.971]], [["advogado", 46.171], ["do", 46.556], ["policial", 46.725]]], "e": 47.156}, {"s": 47.156, "lines": [[["e", 47.156], ["tentou", 47.494], ["tirar", 47.756]], [["o", 47.94], ["caso", 48.11], ["do", 48.279], ["júri.", 48.448]]], "e": 49.371}, {"s": 49.371, "lines": [[["O", 49.371], ["STJ", 49.51], ["negou.", 49.94]]], "e": 50.441}, {"s": 50.441, "lines": [[["No", 50.441], ["debate,", 50.595], ["ele", 51.272], ["disse", 51.395]]], "e": 51.579}, {"s": 51.579, "lines": [[["que", 51.579], ["queria", 51.779], ["ajudar", 51.964]], [["a", 52.333], ["Ana Clara.", 52.456]]], "e": 53.333}, {"s": 53.333, "lines": [[["Ela", 53.333], ["está", 53.472], ["morta.", 53.626]]], "e": 54.641}, {"s": 54.641, "lines": [[["Se", 54.641], ["ele", 54.718], ["ganhar,", 54.841]], [["escolhe", 55.41], ["o", 55.579], ["chefe", 55.672], ["da", 55.949], ["PF,", 56.118]]], "e": 56.379}, {"s": 56.379, "lines": [[["que", 56.379], ["investiga ele.", 56.595]], [["Tem", 57.826], ["certeza", 57.933], ["do", 58.256], ["seu", 58.395], ["voto?", 58.518]]], "e": 59.001}], TOTAL=59.001, CLIPS={"clipv": 7.618776};
+const aud=document.getElementById('aud'), stage=document.getElementById('stage'), frame=document.getElementById('frame');
+function fit(){document.querySelectorAll('.frame').forEach(f=>{const s=f.querySelector('.stage');if(s)s.style.transform='scale('+(f.clientWidth/1080)+')'})}
+addEventListener('resize',fit); new ResizeObserver(fit).observe(frame); fit();
+const els=[...stage.querySelectorAll('[data-in]')].map(e=>({e,i:+e.dataset.in,o:e.dataset.out?+e.dataset.out:null}));
+const scenes=[...stage.querySelectorAll('.scene')];
+const cap=document.getElementById('cap'); let curPage=-1;
+const m=s=>Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
+const fmt=v=>v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+function render(t){
+  for(const x of els){
+    let on=t>=x.i; if(x.o!==null&&t>=x.o)on=false;
+    if(!x.e.classList.contains('scene')){const sc=x.e.closest('.scene'); if(sc&&(t<+sc.dataset.in||t>=+sc.dataset.out))on=false;}
+    x.e.classList.toggle('on',on);
+    const c=x.e.querySelector('[data-count]'); if(c){const k=Math.max(0,Math.min(1,(t-x.i)/0.9));c.textContent='R$ '+fmt(+c.dataset.count*(1-Math.pow(1-k,3)));}
+  }
+  const sc=scenes.find(s=>t>=+s.dataset.in&&t<+s.dataset.out)||scenes[scenes.length-1];
+  cap.className='cap '+(sc.dataset.cap==='vermelho'?'claro vermelho':sc.dataset.cap);
+  document.getElementById('handle').style.color=sc.classList.contains('ink-claro')?'var(--branco)':'var(--preto)';
+  const pi=CAP.findIndex(p=>t>=p.s&&t<p.e);
+  if(pi!==curPage){curPage=pi;cap.innerHTML=pi<0?'':CAP[pi].lines.map(l=>'<span class="ln">'+l.map(w=>'<span class="w" data-s="'+w[1]+'">'+w[0]+'</span>').join(' ')+'</span>').join('')}
+  let last=null; cap.querySelectorAll('.w').forEach(w=>{if(t>=+w.dataset.s)last=w;w.classList.remove('act')}); if(last)last.classList.add('act');
+  document.getElementById('tm').textContent=m(t)+' / '+m(TOTAL);
+  document.getElementById('seek').value=t;
+  for(const id in CLIPS){const v=document.getElementById(id); if(!v||window.__render_mode)continue; const sc2=v.closest('.scene'); const inS=t>=+sc2.dataset.in&&t<+sc2.dataset.out; const want=t-CLIPS[id];
+    if(inS&&!aud.paused){ if(!v.seeking&&Math.abs(v.currentTime-want)>0.3)v.currentTime=Math.max(0,want); if(v.paused)v.play().catch(()=>{}); v.playbackRate=aud.playbackRate;}
+    else { if(!v.paused)v.pause(); if(inS&&!v.seeking&&Math.abs(v.currentTime-want)>0.3)v.currentTime=Math.max(0,want);} }
+}
+window.__render=render;
+function loop(){if(!window.__manual)render(aud.currentTime); requestAnimationFrame(loop)} loop();
+const pb=document.getElementById('play');
+pb.onclick=()=>{ if(aud.paused){ if(aud.currentTime>=TOTAL-0.1)aud.currentTime=0; document.querySelectorAll('#stage video').forEach(v=>{v.play().then(()=>v.pause()).catch(()=>{})}); aud.play(); pb.textContent='❚❚ Pausar'} else {aud.pause(); pb.textContent='▶ Play'} };
+aud.onended=()=>{pb.textContent='▶ Play'};
+document.getElementById('seek').oninput=e=>{aud.currentTime=+e.target.value};
+document.querySelectorAll('[data-sk]').forEach(b=>b.onclick=()=>{aud.currentTime=Math.max(0,Math.min(TOTAL,aud.currentTime+ +b.dataset.sk))});
+const sp=document.getElementById('speeds');
+[1,1.05,1.1,1.2,1.5,2,3].forEach(r=>{const b=document.createElement('button');b.type='button';b.textContent=String(r).replace('.',',')+'x';if(r===1)b.classList.add('sel');b.onclick=()=>{aud.playbackRate=r;sp.querySelectorAll('button').forEach(x=>x.classList.remove('sel'));b.classList.add('sel')};sp.appendChild(b)});
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));document.querySelectorAll('.view').forEach(v=>v.hidden=v.id!==b.dataset.v);aud.pause();pb.textContent='▶ Play';const ov=document.getElementById('origv');if(ov&&b.dataset.v!=='v-orig')ov.pause();fit()});
+document.querySelectorAll('.copy[data-c]').forEach(b=>b.onclick=()=>{const t=document.getElementById(b.dataset.c);navigator.clipboard.writeText(t.value).then(()=>{b.textContent='Copiado'},()=>{t.select()})});
+const notas=document.getElementById('notas'), KEY='notas-peixe-v1';
+try{notas.value=localStorage.getItem(KEY)||''}catch(e){}
+notas.oninput=()=>{try{localStorage.setItem(KEY,notas.value)}catch(e){}};
+document.getElementById('marca').onclick=()=>{const s='['+m(aud.currentTime)+'] ';const p=notas.selectionStart??notas.value.length;notas.value=notas.value.slice(0,p)+(p&&notas.value[p-1]!=='\n'?'\n':'')+s+notas.value.slice(p);notas.focus();notas.oninput()};
+const base=scenes.find(s=>s.dataset.key==='s4');
+[['A · Branco (atual)',''],['B · Lilás','bg-tema ink-escuro'],['C · Preto','bg-preto ink-claro']].forEach(([n,c])=>{
+  const fig=document.createElement('figure');const f=document.createElement('div');f.className='frame';const s=document.createElement('div');s.className='stage';
+  const cl=base.cloneNode(true);cl.classList.add('on');cl.querySelectorAll('[data-in]').forEach(e=>e.classList.add('on'));cl.querySelectorAll('[data-count]').forEach(e=>e.textContent='R$ 199.999,79');
+  if(c)cl.className='scene on '+c;
+  s.appendChild(cl);f.appendChild(s);fig.appendChild(f);const fc=document.createElement('figcaption');fc.textContent=n;fig.appendChild(fc);document.getElementById('opts').appendChild(fig)});
+setTimeout(fit,50);
+</script>
+
