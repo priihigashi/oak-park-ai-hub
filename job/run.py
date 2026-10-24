@@ -180,3 +180,14 @@ if J.get('heads3'):
             ys_, xs_ = np.where(a[..., 3] > 20); a = a[ys_.min():ys_.max() + 1, xs_.min():xs_.max() + 1]
             Image.fromarray(a).save(f'out/h3/{k}.png'); print('h3 ok', k, a.shape)
         except Exception as ex: print('h3 fail', k, ex)
+
+if J.get('drive_into'):
+    import mimetypes, requests
+    td=json.loads(os.environ['SHEETS_TOKEN'])
+    tok=json.loads(urllib.request.urlopen(urllib.request.Request('https://oauth2.googleapis.com/token',data=urllib.parse.urlencode({'client_id':td['client_id'],'client_secret':td['client_secret'],'refresh_token':td['refresh_token'],'grant_type':'refresh_token'}).encode())).read())['access_token']
+    H={'Authorization':'Bearer '+tok}; res={}
+    for f in J['drive_into']:
+        mt=mimetypes.guess_type(f['path'])[0] or 'application/octet-stream'
+        r=requests.post('https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable&supportsAllDrives=true&fields=id',headers={**H,'Content-Type':'application/json; charset=UTF-8','X-Upload-Content-Type':mt},json={'name':f['name'],'parents':[f['parent']]}); r.raise_for_status()
+        r2=requests.put(r.headers['Location'],data=open(f['path'],'rb'),headers={'Content-Type':mt}); r2.raise_for_status(); res[f['key']]=r2.json()['id']
+    json.dump(res,open('out/drive2.json','w'),indent=1); print(res)
