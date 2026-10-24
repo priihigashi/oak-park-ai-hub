@@ -1,1 +1,1 @@
-{"concat": [{"out": "mae.mp4", "parts": ["mae.part0", "mae.part1", "mae.part2", "mae.part3"]}], "whisper": {"file": "mae.mp4", "out": "mae_words.json", "model": "medium"}, "run": 11}
+{"faces": [{"name": "marielle", "q": "Marielle Franco", "n": 6}], "run": 12}
