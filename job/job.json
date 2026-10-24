@@ -1,21 +1,7 @@
 {
- "video": "1ZEpDnyVmPLez5wLhv9KGiQlvJiQfNY1l",
  "tts": {
-  "n01": "O plano do Flávio promete cortar cerca de 190 bilhões de reais. Mas ninguém da campanha diz de onde.",
-  "n02": "Uma economista fez essa crítica num vídeo. A gente conferiu frase por frase.",
-  "n03": "Verdade. A coordenadora econômica, Daniella Marques, cita supersalários, férias de 60 dias e viagens. Mas sem valores e sem uma lista.",
-  "n04": "Também é verdade. Daniella é formada em Administração, com MBA em Finanças, e passou 20 anos no mercado financeiro. E o Haddad, criticado por isso, é formado em Direito, com mestrado em Economia.",
-  "n05": "Ao mesmo tempo, o Flávio promete manter o Bolsa Família, dar aumento do mínimo acima da inflação, e comprar dívidas das famílias, num programa que a imprensa estima em mais de 100 bilhões. Pra economista, ele vai gastar mais que o governo atual. Isso é uma conta dela: não existe número oficial pra confirmar nem pra desmentir.",
-  "n06": "Verdade. Na posse, em 2023, Milei avisou que viria estagflação, com efeito no emprego. E a coordenadora do Flávio disse que o plano se inspira nas reformas dele. Ele chama de tesouraço, e promete um corte mais gradual.",
-  "n07": "Ela também compara a inflação. Aqui, 4,6% em doze meses. Na Argentina, 33%. Verdade. E diz que a inflação é mundial. Em parte: o FMI prevê 4,7% no mundo em 2026, puxada por energia e comida. Mas aqui a conta de luz subiu quase 8% em setembro, e a inflação passou do teto da meta.",
-  "n08": "Verdade em parte. A campanha quer retomar as privatizações e chegou a cogitar o Banco do Brasil em setembro. Mas, no dia 8 de outubro, disse que Banco do Brasil, Petrobras e Caixa não serão vendidos. E o governo atual não promete corte de gastos: mantém a regra fiscal, sem meta de corte.",
-  "n09": "No total, foram oito verdades, três em parte, e uma conta dela. Quase tudo bate com as fontes. O que falta é o plano dizer de onde sai o dinheiro."
+  "n05": "Ao mesmo tempo, o Flávio promete manter o Bolsa Família, dar aumento do mínimo acima da inflação, e comprar dívidas das famílias, num programa que a imprensa estima em mais de 100 bilhões. Pra economista, ele vai gastar mais que o governo atual. Essa é uma conta dela. Não dá pra verificar."
  },
  "voice": "pt-BR-ThalitaMultilingualNeural",
- "rate": "+12%",
- "heads": {
-  "daniella": "Daniella_Marques",
-  "haddad": "Fernando_Haddad",
-  "milei": "Javier_Milei"
- }
+ "rate": "+12%"
 }
