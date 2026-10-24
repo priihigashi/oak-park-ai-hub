@@ -1,7 +1,7 @@
-name: tmp peixe
+name: tmp cofre
 on:
   push:
-    branches: [tmp-peixe]
+    branches: [tmp-cofre]
     paths: ['job/**']
 permissions:
   contents: write
@@ -11,7 +11,7 @@ jobs:
     timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
-        with: { ref: tmp-peixe }
+        with: { ref: tmp-cofre }
       - uses: actions/setup-python@v5
         with: { python-version: "3.11" }
       - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
