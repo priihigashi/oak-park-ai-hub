@@ -2,18 +2,18 @@ import sys,os
 D=sys.argv[1]
 R={
 'template.html':[
- ('#topline{left:108px;right:108px;top:96px','#topline{left:108px;right:108px;top:176px'),
- ('#vbox{left:108px;top:158px','#vbox{left:108px;top:236px'),
- ('#vbox{left:108px;top:236px;width:864px;height:520px}','#vbox{left:108px;top:236px;width:864px;height:540px}'),
- ('#score{left:108px;right:108px;top:730px}','#score{left:108px;right:108px;top:840px}'),
- ('#panel{left:108px;width:864px;top:902px;height:446px}','#panel{left:108px;width:864px;top:1000px;height:460px}'),
- ('#cap{left:108px;right:150px;top:1404px','#cap{left:108px;right:150px;top:1500px'),
- ('#handle{left:0;right:0;top:1626px','#handle{left:0;right:0;top:1690px'),
- ('#src{left:108px;right:108px;top:1668px','#src{left:108px;right:108px;top:1734px'),
+ ('#topline{left:108px;right:108px;top:96px','#topline{left:108px;right:108px;top:170px'),
+ ('#vbox{left:108px;top:158px','#vbox{left:108px;top:226px'),
+ ('#vbox{left:108px;top:226px;width:864px;height:520px}','#vbox{left:108px;top:226px;width:864px;height:540px}'),
+ ('#score{left:108px;right:108px;top:730px}','#score{left:108px;right:108px;top:822px}'),
+ ('#panel{left:108px;width:864px;top:902px;height:446px}','#panel{left:108px;width:864px;top:976px;height:434px}'),
+ ('#cap{left:108px;right:150px;top:1404px','#cap{left:108px;right:150px;top:1436px'),
+ ('#handle{left:0;right:0;top:1626px','#handle{left:0;right:0;top:1650px'),
+ ('#src{left:108px;right:108px;top:1668px','#src{left:108px;right:108px;top:1694px'),
  ('.ch-rep{background:#fff;color:var(--ink);border-color:var(--ink)}','.ch-rep{background:#fff;color:#141416;border-color:#141416}'),
 ],
-'audit.py':[('1360','1472')],
-'make_page.py':[('top:1626px','top:1690px')],
+'audit.py':[('1360','1422')],
+'make_page.py':[('top:1626px','top:1650px')],
 }
 
 R['template.html']+= [
@@ -22,6 +22,7 @@ R['template.html']+= [
  ("function loop(){render(aud.currentTime);requestAnimationFrame(loop)}","function loop(){if(MP4){$('#seek').value=Math.round(aud.currentTime/D.total*1000);$('#time').textContent=fmt(aud.currentTime)+' / '+fmt(D.total)}else render(aud.currentTime);requestAnimationFrame(loop)}"),
  ("#phone{position:relative;","#mp4{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:5;background:#000}\n#phone{position:relative;"),
  ("if(!vid.seeking&&(lastClip!==s.key||(drift>0.6&&performance.now()-lastSeek>1500)))","if(!vid.seeking&&(lastClip!==s.key||(drift>1.2&&performance.now()-lastSeek>3000)))"),
+ ("const chip=$('#spkchip');if(s.type==='clip'&&s.spk==='reporter')","const chip=$('#spkchip');const cs=s.type==='clip'?s:(lastClipBefore(t)||D.segs.find(x=>x.type==='clip'));if(cs&&cs.spk==='reporter')"),
 ]
 R['make_page.py']+= [(".replace('__BG__',os.environ.get('BG','branco'))",".replace('__BG__',os.environ.get('BG','branco')).replace('__MP4__',os.environ.get('MP4',''))")]
 R['render.py']=[("%1384","%NF"),("D=json.load(open('data.json'));FPS=30","D=json.load(open('data.json'));FPS=30\nimport glob;NF=len(glob.glob('fr/*.jpg'))")]
