@@ -2,12 +2,19 @@ import os, json, subprocess, urllib.request, urllib.parse, asyncio
 J=json.load(open('job/job.json'))
 os.makedirs('out',exist_ok=True)
 def sh(c): print(c); subprocess.run(c,shell=True,check=True)
+if J.get('yt'):
+    sh('pip install -q -U yt-dlp')
+    r=subprocess.run(f'yt-dlp -f "bv*[height<=720]+ba/b[height<=720]/b" --merge-output-format mp4 -o orig.mp4 "{J["yt"]}"',shell=True)
+    if r.returncode!=0:
+        sh(f'yt-dlp --extractor-args "youtube:player_client=web_safari,tv,android" -f "b[height<=720]/b" -o orig.mp4 "{J["yt"]}"')
+    J['video']='__local__'
 if J.get('video'):
-    td=json.loads(os.environ['SHEETS_TOKEN'])
-    tok=json.loads(urllib.request.urlopen(urllib.request.Request('https://oauth2.googleapis.com/token',data=urllib.parse.urlencode({'client_id':td['client_id'],'client_secret':td['client_secret'],'refresh_token':td['refresh_token'],'grant_type':'refresh_token'}).encode())).read())['access_token']
-    url=f"https://www.googleapis.com/drive/v3/files/{J['video']}?alt=media&supportsAllDrives=true"
-    with urllib.request.urlopen(urllib.request.Request(url,headers={'Authorization':'Bearer '+tok})) as r, open('orig.mp4','wb') as f:
-        f.write(r.read())
+    if J['video']!='__local__':
+      td=json.loads(os.environ['SHEETS_TOKEN'])
+      tok=json.loads(urllib.request.urlopen(urllib.request.Request('https://oauth2.googleapis.com/token',data=urllib.parse.urlencode({'client_id':td['client_id'],'client_secret':td['client_secret'],'refresh_token':td['refresh_token'],'grant_type':'refresh_token'}).encode())).read())['access_token']
+      url=f"https://www.googleapis.com/drive/v3/files/{J['video']}?alt=media&supportsAllDrives=true"
+      with urllib.request.urlopen(urllib.request.Request(url,headers={'Authorization':'Bearer '+tok})) as r, open('orig.mp4','wb') as f:
+          f.write(r.read())
     sh('ffprobe -v error -show_entries stream=width,height,r_frame_rate:format=duration orig.mp4')
     sh('ffmpeg -y -loglevel error -i orig.mp4 -vf "scale=540:-2,fps=30" -c:v libx264 -preset slow -crf 27 -g 15 -pix_fmt yuv420p -c:a aac -b:a 128k -movflags +faststart out/work.mp4')
     sh('ffmpeg -y -loglevel error -i orig.mp4 -vf "scale=432:-2,fps=24" -c:v libx264 -preset slow -crf 32 -g 48 -pix_fmt yuv420p -c:a aac -b:a 64k -ac 1 -movflags +faststart out/original_leve.mp4')
