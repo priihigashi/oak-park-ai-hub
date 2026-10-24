@@ -49,8 +49,15 @@ if J.get('heads'):
     sess=new_session('isnet-general-use')
     for k,title in J['heads'].items():
         try:
-            meta=requests.get('https://pt.wikipedia.org/api/rest_v1/page/summary/'+title,headers={'User-Agent':'tmp-bot/1.0'}).json()
-            url=meta.get('originalimage',{}).get('source') or meta['thumbnail']['source']
+            if title.startswith('http'):
+                import re as _re
+                for pu in title.split('|'):
+                    html=requests.get(pu,headers={'User-Agent':'Mozilla/5.0'}).text
+                    m=_re.search(r'property=["\']og:image["\'][^>]*content=["\']([^"\']+)',html) or _re.search(r'content=["\']([^"\']+)["\'][^>]*property=["\']og:image',html)
+                    if m: url=m.group(1); print(k,'og',url); break
+            else:
+                meta=requests.get('https://pt.wikipedia.org/api/rest_v1/page/summary/'+title,headers={'User-Agent':'tmp-bot/1.0'}).json()
+                url=meta.get('originalimage',{}).get('source') or meta['thumbnail']['source']
             img=Image.open(__import__('io').BytesIO(requests.get(url,headers={'User-Agent':'tmp-bot/1.0'}).content)).convert('RGB')
             if img.width>1400: img=img.resize((1400,int(img.height*1400/img.width)))
             img.save(f'out/heads/{k}_src.jpg')
