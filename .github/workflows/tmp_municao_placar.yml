@@ -1,0 +1,28 @@
+name: tmp municao placar
+on:
+  push:
+    branches: [tmp-municao-placar]
+    paths: ['job/**']
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: tmp-municao-placar }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - run: pip install -q edge-tts faster-whisper requests
+      - name: job
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: python job/run.py
+      - name: commit
+        run: |
+          git config user.name tmp-bot; git config user.email tmp@bot
+          git add out
+          git commit -m "tmp: out" || true
+          git push
