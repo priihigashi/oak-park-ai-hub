@@ -40,3 +40,9 @@ tts m4 ERR No audio was received. Please verify that your parameters are correct
 tts m4a ERR No audio was received. Please verify that your parameters are correct.
 tts m4b ERR No audio was received. Please verify that your parameters are correct.
 wiki marielle https://upload.wikimedia.org/wikipedia/commons/6/68/Marielle_Franco.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled
+marielle_0	File:Marielle Franco.jpg	https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/Marielle_Franco.jpg/1920px-Marielle_Franco.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail
+marielle_1	File:Marielle Franco - Cianotipia.jpg	https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4c/Marielle_Franco_-_Cianotipia.jpg/1920px-Marielle_Franco_-_Cianotipia.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail
+marielle_2	File:Marielle Franco (cropped).jpg	https://upload.wikimedia.org/wikipedia/commons/d/da/Marielle_Franco_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled
+marielle_3	File:Marielle Franco postcard 2.jpg	https://upload.wikimedia.org/wikipedia/commons/d/dd/Marielle_Franco_postcard_2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled
+marielle_4	File:Marielle Franco postcard.jpg	https://upload.wikimedia.org/wikipedia/commons/5/57/Marielle_Franco_postcard.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled
+marielle_5	File:Marielle Franco - Ferrara - Murales - Internazionale.jpg	https://thumb.wikimedia.org/wikipedia/commons/thumb/5/59/Marielle_Franco_-_Ferrara_-_Murales_-_Internazionale.jpg/1920px-Marielle_Franco_-_Ferrara_-_Murales_-_Internazionale.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail
