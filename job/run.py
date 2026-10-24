@@ -49,9 +49,10 @@ if J.get('heads'):
     sess=new_session('isnet-general-use')
     for k,title in J['heads'].items():
         try:
-            meta=requests.get('https://pt.wikipedia.org/api/rest_v1/page/summary/'+title,headers={'User-Agent':'tmp-bot/1.0'}).json()
-            url=meta.get('originalimage',{}).get('source') or meta['thumbnail']['source']
-            img=Image.open(__import__('io').BytesIO(requests.get(url,headers={'User-Agent':'tmp-bot/1.0'}).content)).convert('RGB')
+            meta=requests.get('https://pt.wikipedia.org/api/rest_v1/page/summary/'+title,headers={'User-Agent':'OakParkContentBot/1.0 (https://github.com/priihigashi/oak-park-ai-hub; contact via github)'}).json()
+            url=(meta.get('thumbnail') or meta['originalimage'])['source']
+            print('img url',url)
+            img=Image.open(__import__('io').BytesIO(requests.get(url,headers={'User-Agent':'OakParkContentBot/1.0 (https://github.com/priihigashi/oak-park-ai-hub; contact via github)'}).content)).convert('RGB')
             if img.width>1400: img=img.resize((1400,int(img.height*1400/img.width)))
             img.save(f'out/heads/{k}_src.jpg')
             cut=remove(img,session=sess,alpha_matting=True,alpha_matting_foreground_threshold=240,alpha_matting_background_threshold=10,alpha_matting_erode_size=10)
