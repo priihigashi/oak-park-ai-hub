@@ -1,38 +1,19 @@
-import sys,os
+import sys,os,re
 D=sys.argv[1]
-R={
-'template.html':[
- ('#topline{left:108px;right:108px;top:96px','#topline{left:108px;right:108px;top:170px'),
- ('#vbox{left:108px;top:158px','#vbox{left:108px;top:226px'),
- ('#vbox{left:108px;top:226px;width:864px;height:520px}','#vbox{left:108px;top:226px;width:864px;height:540px}'),
- ('#score{left:108px;right:108px;top:730px}','#score{left:108px;right:108px;top:822px}'),
- ('#panel{left:108px;width:864px;top:902px;height:446px}','#panel{left:108px;width:864px;top:976px;height:434px}'),
- ('#cap{left:108px;right:150px;top:1404px','#cap{left:108px;right:150px;top:1436px'),
- ('#handle{left:0;right:0;top:1626px','#handle{left:0;right:0;top:1650px'),
- ('#src{left:108px;right:108px;top:1668px','#src{left:108px;right:108px;top:1694px'),
- ('.ch-rep{background:#fff;color:var(--ink);border-color:var(--ink)}','.ch-rep{background:#fff;color:#141416;border-color:#141416}'),
-],
-'audit.py':[('1360','1422')],
-'make_page.py':[('top:1626px','top:1650px')],
-}
-
-R['template.html']+= [
- ('<div id="phone"><div id="stage"','<div id="phone"><video id="mp4" playsinline preload="auto" hidden></video><div id="stage"'),
- ("const aud=$('#aud'),","const MP4='__MP4__';const mp4el=document.getElementById('mp4');if(MP4){mp4el.src=MP4;mp4el.hidden=false;document.getElementById('stage').style.display='none'}\nconst aud=MP4?mp4el:$('#aud'),"),
- ("function loop(){render(aud.currentTime);requestAnimationFrame(loop)}","function loop(){if(MP4){$('#seek').value=Math.round(aud.currentTime/D.total*1000);$('#time').textContent=fmt(aud.currentTime)+' / '+fmt(D.total)}else render(aud.currentTime);requestAnimationFrame(loop)}"),
- ("#phone{position:relative;","#mp4{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:5;background:#000}\n#phone{position:relative;"),
- ("if(!vid.seeking&&(lastClip!==s.key||(drift>0.6&&performance.now()-lastSeek>1500)))","if(!vid.seeking&&(lastClip!==s.key||(drift>1.2&&performance.now()-lastSeek>3000)))"),
- ("const chip=$('#spkchip');if(s.type==='clip'&&s.spk==='reporter')","const chip=$('#spkchip');const cs=s.type==='clip'?s:(lastClipBefore(t)||D.segs.find(x=>x.type==='clip'));if(cs&&cs.spk==='reporter')"),
-]
-R['make_page.py']+= [(".replace('__BG__',os.environ.get('BG','branco'))",".replace('__BG__',os.environ.get('BG','branco')).replace('__MP4__',os.environ.get('MP4',''))")]
-R['render.py']=[("%1384","%NF"),("D=json.load(open('data.json'));FPS=30","D=json.load(open('data.json'));FPS=30\nimport glob;NF=len(glob.glob('fr/*.jpg'))")]
-R['recut.py']=[('crop=540:404:0:4,delogo=x=426:y=150:w=96:h=34','delogo=x=426:y=150:w=96:h=34,crop=540:480:0:20,split[a][b];[a]scale=768:480:force_original_aspect_ratio=increase,crop=768:480,boxblur=20:2,eq=brightness=-0.08[bg];[bg][b]overlay=(W-w)/2:0')]
-
-for f,reps in R.items():
-    p=os.path.join(D,f)
-    if not os.path.exists(p): print('nofile',f); continue
-    s=open(p).read()
-    for a,b in reps:
-        if a in s: s=s.replace(a,b)
-        else: print('MISS',f,a[:50])
-    open(p,'w').write(s); print('ok',f)
+def ed(f,fn):
+    p=os.path.join(D,f); s=open(p).read(); n=fn(s); open(p,'w').write(n); print('ok',f, 'changed' if n!=s else 'same')
+def tpl(s):
+    s=re.sub(r'#topline\{left:108px;right:108px;top:\d+px','#topline{left:108px;right:108px;top:170px',s)
+    s=re.sub(r'#vbox\{left:108px;top:\d+px;width:864px;height:\d+px\}','#vbox{left:108px;top:226px;width:864px;height:540px}',s)
+    s=re.sub(r'#score\{left:108px;right:108px;top:\d+px\}','#score{left:108px;right:108px;top:822px}',s)
+    s=re.sub(r'#panel\{left:108px;width:864px;top:\d+px;height:\d+px\}','#panel{left:108px;width:864px;top:976px;height:434px}',s)
+    s=re.sub(r'#cap\{left:108px;right:150px;top:\d+px','#cap{left:108px;right:150px;top:1436px',s)
+    s=re.sub(r'#handle\{left:0;right:0;top:\d+px','#handle{left:0;right:0;top:1650px',s)
+    s=re.sub(r'#src\{left:108px;right:108px;top:\d+px','#src{left:108px;right:108px;top:1694px',s)
+    a="const chip=$('#spkchip');if(s.type==='clip'&&s.spk==='reporter')"
+    b="const chip=$('#spkchip');const cs=s.type==='clip'?s:(lastClipBefore(t)||D.segs.find(x=>x.type==='clip'));if(cs&&cs.spk==='reporter')"
+    s=s.replace(a,b); print('chip', b in s, 'mp4', "__MP4__" in s, 'rep', '.ch-rep{background:#fff;color:#141416' in s)
+    return s
+ed('template.html',tpl)
+ed('audit.py',lambda s:re.sub(r'\b1(360|472)\b','1422',s))
+ed('make_page.py',lambda s:re.sub(r'top:1(626|690|712)px','top:1650px',s))
