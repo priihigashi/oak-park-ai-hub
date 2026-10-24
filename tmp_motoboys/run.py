@@ -1,6 +1,8 @@
 import json, os, asyncio, base64, requests, subprocess
 job=json.load(open('job.json'))
 os.makedirs('out',exist_ok=True)
+for c in job.get('concat',[]):
+    open(c['out'],'wb').write(b''.join(open(p,'rb').read() for p in c['parts']))
 log=open('out/log.txt','a')
 UA={'User-Agent':'reel-bot/1.0 (github.com/priihigashi)'}
 # faces: wikimedia search
