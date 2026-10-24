@@ -1,1 +1,1 @@
-pt-BR-ThalitaMultilingualNeural
+pt-BR-ThalitaNeural
