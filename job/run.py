@@ -109,3 +109,5 @@ if J.get('mark'):
         segs,_=m.transcribe(f'out/mark/{k}.mp3',language='pt',word_timestamps=True,initial_prompt=J['text'][k])
         words=[{'w':w.word.strip(),'s':round(w.start,3),'e':round(w.end,3)} for s in segs for w in s.words]
         json.dump(words,open(f'out/mark/{k}.json','w'),ensure_ascii=False)
+
+if J.get('kit'): exec(open('job/kit.py').read())
