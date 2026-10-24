@@ -1,22 +1,54 @@
 {
- "video": "1wYKcoqrbJ8zY1g29PGkqUPIaH3wePXBm",
- "tts": {
-  "n0": "No último debate, Flávio Bolsonaro afirmou que o presidente votou contra a Constituição que criou o SUS. O presidente afirmou que Bolsonaro debochou da Covid. E o Flávio disse que o governo atual não fez nada pelas Santas Casas. Vamos verificar.",
-  "n1": "Essa ele não respondeu no debate. Então a gente responde: é meio termo. O PT votou contra mesmo. Os 16 deputados do partido votaram não ao texto final, em setembro de 1988. Mas não foi contra o SUS, que o PT defendia. Foi porque eles queriam mais: jornada de 40 horas, e ficou 44, e reforma agrária, que o texto travou. Anos depois, ele mesmo explicou: queríamos algo mais radical. E em outubro, os 16 assinaram a Constituição.",
-  "n2": "Verdade. Em dezembro de 2020, falando da vacina da Pfizer, Bolsonaro disse: se você virar um jacaré, é problema seu. Naquele ano, o governo dele recusou ofertas da Pfizer, e a vacinação só começou em janeiro de 2021.",
-  "n2b": "Aqui, meio termo. Cloroquina é um remédio antigo, ninguém inventou agora. Mas o governo Bolsonaro mandou o Exército fabricar cerca de 3 milhões de comprimidos, mesmo sem eficácia comprovada contra a Covid.",
-  "n3": "Também verdade. Em duas lives de 2021, em março e em maio, Bolsonaro imitou uma pessoa com falta de ar. No debate, o Flávio disse que isso é mentira, mas os vídeos existem.",
-  "n4": "Verdade, com contexto. Cláudio Lottenberg, que o Flávio escolheu pra ministro da Saúde, disse em 2019: eu não colocaria nada mais no SUS, a não ser depois de gastar melhor o que já tem.",
-  "n5": "Verdade. Depois da facada, em 2018, Bolsonaro foi operado pelo SUS na Santa Casa de Juiz de Fora. Ponto pro Flávio.",
-  "n6": "Verdade também. Segundo o TCU, a espera chegou a 719 dias em 2025. Mas olha o gráfico: em 2022, no governo Bolsonaro, era pior, 1.121 dias. Em 2024, foram 75. O próprio TCU chamou esse dado de fora da curva.",
-  "n7": "Aqui é fake. Em fevereiro de 2026, o governo criou uma linha de crédito da Caixa, com dinheiro do FGTS, pras Santas Casas. Até julho, cerca de 3 bilhões de reais foram pra 140 hospitais, e 122 contratos serviram pra renegociar dívida, com juros caindo de 18 pra 12% ao ano.",
-  "n8": "Placar final: um fake, dois meio termo e cinco verdades. Do presidente, três verdades e um meio termo. Do Flávio, duas verdades, um meio termo e um fake. Amanhã tem segundo turno. Manda pra quem ainda tá na dúvida, e confere as fontes no primeiro comentário."
- },
- "voice": "pt-BR-ThalitaMultilingualNeural",
- "rate": "+35%",
- "heads": {
-  "flavio": "Flávio_Bolsonaro",
-  "jair": "Jair_Bolsonaro",
-  "lottenberg": "Claudio_Lottenberg"
+ "clipsrc": "1wYKcoqrbJ8zY1g29PGkqUPIaH3wePXBm",
+ "crop": [
+  60,
+  328,
+  440,
+  265
+ ],
+ "clips": [
+  [
+   "c1",
+   4.2,
+   11.05
+  ],
+  [
+   "c2",
+   28.5,
+   33.45
+  ],
+  [
+   "c2b",
+   33.45,
+   35.95
+  ],
+  [
+   "c3",
+   68.8,
+   73.3
+  ],
+  [
+   "c4",
+   78.7,
+   83.2
+  ],
+  [
+   "c5",
+   93.9,
+   96.1
+  ],
+  [
+   "c6",
+   101.8,
+   107.7
+  ],
+  [
+   "c7",
+   137.5,
+   144.0
+  ]
+ ],
+ "heads_url": {
+  "lottenberg": "Claudio Lottenberg"
  }
 }

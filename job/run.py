@@ -108,3 +108,30 @@ if J.get('mark'):
         segs,_=m.transcribe(f'out/mark/{k}.mp3',language='pt',word_timestamps=True,initial_prompt=J['text'][k])
         words=[{'w':w.word.strip(),'s':round(w.start,3),'e':round(w.end,3)} for s in segs for w in s.words]
         json.dump(words,open(f'out/mark/{k}.json','w'),ensure_ascii=False)
+
+if J.get('clips'):
+    td=json.loads(os.environ['SHEETS_TOKEN'])
+    tok=json.loads(urllib.request.urlopen(urllib.request.Request('https://oauth2.googleapis.com/token',data=urllib.parse.urlencode({'client_id':td['client_id'],'client_secret':td['client_secret'],'refresh_token':td['refresh_token'],'grant_type':'refresh_token'}).encode())).read())['access_token']
+    if not os.path.exists('orig.mp4'):
+        url=f"https://www.googleapis.com/drive/v3/files/{J['clipsrc']}?alt=media&supportsAllDrives=true"
+        with urllib.request.urlopen(urllib.request.Request(url,headers={'Authorization':'Bearer '+tok})) as r, open('orig.mp4','wb') as f: f.write(r.read())
+    W=int(subprocess.check_output('ffprobe -v error -select_streams v -show_entries stream=width -of csv=p=0 orig.mp4',shell=True).decode().strip())
+    k=W/540; x,y,w,h=[int(round(v*k/2)*2) for v in J['crop']]
+    os.makedirs('out/clips',exist_ok=True); SP=1.2
+    for key,s,e in J['clips']:
+        d=(e-s)/SP
+        sh(f'ffmpeg -y -loglevel error -ss {s} -to {e} -i orig.mp4 -filter_complex "crop={w}:{h}:{x}:{y},scale=864:520:flags=lanczos,setpts=PTS/{SP},fps=30" -an -c:v libx264 -crf 20 -pix_fmt yuv420p out/clips/{key}_v.mp4')
+        sh(f'ffmpeg -y -loglevel error -ss {s} -to {e} -i orig.mp4 -vn -af "atempo={SP},highpass=f=90,acompressor=threshold=-20dB:ratio=3,loudnorm=I=-15,afade=t=in:d=0.08,afade=t=out:st={d-0.25:.3f}:d=0.25" -ar 44100 -ac 1 out/clips/{key}.wav')
+    print('orig width',W)
+
+if J.get('heads_url'):
+    sh('pip install -q "rembg[cpu]" mediapipe==0.10.14 opencv-python-headless pillow')
+    import requests
+    os.makedirs('out/heads',exist_ok=True)
+    for k,q in J['heads_url'].items():
+        try:
+            r=requests.get('https://commons.wikimedia.org/w/api.php',params={'action':'query','generator':'search','gsrsearch':q,'gsrnamespace':6,'prop':'imageinfo','iiprop':'url','format':'json'},headers={'User-Agent':'tmp-bot/1.0'}).json()
+            urls=[p['imageinfo'][0]['url'] for p in r.get('query',{}).get('pages',{}).values() if p['imageinfo'][0]['url'].lower().endswith(('.jpg','.jpeg','.png'))]
+            print(k,urls[:5])
+            if urls: open(f'out/heads/{k}_url.txt','w').write('\n'.join(urls))
+        except Exception as ex: print('search fail',k,ex)
