@@ -114,3 +114,16 @@ if J.get('images'):
             b=requests.get(u,headers=UA,timeout=60).content; open(f'out/img/{k}.src','wb').write(b)
             sh(f'ffmpeg -y -loglevel error -i out/img/{k}.src -vf scale=900:-2 out/img/{k}.jpg && rm out/img/{k}.src'); print('img ok',k)
         except Exception as ex: print('img fail',k,ex)
+if J.get('audio'):
+    import requests
+    os.makedirs('out/mk', exist_ok=True)
+    for k, u in J['audio'].items():
+        open(f'out/mk/{k}.mp3', 'wb').write(requests.get(u, timeout=120).content)
+    from faster_whisper import WhisperModel
+    m = WhisperModel('medium', compute_type='int8')
+    for k in J['audio']:
+        segs, _ = m.transcribe(f'out/mk/{k}.mp3', language='pt', word_timestamps=True, vad_filter=False)
+        ws = [{'w': w.word.strip(), 's': round(w.start, 3), 'e': round(w.end, 3)} for s in segs for w in s.words]
+        json.dump(ws, open(f'out/mk/{k}.json', 'w'), ensure_ascii=False)
+        print('mk', k, len(ws))
+
