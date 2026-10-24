@@ -75,7 +75,7 @@ if J.get('heads'):
             jaw=[234,93,132,58,172,136,150,149,176,148,152,377,400,378,379,365,397,288,361,323,454]
             pts=[P(i) for i in jaw]
             pts=[(x,y+0.05*fh) for x,y in pts]
-            poly=[(0,0),(0,pts[0][1])]+pts+[(Wd,pts[-1][1]),(Wd,0)]
+            cyc=max(y for x,y in pts); poly=[(0,0),(0,cyc),(pts[0][0],cyc)]+pts+[(pts[-1][0],cyc),(Wd,cyc),(Wd,0)]
             cv2.fillPoly(mask,[np.array(poly,np.int32)],255)
             mask=cv2.GaussianBlur(mask,(5,5),0)
             a[...,3]=(a[...,3].astype(np.float32)*mask/255).astype(np.uint8)
