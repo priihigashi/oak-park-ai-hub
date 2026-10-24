@@ -127,3 +127,56 @@ if J.get('audio'):
         ws = [{'w': w.word.strip(), 's': round(w.start, 3), 'e': round(w.end, 3)} for s in segs for w in s.words]
         json.dump(ws, open(f'out/mk/{k}.json', 'w'), ensure_ascii=False)
         print('mk', k, len(ws))
+
+if J.get('heads3'):
+    sh('pip install -q "rembg[cpu]" mediapipe==0.10.14 opencv-python-headless pillow')
+    import requests, numpy as np, cv2, io, re
+    from PIL import Image
+    from rembg import remove, new_session
+    import mediapipe as mp
+    os.makedirs('out/h3', exist_ok=True)
+    sess = new_session('isnet-general-use')
+    UA = {'User-Agent': 'Mozilla/5.0 (Macintosh) AppleWebKit/537.36 Chrome/120 Safari/537.36'}
+    for k, spec in J['heads3'].items():
+        try:
+            src = spec['src']; crop = spec.get('crop')
+            if src.startswith('og:'):
+                html = requests.get(src[3:], headers=UA, timeout=30).text
+                url = re.search(r'property=["\']og:image["\'][^>]*content=["\']([^"\']+)', html).group(1)
+            elif src.startswith('http'): url = src
+            else:
+                meta = requests.get('https://pt.wikipedia.org/api/rest_v1/page/summary/' + src, headers={'User-Agent': 'tmp-bot/1.0'}).json()
+                url = meta.get('originalimage', {}).get('source') or meta['thumbnail']['source']
+            img = Image.open(io.BytesIO(requests.get(url, headers=UA, timeout=60).content)).convert('RGB')
+            if crop: W0, H0 = img.size; img = img.crop((int(crop[0]*W0), int(crop[1]*H0), int(crop[2]*W0), int(crop[3]*H0)))
+            if img.width > 1600: img = img.resize((1600, int(img.height * 1600 / img.width)))
+            if img.height < 700: img = img.resize((int(img.width * 700 / img.height), 700), Image.LANCZOS)
+            img.save(f'out/h3/{k}_src.jpg')
+            cut = remove(img, session=sess, alpha_matting=True, alpha_matting_foreground_threshold=240, alpha_matting_background_threshold=10, alpha_matting_erode_size=10)
+            a = np.array(cut); H, Wd = a.shape[:2]
+            fm = mp.solutions.face_mesh.FaceMesh(static_image_mode=True, max_num_faces=1, refine_landmarks=True)
+            lm = fm.process(np.array(img)).multi_face_landmarks[0].landmark
+            P = lambda i: (lm[i].x * Wd, lm[i].y * H)
+            chin = P(152); top = P(10); L = P(234); R = P(454)
+            fh = chin[1] - top[1]; fw = R[0] - L[0]; cx = (L[0] + R[0]) / 2
+            jaw = [234, 93, 132, 58, 172, 136, 150, 149, 176, 148, 152, 377, 400, 378, 379, 365, 397, 288, 361, 323, 454]
+            pts = [(P(i)[0], P(i)[1] + 0.045 * fh) for i in jaw]
+            xs = np.array([p[0] for p in pts]); ys = np.array([p[1] for p in pts]); o = np.argsort(xs)
+            X = np.arange(Wd)
+            cut_y = np.interp(X, xs[o], ys[o], left=chin[1] + 0.045 * fh, right=chin[1] + 0.045 * fh)
+            cut_y = cv2.GaussianBlur(cut_y.reshape(1, -1).astype(np.float32), (0, 0), max(2, fw * 0.02)).ravel()
+            Y = np.arange(H)[:, None]
+            m1 = (Y < cut_y[None, :]).astype(np.float32)
+            cy = top[1] + 0.25 * fh; ax = spec.get('wx', 0.82) * fw; by = spec.get('hy', 1.05) * fh
+            ell = (((X[None, :] - cx) / ax) ** 2 + ((Y - cy) / by) ** 2) <= 1
+            m = m1 * ell.astype(np.float32)
+            m = cv2.GaussianBlur(m, (0, 0), 1.5)
+            al = a[..., 3].astype(np.float32) / 255 * m
+            bin_ = (al > 0.5).astype(np.uint8); n, lab, st, _ = cv2.connectedComponentsWithStats(bin_)
+            if n > 1:
+                big = 1 + np.argmax(st[1:, cv2.CC_STAT_AREA]); keepm = cv2.dilate((lab == big).astype(np.uint8), np.ones((5, 5), np.uint8))
+                al = al * keepm
+            a[..., 3] = (al * 255).astype(np.uint8)
+            ys_, xs_ = np.where(a[..., 3] > 20); a = a[ys_.min():ys_.max() + 1, xs_.min():xs_.max() + 1]
+            Image.fromarray(a).save(f'out/h3/{k}.png'); print('h3 ok', k, a.shape)
+        except Exception as ex: print('h3 fail', k, ex)
