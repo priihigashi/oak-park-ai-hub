@@ -1,26 +1,11 @@
 {
- "n": 1,
- "video": "1w_XykLV-nQ-pK9VRZbqgMoQuXbjxZfrw",
- "voice": "pt-BR-ThalitaMultilingualNeural",
- "rate": "+14%",
- "tts": {
-  "s1": "O homem que, segundo o assassino confesso da Marielle, arrumou a arma do crime, pediu uma emenda pro gabinete do Flávio Bolsonaro. E a emenda saiu.",
-  "s3": "Ele é o Robson Calixto, o Peixe. Ex-PM, braço direito do Domingos Brazão, e condenado pelo Supremo por organização criminosa no caso Marielle. Os irmãos Brazão foram condenados como mandantes do crime.",
-  "s4": "Em outubro de dois mil e vinte e três, o Peixe escreveu pra uma assessora do Flávio: vê com o nosso senador. Um mês depois, saíram cerca de duzentos mil reais pra uma ONG indicada por ele.",
-  "s5": "Qual é o problema? Dinheiro público, pedido por um condenado da milícia, foi parar onde ele pediu. E o TCU, que fiscaliza o dinheiro federal, achou indícios de irregularidade no uso.",
-  "s6": "E tem a Ana Clara. Cinco anos, morta por um tiro de fuzil numa ação da PM em Niterói. Em dois mil e vinte e quatro, Flávio virou advogado do policial e pediu pra tirar o caso do júri popular. O STJ negou.",
-  "s7": "No debate, ele disse que queria ajudar a Ana Clara. Ela está morta. E se ele ganhar, escolhe o chefe da Polícia Federal, que investiga ele. Você tem certeza do seu voto?"
- },
+ "n": 2,
  "heads": {
-  "flavio": "Flávio_Bolsonaro",
-  "peixe": "og:https://tvtnews.com.br/?p=804271",
-  "domingos": "Domingos_Brazão",
-  "chiquinho": "Chiquinho_Brazão",
-  "marielle": "Marielle_Franco",
-  "lessa": "Ronnie_Lessa"
- },
- "images": {
-  "ana_retrato": "https://anaclara.info/assets/img/frames/ana-retrato.webp",
-  "mae": "https://anaclara.info/assets/img/frames/mae.webp"
+  "peixe2": "og:https://www.infomoney.com.br/politica/pf-apura-emenda-de-flavio-para-ong-suspeita-de-integrar-esquema-dos-irmaos-brazao/",
+  "peixe3": "og:https://almapreta.com.br/sessao/politica/flavio-bolsonaro-emenda-condenado-marielle/",
+  "peixe4": "og:https://www.portaltela.com/noticias/politica/2026/05/20/pf-investiga-emenda-de-flavio-para-ong-ligada-a-esquema-dos-irmaos-brazao/",
+  "peixe5": "og:https://bncamazonas.com.br/poder/emenda-de-flavio-bolsonaro-foi-parar-com-peixe-do-caso-marielle/",
+  "lessa2": "og:https://www.brasildefato.com.br/2026/10/19/adriano-da-nobrega-major-ronald-e-peixe-veja-historico-de-flavio-bolsonaro-com-milicianos/",
+  "domingos2": "Domingos_Inácio_Brazão"
  }
 }
