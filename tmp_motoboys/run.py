@@ -40,7 +40,11 @@ async def tts(s):
     open(f"out/tts/{s['id']}.mp3",'wb').write(au); json.dump(wb,open(f"out/tts/{s['id']}.json",'w'),ensure_ascii=False)
 async def main():
     for s in job.get('tts',[]):
-        try: await tts(s)
-        except Exception as e: log.write(f"tts {s['id']} ERR {e}\n")
+        for k in range(6):
+            try:
+                if k>=3: s['voice']='pt-BR-FranciscaNeural'
+                await tts(s); break
+            except Exception as e:
+                log.write(f"tts {s['id']} try{k} ERR {e}\n"); await asyncio.sleep(8)
 asyncio.run(main())
 log.close()
