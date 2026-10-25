@@ -66,7 +66,6 @@ async def main():
     for s in job.get('tts',[]):
         for k in range(6):
             try:
-                if k>=3: s['voice']='pt-BR-FranciscaNeural'
                 await tts(s); break
             except Exception as e:
                 log.write(f"tts {s['id']} try{k} ERR {e}\n"); await asyncio.sleep(8)
