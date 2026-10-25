@@ -1,0 +1,42 @@
+{
+ "voice": "pt-BR-ThalitaMultilingualNeural",
+ "rate": "+15%",
+ "scenes": [
+  {
+   "id": "s1",
+   "text": "Faltou ônibus no segundo turno em pelo menos cinco lugares do Brasil."
+  },
+  {
+   "id": "s2",
+   "text": "E em Salvador, a Justiça Eleitoral mandou prender o secretário de Mobilidade, Pablo Souza. Ele estava em Paris. A prefeitura diz que ele volta segunda e vai se apresentar."
+  },
+  {
+   "id": "s3",
+   "text": "O Procon achou ônibus prontos parados na garagem, e multou a empresa OT Trans."
+  },
+  {
+   "id": "s4",
+   "text": "O prefeito Bruno Reis culpou uma briga por adesivos com o número do Lula nos ônibus. Essa explicação veio da própria prefeitura, e nenhuma prova foi mostrada até agora."
+  },
+  {
+   "id": "s5",
+   "text": "Em São Paulo, a Justiça Eleitoral mandou rodar a frota inteira. Um app de monitoramento contou setenta e um por cento à tarde. O prefeito Ricardo Nunes diz que a frota estava normal."
+  },
+  {
+   "id": "s6",
+   "text": "Em Teresina, o TRE mandou a prefeitura de Sílvio Mendes pôr na rua a frota de dia útil, com multa de um milhão de reais por hora se não cumprir."
+  },
+  {
+   "id": "s7",
+   "text": "Em João Pessoa, ônibus passaram direto pelos pontos. A prefeitura de Léo Bezerra nega paralisação, culpa um acidente e diz que vai apurar as empresas."
+  },
+  {
+   "id": "s8",
+   "text": "No Pará, mais de duzentas pessoas ficaram no porto de Icoaraci sem barco pro Marajó. Só uma balsa saiu. Barco entre cidades é responsabilidade do governo do estado, que não deu nota até agora."
+  },
+  {
+   "id": "s9",
+   "text": "Por causa disso, o STF estendeu a votação até as sete da noite no país inteiro. Ônibus da cidade é com a prefeitura. Entre cidades e barcos, com o estado. Lembra disso em dois mil e vinte e oito, quando você escolher prefeito."
+  }
+ ]
+}
