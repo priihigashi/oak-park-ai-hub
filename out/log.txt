@@ -1,30 +1,7 @@
-downloaded 21847898
-$ ffprobe -v error -show_entries stream=width,height,r_frame_rate,codec_type -show_entries format=duration -of compact orig.mp4 > out/probe.txt 2>&1
-$ ffmpeg -y -i orig.mp4 -vf fps=1/3,scale=180:-2,tile=8x6 -frames:v 1 out/sheet.jpg
-$ ffmpeg -y -ss 30 -i orig.mp4 -frames:v 1 -vf scale=540:-2 out/frame30.jpg
-$ ffmpeg -y -ss 90 -i orig.mp4 -frames:v 1 -vf scale=540:-2 out/frame90.jpg
-$ ffmpeg -y -i orig.mp4 -vf scale=432:768,fps=24 -c:v libx264 -preset slow -crf 32 -g 48 -pix_fmt yuv420p -c:a aac -b:a 64k -ac 1 -movflags +faststart out/original_leve.mp4
-$ ffmpeg -y -ss 3 -i orig.mp4 -frames:v 1 -vf scale=432:-2 -q:v 4 out/original_poster.jpg
-$ ffmpeg -y -ss 0.0 -to 8.4 -i orig.mp4 -vf "setpts=PTS/1.0,scale=540:960:force_original_aspect_ratio=increase,crop=540:960,fps=30,fade=t=out:st=7.95:d=0.45:color=0x121214" -af "atempo=1.0,highpass=f=90,acompressor=threshold=-20dB:ratio=3,loudnorm=I=-13,afade=t=out:st=8.10:d=0.3" -c:v libx264 -preset slow -crf 27 -g 15 -pix_fmt yuv420p -c:a aac -b:a 96k -ar 44100 -movflags +faststart out/c1.mp4
-$ ffmpeg -y -i out/c1.mp4 -frames:v 1 -q:v 4 out/c1.jpg
-$ ffmpeg -y -ss 40.24 -to 45.12 -i orig.mp4 -vf "setpts=PTS/1.0,scale=540:960:force_original_aspect_ratio=increase,crop=540:960,fps=30,fade=t=out:st=4.43:d=0.45:color=0x121214" -af "atempo=1.0,highpass=f=90,acompressor=threshold=-20dB:ratio=3,loudnorm=I=-13,afade=t=out:st=4.58:d=0.3" -c:v libx264 -preset slow -crf 27 -g 15 -pix_fmt yuv420p -c:a aac -b:a 96k -ar 44100 -movflags +faststart out/c2.mp4
-$ ffmpeg -y -i out/c2.mp4 -frames:v 1 -q:v 4 out/c2.jpg
-$ ffmpeg -y -ss 52.92 -to 69.88 -i orig.mp4 -vf "setpts=PTS/1.12,scale=540:960:force_original_aspect_ratio=increase,crop=540:960,fps=30,fade=t=out:st=14.69:d=0.45:color=0x121214" -af "atempo=1.12,highpass=f=90,acompressor=threshold=-20dB:ratio=3,loudnorm=I=-13,afade=t=out:st=14.84:d=0.3" -c:v libx264 -preset slow -crf 27 -g 15 -pix_fmt yuv420p -c:a aac -b:a 96k -ar 44100 -movflags +faststart out/c3.mp4
-$ ffmpeg -y -i out/c3.mp4 -frames:v 1 -q:v 4 out/c3.jpg
-$ ffmpeg -y -ss 78.44 -to 86.08 -i orig.mp4 -vf "setpts=PTS/1.1,scale=540:960:force_original_aspect_ratio=increase,crop=540:960,fps=30,fade=t=out:st=6.50:d=0.45:color=0x121214" -af "atempo=1.1,highpass=f=90,acompressor=threshold=-20dB:ratio=3,loudnorm=I=-13,afade=t=out:st=6.65:d=0.3" -c:v libx264 -preset slow -crf 27 -g 15 -pix_fmt yuv420p -c:a aac -b:a 96k -ar 44100 -movflags +faststart out/c4a.mp4
-$ ffmpeg -y -i out/c4a.mp4 -frames:v 1 -q:v 4 out/c4a.jpg
-$ ffmpeg -y -ss 104.2 -to 112.72 -i orig.mp4 -vf "setpts=PTS/1.1,scale=540:960:force_original_aspect_ratio=increase,crop=540:960,fps=30,fade=t=out:st=7.30:d=0.45:color=0x121214" -af "atempo=1.1,highpass=f=90,acompressor=threshold=-20dB:ratio=3,loudnorm=I=-13,afade=t=out:st=7.45:d=0.3" -c:v libx264 -preset slow -crf 27 -g 15 -pix_fmt yuv420p -c:a aac -b:a 96k -ar 44100 -movflags +faststart out/c4b.mp4
-$ ffmpeg -y -i out/c4b.mp4 -frames:v 1 -q:v 4 out/c4b.jpg
-$ ffmpeg -y -ss 118.84 -to 124.56 -i orig.mp4 -vf "setpts=PTS/1.05,scale=540:960:force_original_aspect_ratio=increase,crop=540:960,fps=30,fade=t=out:st=5.00:d=0.45:color=0x121214" -af "atempo=1.05,highpass=f=90,acompressor=threshold=-20dB:ratio=3,loudnorm=I=-13,afade=t=out:st=5.15:d=0.3" -c:v libx264 -preset slow -crf 27 -g 15 -pix_fmt yuv420p -c:a aac -b:a 96k -ar 44100 -movflags +faststart out/c5.mp4
-$ ffmpeg -y -i out/c5.mp4 -frames:v 1 -q:v 4 out/c5.jpg
-tts ok n1
-tts ok n2
-tts ok n3
-tts ok n4
-tts ok n5
-tts ok n6
-tts ok n7
+drive skip/fail SystemExit()
 head src flavio https://upload.wikimedia.org/wikipedia/commons/b/b3/Foto_oficial_do_senador_Fl%C3%A1vio_Bolsonaro_%28v._AgSen%29_%283x4%29.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=original
-head ok flavio (620, 586)
+head ok flavio (544, 620)
 head src jair https://upload.wikimedia.org/wikipedia/commons/3/37/Jair_Bolsonaro_2019_Portrait_%283x4_cropped_center%29.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=original
-head ok jair (505, 620)
+head ok jair (512, 620)
+head src temer https://upload.wikimedia.org/wikipedia/commons/b/bd/Michel_Temer_%28foto_oficial%29_%28cropped_2%29.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=original
+head ok temer (486, 618)
