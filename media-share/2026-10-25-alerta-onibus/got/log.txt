@@ -5,3 +5,11 @@ FAIL silvio_mendes
 hana_ghassan https://upload.wikimedia.org/wikipedia/commons/5/58/2023-06-30_Medalha_da_Ordem_do_M%C3%A9rito_Dom_Pedro_II_09_%28Hana_Ghassan%29.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=original
 leo_bezerra 
 FAIL leo_bezerra
+silvio_mendes https://upload.wikimedia.org/wikipedia/commons/c/c2/2024_SILVIO_MENDES_CANDIDATO_PREFEITO_PI_TERESINA_TSE_%28180001882991%29.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=original
+leo_bezerra https://upload.wikimedia.org/wikipedia/commons/1/16/Leo-Bezerra-vice-prefeito.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=original
+pablo_souza 
+FAIL pablo_souza
+silvio_og 
+FAIL silvio_og
+leo_og https://cdn.jornaldaparaiba.com.br/img/inline/210000/conversa-com-joao-deve-definir-futuro-de-leo-no-ps0021968200202607211054.jpg?xid=1220751
+FAIL ref_transcript
