@@ -22,3 +22,7 @@ FAIL ref2_transcript
 FAIL ref2_reel
 FAIL ref_transcript
 FAIL ref2_transcript
+FAIL ref_transcript
+FAIL ref2_transcript
+pablo3 https://p2.trrsf.com/image/fget/cf/1200/630/middle/images.terra.com/2026/10/25/pablo_tre-ba-to4kxtw3p6xu.PNG
+pablo4 https://medias.revistaoeste.com/wp-content/uploads/2026/10/oonibus-municipal-de-salvador-tre-ba-pt.jpg.webp
