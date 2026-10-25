@@ -1,0 +1,19 @@
+name: fetch-voice-ajude-votar
+on:
+  push:
+    branches: ['media/ajude-votar-2026-10-25']
+    paths: ['.github/workflows/fetch-voice-ajude.yml']
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          curl -fsSL -o media-share/2026-10-25-ajude-votar/voice.mp3 'https://storage.googleapis.com/xi-backend/database/workspace/cfd0c30d08bb461c800962f2f06538b3/content_generation/E0rWFsobI5cjmgVqaTqA/1uFgPLAV6grRftdfPJHb/content.mp3?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=xi-backend-prod%40xi-labs.iam.gserviceaccount.com%2F20261025%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20261025T205830Z&X-Goog-Expires=7200&X-Goog-SignedHeaders=host&X-Goog-Signature=a10aee633d974a4265d2250880e218a60ac40b6d2c0f8525e628dd527487a681a47f756aa65467041719de937df492f0f2ae6fdf5d6c06f10e5f1dea9057ded697a2b8d81f43a538b49f286e8507dad0d42cf14c574e78b75df15c5548c80afc87825ca50fc4060f8a07cae4252aeb050466f9c9fe6468ce2f777a6ab917f4a3361e4713d59789b9a6ea017b0a176aa3273e60212f06b9d52cfc53ad40af1c4e6bea8f95d91d86ccaa1b76b64023c4974e03d504f82245de08faa6a83f02d0efec0abb53017008ed7d688ad72c1863faca8dac9b6163cfec1b2124a59634d9d78b0e6722aea822c99b2d12b6e5bbba51e3e1b81b27cb37ff5e6a41cf0a7a5be8'
+          ls -la media-share/2026-10-25-ajude-votar
+          git config user.name bot; git config user.email bot@users.noreply.github.com
+          git add media-share/2026-10-25-ajude-votar/voice.mp3
+          git commit -m "voice mp3"
+          git push
