@@ -1,0 +1,21 @@
+name: tmp-video2-tts
+on:
+  push:
+    branches: [tmp-video2]
+    paths: ['tmp_v2/lines.json']
+permissions:
+  contents: write
+jobs:
+  tts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: tmp-video2 }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: |
+          pip install -q edge-tts
+          mkdir -p tmp_v2/tts
+          python3 tmp_v2/tts.py
+          git config user.name bot && git config user.email bot@users.noreply.github.com
+          git add tmp_v2/tts && git commit -m tts && git pull --rebase && git push
