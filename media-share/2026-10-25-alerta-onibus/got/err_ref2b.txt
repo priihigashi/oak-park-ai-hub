@@ -1,0 +1,8 @@
+[Instagram] Setting up session
+[Instagram] Extracting URL: https://www.instagram.com/p/De7y1qIBER0/
+[Instagram] De7y1qIBER0: Checking post accessibility
+[Instagram] De7y1qIBER0: Downloading webpage
+WARNING: ffmpeg not found. The downloaded format may not be the best available. Installing ffmpeg is strongly recommended: https://github.com/yt-dlp/yt-dlp#dependencies
+[info] De7y1qIBER0: Downloading 1 format(s): 3
+[download] Destination: media-share/2026-10-25-alerta-onibus/got/ref2b.mp4
+[download]   0.0% of   32.31MiB at  Unknown B/s ETA Unknown[download]   0.0% of   32.31MiB at    1.58MiB/s ETA 00:20  [download]   0.0% of   32.31MiB at    1.97MiB/s ETA 00:16[download]   0.0% of   32.31MiB at  646.87KiB/s ETA 00:51[download]   0.1% of   32.31MiB at  948.15KiB/s ETA 00:34[download]   0.2% of   32.31MiB at    1.23MiB/s ETA 00:26[download]   0.4% of   32.31MiB at    1.70MiB/s ETA 00:18[download]   0.8% of   32.31MiB at    2.48MiB/s ETA 00:12[download]   1.5% of   32.31MiB at    3.53MiB/s ETA 00:09[download]   3.1% of   32.31MiB at    5.38MiB/s ETA 00:05[download]   6.2% of   32.31MiB at    8.68MiB/s ETA 00:03[download]  12.4% of   32.31MiB at   12.78MiB/s ETA 00:02[download]  24.8% of   32.31MiB at   19.57MiB/s ETA 00:01[download]  37.1% of   32.31MiB at   23.65MiB/s ETA 00:00[download]  49.5% of   32.31MiB at   26.50MiB/s ETA 00:00[download]  61.9% of   32.31MiB at   28.51MiB/s ETA 00:00[download]  74.3% of   32.31MiB at   29.96MiB/s ETA 00:00[download]  86.6% of   32.31MiB at   31.23MiB/s ETA 00:00[download]  99.0% of   32.31MiB at   31.56MiB/s ETA 00:00[download] 100.0% of   32.31MiB at   31.73MiB/s ETA 00:00[download] 100% of   32.31MiB in 00:00:01 at 26.12MiB/s  

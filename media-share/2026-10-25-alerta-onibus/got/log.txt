@@ -19,3 +19,6 @@ FAIL pablo_souza
 pablo_souza2 https://www.brasildefato.com.br/wp-content/uploads/2026/01/Fernando-Frazao-Agencia-Brasil.webp
 FAIL ref_transcript
 FAIL ref2_transcript
+FAIL ref2_reel
+FAIL ref_transcript
+FAIL ref2_transcript

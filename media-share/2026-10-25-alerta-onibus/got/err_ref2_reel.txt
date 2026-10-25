@@ -1,0 +1,3 @@
+[Instagram] Extracting URL: https://www.instagram.com/reel/De7y1qIBER0/
+[Instagram] De7y1qIBER0: Downloading video info
+ERROR: [Instagram] De7y1qIBER0: Failed to parse JSON (caused by JSONDecodeError("Expecting value in '': line 1 column 1 (char 0)")); please report this issue on  https://github.com/yt-dlp/yt-dlp/issues?q= , filling out the appropriate issue template. Confirm you are on the latest version using  yt-dlp -U
