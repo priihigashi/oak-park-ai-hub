@@ -22,6 +22,7 @@ jobs:
           while IFS='|' read -r name url; do
             [ -z "$name" ] && continue
             case "$url" in
+              wiki:*) t="${url#wiki:}"; img=$(curl -fsSL -A "Mozilla/5.0 (priihigashi bot)" "https://pt.wikipedia.org/w/api.php?action=query&format=json&prop=pageimages&piprop=original&redirects=1&titles=$(python3 -c "import urllib.parse,sys;print(urllib.parse.quote(sys.argv[1]))" "$t")" | python3 -c "import json,sys;d=json.load(sys.stdin);print(next(iter(d['query']['pages'].values())).get('original',{}).get('source',''))"); echo "$name $img" >> $D/got/log.txt; [ -n "$img" ] && curl -fsSL -A "Mozilla/5.0 (priihigashi bot)" -o "$D/got/$name.${img##*.}" "$img" || echo "FAIL $name" >> $D/got/log.txt ;;
               *instagram.com*) yt-dlp -q --cookies /tmp/ig.txt -f "b[ext=mp4]/b" -o "$D/got/$name.%(ext)s" "$url" || echo "FAIL $name" >> $D/got/log.txt ;;
               *) curl -fsSL -A "Mozilla/5.0" -o "$D/got/$name" "$url" || echo "FAIL $name" >> $D/got/log.txt ;;
             esac

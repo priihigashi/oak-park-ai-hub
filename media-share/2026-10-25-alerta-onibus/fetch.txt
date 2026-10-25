@@ -1,1 +1,5 @@
-ref_reel|https://www.instagram.com/reel/De7scZgOBz7/
+bruno_reis|wiki:Bruno Reis
+ricardo_nunes|wiki:Ricardo Nunes
+silvio_mendes|wiki:Sílvio Mendes
+hana_ghassan|wiki:Hana Ghassan
+leo_bezerra|wiki:Léo Bezerra
