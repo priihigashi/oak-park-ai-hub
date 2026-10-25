@@ -1,3 +1,157 @@
-[cbsnews] Extracting URL: https://www.cbsnews.com/video/republicans-divided-over-pentagons-plan-to-livestream-execution-of-fort-hood-shooter/
-[cbsnews] republicans-divided-over-pentagons-plan-to-livestream-execution-of-fort-hood-shooter: Downloading webpage
-ERROR: [cbsnews] republicans-divided-over-pentagons-plan-to-livestream-execution-of-fort-hood-shooter: Unable to download webpage: HTTP Error 406: Not Acceptable (caused by <HTTPError 406: Not Acceptable>)
+[cbsnews] Extracting URL: https://www.cbsnews.com/video/dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-...-shooters-execution/
+[cbsnews] dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execution: Downloading webpage
+[cbsnews] d94625b8-9ffc-4ce8-8611-c0a6ebe8a88c: Downloading m3u8 information
+[info] d94625b8-9ffc-4ce8-8611-c0a6ebe8a88c: Downloading 1 format(s): hls-2226+hls-audio_aac-English
+[info] d94625b8-9ffc-4ce8-8611-c0a6ebe8a88c: Downloading 1 time ranges: 280.0-589.0
+[info] Writing video metadata as JSON to: /tmp/dl_1.info.json
+[download] Destination: /tmp/dl_1.mp4
+mime type is not rfc8216 compliant
+[hls @ 0x564067e68340] Skip ('#EXT-X-VERSION:6')
+[hls @ 0x564067e68340] Skip ('## Generated with https://github.com/shaka-project/shaka-packager version v3.9.2.1-46c0330-release')
+[hls @ 0x564067e68340] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_1.ts' for reading
+[hls @ 0x564067e68340] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_2.ts' for reading
+Input #0, hls, from 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/stream.m3u8':
+  Duration: 00:09:49.36, start: 0.100000, bitrate: 0 kb/s
+  Program 0 
+    Metadata:
+      variant_bitrate : 0
+  Stream #0:0: Video: h264 (High) ([27][0][0][0] / 0x001B), yuv420p, 1280x720 [SAR 1:1 DAR 16:9], 29.97 fps, 29.97 tbr, 90k tbn
+    Metadata:
+      variant_bitrate : 0
+mime type is not rfc8216 compliant
+[hls @ 0x5640681fc8c0] Skip ('#EXT-X-VERSION:6')
+[hls @ 0x5640681fc8c0] Skip ('## Generated with https://github.com/shaka-project/shaka-packager version v3.9.2.1-46c0330-release')
+[hls @ 0x5640681fc8c0] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_1.aac' for reading
+[hls @ 0x5640681fc8c0] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_2.aac' for reading
+Input #1, hls, from 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/stream.m3u8':
+  Duration: 00:09:49.41, start: 0.100000, bitrate: 0 kb/s
+  Program 0 
+    Metadata:
+      variant_bitrate : 0
+  Stream #1:0: Audio: aac (LC), 44100 Hz, stereo, fltp, 133 kb/s
+    Metadata:
+      variant_bitrate : 0
+      id3v2_priv.com.apple.streaming.transportStreamTimestamp: \x00\x00\x00\x00\x00\x00#(
+Output #0, mp4, to 'file:/tmp/dl_1.mp4.part':
+  Metadata:
+    encoder         : Lavf60.16.100
+  Stream #0:0: Video: h264 (High) (avc1 / 0x31637661), yuv420p, 1280x720 [SAR 1:1 DAR 16:9], q=2-31, 29.97 fps, 29.97 tbr, 90k tbn
+    Metadata:
+      variant_bitrate : 0
+  Stream #0:1: Audio: aac (LC) (mp4a / 0x6134706D), 44100 Hz, stereo, fltp, 133 kb/s
+    Metadata:
+      variant_bitrate : 0
+      id3v2_priv.com.apple.streaming.transportStreamTimestamp: \x00\x00\x00\x00\x00\x00#(
+Stream mapping:
+  Stream #0:0 -> #0:0 (copy)
+  Stream #1:0 -> #0:1 (copy)
+Press [q] to stop, [?] for help
+[hls @ 0x564067e68340] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_47.ts' for reading
+[hls @ 0x564067e68340] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_48.ts' for reading
+size=       0kB time=-00:00:01.78 bitrate=  -0.0kbits/s speed=N/A    [hls @ 0x5640681fc8c0] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_47.aac' for reading
+[hls @ 0x5640681fc8c0] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_48.aac' for reading
+size=     512kB time=00:00:00.78 bitrate=5374.4kbits/s speed=1.54x    [https @ 0x7f0d7c001580] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_49.aac' for reading
+[https @ 0x7f0d84001500] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_49.ts' for reading
+[https @ 0x7f0d7c00da40] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_50.aac' for reading
+[https @ 0x7f0d8400d980] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_50.ts' for reading
+[https @ 0x7f0d7c001580] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_51.aac' for reading
+[https @ 0x7f0d84001500] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_51.ts' for reading
+[https @ 0x7f0d7c00da40] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_52.aac' for reading
+[https @ 0x7f0d8400d980] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_52.ts' for reading
+[https @ 0x7f0d7c001580] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_53.aac' for reading
+[https @ 0x7f0d84001500] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_53.ts' for reading
+size=    7168kB time=00:00:26.03 bitrate=2255.1kbits/s speed=24.2x    [https @ 0x7f0d7c00da40] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_54.aac' for reading
+[https @ 0x7f0d8400d980] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_54.ts' for reading
+[https @ 0x7f0d7c001580] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_55.aac' for reading
+[https @ 0x7f0d84001500] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_55.ts' for reading
+[https @ 0x7f0d7c00da40] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_56.aac' for reading
+[https @ 0x7f0d8400d980] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_56.ts' for reading
+[https @ 0x7f0d7c001580] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_57.aac' for reading
+[https @ 0x7f0d84001500] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_57.ts' for reading
+[https @ 0x7f0d7c00da40] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_58.aac' for reading
+[https @ 0x7f0d8400d980] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_58.ts' for reading
+[https @ 0x7f0d7c001580] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_59.aac' for reading
+[https @ 0x7f0d84001500] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_59.ts' for reading
+size=   16640kB time=00:01:02.02 bitrate=2197.6kbits/s speed=38.7x    [https @ 0x7f0d7c00da40] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_60.aac' for reading
+[https @ 0x7f0d8400d980] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_60.ts' for reading
+[https @ 0x7f0d7c001580] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_61.aac' for reading
+[https @ 0x7f0d84001500] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_61.ts' for reading
+[https @ 0x7f0d7c00da40] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_62.aac' for reading
+[https @ 0x7f0d8400d980] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_62.ts' for reading
+[https @ 0x7f0d7c001580] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_63.aac' for reading
+[https @ 0x7f0d84001500] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_63.ts' for reading
+[https @ 0x7f0d7c00da40] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_64.aac' for reading
+[https @ 0x7f0d8400d980] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_64.ts' for reading
+[https @ 0x7f0d7c001580] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_65.aac' for reading
+[https @ 0x7f0d84001500] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_65.ts' for reading
+size=   26112kB time=00:01:38.04 bitrate=2181.8kbits/s speed=45.4x    [https @ 0x7f0d7c00da40] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_66.aac' for reading
+[https @ 0x7f0d8400d980] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_66.ts' for reading
+[https @ 0x7f0d7c001580] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_67.aac' for reading
+[https @ 0x7f0d84001500] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_67.ts' for reading
+[https @ 0x7f0d7c00da40] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_68.aac' for reading
+[https @ 0x7f0d8400d980] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_68.ts' for reading
+[https @ 0x7f0d7c001580] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_69.aac' for reading
+[https @ 0x7f0d84001500] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_69.ts' for reading
+[https @ 0x7f0d7c00da40] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_70.aac' for reading
+[https @ 0x7f0d8400d980] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_70.ts' for reading
+[https @ 0x7f0d7c001580] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_71.aac' for reading
+[https @ 0x7f0d84001500] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_71.ts' for reading
+size=   35840kB time=00:02:14.03 bitrate=2190.5kbits/s speed=50.3x    [https @ 0x7f0d7c00da40] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_72.aac' for reading
+[https @ 0x7f0d8400d980] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_72.ts' for reading
+[https @ 0x7f0d7c001580] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_73.aac' for reading
+[https @ 0x7f0d84001500] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_73.ts' for reading
+[https @ 0x7f0d7c00da40] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_74.aac' for reading
+[https @ 0x7f0d8400d980] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_74.ts' for reading
+[https @ 0x7f0d7c001580] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_75.aac' for reading
+[https @ 0x7f0d84001500] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_75.ts' for reading
+size=   41984kB time=00:02:38.34 bitrate=2172.0kbits/s speed=49.1x    [https @ 0x7f0d7c00da40] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_76.aac' for reading
+[https @ 0x7f0d8400d980] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_76.ts' for reading
+[https @ 0x7f0d7c001580] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_77.aac' for reading
+[https @ 0x7f0d84001500] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_77.ts' for reading
+[https @ 0x7f0d7c00da40] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_78.aac' for reading
+[https @ 0x7f0d8400d980] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_78.ts' for reading
+[https @ 0x7f0d7c001580] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_79.aac' for reading
+size=   48384kB time=00:03:02.02 bitrate=2177.5kbits/s speed=48.4x    [https @ 0x7f0d84001500] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_79.ts' for reading
+[https @ 0x7f0d7c00da40] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_80.aac' for reading
+[https @ 0x7f0d8400d980] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_80.ts' for reading
+[https @ 0x7f0d7c001580] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_81.aac' for reading
+[https @ 0x7f0d84001500] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_81.ts' for reading
+[https @ 0x7f0d7c00da40] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_82.aac' for reading
+[https @ 0x7f0d8400d980] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_82.ts' for reading
+size=   53248kB time=00:03:20.37 bitrate=2176.9kbits/s speed=46.6x    [https @ 0x7f0d7c001580] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_83.aac' for reading
+[https @ 0x7f0d84001500] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_83.ts' for reading
+[https @ 0x7f0d7c00da40] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_84.aac' for reading
+[https @ 0x7f0d8400d980] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_84.ts' for reading
+[https @ 0x7f0d7c001580] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_85.aac' for reading
+[https @ 0x7f0d84001500] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_85.ts' for reading
+[https @ 0x7f0d7c00da40] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_86.aac' for reading
+size=   59648kB time=00:03:44.03 bitrate=2181.1kbits/s speed=46.4x    [https @ 0x7f0d8400d980] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_86.ts' for reading
+[https @ 0x7f0d7c001580] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_87.aac' for reading
+[https @ 0x7f0d84001500] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_87.ts' for reading
+[https @ 0x7f0d7c00da40] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_88.aac' for reading
+[https @ 0x7f0d8400d980] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_88.ts' for reading
+[https @ 0x7f0d7c001580] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_89.aac' for reading
+[https @ 0x7f0d84001500] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_89.ts' for reading
+size=   64768kB time=00:04:02.42 bitrate=2188.6kbits/s speed=45.3x    [https @ 0x7f0d7c00da40] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_90.aac' for reading
+[https @ 0x7f0d8400d980] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_90.ts' for reading
+[https @ 0x7f0d7c001580] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_91.aac' for reading
+[https @ 0x7f0d84001500] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_91.ts' for reading
+[https @ 0x7f0d7c00da40] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_92.aac' for reading
+[https @ 0x7f0d8400d980] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_92.ts' for reading
+[https @ 0x7f0d7c001580] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_93.aac' for reading
+[https @ 0x7f0d84001500] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_93.ts' for reading
+size=   70912kB time=00:04:26.45 bitrate=2180.1kbits/s speed=45.2x    [https @ 0x7f0d7c00da40] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_94.aac' for reading
+[https @ 0x7f0d8400d980] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_94.ts' for reading
+[https @ 0x7f0d7c001580] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_95.aac' for reading
+[https @ 0x7f0d84001500] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_95.ts' for reading
+[https @ 0x7f0d7c00da40] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_96.aac' for reading
+[https @ 0x7f0d8400d980] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_96.ts' for reading
+[https @ 0x7f0d7c001580] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_97.aac' for reading
+[https @ 0x7f0d84001500] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_97.ts' for reading
+[https @ 0x7f0d7c00da40] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_98.aac' for reading
+[https @ 0x7f0d8400d980] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_98.ts' for reading
+size=   78848kB time=00:04:56.48 bitrate=2178.6kbits/s speed=45.8x    [https @ 0x7f0d7c001580] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_en-US_4886056_aac_128/seg_99.aac' for reading
+[https @ 0x7f0d84001500] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4886056_hls/CBSN_fusion_35645_1_dhs-secretary-markwayne-mullin-defends-decision-to-livestream-fort-hood-shooters-execut_video_2100/seg_99.ts' for reading
+[out#0/mp4 @ 0x5640687ce7c0] video:77092kB audio:4919kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: 0.320580%
+size=   82274kB time=00:05:08.99 bitrate=2181.2kbits/s speed=46.2x    
+[download] 100% of   80.35MiB in 00:00:07 at 10.80MiB/s
