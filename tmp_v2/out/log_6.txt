@@ -1,0 +1,15 @@
+[youtube:search] Extracting URL: ytsearch1:Chris Murphy CNN medieval public execution livestream
+[download] Downloading playlist: Chris Murphy CNN medieval public execution livestream
+[youtube:search] query "Chris Murphy CNN medieval public execution livestream": Downloading web client config
+[youtube:search] query "Chris Murphy CNN medieval public execution livestream" page 1: Downloading API JSON
+[info] Writing playlist metadata as JSON to: /tmp/dl_6.info.json
+[youtube:search] Playlist Chris Murphy CNN medieval public execution livestream: Downloading 1 items of 1
+[download] Downloading item 1 of 1
+[youtube] Extracting URL: https://www.youtube.com/watch?v=6pN6zTFwvWA
+[youtube] 6pN6zTFwvWA: Downloading webpage
+WARNING: [youtube] No supported JavaScript runtime could be found. Only deno is enabled by default; to use another runtime add  --js-runtimes RUNTIME[:PATH]  to your command/config. YouTube extraction without a JS runtime has been deprecated, and some formats may be missing. See  https://github.com/yt-dlp/yt-dlp/wiki/EJS  for details on installing one
+[youtube] 6pN6zTFwvWA: Downloading visionos player API JSON
+WARNING: [youtube] No title found in player responses; falling back to title from initial data. Other metadata may also be missing
+ERROR: [youtube] 6pN6zTFwvWA: Sign in to confirm you’re not a bot. This helps protect our community. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+[info] Writing updated playlist metadata as JSON to: /tmp/dl_6.info.json
+[download] Finished downloading playlist: Chris Murphy CNN medieval public execution livestream

@@ -1,0 +1,15 @@
+[youtube:search] Extracting URL: ytsearch1:Hegseth Posobiec Fort Hood shooter execution public
+[download] Downloading playlist: Hegseth Posobiec Fort Hood shooter execution public
+[youtube:search] query "Hegseth Posobiec Fort Hood shooter execution public": Downloading web client config
+[youtube:search] query "Hegseth Posobiec Fort Hood shooter execution public" page 1: Downloading API JSON
+[info] Writing playlist metadata as JSON to: /tmp/dl_2.info.json
+[youtube:search] Playlist Hegseth Posobiec Fort Hood shooter execution public: Downloading 1 items of 1
+[download] Downloading item 1 of 1
+[youtube] Extracting URL: https://www.youtube.com/watch?v=TrNpTmrwQBw
+[youtube] TrNpTmrwQBw: Downloading webpage
+WARNING: [youtube] No supported JavaScript runtime could be found. Only deno is enabled by default; to use another runtime add  --js-runtimes RUNTIME[:PATH]  to your command/config. YouTube extraction without a JS runtime has been deprecated, and some formats may be missing. See  https://github.com/yt-dlp/yt-dlp/wiki/EJS  for details on installing one
+[youtube] TrNpTmrwQBw: Downloading visionos player API JSON
+WARNING: [youtube] No title found in player responses; falling back to title from initial data. Other metadata may also be missing
+ERROR: [youtube] TrNpTmrwQBw: Sign in to confirm you’re not a bot. This helps protect our community. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+[info] Writing updated playlist metadata as JSON to: /tmp/dl_2.info.json
+[download] Finished downloading playlist: Hegseth Posobiec Fort Hood shooter execution public
