@@ -13,3 +13,9 @@ silvio_og
 FAIL silvio_og
 leo_og https://cdn.jornaldaparaiba.com.br/img/inline/210000/conversa-com-joao-deve-definir-futuro-de-leo-no-ps0021968200202607211054.jpg?xid=1220751
 FAIL ref_transcript
+FAIL ref2_reel
+pablo_souza 
+FAIL pablo_souza
+pablo_souza2 https://www.brasildefato.com.br/wp-content/uploads/2026/01/Fernando-Frazao-Agencia-Brasil.webp
+FAIL ref_transcript
+FAIL ref2_transcript
