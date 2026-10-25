@@ -1,15 +1,55 @@
-[youtube:search] Extracting URL: ytsearch1:Hegseth Posobiec Fort Hood shooter execution public
-[download] Downloading playlist: Hegseth Posobiec Fort Hood shooter execution public
-[youtube:search] query "Hegseth Posobiec Fort Hood shooter execution public": Downloading web client config
-[youtube:search] query "Hegseth Posobiec Fort Hood shooter execution public" page 1: Downloading API JSON
-[info] Writing playlist metadata as JSON to: /tmp/dl_2.info.json
-[youtube:search] Playlist Hegseth Posobiec Fort Hood shooter execution public: Downloading 1 items of 1
-[download] Downloading item 1 of 1
-[youtube] Extracting URL: https://www.youtube.com/watch?v=TrNpTmrwQBw
-[youtube] TrNpTmrwQBw: Downloading webpage
-WARNING: [youtube] No supported JavaScript runtime could be found. Only deno is enabled by default; to use another runtime add  --js-runtimes RUNTIME[:PATH]  to your command/config. YouTube extraction without a JS runtime has been deprecated, and some formats may be missing. See  https://github.com/yt-dlp/yt-dlp/wiki/EJS  for details on installing one
-[youtube] TrNpTmrwQBw: Downloading visionos player API JSON
-WARNING: [youtube] No title found in player responses; falling back to title from initial data. Other metadata may also be missing
-ERROR: [youtube] TrNpTmrwQBw: Sign in to confirm you’re not a bot. This helps protect our community. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
-[info] Writing updated playlist metadata as JSON to: /tmp/dl_2.info.json
-[download] Finished downloading playlist: Hegseth Posobiec Fort Hood shooter execution public
+[generic] Extracting URL: https://www.valleynewslive.com/video/2026/10/13/trump-absolutely-approve-execution-livestream/
+[generic] trump-absolutely-approve-execution-livestream: Downloading webpage
+WARNING: [generic] Falling back on generic information extractor
+[generic] trump-absolutely-approve-execution-livestream: Extracting information
+[ArcPublishing] Extracting URL: arcpublishing:gray:dbda43ae-7b50-4d9c-9dd0-922dc7b0106f
+[ArcPublishing] dbda43ae-7b50-4d9c-9dd0-922dc7b0106f: Downloading JSON metadata
+[ArcPublishing] dbda43ae-7b50-4d9c-9dd0-922dc7b0106f: Downloading m3u8 information
+[ArcPublishing] dbda43ae-7b50-4d9c-9dd0-922dc7b0106f: Downloading m3u8 information
+[ArcPublishing] dbda43ae-7b50-4d9c-9dd0-922dc7b0106f: Downloading m3u8 information
+[info] dbda43ae-7b50-4d9c-9dd0-922dc7b0106f: Downloading 1 format(s): hls-4069+hls-audio-1-Alternate_Audio
+[info] dbda43ae-7b50-4d9c-9dd0-922dc7b0106f: Downloading 1 time ranges: 0.0-300.0
+[info] Writing video metadata as JSON to: /tmp/dl_2.info.json
+[download] Destination: /tmp/dl_2.mp4
+[hls @ 0x562586c5b0c0] Skip ('#EXT-X-VERSION:4')
+[hls @ 0x562586c5b0c0] Opening 'https://d1l66zlxaqpl1u.cloudfront.net/wp-gray/POOL/20261013/6acd898c9927741454ab4af5/t_4293f0e81468407c9826e042e21aafba_name_BHDN_PO_143FR_DC__TRUMP___ABSOLUTEL_9077f42f_2d36_47b6_b3be_151d9a65528a/hlsv4_master_1280x720-3000-v4_00001.ts' for reading
+[hls @ 0x562586c5b0c0] Opening 'https://d1l66zlxaqpl1u.cloudfront.net/wp-gray/POOL/20261013/6acd898c9927741454ab4af5/t_4293f0e81468407c9826e042e21aafba_name_BHDN_PO_143FR_DC__TRUMP___ABSOLUTEL_9077f42f_2d36_47b6_b3be_151d9a65528a/hlsv4_master_1280x720-3000-v4_00002.ts' for reading
+Input #0, hls, from 'https://d1l66zlxaqpl1u.cloudfront.net/wp-gray/POOL/20261013/6acd898c9927741454ab4af5/t_4293f0e81468407c9826e042e21aafba_name_BHDN_PO_143FR_DC__TRUMP___ABSOLUTEL_9077f42f_2d36_47b6_b3be_151d9a65528a/hlsv4_master_1280x720-3000-v4.m3u8':
+  Duration: 00:00:11.95, start: 2.066733, bitrate: 0 kb/s
+  Program 0 
+    Metadata:
+      variant_bitrate : 0
+  Stream #0:0: Video: h264 (High) ([27][0][0][0] / 0x001B), yuv420p, 1280x720 [SAR 1:1 DAR 16:9], 29.97 fps, 29.97 tbr, 90k tbn
+    Metadata:
+      variant_bitrate : 0
+[hls @ 0x562586fa2b80] Skip ('#EXT-X-VERSION:4')
+[hls @ 0x562586fa2b80] Opening 'https://d1l66zlxaqpl1u.cloudfront.net/wp-gray/POOL/20261013/6acd898c9927741454ab4af5/t_4293f0e81468407c9826e042e21aafba_name_BHDN_PO_143FR_DC__TRUMP___ABSOLUTEL_9077f42f_2d36_47b6_b3be_151d9a65528a/hlsv4_master_audio-160-v4_00001.aac' for reading
+[hls @ 0x562586fa2b80] Opening 'https://d1l66zlxaqpl1u.cloudfront.net/wp-gray/POOL/20261013/6acd898c9927741454ab4af5/t_4293f0e81468407c9826e042e21aafba_name_BHDN_PO_143FR_DC__TRUMP___ABSOLUTEL_9077f42f_2d36_47b6_b3be_151d9a65528a/hlsv4_master_audio-160-v4_00002.aac' for reading
+Input #1, hls, from 'https://d1l66zlxaqpl1u.cloudfront.net/wp-gray/POOL/20261013/6acd898c9927741454ab4af5/t_4293f0e81468407c9826e042e21aafba_name_BHDN_PO_143FR_DC__TRUMP___ABSOLUTEL_9077f42f_2d36_47b6_b3be_151d9a65528a/hlsv4_master_audio-160-v4.m3u8':
+  Duration: 00:00:11.96, start: 2.030444, bitrate: 0 kb/s
+  Program 0 
+    Metadata:
+      variant_bitrate : 0
+  Stream #1:0: Audio: aac (LC), 44100 Hz, stereo, fltp, 161 kb/s
+    Metadata:
+      variant_bitrate : 0
+      id3v2_priv.com.apple.streaming.transportStreamTimestamp: \x00\x00\x00\x00\x00\x02\xc9\xd4
+      id3v2_priv.com.elementaltechnologies.timestamp.utc: 2026-10-13T00:00:00Z
+Output #0, mp4, to 'file:/tmp/dl_2.mp4.part':
+  Metadata:
+    encoder         : Lavf60.16.100
+  Stream #0:0: Video: h264 (High) (avc1 / 0x31637661), yuv420p, 1280x720 [SAR 1:1 DAR 16:9], q=2-31, 29.97 fps, 29.97 tbr, 90k tbn
+    Metadata:
+      variant_bitrate : 0
+  Stream #0:1: Audio: aac (LC) (mp4a / 0x6134706D), 44100 Hz, stereo, fltp, 161 kb/s
+    Metadata:
+      variant_bitrate : 0
+      id3v2_priv.com.apple.streaming.transportStreamTimestamp: \x00\x00\x00\x00\x00\x02\xc9\xd4
+      id3v2_priv.com.elementaltechnologies.timestamp.utc: 2026-10-13T00:00:00Z
+Stream mapping:
+  Stream #0:0 -> #0:0 (copy)
+  Stream #1:0 -> #0:1 (copy)
+Press [q] to stop, [?] for help
+size=       0kB time=-00:00:00.06 bitrate=  -0.0kbits/s speed=N/A    [out#0/mp4 @ 0x5625872d5800] video:4910kB audio:234kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: 0.204600%
+size=    5154kB time=00:00:11.93 bitrate=3537.6kbits/s speed= 101x    
+[download] 100% of    5.03MiB in 00:00:01 at 2.62MiB/s

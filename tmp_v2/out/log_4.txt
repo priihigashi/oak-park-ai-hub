@@ -1,15 +1,96 @@
-[youtube:search] Extracting URL: ytsearch1:Thom Tillis livestream execution beyond disgusting
-[download] Downloading playlist: Thom Tillis livestream execution beyond disgusting
-[youtube:search] query "Thom Tillis livestream execution beyond disgusting": Downloading web client config
-[youtube:search] query "Thom Tillis livestream execution beyond disgusting" page 1: Downloading API JSON
+[cbsnews] Extracting URL: https://www.cbsnews.com/news/trump-fort-hood-shooter-nidal-hasan-execution-live-stream/
+[cbsnews] trump-fort-hood-shooter-nidal-hasan-execution-live-stream: Downloading webpage
+[download] Downloading playlist: Trump calls off plan to livestream Fort Hood shooter's execution, says people "would rather not watch him die"
 [info] Writing playlist metadata as JSON to: /tmp/dl_4.info.json
-[youtube:search] Playlist Thom Tillis livestream execution beyond disgusting: Downloading 1 items of 1
+[cbsnews] Playlist Trump calls off plan to livestream Fort Hood shooter's execution, says people "would rather not watch him die": Downloading 1 items of 1
 [download] Downloading item 1 of 1
-[youtube] Extracting URL: https://www.youtube.com/watch?v=9RLGQRjXino
-[youtube] 9RLGQRjXino: Downloading webpage
-WARNING: [youtube] No supported JavaScript runtime could be found. Only deno is enabled by default; to use another runtime add  --js-runtimes RUNTIME[:PATH]  to your command/config. YouTube extraction without a JS runtime has been deprecated, and some formats may be missing. See  https://github.com/yt-dlp/yt-dlp/wiki/EJS  for details on installing one
-[youtube] 9RLGQRjXino: Downloading visionos player API JSON
-WARNING: [youtube] No title found in player responses; falling back to title from initial data. Other metadata may also be missing
-ERROR: [youtube] 9RLGQRjXino: Sign in to confirm you’re not a bot. This helps protect our community. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies. Also see  https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies  for tips on effectively exporting YouTube cookies
+[cbsnews:embed] Extracting URL: https://www.cbsnews.com/embed/video/?optanonConsent=0&amp;v=4f1d42c66c57675f2171bdcbf03a043617929...Ctgvr%2F3emnfCnZbP4H
+[cbsnews:embed] 6c972680-c843-4e3a-b78c-1435998d30d2: Downloading m3u8 information
+[info] 6c972680-c843-4e3a-b78c-1435998d30d2: Downloading 1 format(s): hls-2232+hls-audio_aac-English
+[info] 6c972680-c843-4e3a-b78c-1435998d30d2: Downloading 1 time ranges: 0.0-300.0
+[info] Writing video metadata as JSON to: /tmp/dl_4.info.json
+[download] Destination: /tmp/dl_4.mp4
+mime type is not rfc8216 compliant
+[hls @ 0x558d1dc652c0] Skip ('#EXT-X-VERSION:6')
+[hls @ 0x558d1dc652c0] Skip ('## Generated with https://github.com/shaka-project/shaka-packager version v3.9.3.1-28d5f0e-release')
+[hls @ 0x558d1dc652c0] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_2100/seg_1.ts' for reading
+[hls @ 0x558d1dc652c0] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_2100/seg_2.ts' for reading
+Input #0, hls, from 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_2100/stream.m3u8':
+  Duration: 00:02:00.65, start: 0.100000, bitrate: 0 kb/s
+  Program 0 
+    Metadata:
+      variant_bitrate : 0
+  Stream #0:0: Video: h264 (High) ([27][0][0][0] / 0x001B), yuv420p(tv, bt709), 1280x720 [SAR 1:1 DAR 16:9], 29.97 fps, 29.97 tbr, 90k tbn
+    Metadata:
+      variant_bitrate : 0
+mime type is not rfc8216 compliant
+[hls @ 0x558d1e2d77c0] Skip ('#EXT-X-VERSION:6')
+[hls @ 0x558d1e2d77c0] Skip ('## Generated with https://github.com/shaka-project/shaka-packager version v3.9.3.1-28d5f0e-release')
+[hls @ 0x558d1e2d77c0] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_en-US_4896470_aac_128/seg_1.aac' for reading
+[hls @ 0x558d1e2d77c0] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_en-US_4896470_aac_128/seg_2.aac' for reading
+Input #1, hls, from 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_en-US_4896470_aac_128/stream.m3u8':
+  Duration: 00:02:00.71, start: 0.100000, bitrate: 0 kb/s
+  Program 0 
+    Metadata:
+      variant_bitrate : 0
+  Stream #1:0: Audio: aac (LC), 48000 Hz, stereo, fltp, 133 kb/s
+    Metadata:
+      variant_bitrate : 0
+      id3v2_priv.com.apple.streaming.transportStreamTimestamp: \x00\x00\x00\x00\x00\x00#(
+Output #0, mp4, to 'file:/tmp/dl_4.mp4.part':
+  Metadata:
+    encoder         : Lavf60.16.100
+  Stream #0:0: Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709), 1280x720 [SAR 1:1 DAR 16:9], q=2-31, 29.97 fps, 29.97 tbr, 90k tbn
+    Metadata:
+      variant_bitrate : 0
+  Stream #0:1: Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 133 kb/s
+    Metadata:
+      variant_bitrate : 0
+      id3v2_priv.com.apple.streaming.transportStreamTimestamp: \x00\x00\x00\x00\x00\x00#(
+Stream mapping:
+  Stream #0:0 -> #0:0 (copy)
+  Stream #1:0 -> #0:1 (copy)
+Press [q] to stop, [?] for help
+size=       0kB time=-00:00:00.06 bitrate=  -0.0kbits/s speed=N/A    [https @ 0x558d1dc75040] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_2100/seg_3.ts' for reading
+[https @ 0x558d1e683ec0] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_en-US_4896470_aac_128/seg_3.aac' for reading
+[https @ 0x558d1dfa4640] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_2100/seg_4.ts' for reading
+[https @ 0x558d1ea2de00] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_en-US_4896470_aac_128/seg_4.aac' for reading
+[https @ 0x558d1dc75040] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_2100/seg_5.ts' for reading
+[https @ 0x558d1e683ec0] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_en-US_4896470_aac_128/seg_5.aac' for reading
+[https @ 0x558d1ea2de00] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_en-US_4896470_aac_128/seg_6.aac' for reading
+[https @ 0x558d1dfa4640] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_2100/seg_6.ts' for reading
+[https @ 0x558d1dc75040] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_2100/seg_7.ts' for reading
+[https @ 0x558d1e683ec0] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_en-US_4896470_aac_128/seg_7.aac' for reading
+size=    5632kB time=00:00:29.93 bitrate=1541.5kbits/s speed=59.5x    [https @ 0x558d1dfa4640] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_2100/seg_8.ts' for reading
+[https @ 0x558d1ea2de00] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_en-US_4896470_aac_128/seg_8.aac' for reading
+[https @ 0x558d1dc75040] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_2100/seg_9.ts' for reading
+[https @ 0x558d1e683ec0] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_en-US_4896470_aac_128/seg_9.aac' for reading
+[https @ 0x558d1dfa4640] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_2100/seg_10.ts' for reading
+[https @ 0x558d1ea2de00] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_en-US_4896470_aac_128/seg_10.aac' for reading
+[https @ 0x558d1dc75040] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_2100/seg_11.ts' for reading
+[https @ 0x558d1e683ec0] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_en-US_4896470_aac_128/seg_11.aac' for reading
+size=   12800kB time=00:00:57.66 bitrate=1818.4kbits/s speed=56.2x    [https @ 0x558d1ea2de00] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_en-US_4896470_aac_128/seg_12.aac' for reading
+[https @ 0x558d1dfa4640] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_2100/seg_12.ts' for reading
+[https @ 0x558d1e683ec0] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_en-US_4896470_aac_128/seg_13.aac' for reading
+[https @ 0x558d1dc75040] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_2100/seg_13.ts' for reading
+[https @ 0x558d1ea2de00] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_en-US_4896470_aac_128/seg_14.aac' for reading
+[https @ 0x558d1dfa4640] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_2100/seg_14.ts' for reading
+[https @ 0x558d1e683ec0] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_en-US_4896470_aac_128/seg_15.aac' for reading
+[https @ 0x558d1dc75040] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_2100/seg_15.ts' for reading
+[https @ 0x558d1dfa4640] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_2100/seg_16.ts' for reading
+[https @ 0x558d1ea2de00] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_en-US_4896470_aac_128/seg_16.aac' for reading
+[https @ 0x558d1dc75040] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_2100/seg_17.ts' for reading
+[https @ 0x558d1e683ec0] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_en-US_4896470_aac_128/seg_17.aac' for reading
+[https @ 0x558d1ea2de00] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_en-US_4896470_aac_128/seg_18.aac' for reading
+[https @ 0x558d1dfa4640] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_2100/seg_18.ts' for reading
+size=   24320kB time=00:01:36.00 bitrate=2075.3kbits/s speed=56.5x    [https @ 0x558d1e683ec0] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_en-US_4896470_aac_128/seg_19.aac' for reading
+[https @ 0x558d1dc75040] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_2100/seg_19.ts' for reading
+[https @ 0x558d1ea2de00] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_en-US_4896470_aac_128/seg_20.aac' for reading
+[https @ 0x558d1dfa4640] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_2100/seg_20.ts' for reading
+[https @ 0x558d1e683ec0] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_en-US_4896470_aac_128/seg_21.aac' for reading
+[https @ 0x558d1dc75040] Opening 'https://prod.vodvideo.cbsnews.com/cbsnews/vr/hls/4896470_hls/CBSN_fusion_35846_1_trump-says-execution-of-fort-hood-shooter-nidal-hasan-will-not-livestreamed_video_2100/seg_21.ts' for reading
+[out#0/mp4 @ 0x558d1f05e3c0] video:29880kB audio:1925kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: 0.281020%
+size=   31895kB time=00:02:00.68 bitrate=2165.0kbits/s speed=61.9x    
+[download] 100% of   31.15MiB in 00:00:02 at 12.93MiB/s
 [info] Writing updated playlist metadata as JSON to: /tmp/dl_4.info.json
-[download] Finished downloading playlist: Thom Tillis livestream execution beyond disgusting
+[download] Finished downloading playlist: Trump calls off plan to livestream Fort Hood shooter's execution, says people "would rather not watch him die"
