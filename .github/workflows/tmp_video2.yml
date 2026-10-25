@@ -23,12 +23,13 @@ jobs:
           for q in "${Q[@]}"; do
             [ -z "$q" ] && continue
             n=$((n+1))
+            sec="*0-300"; case "$q" in *"|"*) sec="${q#*|}"; q="${q%%|*}";; esac
             yt-dlp --no-playlist -f "bv*[height<=720]+ba/b[height<=720]/b" --merge-output-format mp4 \
-              --download-sections "*0-300" --write-info-json -o "/tmp/dl_$n.%(ext)s" "$q" > tmp_v2/out/log_$n.txt 2>&1 < /dev/null || true
+              --download-sections "$sec" --write-info-json -o "/tmp/dl_$n.%(ext)s" "$q" > tmp_v2/out/log_$n.txt 2>&1 < /dev/null || true
             if [ -f /tmp/dl_$n.mp4 ]; then
-              ffmpeg -v error -y -i /tmp/dl_$n.mp4 -vf "scale=-2:540" -c:v libx264 -crf 30 -preset veryfast -c:a aac -b:a 96k tmp_v2/out/v$n.mp4
-              python3 -c "import json,sys;d=json.load(open('/tmp/dl_$n.info.json'));json.dump({k:d.get(k) for k in ['title','uploader','channel','webpage_url','duration','upload_date']},open('tmp_v2/out/v$n.json','w'))" || true
-              ffmpeg -v error -y -i tmp_v2/out/v$n.mp4 -ac 1 -ar 16000 /tmp/a$n.wav
+              ffmpeg -v error -y -i /tmp/dl_$n.mp4 -vf "scale=-2:540" -c:v libx264 -crf 30 -preset veryfast -c:a aac -b:a 96k tmp_v2/out/m$n.mp4
+              python3 -c "import json,sys;d=json.load(open('/tmp/dl_$n.info.json'));json.dump({k:d.get(k) for k in ['title','uploader','channel','webpage_url','duration','upload_date']},open('tmp_v2/out/m$n.json','w'))" || true
+              ffmpeg -v error -y -i tmp_v2/out/m$n.mp4 -ac 1 -ar 16000 /tmp/a$n.wav
               python3 - "$n" <<'PY'
           import json,sys
           from faster_whisper import WhisperModel
@@ -36,7 +37,7 @@ jobs:
           m=WhisperModel("small.en",device="cpu",compute_type="int8")
           segs,_=m.transcribe(f"/tmp/a{n}.wav",word_timestamps=True,language="en")
           out=[{"w":w.word.strip(),"s":round(w.start,2),"e":round(w.end,2)} for s in segs for w in s.words]
-          json.dump(out,open(f"tmp_v2/out/w{n}.json","w"))
+          json.dump(out,open(f"tmp_v2/out/mw{n}.json","w"))
           PY
             fi
           done
