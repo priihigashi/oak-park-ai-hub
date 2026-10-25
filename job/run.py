@@ -106,7 +106,7 @@ if J.get('mark'):
     for k,u in J['mark'].items():
         open(f'raw_{k}.mp3','wb').write(requests.get(u).content)
         sh(f'ffmpeg -y -loglevel error -i raw_{k}.mp3 -af "silenceremove=start_periods=1:start_threshold=-50dB,areverse,silenceremove=start_periods=1:start_threshold=-50dB,areverse,atempo=1.2" -ar 44100 -ac 1 -b:a 128k out/mark/{k}.mp3')
-        segs,_=m.transcribe(f'out/mark/{k}.mp3',language='pt',word_timestamps=True,initial_prompt=J['text'][k])
+        segs,_=m.transcribe(f'out/mark/{k}.mp3',language='pt',word_timestamps=True,condition_on_previous_text=False,vad_filter=True)
         words=[{'w':w.word.strip(),'s':round(w.start,3),'e':round(w.end,3)} for s in segs for w in s.words]
         json.dump(words,open(f'out/mark/{k}.json','w'),ensure_ascii=False)
 
