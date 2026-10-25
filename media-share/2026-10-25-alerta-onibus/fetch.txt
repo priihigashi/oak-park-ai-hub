@@ -1,5 +1,6 @@
-bruno_reis|wiki:Bruno Reis
-ricardo_nunes|wiki:Ricardo Nunes
-silvio_mendes|wiki:Sílvio Mendes
-hana_ghassan|wiki:Hana Ghassan
-leo_bezerra|wiki:Léo Bezerra
+silvio_mendes|wikis:Sílvio Mendes prefeito Teresina
+leo_bezerra|wikis:Léo Bezerra João Pessoa vice-prefeito
+pablo_souza|og:https://www.metropoles.com/brasil/saiba-quem-e-pablo-souza-secretario-baiano-com-pedido-de-prisao-pelo-tre
+silvio_og|og:https://www.cnnbrasil.com.br/eleicoes/prefeito-de-teresina-fala-a-cnn-apos-ser-eleito-no-primeiro-turno/
+leo_og|og:https://jornaldaparaiba.com.br/politica/pleno-poder/conversa-com-joao-deve-definir-futuro-de-leo-no-psb-estou-de-malas-prontas-para-ir-embora
+ref_transcript|whisper:media-share/2026-10-25-alerta-onibus/got/ref_reel.mp4
