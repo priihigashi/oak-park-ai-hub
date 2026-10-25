@@ -1,5 +1,4 @@
 ref2_reel|https://www.instagram.com/reel/De7y1qIBER0/
-pablo_souza|og:https://exame.com/brasil/justica-manda-prender-secretario-de-salvador-por-retencao-de-onibus-no-2o-turno/
-pablo_souza2|og:https://www.brasildefato.com.br/2026/10/25/tre-ba-ordena-prisao-de-secretario-de-transportes-de-salvador-por-falta-de-onibus-no-2o-turno/
 ref_transcript|whisper:media-share/2026-10-25-alerta-onibus/got/ref_reel.mp4
+ref2b|https://www.instagram.com/p/De7y1qIBER0/
 ref2_transcript|whisper:media-share/2026-10-25-alerta-onibus/got/ref2_reel.mp4
