@@ -1,6 +1,5 @@
-silvio_mendes|wikis:Sílvio Mendes prefeito Teresina
-leo_bezerra|wikis:Léo Bezerra João Pessoa vice-prefeito
-pablo_souza|og:https://www.metropoles.com/brasil/saiba-quem-e-pablo-souza-secretario-baiano-com-pedido-de-prisao-pelo-tre
-silvio_og|og:https://www.cnnbrasil.com.br/eleicoes/prefeito-de-teresina-fala-a-cnn-apos-ser-eleito-no-primeiro-turno/
-leo_og|og:https://jornaldaparaiba.com.br/politica/pleno-poder/conversa-com-joao-deve-definir-futuro-de-leo-no-psb-estou-de-malas-prontas-para-ir-embora
+ref2_reel|https://www.instagram.com/reel/De7y1qIBER0/
+pablo_souza|og:https://exame.com/brasil/justica-manda-prender-secretario-de-salvador-por-retencao-de-onibus-no-2o-turno/
+pablo_souza2|og:https://www.brasildefato.com.br/2026/10/25/tre-ba-ordena-prisao-de-secretario-de-transportes-de-salvador-por-falta-de-onibus-no-2o-turno/
 ref_transcript|whisper:media-share/2026-10-25-alerta-onibus/got/ref_reel.mp4
+ref2_transcript|whisper:media-share/2026-10-25-alerta-onibus/got/ref2_reel.mp4

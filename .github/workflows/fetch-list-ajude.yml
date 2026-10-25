@@ -25,16 +25,7 @@ jobs:
               wiki:*) t="${url#wiki:}"; img=$(curl -fsSL -A "Mozilla/5.0 (priihigashi bot)" "https://pt.wikipedia.org/w/api.php?action=query&format=json&prop=pageimages&piprop=original&redirects=1&titles=$(python3 -c "import urllib.parse,sys;print(urllib.parse.quote(sys.argv[1]))" "$t")" | python3 -c "import json,sys;d=json.load(sys.stdin);print(next(iter(d['query']['pages'].values())).get('original',{}).get('source',''))"); echo "$name $img" >> $D/got/log.txt; [ -n "$img" ] && curl -fsSL -A "Mozilla/5.0 (priihigashi bot)" -o "$D/got/$name.${img##*.}" "$img" || echo "FAIL $name" >> $D/got/log.txt ;;
               wikis:*) q="${url#wikis:}"; img=$(curl -fsSL -A "Mozilla/5.0 (priihigashi bot)" "https://pt.wikipedia.org/w/api.php?action=query&format=json&generator=search&gsrlimit=1&prop=pageimages&piprop=original&gsrsearch=$(python3 -c "import urllib.parse,sys;print(urllib.parse.quote(sys.argv[1]))" "$q")" | python3 -c "import json,sys;d=json.load(sys.stdin);print(next(iter(d['query']['pages'].values())).get('original',{}).get('source',''))" ); echo "$name $img" >> $D/got/log.txt; [ -n "$img" ] && curl -fsSL -A "Mozilla/5.0 (priihigashi bot)" -o "$D/got/$name.img" "$img" || echo "FAIL $name" >> $D/got/log.txt ;;
               og:*) pg="${url#og:}"; img=$(curl -fsSL -A "Mozilla/5.0" "$pg" | python3 -c "import re,sys,html;t=sys.stdin.read();m=re.search(r'<meta[^>]+property=[\"\']og:image[\"\'][^>]+content=[\"\']([^\"\']+)',t) or re.search(r'content=[\"\']([^\"\']+)[\"\'][^>]+property=[\"\']og:image',t);print(html.unescape(m.group(1)) if m else '')"); echo "$name $img" >> $D/got/log.txt; [ -n "$img" ] && curl -fsSL -A "Mozilla/5.0" -o "$D/got/$name.img" "$img" || echo "FAIL $name" >> $D/got/log.txt ;;
-              whisper:*) f="${url#whisper:}"; pip install -q faster-whisper && python3 -c "
-          from faster_whisper import WhisperModel
-          import json,sys
-          m=WhisperModel('small',compute_type='int8')
-          segs,_=m.transcribe(sys.argv[1],language='pt',word_timestamps=True)
-          out=[]
-          for s in segs:
-            out.append({'start':s.start,'end':s.end,'text':s.text,'words':[{'w':w.word,'s':w.start,'e':w.end} for w in s.words]})
-          json.dump(out,open(sys.argv[2],'w'),ensure_ascii=False)
-          " "$f" "$D/got/$name.json" || echo "FAIL $name" >> $D/got/log.txt ;;
+              whisper:*) f="${url#whisper:}"; pip install -q faster-whisper; python3 $D/wh.py "$f" "$D/got/$name.json" || echo "FAIL $name" >> $D/got/log.txt ;;
               *instagram.com*) yt-dlp -q --cookies /tmp/ig.txt -f "b[ext=mp4]/b" -o "$D/got/$name.%(ext)s" "$url" || echo "FAIL $name" >> $D/got/log.txt ;;
               *) curl -fsSL -A "Mozilla/5.0" -o "$D/got/$name" "$url" || echo "FAIL $name" >> $D/got/log.txt ;;
             esac
