@@ -1,15 +1,39 @@
-{"voice":"pt-BR-ThalitaMultilingualNeural","rate":"+10%","scenes":[
-{"id":"c2","text":"Esse vídeo tá rodando. Diz que um candidato a presidente tem fotos com um coronel condenado por estuprar uma criança de 2 anos. Checamos. As fotos existem, e o candidato é o Flávio Bolsonaro."},
-{"id":"c3","text":"O coronel é Pedro Chavarri, da reserva da PM do Rio. Em setembro de 2016, foi preso em flagrante com uma menina de 2 anos, nua, no carro dele. E ainda tentou subornar os policiais. Em 2017, foi condenado a 11 anos de prisão."},
-{"id":"c4","text":"E não era a primeira vez. Em 1993, ainda capitão, ele foi preso em Bangu, suspeito de tráfico de bebês, pegando um bebê de 4 meses dopado com calmante. Ele dizia pras mães pobres que trabalhava pra Igreja. Nesse caso, não foi condenado."},
-{"id":"c5","text":"Agora, as fotos. Em 2012, o Flávio era deputado estadual, e o coronel presidia a Caixa Beneficente da PM. O boletim da própria Caixa publicou uma foto dos dois num evento. Tem uma segunda foto, de origem desconhecida. As duas saíram no The Intercept, em 2016."},
-{"id":"c6","text":"Na época, o Flávio era candidato a prefeito do Rio. A resposta dele foi ameaçar processar quem publicasse as fotos."},
-{"id":"c7","text":"Então, o que é verdade? As fotos existem. O coronel foi condenado. O vídeo erra o ano: foi 1993, não 1983. E nenhuma reportagem mostra que o Flávio sabia dos crimes ou participou deles."},
-{"id":"c8","text":"Mas, em 2012, o coronel já tinha sido preso por suspeita de tráfico de bebês. Quem julga é a Justiça. Quem vota é você. Pesquisa antes do dia 25."}
+{
+"voice": "pt-BR-ThalitaMultilingualNeural",
+"rate": "+18%",
+"scenes": [
+{
+"id": "c2",
+"text": "Esse vídeo tá rodando. Diz que um candidato a presidente tem fotos com um coronel condenado por estuprar uma criança de 2 anos. Checamos. As fotos existem, e o candidato é o Flávio Bolsonaro."
+},
+{
+"id": "c3",
+"text": "O coronel é Pedro Chavarri, da reserva da PM do Rio. Em 2016, foi preso em flagrante com uma menina de 2 anos, nua, no carro dele, e tentou subornar os policiais. Em 2017, foi condenado a 11 anos."
+},
+{
+"id": "c4",
+"text": "E não era a primeira vez. Em 1993, ainda capitão, foi preso em Bangu, suspeito de tráfico de bebês, com um bebê de 4 meses dopado. Ele dizia pras mães pobres que trabalhava pra Igreja. Nesse caso, não foi condenado."
+},
+{
+"id": "c5",
+"text": "Agora, as fotos. Em 2012, Flávio era deputado estadual, e o coronel presidia a Caixa Beneficente da PM. O boletim da Caixa publicou uma foto dos dois num evento. Uma segunda foto tem origem desconhecida. As duas saíram no The Intercept em 2016."
+},
+{
+"id": "c6",
+"text": "Na época, o Flávio era candidato a prefeito do Rio. A resposta dele foi ameaçar processar quem publicasse as fotos."
+},
+{
+"id": "c7",
+"text": "Então, o que é verdade? As fotos existem. O coronel foi condenado. O vídeo erra o ano: foi 1993, não 1983. E nenhuma reportagem mostra que o Flávio sabia dos crimes ou participou."
+},
+{
+"id": "c8",
+"text": "Mas, em 2012, o coronel já tinha sido preso por suspeita de tráfico de bebês. Quem julga é a Justiça. Quem vota é você. Pesquisa antes do dia 25."
+}
 ],
-"reel":"https://www.instagram.com/reel/De5d8uzyN_J/",
-"drive_file_id":"1JMVqoIBrDqU-a6m7hBEhjnJz7708gBwN",
-"photo_pages":[
+"reel": "https://www.instagram.com/reel/De5d8uzyN_J/",
+"drive_file_id": "1JMVqoIBrDqU-a6m7hBEhjnJz7708gBwN",
+"photo_pages": [
 "https://www.metropoles.com/brasil/coronel-acusado-de-estuprar-crianca-usava-remedios-para-dopar-vitimas",
 "https://www.metropoles.com/brasil/mulher-que-entregou-crianca-a-coronel-detido-por-estupro-e-presa",
 "https://www.gazetadopovo.com.br/vida-e-cidadania/coronel-e-flagrado-com-menina-de-2-anos-nua-e-tenta-subornar-policiais-para-nao-ser-preso-ag6wwxmb60vs2um1im8vld5hi",
@@ -20,4 +44,5 @@
 "https://catracalivre.com.br/cidadania/coronel-da-pm-e-preso-acusado-de-estuprar-menina-de-2-anos/",
 "https://www.bahianoticias.com.br/noticia/195928-coronel-da-pm-e-preso-suspeito-de-estuprar-menina-de-2-anos-crianca-estava-nua-em-carro",
 "https://observatorio3setor.org.br/coronel-que-estuprou-crianca-de-2-anos-recebe-salario-de-34-mil-todo-mes/"
-]}
+]
+}

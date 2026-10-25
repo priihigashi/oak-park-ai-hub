@@ -19,6 +19,8 @@ for sc in J['scenes']:
     try: asyncio.run(tts(sc)); L('tts ok',sc['id'])
     except Exception as e: L('tts fail',sc['id'],traceback.format_exc())
 # 2 video
+if os.path.exists('job/tts_only'):
+    L('DONE tts only'); sys.exit(0)
 ok=sh(f"yt-dlp -f 'bv*+ba/b' --merge-output-format mp4 -o orig.mp4 '{J['reel']}'")==0 and os.path.exists('orig.mp4')
 if not ok:
     try:
