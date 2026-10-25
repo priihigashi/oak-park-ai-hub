@@ -1,26 +1,90 @@
 {
-  "drive_id": "1uNnx2AriJp3X6rUx6hSfNBWvY7RAgrmu",
-  "voice": "pt-BR-ThalitaMultilingualNeural",
-  "rate": "+14%",
-  "clips": [
-    {"id": "c1", "a": 0.0, "b": 8.4, "speed": 1.0},
-    {"id": "c2", "a": 40.24, "b": 45.12, "speed": 1.0},
-    {"id": "c3", "a": 52.92, "b": 69.88, "speed": 1.12},
-    {"id": "c4a", "a": 78.44, "b": 86.08, "speed": 1.1},
-    {"id": "c4b", "a": 104.2, "b": 112.72, "speed": 1.1},
-    {"id": "c5", "a": 118.84, "b": 124.56, "speed": 1.05}
-  ],
-  "narr": [
-    {"id": "n1", "text": "A comida ficou cara por culpa do governo atual. É o que diz a campanha do Flávio. Esse vídeo checou as duas campanhas, mas esqueceu escolhas do governo Bolsonaro. Eu completo no caminho."},
-    {"id": "n2", "text": "Verdade. Comida em casa, mesmo período nos dois mandatos. Com Bolsonaro, subiu quase quatro vezes mais."},
-    {"id": "n3", "text": "Pandemia e guerra pesaram no mundo todo. O que ele não contou é o que o governo Bolsonaro fez aqui dentro. Um: a Conab, que guarda comida pra soltar quando o preço sobe, estava com os estoques quase zerados desde o Temer. Bolsonaro não refez os estoques e ainda fechou armazéns."},
-    {"id": "n4", "text": "Dois: manteve a gasolina e o diesel presos ao preço de fora, em dólar. Em junho de 2022, o diesel bateu recorde, quase 7 reais e 70 o litro. Diesel caro vira frete caro, e frete caro vira comida cara. Quem acabou com essa regra foi o governo atual, em 2023."},
-    {"id": "n5", "text": "Três: em 2020, o arroz no campo subiu cerca de 120%. E o imposto pra trazer arroz de fora só foi zerado em setembro, com o preço já lá em cima."},
-    {"id": "n6", "text": "Ele acerta de novo. Sobra menos dinheiro no fim do mês, por dívidas e por uma comida que subiu antes de 2023. Culpar o governo atual por um preço que ele herdou e freou é falso."},
-    {"id": "n7", "text": "Pandemia e guerra pesaram, sim. Mas escolhas do governo Bolsonaro também deixaram a sua comida mais cara."}
-  ],
-  "heads": [
-    {"id": "flavio", "wiki": "Flávio Bolsonaro"},
-    {"id": "jair", "wiki": "Jair Bolsonaro"}
-  ]
+ "drive_id": "1uNnx2AriJp3X6rUx6hSfNBWvY7RAgrmu",
+ "voice": "pt-BR-ThalitaMultilingualNeural",
+ "rate": "+14%",
+ "clips": [
+  {
+   "id": "c1",
+   "a": 0.0,
+   "b": 8.4,
+   "speed": 1.0
+  },
+  {
+   "id": "c2",
+   "a": 40.24,
+   "b": 45.12,
+   "speed": 1.0
+  },
+  {
+   "id": "c3",
+   "a": 52.92,
+   "b": 69.88,
+   "speed": 1.12
+  },
+  {
+   "id": "c4a",
+   "a": 78.44,
+   "b": 86.08,
+   "speed": 1.1
+  },
+  {
+   "id": "c4b",
+   "a": 104.2,
+   "b": 112.72,
+   "speed": 1.1
+  },
+  {
+   "id": "c5",
+   "a": 118.84,
+   "b": 124.56,
+   "speed": 1.05
+  }
+ ],
+ "narr": [
+  {
+   "id": "n1",
+   "text": "A comida ficou cara por culpa do governo atual. É o que diz a campanha do Flávio. Esse vídeo checou as duas campanhas, mas esqueceu escolhas do governo Bolsonaro. Eu completo no caminho."
+  },
+  {
+   "id": "n2",
+   "text": "Verdade. Comida em casa, mesmo período nos dois mandatos. Com Bolsonaro, subiu quase quatro vezes mais."
+  },
+  {
+   "id": "n3",
+   "text": "Pandemia e guerra pesaram no mundo todo. O que ele não contou é o que o governo Bolsonaro fez aqui dentro. Um: a Conab, que guarda comida pra soltar quando o preço sobe, estava com os estoques quase zerados desde o Temer. Bolsonaro não refez os estoques e ainda fechou armazéns."
+  },
+  {
+   "id": "n4",
+   "text": "Dois: manteve a gasolina e o diesel presos ao preço de fora, em dólar. Em junho de 2022, o diesel bateu recorde, quase 7 reais e 70 o litro. Diesel caro vira frete caro, e frete caro vira comida cara. Quem acabou com essa regra foi o governo atual, em 2023."
+  },
+  {
+   "id": "n5",
+   "text": "Três: em 2020, o arroz no campo subiu cerca de 120%. E o imposto pra trazer arroz de fora só foi zerado em setembro, com o preço já lá em cima."
+  },
+  {
+   "id": "n6",
+   "text": "Ele acerta de novo. Sobra menos dinheiro no fim do mês, por dívidas e por uma comida que subiu antes de 2023. Culpar o governo atual por um preço que ele herdou e freou é falso."
+  },
+  {
+   "id": "n7",
+   "text": "Pandemia e guerra pesaram, sim. Mas escolhas do governo Bolsonaro também deixaram a sua comida mais cara."
+  }
+ ],
+ "heads": [
+  {
+   "id": "flavio",
+   "wiki": "Flávio Bolsonaro"
+  },
+  {
+   "id": "jair",
+   "wiki": "Jair Bolsonaro"
+  },
+  {
+   "id": "temer",
+   "wiki": "Michel Temer"
+  }
+ ],
+ "only": [
+  "heads"
+ ]
 }
