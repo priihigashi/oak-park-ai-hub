@@ -1,0 +1,7 @@
+bruno_reis https://upload.wikimedia.org/wikipedia/commons/b/b5/Bruno_Reis_%28foto_oficial_para_o_TSE%29.png?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=original
+ricardo_nunes https://upload.wikimedia.org/wikipedia/commons/0/00/Reuni%C3%A3o_com_o_Senhor_Ricardo_Nunes%2C_Prefeito_do_Munic%C3%ADpio_de_S%C3%A3o_Paulo_e_Secret%C3%A1rios_%28cropped%29.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=original
+silvio_mendes 
+FAIL silvio_mendes
+hana_ghassan https://upload.wikimedia.org/wikipedia/commons/5/58/2023-06-30_Medalha_da_Ordem_do_M%C3%A9rito_Dom_Pedro_II_09_%28Hana_Ghassan%29.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=original
+leo_bezerra 
+FAIL leo_bezerra
