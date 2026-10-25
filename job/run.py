@@ -11,6 +11,7 @@ def sh(c):
 
 # 1) video from Drive
 try:
+    if 'video' not in job.get('only',['video']): raise SystemExit
     from google.oauth2.credentials import Credentials
     from googleapiclient.discovery import build
     from googleapiclient.http import MediaIoBaseDownload
@@ -21,10 +22,11 @@ try:
     fh = io.FileIO('orig.mp4', 'wb'); d = MediaIoBaseDownload(fh, req); done = False
     while not done: _, done = d.next_chunk()
     fh.close(); L('downloaded', os.path.getsize('orig.mp4'))
-except Exception as e:
-    L('drive fail', repr(e))
+except BaseException as e:
+    L('drive skip/fail', repr(e))
 
-if os.path.exists('orig.mp4'):
+ONLY=job.get('only',['video','tts','heads'])
+if 'video' in ONLY and os.path.exists('orig.mp4'):
     sh('ffprobe -v error -show_entries stream=width,height,r_frame_rate,codec_type -show_entries format=duration -of compact orig.mp4 > out/probe.txt 2>&1')
     sh("ffmpeg -y -i orig.mp4 -vf fps=1/3,scale=180:-2,tile=8x6 -frames:v 1 out/sheet.jpg")
     sh("ffmpeg -y -ss 30 -i orig.mp4 -frames:v 1 -vf scale=540:-2 out/frame30.jpg")
@@ -64,7 +66,7 @@ async def tts(i, text, voice, rate):
             elif ch['type'] == 'WordBoundary':
                 words.append({'w': ch['text'], 's': ch['offset'] / 1e7, 'e': (ch['offset'] + ch['duration']) / 1e7})
     json.dump(words, open(f'{OUT}/{i}.json', 'w'), ensure_ascii=False)
-for n in job['narr']:
+for n in (job['narr'] if 'tts' in ONLY else []):
     try:
         asyncio.run(tts(n['id'], n['text'], job['voice'], job['rate']))
         L('tts ok', n['id'])
@@ -83,7 +85,7 @@ try:
     from rembg import remove, new_session
     import mediapipe as mp
     sess = new_session('isnet-general-use')
-    for h in job['heads']:
+    for h in (job['heads'] if 'heads' in ONLY else []):
         try:
             url = h.get('url') or wiki_img(h['wiki'])
             L('head src', h['id'], url)
@@ -104,13 +106,24 @@ try:
             grow = 1.06
             pts2 = ((pts - [cx, cy]) * grow + [cx, cy]).astype(np.int32)
             ear_y = (P(234)[1] + P(454)[1]) / 2
+            al = arr[:, :, 3]
+            ys, xs = np.where(al[:int(ear_y), :] > 128)
+            cand = np.concatenate([pts2, np.stack([xs, ys], 1).astype(np.int32)[::7]], 0)
+            hull = cv2.convexHull(cand)
             keep = np.zeros((H, Wd), np.uint8)
-            cv2.fillPoly(keep, [pts2], 255)
-            keep[:int(ear_y), :] = 255
+            cv2.fillConvexPoly(keep, hull, 255)
             chin = P(152)[1]
+            jaw = np.zeros((H, Wd), np.uint8)
+            cv2.fillPoly(jaw, [((pts - [cx, cy]) * 1.04 + [cx, cy]).astype(np.int32)], 255)
+            low = int((ear_y + chin) / 2)
+            keep[low:, :] = np.minimum(keep[low:, :], jaw[low:, :])
             keep[int(chin + 0.03 * fw):, :] = 0
-            keep = cv2.GaussianBlur(keep, (5, 5), 0)
-            a = (arr[:, :, 3].astype(np.float32) * keep.astype(np.float32) / 255).astype(np.uint8)
+            a = (al.astype(np.float32) * keep.astype(np.float32) / 255).astype(np.uint8)
+            n, lab, stats, _ = cv2.connectedComponentsWithStats((a > 40).astype(np.uint8), 8)
+            if n > 1:
+                big = 1 + int(np.argmax(stats[1:, cv2.CC_STAT_AREA]))
+                a[lab != big] = 0
+            a = cv2.GaussianBlur(a, (3, 3), 0)
             arr[:, :, 3] = a
             out = Image.fromarray(arr)
             bb = out.getbbox(); out = out.crop(bb)
