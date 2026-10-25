@@ -15,7 +15,7 @@ jobs:
       - uses: actions/setup-python@v5
         with: { python-version: '3.11' }
       - run: |
-          pip install -q "rembg[cpu]" pillow numpy && pip uninstall -y -q opencv-python opencv-python-headless opencv-contrib-python-headless; pip install -q --force-reinstall --no-deps opencv-python-headless
+          pip install -q "rembg[cpu]" pillow
           python3 tmp_v2/heads/heads.py > tmp_v2/heads/log.txt 2>&1 || true
           git config user.name bot && git config user.email bot@users.noreply.github.com
           git add tmp_v2/heads && git commit -m heads && for i in 1 2 3 4 5; do git pull --rebase -q && git push -q && break; sleep 5; done
