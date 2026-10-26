@@ -1,0 +1,23 @@
+name: tmp prorrogacao reel job
+on:
+  push:
+    branches: [tmp-prorrogacao]
+    paths: [job.json, tools/prorrog_job.py, .github/workflows/tmp_prorrogacao.yml]
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: tmp-prorrogacao }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install -q edge-tts "rembg[cpu]" pillow numpy "mediapipe==0.10.14" onnxruntime
+      - run: python tools/prorrog_job.py
+      - run: |
+          git config user.name "reel-bot"; git config user.email "reel-bot@users.noreply.github.com"
+          git add -f out
+          git commit -m "out: tts + heads" || echo nothing
+          git push origin HEAD:tmp-prorrogacao
