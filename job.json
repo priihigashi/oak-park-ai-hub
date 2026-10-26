@@ -3,28 +3,9 @@
  "rate": "+12%",
  "scenes": [
   {
-   "id": "sT",
-   "text": "Olha o relógio. À uma e vinte e dois da tarde, o PT pede mais tempo em três cidades da Bahia, onde faltou ônibus. Às três e cinquenta, a campanha do Flávio pede em dezessete cidades, por causa da chuva, e pede pra segurar o resultado. Às quatro e vinte e dois, o PT pede o país inteiro ao Supremo. Perto das cinco, Zanin manda estender até as sete."
-  },
-  {
    "id": "s05",
-   "text": "Zanin foi indicado pelo governo atual, e dá pra criticar a decisão. Mas quem aplicou foi o TSE, presidido por Nunes Marques, indicado por Bolsonaro. E a regra ficou assim: só votou depois das cinco quem estava numa seção que ainda não tinha fechado."
-  },
-  {
-   "id": "sZ",
-   "text": "Golpe igual à Venezuela? Lá, o governo nunca mostrou o resultado de cada urna. Aqui, o boletim de cada seção é público, qualquer um confere. E os ônibus adesivados em Salvador? Nenhuma reportagem, nenhuma foto. Sem prova. E quem cuida dos ônibus de Salvador é a prefeitura, do União Brasil, partido de direita."
-  },
-  {
-   "id": "sZ0",
-   "text": "E o Zema, que apoiou o Flávio, foi além."
+   "text": "E o Zanin não escolheu o caso. No Supremo, pedido novo vai pra um ministro por sorteio eletrônico, e caiu com ele. Dá pra criticar a decisão. Mas quem mandou não reabrir as seções que já tinham fechado foi o TSE de Kassio Nunes Marques, indicado pelo pai do Flávio. E mesmo assim, o Flávio reclamou."
   }
  ],
- "people": [
-  {
-   "id": "zema",
-   "wiki": [
-    "pt:Romeu_Zema"
-   ]
-  }
- ]
+ "people": []
 }
