@@ -3,28 +3,8 @@
  "rate": "+12%",
  "scenes": [
   {
-   "id": "s01",
-   "text": "Roubaram a eleição nas duas horas extras de votação. É o que dizem o Flávio, o Nikolas, o Zema e até gente nos Estados Unidos. Me dá um minuto que eu te mostro os dados."
-  },
-  {
-   "id": "s06",
-   "text": "Depois das cinco da tarde, entraram cerca de cinco mil votos no país inteiro. A diferença foi de quatro milhões e quatrocentos mil. E de onde vem isso? Cada urna grava a hora de cada voto, e esse arquivo é público no site do TSE. Um programador juntou tudo e abriu o código pra qualquer um conferir."
-  },
-  {
    "id": "sN",
-   "text": "O Nikolas Ferreira, do PL, postou que o governo atual ganhou onze milhões de votos do nada. A conta, com os números do TSE: nove milhões de votos de quem saiu da disputa no primeiro turno, mais cinco milhões de votos válidos a mais no segundo. Dá catorze. Dez vírgula seis foram pro governo atual, e três vírgula oito pro Flávio. A conta fecha."
-  },
-  {
-   "id": "sT",
-   "text": "E as duas horas extras? Os dois lados pediram. À uma e vinte e dois, o PT pediu na Bahia, onde faltou ônibus. Às três e cinquenta, a campanha do Flávio pediu em dezessete cidades, por causa da chuva. Às quatro e vinte e dois, o PT pediu o país todo no Supremo."
-  },
-  {
-   "id": "s05",
-   "text": "Perto das cinco, Zanin mandou estender até as sete. O caso caiu com ele por sorteio eletrônico, como todo pedido novo no Supremo. E quem mandou não reabrir as seções que já tinham fechado foi o TSE de Kassio Nunes Marques, indicado pelo pai do Flávio. E mesmo assim, o Flávio reclamou."
-  },
-  {
-   "id": "sZ",
-   "text": "Golpe igual à Venezuela? Lá, o governo nunca mostrou o resultado de cada urna. Aqui, o boletim de cada seção é público. E os ônibus? A prefeitura de Salvador, do União Brasil, divulgou imagens de homens colando adesivos do PT. Ninguém foi identificado. E a própria Justiça Eleitoral da Bahia mandou a prefeitura devolver os ônibus pra rua, e mandou prender o secretário de mobilidade por segurar a frota."
+   "text": "O Nikolas postou que, do primeiro pro segundo turno, o governo atual ganhou onze milhões de votos a mais, e que isso não tem explicação. Olha a conta, com os números do TSE. No primeiro turno, nove milhões de pessoas votaram em candidatos que saíram da disputa. No segundo turno, esses votos foram pra alguém. E quase cinco milhões de pessoas a mais votaram em alguém, porque mais gente foi votar e menos gente votou branco ou nulo. Somando, catorze milhões de votos pra dividir. Dez vírgula quatro milhões foram pro governo atual, e três vírgula sete, pro Flávio. Os dois cresceram. O governo atual cresceu mais."
   }
  ],
  "people": []
