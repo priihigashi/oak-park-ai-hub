@@ -3,9 +3,20 @@
  "rate": "+12%",
  "scenes": [
   {
-   "id": "s05",
-   "text": "E o Zanin não escolheu o caso. No Supremo, pedido novo vai pra um ministro por sorteio eletrônico, e caiu com ele. Dá pra criticar a decisão. Mas quem mandou não reabrir as seções que já tinham fechado foi o TSE de Kassio Nunes Marques, indicado pelo pai do Flávio. E mesmo assim, o Flávio reclamou."
+   "id": "s06",
+   "text": "E quase ninguém apareceu. Uma análise dos registros das urnas, com dados do TSE, achou cerca de cinco mil votos depois das cinco da tarde, no país inteiro. A diferença final foi de quatro milhões e quatrocentos mil votos."
+  },
+  {
+   "id": "sN",
+   "text": "Aí o Nikolas Ferreira, do PL, postou que o candidato do governo atual teve onze milhões de votos a mais, e que todos os votos dos outros candidatos teriam que ir pra ele. A conta é simples. No primeiro turno, cerca de nove milhões de votos foram pra quem saiu da disputa. No segundo, entraram cerca de cinco milhões de votos válidos a mais, porque mais gente votou e menos gente anulou. Somando, dá catorze milhões. O governo atual ficou com dez vírgula seis, e o Flávio, com três vírgula oito. A conta fecha."
   }
  ],
- "people": []
+ "people": [
+  {
+   "id": "nikolas",
+   "wiki": [
+    "pt:Nikolas_Ferreira"
+   ]
+  }
+ ]
 }
