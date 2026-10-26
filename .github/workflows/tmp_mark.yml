@@ -1,0 +1,23 @@
+name: tmp mark audio job
+on:
+  push:
+    branches: [tmp-prorrogacao]
+    paths: [mark.json, tools/mark_job.py, .github/workflows/tmp_mark.yml]
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: tmp-prorrogacao }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install -q faster-whisper
+      - run: python tools/mark_job.py
+      - run: |
+          git config user.name "reel-bot"; git config user.email "reel-bot@users.noreply.github.com"
+          git add -f out/mark
+          git commit -m "out: mark audio + words" || echo nothing
+          git pull --rebase origin tmp-prorrogacao && git push origin HEAD:tmp-prorrogacao
