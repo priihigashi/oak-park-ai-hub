@@ -1,0 +1,19 @@
+name: tmp tse job
+on:
+  push:
+    branches: [tmp-prorrogacao]
+    paths: [tools/tse_job.py, .github/workflows/tmp_tse.yml]
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: tmp-prorrogacao }
+      - run: python3 tools/tse_job.py
+      - run: |
+          git config user.name "reel-bot"; git config user.email "reel-bot@users.noreply.github.com"
+          git add -f out/tse
+          git commit -m "out: tse" || echo nothing
+          git pull --rebase origin tmp-prorrogacao && git push origin HEAD:tmp-prorrogacao
