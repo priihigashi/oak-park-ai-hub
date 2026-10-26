@@ -4,81 +4,54 @@
  "scenes": [
   {
    "id": "s01",
-   "text": "Estão espalhando que a eleição foi roubada nas duas horas extras de votação. Vamos aos fatos."
+   "text": "Estão dizendo que a eleição foi roubada nas duas horas extras de votação."
   },
   {
    "id": "s03",
-   "text": "Primeiro: os dois lados pediram mais tempo. A campanha do Flávio pediu às três e cinquenta da tarde, em dezessete cidades de São Paulo, Paraná e Santa Catarina, por causa da chuva. E ainda pediu pra segurar a divulgação do resultado."
+   "text": "Só que os dois lados pediram mais tempo. A campanha do Flávio pediu às três e cinquenta da tarde, em dezessete cidades do Sul e de São Paulo, por causa da chuva."
   },
   {
    "id": "s04",
-   "text": "A campanha do PT pediu primeiro em três cidades da Bahia, onde cortaram ônibus. Depois em mais nove estados. E às quatro e vinte e dois, pediu o país inteiro ao Supremo."
+   "text": "A do PT pediu primeiro na Bahia, onde cortaram ônibus. E às quatro e vinte e dois, pediu o país inteiro."
   },
   {
    "id": "s05",
-   "text": "O ministro Zanin, indicado pelo governo atual, deu duas horas pro Brasil todo. Dá pra criticar essa decisão. Mas o TSE, presidido por Nunes Marques, indicado por Bolsonaro, só deixou votar onde a seção ainda estava aberta."
+   "text": "O ministro Zanin, do Supremo, deu duas horas pro Brasil todo. Dá pra criticar. Mas o TSE, presidido por Nunes Marques, indicado por Bolsonaro, só deixou votar onde a seção ainda estava aberta."
   },
   {
    "id": "s06",
-   "text": "E quase ninguém apareceu. Numa seção, entraram três ou quatro pessoas nas duas horas. A diferença final foi de cerca de quatro milhões e quatrocentos mil votos. Pra virar isso em duas horas, precisaria de mais de trinta e seis mil votos por minuto, só pra um lado."
+   "text": "E quase ninguém apareceu. A diferença final foi de quatro milhões e quatrocentos mil votos. Pra virar isso em duas horas, seriam trinta e seis mil votos por minuto, só pra um lado."
   },
   {
    "id": "s07",
-   "text": "Agora o Flávio quer anular a eleição por causa da prorrogação. A mesma prorrogação que a campanha dele pediu."
+   "text": "Agora ele quer anular a mesma prorrogação que a campanha dele pediu."
   },
   {
    "id": "s08",
-   "text": "E tem americano jogando gasolina nisso. Donald Trump Júnior, filho do presidente americano, disse que se um governo conservador fizesse isso, a imprensa ia surtar. Só que quem aplicou a regra foi o TSE do ministro indicado por Bolsonaro, e a campanha do Flávio pediu a mesma coisa."
+   "text": "E tem americano jogando gasolina. O filho do presidente americano disse que, se fosse um governo conservador, a imprensa ia surtar. Só que quem aplicou a regra foi o TSE de um ministro indicado por Bolsonaro."
   },
   {
    "id": "s09",
-   "text": "Jim Hoft, do site Gateway Pundit, diz que estão roubando a eleição. Falso: os dois lados pediram, e o horário extra não chega nem perto da diferença."
+   "text": "Jim Hoft, do site Gateway Pundit, diz que estão roubando a eleição. Falso. Os dois lados pediram, e a conta não fecha."
   },
   {
    "id": "s10",
-   "text": "Mike Benz diz que o governo atual foi bancado com dinheiro da USAID. Sem prova. A agência foi desmontada em dois mil e vinte e cinco, e a lei brasileira proíbe dinheiro estrangeiro em campanha."
+   "text": "Mike Benz diz que dinheiro da USAID bancou o governo atual. Sem prova. E a lei proíbe dinheiro estrangeiro em campanha."
   },
   {
    "id": "s11",
-   "text": "Pete Marocco fala em um bilhão e meio de dólares. De novo, só a palavra dele, nenhum documento."
+   "text": "Pete Marocco fala em um bilhão e meio de dólares. Só a palavra dele."
   },
   {
    "id": "s12",
-   "text": "E um perfil com um milhão e trezentas mil visualizações diz que roubaram o Flávio igual roubaram o pai. Em dois mil e vinte e dois, nem a auditoria dos militares achou fraude. E o pai foi condenado por trama golpista."
+   "text": "E um perfil com um milhão e trezentas mil visualizações diz que roubaram o Flávio igual o pai. Em dois mil e vinte e dois, nem os militares acharam fraude. E o pai foi condenado por trama golpista."
   },
   {
    "id": "s13",
-   "text": "O povo votou, a diferença foi de milhões, e as duas campanhas pediram mais tempo. Esse é só o começo da emancipação da classe trabalhadora."
+   "text": "O povo votou. Esse é só o começo da emancipação da classe trabalhadora."
   }
  ],
  "people": [
-  {
-   "id": "flavio",
-   "wiki": [
-    "pt:Flávio_Bolsonaro",
-    "en:Flávio_Bolsonaro"
-   ]
-  },
-  {
-   "id": "zanin",
-   "wiki": [
-    "pt:Cristiano_Zanin",
-    "en:Cristiano_Zanin"
-   ]
-  },
-  {
-   "id": "nunes",
-   "wiki": [
-    "pt:Nunes_Marques",
-    "en:Kassio_Nunes_Marques"
-   ]
-  },
-  {
-   "id": "jair",
-   "wiki": [
-    "pt:Jair_Bolsonaro"
-   ]
-  },
   {
    "id": "hoft",
    "wiki": [
@@ -86,36 +59,6 @@
    ],
    "x": [
     "jimhoft"
-   ]
-  },
-  {
-   "id": "benz",
-   "wiki": [
-    "en:Mike_Benz"
-   ],
-   "x": [
-    "MikeBenzCyber"
-   ]
-  },
-  {
-   "id": "marocco",
-   "wiki": [
-    "en:Peter_Marocco"
-   ],
-   "x": [
-    "Petermarocco"
-   ]
-  },
-  {
-   "id": "trumpdaily",
-   "x": [
-    "TrumpDailyPosts"
-   ]
-  },
-  {
-   "id": "trumpjr",
-   "wiki": [
-    "en:Donald_Trump_Jr."
    ]
   }
  ]
