@@ -28,23 +28,23 @@
   },
   {
    "id": "s08",
-   "text": "E tem americano jogando gasolina nisso. Jim Hoft, do site Gateway Pundit, diz que estão roubando a eleição. Falso: os dois lados pediram, e o horário extra não chega nem perto da diferença."
+   "text": "E tem americano jogando gasolina nisso. Donald Trump Júnior, filho do presidente americano, disse que se um governo conservador fizesse isso, a imprensa ia surtar. Só que quem aplicou a regra foi o TSE do ministro indicado por Bolsonaro, e a campanha do Flávio pediu a mesma coisa."
   },
   {
    "id": "s09",
-   "text": "Mike Benz diz que o governo atual foi bancado com dinheiro da USAID. Sem prova. A agência foi desmontada em dois mil e vinte e cinco, e a lei brasileira proíbe dinheiro estrangeiro em campanha."
+   "text": "Jim Hoft, do site Gateway Pundit, diz que estão roubando a eleição. Falso: os dois lados pediram, e o horário extra não chega nem perto da diferença."
   },
   {
    "id": "s10",
-   "text": "Pete Marocco fala em um bilhão e meio de dólares. De novo, só a palavra dele, nenhum documento."
+   "text": "Mike Benz diz que o governo atual foi bancado com dinheiro da USAID. Sem prova. A agência foi desmontada em dois mil e vinte e cinco, e a lei brasileira proíbe dinheiro estrangeiro em campanha."
   },
   {
    "id": "s11",
-   "text": "Um perfil com um milhão e trezentas mil visualizações diz que roubaram o Flávio igual roubaram o pai. Em dois mil e vinte e dois, nem a auditoria dos militares achou fraude. E o pai foi condenado por trama golpista."
+   "text": "Pete Marocco fala em um bilhão e meio de dólares. De novo, só a palavra dele, nenhum documento."
   },
   {
    "id": "s12",
-   "text": "E um jornal da Califórnia escreveu que estenderam o horário pra garantir a vitória. Os números mostram o contrário."
+   "text": "E um perfil com um milhão e trezentas mil visualizações diz que roubaram o Flávio igual roubaram o pai. Em dois mil e vinte e dois, nem a auditoria dos militares achou fraude. E o pai foi condenado por trama golpista."
   },
   {
    "id": "s13",
@@ -85,7 +85,7 @@
     "en:Jim_Hoft"
    ],
    "x": [
-    "gatewaypundit"
+    "jimhoft"
    ]
   },
   {
@@ -113,9 +113,9 @@
    ]
   },
   {
-   "id": "smobserved",
-   "x": [
-    "smobserved"
+   "id": "trumpjr",
+   "wiki": [
+    "en:Donald_Trump_Jr."
    ]
   }
  ]
