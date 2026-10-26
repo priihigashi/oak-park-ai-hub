@@ -3,62 +3,27 @@
  "rate": "+12%",
  "scenes": [
   {
-   "id": "s01",
-   "text": "Estão dizendo que a eleição foi roubada nas duas horas extras de votação."
-  },
-  {
-   "id": "s03",
-   "text": "Só que os dois lados pediram mais tempo. A campanha do Flávio pediu às três e cinquenta da tarde, em dezessete cidades do Sul e de São Paulo, por causa da chuva."
-  },
-  {
-   "id": "s04",
-   "text": "A do PT pediu primeiro na Bahia, onde cortaram ônibus. E às quatro e vinte e dois, pediu o país inteiro."
+   "id": "sT",
+   "text": "Olha o relógio. À uma e vinte e dois da tarde, o PT pede mais tempo em três cidades da Bahia, onde faltou ônibus. Às três e cinquenta, a campanha do Flávio pede em dezessete cidades, por causa da chuva, e pede pra segurar o resultado. Às quatro e vinte e dois, o PT pede o país inteiro ao Supremo. Perto das cinco, Zanin manda estender até as sete."
   },
   {
    "id": "s05",
-   "text": "O ministro Zanin, do Supremo, deu duas horas pro Brasil todo. Dá pra criticar. Mas o TSE, presidido por Nunes Marques, indicado por Bolsonaro, só deixou votar onde a seção ainda estava aberta."
+   "text": "Zanin foi indicado pelo governo atual, e dá pra criticar a decisão. Mas quem aplicou foi o TSE, presidido por Nunes Marques, indicado por Bolsonaro. E a regra ficou assim: só votou depois das cinco quem estava numa seção que ainda não tinha fechado."
   },
   {
-   "id": "s06",
-   "text": "E quase ninguém apareceu. A diferença final foi de quatro milhões e quatrocentos mil votos. Pra virar isso em duas horas, seriam trinta e seis mil votos por minuto, só pra um lado."
+   "id": "sZ",
+   "text": "Golpe igual à Venezuela? Lá, o governo nunca mostrou o resultado de cada urna. Aqui, o boletim de cada seção é público, qualquer um confere. E os ônibus adesivados em Salvador? Nenhuma reportagem, nenhuma foto. Sem prova. E quem cuida dos ônibus de Salvador é a prefeitura, do União Brasil, partido de direita."
   },
   {
-   "id": "s07",
-   "text": "Agora ele quer anular a mesma prorrogação que a campanha dele pediu."
-  },
-  {
-   "id": "s08",
-   "text": "E tem americano jogando gasolina. O filho do presidente americano disse que, se fosse um governo conservador, a imprensa ia surtar. Só que quem aplicou a regra foi o TSE de um ministro indicado por Bolsonaro."
-  },
-  {
-   "id": "s09",
-   "text": "Jim Hoft, do site Gateway Pundit, diz que estão roubando a eleição. Falso. Os dois lados pediram, e a conta não fecha."
-  },
-  {
-   "id": "s10",
-   "text": "Mike Benz diz que dinheiro da USAID bancou o governo atual. Sem prova. E a lei proíbe dinheiro estrangeiro em campanha."
-  },
-  {
-   "id": "s11",
-   "text": "Pete Marocco fala em um bilhão e meio de dólares. Só a palavra dele."
-  },
-  {
-   "id": "s12",
-   "text": "E um perfil com um milhão e trezentas mil visualizações diz que roubaram o Flávio igual o pai. Em dois mil e vinte e dois, nem os militares acharam fraude. E o pai foi condenado por trama golpista."
-  },
-  {
-   "id": "s13",
-   "text": "O povo votou. Esse é só o começo da emancipação da classe trabalhadora."
+   "id": "sZ0",
+   "text": "E o Zema, que apoiou o Flávio, foi além."
   }
  ],
  "people": [
   {
-   "id": "hoft",
+   "id": "zema",
    "wiki": [
-    "en:Jim_Hoft"
-   ],
-   "x": [
-    "jimhoft"
+    "pt:Romeu_Zema"
    ]
   }
  ]
