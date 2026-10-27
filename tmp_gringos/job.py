@@ -5,14 +5,18 @@ os.makedirs('out', exist_ok=True)
 job = json.load(open('tmp_gringos/job.json'))
 
 async def tts(i, text, voice, rate):
-    c = edge_tts.Communicate(text, voice, rate=rate, boundary='WordBoundary')
-    words = []
+    parts = text if isinstance(text, list) else [[text, voice]]
+    words, base = [], 0.0
     with open(f'out/s{i:02d}.mp3', 'wb') as f:
-        async for ch in c.stream():
-            if ch['type'] == 'audio':
-                f.write(ch['data'])
-            elif ch['type'] == 'WordBoundary':
-                words.append({'w': ch['text'], 's': ch['offset'] / 1e7, 'd': ch['duration'] / 1e7})
+        for ptxt, pv in parts:
+            c = edge_tts.Communicate(ptxt, pv, rate=rate, boundary='WordBoundary')
+            nbytes, last = 0, 0.0
+            async for ch in c.stream():
+                if ch['type'] == 'audio':
+                    f.write(ch['data']); nbytes += len(ch['data'])
+                elif ch['type'] == 'WordBoundary':
+                    words.append({'w': ch['text'], 's': base + ch['offset'] / 1e7, 'd': ch['duration'] / 1e7})
+            base += nbytes * 8 / 48000.0
     json.dump(words, open(f'out/s{i:02d}.json', 'w'), ensure_ascii=False)
 
 import time
