@@ -1,0 +1,16 @@
+name: tmp-opc-tts
+on:
+  push:
+    branches: [tmp-opc-obra-real]
+    paths: [job/job.json]
+permissions:
+  contents: write
+jobs:
+  tts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install edge-tts==7.0.2 && cd job && python tts.py
+      - run: |
+          git config user.name bot && git config user.email bot@users.noreply.github.com
+          git add job/out && git commit -m "tts out" && git push
