@@ -14,7 +14,7 @@ jobs:
         with: {ref: tmp-triplex-rachadinha}
       - uses: actions/setup-python@v5
         with: {python-version: '3.11'}
-      - run: pip install -q "rembg[cpu]" opencv-python-headless pillow numpy
+      - run: pip install -q "rembg[cpu]" pillow numpy && pip uninstall -y -q opencv-python opencv-python-headless opencv-contrib-python || true; pip install -q "opencv-python-headless==4.10.0.84"
       - run: python tmp/tr/heads.py
       - if: always()
         run: |
