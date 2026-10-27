@@ -14,8 +14,8 @@ async def one(s, voice, rate):
 async def main():
     for s in job['scenes']:
         done=False
-        for voice,rate in [(job['voice'],job['rate'])]*3+[('pt-BR-FranciscaNeural','+14%')]*3:
+        for voice,rate in [(job['voice'],job['rate'])]*8:
             try: await one(s,voice,rate); done=True; print(s['id'],voice); break
-            except Exception as e: print('retry',s['id'],voice,e); await asyncio.sleep(3)
+            except Exception as e: print('retry',s['id'],voice,e); await asyncio.sleep(8)
         if not done: raise SystemExit('fail '+s['id'])
 asyncio.run(main())

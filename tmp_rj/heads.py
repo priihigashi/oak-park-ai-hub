@@ -9,7 +9,8 @@ sess=new_session('birefnet-portrait')
 fm=mp.solutions.face_mesh.FaceMesh(static_image_mode=True,max_num_faces=1,refine_landmarks=False)
 JAW=[454,323,361,288,397,365,379,378,400,377,152,148,176,149,150,136,172,58,132,93,234]
 def search(q,n):
-    r=requests.get('https://commons.wikimedia.org/w/api.php',params={'action':'query','format':'json','generator':'search','gsrsearch':q+' filetype:bitmap','gsrnamespace':6,'gsrlimit':n,'prop':'imageinfo','iiprop':'url|size','iiurlwidth':1400},headers=UA,timeout=60).json()
+    r=requests.get('https://commons.wikimedia.org/w/api.php',params={'action':'query','format':'json','generator':'search','gsrsearch':q,'gsrnamespace':6,'gsrlimit':n,'prop':'imageinfo','iiprop':'url|size','iiurlwidth':1400},headers=UA,timeout=60)
+    print(q,r.status_code,r.text[:300]); r=r.json()
     pages=sorted(r.get('query',{}).get('pages',{}).values(),key=lambda p:p.get('index',99))
     return [(p['title'],p['imageinfo'][0].get('thumburl') or p['imageinfo'][0]['url']) for p in pages]
 log=[]
