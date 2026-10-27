@@ -1,0 +1,16 @@
+{
+ "transcricao": {
+  "id": "1TBroSK3k-2Q-ZJUT5gFZOJJGLPvKdNGS",
+  "name": "TRANSCRICAO_reel_triplex_rachadinha.txt",
+  "parents": [
+   "1dZil2rvx6ak-en1YdLOoksxPcWLkooRO"
+  ]
+ },
+ "video": {
+  "id": "1cy5uhWx1UTvKSo7M3w9qwCnGhu9r8Z7R",
+  "name": "REEL_original_triplex_rachadinha.mp4",
+  "parents": [
+   "1dZil2rvx6ak-en1YdLOoksxPcWLkooRO"
+  ]
+ }
+}
