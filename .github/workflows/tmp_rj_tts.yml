@@ -1,0 +1,18 @@
+name: tmp rj tts
+on:
+  push:
+    branches: [tmp-rj-turno]
+    paths: ['tmp_rj/job.json']
+permissions:
+  contents: write
+jobs:
+  tts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: tmp-rj-turno }
+      - run: pip install -q edge-tts
+      - run: python tmp_rj/tts.py
+      - run: |
+          git config user.name bot; git config user.email bot@users.noreply.github.com
+          git add tmp_rj/out; git commit -m "tts out"; git push
