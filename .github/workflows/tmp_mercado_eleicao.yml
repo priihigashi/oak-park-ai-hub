@@ -18,8 +18,11 @@ jobs:
       - name: data
         if: hashFiles('job/fetch_data.py') != '' && hashFiles('out/market.json') == ''
         run: python job/fetch_data.py
+      - name: extra
+        if: hashFiles('job/extra.py') != '' && hashFiles('out/ptax_hist.csv') == ''
+        run: python job/extra.py
       - name: tts
-        if: hashFiles('job/tts.json') != ''
+        if: hashFiles('job/tts.json') != '' && hashFiles('out/tts/done.txt') == ''
         run: python job/tts.py
       - name: commit
         run: |
