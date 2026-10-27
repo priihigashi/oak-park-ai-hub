@@ -2,17 +2,17 @@
  "voice": "pt-BR-ThalitaMultilingualNeural",
  "rate": "+12%",
  "scenes": [
-  "Bora ajudar os gringos a aposentar o Trump. Eu tenho um plano, e ele cabe num WhatsApp.",
+  "Bora ajudar os gringos a aposentar o Trump. Eu tenho um plano, e ele cabe no seu celular.",
   "Dia 3 de novembro, os Estados Unidos votam pra Câmara inteira. Hoje, o partido do Trump tem 218 cadeiras, e a oposição tem 214. Os democratas só precisam virar 4.",
   "Quem manda na Câmara segura o dinheiro do governo e abre investigações. Sem ela, o Trump vira um pato manco: continua no cargo, mas trava quase tudo.",
   "E isso é problema nosso: desde julho, boa parte dos produtos brasileiros paga 25% de tarifa extra pra entrar lá, e as nossas vendas pros Estados Unidos caíram 13%.",
   "Parece difícil? Em 2022, a Câmara foi decidida por cerca de 6.700 votos, em só 5 distritos. É menos gente do que cabe num show. E só 45% dos eleitores foram votar.",
-  "O plano: você tem primo, amiga ou ex-colega que mora lá e é cidadão americano? Manda mensagem hoje. A votação antecipada já começou, e no vote ponto gov ele vê onde e como votar.",
+  "O plano tem duas partes. Um: comenta nos vídeos de criadores americanos, em inglês mesmo: you can beat MAGA, go vote! O mundo tá de olho no Brasil depois dessa eleição, e isso dá esperança pra eles. Dois: tem primo ou amiga que é cidadão americano? Manda mensagem hoje com o link vote ponto gov.",
   "Manda esse vídeo pra quem tem família nos Estados Unidos. Os gringos agradecem."
  ],
  "faces": {},
  "search": {
   "trump": "Donald Trump official portrait 2025"
  },
- "run": 3
+ "run": 4
 }
