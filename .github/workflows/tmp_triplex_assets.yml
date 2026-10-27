@@ -1,0 +1,21 @@
+name: tmp-triplex-assets
+on:
+  push:
+    branches: [tmp-triplex-rachadinha]
+    paths: ['tmp/tr/go_assets.txt']
+permissions:
+  contents: write
+jobs:
+  a:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: tmp-triplex-rachadinha}
+      - env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: python3 tmp/tr/assets.py
+      - if: always()
+        run: |
+          git config user.name "github-actions"; git config user.email "actions@github.com"
+          git add tmp/tr/out && git commit -m "tmp: assets" && git pull --rebase -q origin tmp-triplex-rachadinha; git push origin tmp-triplex-rachadinha
