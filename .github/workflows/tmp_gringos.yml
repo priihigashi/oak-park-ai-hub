@@ -1,0 +1,24 @@
+name: tmp-gringos
+on:
+  push:
+    branches: [tmp-gringos]
+    paths: ['tmp_gringos/job.json']
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: tmp-gringos
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - run: pip install -q edge-tts requests pillow "rembg[cpu]"
+      - run: python tmp_gringos/job.py
+      - run: |
+          mkdir -p tmp_gringos/out && cp -r out/* tmp_gringos/out/ || true
+          git config user.name tmp-bot && git config user.email tmp@bot
+          git add tmp_gringos/out && git commit -m "tmp out" && git push origin HEAD:tmp-gringos
