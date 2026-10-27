@@ -2,7 +2,7 @@
  "voice": "pt-BR-ThalitaMultilingualNeural",
  "rate": "+12%",
  "scenes": [
-  "Dia 3 de novembro, os americanos podem tirar do Trump o controle da Câmara. E o Felipe Veríssimo teve uma ideia maravilhosa pra gente ajudar daqui do Brasil. A gente vai entrar nessa.",
+  "Terça-feira que vem, os americanos podem tirar do Trump o controle da Câmara. Bora, que dá tempo! E o Felipe Veríssimo teve uma ideia maravilhosa pra gente ajudar daqui do Brasil.",
   "Eles votam pra Câmara inteira. Hoje, o partido do Trump tem 218 cadeiras, e a oposição tem 214. Os democratas só precisam virar 4.",
   "Quem manda na Câmara segura o dinheiro do governo e abre investigações. Sem ela, o Trump fica de mãos atadas: continua no cargo, mas não aprova quase nada sozinho.",
   "E isso é problema nosso: desde julho, boa parte dos produtos brasileiros paga 25% de tarifa extra pra entrar lá, e as nossas vendas pros Estados Unidos caíram 13%.",
@@ -14,5 +14,5 @@
  "search": {
   "trump": "Donald Trump official portrait 2025"
  },
- "run": 6
+ "run": 7
 }
