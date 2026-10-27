@@ -1,7 +1,10 @@
 import json,asyncio,edge_tts,os
 j=json.load(open('job.json'));os.makedirs('out',exist_ok=True)
 async def go(k,t):
-    c=edge_tts.Communicate(t,j['voice'],rate=j['rate'],boundary='WordBoundary')
+    try:
+        c=edge_tts.Communicate(t,j['voice'],rate=j['rate'],boundary='WordBoundary')
+    except TypeError:
+        c=edge_tts.Communicate(t,j['voice'],rate=j['rate'])
     words=[];f=open(f'out/{k}.mp3','wb')
     async for ch in c.stream():
         if ch['type']=='audio': f.write(ch['data'])

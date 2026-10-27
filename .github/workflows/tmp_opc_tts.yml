@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: pip install edge-tts==7.0.2 && cd job && python tts.py
+      - run: pip install -U edge-tts && cd job && python tts.py
       - run: |
           git config user.name bot && git config user.email bot@users.noreply.github.com
           git add job/out && git commit -m "tts out" && git push
