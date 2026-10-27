@@ -13,15 +13,15 @@ log=[]
 def dl(args):
     r=subprocess.run(['yt-dlp','-f','best[ext=mp4]/best','-o',str(OUT/'reel.%(ext)s'),'--write-info-json','--no-playlist']+args+[URL],capture_output=True,text=True)
     log.append(r.stdout[-1500:]+r.stderr[-1500:]); return r.returncode==0
-ok = (blob and dl(['--cookies',ck])) or dl([])
-open(OUT/'log.txt','w').write('\n----\n'.join(log))
+ok = (OUT/'reel.mp4').exists() or (blob and dl(['--cookies',ck])) or dl([])
+open(OUT/'log2.txt','w').write('\n----\n'.join(log))
 vids=[f for f in glob.glob(str(OUT/'reel.*')) if not f.endswith('.json')]
 if not vids: raise SystemExit('download failed')
 v=vids[0]
 subprocess.run(['ffmpeg','-y','-i',v,'-vf','scale=-2:960','-c:v','libx264','-crf','30','-preset','veryfast','-c:a','aac','-b:a','96k',str(OUT/'reel_small.mp4')],check=True)
 subprocess.run(['ffmpeg','-y','-i',v,'-ac','1','-ar','16000','/tmp/a.wav'],check=True)
 (OUT/'frames').mkdir(exist_ok=True)
-subprocess.run(['ffmpeg','-y','-i',v,'-vf','fps=1/2,scale=360:-2',str(OUT/'frames/f_%03d.jpg')],check=True)
+subprocess.run(['ffmpeg','-y','-i',v,'-vf','fps=1/2,scale=360:-2',str(OUT/'frames/f_%03d.jpg')],check=False)
 from faster_whisper import WhisperModel
 m=WhisperModel('medium',device='cpu',compute_type='int8')
 segs,info=m.transcribe('/tmp/a.wav',language='pt',word_timestamps=True,vad_filter=False,beam_size=5)
