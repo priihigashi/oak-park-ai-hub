@@ -1,0 +1,24 @@
+name: tmp-triplex-rachadinha
+on:
+  push:
+    branches: [tmp-triplex-rachadinha]
+    paths: ['tmp/tr/go.txt']
+permissions:
+  contents: write
+jobs:
+  r:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: tmp-triplex-rachadinha}
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - run: pip install -q -U yt-dlp faster-whisper
+      - env:
+          PRI_OP_IG_COOKIES: ${{ secrets.PRI_OP_IG_COOKIES }}
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: python3 tmp/tr/run.py
+      - if: always()
+        run: |
+          git config user.name "github-actions"; git config user.email "actions@github.com"
+          git add tmp/tr/out && git commit -m "tmp: triplex reel out" && git pull --rebase -q origin tmp-triplex-rachadinha; git push origin tmp-triplex-rachadinha
