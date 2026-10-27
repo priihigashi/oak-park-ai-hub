@@ -15,3 +15,11 @@ for k,t in j['items'].items():
             try: asyncio.run(go(k,t,voice)); ok=True; print('ok',k,voice); break
             except Exception as ex: print('fail',k,voice,a,ex); time.sleep(5)
         if ok: break
+
+import urllib.request
+for name,url in j.get('music',{}).items():
+    try:
+        req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0'})
+        data=urllib.request.urlopen(req,timeout=60).read()
+        open(f'out/music_{name}.mp3','wb').write(data); print('music ok',name,len(data))
+    except Exception as ex: print('music fail',name,url,ex)
