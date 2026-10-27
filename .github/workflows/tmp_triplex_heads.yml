@@ -1,0 +1,22 @@
+name: tmp-triplex-heads
+on:
+  push:
+    branches: [tmp-triplex-rachadinha]
+    paths: ['tmp/tr/go_heads.txt']
+permissions:
+  contents: write
+jobs:
+  h:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: tmp-triplex-rachadinha}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: pip install -q "rembg[cpu]" opencv-python-headless pillow numpy
+      - run: python tmp/tr/heads.py
+      - if: always()
+        run: |
+          git config user.name "github-actions"; git config user.email "actions@github.com"
+          git add tmp/tr/out && git commit -m "tmp: heads" && git pull --rebase -q origin tmp-triplex-rachadinha; git push origin tmp-triplex-rachadinha
