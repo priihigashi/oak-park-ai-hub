@@ -1,0 +1,19 @@
+name: tmp-privilegio-tts
+on:
+  push:
+    branches: [tts-job-privilegio]
+permissions:
+  contents: write
+jobs:
+  tts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install edge-tts
+      - run: python tts_jobs/privilegio/gen.py
+      - run: |
+          git config user.name "tts-bot"; git config user.email "tts-bot@users.noreply.github.com"
+          git checkout -b tts-out-privilegio
+          git add tts_out/privilegio
+          git commit -m "tts privilegio"
+          git push -f origin tts-out-privilegio
