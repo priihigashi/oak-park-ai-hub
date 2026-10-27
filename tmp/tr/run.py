@@ -24,7 +24,10 @@ subprocess.run(['ffmpeg','-y','-i',v,'-ac','1','-ar','16000','/tmp/a.wav'],check
 subprocess.run(['ffmpeg','-y','-i',v,'-vf','fps=1/2,scale=360:-2',str(OUT/'frames/f_%03d.jpg')],check=False)
 from faster_whisper import WhisperModel
 m=WhisperModel('medium',device='cpu',compute_type='int8')
-segs,info=m.transcribe('/tmp/a.wav',language='pt',word_timestamps=True,vad_filter=False,beam_size=5)
+import numpy as np
+raw=subprocess.run(['ffmpeg','-i','/tmp/a.wav','-f','f32le','-ac','1','-ar','16000','-'],capture_output=True).stdout
+aud=np.frombuffer(raw,dtype=np.float32)
+segs,info=m.transcribe(aud,language='pt',word_timestamps=True,vad_filter=False,beam_size=5)
 lines=[];words=[]
 for s in segs:
     lines.append(f"[{int(s.start//60):02d}:{s.start%60:05.2f}] {s.text.strip()}")
