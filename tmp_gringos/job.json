@@ -1,19 +1,17 @@
 {
-  "voice": "pt-BR-ThalitaMultilingualNeural",
-  "rate": "+12%",
-  "scenes": [
-    "Bora ajudar os gringos a aposentar o Trump. Eu tenho um plano, e ele cabe numa mensagem de WhatsApp.",
-    "No dia 3 de novembro, os Estados Unidos votam pra Câmara inteira: são 435 cadeiras. Hoje, o partido do Trump tem 218, e a oposição tem 214. Os democratas só precisam virar 4.",
-    "Quem manda na Câmara segura o dinheiro do governo e pode abrir investigações. Sem ela, o Trump vira o que os gringos chamam de pato manco: continua no cargo, mas trava quase tudo que quer aprovar.",
-    "E isso é problema nosso também. Desde julho, boa parte dos produtos brasileiros paga uma tarifa extra de 25% pra entrar nos Estados Unidos, e no primeiro semestre as nossas vendas pra lá caíram 13%.",
-    "Parece difícil? Em 2022, a Câmara foi decidida por cerca de 6.700 votos, em só 5 distritos. É menos gente do que cabe num show. E menos da metade dos eleitores foi votar: só 45%.",
-    "Então o plano é esse: você tem primo, amiga ou ex-colega que mora lá e é cidadão americano? Manda mensagem hoje. Em vários estados a votação antecipada já começou, e no site vote ponto gov dá pra ver onde e como votar.",
-    "Manda esse vídeo pra quem tem família nos Estados Unidos. Os gringos agradecem."
-  ],
-  "faces": {
-    "trump": ["File:Official Presidential Portrait of President Donald J. Trump (2025).jpg", "File:Donald Trump official portrait.jpg"]
-  },
-  "search": {
-    "trump": "Donald Trump official portrait 2025"
-  }
+ "voice": "pt-BR-ThalitaMultilingualNeural",
+ "rate": "+12%",
+ "scenes": [
+  "Bora ajudar os gringos a aposentar o Trump. Eu tenho um plano, e ele cabe num WhatsApp.",
+  "Dia 3 de novembro, os Estados Unidos votam pra Câmara inteira. Hoje, o partido do Trump tem 218 cadeiras, e a oposição tem 214. Os democratas só precisam virar 4.",
+  "Quem manda na Câmara segura o dinheiro do governo e abre investigações. Sem ela, o Trump vira um pato manco: continua no cargo, mas trava quase tudo.",
+  "E isso é problema nosso: desde julho, boa parte dos produtos brasileiros paga 25% de tarifa extra pra entrar lá, e as nossas vendas pros Estados Unidos caíram 13%.",
+  "Parece difícil? Em 2022, a Câmara foi decidida por cerca de 6.700 votos, em só 5 distritos. É menos gente do que cabe num show. E só 45% dos eleitores foram votar.",
+  "O plano: você tem primo, amiga ou ex-colega que mora lá e é cidadão americano? Manda mensagem hoje. A votação antecipada já começou, e no vote ponto gov ele vê onde e como votar.",
+  "Manda esse vídeo pra quem tem família nos Estados Unidos. Os gringos agradecem."
+ ],
+ "faces": {},
+ "search": {
+  "trump": "Donald Trump official portrait 2025"
+ }
 }
