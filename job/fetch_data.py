@@ -28,13 +28,13 @@ for name, tk in [("ibov", "^BVSP"), ("usdbrl_yf", "BRL=X"), ("sp500", "^GSPC"), 
         series[name] = yf_series(tk)
         log.append(f"{name}: {len(series[name])} pts, {series[name].index[0].date()}..{series[name].index[-1].date()}")
     except Exception as e:
-        log.append(f"{name} FAIL {e}")
+        log.append(f"{name} FAIL {e}"); print(log[-1], flush=True)
 
 def sgs(code, y0=1994):
     out = []
     for y in range(y0, 2027, 9):
         a = f"01/01/{y}"; b = f"31/12/{min(y+8, 2026)}"
-        r = requests.get(f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.{code}/dados?formato=json&dataInicial={a}&dataFinal={b}", timeout=60)
+        r = requests.get(f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.{code}/dados?formato=json&dataInicial={a}&dataFinal={b}", timeout=40)
         if r.status_code == 200 and r.text.strip().startswith("["):
             out += r.json()
     return pd.Series({pd.to_datetime(x["data"], dayfirst=True): float(x["valor"]) for x in out}).sort_index()
@@ -44,7 +44,7 @@ for name, code in [("ptax", 1), ("swap360", 7806), ("swap1800", 7816)]:
         series[name] = sgs(code)
         log.append(f"{name}: {len(series[name])} pts, {series[name].index[0].date()}..{series[name].index[-1].date()}")
     except Exception as e:
-        log.append(f"{name} FAIL {e}")
+        log.append(f"{name} FAIL {e}"); print(log[-1], flush=True)
 
 try:
     r = requests.get("http://www.ipeadata.gov.br/api/odata4/ValoresSerie(SERCODIGO='JPM366_EMBI366')", timeout=120)
@@ -55,6 +55,8 @@ try:
 except Exception as e:
     log.append(f"embi FAIL {e}")
 
+series = {k: s for k, s in series.items() if len(s) > 10 and isinstance(s.index, pd.DatetimeIndex)}
+print("\n".join(log), flush=True)
 for k, s in series.items():
     s.to_csv(f"{OUT}/{k}.csv", header=["v"])
 
