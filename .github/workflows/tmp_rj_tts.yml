@@ -2,17 +2,25 @@ name: tmp rj tts
 on:
   push:
     branches: [tmp-rj-turno]
-    paths: ['tmp_rj/job.json']
+    paths: ['tmp_rj/job.json','tmp_rj/heads.json']
 permissions:
   contents: write
+concurrency: { group: tmp-rj, cancel-in-progress: false }
 jobs:
-  tts:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with: { ref: tmp-rj-turno }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
       - run: pip install -q edge-tts
       - run: python tmp_rj/tts.py
+      - run: pip install -q "rembg[cpu]" mediapipe==0.10.14 pillow requests numpy
+        if: hashFiles('tmp_rj/heads.json') != ''
+      - run: python tmp_rj/heads.py
+        if: hashFiles('tmp_rj/heads.json') != ''
+        continue-on-error: true
       - run: |
           git config user.name bot; git config user.email bot@users.noreply.github.com
-          git add tmp_rj/out; git commit -m "tts out"; git push
+          git add tmp_rj/out tmp_rj/heads || true; git commit -m "out" || true; git pull --rebase -q || true; git push
