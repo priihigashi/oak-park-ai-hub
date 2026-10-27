@@ -1,0 +1,23 @@
+[Instagram] Extracting URL: https://www.instagram.com/reel/De4uxy0xC1m/
+[Instagram] De4uxy0xC1m: Downloading video info
+[Instagram] Setting up session
+[Instagram] De4uxy0xC1m: Checking post accessibility
+[Instagram] De4uxy0xC1m: Downloading webpage
+[info] De4uxy0xC1m: Downloading 1 format(s): 3
+[info] Writing video metadata as JSON to: tmp/tr/out/reel.info.json
+[download] Destination: tmp/tr/out/reel.mp4
+
+[download]   0.0% of    2.27MiB at  950.01KiB/s ETA 00:02
+[download]   0.1% of    2.27MiB at    1.94MiB/s ETA 00:01
+[download]   0.3% of    2.27MiB at    3.72MiB/s ETA 00:00
+[download]   0.6% of    2.27MiB at    6.87MiB/s ETA 00:00
+[download]   1.3% of    2.27MiB at    8.98MiB/s ETA 00:00
+[download]   2.7% of    2.27MiB at   13.19MiB/s ETA 00:00
+[download]   5.5% of    2.27MiB at   20.62MiB/s ETA 00:00
+[download]  11.0% of    2.27MiB at   26.11MiB/s ETA 00:00
+[download]  22.0% of    2.27MiB at   43.09MiB/s ETA 00:00
+[download]  44.1% of    2.27MiB at   56.53MiB/s ETA 00:00
+[download]  88.2% of    2.27MiB at   60.69MiB/s ETA 00:00
+[download] 100.0% of    2.27MiB at   61.12MiB/s ETA 00:00
+[download] 100% of    2.27MiB in 00:00:00 at 20.75MiB/s  
+WARNING: [Instagram] The provided Instagram account cookies are no longer valid
