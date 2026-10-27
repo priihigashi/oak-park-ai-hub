@@ -1,0 +1,30 @@
+name: tmp-mercado-eleicao
+on:
+  push:
+    branches: [tmp-mercado-eleicao]
+    paths: ["job/**"]
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: tmp-mercado-eleicao }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install -q yfinance pandas requests edge-tts
+      - name: data
+        if: hashFiles('job/fetch_data.py') != '' && hashFiles('out/market.json') == ''
+        run: python job/fetch_data.py
+      - name: tts
+        if: hashFiles('job/tts.json') != ''
+        run: python job/tts.py
+      - name: commit
+        run: |
+          git config user.name "tmp-bot"; git config user.email "tmp-bot@users.noreply.github.com"
+          git pull --rebase || true
+          git add out || true
+          git commit -m "out $(date -u +%H%M%S)" || echo nothing
+          git push
