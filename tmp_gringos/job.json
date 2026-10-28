@@ -2,6 +2,7 @@
  "voice": "pt-BR-ThalitaMultilingualNeural",
  "rate": "+12%",
  "scenes": [
+  "Ei! Tira print disso e manda pros seus amigos americanos, ou comenta com essa imagem nos posts que aceitam foto. Deixa eu te explicar por quê.",
   "Terça-feira que vem, os americanos podem tirar do Trump o controle da Câmara. Bora, que dá tempo! E o Felipe Veríssimo teve uma ideia maravilhosa pra gente ajudar daqui do Brasil.",
   "Eles votam pra Câmara inteira. Hoje, o partido do Trump tem 218 cadeiras, e a oposição tem 214. Os democratas só precisam virar 4.",
   "Quem manda na Câmara segura o dinheiro do governo e abre investigações. Sem ela, o Trump fica de mãos atadas: continua no cargo, mas não aprova quase nada sozinho.",
@@ -30,5 +31,5 @@
  "search": {
   "trump": "Donald Trump official portrait 2025"
  },
- "run": 15
+ "run": 16
 }
