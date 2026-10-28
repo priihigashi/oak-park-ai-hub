@@ -1,3 +1,17 @@
+import json as _j, os as _o, sys as _s, subprocess as _sp
+_job=_j.load(open('tmp_gringos/job.json'))
+if _job.get('el'):
+    import requests as _r
+    _o.makedirs('out', exist_ok=True)
+    _sp.run([_s.executable,'-m','pip','install','-q','faster-whisper'],check=True)
+    from faster_whisper import WhisperModel
+    _m=WhisperModel('small',compute_type='int8')
+    for _i,_u in enumerate(_job['el']):
+        open(f'out/m{_i:02d}.mp3','wb').write(_r.get(_u,timeout=120).content)
+        _seg,_=_m.transcribe(f'out/m{_i:02d}.mp3',language=('en' if _i==7 else 'pt'),word_timestamps=True)
+        _w=[{'w':w.word.strip(),'s':w.start,'e':w.end} for s in _seg for w in s.words]
+        _j.dump(_w,open(f'out/m{_i:02d}.json','w'),ensure_ascii=False)
+    _s.exit(0)
 import asyncio, json, os, io, requests, traceback
 import edge_tts
 
