@@ -1,50 +1,11 @@
-{
-"voice": "pt-BR-AntonioNeural",
-"rate": "+15%",
-"scenes": [
-[
-"s1",
-"Você que votou no Bolsonaro ou no governo atual: bora começar uma conversa?"
-],
-[
-"s2",
-"Se você gosta de conversar com quem pensa diferente, com educação e troca de verdade, posta esse vídeo nos seus stories."
-],
-[
-"s3",
-"E se você tem dúvida, se não entende o que o outro lado defende, posta também. Alguém pode topar te mandar uma informação."
-],
-[
-"s4",
-"Tem mais gente querendo uma conversa sincera do que você imagina."
-],
-[
-"s5",
-"Olha, não é pra convencer ninguém, tá? A gente separou umas frases e umas regrinhas pra não virar briga."
-],
-[
-"s6",
-"Funciona assim: escreve, nessa caixinha aqui embaixo, uma coisa que te preocupa."
-],
-[
-"s7",
-"Ou escolhe uma frase da lista, tipo essa aqui."
-],
-[
-"s8",
-"Aí, o amigo que pensa diferente te manda o que ele pesquisou. E você manda a sua pesquisa também, se quiser."
-],
-[
-"s9",
-"Agora, as regras. Se ele falar algo que parece absurdo, espera. Não responde na hora. Vai pesquisar por que ele pensa assim. Pesquisa até isso: por que ele não me entende nesse assunto? Muita gente tem essa mesma dúvida."
-],
-[
-"s10",
-"Antes de discordar, tenta provar que ele tá certo. O prompt pra IA tá nos comentários: ele pesquisa os dois lados, sem dar opinião, e diz quando uma acusação tem prova e quando não tem."
-],
-[
-"s11",
-"E depois dessa troca, parou. Tira um print e posta nos seus stories. E reposta esse vídeo também, pra mais gente aprender as regras. Se você tá vendo esse vídeo, o próximo vai trazer as perguntas. Boa sorte!"
-]
-]
-}
+{"voice":"pt-BR-AntonioNeural","rate":"+20%","scenes":[
+["s1","Você que votou no Bolsonaro ou no governo atual: bora conversar?"],
+["s2","Se você gosta de conversar com quem pensa diferente, posta esse vídeo nos stories."],
+["s3","Se tem dúvida do que o outro lado defende, posta também. Tem mais gente querendo uma conversa sincera do que você imagina."],
+["s4","Olha, não é pra convencer ninguém, tá? São só umas regrinhas pra não virar briga."],
+["s5","Escreve na caixinha o que te preocupa, ou escolhe uma frase da lista."],
+["s6","O amigo que pensa diferente te manda o que pesquisou. E você manda o seu, se quiser."],
+["s7","Regra um: se parecer absurdo, espera. Não responde na hora. Pesquisa por que ele pensa assim."],
+["s8","Regra dois: antes de discordar, tenta provar que ele tá certo. O prompt pra IA tá nos comentários."],
+["s9","Regra três: depois da troca, parou."],
+["s10","Tira um print, posta nos stories e reposta esse vídeo, pra mais gente aprender as regras. O próximo traz as perguntas. Boa sorte!"]]}
