@@ -1,0 +1,16 @@
+name: tmp voz ouvir
+on:
+  push:
+    branches: [tmp-ouvir-outro-lado]
+    paths: ['voz/job.json']
+permissions:
+  contents: write
+jobs:
+  voz:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install edge-tts && python voz/run.py
+      - run: |
+          git config user.name "voz-bot"; git config user.email "noreply@github.com"
+          git add voz/out && git commit -m "voz gerada" && git push
