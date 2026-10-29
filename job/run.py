@@ -6,7 +6,7 @@ job = json.load(open('job/job.json'))
 sh = lambda c: subprocess.run(c, shell=True, check=True)
 
 # ---- video processing
-if job.get('video_url'):
+if job.get('video_url') and not os.path.exists('out/original_leve.mp4'):
     urllib.request.urlretrieve(job['video_url'], 'orig.mp4')
     # lightweight original for the "Video original" tab
     sh('ffmpeg -y -loglevel error -i orig.mp4 -vf scale=432:768,fps=24 -c:v libx264 -preset slow -crf 32 -g 48 -pix_fmt yuv420p -c:a aac -b:a 64k -ac 1 -movflags +faststart out/original_leve.mp4')
@@ -35,8 +35,22 @@ async def tts(key, text, voice, rate):
     json.dump(words, open(f'out/{key}.words.json', 'w'), ensure_ascii=False)
 
 async def main():
+    import random
+    fails = []
     for it in job.get('tts', []):
-        await tts(it['key'], it['text'], it.get('voice', 'pt-BR-ThalitaMultilingualNeural'), it.get('rate', '+12%'))
+        if os.path.exists(f"out/{it['key']}.mp3") and os.path.getsize(f"out/{it['key']}.mp3") > 1000 and not job.get('force'):
+            continue
+        for attempt in range(6):
+            try:
+                await tts(it['key'], it['text'], it.get('voice', 'pt-BR-ThalitaMultilingualNeural'), it.get('rate', '+12%'))
+                break
+            except Exception as ex:
+                print('retry', it['key'], attempt, ex)
+                await asyncio.sleep(4 + attempt * 5 + random.random() * 3)
+        else:
+            fails.append(it['key'])
+        await asyncio.sleep(1.2)
+    print('FAILED', fails)
 
 asyncio.run(main())
 
