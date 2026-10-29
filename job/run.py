@@ -23,6 +23,14 @@ if job.get('video_url') and not os.path.exists('out/original_leve.mp4'):
     os.makedirs('job/audio', exist_ok=True)
     sh('ffmpeg -y -loglevel error -i orig.mp4 -ac 1 -ar 16000 job/audio/speech.wav')
 
+for dl in job.get('downloads', []):
+    try:
+        rq = urllib.request.Request(dl['url'], headers={'User-Agent': 'Mozilla/5.0'})
+        open('out/' + dl['out'], 'wb').write(urllib.request.urlopen(rq, timeout=60).read())
+        print('downloaded', dl['out'])
+    except Exception as ex:
+        print('download failed', dl['url'], ex)
+
 async def tts(key, text, voice, rate):
     comm = edge_tts.Communicate(text, voice, rate=rate, boundary='WordBoundary')
     words = []
