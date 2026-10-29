@@ -74,4 +74,6 @@ if aud and job.get('whisper', True):
             for w in s.words:
                 res['words'].append({'w': w.word.strip(), 's': round(w.start, 3), 'e': round(w.end, 3)})
         json.dump(res, open('out/' + os.path.basename(a) + '.whisper.json', 'w'), ensure_ascii=False)
+if job.get('render'):
+    subprocess.run('tar xzf job/bundle.tgz -C job && bash job/bundle/go.sh', shell=True, check=True)
 print('done')
