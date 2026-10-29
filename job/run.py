@@ -75,5 +75,5 @@ if aud and job.get('whisper', True):
                 res['words'].append({'w': w.word.strip(), 's': round(w.start, 3), 'e': round(w.end, 3)})
         json.dump(res, open('out/' + os.path.basename(a) + '.whisper.json', 'w'), ensure_ascii=False)
 if job.get('render'):
-    subprocess.run('tar xzf job/bundle.tgz -C job && bash job/bundle/go.sh', shell=True, check=True)
+    subprocess.run("tar xzf job/bundle.tgz -C job && sed -i -E 's#python \\$B/(gen|page|build)\\.py#/usr/bin/python3 $B/\\1.py#g' job/bundle/go.sh && grep -n usr/bin/python3 job/bundle/go.sh && bash job/bundle/go.sh", shell=True, check=True)
 print('done')
