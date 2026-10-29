@@ -1,12 +1,50 @@
-{"voice":"pt-BR-AntonioNeural","rate":"+15%","scenes":[
-["s1","Você que votou no Bolsonaro ou no governo atual: bora começar uma conversa?"],
-["s2","Se você gosta de conversar com quem pensa diferente, com educação e troca de verdade, posta esse vídeo nos seus stories."],
-["s3","E se você tem dúvida, se não entende o que o outro lado defende, posta também. Alguém pode topar te mandar uma informação."],
-["s4","Tem mais gente querendo uma conversa sincera do que você imagina."],
-["s5","Não é pra convencer ninguém. A gente separou umas frases e umas regrinhas pra não virar briga."],
-["s6","Funciona assim: escreve, nessa caixinha aqui embaixo, uma coisa que te preocupa."],
-["s7","Ou escolhe uma frase da lista, tipo essa aqui."],
-["s8","Aí, o amigo que pensa diferente te manda o que ele pesquisou. E você manda a sua pesquisa também, se quiser."],
-["s9","Agora, as regras. Se ele falar algo que parece absurdo, espera. Não responde na hora. Vai pesquisar por que ele pensa assim. Pesquisa até isso: por que ele não me entende nesse assunto? Muita gente tem essa mesma dúvida."],
-["s10","Antes de discordar, tenta provar que ele tá certo. O prompt pra IA tá nos comentários: ele pesquisa os dois lados, sem dar opinião, e diz quando uma acusação tem prova e quando não tem."],
-["s11","E depois dessa troca, parou. Isso aqui é só o começo de uma conversa. Boa sorte!"]]}
+{
+"voice": "pt-BR-AntonioNeural",
+"rate": "+15%",
+"scenes": [
+[
+"s1",
+"Você que votou no Bolsonaro ou no governo atual: bora começar uma conversa?"
+],
+[
+"s2",
+"Se você gosta de conversar com quem pensa diferente, com educação e troca de verdade, posta esse vídeo nos seus stories."
+],
+[
+"s3",
+"E se você tem dúvida, se não entende o que o outro lado defende, posta também. Alguém pode topar te mandar uma informação."
+],
+[
+"s4",
+"Tem mais gente querendo uma conversa sincera do que você imagina."
+],
+[
+"s5",
+"Olha, não é pra convencer ninguém, tá? A gente separou umas frases e umas regrinhas pra não virar briga."
+],
+[
+"s6",
+"Funciona assim: escreve, nessa caixinha aqui embaixo, uma coisa que te preocupa."
+],
+[
+"s7",
+"Ou escolhe uma frase da lista, tipo essa aqui."
+],
+[
+"s8",
+"Aí, o amigo que pensa diferente te manda o que ele pesquisou. E você manda a sua pesquisa também, se quiser."
+],
+[
+"s9",
+"Agora, as regras. Se ele falar algo que parece absurdo, espera. Não responde na hora. Vai pesquisar por que ele pensa assim. Pesquisa até isso: por que ele não me entende nesse assunto? Muita gente tem essa mesma dúvida."
+],
+[
+"s10",
+"Antes de discordar, tenta provar que ele tá certo. O prompt pra IA tá nos comentários: ele pesquisa os dois lados, sem dar opinião, e diz quando uma acusação tem prova e quando não tem."
+],
+[
+"s11",
+"E depois dessa troca, parou. Isso aqui é só o começo de uma conversa. Boa sorte!"
+]
+]
+}
