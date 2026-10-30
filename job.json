@@ -23,6 +23,8 @@
   "erika": "Erika_Hilton",
   "valdemar": "Valdemar_Costa_Neto"
  },
- "only": [],
+ "only": [
+  "s08"
+ ],
  "skip_faces": true
 }
