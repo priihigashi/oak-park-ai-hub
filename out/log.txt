@@ -1,0 +1,55 @@
+tts fail n1 NoAudioReceived('No audio was received. Please verify that your parameters are correct.')
+tts fail n2 NoAudioReceived('No audio was received. Please verify that your parameters are correct.')
+tts fail n3 NoAudioReceived('No audio was received. Please verify that your parameters are correct.')
+tts fail n4 NoAudioReceived('No audio was received. Please verify that your parameters are correct.')
+tts fail n5 NoAudioReceived('No audio was received. Please verify that your parameters are correct.')
+tts ok n6
+tts fail n7 NoAudioReceived('No audio was received. Please verify that your parameters are correct.')
+tts fail n8 NoAudioReceived('No audio was received. Please verify that your parameters are correct.')
+tts fail n9 NoAudioReceived('No audio was received. Please verify that your parameters are correct.')
+wiki fail tereza KeyError('original')
+wiki fail jair <HTTPError 429: 'Too Many Requests'>
+commons fail jair <HTTPError 429: 'Too Many Requests'>
+head src hiran_0 https://upload.wikimedia.org/wikipedia/commons/b/bd/Hiran_Gon%C3%A7alves.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=original
+head ok hiran_0 (439, 620)
+head src hiran_1 https://upload.wikimedia.org/wikipedia/commons/9/9f/Hiran_Gon%C3%A7alves_em_outubro_de_2016.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled
+head ok hiran_1 (429, 590)
+head src hiran_2 https://upload.wikimedia.org/wikipedia/commons/b/bd/Hiran_Gon%C3%A7alves.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled
+head ok hiran_2 (439, 620)
+head src hiran_3 https://upload.wikimedia.org/wikipedia/commons/2/21/Senadores_da_57%C2%AA_Legislatura_%2852689522668%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled
+head ok hiran_3 (436, 620)
+head src chico_0 https://upload.wikimedia.org/wikipedia/commons/0/02/Senador_Chico_Rodrigues.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=original
+head ok chico_0 (473, 620)
+head src chico_1 https://upload.wikimedia.org/wikipedia/commons/a/a8/Senador_Chico_Rodrigues_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled
+head ok chico_1 (476, 620)
+head src chico_2 https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7c/Senador_Chico_Rodrigues_%2852989104706%29.jpg/1920px-Senador_Chico_Rodrigues_%2852989104706%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail
+no face chico_2
+head src chico_3 https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e8/Senador_Chico_Rodrigues_%2852989561568%29.jpg/1920px-Senador_Chico_Rodrigues_%2852989561568%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail
+no face chico_3
+head src mecias_0 https://upload.wikimedia.org/wikipedia/commons/d/d1/Senador_Mecias_de_Jesus.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=original
+head ok mecias_0 (457, 620)
+head src mecias_1 https://upload.wikimedia.org/wikipedia/commons/d/d1/Senador_Mecias_de_Jesus.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled
+head ok mecias_1 (457, 620)
+head src mecias_2 https://upload.wikimedia.org/wikipedia/commons/9/9e/Mecias_de_Jesus.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled
+head ok mecias_2 (201, 251)
+head src mecias_3 https://upload.wikimedia.org/wikipedia/commons/4/4c/Senador_Mecias_de_Jesus_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled
+head ok mecias_3 (458, 620)
+head src rogerio_0 https://upload.wikimedia.org/wikipedia/commons/8/8c/Senador_Rog%C3%A9rio_Carvalho.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=original
+head ok rogerio_0 (446, 620)
+head src rogerio_1 https://thumb.wikimedia.org/wikipedia/commons/thumb/6/69/Rog%C3%A9rio_Carvalho_%28sess%C3%A3o%29.jpg/1920px-Rog%C3%A9rio_Carvalho_%28sess%C3%A3o%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail
+head ok rogerio_1 (278, 375)
+head src rogerio_2 https://upload.wikimedia.org/wikipedia/commons/8/8c/Senador_Rog%C3%A9rio_Carvalho.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled
+head ok rogerio_2 (446, 620)
+head src rogerio_3 https://upload.wikimedia.org/wikipedia/commons/6/67/Senador_Rog%C3%A9rio_Carvalho_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled
+head fail rogerio_3 <HTTPError 429: 'Too many requests - please contact noc@wikimedia.org to discuss a less disruptive approach or instead use thumbnail images in sizes listed on https://w.wiki/GHai. (0c640b1)'>
+head src tereza_0 https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e6/Tereza_Cristina_%28politician%29_in_2025_Plen%C3%A1rio_do_Senado.jpg/1920px-Tereza_Cristina_%28politician%29_in_2025_Plen%C3%A1rio_do_Senado.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail
+head ok tereza_0 (315, 416)
+head src tereza_1 https://upload.wikimedia.org/wikipedia/commons/8/8b/Tereza_Cristina_Corr%C3%AAa_da_Costa_Dias_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled
+head fail tereza_1 <HTTPError 429: 'Too many requests - please contact noc@wikimedia.org to discuss a less disruptive approach or instead use thumbnail images in sizes listed on https://w.wiki/GHai. (0c640b1)'>
+head src tereza_2 https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Zenaide_Maia%2C_Izalci_Lucas_and_Tereza_Cristina_Plen%C3%A1rio_do_Senado.jpg/1920px-Zenaide_Maia%2C_Izalci_Lucas_and_Tereza_Cristina_Plen%C3%A1rio_do_Senado.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail
+no face tereza_2
+head src tereza_3 https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8c/Tereza_Cristina_Corr%C3%AAa_da_Costa_Dias.jpg/1920px-Tereza_Cristina_Corr%C3%AAa_da_Costa_Dias.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail
+head ok tereza_3 (374, 437)
+font ok Figtree:wght@600;800;900
+font ok Instrument+Serif:ital@1
+pdf ok 171060
