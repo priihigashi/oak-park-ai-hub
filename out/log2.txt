@@ -1,0 +1,27 @@
+edge_tts 7.3.1
+tts fail n1 0 NoAudioReceived('No audio was received. Please verify that your parameters are correct.')
+tts fail n1 1 NoAudioReceived('No audio was received. Please verify that your parameters are correct.')
+tts fail n1 2 NoAudioReceived('No audio was received. Please verify that your parameters are correct.')
+tts ok n1 3 pt-BR-ThalitaMultilingualNeural
+tts ok n2 0 pt-BR-ThalitaMultilingualNeural
+tts fail n3 0 NoAudioReceived('No audio was received. Please verify that your parameters are correct.')
+tts fail n3 1 NoAudioReceived('No audio was received. Please verify that your parameters are correct.')
+tts fail n3 2 NoAudioReceived('No audio was received. Please verify that your parameters are correct.')
+tts fail n3 3 NoAudioReceived('No audio was received. Please verify that your parameters are correct.')
+tts fail n3 4 NoAudioReceived('No audio was received. Please verify that your parameters are correct.')
+tts ok n3 5 pt-BR-FranciscaNeural
+tts ok n4 0 pt-BR-ThalitaMultilingualNeural
+tts fail n5 0 NoAudioReceived('No audio was received. Please verify that your parameters are correct.')
+tts fail n5 1 NoAudioReceived('No audio was received. Please verify that your parameters are correct.')
+tts fail n5 2 NoAudioReceived('No audio was received. Please verify that your parameters are correct.')
+tts fail n5 3 NoAudioReceived('No audio was received. Please verify that your parameters are correct.')
+tts ok n5 4 pt-BR-ThalitaMultilingualNeural
+tts fail n7 0 NoAudioReceived('No audio was received. Please verify that your parameters are correct.')
+tts fail n7 1 NoAudioReceived('No audio was received. Please verify that your parameters are correct.')
+tts ok n7 2 pt-BR-ThalitaMultilingualNeural
+tts fail n8 0 NoAudioReceived('No audio was received. Please verify that your parameters are correct.')
+tts ok n8 1 pt-BR-ThalitaMultilingualNeural
+tts fail n9 0 NoAudioReceived('No audio was received. Please verify that your parameters are correct.')
+tts fail n9 1 NoAudioReceived('No audio was received. Please verify that your parameters are correct.')
+tts fail n9 2 NoAudioReceived('No audio was received. Please verify that your parameters are correct.')
+tts ok n9 3 pt-BR-ThalitaMultilingualNeural
