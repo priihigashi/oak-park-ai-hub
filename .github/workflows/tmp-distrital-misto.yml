@@ -1,0 +1,21 @@
+name: tmp distrital misto
+on:
+  push:
+    branches: [tmp-distrital-misto]
+    paths: [job.json, tools/**, .github/workflows/tmp-distrital-misto.yml]
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: pip install edge-tts "rembg[cpu]" mediapipe==0.10.14 pillow numpy requests
+      - run: python tools/tts.py
+      - run: python tools/faces.py || true
+      - run: |
+          git config user.name bot; git config user.email bot@users.noreply.github.com
+          git add out; git commit -m "out [skip ci]" || true; git push
