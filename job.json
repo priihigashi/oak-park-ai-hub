@@ -1,21 +1,21 @@
 {
  "voice": "pt-BR-ThalitaMultilingualNeural",
- "rate": "+12%",
+ "rate": "+20%",
  "lines": {
-  "s01": "Querem mudar o jeito que você vota pra deputado. E os jornais já deram um apelido: a reforma contra o efeito Nikolas.",
-  "s02": "Hoje é assim: seu voto vai primeiro pro partido. Nikolas teve mais de três milhões de votos em Minas, e a sobra ajudou a eleger mais cinco deputados do PL, com bem menos voto.",
-  "s03": "E isso vale pros dois lados. Erika Hilton, do PSOL, teve um milhão e seiscentos mil. No total, quatrocentos e setenta e nove dos quinhentos e treze deputados entraram puxados pelo partido ou por colegas.",
-  "s04": "O plano tem dois passos. Em dois mil e trinta, metade das vagas vai pros mais votados do estado, e ninguém puxa ninguém. A outra metade vai pra uma lista montada pelo partido.",
-  "s05": "Em dois mil e trinta e quatro, o estado é cortado em pedaços, os distritos. Você vota duas vezes: num candidato da sua região e num partido. O voto no partido decide quantas cadeiras ele leva.",
-  "s06": "Lista fechada quer dizer: quem escolhe a ordem dos nomes é a cúpula do partido, não você.",
-  "s07": "Quem defende diz que você vai saber quem é o deputado da sua região e cobrar dele, que a campanha fica mais barata, e que fica mais difícil pro crime organizado entrar.",
-  "s08": "Quem critica diz que quem desenha o mapa dos distritos pode favorecer um grupo, e os Estados Unidos sofrem com isso. E que, em região dominada por um grupo, quem pensa diferente some.",
-  "s09": "Quem quer a mudança é o centrão: oito partidos, que somam duzentos e oitenta e nove deputados. Precisa de trezentos e oito, em duas votações, e depois passar no Senado.",
-  "s10": "Quem resiste está nos dois polos. O PT prefere o voto só no partido, sem distritos. E o presidente do PL, Valdemar Costa Neto, diz que a mudança só beneficia os donos dos partidos. Os jornais contam que é uma reação ao PL, que virou a maior bancada, com cento e vinte e um.",
-  "s11": "E tem um detalhe: querem votar ainda em dois mil e vinte e seis, com a Câmara atual, antes dos novos deputados assumirem em fevereiro.",
-  "s12": "Você não vota nessa mudança. Mas os deputados do seu estado votam. Manda mensagem pra quem você elegeu. E tem outras ideias na mesa: manter o sistema de hoje com limite pros puxadores, ou ficar só no distritão misto.",
-  "s13": "Ah, e pra presidente, nada muda. Nos Estados Unidos, o voto pra deputado é distrital puro: quem ganha o distrito leva a vaga, sem lista nenhuma.",
-  "s14": "E você, prefere votar no candidato da sua região ou no partido? Comenta aí."
+  "s01": "Querem mudar como você vota pra deputado. Os jornais chamam de: a reforma contra o efeito Nikolas.",
+  "s02": "Hoje, seu voto vai primeiro pro partido. Nikolas teve mais de três milhões de votos, e a sobra ajudou a eleger mais cinco do PL.",
+  "s03": "E vale pros dois lados: Erika Hilton, do PSOL, teve um milhão e seiscentos mil. No total, quatrocentos e setenta e nove dos quinhentos e treze deputados entraram puxados.",
+  "s04": "A proposta tem dois passos. Em dois mil e trinta, metade das vagas vai pros mais votados do estado. A outra metade, pra uma lista do partido.",
+  "s05": "Em dois mil e trinta e quatro, o estado vira pedaços, os distritos. Você vota duas vezes: num candidato da sua região e num partido.",
+  "s06": "Lista fechada: quem escolhe a ordem dos nomes é a cúpula do partido, não você.",
+  "s09": "Quem quer a mudança é o centrão: oito partidos, com duzentos e oitenta e nove deputados. Precisa de trezentos e oito, duas vezes, e depois o Senado.",
+  "s10": "Quem resiste está nos dois polos: o PT prefere votar só no partido, e Valdemar, presidente do PL, diz que só beneficia os donos dos partidos. Os jornais contam que é uma reação ao PL, a maior bancada.",
+  "s07": "A favor: você sabe quem é o seu deputado e cobra dele, a campanha fica mais barata, e, segundo Motta, fica mais difícil pro crime entrar.",
+  "s08": "Contra: quem desenha os distritos pode favorecer um grupo, como acontece nos Estados Unidos. E onde um grupo manda, quem pensa diferente some.",
+  "s11": "E tem um detalhe: querem votar ainda este ano, com a Câmara atual, antes dos novos deputados assumirem.",
+  "s12": "Você não vota nisso, mas os deputados do seu estado votam. Manda mensagem pra quem você elegeu. Outra ideia na mesa: manter o sistema de hoje, com limite pros puxadores.",
+  "s13": "E pra presidente, nada muda. Nos Estados Unidos, é distrital puro: quem ganha o distrito leva a vaga, sem lista.",
+  "s14": "Você prefere votar no candidato da sua região ou no partido? Comenta aí."
  },
  "photos": {
   "motta": "Hugo_Motta",
@@ -23,9 +23,6 @@
   "erika": "Erika_Hilton",
   "valdemar": "Valdemar_Costa_Neto"
  },
- "only": [
-  "s09",
-  "s12",
-  "s13"
- ]
+ "only": [],
+ "skip_faces": true
 }

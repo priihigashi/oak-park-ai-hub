@@ -1,4 +1,6 @@
 import json, os, requests, numpy as np, io
+import sys
+if json.load(open('job.json')).get('skip_faces'): sys.exit(0)
 from PIL import Image, ImageFilter
 job=json.load(open('job.json')); os.makedirs('out/faces',exist_ok=True)
 H={'User-Agent':'oakpark-reel-bot/1.0 (priscila@oakpark-construction.com)'}
