@@ -12,10 +12,11 @@ async def one(k,t,voice):
     json.dump(words,open(f'out/tts/{k}.json','w'),ensure_ascii=False)
 async def main():
     for k,t in job['lines'].items():
-        for voice in [job['voice'],job['voice'],'pt-BR-FranciscaNeural','pt-BR-AntonioNeural']:
+        if job.get('only') and k not in job['only']: continue
+        for voice in [job['voice']]*6:
             try:
                 await one(k,t,voice); log[k]=voice; break
             except Exception as ex:
-                log[k]='err '+repr(ex)[:200]; await asyncio.sleep(4)
-    json.dump(log,open('out/tts/log.json','w'),indent=1)
+                log[k]='err '+repr(ex)[:200]; await asyncio.sleep(10)
+    json.dump(log,open('out/tts/log2.json','w'),indent=1)
 asyncio.run(main())

@@ -17,5 +17,15 @@
   "s13": "Ah, e pra presidente, nada muda. Nos Estados Unidos, o voto pra deputado é distrital puro: quem ganha o distrito leva a vaga, sem lista nenhuma.",
   "s14": "E você, prefere votar no candidato da sua região ou no partido? Comenta aí."
  },
- "photos": {"motta":"Hugo_Motta","nikolas":"Nikolas_Ferreira","erika":"Erika_Hilton","valdemar":"Valdemar_Costa_Neto"}
+ "photos": {
+  "motta": "Hugo_Motta",
+  "nikolas": "Nikolas_Ferreira",
+  "erika": "Erika_Hilton",
+  "valdemar": "Valdemar_Costa_Neto"
+ },
+ "only": [
+  "s09",
+  "s12",
+  "s13"
+ ]
 }

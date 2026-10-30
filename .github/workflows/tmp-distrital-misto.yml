@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: '3.11'}
-      - run: pip install edge-tts "rembg[cpu]" mediapipe==0.10.14 pillow numpy requests
+      - run: pip install edge-tts "rembg[cpu]" mediapipe==0.10.14 pillow numpy requests scipy
       - run: python tools/tts.py || true
       - run: python tools/faces.py || true
       - run: |

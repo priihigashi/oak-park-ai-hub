@@ -22,15 +22,19 @@ for k,title in job['photos'].items():
     if res.multi_face_landmarks:
       lm=res.multi_face_landmarks[0].landmark; w,h=im.size
       pts=[(lm[i].x*w,lm[i].y*h) for i in OVAL]
-      chin=lm[152].y*h; top=lm[10].y*h; fh=chin-top; extra=0.05*fh
+      chin=lm[152].y*h; top=lm[10].y*h; fh=chin-top; extra=0.0*fh
       xs=np.array([p[0] for p in pts]); ys=np.array([p[1] for p in pts])+extra
       order=np.argsort(xs); xs,ys=xs[order],ys[order]
       Y=np.arange(h)[:,None]; X=np.arange(w)[None,:]
       cutoff=np.interp(np.arange(w),xs,ys)
       side=(np.arange(w)<xs[0])|(np.arange(w)>xs[-1])
-      cutoff[side]=min(ys[0],ys[-1])-0.05*fh
+      L=np.arange(w)<xs[0]; Rr=np.arange(w)>xs[-1]
+      cutoff[L]=np.minimum(ys[0]+0.7*(xs[0]-np.arange(w)[L]),chin-0.12*fh)
+      cutoff[Rr]=np.minimum(ys[-1]+0.7*(np.arange(w)[Rr]-xs[-1]),chin-0.12*fh)
+      from scipy.ndimage import uniform_filter1d
+      cutoff=uniform_filter1d(cutoff,size=max(3,int(0.06*w)))
       a[...,3]=np.where(Y>cutoff[None,:],0,a[...,3])
-      al=Image.fromarray(a[...,3]).filter(ImageFilter.GaussianBlur(1.2)); a[...,3]=np.array(al)
+      al=Image.fromarray(a[...,3]).filter(ImageFilter.GaussianBlur(1.6)); a[...,3]=np.array(al)
       log[k]='ok'
     else: log[k]='noface'
     o=Image.fromarray(a); bb=o.getbbox(); o=o.crop(bb)
