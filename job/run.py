@@ -75,5 +75,5 @@ if aud and job.get('whisper', True):
                 res['words'].append({'w': w.word.strip(), 's': round(w.start, 3), 'e': round(w.end, 3)})
         json.dump(res, open('out/' + os.path.basename(a) + '.whisper.json', 'w'), ensure_ascii=False)
 if job.get('render'):
-    subprocess.run("tar xzf job/bundle.tgz -C job && sed -i -E 's#python \\$B/(gen|page|build)\\.py#/usr/bin/python3 $B/\\1.py#g' job/bundle/go.sh && grep -n usr/bin/python3 job/bundle/go.sh && bash job/bundle/go.sh", shell=True, check=True)
+    subprocess.run("tar xzf job/bundle.tgz -C job && sed -i -E 's#python \\$B/(gen|page|build)\\.py#/usr/bin/python3 $B/\\1.py#g' job/bundle/go.sh && grep -n usr/bin/python3 job/bundle/go.sh && sed -i 's#Vídeo: @nikolasferreiradm, 28/10/2026#Vídeo do deputado no Instagram, 28/10/2026#g' job/bundle/gen.py && sed -i 's#Vídeo original: @nikolasferreiradm#Vídeo original: post do deputado no Instagram#' job/bundle/page.py && sed -i 's#reel_plantou_v3#reel_plantou_v4#g; s#capa_plantou_v3#capa_plantou_v4#g' job/bundle/go.sh && ! grep -n nikolasferreiradm job/bundle/gen.py job/bundle/page.py && bash job/bundle/go.sh", shell=True, check=True)
 print('done')
