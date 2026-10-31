@@ -17,7 +17,7 @@
   "tl": "Vamos ver como seria. O plano tem três etapas. Hoje, seu voto vai pra uma pessoa e ajuda o partido dela. Em dois mil e trinta, uma transição. E em dois mil e trinta e quatro, o voto distrital misto: você vota duas vezes, num candidato do seu pedaço e num partido.",
   "m1": "Olha Minas. Hoje, o Nikolas pega voto do estado inteiro, e a sobra puxa colegas: sem os votos dele, o PL teria onze deputados lá, e não vinte e um.",
   "m2": "Mesmo assim, querem mudar tudo. Em dois mil e trinta e quatro, Minas seria cortada em pedaços, os distritos. Cada pedaço elege uma pessoa só. O Nikolas ganharia o pedaço dele, e só: os votos que sobram não ajudam mais a eleger ninguém nos outros pedaços.",
-  "m3": "E quem ganha os outros pedaços? Num pedaço pequeno, a eleição vira quase uma eleição de prefeito: costuma ganhar quem já tem prefeito aliado, vereador e obra na rua. E os partidos do centrão têm cerca de três mil prefeituras. O PL tem quinhentas, e o PT, duzentas e cinquenta.",
+  "m3": "E quem ganha os outros pedaços? Hoje, em Minas, os partidos que articulam a mudança têm só quinze dos cinquenta e três deputados. Mas num pedaço pequeno, a eleição vira quase uma eleição de prefeito: costuma ganhar quem já tem prefeito aliado, vereador e obra na rua. E esses partidos têm cerca de três mil prefeituras no país. O PL tem quinhentas, e o PT, duzentas e cinquenta.",
   "q1": "Agora junta tudo. O centrão acabou de perder cadeiras pro PL nesta eleição. E agora propõe uma regra em que ele tende a ganhar força. Se o problema era o puxador, e já existe um limite pra ele, por que mudar o sistema inteiro, e por que justo agora?",
   "m5": "Agora, o cinquenta e um contra quarenta e nove. Num pedaço de Minas, um candidato tem cinquenta e um por cento e leva a cadeira. Quem votou no outro, quarenta e nove por cento, perde a disputa ali. Mas ainda tem o segundo voto, no partido, que ajuda a eleger gente pela lista. Então essas pessoas não ficam sem nada. Mas ficam sem o deputado do seu pedaço, e quem entra pela lista é quem a direção do partido colocou no topo da lista.",
   "m6": "E isso pega os dois lados. Pensa num candidato de esquerda no Rio Grande do Sul, ou num de direita no Ceará, onde o PT é forte. Hoje, ele junta voto espalhado pelo estado inteiro e se elege. Com distritos, pode ser forte no estado e não ganhar nenhum pedaço. A esquerda no Sul e a direita no Nordeste podem perder espaço.",
@@ -38,15 +38,7 @@
   "andre2": "André_Fernandes"
  },
  "only": [
-  "p1",
-  "p2",
-  "m2",
-  "q1",
-  "m5",
-  "s10",
-  "s08",
-  "alt",
-  "s11c"
+  "m3"
  ],
  "skip_faces": true
 }
