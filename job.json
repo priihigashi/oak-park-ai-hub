@@ -5,9 +5,9 @@
   "s01": "Hugo Motta, presidente da Câmara, anunciou que quer mudar como você vota pra deputado. E os jornais já chamam de: a reforma contra o efeito Nikolas.",
   "s02": "Hoje, seu voto vai primeiro pro partido. Nikolas teve mais de três milhões de votos, e a sobra ajudou a eleger mais cinco do PL.",
   "s03": "E vale pros dois lados: Erika Hilton, do PSOL, teve um milhão e seiscentos mil. No total, quatrocentos e setenta e nove dos quinhentos e treze deputados entraram puxados.",
-  "s04": "A proposta tem dois passos. Em dois mil e trinta, metade das vagas vai pros mais votados do estado. A outra metade, pra uma lista do partido.",
+  "s04": "Compara comigo. Hoje, você vota numa pessoa, e entram os mais votados de cada partido. Em dois mil e trinta, metade das vagas vai pros mais votados do estado, e a outra metade sai de uma lista que o partido monta. Em dois mil e trinta e quatro, o estado vira distritos, que são grupos de cidades ou bairros. Você vota duas vezes: num candidato do seu distrito e num partido. E as vagas que sobram saem da lista do partido.",
   "s05": "Em dois mil e trinta e quatro, o estado vira pedaços, os distritos. Você vota duas vezes: num candidato da sua região e num partido.",
-  "s06": "Lista fechada: quem escolhe a ordem dos nomes é a cúpula do partido, não você.",
+  "s06": "Resumindo: hoje, quem escolhe os nomes é o seu voto. Com a mudança, metade quem escolhe é a cúpula do partido.",
   "s09": "Quem quer a mudança é o centrão: oito partidos, com duzentos e oitenta e nove deputados. Precisa de trezentos e oito, duas vezes, e depois o Senado.",
   "s10": "Quem resiste está nos dois polos: o PT prefere votar só no partido, e Valdemar, presidente do PL, diz que só beneficia os donos dos partidos. Os jornais contam que é uma reação ao PL, a maior bancada.",
   "s07": "A favor: você sabe quem é o seu deputado e cobra dele, a campanha fica mais barata, e, segundo Motta, fica mais difícil pro crime entrar.",
@@ -24,8 +24,8 @@
   "valdemar": "Valdemar_Costa_Neto"
  },
  "only": [
-  "s01",
-  "s14"
+  "s04",
+  "s06"
  ],
  "skip_faces": true
 }
