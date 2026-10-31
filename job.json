@@ -3,8 +3,8 @@
  "rate": "+20%",
  "lines": {
   "s01": "Hugo Motta, presidente da Câmara, anunciou que quer mudar como você vota pra deputado. Os jornais chamam de reforma contra o efeito Nikolas. Pode ser sincero, mas também pode ser um jeito de fazer quem não gosta do Nikolas aceitar uma mudança que mexe com todo mundo.",
-  "s02": "Hoje, seu voto vai primeiro pro partido. Nikolas teve mais de três milhões de votos, e a sobra ajudou a eleger mais cinco do PL.",
-  "s03": "E vale pros dois lados: Erika Hilton, do PSOL, teve um milhão e seiscentos mil. No total, quatrocentos e setenta e nove dos quinhentos e treze deputados entraram puxados.",
+  "s02": "Hoje, seu voto vai primeiro pro partido. O Nikolas teve mais de três milhões de votos em Minas. Sem os votos dele, o PL teria onze deputados lá, em vez de vinte e um.",
+  "s03": "E isso não é só do PL: funciona igual pra todo partido. A Erika Hilton, do PSOL, teve um milhão e seiscentos mil votos, e o que passou do que ela precisava também foi pros colegas dela. No total, só trinta e quatro dos quinhentos e treze deputados se elegeram só com os próprios votos.",
   "s04": "Compara comigo. Hoje, você vota numa pessoa, e entram os mais votados de cada partido. Em dois mil e trinta, metade das vagas vai pros mais votados do estado, e a outra metade sai de uma lista que o partido monta. Em dois mil e trinta e quatro, o estado vira distritos, que são grupos de cidades ou bairros. Você vota duas vezes: num candidato do seu distrito e num partido. E as vagas que sobram saem da lista do partido.",
   "s05": "Em dois mil e trinta e quatro, o estado vira pedaços, os distritos. Você vota duas vezes: num candidato da sua região e num partido.",
   "s06": "Resumindo: hoje, quem escolhe os nomes é o seu voto. Com a mudança, metade quem escolhe é a cúpula do partido, e até quem perdeu no voto pode voltar pela lista.",
@@ -24,11 +24,8 @@
   "flavio": "Flávio_Bolsonaro"
  },
  "only": [
-  "s01",
-  "s06",
-  "s08",
-  "s11c",
-  "s12"
+  "s02",
+  "s03"
  ],
  "skip_faces": true
 }
