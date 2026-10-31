@@ -21,15 +21,24 @@
   "s16": "Pra presidente, essa mudança não vale. Mas olha como o mapa pesa: se o Brasil escolhesse presidente como nos Estados Unidos, estado por estado, quem ganhou agora teria perdido, mesmo com mais de quatro milhões de votos a mais.",
   "s04a": "Vamos simplificar. Imagina um estado com dez cadeiras. Hoje, primeiro se conta quantos votos cada partido teve. Se o partido Roxo teve metade dos votos, ele leva cinco cadeiras. E quem senta nelas? Os cinco candidatos mais votados do Roxo. Quem decide os nomes é o seu voto.",
   "s04b": "Em dois mil e trinta, muda assim: cinco cadeiras vão pros cinco mais votados do estado, de qualquer partido. As outras cinco são divididas entre os partidos, e quem senta é quem o partido colocou no topo da lista. Aí quem decide o nome é o partido.",
-  "s04c": "Em dois mil e trinta e quatro, o estado é cortado em cinco pedaços, os distritos, que são grupos de cidades ou bairros. Cada pedaço elege uma pessoa. E as outras cinco cadeiras saem de novo da lista do partido."
+  "s04c": "Em dois mil e trinta e quatro, o estado é cortado em cinco pedaços, os distritos, que são grupos de cidades ou bairros. Cada pedaço elege uma pessoa. E as outras cinco cadeiras saem de novo da lista do partido.",
+  "h1": "Hoje, o famoso puxa: a sobra dos votos dele elege os colegas do partido.",
+  "h2": "Com distritos, ele disputa um pedaço só. Ganha o dele, uma cadeira, e a sobra não puxa ninguém.",
+  "h3": "Nos outros pedaços, ganha quem já manda na região: quem tem prefeito, emenda e obra. E o centrão tem cerca de três mil das cinco mil e quinhentas prefeituras do país.",
+  "h4": "E quem é minoria na região perde, seja a esquerda no Sul, seja a direita no Nordeste.",
+  "h5": "E a outra metade das cadeiras, quem escolhe é a cúpula do partido.",
+  "h6": "Ou seja: o PL perde o efeito Nikolas, a esquerda perde onde é minoria, e quem ganha força é o centrão, justamente quem propôs a mudança."
  },
  "photos": {
   "flavio": "Flávio_Bolsonaro"
  },
  "only": [
-  "s04a",
-  "s04b",
-  "s04c"
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6"
  ],
  "skip_faces": true
 }
