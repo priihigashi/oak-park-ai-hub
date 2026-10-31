@@ -5,7 +5,7 @@
   "s01": "A eleição mal acabou e Hugo Motta, presidente da Câmara, já quer mudar como o seu voto vira deputado. Os jornais chamam de reforma contra o efeito Nikolas. Mas quem pode ganhar poder com isso não é quem você imagina.",
   "s02": "Pra entender, vamos com calma. Hoje, você vota numa pessoa, mas o seu voto também conta pro partido dela. O Nikolas teve mais de três milhões de votos em Minas. Sem os votos dele, o PL teria onze deputados lá, em vez de vinte e um.",
   "s03": "Agora, com calma. Primeiro, o hoje. O nome do sistema atual é proporcional: cada partido leva cadeiras conforme a soma dos votos dos seus candidatos. E vale pra todo partido. A Erika Hilton, do PSOL, teve quase um milhão e seiscentos mil votos, e eles também entram na conta do partido dela. No total, só trinta e quatro dos quinhentos e treze deputados se elegeram só com os próprios votos.",
-  "s04b": "Em dois mil e trinta, uma das ideias é o distritão misto. Imagina dez cadeiras. Cinco vão pros cinco mais votados do estado, de qualquer partido. As outras cinco são divididas entre os partidos conforme os votos de cada um: um partido com quarenta por cento dos votos leva duas dessas cinco. E quem senta não é quem você escolheu, é quem está no topo da lista que o partido montou antes da eleição. Mesmo que quase ninguém conheça. Aí quem decide o nome é o partido.",
+  "s04b": "Em dois mil e trinta, uma das ideias é o distritão misto. Imagina dez cadeiras. Cinco vão pros cinco mais votados do estado, de qualquer partido. As outras cinco são divididas entre os partidos conforme os votos de cada um: um partido com quarenta por cento dos votos leva duas dessas cinco. E quem senta é quem está no topo da lista que o partido montou antes da eleição. Seu voto não muda essa ordem. Se o PL puser o Pavanato no topo, ou o PSOL puser o Boulos, eles entram, e quem não gosta deles não consegue tirar. Aí quem decide o nome é o partido.",
   "s10": "Quem é contra está nos dois polos. Na esquerda: em dois mil e dezessete, a maioria do PT votou contra no Senado, e PT e PSOL já pediram pra tirar o tema de pauta. O medo deles: que o distrito favoreça quem já manda em cada região, e que quem é votado pelas ideias perca pra quem tem dinheiro e apoio na região. Na direita, Valdemar, presidente do PL, diz que só beneficia os donos dos partidos.",
   "s08": "Agora, os riscos. Quem já tem estrutura, dinheiro e emenda sai na frente. E onde milícia ou facção manda no bairro, o voto já fica concentrado em poucos nomes: no Rio, mais de um terço dos eleitores vota nessas áreas. Mulheres, indígenas e minorias perdem espaço, porque raramente são os mais fortes num pedaço só. E tem o risco do mapa. Isso tem até nome em inglês: gerrymandering, que é desenhar os distritos pra escolher quem ganha. Nos Estados Unidos, o Texas redesenhou o mapa a pedido do presidente americano pra ganhar cinco vagas, e a Califórnia respondeu fazendo o mesmo.",
   "h1": "Hoje, um famoso muito votado puxa: a sobra dos votos dele ajuda a eleger os colegas do partido.",
@@ -33,12 +33,11 @@
   "s14": "Nos comentários, o povo pediu outra lista pro Motta: fim do foro privilegiado, transparência nas emendas, menos privilégios pros deputados, mais dinheiro pro SUS, direitos dos povos indígenas e combate às fake news. Qual dessas você quer primeiro? Comenta aí."
  },
  "photos": {
-  "melchionna": "Fernanda_Melchionna",
-  "andre": "André_Fernandes_(político)",
-  "andre2": "André_Fernandes"
+  "pavanato": "Lucas_Pavanato",
+  "boulos": "Guilherme_Boulos"
  },
  "only": [
   "s04b"
  ],
- "skip_faces": true
+ "skip_faces": false
 }
