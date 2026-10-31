@@ -12,10 +12,11 @@
   "s10": "Quem resiste está nos dois polos: o PT prefere votar só no partido, e Valdemar, presidente do PL, diz que só beneficia os donos dos partidos. Os jornais contam que é uma reação ao PL, a maior bancada.",
   "s07": "A favor: você sabe quem é o seu deputado e cobra dele, a campanha fica mais barata, e, segundo Motta, fica mais difícil pro crime entrar.",
   "s08": "Contra: quem desenha os distritos pode favorecer um grupo, como acontece nos Estados Unidos. E onde um grupo manda, quem pensa diferente some.",
-  "s11": "E tem um detalhe: querem votar ainda este ano, com a Câmara atual, antes dos novos deputados assumirem.",
+  "s11": "E tem um detalhe: olha o que ele mesmo disse.",
   "s12": "Você não vota nisso, mas os deputados do seu estado votam. Manda mensagem pra quem você elegeu. Outra ideia na mesa: manter o sistema de hoje, com limite pros puxadores.",
   "s13": "E pra presidente, nada muda. Nos Estados Unidos, é distrital puro: quem ganha o distrito leva a vaga, sem lista.",
-  "s14": "Nos comentários, o povo pediu outra lista pro Motta: fim do foro privilegiado, transparência nas emendas, menos privilégios pros deputados, mais dinheiro pro SUS, direitos dos povos indígenas e combate às fake news. Qual dessas você quer primeiro? Comenta aí."
+  "s14": "Nos comentários, o povo pediu outra lista pro Motta: fim do foro privilegiado, transparência nas emendas, menos privilégios pros deputados, mais dinheiro pro SUS, direitos dos povos indígenas e combate às fake news. Qual dessas você quer primeiro? Comenta aí.",
+  "s11c": "Ou seja: querem votar com a Câmara atual, antes dos novos deputados assumirem, em fevereiro."
  },
  "photos": {
   "motta": "Hugo_Motta",
@@ -24,8 +25,8 @@
   "valdemar": "Valdemar_Costa_Neto"
  },
  "only": [
-  "s04",
-  "s06"
+  "s11",
+  "s11c"
  ],
  "skip_faces": true
 }
