@@ -12,7 +12,9 @@ OVAL=[234,93,132,58,172,136,150,149,176,148,152,377,400,378,379,365,397,288,361,
 log={}
 for k,title in job['photos'].items():
   try:
-    j=requests.get(f'https://pt.wikipedia.org/api/rest_v1/page/summary/{title}',headers=H,timeout=30).json()
+    lang='pt'
+    if title.startswith('en:'): lang='en'; title=title[3:]
+    j=requests.get(f'https://{lang}.wikipedia.org/api/rest_v1/page/summary/{title}',headers=H,timeout=30).json()
     url=j.get('originalimage',{}).get('source') or j['thumbnail']['source']
     raw=requests.get(url,headers=H,timeout=60).content
     im=Image.open(io.BytesIO(raw)).convert('RGB')
