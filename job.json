@@ -2,35 +2,46 @@
  "voice": "pt-BR-ThalitaMultilingualNeural",
  "rate": "+20%",
  "lines": {
-  "s01": "Hugo Motta, presidente da Câmara, quer votar ainda este ano uma mudança no jeito que você vota pra deputado. Os jornais chamam de reforma contra o efeito Nikolas. Mas ela mexe com todos os partidos. Olha o que pode acontecer.",
+  "s01": "A eleição mal acabou e Hugo Motta, presidente da Câmara, quer mudar como o seu voto vira deputado. Os jornais chamam de reforma contra o efeito Nikolas. Mas quem pode sair ganhando não é quem você imagina.",
   "s02": "Pra entender, vamos com calma. Hoje, você vota numa pessoa, mas o seu voto também conta pro partido dela. O Nikolas teve mais de três milhões de votos em Minas. Sem os votos dele, o PL teria onze deputados lá, em vez de vinte e um.",
-  "s03": "E isso vale pra todo partido. A Erika Hilton, do PSOL, teve um milhão e seiscentos mil votos, e os votos dela também ajudaram a eleger colegas do PSOL. No total, só trinta e quatro dos quinhentos e treze deputados se elegeram só com os próprios votos.",
+  "s03": "Agora, com calma. Primeiro, o hoje. O nome do sistema atual é proporcional: cada partido leva cadeiras conforme a soma dos votos dos seus candidatos. E vale pra todo partido. A Erika Hilton, do PSOL, teve quase um milhão e seiscentos mil votos, e eles também entram na conta do partido dela. No total, só trinta e quatro dos quinhentos e treze deputados se elegeram só com os próprios votos.",
   "s04b": "Em dois mil e trinta, uma das ideias é assim: cinco cadeiras vão pros cinco mais votados do estado, de qualquer partido. As outras cinco são divididas entre os partidos, e quem senta é quem o partido colocou no topo da lista. Aí quem decide o nome é o partido.",
   "s10": "Quem é contra está nos dois polos. Na esquerda: em dois mil e dezessete, a maioria do PT votou contra no Senado, e PT e PSOL já pediram pra tirar o tema de pauta. O medo deles: que o distrito favoreça quem já manda em cada região, e quem tem voto de ideia perca pra quem tem estrutura no lugar. Na direita, Valdemar, presidente do PL, diz que só beneficia os donos dos partidos.",
-  "s08": "Agora, os riscos. Num distrito, só um ganha: se um tem cinquenta e um por cento e o outro quarenta e nove, quase metade da região fica sem o deputado que escolheu. O voto no partido compensa só uma parte. Quem já tem máquina, dinheiro e emenda sai na frente. E onde milícia ou facção manda no bairro, o voto já fica concentrado em poucos nomes: no Rio, mais de um terço dos eleitores vota nessas áreas. Mulheres, indígenas e minorias perdem espaço, porque raramente são os mais fortes num pedaço só. E quem desenha o mapa pode mudar o resultado antes da eleição: nos Estados Unidos, o Texas redesenhou os distritos a pedido do presidente americano pra ganhar cinco vagas, e a Califórnia respondeu fazendo o mesmo.",
+  "s08": "Agora, os riscos. Quem já tem máquina, dinheiro e emenda sai na frente. E onde milícia ou facção manda no bairro, o voto já fica concentrado em poucos nomes: no Rio, mais de um terço dos eleitores vota nessas áreas. Mulheres, indígenas e minorias perdem espaço, porque raramente são os mais fortes num pedaço só. E tem o risco do mapa. Isso tem até nome em inglês: gerrymandering, que é desenhar os distritos pra escolher quem ganha. Nos Estados Unidos, o Texas redesenhou o mapa a pedido do presidente americano pra ganhar cinco vagas, e a Califórnia respondeu fazendo o mesmo.",
   "h1": "Hoje, um famoso muito votado puxa: a sobra dos votos dele ajuda a eleger os colegas do partido.",
   "h2": "Com a mudança, o estado vira distritos, pedaços com algumas cidades ou bairros. Cada pedaço elege uma pessoa. O famoso ganha a cadeira dele, e a sobra quase não puxa ninguém.",
   "h3": "Nos outros pedaços, é quase uma eleição de prefeito: tende a ganhar quem já manda na região, com prefeito aliado, emenda e obra. E os partidos do centrão têm cerca de três mil das cinco mil e quinhentas prefeituras.",
   "h4": "E quem é minoria na região perde força, seja a esquerda no Sul, seja a direita no Nordeste.",
   "h5": "E a outra metade das cadeiras sai de uma lista que a cúpula do partido monta. Dependendo da regra, até quem perdeu no voto entra por ela.",
-  "h6": "Ou seja: o PL perde o efeito Nikolas, a esquerda perde onde é minoria, e quem mais ganha força é o centrão, justamente quem está propondo a mudança."
+  "h6": "Ou seja: o PL perde o efeito Nikolas, a esquerda perde onde é minoria, e quem mais ganha força é o centrão, justamente quem está propondo a mudança.",
+  "tl": "O plano tem três etapas. Hoje, seu voto vai pra uma pessoa e ajuda o partido dela. Em dois mil e trinta, uma transição. E em dois mil e trinta e quatro, a mudança grande: o estado é cortado em pedaços, os distritos.",
+  "m1": "Olha Minas. Hoje, o Nikolas pega voto do estado inteiro, e a sobra puxa colegas: sem os votos dele, o PL teria onze deputados lá, e não vinte e um.",
+  "m2": "Com distritos, cada pedaço elege uma pessoa. O Nikolas ganha o pedaço dele, e só. A sobra não elege mais ninguém nos outros pedaços.",
+  "m3": "E quem leva os outros pedaços? Quem já manda no lugar: quem tem prefeito, vereador e obra. E os partidos do centrão têm cerca de três mil prefeituras, bem mais que PL e PT.",
+  "q1": "Ou seja: o PL perde o puxador, quem é minoria numa região perde espaço, e quem tende a ganhar força é o centrão, justamente quem está propondo. Se o problema era o famoso que puxa os outros, por que mudar o sistema inteiro?",
+  "m5": "Agora, o cinquenta e um contra quarenta e nove. Num distrito, um candidato tem cinquenta e um por cento e leva a cadeira. Quem votou no outro, quarenta e nove por cento, perde a disputa ali. Mas ainda tem o segundo voto, no partido, que ajuda a eleger gente pela lista. Então essas pessoas não ficam sem nada. Mas ficam sem o deputado do seu pedaço, e quem entra pela lista é quem a cúpula do partido colocou no topo.",
+  "m6": "E isso pega os dois lados. A Fernanda Melchionna, do PSOL, foi a segunda mais votada do Rio Grande do Sul, com duzentos e oitenta mil votos. O André Fernandes, do PL, teve quase setecentos mil votos no Ceará, onde o PT é forte. Com distritos, quem tem voto espalhado pelo estado pode não ganhar nenhum pedaço. A esquerda no Sul e a direita no Nordeste podem perder espaço.",
+  "s09": "Quem articula a mudança é o centrão: oito partidos que, juntos, têm mais da metade da Câmara. Segundo os jornais, eles se preocupam com o crescimento do PL, puxado por famosos da internet. PL e PT nem estavam na reunião. E mudar a Constituição precisa de trezentos e oito votos, duas vezes, e depois o Senado.",
+  "alt": "E aqui tá a pergunta principal. Se o problema é mentira na internet, o caminho é fiscalizar: o TSE mandou o Nikolas apagar um post que distorcia uma fala do presidente. E no mesmo dia da reforma, o Motta também criou um grupo pra fazer regras pras redes. Se o problema é o puxador, já existe uma nota mínima: pra entrar, o candidato precisa ter pelo menos dez por cento dos votos que valem uma cadeira. Dá pra mexer nessa regra. Todo caminho tem consequência, mas mudar o sistema inteiro não é o único."
  },
  "photos": {
-  "flavio": "Flávio_Bolsonaro"
+  "melchionna": "Fernanda_Melchionna",
+  "andre": "André_Fernandes_(político)",
+  "andre2": "André_Fernandes"
  },
  "only": [
   "s01",
-  "h1",
-  "h2",
-  "h3",
-  "h4",
-  "h5",
-  "h6",
-  "s02",
+  "tl",
+  "m1",
+  "m2",
+  "m3",
+  "q1",
   "s03",
-  "s04b",
-  "s10",
-  "s08"
+  "m5",
+  "m6",
+  "s09",
+  "s08",
+  "alt"
  ],
- "skip_faces": true
+ "skip_faces": false
 }
