@@ -1,14 +1,1 @@
-{
- "voice": "pt-BR-ThalitaMultilingualNeural",
- "rate": "+8%",
- "lines": {
-  "s01": "A eleição mal acabou e Hugo Motta, presidente da Câmara, já quer mudar como o seu voto vira deputado. Os jornais chamam de reforma contra o efeito Nikolas. Mas o efeito maior é outro: se você vota diferente da maioria do seu estado, pode ficar sem nenhum deputado do seu lado.",
-  "m2": "Mesmo assim, querem mudar tudo. Em dois mil e trinta e quatro, Minas seria cortada em pedaços, os distritos. Cada pedaço elege uma pessoa só. O Nikolas ganharia o pedaço dele, e só: os votos que sobram não ajudam mais a eleger ninguém nos outros pedaços. E aqui tá o maior problema.",
-  "m5": "Agora, o cinquenta e um contra quarenta e nove, com gente de verdade. A Erika Hilton e o Pavanato são os dois de São Paulo. Se caírem no mesmo distrito, só um leva a cadeira, mesmo que o outro tenha quarenta e nove por cento. Quem perdeu só entra se o partido tiver posto o nome dele no topo da lista, e se a regra deixar disputar os dois ao mesmo tempo, o que ainda não foi decidido. E quase metade dos eleitores daquele pedaço fica sem deputado da sua região.",
-  "m6": "Imagina um estado onde sete em cada dez pessoas votam na direita, e três votam na esquerda, espalhadas por todo canto. Hoje, esses três somam os votos pelo estado inteiro e elegem cerca de três em cada dez deputados. Com distritos, em cada pedaço a direita tem sete em dez, e ganha. Todos os pedaços. O estado inteiro fica azul, e quem vota na esquerda ali fica sem nenhum deputado da sua região. Num estado onde a esquerda é maioria, acontece o contrário: quem vota na direita fica sem ninguém. Nos Estados Unidos, que usam distritos, é assim: em Massachusetts, cerca de um terço vota republicano, e as nove cadeiras são democratas. Em Oklahoma, um terço vota democrata, e as cinco cadeiras são republicanas.",
-  "s12": "Lembra do maior problema: com distritos, quem vota diferente da maioria da sua região pode ficar sem nenhum deputado do seu lado. Você não vota nisso, mas os deputados do seu estado votam. Pergunta pra quem você elegeu se ele concorda. Seja pra apoiar ou pra ser contra. Quem é contra tá usando a hashtag voto distrital não."
- },
- "photos": {},
- "only": ["s01","m2","m6","m5","s12"],
- "skip_faces": true
-}
+{"voice": "pt-BR-ThalitaMultilingualNeural", "rate": "+8%", "lines": {"m3": "E quem ganha os outros pedaços? Hoje, em Minas, os partidos que articulam a mudança têm só quinze dos cinquenta e três deputados. Mas num pedaço pequeno, a eleição vira quase uma eleição de prefeito: costuma ganhar quem já tem prefeito aliado, vereador e obra na rua. E esses partidos têm cerca de três mil prefeituras no país. O PL tem quinhentas, e o PT, duzentas e cinquenta. Ou seja: nesse cenário, quem levaria a maior parte dos pedaços em Minas seria o centrão, que é, na maioria, de centro-direita. E PL e PT perderiam espaço."}, "photos": {}, "only": ["m3"], "skip_faces": true}
