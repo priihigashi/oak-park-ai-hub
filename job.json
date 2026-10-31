@@ -9,24 +9,26 @@
   "s05": "Em dois mil e trinta e quatro, o estado vira pedaços, os distritos. Você vota duas vezes: num candidato da sua região e num partido.",
   "s06": "Resumindo: hoje, quem escolhe os nomes é o seu voto. Com a mudança, metade quem escolhe é a cúpula do partido.",
   "s09": "Quem quer a mudança é o centrão: oito partidos, com duzentos e oitenta e nove deputados. Precisa de trezentos e oito, duas vezes, e depois o Senado.",
-  "s10": "Quem resiste está nos dois polos: o PT prefere votar só no partido, e Valdemar, presidente do PL, diz que só beneficia os donos dos partidos. Os jornais contam que é uma reação ao PL, a maior bancada.",
-  "s07": "A favor: você sabe quem é o seu deputado e cobra dele, a campanha fica mais barata, e, segundo Motta, fica mais difícil pro crime entrar.",
-  "s08": "Contra: quem desenha os distritos pode favorecer um grupo, como acontece nos Estados Unidos. E onde um grupo manda, quem pensa diferente some.",
+  "s10": "Quem é contra está nos dois polos. Na esquerda: em dois mil e dezessete, o PT votou contra no Senado, e PT e PSOL já pediram pra tirar o tema de pauta. O medo deles: que o distrito favoreça quem já manda em cada região. Na direita, Valdemar, presidente do PL, diz que só beneficia os donos dos partidos.",
+  "s07": "Quem defende diz que você vai saber quem é o seu deputado e cobrar dele, que a campanha fica mais barata, e, segundo Motta, que fica mais difícil pro crime entrar.",
+  "s08": "Agora, o risco: quem desenha os distritos pode desenhar a favor de um grupo. Nos Estados Unidos, isso tá acontecendo agora: o Texas redesenhou o mapa a pedido do Trump pra ganhar cinco vagas, e a Califórnia respondeu fazendo o mesmo. E onde um grupo manda, quem pensa diferente pode ficar sem ninguém. Vale pra esquerda no Sul e pra direita no Nordeste.",
   "s11": "E tem um detalhe: olha o que ele mesmo disse.",
   "s12": "Você não vota nisso, mas os deputados do seu estado votam. Manda mensagem pra quem você elegeu. Outra ideia na mesa: manter o sistema de hoje, com limite pros puxadores.",
   "s13": "E pra presidente, nada muda. Nos Estados Unidos, é distrital puro: quem ganha o distrito leva a vaga, sem lista.",
   "s14": "Nos comentários, o povo pediu outra lista pro Motta: fim do foro privilegiado, transparência nas emendas, menos privilégios pros deputados, mais dinheiro pro SUS, direitos dos povos indígenas e combate às fake news. Qual dessas você quer primeiro? Comenta aí.",
-  "s11c": "Ou seja: querem votar com a Câmara atual, antes dos novos deputados assumirem, em fevereiro."
+  "s11c": "Ou seja: querem votar com a Câmara atual, antes dos novos deputados assumirem, em fevereiro.",
+  "s15": "E por que agora? O PL fez cento e vinte e um deputados, e o Metrópoles chamou de reforma contra o efeito Nikolas. Pode ser sincero. Mas também pode ser um jeito de fazer quem não gosta do Nikolas aceitar uma mudança que mexe com todo mundo, justo quando o eleitor tá se organizando.",
+  "s16": "Pra presidente, essa mudança não vale. Mas olha como o mapa pesa: se o Brasil escolhesse presidente como nos Estados Unidos, estado por estado, quem ganhou agora teria perdido, mesmo com mais de quatro milhões de votos a mais."
  },
  "photos": {
-  "motta": "Hugo_Motta",
-  "nikolas": "Nikolas_Ferreira",
-  "erika": "Erika_Hilton",
-  "valdemar": "Valdemar_Costa_Neto"
+  "flavio": "Flávio_Bolsonaro"
  },
  "only": [
-  "s11",
-  "s11c"
+  "s10",
+  "s15",
+  "s07",
+  "s08",
+  "s16"
  ],
- "skip_faces": true
+ "skip_faces": false
 }
