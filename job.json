@@ -20,7 +20,7 @@
   "m3": "E quem leva os outros pedaços? Quem já manda no lugar: quem tem prefeito, vereador e obra. E os partidos do centrão têm cerca de três mil prefeituras, bem mais que PL e PT.",
   "q1": "Ou seja: o PL perde o puxador, quem é minoria numa região perde espaço, e quem tende a ganhar força é o centrão, justamente quem está propondo. Se o problema era o famoso que puxa os outros, por que mudar o sistema inteiro?",
   "m5": "Agora, o cinquenta e um contra quarenta e nove. Num distrito, um candidato tem cinquenta e um por cento e leva a cadeira. Quem votou no outro, quarenta e nove por cento, perde a disputa ali. Mas ainda tem o segundo voto, no partido, que ajuda a eleger gente pela lista. Então essas pessoas não ficam sem nada. Mas ficam sem o deputado do seu pedaço, e quem entra pela lista é quem a cúpula do partido colocou no topo.",
-  "m6": "E isso pega os dois lados. A Fernanda Melchionna, do PSOL, foi a segunda mais votada do Rio Grande do Sul, com duzentos e oitenta mil votos. O André Fernandes, do PL, teve quase setecentos mil votos no Ceará, onde o PT é forte. Com distritos, quem tem voto espalhado pelo estado pode não ganhar nenhum pedaço. A esquerda no Sul e a direita no Nordeste podem perder espaço.",
+  "m6": "E isso pega os dois lados. Pensa num candidato de esquerda no Rio Grande do Sul, ou num de direita no Ceará, onde o PT é forte. Hoje, ele junta voto espalhado pelo estado inteiro e se elege. Com distritos, pode ser forte no estado e não ganhar nenhum pedaço. A esquerda no Sul e a direita no Nordeste podem perder espaço.",
   "s09": "Quem articula a mudança é o centrão: oito partidos que, juntos, têm mais da metade da Câmara. Segundo os jornais, eles se preocupam com o crescimento do PL, puxado por famosos da internet. PL e PT nem estavam na reunião. E mudar a Constituição precisa de trezentos e oito votos, duas vezes, e depois o Senado.",
   "alt": "E aqui tá a pergunta principal. Se o problema é mentira na internet, o caminho é fiscalizar: o TSE mandou o Nikolas apagar um post que distorcia uma fala do presidente. E no mesmo dia da reforma, o Motta também criou um grupo pra fazer regras pras redes. Se o problema é o puxador, já existe uma nota mínima: pra entrar, o candidato precisa ter pelo menos dez por cento dos votos que valem uma cadeira. Dá pra mexer nessa regra. Todo caminho tem consequência, mas mudar o sistema inteiro não é o único."
  },
@@ -30,18 +30,7 @@
   "andre2": "André_Fernandes"
  },
  "only": [
-  "s01",
-  "tl",
-  "m1",
-  "m2",
-  "m3",
-  "q1",
-  "s03",
-  "m5",
-  "m6",
-  "s09",
-  "s08",
-  "alt"
+  "m6"
  ],
- "skip_faces": false
+ "skip_faces": true
 }
