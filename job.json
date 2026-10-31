@@ -1,8 +1,8 @@
 {
  "voice": "pt-BR-ThalitaMultilingualNeural",
- "rate": "+20%",
+ "rate": "+8%",
  "lines": {
-  "s01": "A eleição mal acabou e Hugo Motta, presidente da Câmara, quer mudar como o seu voto vira deputado. Os jornais chamam de reforma contra o efeito Nikolas. Mas quem pode sair ganhando não é quem você imagina.",
+  "s01": "A eleição mal acabou e Hugo Motta, presidente da Câmara, já quer mudar como o seu voto vira deputado. Os jornais chamam de reforma contra o efeito Nikolas. Mas quem pode ganhar poder com isso não é quem você imagina.",
   "s02": "Pra entender, vamos com calma. Hoje, você vota numa pessoa, mas o seu voto também conta pro partido dela. O Nikolas teve mais de três milhões de votos em Minas. Sem os votos dele, o PL teria onze deputados lá, em vez de vinte e um.",
   "s03": "Agora, com calma. Primeiro, o hoje. O nome do sistema atual é proporcional: cada partido leva cadeiras conforme a soma dos votos dos seus candidatos. E vale pra todo partido. A Erika Hilton, do PSOL, teve quase um milhão e seiscentos mil votos, e eles também entram na conta do partido dela. No total, só trinta e quatro dos quinhentos e treze deputados se elegeram só com os próprios votos.",
   "s04b": "Em dois mil e trinta, uma das ideias é assim: cinco cadeiras vão pros cinco mais votados do estado, de qualquer partido. As outras cinco são divididas entre os partidos, e quem senta é quem o partido colocou no topo da lista. Aí quem decide o nome é o partido.",
@@ -14,15 +14,23 @@
   "h4": "E quem é minoria na região perde força, seja a esquerda no Sul, seja a direita no Nordeste.",
   "h5": "E a outra metade das cadeiras sai de uma lista que a cúpula do partido monta. Dependendo da regra, até quem perdeu no voto entra por ela.",
   "h6": "Ou seja: o PL perde o efeito Nikolas, a esquerda perde onde é minoria, e quem mais ganha força é o centrão, justamente quem está propondo a mudança.",
-  "tl": "O plano tem três etapas. Hoje, seu voto vai pra uma pessoa e ajuda o partido dela. Em dois mil e trinta, uma transição. E em dois mil e trinta e quatro, a mudança grande: o estado é cortado em pedaços, os distritos.",
+  "tl": "Vamos ver como seria. O plano tem três etapas. Hoje, seu voto vai pra uma pessoa e ajuda o partido dela. Em dois mil e trinta, uma transição. E em dois mil e trinta e quatro, o voto distrital misto: você vota duas vezes, num candidato do seu pedaço e num partido.",
   "m1": "Olha Minas. Hoje, o Nikolas pega voto do estado inteiro, e a sobra puxa colegas: sem os votos dele, o PL teria onze deputados lá, e não vinte e um.",
-  "m2": "Com distritos, cada pedaço elege uma pessoa. O Nikolas ganha o pedaço dele, e só. A sobra não elege mais ninguém nos outros pedaços.",
-  "m3": "E quem leva os outros pedaços? Quem já manda no lugar: quem tem prefeito, vereador e obra. E os partidos do centrão têm cerca de três mil prefeituras, bem mais que PL e PT.",
-  "q1": "Ou seja: o PL perde o puxador, quem é minoria numa região perde espaço, e quem tende a ganhar força é o centrão, justamente quem está propondo. Se o problema era o famoso que puxa os outros, por que mudar o sistema inteiro?",
-  "m5": "Agora, o cinquenta e um contra quarenta e nove. Num distrito, um candidato tem cinquenta e um por cento e leva a cadeira. Quem votou no outro, quarenta e nove por cento, perde a disputa ali. Mas ainda tem o segundo voto, no partido, que ajuda a eleger gente pela lista. Então essas pessoas não ficam sem nada. Mas ficam sem o deputado do seu pedaço, e quem entra pela lista é quem a cúpula do partido colocou no topo.",
+  "m2": "Mesmo assim, querem mudar tudo. Em dois mil e trinta e quatro, Minas seria cortada em pedaços, os distritos. Cada pedaço elege uma pessoa só. O Nikolas ganharia o pedaço dele, e só: o resto dos votos não paga mais cadeira de ninguém nos outros pedaços.",
+  "m3": "E quem ganha os outros pedaços? Num pedaço pequeno, a eleição vira quase uma eleição de prefeito: costuma ganhar quem já tem prefeito aliado, vereador e obra na rua. E os partidos do centrão têm cerca de três mil prefeituras. O PL tem quinhentas, e o PT, duzentas e cinquenta.",
+  "q1": "Agora junta tudo. O centrão acabou de perder cadeiras pro PL nesta eleição. E agora propõe uma regra em que ele tende a ganhar força. Se o problema era o puxador, e já existe um freio pra ele, por que mudar o sistema inteiro, e por que justo agora?",
+  "m5": "Agora, o cinquenta e um contra quarenta e nove. Num pedaço de Minas, um candidato tem cinquenta e um por cento e leva a cadeira. Quem votou no outro, quarenta e nove por cento, perde a disputa ali. Mas ainda tem o segundo voto, no partido, que ajuda a eleger gente pela lista. Então essas pessoas não ficam sem nada. Mas ficam sem o deputado do seu pedaço, e quem entra pela lista é quem a cúpula do partido colocou no topo.",
   "m6": "E isso pega os dois lados. Pensa num candidato de esquerda no Rio Grande do Sul, ou num de direita no Ceará, onde o PT é forte. Hoje, ele junta voto espalhado pelo estado inteiro e se elege. Com distritos, pode ser forte no estado e não ganhar nenhum pedaço. A esquerda no Sul e a direita no Nordeste podem perder espaço.",
-  "s09": "Quem articula a mudança é o centrão: oito partidos que, juntos, têm mais da metade da Câmara. Segundo os jornais, eles se preocupam com o crescimento do PL, puxado por famosos da internet. PL e PT nem estavam na reunião. E mudar a Constituição precisa de trezentos e oito votos, duas vezes, e depois o Senado.",
-  "alt": "E aqui tá a pergunta principal. Se o problema é mentira na internet, o caminho é fiscalizar: o TSE mandou o Nikolas apagar um post que distorcia uma fala do presidente. E no mesmo dia da reforma, o Motta também criou um grupo pra fazer regras pras redes. Se o problema é o puxador, já existe uma nota mínima: pra entrar, o candidato precisa ter pelo menos dez por cento dos votos que valem uma cadeira. Dá pra mexer nessa regra. Todo caminho tem consequência, mas mudar o sistema inteiro não é o único."
+  "s09": "Quem articula a mudança é o centrão: oito partidos que, juntos, ainda têm mais da metade da Câmara. Mas nesta eleição eles encolheram: União e PP perderam dezoito cadeiras, enquanto o PL ganhou vinte e quatro. Segundo os jornais, o centrão se preocupa com esse crescimento do PL, puxado por famosos da internet. PL e PT nem estavam na reunião. E mudar a Constituição precisa de trezentos e oito votos, duas vezes, e depois o Senado.",
+  "alt": "E aqui tá a pergunta principal. Se o problema é mentira na internet, o caminho é fiscalizar: o tê ésse é mandou o Nikolas apagar um post que distorcia uma fala do presidente. E no mesmo dia da reforma, o Motta também criou um grupo pra fazer regras pras redes. Se o problema é o puxador, dá pra mexer no freio que já existe. Todo caminho tem consequência, mas mudar o sistema inteiro não é o único.",
+  "p1": "Pra entender, pensa assim: cada cadeira de deputado tem um preço em votos. Em Minas, cerca de duzentos mil. O Nikolas teve três milhões de votos. Ele só precisava de uma cadeira. O resto dos votos ficou com o PL e pagou a cadeira de colegas. Sem ele, o PL teria onze deputados em Minas, e não vinte e um. Isso tem nome: puxador de votos.",
+  "p2": "Esse sistema se chama proporcional, e vale pra todo partido. A Erika Hilton, do PSOL, teve quase um milhão e seiscentos mil votos em São Paulo, onde a cadeira custou cerca de trezentos e quarenta mil. Os votos dela também foram pro PSOL. Mas já existe um freio: pra entrar de carona, o colega precisa ter pelo menos dez por cento do preço da cadeira. Ou seja, o sistema já limita o puxador.",
+  "s07": "Quem defende diz três coisas. Primeiro: você vai saber quem é o deputado da sua região e cobrar dele, porque hoje quase ninguém lembra em quem votou. Segundo: a campanha fica mais barata, porque o candidato só precisa rodar um pedaço do estado. E terceiro, segundo Motta, fica mais difícil o dinheiro do crime entrar nas campanhas.",
+  "s16": "Pra presidente, essa mudança não vale. Mas olha como o mapa pesa: se o Brasil escolhesse presidente como nos Estados Unidos, estado por estado, quem ganhou agora teria perdido, mesmo com mais de quatro milhões de votos a mais.",
+  "s11": "E tem um detalhe: olha o que ele mesmo disse.",
+  "s11c": "Ou seja: querem votar logo depois da eleição, com a Câmara atual, antes dos novos deputados assumirem. E dois mil e trinta e quatro parece longe, mas a regra fica travada agora.",
+  "s12": "Você não vota nisso, mas os deputados do seu estado votam. Manda mensagem pra quem você elegeu, seja pra apoiar ou pra ser contra. Quem é contra tá usando a hashtag voto distrital não.",
+  "s14": "Nos comentários, o povo pediu outra lista pro Motta: fim do foro privilegiado, transparência nas emendas, menos privilégios pros deputados, mais dinheiro pro SUS, direitos dos povos indígenas e combate às fake news. Qual dessas você quer primeiro? Comenta aí."
  },
  "photos": {
   "melchionna": "Fernanda_Melchionna",
@@ -30,7 +38,26 @@
   "andre2": "André_Fernandes"
  },
  "only": [
-  "m6"
+  "s01",
+  "p1",
+  "p2",
+  "m2",
+  "m3",
+  "q1",
+  "tl",
+  "s04b",
+  "m5",
+  "m6",
+  "s09",
+  "s10",
+  "s07",
+  "s08",
+  "s16",
+  "alt",
+  "s11",
+  "s11c",
+  "s12",
+  "s14"
  ],
  "skip_faces": true
 }
