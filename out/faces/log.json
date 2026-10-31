@@ -1,8 +1,5 @@
 {
- "melchionna": "ok",
- "melchionna_src": "https://upload.wikimedia.org/wikipedia/commons/0/0a/Fernanda_Melchionna_em_mar%C3%A7o_de_2019_%28cropped%29.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
- "andre": "ok",
- "andre_src": "https://upload.wikimedia.org/wikipedia/commons/b/b3/Andr%C3%A9_Fernandes_%28cropped%29.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
- "andre2": "noface",
- "andre2_src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/Wiki_Takes_Santana_de_Parna%C3%ADba_%28Jul_2019%29_152.jpg/3840px-Wiki_Takes_Santana_de_Parna%C3%ADba_%28Jul_2019%29_152.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+ "pavanato": "err JSONDecodeError('Expecting value: line 1 column 1 (char 0)')",
+ "boulos": "ok",
+ "boulos_src": "https://upload.wikimedia.org/wikipedia/commons/1/1a/Audi%C3%AAncia_P%C3%BAblica_-_Guilherme_Boulos_%28cropped%29.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled"
 }
