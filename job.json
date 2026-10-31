@@ -2,7 +2,7 @@
  "voice": "pt-BR-ThalitaMultilingualNeural",
  "rate": "+20%",
  "lines": {
-  "s01": "Querem mudar como você vota pra deputado. Os jornais chamam de: a reforma contra o efeito Nikolas.",
+  "s01": "Hugo Motta, presidente da Câmara, anunciou que quer mudar como você vota pra deputado. E os jornais já chamam de: a reforma contra o efeito Nikolas.",
   "s02": "Hoje, seu voto vai primeiro pro partido. Nikolas teve mais de três milhões de votos, e a sobra ajudou a eleger mais cinco do PL.",
   "s03": "E vale pros dois lados: Erika Hilton, do PSOL, teve um milhão e seiscentos mil. No total, quatrocentos e setenta e nove dos quinhentos e treze deputados entraram puxados.",
   "s04": "A proposta tem dois passos. Em dois mil e trinta, metade das vagas vai pros mais votados do estado. A outra metade, pra uma lista do partido.",
@@ -15,7 +15,7 @@
   "s11": "E tem um detalhe: querem votar ainda este ano, com a Câmara atual, antes dos novos deputados assumirem.",
   "s12": "Você não vota nisso, mas os deputados do seu estado votam. Manda mensagem pra quem você elegeu. Outra ideia na mesa: manter o sistema de hoje, com limite pros puxadores.",
   "s13": "E pra presidente, nada muda. Nos Estados Unidos, é distrital puro: quem ganha o distrito leva a vaga, sem lista.",
-  "s14": "Você prefere votar no candidato da sua região ou no partido? Comenta aí."
+  "s14": "Nos comentários, o povo pediu outra lista pro Motta: fim do foro privilegiado, transparência nas emendas, menos privilégios pros deputados, mais dinheiro pro SUS, direitos dos povos indígenas e combate às fake news. Qual dessas você quer primeiro? Comenta aí."
  },
  "photos": {
   "motta": "Hugo_Motta",
@@ -24,7 +24,8 @@
   "valdemar": "Valdemar_Costa_Neto"
  },
  "only": [
-  "s08"
+  "s01",
+  "s14"
  ],
  "skip_faces": true
 }
