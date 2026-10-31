@@ -10,8 +10,8 @@
   "s06": "Resumindo: hoje, quem escolhe os nomes é o seu voto. Com a mudança, metade quem escolhe é a cúpula do partido, e até quem perdeu no voto pode voltar pela lista.",
   "s09": "Quem quer a mudança é o centrão: oito partidos, com duzentos e oitenta e nove deputados. Precisa de trezentos e oito, duas vezes, e depois o Senado.",
   "s10": "Quem é contra está nos dois polos. Na esquerda: em dois mil e dezessete, o PT votou contra no Senado, e PT e PSOL já pediram pra tirar o tema de pauta. O medo deles: que o distrito favoreça quem já manda em cada região. Na direita, Valdemar, presidente do PL, diz que só beneficia os donos dos partidos.",
-  "s07": "Quem defende diz que você vai saber quem é o seu deputado e cobrar dele, que a campanha fica mais barata, e, segundo Motta, que fica mais difícil pro crime entrar.",
-  "s08": "Agora, os riscos. Num distrito, só um ganha: se um candidato tem cinquenta e um por cento e o outro quarenta e nove, quem votou nos quarenta e nove fica sem ninguém. E quem já tem máquina, dinheiro e emenda na região sai na frente; mulheres, indígenas e minorias perdem espaço. Outro risco: desenhar os distritos a favor de um grupo. Nos Estados Unidos, o Texas fez isso a pedido do presidente americano pra ganhar cinco vagas, e a Califórnia respondeu fazendo o mesmo.",
+  "s07": "Quem defende diz três coisas. Primeiro: você vai saber quem é o deputado da sua região e cobrar dele, porque hoje quase ninguém lembra em quem votou. Segundo: a campanha fica mais barata, porque o candidato só precisa rodar um pedaço do estado. E terceiro, segundo Motta, fica mais difícil o dinheiro do crime entrar nas campanhas.",
+  "s08": "Agora, os riscos. Num distrito, só um ganha: se um tem cinquenta e um por cento e o outro quarenta e nove, quem votou nos quarenta e nove fica sem ninguém, quase metade da região sem voz. Quem já tem máquina, dinheiro e emenda sai na frente, porque é quem leva obra pro bairro; mulheres, indígenas e minorias perdem espaço, porque raramente são os mais fortes num pedaço só. E quem desenha o mapa pode escolher o resultado antes da eleição: nos Estados Unidos, o Texas redesenhou os distritos a pedido do presidente americano pra ganhar cinco vagas, e a Califórnia respondeu fazendo o mesmo.",
   "s11": "E tem um detalhe: olha o que ele mesmo disse.",
   "s12": "Você não vota nisso, mas os deputados do seu estado votam. Manda mensagem pra quem você elegeu, seja pra apoiar ou pra ser contra. Quem é contra tá usando a hashtag voto distrital não.",
   "s13": "E pra presidente, nada muda. Nos Estados Unidos, é distrital puro: quem ganha o distrito leva a vaga, sem lista.",
@@ -24,8 +24,8 @@
   "flavio": "Flávio_Bolsonaro"
  },
  "only": [
-  "s02",
-  "s03"
+  "s07",
+  "s08"
  ],
  "skip_faces": true
 }
