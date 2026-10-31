@@ -1,1 +1,1 @@
-{"voice": "pt-BR-ThalitaMultilingualNeural", "rate": "+8%", "lines": {"int1": "Essa é a parte um de dois."}, "photos": {}, "only": ["int1"], "skip_faces": true}
+{"voice":"en-US-AvaMultilingualNeural","rate":"+0%","lines":{"gA":"Gerrymandering.","gB":"This is called gerrymandering."},"photos":{},"only":["gA","gB"],"skip_faces":true}
