@@ -24,7 +24,7 @@
   "s09": "Quem articula a mudança é o centrão: oito partidos que, juntos, ainda têm mais da metade da Câmara. Mas nesta eleição eles encolheram: União e PP perderam dezoito cadeiras, enquanto o PL ganhou vinte e quatro. Segundo os jornais, o centrão se preocupa com esse crescimento do PL, puxado por famosos da internet. PL e PT nem estavam na reunião. E mudar a Constituição precisa de trezentos e oito votos, duas vezes, e depois o Senado.",
   "alt": "E aqui tá a pergunta principal. Se o problema é mentira na internet, o caminho é fiscalizar: o tê ésse é mandou o Nikolas apagar um post que distorcia uma fala do presidente. E no mesmo dia da reforma, o Motta também criou um grupo pra fazer regras pras redes. Se o problema é o puxador, dá pra mexer no freio que já existe. Todo caminho tem consequência, mas mudar o sistema inteiro não é o único.",
   "p1": "Pra entender, pensa assim: cada cadeira de deputado tem um preço em votos. Em Minas, foi de duzentos e quinze mil. O Nikolas teve três milhões, quase quinze cadeiras de votos. Ele só precisava de uma. O resto ficou com o PL e pagou a cadeira de colegas, e teve gente eleita com vinte e cinco mil votos. Sem ele, o PL teria onze deputados em Minas, e não vinte e um. Isso tem nome: puxador de votos.",
-  "p2": "Esse sistema se chama proporcional, e vale pra todo partido. A Erika Hilton, do PSOL, teve quase um milhão e seiscentos mil votos em São Paulo, onde a cadeira custou trezentos e trinta e oito mil. Os votos dela também puxaram colegas: uma delas entrou com cinquenta e quatro mil. Mas tem um freio: o colega só entra de carona se tiver pelo menos dez por cento do preço da cadeira. Em Minas, vinte e um mil votos. Em São Paulo, trinta e quatro mil. Por isso o Nikolas deu dez cadeiras a mais pro PL, e a Erika ajudou o PSOL a eleger seis. Quem não chega no freio fica de fora.",
+  "p2": "Esse sistema se chama proporcional, e vale pra todo partido. A Erika Hilton, do PSOL, teve quase um milhão e seiscentos mil votos em São Paulo, onde a cadeira custou trezentos e trinta e oito mil. E tem um freio: o colega só entra de carona se tiver pelo menos dez por cento do preço da cadeira. Em Minas, vinte e um mil votos. Em São Paulo, trinta e quatro mil. Por isso o PL fez vinte e um deputados em Minas, e o PSOL fez seis em São Paulo. Quem não chega no freio fica de fora.",
   "s07": "Quem defende diz três coisas. Primeiro: você vai saber quem é o deputado da sua região e cobrar dele, porque hoje quase ninguém lembra em quem votou. Segundo: a campanha fica mais barata, porque o candidato só precisa rodar um pedaço do estado. E terceiro, segundo Motta, fica mais difícil o dinheiro do crime entrar nas campanhas.",
   "s16": "Pra presidente, essa mudança não vale. Mas olha como o mapa pesa: se o Brasil escolhesse presidente como nos Estados Unidos, estado por estado, quem ganhou agora teria perdido, mesmo com mais de quatro milhões de votos a mais.",
   "s11": "E tem um detalhe: olha o que ele mesmo disse.",
@@ -38,7 +38,6 @@
   "andre2": "André_Fernandes"
  },
  "only": [
-  "p1",
   "p2"
  ],
  "skip_faces": true
