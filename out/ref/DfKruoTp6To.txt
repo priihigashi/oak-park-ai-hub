@@ -1,0 +1,110 @@
+[0.0-5.0] Nós caminharemos, para fazer ainda esse ano, uma discussão e possível votação na Câmara
+[5.0-10.4] dos Deputados sobre a mudança do nosso sistema eleitoral, caminhando para o sistema de distrital
+[10.4-11.4] misto.
+[11.4-14.2] Antes de saber como a eleição distrital acontece, para eleger o legislativo, você
+[14.2-17.9] precisa saber como nós elegemos o legislativo atualmente nas eleições proporcionais.
+[17.9-21.0] Vamos supor que esses aqui são os votos válidos de um determinado estado.
+[21.0-24.0] Azul, vermelho, verde e rosa são as cores dos partidos.
+[24.0-27.5] Temos o total de 144 votos, 5 vagas para deputado.
+[27.5-34.4] O cossiante eleitoral vai ser 144 votos dividido por 5 vagas, 28,8, no caso, 28 votos é preciso
+[34.4-35.9] para um partido eleger um deputado.
+[35.9-39.8] Aí vamos supor que essa quantidade aqui de eleitor votou em um candidato do Azul.
+[39.8-42.4] Essa outra quantidade aqui votou em outro candidato do Azul.
+[42.4-46.9] Foram 12 candidatos votados, no total o partido Azul teve 60 votos.
+[46.9-52.6] 60 dividido pelo cossiante eleitoral da 2,08, ou seja, o Azul tem 2 vagas.
+[52.6-56.6] As pessoas foram votando em 2 candidatos do vermelho e no final foram 14 candidatos
+[56.6-60.2] votados, mas que no montante deu um número menor que a do Azul, 58 votos.
+[60.2-62.0] Deu um total de 2 vagas para o vermelho também.
+[62.0-68.7] E aí o partido verde teve 6 votos em um candidato, 9 votos em outro candidato,
+[68.7-71.4] 3 candidatos votados, 21 votos no total.
+[71.4-73.0] Logo o verde conseguiu 0 vagas.
+[73.0-77.0] Hora do partido rosa, com um candidato que teve 4 votos e outro que só teve 1.
+[77.0-79.8] O partido teve 5 votos no total, logo o rosa teve 0 vagas.
+[79.8-83.2] Na primeira fase tivemos 4 vagas, 2 do Azul e 2 do vermelho.
+[83.2-86.7] Logo as 2 vagas do partido Azul iriam pros 2 deputados mais votados do Azul
+[86.7-89.3] e as do vermelho iriam pros 2 deputados mais votados do vermelho.
+[89.3-90.4] Mas ainda falta 1 vaga.
+[90.4-94.2] É aí que chega na segunda fase, que o candidato mais votado entre todos será eleito.
+[94.2-97.8] E aí você imagina, então é a chance pro deputado do partido verde que recebeu 9 votos ganhar,
+[97.8-99.2] mas aí tem a regra dos 80%.
+[99.2-103.0] O partido inteiro precisa ter 80% do cossiante eleitoral, ou seja, 22,24.
+[103.0-106.6] Logo nenhum candidato do verde e nenhum candidato do rosa conseguiria se eleger na segunda fase.
+[106.6-109.6] Como pra se eleger o candidato precisa de 20% nessa segunda fase?
+[109.6-112.1] Um dos que restaram teve mais de 5 votos pra conseguir isso.
+[112.1-114.5] Então iria pra fase 3, onde todo mundo concorre,
+[114.5-117.0] e quem ganharia foi o deputado mais votado de todos do partido verde.
+[117.0-119.6] Mas num formato distrital não é assim que rola.
+[119.6-122.8] 5 vagas, certo? Logo o estado seria dividido em 5 distritos.
+[122.8-125.9] E, acordo com o próprio teste, os partidos políticos poderiam indicar
+[125.9-128.4] 1 candidato para concorrer em cada um dos distritos.
+[128.4-131.1] E aí vamos supor que vai ser tudo dividido de forma igualitar e vamos distribuir esses aqui.
+[131.1-132.4] 60 votos no partido Azul.
+[132.4-135.0] E aí eu dividi nos 2 distritos que tem mais votos, eu coloquei 15.
+[135.0-136.2] E nos outros 3 eu coloquei 10.
+[136.2-137.6] 58 votos no vermelho.
+[137.6-140.4] Os 2 distritos que tem mais, eu coloquei 14 em cada.
+[140.4-142.2] Nos outros 3 distritos eu coloquei 10 em cada.
+[142.2-143.4] 21 votos no verde.
+[143.4-145.6] Os 2 distritos que são maiores, 6 pra cada um.
+[145.6-147.8] E pros outros 3 distritos, 3, 3, 3.
+[147.8-148.8] 5 votos no rosa.
+[148.8-150.4] 1 voto pra cada distrito.
+[150.4-153.7] Nos 2 distritos maiores, quem ganharia seria o partido azul.
+[153.7-156.8] Nos outros 3 distritos, o empate ficaria entre os 2 partidos.
+[156.8-157.8] Azul e vermelho.
+[157.8-159.8] Ou seja, se aqui já foi essa agonia toda,
+[159.8-161.4] o verde conseguir, pelo menos, uma vaga,
+[161.4-163.0] aqui ele teria menos chance ainda.
+[163.0-164.6] Porque as eleições seriam majoritárias,
+[164.6-166.0] ou seja, e a ganhar quem tivesse mais voto.
+[166.0-169.8] E aí eu devia trazer a ideia de ser uma eleição distrital mista.
+[169.8-172.6] É a ideia, eu votar em um deputado da minha região,
+[172.6-175.4] que o partido vai definir, e ao mesmo tempo votar em um partido.
+[175.4-178.2] Porque aí quanto mais votos um partido tiver no meu estado,
+[178.2-180.0] mais deputados ele consegue mandar
+[180.0-182.0] através de uma lista que o próprio partido fez.
+[182.0-183.9] E aí a gente volta às origens do consenso eleitoral.
+[183.9-184.6] É a mesma coisa.
+[184.6-186.5] Porque o que tá me parecendo aqui dessa reforma política
+[186.5-188.5] é uma forma do centrão tentar não se perder.
+[188.5-189.8] Não é novidade que com essas eleições
+[189.8-191.8] o centrão perdeu muito a sua força dentro do Congresso.
+[191.8-193.8] Em número de deputados, eleitos e reeleitos,
+[193.8-196.1] quem mais saiu perdendo foi o centro e centro esquerdo e direita.
+[196.1-197.8] E o que mais se nota com os deputados que são eleitos
+[197.8-199.8] e com os números recordistas dos deputados
+[199.8-201.5] que foram eleitos esse ano, são as redes sociais.
+[201.5-203.5] Eu sei que os nomes que vem logo à sua mente
+[203.5-204.7] são pessoas de extrema direita, né?
+[204.7-206.9] Lucas Pavonato, É Nicolas Ferreira, Eduardo Campopiano.
+[206.9-208.9] Mas alguns deputados da esquerda e da extrema esquerda
+[208.9-211.2] também passaram a ser mais conhecidos através das redes sociais.
+[211.2-212.8] As redes sociais foram muito importantes para a campanha de Janones,
+[212.8-214.2] muito importantes para a campanha de Guilherme Cortez,
+[214.2-215.4] muito importantes para a campanha de Erika Hilton,
+[215.4-217.0] muito importantes para a campanha de Johnny Manuel.
+[217.0-219.0] Isso não anula o trabalho das pessoas presencialmente,
+[219.0-220.7] em campanhas e tudo mais,
+[220.7-224.2] mas faz com que todo o território do estado que elegeu aquela pessoa
+[224.2-225.7] acabe conhecendo aquela figura.
+[225.7-227.7] Por isso que na nova reforma política, né,
+[227.7-229.7] que o Gomorra está propondo junto com os outros deputados de Centro,
+[229.7-233.7] ele também defendido um debate sobre regras de propaganda eleitoral nas redes sociais.
+[233.7-235.7] Os candidatos de Centro, Centro, Esquerda e Centro de Direita
+[235.7-238.7] acabaram saindo muito prejudicados nessas eleições de agora,
+[238.7-240.7] tanto para se releger como para se eleger.
+[240.7-242.7] Porque com as redes sociais a gente acabou consumindo mais ideias,
+[242.7-244.7] entendendo mais sobre ideologias de outras pessoas.
+[244.7-246.7] E hoje em dia o que é Centro, Esquerda e Direita
+[246.7-248.7] é muito mais debatido até entre pessoas
+[248.7-250.7] que nunca se interessaram tanto por política.
+[250.7-253.7] Logo, em um país tão polarizado, principalmente por conta das redes sociais,
+[253.7-255.7] se ele experimentar de Centro, pode ser eleito,
+[255.7-257.7] se ele é odiado pela direita e pela esquerda.
+[257.7-260.7] Porque vem em 2024, a direita tradicional foi a maior vencedora das eleições,
+[260.7-263.7] a mesma direita tradicional que perdeu cadeira na Câmara dos Deputados nesse ano.
+[263.7-265.7] Logo, a ideia é de decidir os variadores,
+[265.7-267.7] os deputados federais e os deputados estaduais,
+[267.7-270.7] a partir de distritos, né, regiões dentro do próprio Estado.
+[270.7-272.7] Só reforço o interesse de quem tem medo de se posicionar
+[272.7-274.7] e não perder o poder enquanto perde de ganhar seguidores.
