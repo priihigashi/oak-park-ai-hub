@@ -10,15 +10,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: pip install -q yt-dlp faster-whisper && sudo apt-get install -y -qq ffmpeg >/dev/null
+      - run: pip install -q yt-dlp faster-whisper numpy && sudo apt-get install -y -qq ffmpeg >/dev/null
       - run: yt-dlp -f "bv*+ba/b" --merge-output-format mp4 -o src.mp4 "https://www.instagram.com/reel/DfDqWGyADC0/"
       - run: |
           ffmpeg -v error -y -i src.mp4 -vf "scale=432:-2" -c:v libx264 -crf 30 -c:a aac -b:a 64k small.mp4
           mkdir -p fr && ffmpeg -v error -y -i src.mp4 -vf "fps=1/2,scale=270:-1" fr/f_%03d.jpg
           python - <<'P'
+          import numpy as np,subprocess
           from faster_whisper import WhisperModel
+          raw=subprocess.run(["ffmpeg","-v","error","-i","src.mp4","-f","s16le","-ac","1","-ar","16000","-"],capture_output=True).stdout
+          a=np.frombuffer(raw,np.int16).astype(np.float32)/32768
           m=WhisperModel("medium",compute_type="int8")
-          segs,info=m.transcribe("src.mp4",language="pt",word_timestamps=False)
+          segs,info=m.transcribe(a,language="pt",word_timestamps=False)
           with open("transcript.txt","w") as f:
               for s in segs: f.write(f"[{s.start:6.1f}-{s.end:6.1f}] {s.text.strip()}\n")
           P
