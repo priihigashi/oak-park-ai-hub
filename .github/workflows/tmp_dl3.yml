@@ -1,0 +1,27 @@
+name: tmp download+transcribe reel DfDqWGyADC0
+on:
+  push:
+    branches: [tmp-reel-dl3]
+permissions:
+  contents: write
+jobs:
+  dl:
+    if: "!contains(github.event.head_commit.message, 'result')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install -q yt-dlp faster-whisper && sudo apt-get install -y -qq ffmpeg >/dev/null
+      - run: yt-dlp -f "bv*+ba/b" --merge-output-format mp4 -o src.mp4 "https://www.instagram.com/reel/DfDqWGyADC0/"
+      - run: |
+          ffmpeg -v error -y -i src.mp4 -vf "scale=432:-2" -c:v libx264 -crf 30 -c:a aac -b:a 64k small.mp4
+          mkdir -p fr && ffmpeg -v error -y -i src.mp4 -vf "fps=1/2,scale=270:-1" fr/f_%03d.jpg
+          python - <<'P'
+          from faster_whisper import WhisperModel
+          m=WhisperModel("medium",compute_type="int8")
+          segs,info=m.transcribe("src.mp4",language="pt",word_timestamps=False)
+          with open("transcript.txt","w") as f:
+              for s in segs: f.write(f"[{s.start:6.1f}-{s.end:6.1f}] {s.text.strip()}\n")
+          P
+      - run: |
+          git config user.email noreply@anthropic.com; git config user.name Claude
+          git add small.mp4 fr transcript.txt && git commit -m "result" && git push
