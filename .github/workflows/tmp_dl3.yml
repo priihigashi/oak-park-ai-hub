@@ -10,14 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: pip install -q yt-dlp edge-tts && sudo apt-get install -y -qq ffmpeg >/dev/null
+      - run: pip install -q edge-tts
       - run: python tts.py
-      - run: |
-          yt-dlp -f "bv*+ba/b" --merge-output-format mp4 -o src.mp4 "https://www.instagram.com/reel/DfDqWGyADC0/" || true
-          mkdir -p out/face
-          for t in 0.5 1.5 3 4 140 145 150 155 160 165; do ffmpeg -v error -y -ss $t -i src.mp4 -frames:v 1 -q:v 1 out/face/f_$t.png || true; done
-          ffprobe -v error -show_entries stream=width,height -of csv=p=0 src.mp4 > out/face/size.txt || true
-          curl -sfL -o out/music.mp3 "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Sneaky%20Snitch.mp3" || echo nomusic
       - run: |
           git config user.email noreply@anthropic.com; git config user.name Claude
           git add out && git commit -m "result assets" && git push
