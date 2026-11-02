@@ -5,8 +5,8 @@ Atualizado em 02/11/2026
 
 ESTRUTURA
 - Parte 1 (JÁ PUBLICADA em 31/10, só para contexto): int1 > s01 > m6 > p1 > p2 > m2 > m3 > q1 > s11 > s11b > s11c > s12 > end1
-- Parte 2 (vai ser publicada, revisar com prioridade): int2 > tl > s04b > m5 > pz > s09 > s10 > bxr > g8 > s16 > alt > s12 > s14 · cerca de 6:17
-- Vídeo completo: s01 > m6 > p1 > p2 > m2 > m3 > q1 > tl > s04b > m5 > pz > s09 > s10 > bxr > g8 > s16 > alt > s11 > s11b > s11c > s12 > s14 · cerca de 9:34
+- Parte 2 (vai ser publicada, revisar com prioridade): int2 > tl > s04b > m5 > pz > s09 > s10 > bxr > g8 > s16 > alt > s12 > s14 · cerca de 7:30
+- Vídeo completo: s01 > m6 > p1 > p2 > m2 > m3 > q1 > tl > s04b > m5 > pz > s09 > s10 > bxr > g8 > s16 > alt > s11 > s11b > s11c > s12 > s14 · cerca de 10:46
 
 COMO LER
 Cada cena traz o tempo em que começa, a NARRAÇÃO exata (voz feminina) e o que aparece NA TELA, na ordem, com a palavra da narração em que cada coisa entra. 'Cabeça' = recorte da foto real da pessoa com contorno branco. Toda pessoa na tela tem um chip 'nome · partido · ideologia' (azul = direita, vermelho = esquerda). A legenda da fala aparece embaixo, duas linhas por vez. A linha de fonte fica no rodapé. 'Sai na palavra X' = o elemento some ali e outro entra no lugar.
@@ -26,7 +26,7 @@ NA TELA:
 CENA s01 · completo 0:00 · parte 1
 ============================================================
 NARRAÇÃO:
-A eleição mal acabou e Hugo Motta, presidente da Câmara, já quer mudar como o seu voto vira deputado. Os jornais chamam de reforma contra o efeito Nikolas. Mas o efeito maior é outro: se você pensa diferente da maioria da sua região, essa mudança pode calar a sua voz no seu estado. Fica aqui, porque isso mexe direto com você.
+A eleição mal acabou e Hugo Motta, presidente da Câmara, já quer mudar como o seu voto vira deputado. Os jornais chamam de reforma contra o efeito Nikolas. Mas o efeito maior é outro: se você pensa diferente da maioria da sua região, essa mudança pode calar a sua voz no seu estado. Fica até o final, porque isso mexe direto com você. E no fim eu mostro como dá pra barrar quem ganha espalhando mentira, sem calar a internet.
 
 NA TELA:
 - (entra em 0.05s) Anúncio de 28/10
@@ -42,11 +42,12 @@ NA TELA:
 - (entra na palavra "nikolas"; sai na palavra "maior") Nikolas Ferreira · PL · direita
 - (entra na palavra "maior") Mas o efeito maior é outro:
 - (entra na palavra "diferente") Se você pensa diferente da maioria da sua região, essa mudança pode calar a sua voz no seu estado
-- (entra na palavra "fica") Fica aqui: isso mexe direto com você
+- (entra na palavra "fica") Fica até o final
+- (entra na palavra "mentira") No fim: como barrar quem ganha espalhando mentira, sem calar a internet
 - Rodapé: Fonte: Poder360, 28/10/2026; Metrópoles / Correio, 16/10/2026
 
 ============================================================
-CENA m6 · completo 0:17 · parte 1
+CENA m6 · completo 0:22 · parte 1
 ============================================================
 NARRAÇÃO:
 A proposta corta o estado em pedaços, os distritos, e cada pedaço elege uma pessoa só. Imagina um estado onde a direita é maioria em todos os distritos. Ela pode ganhar todas as cadeiras disputadas diretamente. Mesmo com milhões de votos, a esquerda não elege ninguém nessas disputas. E se a esquerda for maioria, acontece o contrário. Nos Estados Unidos, isso já acontece. Oklahoma não tem nenhum deputado federal democrata. Massachusetts não tem nenhum republicano. No sistema misto proposto para o Brasil, ainda existem as cadeiras das listas dos partidos. Elas podem devolver representação a quem perdeu nos distritos. Mas quem define a ordem dos nomes é o partido, e ainda não sabemos quanto essas listas vão compensar. Ou seja, dependendo das regras, um grupo pode perder todas as disputas locais e ficar dependendo das listas para conseguir representação.
@@ -100,7 +101,7 @@ NA TELA:
 - (entra na palavra "seja") Um grupo pode perder todas as disputas locais e depender da lista
 
 ============================================================
-CENA p1 · completo 1:04 · parte 1
+CENA p1 · completo 1:09 · parte 1
 ============================================================
 NARRAÇÃO:
 Pra entender, pensa assim: cada cadeira de deputado tem um preço em votos. Em Minas, foi de duzentos e quinze mil. O Nikolas teve três milhões, votos suficientes pra quase quinze cadeiras. Ele só precisava de uma. O resto dos votos foi pro PL e ajudou a eleger colegas, e teve gente eleita com vinte e cinco mil votos. Sem ele, o PL teria onze deputados em Minas, e não vinte e um. Isso tem nome: puxador de votos.
@@ -118,7 +119,7 @@ NA TELA:
 - Rodapé: Fonte: Congresso em Foco, out/2026; TSE. quociente eleitoral de MG 2026: 214.720; Estadão via DGABC
 
 ============================================================
-CENA p2 · completo 1:27 · parte 1
+CENA p2 · completo 1:32 · parte 1
 ============================================================
 NARRAÇÃO:
 Esse sistema se chama proporcional, e vale pra todo partido. A Erika Hilton, do PSOL, teve quase um milhão e seiscentos mil votos em São Paulo, onde a cadeira custou trezentos e trinta e oito mil. Mas existe um limite: o colega só se elege com a ajuda do puxador se tiver, sozinho, pelo menos dez por cento do preço da cadeira. Em Minas, vinte e um mil votos. Em São Paulo, trinta e quatro mil. Por isso o PL fez vinte e um deputados em Minas, e o PSOL fez seis em São Paulo. Quem não chega nesses dez por cento mínimos fica de fora.
@@ -142,7 +143,7 @@ NA TELA:
 - (entra na palavra "fora") Nome técnico: votação mínima de 10% do quociente eleitoral. Quem não chega nesses 10% fica de fora.
 
 ============================================================
-CENA m2 · completo 1:55 · parte 1
+CENA m2 · completo 1:59 · parte 1
 ============================================================
 NARRAÇÃO:
 Mesmo assim, querem mudar tudo. Em dois mil e trinta e quatro, Minas seria cortada em pedaços, os distritos. Cada pedaço elege uma pessoa só. O Nikolas ganharia o pedaço dele, e só: os votos que sobram não ajudam mais a eleger ninguém nos outros pedaços.
@@ -157,7 +158,7 @@ NA TELA:
 - Rodapé: Mapa ilustrativo: 26 pedaços, cerca de metade das 53 vagas. Fonte: proposta de 28/10/2026 (Poder360, SBT News)
 
 ============================================================
-CENA m3 · completo 2:08 · parte 1
+CENA m3 · completo 2:13 · parte 1
 ============================================================
 NARRAÇÃO:
 E quem ganha os outros pedaços? Hoje, em Minas, os partidos que articulam a mudança têm só cerca de quinze dos cinquenta e três deputados. Mas num pedaço pequeno, a eleição vira quase uma eleição de prefeito: costuma ganhar quem já tem prefeito aliado, vereador e obra na rua. E esses partidos têm mais de três mil prefeituras no país. O PL tem quinhentas, e o PT, duzentas e cinquenta. Ou seja: nesse cenário, quem tende a levar mais pedaços em Minas é o centrão, que junta partidos de direita e de centro. E PL e PT tendem a perder espaço. Mas quem mais sofre são os partidos menores, de esquerda e de direita. O PSOL e a Rede elegeram quinze deputados agora, o Novo, dez, o Missão, um, e o PSTU, nenhum. Hoje eles juntam votos espalhados pelo estado. Num pedaço só, quase nunca são os mais fortes. Aí sobra a lista, e só se o partido tiver votos suficientes.
@@ -191,7 +192,7 @@ NA TELA:
 - Rodapé: Eleitos em MG em 2026 (Câmara dos Deputados; fotos: Arquivo/Câmara). Bancadas: SBT News, A Crítica. Fonte: CNM/TSE 2024 (PSD 887, MDB 855, PP 747, União 583); Estado de Minas e O Fator (bancada MG 2026). Mapa ilustrativo, sem simulação oficial
 
 ============================================================
-CENA q1 · completo 2:55 · parte 1
+CENA q1 · completo 3:00 · parte 1
 ============================================================
 NARRAÇÃO:
 Agora junta tudo. O centrão acabou de perder cadeiras pro PL. E propõe uma regra em que ele tende a ganhar força, e em que quem é minoria espalhada pelo estado perde a voz. Se o problema era o puxador, e já existe um limite pra ele, por que não melhorar o sistema que já existe? E por que justo agora?
@@ -206,7 +207,7 @@ NA TELA:
 - Rodapé: Fonte: Congresso em Foco e Times Brasil (bancadas 2026); Poder360, 28/10/2026
 
 ============================================================
-CENA s11 · completo 8:34 · parte 1
+CENA s11 · completo 9:46 · parte 1
 ============================================================
 NARRAÇÃO:
 E tem um detalhe: olha o que ele mesmo disse.
@@ -217,7 +218,7 @@ NA TELA:
 - (entra na palavra "ele") [Cabeça: motta]
 
 ============================================================
-CENA s11b · completo 8:37 · parte 1
+CENA s11b · completo 9:49 · parte 1
 ============================================================
 NARRAÇÃO:
 (clipe de vídeo real, sem narração própria)
@@ -230,7 +231,7 @@ NA TELA:
 - Rodapé: Vídeo: Câmara dos Deputados / EBC, 28/10/2026
 
 ============================================================
-CENA s11c · completo 8:45 · parte 1
+CENA s11c · completo 9:57 · parte 1
 ============================================================
 NARRAÇÃO:
 Ou seja: querem votar logo depois da eleição, com a Câmara atual, antes dos novos deputados assumirem. E dois mil e trinta e quatro parece longe, mas querem decidir a regra agora.
@@ -246,7 +247,7 @@ NA TELA:
 - Rodapé: Fonte: Metrópoles / Correio; A Crítica, 28/10/2026
 
 ============================================================
-CENA s12 · completo 8:54 · parte 2 5:37 · parte 1
+CENA s12 · completo 10:06 · parte 2 6:50 · parte 1
 ============================================================
 NARRAÇÃO:
 Lembra do maior problema: com distritos, quem vota diferente da maioria da sua região pode ficar sem nenhum deputado do seu lado. Você não vota nisso, mas os deputados do seu estado votam. Pergunta pra quem você elegeu se ele concorda. Seja pra apoiar ou pra ser contra. Quem é contra tá usando a hashtag voto distrital não. E dá pra deixar sua opinião: a Câmara tem enquete aberta sobre propostas parecidas, uma de dois mil e dezessete e outra de dois mil e vinte e cinco. Os links tão no primeiro comentário.
@@ -284,7 +285,7 @@ NA TELA:
 - Rodapé: 
 
 ============================================================
-CENA tl · completo 3:10 · parte 2 0:11
+CENA tl · completo 3:15 · parte 2 0:17
 ============================================================
 NARRAÇÃO:
 Vamos ver como seria. O plano tem três etapas. Hoje, seu voto vai pra uma pessoa e ajuda o partido dela. Em dois mil e trinta, uma transição. E em dois mil e trinta e quatro, o voto distrital misto: você vota duas vezes, num candidato do seu pedaço e num partido.
@@ -304,7 +305,7 @@ NA TELA:
 - Rodapé: Fonte: Poder360, SBT News e O Liberal, 28/10/2026
 
 ============================================================
-CENA s04b · completo 3:25 · parte 2 0:27
+CENA s04b · completo 3:30 · parte 2 0:32
 ============================================================
 NARRAÇÃO:
 Em dois mil e trinta, uma das ideias é o distritão misto. Imagina dez cadeiras. Cinco vão pros cinco mais votados do estado, de qualquer partido. As outras cinco são divididas entre os partidos conforme os votos de cada um: um partido com quarenta por cento dos votos leva duas dessas cinco. E quem senta é quem está no topo da lista que o partido montou antes da eleição. Seu voto não muda essa ordem. Se o PL puser o Pavanato no topo, ou o PSOL puser o Boulos, eles entram, e quem não gosta deles não consegue tirar. Aí quem decide o nome é o partido.
@@ -327,10 +328,10 @@ NA TELA:
 - (entra na palavra "decide") Quem decide o nome: o partido
 
 ============================================================
-CENA m5 · completo 3:53 · parte 2 0:56
+CENA m5 · completo 3:58 · parte 2 1:01
 ============================================================
 NARRAÇÃO:
-Agora, o cinquenta e um contra quarenta e nove, com gente de verdade. A Erika Hilton e o Pavanato são os dois de São Paulo. Se caírem no mesmo distrito, só um leva a cadeira, e quase metade dos eleitores daquele pedaço fica sem deputado da sua região. Quem perder ainda pode entrar pela lista do partido, que vale pro estado inteiro. Mas quantos entram por ela? São Paulo tem setenta cadeiras: cerca de metade por distrito, metade pela lista. O PSOL, com mais de doze por cento dos votos, levaria umas cinco vagas da lista, e a Erika, a mais votada, poderia estar no topo. Mas hoje o PSOL tem seis deputados de São Paulo: quem não estiver entre os cinco primeiros e não ganhar um distrito fica de fora. No PL é igual: quem não estiver no topo depende de ganhar um distrito. E tem mais: se você gosta da Erika, mas mora em outro distrito, não pode votar nela. Ela só recebe voto de quem mora no pedaço dela. Se esse pedaço vota mais na direita, a chance dela cai. E vale o mesmo pro Pavanato, num pedaço que vota mais na esquerda.
+Agora, o cinquenta e um contra quarenta e nove, com gente de verdade. A Erika Hilton e o Pavanato são os dois de São Paulo. Se caírem no mesmo distrito, só um leva a cadeira, e quase metade dos eleitores daquele pedaço fica sem deputado da sua região. Quem perder ainda pode entrar pela lista do partido, que vale pro estado inteiro. Mas quantos entram por ela? São Paulo tem setenta cadeiras: cerca de metade por distrito, metade pela lista. O PSOL, com mais de doze por cento dos votos, levaria umas cinco vagas da lista, e a Erika, a mais votada, poderia estar no topo. Mas hoje o PSOL tem seis deputados de São Paulo: quem não estiver entre os cinco primeiros e não ganhar um distrito fica de fora. No PL é igual: quem não estiver no topo depende de ganhar um distrito. E tem mais: se você gosta da Erika, mas mora em outro distrito, não pode votar nela. Ela só recebe voto de quem mora no pedaço dela. Se esse pedaço vota mais na direita, a chance dela cai. E vale o mesmo pro Pavanato, num pedaço que vota mais na esquerda. E tem um problema ainda maior: o voto espalhado. A Erika teve voto nos seiscentos e quarenta e cinco municípios de São Paulo, mas não foi a mais votada em nenhum. No distrito, não importa quanto voto você tem no estado: importa ser o mais votado naquele pedaço. Quem tem uma ideia que agrada um pouco em todo lugar, mas não é maioria em lugar nenhum, perde o distrito. Isso pesa pras minorias e pros partidos pequenos, da esquerda e da direita, que muitas vezes crescem falando pela internet com gente espalhada pelo estado todo. No Reino Unido, que é distrital, em dois mil e vinte e quatro, um partido da direita teve catorze por cento dos votos e ficou com só cinco das seiscentas e cinquenta cadeiras. E um partido de centro, com doze por cento, levou setenta e duas, porque o voto dele era concentrado.
 
 RESUMO DO VISUAL: 3 fases. (1) 100 bolinhas de eleitores num distrito: 51 vermelhas e 49 azuis; as 49 azuis ficam cinza (voto que não elege ninguém). (2) Grade de 70 cadeiras de SP; 5 quadradinhos vermelhos do PSOL; lista com 1º a 5º marcados e o 6º com X; cabeça da Erika; depois o espelho com Pavanato. (3) Mapa de SP dividido em 4 distritos coloridos azul/vermelho, com "Você" e a seta mostrando que seu voto não vira deputado.
 
@@ -356,24 +357,38 @@ NA TELA:
 - (entra na palavra "fora"; sai na palavra "mais#3") 6º: de fora, se não ganhar um distrito
 - (entra na palavra "igual"; sai na palavra "mais#3") [Cabeça: pavanato]
 - (entra na palavra "igual"; sai na palavra "mais#3") No PL é igual
-- (entra na palavra "mais" (3ª vez)) São Paulo cortado em distritos (exemplo)
-- (entra na palavra "mais" (3ª vez)) Distrito A | Distrito B | Distrito C | Distrito D
-- (entra na palavra "voce") Você
-- (entra na palavra "erika" (3ª vez)) [Cabeça: erika]
-- (entra na palavra "erika" (3ª vez)) Erika
-- (entra na palavra "votar") [Elemento visual: bloco, linha, ponto ou mapa]
-- (entra na palavra "votar") ✗
-- (entra na palavra "votar") Não pode votar nela
-- (entra na palavra "recebe") Ela só recebe voto de quem mora no Distrito B
-- (entra na palavra "direita") [Elemento visual: bloco, linha, ponto ou mapa]
-- (entra na palavra "direita") B vota mais na direita: a chance dela cai
-- (entra na palavra "pavanato" (2ª vez)) [Cabeça: pavanato]
-- (entra na palavra "pavanato" (2ª vez)) Pavanato
-- (entra na palavra "pavanato" (2ª vez) + 0.5s) [Elemento visual: bloco, linha, ponto ou mapa]
-- (entra na palavra "pavanato" (2ª vez) + 0.5s) O mesmo vale pro Pavanato num distrito que vota mais na esquerda
+- (entra na palavra "mais" (3ª vez); sai na palavra "espalhado") São Paulo cortado em distritos (exemplo)
+- (entra na palavra "mais" (3ª vez); sai na palavra "espalhado") Distrito A | Distrito B | Distrito C | Distrito D
+- (entra na palavra "voce"; sai na palavra "espalhado") Você
+- (entra na palavra "erika" (3ª vez); sai na palavra "espalhado") [Cabeça: erika]
+- (entra na palavra "erika" (3ª vez); sai na palavra "espalhado") Erika
+- (entra na palavra "votar"; sai na palavra "espalhado") [Elemento visual: bloco, linha, ponto ou mapa]
+- (entra na palavra "votar"; sai na palavra "espalhado") ✗
+- (entra na palavra "votar"; sai na palavra "espalhado") Não pode votar nela
+- (entra na palavra "recebe"; sai na palavra "espalhado") Ela só recebe voto de quem mora no Distrito B
+- (entra na palavra "direita"; sai na palavra "espalhado") [Elemento visual: bloco, linha, ponto ou mapa]
+- (entra na palavra "direita"; sai na palavra "espalhado") B vota mais na direita: a chance dela cai
+- (entra na palavra "pavanato" (2ª vez); sai na palavra "espalhado") [Cabeça: pavanato]
+- (entra na palavra "pavanato" (2ª vez); sai na palavra "espalhado") Pavanato
+- (entra na palavra "pavanato" (2ª vez) + 0.5s; sai na palavra "espalhado") [Elemento visual: bloco, linha, ponto ou mapa]
+- (entra na palavra "pavanato" (2ª vez) + 0.5s; sai na palavra "espalhado") O mesmo vale pro Pavanato num distrito que vota mais na esquerda
+- (entra na palavra "espalhado") Voto espalhado: muito voto, nenhum distrito
+- (entra na palavra "municipios" + 0s) Distrito A | Vencedor | | Erika | 2º
+- (entra na palavra "municipios" + 0.25s) Distrito B | Vencedor | | Erika | 2º
+- (entra na palavra "municipios" + 0.5s) Distrito C | Vencedor | | Erika | 2º
+- (entra na palavra "municipios" + 0.75s) Distrito D | Vencedor | | Erika | 2º
+- (entra na palavra "nenhum") [Cabeça: erika]
+- (entra na palavra "nenhum") Erika Hilton · PSOL · esquerda
+- (entra na palavra "nenhum") Voto nos 645 municípios de SP, mais votada em nenhum
+- (entra na palavra "perde") Agrada em todo lugar, maioria em nenhum: perde o distrito
+- (entra na palavra "minorias") Pesa pras minorias e partidos pequenos, dos dois lados
+- (entra na palavra "reino") Reino Unido, 2024 (distrital):
+- (entra na palavra "direita" (3ª vez)) Partido de direita (Reform UK) | 14% → 5dos votos → cadeiras de 650
+- (entra na palavra "centro") Partido de centro (Liberais Democratas) | 12% → 72voto concentrado
+- (entra na palavra "espalhado") NOTA PRA VOCÊ (tiro depois): você está CERTA sobre o voto espalhado, é o ponto mais forte. Só um ajuste: no misto, quem tem voto espalhado ainda pode entrar pela lista, se o partido puser no topo. Não usei o Janones aqui: não achei dado de onde vêm os votos dele.
 
 ============================================================
-CENA pz · completo 4:45 · parte 2 1:48
+CENA pz · completo 5:28 · parte 2 2:31
 ============================================================
 NARRAÇÃO:
 Fazendo a conta com os votos de verdade de dois mil e vinte e seis em São Paulo: o PL teve vinte e sete por cento, o PSOL, treze, e o PT, doze. Dividindo as trinta e cinco vagas da lista, o PL levaria onze, o PSOL cinco e o PT quatro. Ou seja, dos setenta eleitos agora, metade só voltaria se ganhasse um distrito, ou se o partido pusesse o nome no topo da lista. Gente como Celso Russomanno, Felipe Becari, Sônia Guajajara, Edinho Silva, Mario Frias e Coronel Telhada, e muitos outros, poderiam ficar de fora.
@@ -401,7 +416,7 @@ NA TELA:
 - (entra na palavra "fora") Poderiam ficar de fora
 
 ============================================================
-CENA s09 · completo 5:12 · parte 2 2:15
+CENA s09 · completo 5:55 · parte 2 2:58
 ============================================================
 NARRAÇÃO:
 Quem articula a mudança é o centrão: oito partidos que, juntos, ainda têm mais da metade da Câmara. Mas nesta eleição eles encolheram: União e PP perderam dezoito cadeiras, enquanto o PL ganhou vinte e quatro. Segundo os jornais, o centrão se preocupa com esse crescimento do PL, puxado por famosos da internet. PL e PT nem estavam na reunião. E mudar a Constituição precisa de trezentos e oito votos, duas vezes, e depois o Senado.
@@ -419,10 +434,10 @@ NA TELA:
 - Rodapé: Fonte: SBT News, Diario de Pernambuco, Poder360; Congresso em Foco (bancadas 2026)
 
 ============================================================
-CENA s10 · completo 5:34 · parte 2 2:37
+CENA s10 · completo 6:17 · parte 2 3:20
 ============================================================
 NARRAÇÃO:
-Quem é contra está nos dois polos. Na esquerda: em dois mil e dezessete, a maioria do PT votou contra no Senado, e PT e PSOL já pediram pra tirar o tema de pauta. O medo deles: que o distrito favoreça quem já manda em cada região, e que quem é votado pelas ideias perca pra quem tem dinheiro e apoio na região. Na direita, Valdemar, presidente do PL, diz que só beneficia os donos dos partidos.
+Quem é contra está nos dois polos. Na esquerda: em dois mil e dezessete, a maioria do PT votou contra no Senado, e PT e PSOL já pediram pra tirar o tema de pauta. Na direita, Valdemar, presidente do PL, diz que só beneficia os donos dos partidos.
 
 RESUMO DO VISUAL: Página lado a lado: esquerda "Quem quer" (centrão, cabeça do Motta, motivo); direita "Contra: os dois polos" (PT e PSOL na esquerda, PL na direita, cabeça do Valdemar com a frase dele).
 
@@ -441,7 +456,6 @@ NA TELA:
 - (entra na palavra "psol") PSOL · esquerda
 - (entra na palavra "dezessete") 2017: a maioria do PT votou contra no Senado
 - (entra na palavra "pauta") PT e PSOL pediram pra tirar de pauta
-- (entra na palavra "medo") Medo: quem é votado pelas ideias perder pra quem tem dinheiro na região
 - (entra na palavra "direita") Na direita
 - (entra na palavra "valdemar") [Cabeça: valdemar]
 - (entra na palavra "valdemar") Valdemar Costa Neto · PL · direita
@@ -450,27 +464,27 @@ NA TELA:
 - Rodapé: Fonte: O Fator; Mais Goiás, A Crítica e CNN Brasil, out/2026 (Cabo Gilberto, líder da oposição); Senado (2017, 40 a 13)
 
 ============================================================
-CENA bxr · completo 5:55 · parte 2 2:58
+CENA bxr · completo 6:30 · parte 2 3:34
 ============================================================
 NARRAÇÃO:
-Agora, o que dizem a favor, e o que pesa contra. Primeiro: quem defende diz que você vai saber quem é o deputado da sua região e cobrar dele. Mas cuidar do bairro já é papel do vereador. O deputado federal vota leis pro país inteiro. E se você votou no outro lado, ele não precisa do seu voto. Segundo: a campanha fica mais barata, porque o candidato só roda um pedaço do estado. Mas quem já tem estrutura, dinheiro e emenda sai na frente. Terceiro, segundo Motta, fica mais difícil o dinheiro do crime entrar. Mas onde milícia ou facção manda no bairro, um distrito pequeno fica até mais fácil de controlar: no Rio, mais de um terço dos eleitores vota nessas áreas. E tem riscos sem resposta do outro lado. Mulheres, pessoas trans e outras minorias tendem a perder espaço, porque os votos delas costumam estar espalhados: raramente são maioria num pedaço só. A Erika Hilton teve votos nos seiscentos e quarenta e cinco municípios de São Paulo, mas não foi a mais votada em nenhum. E no mundo, em dois mil e vinte e cinco, os sistemas proporcionais ou mistos elegeram trinta e um por cento de mulheres. Os distritais, só vinte e cinco. E o estado pode ficar com uma voz só: hoje o PT já não elegeu ninguém em sete estados, e com distritos isso pode se espalhar pros dois lados, como nos Estados Unidos.
+Agora, os dois lados, ponto por ponto. Primeiro ponto. Quem defende diz que, com distrito, você sabe quem é o seu deputado e pode cobrar dele, porque hoje quase ninguém lembra em quem votou. Quem critica responde: cobrar o buraco da rua é papel do vereador. O deputado federal vota leis pro Brasil inteiro. E se você votou em quem perdeu no seu distrito, quem ganhou não precisa do seu voto pra se reeleger. Ele vai ouvir a maioria do bairro, não você. Segundo ponto. Quem defende diz que a campanha fica mais barata, porque o candidato só pede voto num pedaço do estado, e não no estado inteiro. Quem critica responde: num pedaço pequeno, ganha quem já é conhecido ali. Quem já tem mandato, dinheiro e emenda pra levar obra pro bairro sai na frente, e quem é novo tem mais dificuldade de entrar. Terceiro ponto. O Motta diz que fica mais difícil o dinheiro do crime entrar, porque, com campanha mais barata, o dinheiro vivo das facções pesaria menos. Quem critica responde: pode ser o contrário. Onde a milícia ou a facção manda no bairro, ela decide quem pode fazer campanha ali. Num distrito pequeno, fica mais fácil controlar quem ganha. No Rio, mais de um terço dos eleitores vota em áreas assim. E tem riscos sem resposta do outro lado. Mulheres, pessoas trans e outras minorias tendem a perder espaço, pelo mesmo motivo da Erika: voto espalhado. No mundo, em dois mil e vinte e cinco, os sistemas proporcionais ou mistos elegeram trinta e um por cento de mulheres. Os distritais, só vinte e cinco. E o estado pode ficar com uma voz só: hoje o PT já não elegeu ninguém em sete estados, e com distritos isso pode se espalhar pros dois lados, como nos Estados Unidos.
 
 RESUMO DO VISUAL: Uma página em duas colunas: esquerda azul "Quem defende diz", direita vermelha "O risco". Fase 1: 3 pares lado a lado (cada risco responde o benefício da mesma linha). Fase 2: os 3 pares saem e entram 2 riscos com "Sem resposta" na coluna da esquerda (minorias; estado com uma voz só), com bonequinhos desenhados de mulheres diversas, cabeça da Erika e caixas Oklahoma/Massachusetts com 0.
 
 NA TELA:
-- (entra na palavra "favor") Quem defende diz
-- (entra na palavra "contra") O risco
-- (entra na palavra "contra") [Elemento visual: bloco, linha, ponto ou mapa]
-- (entra na palavra "saber"; sai na palavra "mulheres") Deputado perto de você: dá pra cobrar | Hoje quase ninguém lembra em quem votou
-- (entra na palavra "vereador"; sai na palavra "mulheres") Cuidar do bairro já é papel do vereador | Deputado federal vota leis pro país inteiro. E se você votou no outro lado, ele não precisa do seu voto
-- (entra na palavra "campanha"; sai na palavra "mulheres") Campanha mais barata | O candidato só roda um pedaço do estado
-- (entra na palavra "estrutura"; sai na palavra "mulheres") Quem já tem estrutura, dinheiro e emenda sai na frente
-- (entra na palavra "terceiro"; sai na palavra "mulheres") Mais difícil o dinheiro do crime entrar | Segundo Motta, com campanha menor
+- (entra na palavra "lados") Quem defende diz
+- (entra na palavra "lados" + 0.3s) Quem critica responde
+- (entra na palavra "lados" + 0.3s) [Elemento visual: bloco, linha, ponto ou mapa]
+- (entra na palavra "sabe"; sai na palavra "mulheres") Deputado perto de você: dá pra cobrar | Por quê: hoje quase ninguém lembra em quem votou
+- (entra na palavra "vereador"; sai na palavra "mulheres") Cobrar o buraco da rua é papel do vereador | Deputado federal vota leis pro Brasil inteiro | Votou em quem perdeu no seu distrito? Quem ganhou não precisa do seu voto pra se reeleger
+- (entra na palavra "campanha"; sai na palavra "mulheres") Campanha mais barata | Por quê: o candidato só pede voto num pedaço do estado
+- (entra na palavra "conhecido"; sai na palavra "mulheres") Num pedaço pequeno, ganha quem já é conhecido ali | Quem tem mandato, dinheiro e emenda sai na frente. Quem é novo tem mais dificuldade
+- (entra na palavra "terceiro"; sai na palavra "mulheres") Mais difícil o dinheiro do crime entrar | Por quê: com campanha barata, o dinheiro vivo das facções pesaria menos
 - (entra na palavra "motta"; sai na palavra "mulheres") [Cabeça: motta]
 - (entra na palavra "motta"; sai na palavra "mulheres") Hugo Motta · Republicanos · direita
-- (entra na palavra "milicia"; sai na palavra "mulheres") Onde milícia ou facção manda, distrito pequeno fica mais fácil de controlar | No Rio, 36,6% dos eleitores votam nessas áreas
+- (entra na palavra "contrario"; sai na palavra "mulheres") Pode ser o contrário | Onde milícia ou facção manda, ela decide quem faz campanha ali. Num distrito pequeno, fica mais fácil controlar quem ganha | No Rio, 36,6% dos eleitores votam nessas áreas
 - (entra na palavra "mulheres") Sem resposta | Proporcional ou misto: 31,1% de mulheres eleitas | Distrital: 25,5% | União Interparlamentar, 2025
-- (entra na palavra "mulheres") Mulheres, pessoas trans e minorias perdem espaço | Os votos delas costumam estar espalhados: raramente são maioria num pedaço só
+- (entra na palavra "mulheres") Mulheres, pessoas trans e minorias perdem espaço | Mesmo motivo da Erika: voto espalhado, maioria em lugar nenhum
 - (entra na palavra "erika") [Cabeça: erika]
 - (entra na palavra "erika") Erika Hilton: votos nos 645 municípios de SP, mais votada em nenhum
 - (entra na palavra "voz") Sem resposta | Estados sem nenhum deputado federal do PT hoje: | AL · AC · AP · AM / RO · RR · TO | Nos EUA é distrital puro. Aqui, a lista dos partidos pode compensar em parte, mas a regra ainda não foi definida.
@@ -480,7 +494,7 @@ NA TELA:
 - Rodapé: Fonte: Congresso em Foco (Motta, votos da Erika); estudo de 8/10/2026 (via Viva); FGV; União Interparlamentar 2025; Revista Oeste e TSE; Câmara dos EUA
 
 ============================================================
-CENA g8 · completo 7:00 · parte 2 4:03
+CENA g8 · completo 7:54 · parte 2 4:57
 ============================================================
 NARRAÇÃO:
 E tem o risco do mapa. Isso tem nome em inglês: gerrymandering. É desenhar os distritos pra escolher quem ganha antes da eleição. Olha um caso real. No Texas, em dois mil e vinte e cinco, a pedido do presidente americano, os republicanos redesenharam o mapa. Pega um distrito perto de Austin, que elegia um democrata: tiraram bairros da cidade, que votam democrata, e colaram cidades do interior, que votam republicano. As mesmas pessoas, votando igual, mas agora o distrito tende a eleger um republicano. No estado todo, o plano é passar de vinte e cinco pra trinta das trinta e oito cadeiras pros republicanos, e de treze pra oito pros democratas. E a Califórnia respondeu fazendo o mesmo do outro lado, pra tirar cinco cadeiras dos republicanos.
@@ -504,7 +518,7 @@ NA TELA:
 - Rodapé: Fonte: Texas Tribune, CBS, NPR (2025); Ballotpedia (Prop. 50, Califórnia). Desenho ilustrativo
 
 ============================================================
-CENA s16 · completo 7:36 · parte 2 4:39
+CENA s16 · completo 8:29 · parte 2 5:33
 ============================================================
 NARRAÇÃO:
 Pra presidente, essa proposta não muda nada: presidente continua sendo quem tiver mais votos no país inteiro. Mas olha como o desenho do mapa pesa: se o Brasil escolhesse presidente como nos Estados Unidos, estado por estado, quem ganhou agora teria perdido, mesmo com mais de quatro milhões de votos a mais. Hoje ninguém propõe isso. Mas mudar a regra do jogo logo depois de uma eleição abre a porta pra outras mudanças. Por isso, tem que ser muito bem pensado.
@@ -524,15 +538,17 @@ NA TELA:
 - Rodapé: Fonte: TSE, 2º turno 2026; cálculo nosso
 
 ============================================================
-CENA alt · completo 7:58 · parte 2 5:01
+CENA alt · completo 8:52 · parte 2 5:55
 ============================================================
 NARRAÇÃO:
-E aqui tá a pergunta principal: em vez de trocar tudo, dá pra corrigir o que incomoda. Se o problema é mentira na internet, o caminho é fiscalizar: o tê ésse é mandou o Nikolas apagar um post que distorcia uma fala do presidente, e no mesmo dia da reforma o Motta criou um grupo pra fazer regras pras redes. Se o problema é o puxador, dá pra apertar a regra que já existe, a dos dez por cento, em vez de acabar com o sistema. E se mesmo assim quiserem distritos, alguns estados americanos usam garantias: uma comissão independente pra desenhar o mapa, o mapa público antes da votação, e proibido redesenhar no meio do caminho. O que não dá é aprovar uma mudança que pode deixar milhões sem representação antes de mostrar o mapa, as listas e as garantias.
+E aqui tá a pergunta principal: como barrar quem ganha espalhando mentira, sem calar a internet? Porque a internet também deu voz a quem não tinha: em São Paulo, o PSOL, que é menor, teve mais voto que o PT. Então, em vez de trocar tudo, dá pra corrigir o que incomoda. Se o problema é mentira, o caminho é fiscalizar e punir a mentira. Em dois mil e dezoito, o tê ésse é mandou tirar do ar vídeos com a mentira do kit gay. Em dois mil e vinte e dois, mandou apagar vídeos do Janones com acusação falsa. E este ano, mandou o Nikolas apagar um post que distorcia uma fala do presidente. No mesmo dia da reforma, o Motta criou um grupo pra fazer regras pras redes. Se o problema é o puxador, dá pra apertar a regra que já existe, a dos dez por cento, em vez de acabar com o sistema. E se mesmo assim quiserem distritos, alguns estados americanos usam garantias: uma comissão independente pra desenhar o mapa, o mapa público antes da votação, e proibido redesenhar no meio do caminho. O que não dá é aprovar uma mudança que pode deixar milhões sem representação antes de mostrar o mapa, as listas e as garantias.
 
 NA TELA:
-- (entra na palavra "pergunta") Em vez de trocar tudo, corrigir o que incomoda
-- (entra na palavra "mentira") Mentira na internetFiscalizar e cobrar as plataformas
-- (entra na palavra "tse") 30/9/2026: TSE mandou o Nikolas apagar post que distorcia fala do presidente. No dia da reforma, Motta criou grupo pra regras das redes.
+- (entra na palavra "pergunta") Como barrar quem ganha espalhando mentira, sem calar a internet?
+- (entra na palavra "psol") A internet também deu voz a quem não tinha: em SP, o PSOL teve mais voto que o PT (3,06 mi x 2,84 mi)
+- (entra na palavra "corrigir") Em vez de trocar tudo, corrigir o que incomoda
+- (entra na palavra "mentira" (2ª vez)) MentiraFiscalizar e punir a mentira
+- (entra na palavra "kit") 2018: TSE mandou tirar do ar vídeos com a mentira do “kit gay”. 2022: mandou apagar vídeos do Janones com acusação falsa. 30/9/2026: post do Nikolas que distorcia fala do presidente. No dia da reforma, Motta criou grupo pra regras das redes.
 - (entra na palavra "puxador") PuxadorApertar a regra dos 10%, sem acabar com o sistema
 - (entra na palavra "garantias") Se quiserem distritos, garantias de alguns estados dos EUA:
 - (entra na palavra "comissao") ✓Comissão independente desenha o mapa
@@ -541,7 +557,7 @@ NA TELA:
 - (entra na palavra "aprovar") Não aprovar antes de mostrar o mapa, as listas e as garantias
 
 ============================================================
-CENA s14 · completo 9:19 · parte 2 6:03
+CENA s14 · completo 10:32 · parte 2 7:15
 ============================================================
 NARRAÇÃO:
 Nos comentários, o povo pediu outra lista pro Motta: fim do foro privilegiado, transparência nas emendas, menos privilégios pros deputados, mais dinheiro pro SUS, direitos dos povos indígenas e combate às fake news. Qual dessas você quer primeiro? Comenta aí.
@@ -564,7 +580,7 @@ NA TELA:
 CENA int2 · parte 2 0:00
 ============================================================
 NARRAÇÃO:
-Essa é a parte dois. Se você não viu a parte um, assiste ela primeiro: lá eu mostro por que essa mudança pode deixar sem voz quem pensa diferente da maioria da sua região. Agora, vamos ver como seria a eleição na prática.
+Essa é a parte dois. Se você não viu a parte um, assiste ela primeiro: lá eu mostro por que essa mudança pode deixar sem voz quem pensa diferente da maioria da sua região. Agora, vamos ver como seria a eleição na prática. E fica até o final: eu vou mostrar como dá pra barrar quem ganha espalhando mentira, sem calar a internet.
 
 NA TELA:
 - (entra em 0.05s) Parte 2 de 2
@@ -573,4 +589,5 @@ NA TELA:
 - (entra na palavra "um") Não viu a parte 1? / Assiste primeiro
 - (entra na palavra "mostro") Lá eu mostro por que essa mudança pode deixar sem voz quem pensa diferente da maioria da sua região
 - (entra na palavra "agora") Agora: / como seria a eleição na prática
+- (entra na palavra "final") Fica até o final: como barrar quem ganha espalhando mentira, sem calar a internet
 - Rodapé: 
