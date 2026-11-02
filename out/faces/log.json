@@ -1,8 +1,7 @@
 {
- "samia": "ok",
- "samia_src": "https://upload.wikimedia.org/wikipedia/commons/7/71/2023-08_S%C3%A2mia_em_Bras%C3%ADlia_54.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
- "cortez": "ok",
- "cortez_src": "https://upload.wikimedia.org/wikipedia/commons/b/b8/Foto_oficial_guilherme_cortez.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
- "luciene": "ok",
- "luciene_src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/Dep._Luciene_Cavalcante.jpg/3840px-Dep._Luciene_Cavalcante.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+ "jones": "ok",
+ "jones_src": "https://upload.wikimedia.org/wikipedia/commons/8/8f/Jones_Manoel.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+ "chiquini": "err KeyError('thumbnail')",
+ "marinahelena": "ok",
+ "marinahelena_src": "https://upload.wikimedia.org/wikipedia/commons/4/4f/Marina_Helena_home_%28cropped%29.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled"
 }
