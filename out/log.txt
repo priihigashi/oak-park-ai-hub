@@ -1,7 +1,0 @@
-tts s3 44
-tts s6 42
-tts c1 60
-tts c2 48
-tts c3 50
-tts c4 59
-tts c5 58
