@@ -1,0 +1,6 @@
+{
+ "before": {
+  "status": 401,
+  "body": "{\"detail\":{\"type\":\"authentication_error\",\"code\":\"unauthorized\",\"message\":\"The API key you used is missing the permission user_read to execute this operation.\",\"status\":\"missing_permissions\",\"request_id\":\"be2afbe6d10a0c3030a7e62dc34fecd6\"}}"
+ }
+}
