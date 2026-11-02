@@ -14,7 +14,7 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: '3.11'}
       - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
-      - run: pip install -q edge-tts requests "rembg[cpu]" mediapipe==0.10.14 pillow numpy yt-dlp faster-whisper
+      - run: pip install -q yt-dlp faster-whisper
       - run: python tmpjob/run.py
       - run: |
           git config user.email bot@x; git config user.name bot
