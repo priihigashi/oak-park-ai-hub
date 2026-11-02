@@ -1,0 +1,21 @@
+name: tmp-canetada
+on:
+  push:
+    branches: [tmp-canetada]
+    paths: [tmpjob/**]
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - run: pip install -q edge-tts requests "rembg[cpu]" mediapipe==0.10.14 pillow numpy yt-dlp faster-whisper
+      - run: python tmpjob/run.py
+      - run: |
+          git config user.email bot@x; git config user.name bot
+          git add out; git commit -qm "out [skip ci]" || true; git push
