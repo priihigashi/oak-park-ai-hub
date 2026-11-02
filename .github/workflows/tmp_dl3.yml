@@ -1,4 +1,4 @@
-name: tmp download+transcribe reel DfDqWGyADC0
+name: tmp cowboy reel assets
 on:
   push:
     branches: [tmp-reel-dl3]
@@ -10,21 +10,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: pip install -q yt-dlp faster-whisper numpy && sudo apt-get install -y -qq ffmpeg >/dev/null
-      - run: yt-dlp -f "bv*+ba/b" --merge-output-format mp4 -o src.mp4 "https://www.instagram.com/reel/DfDqWGyADC0/"
+      - run: pip install -q yt-dlp edge-tts && sudo apt-get install -y -qq ffmpeg >/dev/null
+      - run: python tts.py
       - run: |
-          ffmpeg -v error -y -i src.mp4 -vf "scale=432:-2" -c:v libx264 -crf 30 -c:a aac -b:a 64k small.mp4
-          mkdir -p fr && ffmpeg -v error -y -i src.mp4 -vf "fps=1/2,scale=270:-1" fr/f_%03d.jpg
-          python - <<'P'
-          import numpy as np,subprocess
-          from faster_whisper import WhisperModel
-          raw=subprocess.run(["ffmpeg","-v","error","-i","src.mp4","-f","s16le","-ac","1","-ar","16000","-"],capture_output=True).stdout
-          a=np.frombuffer(raw,np.int16).astype(np.float32)/32768
-          m=WhisperModel("medium",compute_type="int8")
-          segs,info=m.transcribe(a,language="pt",word_timestamps=False)
-          with open("transcript.txt","w") as f:
-              for s in segs: f.write(f"[{s.start:6.1f}-{s.end:6.1f}] {s.text.strip()}\n")
-          P
+          yt-dlp -f "bv*+ba/b" --merge-output-format mp4 -o src.mp4 "https://www.instagram.com/reel/DfDqWGyADC0/" || true
+          mkdir -p out/face
+          for t in 0.5 1.5 3 4 140 145 150 155 160 165; do ffmpeg -v error -y -ss $t -i src.mp4 -frames:v 1 -q:v 1 out/face/f_$t.png || true; done
+          ffprobe -v error -show_entries stream=width,height -of csv=p=0 src.mp4 > out/face/size.txt || true
+          curl -sfL -o out/music.mp3 "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Sneaky%20Snitch.mp3" || echo nomusic
       - run: |
           git config user.email noreply@anthropic.com; git config user.name Claude
-          git add small.mp4 fr transcript.txt && git commit -m "result" && git push
+          git add out && git commit -m "result assets" && git push
