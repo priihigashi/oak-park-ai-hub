@@ -17,6 +17,7 @@ jobs:
       - run: python tools/tts_el.py || true
         env:
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+      - run: python tools/el_fetch.py || true
       - run: python tools/tts.py || true
       - run: python tools/faces.py || true
       - run: pip install yt-dlp faster-whisper && python tools/ref.py || true
