@@ -4,16 +4,50 @@
  "lines": {
   "pz": "Uma simulação com os votos de dois mil e vinte e seis em São Paulo: o PL teve vinte e sete por cento, o PSOL, treze, e o PT, doze. Dividindo as trinta e cinco vagas da lista, o PL levaria onze, o PSOL cinco e o PT quatro. Ou seja, nenhum dos setenta eleitos agora tem lugar garantido: precisa ganhar um distrito ou estar no topo da lista. Gente como Celso Russomanno, Felipe Becari, Sônia Guajajara e muitos outros poderiam ficar de fora."
  },
- "photos": {
-  "trump": "en:Donald_Trump",
-  "newsom": "en:Gavin_Newsom"
- },
+ "photos": {},
  "only": [
   "__none__"
  ],
- "skip_faces": false,
- "nonce": 9,
+ "skip_faces": true,
+ "nonce": 10,
  "el": {},
  "reels": [],
- "elf": {}
+ "elf": {
+  "urls": {
+   "int1": "wVepoBQPBFmZTQeRcit2/mIP4z0xcCr7Q3lz24goT/content.mp3?Expires=1793660400&KeyName=assets-cdn-key-1&Signature=BxDNnw8w7bsHWXrF5CEkLDVBEno=",
+   "s01": "w77lgKchSPfEpmPqyMCs/cok2h7qrU3NRI3f6riaR/content.mp3?Expires=1793660400&KeyName=assets-cdn-key-1&Signature=KsFryride2libHOuihgp26cy9rw=",
+   "m6": "dP4UZugeFc7zFwlcGxTG/GA7rTHqDVx00vdpwNWng/content.mp3?Expires=1793660400&KeyName=assets-cdn-key-1&Signature=wy3SBP9FfcLAzcP6EqzOlHNvpgs=",
+   "p1": "hIf8ECKSUgZI1hYjFVmy/2c7sgpQrh0qTJ8oAZ8ds/content.mp3?Expires=1793660400&KeyName=assets-cdn-key-1&Signature=QlK-vmlGbu40ulfssAMNNgpdDL8=",
+   "p2": "gZzkCW36sSIxIWhs54lw/suRNeicjdF8BQQrzkLg4/content.mp3?Expires=1793660400&KeyName=assets-cdn-key-1&Signature=yBkQ-uZoQAH29nA0B-r-CAhT67Y=",
+   "m2": "JG96uK2gx1CXh4df51AI/IsJP9cwmgzNfvIsoQF71/content.mp3?Expires=1793660400&KeyName=assets-cdn-key-1&Signature=Lokap_xzUexATDCLit42zk1CPAg=",
+   "m3": "XgivAM4cIVqniO4enrbl/XR2dU89qaubXkXx157N7/content.mp3?Expires=1793660400&KeyName=assets-cdn-key-1&Signature=sjIThheLuoKtc2iVFsbaM-hFSzY=",
+   "q1": "rR2f0ie4GvmUUijxHIDz/3PizPMsg2U7xTC9NkzZr/content.mp3?Expires=1793660400&KeyName=assets-cdn-key-1&Signature=hgjEd2H-uKgPB7cwK_FXTvsRYx0=",
+   "s11": "Hiw35XJBwaNNfUnlLx1w/hqjgqHt4W91nUi5M3srq/content.mp3?Expires=1793660400&KeyName=assets-cdn-key-1&Signature=sPCgoMLjF1tapdWsQvsujR6DNiw=",
+   "s11c": "w1oMlIe7sU6sxFLWdX0C/5QSC1vpKGCk73o8zXlnd/content.mp3?Expires=1793660400&KeyName=assets-cdn-key-1&Signature=4FCIJ4BRXMJ4qPEXwBqGNt_DJcU=",
+   "s12": "HGE6WrCdeu5H68JnDjo7/MtcAgLD9JFJl7PJSet6H/content.mp3?Expires=1793660400&KeyName=assets-cdn-key-1&Signature=jE-nkt-AEZ3qRtJQ3VC5bZUfjYM=",
+   "end1": "tEkWzQ5fTzPO9u5yjdeU/MV6TdImZg7RCbt6nkn0t/content.mp3?Expires=1793660400&KeyName=assets-cdn-key-1&Signature=N82zV-BCTXIDYymwuZmpWLtQQas=",
+   "int2": "0WAV9EGd5mdxdyupN1Hd/wNJ86wqkRJ4wNaIgNvbI/content.mp3?Expires=1793660400&KeyName=assets-cdn-key-1&Signature=Kj5kKK8b09wt4A_kARxGIWzD7qU=",
+   "m5": "7Np6SXuBpg0Wx3zQ6jp7/XKy5FeicZT2sK4VvDYaD/content.mp3?Expires=1793660400&KeyName=assets-cdn-key-1&Signature=KnGpeeNtLEQliT2F2YcVFOX8cTU=",
+   "s04b": "h6isE9R74qvIwTvw7Cfo/gGt8T6eEiOg5ohlIfnLo/content.mp3?Expires=1793660400&KeyName=assets-cdn-key-1&Signature=UyeL9j4AIOwWkOJoXOhq0W5QJwA=",
+   "pz": "2r9XV3wfk92Dwd3Y2VMt/S8jprbNsJXgr1VY9RKsY/content.mp3?Expires=1793660400&KeyName=assets-cdn-key-1&Signature=ImRltcRhhfl0K_P7e3GTifX0ZMU=",
+   "s09": "DDtDzHDMwLATIpFWyUqR/bdKctxSVv4qEeZX40DDi/content.mp3?Expires=1793660400&KeyName=assets-cdn-key-1&Signature=f8ig0a07IiArwAk9EDTDpkUdUnE=",
+   "s10": "RzHYPqhyfz0y3TnI6Q7a/PqN55qYyNeOeMVyPMgp5/content.mp3?Expires=1793660400&KeyName=assets-cdn-key-1&Signature=4JKIo1yx-VLGkKlh--HLPR23Wo4=",
+   "bxr": "tSjbr87AJlbb5Zutxcxd/7R4HHocL7fldPK9FzGXn/content.mp3?Expires=1793660400&KeyName=assets-cdn-key-1&Signature=zfPlQZqPzWxNnqloHWDX44jH4H8=",
+   "g8": "VO5lA9JV8lkLFSxAoynq/rFprL3O48M2arVZ3kzrE/content.mp3?Expires=1793660400&KeyName=assets-cdn-key-1&Signature=lMr4gf4G-8nxxyXQz6RrB6UHooE=",
+   "alt": "CdspxAUFWY3QKRpqfjfR/cJskS2MdZqAsW7m3sqA0/content.mp3?Expires=1793660400&KeyName=assets-cdn-key-1&Signature=r-bG-NAoIiKk3BpL6MU8hr9mtz0=",
+   "s14": "9XXFUWBqFXL2xCsWLwmh/BqMACsf2I3uflV97eOYR/content.mp3?Expires=1793660400&KeyName=assets-cdn-key-1&Signature=IK1JO_qY-Wxt-By6t1WnwJ1xJ84="
+  },
+  "redo": [
+   "s01",
+   "p1",
+   "s12",
+   "s10",
+   "g8",
+   "m6",
+   "pz",
+   "alt",
+   "p2",
+   "m5"
+  ]
+ }
 }
