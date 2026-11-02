@@ -1,4 +1,21 @@
 {
- "pavanato": "ok",
- "pavanato_src": "https://upload.wikimedia.org/wikipedia/commons/f/f9/Lucas_Pavanato.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled"
+ "lira": "ok",
+ "lira_src": "https://upload.wikimedia.org/wikipedia/commons/3/37/Lula_e_Lira_2022_%28cropped2%29.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+ "ciro": "ok",
+ "ciro_src": "https://upload.wikimedia.org/wikipedia/commons/4/4e/Senador739.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+ "kassab": "ok",
+ "kassab_src": "https://upload.wikimedia.org/wikipedia/commons/f/f2/Governo_do_Estado_de_S%C3%A3o_Paulo_-_52600908378.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+ "alcolumbre": "ok",
+ "alcolumbre_src": "https://upload.wikimedia.org/wikipedia/commons/7/78/Foto_Oficial_Davi_Alcolumbre.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+ "elmar": "ok",
+ "elmar_src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/98/Depelmardiscursando.jpg/3840px-Depelmardiscursando.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "baleia": "ok",
+ "baleia_src": "https://upload.wikimedia.org/wikipedia/commons/7/7c/08-12-2021_Lan%C3%A7amento_da_pr%C3%A9-candidatura_de_Simone_Tebet_%C3%A0_Presid%C3%AAncia_da_Rep%C3%BAblica_%28519%29_%28cropped%29.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+ "mpereira": "ok",
+ "mpereira_src": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Marcos_Antonio_Pereira_ministro_2.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+ "renata": "ok",
+ "renata_src": "https://upload.wikimedia.org/wikipedia/commons/8/81/RenataAbreu178989.jpgmaior.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+ "aecio": "ok",
+ "aecio_src": "https://upload.wikimedia.org/wikipedia/commons/e/e0/A%C3%A9cio_Neves_em_2023_%28cropped%29.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+ "rueda": "err KeyError('thumbnail')"
 }
