@@ -4,24 +4,26 @@
  "lines": {
   "pz": "Uma simulação com os votos de dois mil e vinte e seis em São Paulo: o PL teve vinte e sete por cento, o PSOL, treze, e o PT, doze. Dividindo as trinta e cinco vagas da lista, o PL levaria onze, o PSOL cinco e o PT quatro. Ou seja, nenhum dos setenta eleitos agora tem lugar garantido: precisa ganhar um distrito ou estar no topo da lista. Gente como Celso Russomanno, Felipe Becari, Sônia Guajajara e muitos outros poderiam ficar de fora."
  },
- "photos": {
-  "jones": "Jones_Manoel",
-  "chiquini": "Jeffrey_Chiquini",
-  "marinahelena": "Marina_Helena"
- },
+ "photos": {},
  "only": [
   "__none__"
  ],
- "skip_faces": false,
- "nonce": 14,
+ "skip_faces": true,
+ "nonce": 15,
  "el": {},
  "reels": [],
- "elf": {
-  "urls": {
-   "int2b": "mkvnyXp8CHcG4tuN0pSd/1IUVG5YyqLMfqvPZlD6B/content.mp3?Expires=1793667600&KeyName=assets-cdn-key-1&Signature=4B90BUMLxLHthy6g2dRn2uKTJHM="
-  },
-  "redo": [
-   "int2b"
-  ]
+ "elf": {},
+ "upload": {
+  "folder": "1_i1tkJDOz0LNKsWOvcNnAmSmDhll2SQ3",
+  "files": {
+   "Parte2_distrital_v18.mp4": {
+    "parts": "out/upload/p2.part*",
+    "mime": "video/mp4"
+   },
+   "Parte2_distrital_capa.jpg": {
+    "path": "out/upload/capa2.jpg",
+    "mime": "image/jpeg"
+   }
+  }
  }
 }

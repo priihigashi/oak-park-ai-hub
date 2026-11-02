@@ -17,6 +17,9 @@ jobs:
       - run: python tools/tts_el.py || true
         env:
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+      - run: pip install google-auth google-api-python-client && python tools/drive_up.py
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
       - run: python tools/el_fetch.py || true
       - run: python tools/tts.py || true
       - run: python tools/faces.py || true
