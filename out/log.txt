@@ -1,0 +1,16 @@
+tts s1 31
+tts s2 20
+tts s3 30
+tts s4 28
+tts s5 34
+tts s6 17
+tts s7 72
+tts s8 36
+tts s9 27
+photo nikolas https://upload.wikimedia.org/wikipedia/commons/d/d8/Nikolas_Ferreira_in_2023_%28cropped%29.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=original 375257
+photo bolsonaro https://upload.wikimedia.org/wikipedia/commons/3/37/Jair_Bolsonaro_2019_Portrait_%283x4_cropped_center%29.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=original 2074731
+photo temer https://upload.wikimedia.org/wikipedia/commons/b/bd/Michel_Temer_%28foto_oficial%29_%28cropped_2%29.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=original 3531535
+cut out/head_bolsonaro.png (739, 900)
+cut out/head_nikolas.png (556, 709)
+cut out/head_temer.png (562, 721)
+ig ['ref.mp4']
