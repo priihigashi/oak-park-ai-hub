@@ -1,8 +1,8 @@
-name: tmp fetch dub audio
+name: tmp download reels
 on:
   push:
     branches: [tmp-reel-dl2]
-    paths: ['urls.txt']
+    paths: ['reels.txt']
 permissions:
   contents: write
 jobs:
@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - run: pip install -q yt-dlp && sudo apt-get install -y -qq ffmpeg >/dev/null
       - run: |
-          mkdir -p el
-          while read n u; do curl -s -f -o "el/$n.mp3" "$u" || echo "FAIL $n"; done < urls.txt
-          ls -la el
+          while read n u; do yt-dlp -f "bv*+ba/b" --merge-output-format mp4 -o "$n.mp4" "$u" || echo "FAIL $n"; done < reels.txt
+          ls -la *.mp4
       - run: |
           git config user.email noreply@anthropic.com; git config user.name Claude
-          git add el && git commit -m "result el audio" && git push
+          git add r3.mp4 r4.mp4; git commit -m "result reels" && git push
