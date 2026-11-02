@@ -1,0 +1,34 @@
+{
+ "before": {
+  "status": 401,
+  "body": "{\"detail\":{\"type\":\"authentication_error\",\"code\":\"unauthorized\",\"message\":\"The API key you used is missing the permission user_read to execute this operation.\",\"status\":\"missing_permissions\",\"request_id\":\"20dfb0e5b47cefd4568aadd69d10cf23\"}}"
+ },
+ "log": {
+  "int1": "err 400 {\"detail\":{\"type\":\"invalid_request\",\"code\":\"bad_request\",\"message\":\"You need to be on the creator tier or above to use this voice.\",\"status\":\"free_users_not_allowed\",\"request_id\":\"380e193727fd0db3f5bd47f5b56f45e0\"}}",
+  "s01": "err 400 {\"detail\":{\"type\":\"invalid_request\",\"code\":\"bad_request\",\"message\":\"You need to be on the creator tier or above to use this voice.\",\"status\":\"free_users_not_allowed\",\"request_id\":\"16bbcec589a22a0c3821c276fbcd813a\"}}",
+  "m6": "err 400 {\"detail\":{\"type\":\"invalid_request\",\"code\":\"bad_request\",\"message\":\"You need to be on the creator tier or above to use this voice.\",\"status\":\"free_users_not_allowed\",\"request_id\":\"e3d4406f67dc55e193fdd05a008f9bc8\"}}",
+  "p1": "err 400 {\"detail\":{\"type\":\"invalid_request\",\"code\":\"bad_request\",\"message\":\"You need to be on the creator tier or above to use this voice.\",\"status\":\"free_users_not_allowed\",\"request_id\":\"545016659fa26bed258978ba9370cbf2\"}}",
+  "p2": "err 400 {\"detail\":{\"type\":\"invalid_request\",\"code\":\"bad_request\",\"message\":\"You need to be on the creator tier or above to use this voice.\",\"status\":\"free_users_not_allowed\",\"request_id\":\"5990611263c79dea63d781a9fcbcc6e6\"}}",
+  "m2": "err 400 {\"detail\":{\"type\":\"invalid_request\",\"code\":\"bad_request\",\"message\":\"You need to be on the creator tier or above to use this voice.\",\"status\":\"free_users_not_allowed\",\"request_id\":\"9b7159310c6acc89b4272e97e8df953f\"}}",
+  "m3": "err 400 {\"detail\":{\"type\":\"invalid_request\",\"code\":\"bad_request\",\"message\":\"You need to be on the creator tier or above to use this voice.\",\"status\":\"free_users_not_allowed\",\"request_id\":\"db0535a96ff2e6fecec44ebd2acc5e69\"}}",
+  "q1": "err 400 {\"detail\":{\"type\":\"invalid_request\",\"code\":\"bad_request\",\"message\":\"You need to be on the creator tier or above to use this voice.\",\"status\":\"free_users_not_allowed\",\"request_id\":\"294ac11f7ff44a94e4573cec6f3764ba\"}}",
+  "s11": "err 400 {\"detail\":{\"type\":\"invalid_request\",\"code\":\"bad_request\",\"message\":\"You need to be on the creator tier or above to use this voice.\",\"status\":\"free_users_not_allowed\",\"request_id\":\"a770835ea27d9c0c90bf1daf2f77c4a7\"}}",
+  "s11c": "err 400 {\"detail\":{\"type\":\"invalid_request\",\"code\":\"bad_request\",\"message\":\"You need to be on the creator tier or above to use this voice.\",\"status\":\"free_users_not_allowed\",\"request_id\":\"7f24efaeadc3a440bb732e64b2d295ec\"}}",
+  "s12": "err 400 {\"detail\":{\"type\":\"invalid_request\",\"code\":\"bad_request\",\"message\":\"You need to be on the creator tier or above to use this voice.\",\"status\":\"free_users_not_allowed\",\"request_id\":\"c8e5578a3039206c568aadd69d10c436\"}}",
+  "end1": "err 400 {\"detail\":{\"type\":\"invalid_request\",\"code\":\"bad_request\",\"message\":\"You need to be on the creator tier or above to use this voice.\",\"status\":\"free_users_not_allowed\",\"request_id\":\"4c419fdd82e469a4cd0c537d0856acf9\"}}",
+  "int2": "err 400 {\"detail\":{\"type\":\"invalid_request\",\"code\":\"bad_request\",\"message\":\"You need to be on the creator tier or above to use this voice.\",\"status\":\"free_users_not_allowed\",\"request_id\":\"7f05ab53e957507ef5bd47f5b56f4e0e\"}}",
+  "m5": "err 400 {\"detail\":{\"type\":\"invalid_request\",\"code\":\"bad_request\",\"message\":\"You need to be on the creator tier or above to use this voice.\",\"status\":\"free_users_not_allowed\",\"request_id\":\"071734a4ef31b533d4bd0693ac390890\"}}",
+  "s04b": "err 400 {\"detail\":{\"type\":\"invalid_request\",\"code\":\"bad_request\",\"message\":\"You need to be on the creator tier or above to use this voice.\",\"status\":\"free_users_not_allowed\",\"request_id\":\"acfbf5f7772c6afc93fdd05a008f9237\"}}",
+  "pz": "err 400 {\"detail\":{\"type\":\"invalid_request\",\"code\":\"bad_request\",\"message\":\"You need to be on the creator tier or above to use this voice.\",\"status\":\"free_users_not_allowed\",\"request_id\":\"d5a5c760883f74b7b59eeab095d7a7df\"}}",
+  "s09": "err 400 {\"detail\":{\"type\":\"invalid_request\",\"code\":\"bad_request\",\"message\":\"You need to be on the creator tier or above to use this voice.\",\"status\":\"free_users_not_allowed\",\"request_id\":\"f7fcc3ccdae28b4aa38056b50be7f5c8\"}}",
+  "s10": "err 400 {\"detail\":{\"type\":\"invalid_request\",\"code\":\"bad_request\",\"message\":\"You need to be on the creator tier or above to use this voice.\",\"status\":\"free_users_not_allowed\",\"request_id\":\"55a99c9b0078af700210ac651b9ad931\"}}",
+  "bxr": "err 400 {\"detail\":{\"type\":\"invalid_request\",\"code\":\"bad_request\",\"message\":\"You need to be on the creator tier or above to use this voice.\",\"status\":\"free_users_not_allowed\",\"request_id\":\"fdb9d0ffb77ce63472696485b0b43a7c\"}}",
+  "g8": "err 400 {\"detail\":{\"type\":\"invalid_request\",\"code\":\"bad_request\",\"message\":\"You need to be on the creator tier or above to use this voice.\",\"status\":\"free_users_not_allowed\",\"request_id\":\"a045fff4f885e08b44a6d07026e2971d\"}}",
+  "alt": "err 400 {\"detail\":{\"type\":\"invalid_request\",\"code\":\"bad_request\",\"message\":\"You need to be on the creator tier or above to use this voice.\",\"status\":\"free_users_not_allowed\",\"request_id\":\"66957ee4a62110cdc6523fbd368c2b36\"}}",
+  "s14": "err 400 {\"detail\":{\"type\":\"invalid_request\",\"code\":\"bad_request\",\"message\":\"You need to be on the creator tier or above to use this voice.\",\"status\":\"free_users_not_allowed\",\"request_id\":\"183e7f4c72da80c04e5b3e37255b4f7b\"}}"
+ },
+ "after": {
+  "status": 401,
+  "body": "{\"detail\":{\"type\":\"authentication_error\",\"code\":\"unauthorized\",\"message\":\"The API key you used is missing the permission user_read to execute this operation.\",\"status\":\"missing_permissions\",\"request_id\":\"185adeb2bbdfe999c4eb067a1465adee\"}}"
+ }
+}
