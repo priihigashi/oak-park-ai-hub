@@ -1,4 +1,5 @@
-tts s2 24
-tts s5 51
-tts s9r 46
-tts s10 58
+tts s5 54
+tts s7 77
+tts s9 61
+tts s9r 44
+tts s10 59
