@@ -18,7 +18,7 @@
   },
   {
    "id": "s4",
-   "text": "Em maio de 2023, a Petrobras tirou o {PPI|pê pê í} e passou a olhar também o custo daqui. Então dizer que a canetada nunca veio é falso."
+   "text": "Em maio de 2023, o governo atual mandou a Petrobras tirar o {PPI|pê pê í}, e ela passou a olhar também o custo daqui. Então dizer que a canetada nunca veio é falso."
   },
   {
    "id": "s4b",
@@ -26,7 +26,7 @@
   },
   {
    "id": "s5",
-   "text": "E tem a parte dos estados: quase um quarto do preço da gasolina é imposto deles, o {ICMS|í cê ême ésse}. Em 2026, o governo ofereceu pagar metade pra zerar esse imposto no diesel importado.¦ Os estados recusaram: não quiseram abrir mão da outra metade, cerca de um bilhão e meio por mês. Toparam só um desconto menor, no diesel. Na gasolina, nada: e ainda aprovaram aumento pra 2027."
+   "text": "E tem a parte dos estados: quase um quarto do preço da gasolina é imposto deles, o {ICMS|í cê ême ésse}. Em 2026, o governo ofereceu pagar metade pra zerar esse imposto no diesel importado.¦ Os estados recusaram, e o motivo foi dinheiro: não quiseram abrir mão de cerca de um bilhão e meio por mês, que dizem usar em saúde e educação. Toparam só um desconto menor, no diesel. Na gasolina, nada: e ainda aprovaram aumento pra 2027."
   },
   {
    "id": "s6",
@@ -54,7 +54,7 @@
   }
  ],
  "only": [
-  "s2",
-  "s3"
+  "s4",
+  "s5"
  ]
 }
