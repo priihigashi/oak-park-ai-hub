@@ -16,6 +16,13 @@ for op in ops:
         if op['op']=='move':
             f=d.files().get(fileId=op['id'],fields='parents',supportsAllDrives=True).execute()
             d.files().update(fileId=op['id'],addParents=op['to'],removeParents=','.join(f.get('parents',[])),supportsAllDrives=True).execute(); out[op['id']]='moved'
+        elif op['op']=='url_up':
+            import requests; fn='/tmp/'+op['name']
+            with requests.get(op['url'],stream=True,timeout=300) as r:
+                r.raise_for_status()
+                with open(fn,'wb') as o:
+                    for c in r.iter_content(1<<20): o.write(c)
+            f=d.files().create(body={'name':op['name'],'parents':[op['to']]},media_body=MediaFileUpload(fn,mimetype=op.get('mime','video/mp4'),resumable=True),supportsAllDrives=True,fields='id,size,webViewLink').execute(); out[op['name']]=f
         elif op['op']=='trash':
             d.files().update(fileId=op['id'],body={'trashed':True},supportsAllDrives=True).execute(); out[op['id']]='trashed'
         elif op['op']=='faces':
