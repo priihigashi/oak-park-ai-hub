@@ -9,17 +9,91 @@
   "__none__"
  ],
  "skip_faces": true,
- "nonce": 23,
+ "nonce": 24,
  "el": {},
  "reels": [],
  "elf": {},
- "upload": {
-  "folder": "1_i1tkJDOz0LNKsWOvcNnAmSmDhll2SQ3",
-  "files": {
-   "Distrital_presidente_EUA_capa_trialB.jpg": {
-    "path": "out/upload/capa_pr_b.jpg",
-    "mime": "image/jpeg"
-   }
+ "upload": null,
+ "drive_ops": [
+  {
+   "op": "move",
+   "id": "1O5pmpMBQb40pssnDfGebKWvuyrYWXpB0",
+   "to": "1ppNqlmlYz-n4gIpg_3OBjZ9Ydi_gZLW3"
+  },
+  {
+   "op": "move",
+   "id": "1We0rsXaznyO_5Q1MhbvtkrQsT7BesaFS",
+   "to": "1ppNqlmlYz-n4gIpg_3OBjZ9Ydi_gZLW3"
+  },
+  {
+   "op": "move",
+   "id": "1jZhT2bnBg685iwh8foePwuwSZtzROOob",
+   "to": "1ppNqlmlYz-n4gIpg_3OBjZ9Ydi_gZLW3"
+  },
+  {
+   "op": "move",
+   "id": "1VdLuaZbpIq4lKHEAKQITLIMof8OvQcCP",
+   "to": "1ppNqlmlYz-n4gIpg_3OBjZ9Ydi_gZLW3"
+  },
+  {
+   "op": "move",
+   "id": "1QTIHVRcK-0nqJEKITyNda2VGl0icAvNA",
+   "to": "1ppNqlmlYz-n4gIpg_3OBjZ9Ydi_gZLW3"
+  },
+  {
+   "op": "move",
+   "id": "1rgloYXYnkyEjf_8c_yJl_Dd1-aKAtOfJ",
+   "to": "1ppNqlmlYz-n4gIpg_3OBjZ9Ydi_gZLW3"
+  },
+  {
+   "op": "move",
+   "id": "1Yra-qXu2YOpbIinjvNsUzcdpd68snWV7",
+   "to": "1ppNqlmlYz-n4gIpg_3OBjZ9Ydi_gZLW3"
+  },
+  {
+   "op": "move",
+   "id": "1r-2AwMKzjYuVPBaKJW2lUZBye-ssr7fF",
+   "to": "1ppNqlmlYz-n4gIpg_3OBjZ9Ydi_gZLW3"
+  },
+  {
+   "op": "move",
+   "id": "1rrTzRjwnLSEJ7Oi6UIMW9sHyea6_fH7FTJwEDAcVZjQ",
+   "to": "1ppNqlmlYz-n4gIpg_3OBjZ9Ydi_gZLW3"
+  },
+  {
+   "op": "faces",
+   "root": "0AH7_C87G0ZwgUk9PVA"
+  },
+  {
+   "op": "sheet_append",
+   "sheet": "1QFHa_xcuLOqbbYbtzeMVhb5ypfHIbAkVJyyInCKlgcM",
+   "tab_contains": "Brazil In Production",
+   "rows": [
+    {
+     "título|titulo|title|tema|topic|nome": "Distrital misto: Parte 2 (riscos e alternativas)",
+     "status": "Postado 02/11",
+     "formato|format|tipo": "Reel 7:03",
+     "link|drive|pasta|folder": "https://drive.google.com/drive/folders/1ppNqlmlYz-n4gIpg_3OBjZ9Ydi_gZLW3",
+     "data|date": "2026-11-02",
+     "nota|notes|obs": "Feed + 5 collabs. Voz Arthur (ElevenLabs)."
+    },
+    {
+     "título|titulo|title|tema|topic|nome": "Distrital misto: vídeo completo",
+     "status": "Trial 03/11 13:40 BRT",
+     "formato|format|tipo": "Trial reel 10:44",
+     "link|drive|pasta|folder": "https://drive.google.com/drive/folders/1ppNqlmlYz-n4gIpg_3OBjZ9Ydi_gZLW3",
+     "data|date": "2026-11-03",
+     "nota|notes|obs": "Conferir trial 05/11."
+    },
+    {
+     "título|titulo|title|tema|topic|nome": "E se eles quiserem distrital pra presidente? (simulação EUA)",
+     "status": "Agendado 03/11 10h BRT feed + trial gancho B 04/11 18h BRT",
+     "formato|format|tipo": "Reel 0:54",
+     "link|drive|pasta|folder": "https://drive.google.com/drive/folders/1ppNqlmlYz-n4gIpg_3OBjZ9Ydi_gZLW3",
+     "data|date": "2026-11-03",
+     "nota|notes|obs": "Flávio 318 x 276 estado por estado. Repost como trial no dia da votação da PEC."
+    }
+   ]
   }
- }
+ ]
 }

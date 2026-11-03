@@ -23,7 +23,7 @@ jobs:
       - run: pip install yt-dlp faster-whisper && python tools/ref.py || true
         env:
           PRI_OP_IG_COOKIES: ${{ secrets.PRI_OP_IG_COOKIES }}
-      - run: pip install google-auth google-api-python-client && python tools/drive_up.py
+      - run: pip install google-auth google-api-python-client && python tools/drive_up.py && python tools/drive_ops.py
         env:
           SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
       - run: |
