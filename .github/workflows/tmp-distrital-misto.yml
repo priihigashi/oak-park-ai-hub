@@ -17,15 +17,15 @@ jobs:
       - run: python tools/tts_el.py || true
         env:
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
-      - run: pip install google-auth google-api-python-client && python tools/drive_up.py
-        env:
-          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
       - run: python tools/el_fetch.py || true
       - run: python tools/tts.py || true
       - run: python tools/faces.py || true
       - run: pip install yt-dlp faster-whisper && python tools/ref.py || true
         env:
           PRI_OP_IG_COOKIES: ${{ secrets.PRI_OP_IG_COOKIES }}
+      - run: pip install google-auth google-api-python-client && python tools/drive_up.py
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
       - run: |
           git config user.name bot; git config user.email bot@users.noreply.github.com
           git add out; git commit -m "out [skip ci]" || true; git push
