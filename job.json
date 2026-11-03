@@ -9,15 +9,15 @@
   "__none__"
  ],
  "skip_faces": true,
- "nonce": 22,
+ "nonce": 23,
  "el": {},
  "reels": [],
  "elf": {},
  "upload": {
   "folder": "1_i1tkJDOz0LNKsWOvcNnAmSmDhll2SQ3",
   "files": {
-   "Distrital_presidente_EUA_capa.jpg": {
-    "path": "out/upload/capa_pr.jpg",
+   "Distrital_presidente_EUA_capa_trialB.jpg": {
+    "path": "out/upload/capa_pr_b.jpg",
     "mime": "image/jpeg"
    }
   }
