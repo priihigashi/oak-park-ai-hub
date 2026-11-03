@@ -4,7 +4,7 @@
  "scenes": [
   {
    "id": "s1",
-   "text": "Cadê a canetada? Foi o que o Nikolas postou, com uma manchete de 2022: o atual presidente dizia que o Bolsonaro podia baixar o combustível com uma canetada, e não fazia.",
+   "text": "{Cadê|Cá dê} a canetada? Foi o que o Nikolas postou, com uma manchete de 2022: o atual presidente dizia que o Bolsonaro podia baixar o combustível com uma canetada, e não fazia.",
    "speed": 1.1
   },
   {
@@ -54,7 +54,6 @@
   }
  ],
  "only": [
-  "s5",
-  "s7"
+  "s1"
  ]
 }
