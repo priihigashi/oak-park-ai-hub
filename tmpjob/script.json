@@ -4,12 +4,12 @@
  "scenes": [
   {
    "id": "s1",
-   "text": "Cadê a canetada? Foi o que o Nikolas postou, com uma manchete de 2022: o atual presidente dizia que o Bolsonaro podia baixar o combustível com uma canetada, e não fazia.",
+   "text": "O Nikolas postou: {Cadê|cadê} a canetada? Foi uma cobrança ao governo federal, com uma manchete de 2022: o atual presidente dizia que o Bolsonaro podia baixar o combustível com uma canetada, e não fazia.",
    "speed": 1.1
   },
   {
    "id": "s2",
-   "text": "Só que o Nikolas ataca de novo com meias verdades. E meias verdades podem se tornar desinformação. Essa canetada existiu, e foi dada em maio de 2023.",
+   "text": "Só que isso é meia verdade. E meias verdades espalham desinformação. Essa canetada existiu, e foi dada em maio de 2023.",
    "speed": 1.1
   },
   {
@@ -54,7 +54,7 @@
   }
  ],
  "only": [
-  "s4",
-  "s5"
+  "s1",
+  "s2"
  ]
 }
