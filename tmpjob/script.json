@@ -9,7 +9,7 @@
   },
   {
    "id": "s2",
-   "text": "Só que o Nikolas ataca de novo com meias verdades. E meia verdade engana. Essa canetada existiu, e foi dada em maio de 2023.",
+   "text": "Só que o Nikolas ataca de novo com meias verdades. E meias verdades podem se tornar desinformação. Essa canetada existiu, e foi dada em maio de 2023.",
    "speed": 1.1
   },
   {
@@ -54,6 +54,7 @@
   }
  ],
  "only": [
+  "s2",
   "s3"
  ]
 }
