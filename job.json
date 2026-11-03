@@ -9,16 +9,17 @@
   "__none__"
  ],
  "skip_faces": true,
- "nonce": 21,
+ "nonce": 22,
  "el": {},
  "reels": [],
- "elf": {
-  "urls": {
-   "prA": "mdzIZuTD0IGkNPxFTADj/s91wJUTIgIqJIOltBp1w/content.mp3?Expires=1793689200&KeyName=assets-cdn-key-1&Signature=b77BcIuuqwAlKariyr3VJns_Uuw="
-  },
-  "redo": [
-   "prA"
-  ]
- },
- "upload": null
+ "elf": {},
+ "upload": {
+  "folder": "1_i1tkJDOz0LNKsWOvcNnAmSmDhll2SQ3",
+  "files": {
+   "Distrital_presidente_EUA_capa.jpg": {
+    "path": "out/upload/capa_pr.jpg",
+    "mime": "image/jpeg"
+   }
+  }
+ }
 }
