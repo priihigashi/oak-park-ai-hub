@@ -1,0 +1,37 @@
+name: render reel
+on:
+  push:
+    branches: [tmp-distrital-misto]
+    paths: [render_job.json]
+permissions:
+  contents: read
+jobs:
+  chunks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        i: [0,1,2,3,4,5,6,7,8,9]
+    steps:
+      - uses: actions/checkout@v4
+        with: {sparse-checkout: "render_src\ntools\nrender_job.json", sparse-checkout-cone-mode: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: '20'}
+      - run: npm i playwright@1.48.2 && npx playwright install --with-deps chromium && sudo apt-get install -y ffmpeg >/dev/null
+      - run: (python3 -m http.server 8799 -d render_src >/dev/null 2>&1 &) && sleep 2 && node tools/render.js
+        env: {I: "${{ matrix.i }}"}
+      - uses: actions/upload-artifact@v4
+        with: {name: "chunk-${{ matrix.i }}", path: chunk.mp4, retention-days: 2}
+  join:
+    needs: chunks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {sparse-checkout: "render_src\ntools\nrender_job.json", sparse-checkout-cone-mode: false}
+      - uses: actions/download-artifact@v4
+        with: {path: chunks}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: sudo apt-get install -y ffmpeg >/dev/null && pip install -q google-auth google-api-python-client && python tools/render_join.py
+        env: {SHEETS_TOKEN: "${{ secrets.SHEETS_TOKEN }}"}
