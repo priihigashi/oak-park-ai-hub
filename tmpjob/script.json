@@ -22,11 +22,11 @@
   },
   {
    "id": "s4b",
-   "text": "E essa canetada mexeu no seu bolso. É só dividir o salário mínimo pelo preço do litro. De janeiro a setembro de 2022, último ano do Bolsonaro, o mínimo comprava cerca de 190 litros. Em 2026, compra cerca de 250. E olha que tem guerra: sem o {PPI|pê pê í}, a Petrobras vende a gasolina cerca de um quarto abaixo do preço de importar. Com o {PPI|pê pê í}, a guerra chegaria inteira na bomba."
+   "text": "E essa canetada mexeu no seu bolso. É só dividir o salário mínimo pelo preço do litro. De janeiro a setembro de 2022, último ano do Bolsonaro, o mínimo comprava cerca de 190 litros. Em 2026, compra cerca de 250.¦ E olha que tem guerra: sem o {PPI|pê pê í}, a Petrobras vende a gasolina cerca de um quarto abaixo do preço de importar. Com o {PPI|pê pê í}, a guerra chegaria inteira na bomba."
   },
   {
    "id": "s5",
-   "text": "E os estados? Quase um quarto do preço da gasolina é imposto dos estados, o {ICMS|í cê ême ésse}. Em 2026, o governo ofereceu pagar metade pra zerar esse imposto no diesel importado. Os estados recusaram. Toparam só um desconto menor, no diesel. Na gasolina, nada: e ainda aprovaram aumento pra 2027."
+   "text": "E tem a parte dos estados: quase um quarto do preço da gasolina é imposto deles, o {ICMS|í cê ême ésse}. Em 2026, o governo ofereceu pagar metade pra zerar esse imposto no diesel importado, e os estados recusaram. Toparam só um desconto menor, no diesel. Na gasolina, nada: e ainda aprovaram aumento pra 2027."
   },
   {
    "id": "s6",
@@ -34,7 +34,7 @@
   },
   {
    "id": "s7",
-   "text": "Então, o que o governo ainda pode fazer, e em que pé está? Tirar o {PPI|pê pê í}: feito.¦ Imposto federal: zerado. Multar quem abusa: já são mais de 700 milhões em multas pra distribuidoras. Baixar o {ICMS|í cê ême ésse}: depende dos estados. Voltar a ter postos da Petrobras: travado até 2029,¦ por contrato da venda¦ da {BR|bê érre}, no governo Bolsonaro. E recomprar a refinaria da Bahia, vendida em 2021, também no governo Bolsonaro: em negociação."
+   "text": "Agora, olha o que o governo ainda pode fazer, e em que pé está. Tirar o {PPI|pê pê í}: feito.¦ Imposto federal: zerado. Multar quem abusa: já são mais de 700 milhões em multas pra distribuidoras. Baixar o {ICMS|í cê ême ésse}: depende dos estados. Voltar a ter postos da Petrobras: travado até 2029,¦ por contrato da venda¦ da {BR|bê érre}, no governo Bolsonaro. E recomprar a refinaria da Bahia, vendida em 2021, também no governo Bolsonaro: em negociação."
   },
   {
    "id": "s8",
@@ -42,20 +42,21 @@
   },
   {
    "id": "s9",
-   "text": "E em 2022, ele tava errado de cobrar? Não. Bolsonaro teve quatro presidentes na Petrobras e não mexeu no {PPI|pê pê í}. Na gasolina, só cortou imposto federal em junho de 2022, a quatro meses da eleição, e só até dezembro. E obrigou os estados a baixar o {ICMS|í cê ême ésse}, vetando a compensação:¦ a conta, de 27 bilhões, ficou pro governo seguinte."
+   "text": "E em 2022, ele tinha razão de cobrar: Bolsonaro teve quatro presidentes na Petrobras e não mexeu no {PPI|pê pê í}. Na gasolina, só cortou imposto federal em junho de 2022, a quatro meses da eleição, e só até dezembro. E obrigou os estados a baixar o {ICMS|í cê ême ésse}, vetando a compensação:¦ a conta, de 27 bilhões, ficou pro governo seguinte."
   },
   {
    "id": "s9r",
-   "text": "Então, quem fez a gasolina subir no último ano? Ela subiu cerca de 30 centavos. Quem mais empurrou pra cima: as distribuidoras, que são privadas,¦ a guerra, o Bolsonaro, que vendeu a distribuidora da Petrobras, e os governadores. E quem mais segurou o preço: o governo atual."
+   "text": "Somando tudo, a gasolina subiu cerca de 30 centavos no último ano. Quem mais empurrou pra cima: as distribuidoras, que são privadas,¦ a guerra, o Bolsonaro, que vendeu a distribuidora da Petrobras, e os governadores. E quem mais segurou o preço foi o governo atual."
   },
   {
    "id": "s10",
-   "text": "Dá pra cobrar? Dá, e a gente vai continuar de olho.¦ Mas culpar só um lado, sem dar nome a todos os responsáveis, não é informação: é desinformação. Será que o Nikolas não sabe que o governo Bolsonaro e os estados também têm parte nisso? Cobrar é direito de todo mundo. Só cobra todo mundo que tem culpa."
+   "text": "Cobrar o governo é justo, e a gente vai continuar de olho.¦ Mas culpar só um lado, sem dar nome a todos os responsáveis, não é informação: é desinformação. Será que o Nikolas não sabe que o governo Bolsonaro e os estados também têm parte nisso? Cobrar é direito de todo mundo. Só cobra todo mundo que tem culpa."
   }
  ],
  "only": [
-  "s2",
   "s5",
+  "s7",
+  "s9",
   "s9r",
   "s10"
  ]
