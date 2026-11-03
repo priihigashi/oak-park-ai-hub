@@ -1,12 +1,1 @@
-tts s1 31
-tts s2 24
-tts s3 78
-tts s4 28
-tts s4b 73
-tts s5 68
-tts s6 42
-tts s7 83
-tts s8 51
-tts s9 61
-tts s9r 44
-tts s10 59
+tts s3 80
