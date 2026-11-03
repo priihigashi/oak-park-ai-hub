@@ -1,2 +1,4 @@
-photo https://upload.wikimedia.org/wikipedia/commons/f/f5/Foto_oficial_do_governador_de_Goi%C3%A1s%2C_Ronaldo_Caiado_em_2023_%28ombros%29.jpg
-cut out/head_caiado.png (551, 638)
+tts s7 112
+tts s8 79
+ASR s7  Agora, olhe o que o governo ainda pode fazer, e em que pé está.  O PP já saiu, em 2023.  Os impostos federais estão zerados.  Contra quem abusa, já são mais de 700 milhões em multas para as distribuidoras.  Mas à medida que deu esse poder a NP venceu em agosto, o Congresso não votou.  Baixar o ICMS depende dos estados.  Voltar a ter postos da Petrobras está travado até 2029,  por contrato da venda da BR, no governo Bolsonaro.  E a refinaria da Bahia foi vendida em 2021, também no governo Bolsonaro.  Desde então, quem define o preço lá não é a Petrobras.  O governo negocia comprar de volta.
+ASR s8  Para você entender por que ainda atacaram, a guerra no Oriente Médio fez o petróleo disparar no mundo inteiro.  E o preço na bomba não é só Petrobras, tem o imposto dos governadores, a distribuidora,  que deixou de ser da Petrobras do governo Bolsonaro, e o posto, que cobra o que quiser.  Viu um posto a quase R$10 na Bahia?  É o mais caro que a ANP achou.  A média do Estado é cerca de R$6,70.
