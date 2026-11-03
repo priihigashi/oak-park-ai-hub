@@ -1,6 +1,6 @@
 {
- "voice": "pt-BR-ThalitaMultilingualNeural",
- "rate": "+12%",
+ "voice": "pt-BR-AntonioNeural",
+ "rate": "+10%",
  "scenes": [
   {
    "id": "s1",
@@ -14,7 +14,7 @@
   },
   {
    "id": "s3",
-   "text": "A canetada era o {PPI|pê pê í}: regra de 2016, do governo Temer, que fazia a gasolina seguir o dólar e o petróleo lá de fora. Você recebe em real, mas pagava a gasolina como se fosse em dólar. Bolsonaro manteve até o fim."
+   "text": "A canetada era o {PPI|pê pê í}: regra de 2016, do governo Temer, que fazia a gasolina seguir o dólar e o petróleo lá de fora. Você recebe em real, mas pagava a gasolina como se fosse em dólar.¦ Era canetada porque o {PPI|pê pê í} não passou pelo Congresso: foi decisão da Petrobras. Então dava pra desfazer do mesmo jeito. Como ele mesmo disse em 2022:¦ pra tirar, também pode ser numa canetada. Bolsonaro manteve até o fim."
   },
   {
    "id": "s4",
@@ -52,8 +52,5 @@
    "id": "s10",
    "text": "Cobrar o governo é justo, e a gente vai continuar de olho.¦ Mas culpar só um lado, sem dar nome a todos os responsáveis, não é informação: é desinformação. Será que o Nikolas não sabe que o governo Bolsonaro e os estados também têm parte nisso? Cobrar é direito de todo mundo. Só cobra todo mundo que tem culpa."
   }
- ],
- "only": [
-  "s1"
  ]
 }
