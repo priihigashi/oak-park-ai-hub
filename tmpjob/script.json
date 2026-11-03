@@ -26,7 +26,7 @@
   },
   {
    "id": "s5",
-   "text": "E tem a parte dos estados: quase um quarto do preço da gasolina é imposto deles, o {ICMS|í cê ême ésse}. Em 2026, o governo ofereceu pagar metade pra zerar esse imposto no diesel importado, e os estados recusaram. Toparam só um desconto menor, no diesel. Na gasolina, nada: e ainda aprovaram aumento pra 2027."
+   "text": "E tem a parte dos estados: quase um quarto do preço da gasolina é imposto deles, o {ICMS|í cê ême ésse}. Em 2026, o governo ofereceu pagar metade pra zerar esse imposto no diesel importado.¦ Os estados recusaram: não quiseram abrir mão da outra metade, cerca de um bilhão e meio por mês. Toparam só um desconto menor, no diesel. Na gasolina, nada: e ainda aprovaram aumento pra 2027."
   },
   {
    "id": "s6",
@@ -34,7 +34,7 @@
   },
   {
    "id": "s7",
-   "text": "Agora, olha o que o governo ainda pode fazer, e em que pé está. Tirar o {PPI|pê pê í}: feito.¦ Imposto federal: zerado. Multar quem abusa: já são mais de 700 milhões em multas pra distribuidoras. Baixar o {ICMS|í cê ême ésse}: depende dos estados. Voltar a ter postos da Petrobras: travado até 2029,¦ por contrato da venda¦ da {BR|bê érre}, no governo Bolsonaro. E recomprar a refinaria da Bahia, vendida em 2021, também no governo Bolsonaro: em negociação."
+   "text": "Agora, olha o que o governo ainda pode fazer, e em que pé está.¦ O {PPI|pê pê í} já saiu, em 2023.¦ Os impostos federais estão zerados.¦ Contra quem abusa, já são mais de 700 milhões em multas pras distribuidoras.¦ Baixar o {ICMS|í cê ême ésse} depende dos estados.¦ Voltar a ter postos da Petrobras está travado até 2029, por contrato da venda da {BR|bê érre}, no governo Bolsonaro.¦ E a refinaria da Bahia, vendida em 2021, também no governo Bolsonaro, está em negociação pra voltar."
   },
   {
    "id": "s8",
@@ -55,9 +55,6 @@
  ],
  "only": [
   "s5",
-  "s7",
-  "s9",
-  "s9r",
-  "s10"
+  "s7"
  ]
 }
