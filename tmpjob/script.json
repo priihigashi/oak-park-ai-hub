@@ -1,6 +1,6 @@
 {
  "voice": "pt-BR-AntonioNeural",
- "rate": "+10%",
+ "rate": "+18%",
  "scenes": [
   {
    "id": "s1",
@@ -52,8 +52,5 @@
    "id": "s10",
    "text": "Cobrar o governo é justo, e a gente vai continuar de olho.¦ Mas culpar só um lado, sem dar nome a todos os responsáveis, não é informação: é desinformação. Será que o Nikolas não sabe que o governo Bolsonaro e os estados também têm parte nisso? Cobrar é direito de todo mundo. Só cobra todo mundo que tem culpa."
   }
- ],
- "only": [
-  "s1"
  ]
 }
