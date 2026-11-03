@@ -4,7 +4,7 @@
  "scenes": [
   {
    "id": "s1",
-   "text": "{Cadê|Cá dê} a canetada? Foi o que o Nikolas postou, com uma manchete de 2022: o atual presidente dizia que o Bolsonaro podia baixar o combustível com uma canetada, e não fazia.",
+   "text": "Cadê a canetada? Foi o que o Nikolas postou, com uma manchete de 2022: o atual presidente dizia que o Bolsonaro podia baixar o combustível com uma canetada, e não fazia.",
    "speed": 1.1
   },
   {
@@ -52,5 +52,8 @@
    "id": "s10",
    "text": "Cobrar o governo é justo, e a gente vai continuar de olho.¦ Mas culpar só um lado, sem dar nome a todos os responsáveis, não é informação: é desinformação. Será que o Nikolas não sabe que o governo Bolsonaro e os estados também têm parte nisso? Cobrar é direito de todo mundo. Só cobra todo mundo que tem culpa."
   }
+ ],
+ "only": [
+  "s1"
  ]
 }
