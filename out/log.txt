@@ -1,2 +1,15 @@
-tts s1 34
-tts s2 21
+tts s5 82
+tts s7 114
+tts s8 81
+photo https://upload.wikimedia.org/wikipedia/commons/f/f5/Foto_oficial_do_governador_de_Goi%C3%A1s%2C_Ronaldo_Caiado_em_2023_%28ombros%29.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=original
+cut fail Traceback (most recent call last):
+  File "/home/runner/work/oak-park-ai-hub/oak-park-ai-hub/tmpjob/run.py", line 61, in <module>
+    try: cut('out/orig_caiado.jpg','out/head_caiado.png')
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/oak-park-ai-hub/oak-park-ai-hub/tmpjob/run.py", line 39, in cut
+    im=Image.open(src).convert('RGB')
+       ^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.17/x64/lib/python3.11/site-packages/PIL/Image.py", line 3730, in open
+    raise UnidentifiedImageError(msg)
+PIL.UnidentifiedImageError: cannot identify image file 'out/orig_caiado.jpg'
+
