@@ -4,16 +4,22 @@
  "lines": {
   "pr": "Uma curiosidade pra entender por que as regras importam. No primeiro turno de dois mil e vinte e seis, o Flávio Bolsonaro ficou na frente. No segundo, o presidente virou e ganhou com mais de quatro milhões de votos a mais. Agora imagina contar como nos Estados Unidos: cada estado vale pontos, do tamanho da sua bancada no Congresso, e quem ganha no estado leva todos os pontos dele. São Paulo, Rio, Paraná, Santa Catarina, Rio Grande do Sul... Somando, o Flávio faria trezentos e dezoito pontos, contra duzentos e setenta e seis. Ganharia com quatro milhões de votos a menos. A virada só valeu porque aqui cada voto conta igual, em qualquer canto do país. A proposta do Motta não mexe na eleição pra presidente. Mas isso mostra como mudar a forma de contar pode mudar quem ganha. Pra entender a proposta, a parte um e a parte dois tão no meu perfil. E nos comentários eu deixo como você pode participar."
  },
- "photos": {
-  "lula": "Luiz_Inácio_Lula_da_Silva"
- },
+ "photos": {},
  "only": [
   "__none__"
  ],
- "skip_faces": false,
- "nonce": 17,
+ "skip_faces": true,
+ "nonce": 18,
  "el": {},
  "reels": [],
  "elf": {},
- "upload": null
+ "upload": {
+  "folder": "1_i1tkJDOz0LNKsWOvcNnAmSmDhll2SQ3",
+  "files": {
+   "Completo_distrital_capa.jpg": {
+    "path": "out/upload/capa_full.jpg",
+    "mime": "image/jpeg"
+   }
+  }
+ }
 }
