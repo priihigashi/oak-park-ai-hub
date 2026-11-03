@@ -25,7 +25,7 @@ try:
     subprocess.run([sys.executable,'-m','pip','install','-q','faster-whisper'],check=False)
     from faster_whisper import WhisperModel
     m=WhisperModel('small',compute_type='int8')
-    for sid in ['s7','s8']:
+    for sid in json.load(open('tmpjob/script.json'))['only']:
         segs,_=m.transcribe(f'out/{sid}.mp3',language='pt')
         L('ASR',sid,' '.join(x.text for x in segs))
 except Exception: L('asr fail',traceback.format_exc())
