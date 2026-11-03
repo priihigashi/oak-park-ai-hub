@@ -1,2 +1,1 @@
-tts s5 68
-tts s7 83
+tts s1 32
