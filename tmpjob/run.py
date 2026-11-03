@@ -22,41 +22,10 @@ async def tts():
 try: asyncio.run(tts())
 except Exception: L(traceback.format_exc())
 try:
-    subprocess.run([sys.executable,'-m','pip','install','-q','rembg[cpu]','mediapipe==0.10.14','pillow','numpy'],check=False)
-    import requests
-    UA={'User-Agent':'ReelBot/1.0 (https://github.com/priihigashi/oak-park-ai-hub) python-requests'}
-    r=requests.get('https://pt.wikipedia.org/w/api.php',params={'action':'query','titles':'Ronaldo_Caiado','prop':'pageimages','piprop':'original','format':'json'},headers=UA,timeout=30).json()
-    p=list(r['query']['pages'].values())[0]; url=p['original']['source'].split('?')[0]
-    open('out/orig_caiado.jpg','wb').write(requests.get(url,headers=UA,timeout=60).content); L('photo',url)
-except Exception: L('photo fail',traceback.format_exc())
-# ---------- cutouts ----------
-def cut(src, dst):
-    from rembg import remove, new_session
-    from PIL import Image, ImageFilter, ImageDraw
-    import numpy as np, mediapipe as mp
-    global SESSION
-    if 'SESSION' not in globals(): SESSION=new_session('birefnet-portrait')
-    im=Image.open(src).convert('RGB')
-    if max(im.size)>1800: im.thumbnail((1800,1800))
-    rgba=remove(im,session=SESSION,alpha_matting=True,alpha_matting_foreground_threshold=240,alpha_matting_background_threshold=10,alpha_matting_erode_size=10)
-    W,H=im.size; arr=np.array(im)
-    fm=mp.solutions.face_mesh.FaceMesh(static_image_mode=True,max_num_faces=1,refine_landmarks=False)
-    res=fm.process(arr)
-    if not res.multi_face_landmarks: L('noface',src); rgba.save(dst.replace('.png','_full.png')); return
-    lm=res.multi_face_landmarks[0].landmark
-    P=lambda i:(lm[i].x*W,lm[i].y*H)
-    jaw=[234,93,132,58,172,136,150,149,176,148,152,377,400,378,379,365,397,288,361,323,454]
-    top=P(10); chin=P(152); fh=chin[1]-top[1]; off=0.05*fh
-    pts=[(x,y+off) for x,y in map(P,jaw)]
-    poly=[(0,0),(W,0),(W,pts[-1][1])]+list(reversed(pts))+[(0,pts[0][1])]
-    m=Image.new('L',(W,H),0); ImageDraw.Draw(m).polygon(poly,fill=255)
-    m=m.filter(ImageFilter.GaussianBlur(2))
-    a=np.minimum(np.array(rgba.split()[3]),np.array(m))
-    a=np.array(Image.fromarray(a).filter(ImageFilter.GaussianBlur(1)))
-    rgba.putalpha(Image.fromarray(a))
-    bb=rgba.getbbox(); rgba=rgba.crop(bb)
-    if max(rgba.size)>900: rgba.thumbnail((900,900))
-    rgba.save(dst); L('cut',dst,rgba.size)
-
-try: cut('out/orig_caiado.jpg','out/head_caiado.png')
-except Exception: L('cut fail',traceback.format_exc())
+    subprocess.run([sys.executable,'-m','pip','install','-q','faster-whisper'],check=False)
+    from faster_whisper import WhisperModel
+    m=WhisperModel('small',compute_type='int8')
+    for sid in ['s7','s8']:
+        segs,_=m.transcribe(f'out/{sid}.mp3',language='pt')
+        L('ASR',sid,' '.join(x.text for x in segs))
+except Exception: L('asr fail',traceback.format_exc())

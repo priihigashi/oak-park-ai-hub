@@ -1,1 +1,60 @@
-{"voice": "pt-BR-AntonioNeural", "rate": "+18%", "scenes": [{"id": "s1", "text": "O Nikolas postou: {Cadê|cadê} a canetada? Foi uma cobrança ao governo federal, com uma manchete de 2022: o atual presidente dizia que o Bolsonaro podia baixar o combustível com uma canetada, e não fazia.", "speed": 1.1}, {"id": "s2", "text": "Só que isso é meia verdade. E meias verdades espalham desinformação. Essa canetada existiu, e foi dada em maio de 2023.", "speed": 1.1}, {"id": "s3", "text": "A canetada era o {PPI|pê pê í}: regra de 2016, do governo Temer, que fazia a gasolina seguir o dólar e o petróleo lá de fora. Você recebe em real, mas pagava a gasolina como se fosse em dólar.¦ Era canetada porque o {PPI|pê pê í} não passou pelo Congresso: foi decisão da Petrobras. Então dava pra desfazer do mesmo jeito. Como ele mesmo disse em 2022:¦ pra tirar, também pode ser numa canetada. Bolsonaro manteve durante todo o seu mandato."}, {"id": "s4", "text": "Em maio de 2023, o governo atual mandou a Petrobras tirar o {PPI|pê pê í}, e ela passou a olhar também o custo daqui. Então dizer que a canetada nunca veio é falso."}, {"id": "s4b", "text": "E essa canetada mexeu no seu bolso. É só dividir o salário mínimo pelo preço do litro. De janeiro a setembro de 2022, último ano do Bolsonaro, o mínimo comprava cerca de 190 litros. Em 2026, compra cerca de 250.¦ E olha que tem guerra: sem o {PPI|pê pê í}, a Petrobras vende a gasolina cerca de um quarto abaixo do preço de importar. Com o {PPI|pê pê í}, a guerra chegaria inteira na bomba."}, {"id": "s5", "text": "E tem a parte dos estados: quase um quarto do preço da gasolina é imposto deles, o {ICMS|í cê ême ésse}. Em 2026, o governo ofereceu pagar metade pra zerar esse imposto no diesel importado.¦ Os estados recusaram, como Goiás, do Caiado, e o motivo foi dinheiro: não quiseram abrir mão de cerca de um bilhão e meio por mês, que dizem usar em saúde e educação. Toparam só um desconto menor, no diesel. Na gasolina, nada: e ainda aprovaram aumento pra 2027."}, {"id": "s6", "text": "E ele não ficou parado: zerou os impostos federais da gasolina até 9 de novembro, pagando com o dinheiro extra que o governo ganha com o petróleo caro. Mas é temporário.¦ Pra baixar de vez, falta o imposto que mais pesa: o dos estados."}, {"id": "s7", "text": "Agora, olha o que o governo ainda pode fazer, e em que pé está.¦ O {PPI|pê pê í} já saiu, em 2023.¦ Os impostos federais estão zerados.¦ Contra quem abusa, já são mais de 700 milhões em multas pras distribuidoras. Mas a medida que deu esse poder à {ANP|a ene pê} venceu em agosto: o Congresso não votou.¦ Baixar o {ICMS|í cê ême ésse} depende dos estados.¦ Voltar a ter postos da Petrobras está travado até 2029, por contrato da venda da {BR|bê érre}, no governo Bolsonaro.¦ E a refinaria da Bahia foi vendida em 2021, também no governo Bolsonaro: desde então, quem define o preço lá não é a Petrobras. O governo negocia comprar de volta."}, {"id": "s8", "text": "Pra você entender por que ainda tá caro:¦ a guerra no Oriente Médio fez o petróleo disparar no mundo inteiro. E o preço na bomba não é só Petrobras: tem o imposto dos governadores, a distribuidora, que deixou de ser da Petrobras no governo Bolsonaro, e o posto, que cobra o que quiser. Viu um posto a quase 10 reais na Bahia? É o mais caro que a {ANP|a ene pê} achou. A média do estado é cerca de {R$ 6,70|seis e setenta}."}, {"id": "s9", "text": "E em 2022, ele tinha razão de cobrar: Bolsonaro teve quatro presidentes na Petrobras e não mexeu no {PPI|pê pê í}. Na gasolina, só cortou imposto federal em junho de 2022, a quatro meses da eleição, e só até dezembro. E obrigou os estados a baixar o {ICMS|í cê ême ésse}, vetando a compensação:¦ a conta, de 27 bilhões, ficou pro governo seguinte."}, {"id": "s9r", "text": "Somando tudo, a gasolina subiu cerca de 30 centavos no último ano. Quem mais empurrou pra cima: as distribuidoras, que são privadas,¦ a guerra, o Bolsonaro, que vendeu a distribuidora da Petrobras, e os governadores. E quem mais segurou o preço foi o governo atual."}, {"id": "s10", "text": "Cobrar o governo é justo, e a gente vai continuar de olho.¦ Mas culpar só um lado, sem dar nome a todos os responsáveis, não é informação: é desinformação. Será que o Nikolas não sabe que o governo Bolsonaro e os estados também têm parte nisso? Cobrar é direito de todo mundo. Só cobra todo mundo que tem culpa."}], "only": ["none"]}
+{
+ "voice": "pt-BR-AntonioNeural",
+ "rate": "+18%",
+ "scenes": [
+  {
+   "id": "s1",
+   "text": "O Nikolas postou: {Cadê|cadê} a canetada? Foi uma cobrança ao governo federal, com uma manchete de 2022: o atual presidente dizia que o Bolsonaro podia baixar o combustível com uma canetada, e não fazia.",
+   "speed": 1.1
+  },
+  {
+   "id": "s2",
+   "text": "Só que isso é meia verdade. E meias verdades espalham desinformação. Essa canetada existiu, e foi dada em maio de 2023.",
+   "speed": 1.1
+  },
+  {
+   "id": "s3",
+   "text": "A canetada era o {PPI|pê pê í}: regra de 2016, do governo Temer, que fazia a gasolina seguir o dólar e o petróleo lá de fora. Você recebe em real, mas pagava a gasolina como se fosse em dólar.¦ Era canetada porque o {PPI|pê pê í} não passou pelo Congresso: foi decisão da Petrobras. Então dava pra desfazer do mesmo jeito. Como ele mesmo disse em 2022:¦ pra tirar, também pode ser numa canetada. Bolsonaro manteve durante todo o seu mandato."
+  },
+  {
+   "id": "s4",
+   "text": "Em maio de 2023, o governo atual mandou a Petrobras tirar o {PPI|pê pê í}, e ela passou a olhar também o custo daqui. Então dizer que a canetada nunca veio é falso."
+  },
+  {
+   "id": "s4b",
+   "text": "E essa canetada mexeu no seu bolso. É só dividir o salário mínimo pelo preço do litro. De janeiro a setembro de 2022, último ano do Bolsonaro, o mínimo comprava cerca de 190 litros. Em 2026, compra cerca de 250.¦ E olha que tem guerra: sem o {PPI|pê pê í}, a Petrobras vende a gasolina cerca de um quarto abaixo do preço de importar. Com o {PPI|pê pê í}, a guerra chegaria inteira na bomba."
+  },
+  {
+   "id": "s5",
+   "text": "E tem a parte dos estados: quase um quarto do preço da gasolina é imposto deles, o {ICMS|í cê ême ésse}. Em 2026, o governo ofereceu pagar metade pra zerar esse imposto no diesel importado.¦ Os estados recusaram, como Goiás, do Caiado, e o motivo foi dinheiro: não quiseram abrir mão de cerca de um bilhão e meio por mês, que dizem usar em saúde e educação. Toparam só um desconto menor, no diesel. Na gasolina, nada: e ainda aprovaram aumento pra 2027."
+  },
+  {
+   "id": "s6",
+   "text": "E ele não ficou parado: zerou os impostos federais da gasolina até 9 de novembro, pagando com o dinheiro extra que o governo ganha com o petróleo caro. Mas é temporário.¦ Pra baixar de vez, falta o imposto que mais pesa: o dos estados."
+  },
+  {
+   "id": "s7",
+   "text": "Agora, olha o que o governo ainda pode fazer, e em que pé está.¦ O {PPI|pê pê í} já saiu, em 2023.¦ Os impostos federais estão zerados.¦ Contra quem abusa, já são mais de 700 milhões em multas pras distribuidoras. Mas a medida que deu esse poder à ANP venceu em agosto: o Congresso não votou.¦ Baixar o {ICMS|í cê ême ésse} depende dos estados.¦ Voltar a ter postos da Petrobras está travado até 2029, por contrato da venda da {BR|bê érre}, no governo Bolsonaro.¦ E a refinaria da Bahia foi vendida em 2021, também no governo Bolsonaro: desde então, quem define o preço lá não é a Petrobras. O governo negocia comprar de volta."
+  },
+  {
+   "id": "s8",
+   "text": "Pra você entender por que ainda tá caro:¦ a guerra no Oriente Médio fez o petróleo disparar no mundo inteiro. E o preço na bomba não é só Petrobras: tem o imposto dos governadores, a distribuidora, que deixou de ser da Petrobras no governo Bolsonaro, e o posto, que cobra o que quiser. Viu um posto a quase 10 reais na Bahia? É o mais caro que a ANP achou. A média do estado é cerca de {R$ 6,70|seis e setenta}."
+  },
+  {
+   "id": "s9",
+   "text": "E em 2022, ele tinha razão de cobrar: Bolsonaro teve quatro presidentes na Petrobras e não mexeu no {PPI|pê pê í}. Na gasolina, só cortou imposto federal em junho de 2022, a quatro meses da eleição, e só até dezembro. E obrigou os estados a baixar o {ICMS|í cê ême ésse}, vetando a compensação:¦ a conta, de 27 bilhões, ficou pro governo seguinte."
+  },
+  {
+   "id": "s9r",
+   "text": "Somando tudo, a gasolina subiu cerca de 30 centavos no último ano. Quem mais empurrou pra cima: as distribuidoras, que são privadas,¦ a guerra, o Bolsonaro, que vendeu a distribuidora da Petrobras, e os governadores. E quem mais segurou o preço foi o governo atual."
+  },
+  {
+   "id": "s10",
+   "text": "Cobrar o governo é justo, e a gente vai continuar de olho.¦ Mas culpar só um lado, sem dar nome a todos os responsáveis, não é informação: é desinformação. Será que o Nikolas não sabe que o governo Bolsonaro e os estados também têm parte nisso? Cobrar é direito de todo mundo. Só cobra todo mundo que tem culpa."
+  }
+ ],
+ "only": [
+  "s7",
+  "s8"
+ ]
+}
