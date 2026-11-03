@@ -24,9 +24,9 @@ except Exception: L(traceback.format_exc())
 try:
     subprocess.run([sys.executable,'-m','pip','install','-q','rembg[cpu]','mediapipe==0.10.14','pillow','numpy'],check=False)
     import requests
-    UA={'User-Agent':'reel-bot/1.0'}
+    UA={'User-Agent':'ReelBot/1.0 (https://github.com/priihigashi/oak-park-ai-hub) python-requests'}
     r=requests.get('https://pt.wikipedia.org/w/api.php',params={'action':'query','titles':'Ronaldo_Caiado','prop':'pageimages','piprop':'original','format':'json'},headers=UA,timeout=30).json()
-    p=list(r['query']['pages'].values())[0]; url=p['original']['source']
+    p=list(r['query']['pages'].values())[0]; url=p['original']['source'].split('?')[0]
     open('out/orig_caiado.jpg','wb').write(requests.get(url,headers=UA,timeout=60).content); L('photo',url)
 except Exception: L('photo fail',traceback.format_exc())
 # ---------- cutouts ----------
