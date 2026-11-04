@@ -5,18 +5,29 @@ def sh(c): print('+', c[:200]); subprocess.run(c, shell=True, check=True)
 
 # ---------- 1. TTS (edge-tts, word boundaries) ----------
 async def tts():
-    import edge_tts
+    import edge_tts, time
+    print('edge_tts', getattr(edge_tts,'__version__','?'))
+    voices=[J['voice'],'pt-BR-FranciscaNeural','pt-BR-AntonioNeural']
     for sc in J['scenes']:
         mp3 = f"{OUT}/{sc['id']}.mp3"
-        words = []
-        c = edge_tts.Communicate(sc['text'], J['voice'], rate=J['rate'], boundary='WordBoundary')
-        with open(mp3, 'wb') as f:
-            async for ch in c.stream():
-                if ch['type'] == 'audio': f.write(ch['data'])
-                elif ch['type'] == 'WordBoundary':
-                    words.append({'w': ch['text'], 's': ch['offset']/1e7, 'e': (ch['offset']+ch['duration'])/1e7})
-        json.dump(words, open(f"{OUT}/{sc['id']}.json", 'w'), ensure_ascii=False)
-        print(sc['id'], len(words))
+        if os.path.exists(mp3) and os.path.getsize(mp3) > 1000: continue
+        ok=False
+        for v in voices:
+            for attempt in range(3):
+                words=[]; buf=bytearray()
+                try:
+                    c = edge_tts.Communicate(sc['text'], v, rate=J['rate'], boundary='WordBoundary')
+                    async for ch in c.stream():
+                        if ch['type'] == 'audio': buf.extend(ch['data'])
+                        elif ch['type'] == 'WordBoundary':
+                            words.append({'w': ch['text'], 's': ch['offset']/1e7, 'e': (ch['offset']+ch['duration'])/1e7})
+                    if len(buf) > 1000:
+                        open(mp3,'wb').write(buf); json.dump(words, open(f"{OUT}/{sc['id']}.json", 'w'), ensure_ascii=False)
+                        print(sc['id'], v, len(words)); ok=True; break
+                except Exception as ex:
+                    print('fail', sc['id'], v, attempt, repr(ex)[:200])
+                await asyncio.sleep(3)
+            if ok: break
 try:
     asyncio.run(tts())
 except Exception:
@@ -28,7 +39,9 @@ def token():
     data = urllib.parse.urlencode({'client_id': td['client_id'], 'client_secret': td['client_secret'],
                                    'refresh_token': td['refresh_token'], 'grant_type': 'refresh_token'}).encode()
     return json.loads(urllib.request.urlopen(urllib.request.Request('https://oauth2.googleapis.com/token', data=data)).read())['access_token']
+SKIPV = os.path.exists(f'{OUT}/clips.json')
 try:
+    if SKIPV: raise RuntimeError('skip video (already done)')
     tk = token()
     req = urllib.request.Request(f"https://www.googleapis.com/drive/v3/files/{J['drive_video']}?alt=media&supportsAllDrives=true",
                                  headers={'Authorization': 'Bearer ' + tk})
@@ -94,10 +107,20 @@ try:
     UA = {'User-Agent': 'reel-builder/1.0 (contact via github priihigashi)'}
     sheet = []
     for f in J['faces']:
+        if os.path.exists(f"{OUT}/{f['id']}_head.png") and not f.get('redo'): continue
         try:
             api = 'https://pt.wikipedia.org/w/api.php?action=query&prop=pageimages&piprop=original&format=json&titles=' + urllib.parse.quote(f['page'])
             d = json.loads(urllib.request.urlopen(urllib.request.Request(api, headers=UA)).read())
-            src = list(d['query']['pages'].values())[0]['original']['source']
+            pg = list(d['query']['pages'].values())[0]
+            if f.get('file'):
+                src = 'https://commons.wikimedia.org/wiki/Special:FilePath/' + urllib.parse.quote(f['file'])
+            elif 'original' in pg:
+                src = pg['original']['source']
+            else:
+                q = 'https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrlimit=5&prop=imageinfo&iiprop=url&format=json&gsrsearch=' + urllib.parse.quote(f.get('search', f['page'].replace('_', ' ')))
+                dd = json.loads(urllib.request.urlopen(urllib.request.Request(q, headers=UA)).read())
+                cands = [p['imageinfo'][0]['url'] for p in dd['query']['pages'].values() if p['imageinfo'][0]['url'].lower().endswith(('.jpg', '.jpeg'))]
+                src = cands[0]
             raw = urllib.request.urlopen(urllib.request.Request(src, headers=UA)).read()
             open(f"{OUT}/{f['id']}_src.jpg", 'wb').write(raw)
             im = Image.open(f"{OUT}/{f['id']}_src.jpg").convert('RGB')

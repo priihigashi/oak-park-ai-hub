@@ -39,19 +39,14 @@
  "faces": [
   {
    "id": "collor",
-   "page": "Fernando_Collor_de_Mello"
-  },
-  {
-   "id": "fhc",
-   "page": "Fernando_Henrique_Cardoso"
-  },
-  {
-   "id": "jango",
-   "page": "João_Goulart"
+   "page": "Fernando_Collor_de_Mello",
+   "search": "Fernando Collor 1990 portrait"
   },
   {
    "id": "bolsonaro",
-   "page": "Jair_Bolsonaro"
+   "page": "Jair_Bolsonaro",
+   "file": "Jair_Bolsonaro_2019_Portrait.jpg",
+   "redo": true
   }
  ],
  "scenes": [
