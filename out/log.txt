@@ -1,12 +1,2 @@
-tts s3 76
-tts s4 31
-tts s4b 69
-tts s5 79
-tts s7 106
-tts s9 56
-ASR s3  A canetada era o PPI, regra de 2016, do governo Temer, que fazia a gasolina seguir o dólar  e o petróleo lá de fora.  Você recebe em real, mas pagava a gasolina como se fosse em dólar.  Era a canetada porque o PPI não passou pelo Congresso, foi decisão da Petrobras.  Então dava pra desfazer do mesmo jeito.  Como ele mesmo disse em 2022, pra tirar, também pode ser numa canetada.  Bolsonaro manteve durante todo o seu mandato.
-ASR s4  Em maio de 2023, o governo atual mandou a Petro Brás tirar o PTI, e ela passou a olhar também o custo daqui.  Então dizer que a canetada nunca veio é falso.
-ASR s4b  e essa canetada mexeu no seu bolso. É só dividir o salário mínimo pelo preço do litro.  De janeiro a setembro de 2022, último ano do Bolsonaro, o mínimo comprava cerca de 190 litros.  Em 2026, compra cerca de 250. E olha que tem guerra, sem o PPI, a Petrobras vende a gasolina  cerca de um quarto abaixo do preço de importar. Com o PPI, a guerra chegaria inteira na bomba.
-ASR s5  e tem a parte dos estados, quase um quarto do preço da gasolina em posto deles, o ICMS.  Em 2026, o governo ofereceu pagar metade pra zerar esse imposto no diesel importado.  Os estados recusaram, como goiais, do caiado, e o motivo foi dinheiro, não quiseram abrir mão de  cerca de um bilhão e meio por mês, que dizem usar em saúde e educação. Toparam só um desconto  menor, no diesel. Na gasolina, nada, e ainda aprovaram um aumento pra 2027.
-ASR s7  Agora, olhe o que o governo ainda pode fazer, e em que pé está.  O PPI já saiu, em 2023.  Os impostos federais estão zerados.  Contra quem abusa, já são mais de 700 milhões em multas para as distribuidoras.  Mas à medida que deu esse poder para a NP venceu em agosto, o Congresso não votou.  Baixar o ICMS depende dos estados.  Voltar a ter postos da Petrobras está travado até 2029,  por contrato da venda da BR, no governo Bolsonaro.  E a refinaria da Bahia foi vendida em 2021, também no governo Bolsonaro.  Desde então, quem define o preço lá não é a Petrobras.  O governo negocia comprar de volta.
-ASR s9  E em 2022, ele tinha razão de cobrar, Bolsonaro teve quatro presidentes na Petrobras e não mexeu no PPI.  Na gasolina, só cortou imposto federal em junho de 2022, há quatro meses de eleição, e só até dezembro.  E obrigou os estados a baixar o ICMS, vetando a compensação, a conta, de 27 bilhões, ficou pro governo seguinte.
+tts s2 21
+tts s10 56
