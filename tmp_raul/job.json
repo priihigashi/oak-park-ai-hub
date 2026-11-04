@@ -36,24 +36,7 @@
    "post": 0.25
   }
  ],
- "faces": [
-  {
-   "id": "dilma",
-   "page": "Dilma_Rousseff"
-  },
-  {
-   "id": "cunha",
-   "page": "Eduardo_Cunha"
-  },
-  {
-   "id": "temer",
-   "page": "Michel_Temer"
-  },
-  {
-   "id": "kataguiri",
-   "page": "Kim_Kataguiri"
-  }
- ],
+ "faces": [],
  "scenes": [
   {
    "id": "n03",
@@ -61,7 +44,7 @@
   },
   {
    "id": "n04",
-   "text": "Primeiro: a indústria não morreu agora. No auge, em 1985, ela era trinta e seis por cento do PIB. Em 2021, onze por cento."
+   "text": "Primeiro: a indústria não morreu agora. Em 1985, as fábricas eram trinta e seis por cento de tudo que o país produzia. Em 2021, onze por cento. Elas não pararam: perderam espaço."
   },
   {
    "id": "n05",
@@ -69,43 +52,43 @@
   },
   {
    "id": "n06",
-   "text": "E o PT? Também errou. A Dilma deu desconto bilionário de imposto pra indústria e segurou na marra o preço da gasolina e da luz. Em 2015 e 2016, o país afundou."
+   "text": "E o PT? Também errou. A Dilma deu desconto bilionário de imposto pra indústria e segurou na marra gasolina e luz. Com crise fiscal e política junto, em 2015 e 2016 o país afundou."
   },
   {
    "id": "n07",
-   "text": "Aí, nos comentários: a esquerda tá há vinte anos no poder. Tá bom, vamos supor. Mas a conta certa é: uns treze anos de Lula e Dilma, quase sete de Temer e Bolsonaro, e agora quase quatro. Não foi estrada reta: construiu, alguém parou, recomeçou."
+   "text": "Aí, nos comentários: a esquerda tá há vinte anos no poder. Tá bom, vamos supor. Mas a conta certa é: uns treze anos de Lula e Dilma, quase sete de Temer e Bolsonaro, e agora quase quatro. Construiu, alguém parou, recomeçou."
   },
   {
    "id": "n07b",
-   "text": "Olha os estaleiros. Com a regra de fazer as plataformas da Petrobras aqui, o emprego foi de uns três mil pra oitenta e dois mil em 2014. Teve corrupção, e tinha que punir, mas as obras pararam junto. Em 2017, o Temer cortou a regra e as encomendas foram pra Ásia. Sobraram uns vinte e um mil. A regra voltou, e hoje o setor já passa de oitenta e seis mil."
+   "text": "Olha os estaleiros. No fim dos anos 90, tinham uns dois mil empregos. Com encomenda da Petrobras e a regra de produzir aqui, o conteúdo local, chegaram a oitenta e dois mil em 2014. A crise começou ainda com a Dilma, com a Lava Jato e obra parada. Em 2017, o Temer afrouxou a regra e as plataformas foram pra Ásia. Sobraram uns vinte e um mil. A regra voltou, e hoje passa de oitenta e seis mil."
   },
   {
    "id": "n07c",
-   "text": "E dizer que não teve melhoria é sacanagem. O Brasil saiu do Mapa da Fome em 2014. Depois, a compra de comida do pequeno agricultor pra doar caiu de cerca de quatrocentos e vinte pra cento e sessenta milhões, de 2016 a 2019. Teve pandemia, claro. Voltamos pro mapa e só saímos de novo em 2025."
+   "text": "E dizer que não teve melhoria é sacanagem. O Brasil saiu do Mapa da Fome em 2014 e voltou em 2021. E não sou eu que tô dizendo: a FAO, da ONU, culpa a mudança nas prioridades das políticas públicas e a pandemia. Em 2025, saímos de novo."
   },
   {
    "id": "n08",
-   "text": "E o Congresso? Em 2007, o Senado derrubou a cê pê eme efe: cerca de quarenta bilhões por ano a menos pra saúde. Em 2025, a Câmara deixou vencer a medida que cobrava mais de béts e fintechs, por duzentos e cinquenta e um a cento e noventa e três. Uns dezessete bilhões a menos em 2026."
+   "text": "E o Congresso? Em 2007, a cê pê eme efe, o imposto do cheque, precisava de quarenta e nove votos no Senado e teve quarenta e cinco: cerca de quarenta bilhões por ano a menos, que também iam pra saúde. Em 2025, a Câmara derrubou por duzentos e cinquenta e um a cento e noventa e três a medida que cobrava mais de investimentos, béts e fintechs: uns dezessete bilhões previstos pra 2026."
   },
   {
    "id": "n09",
-   "text": "Ah, mas Congresso não faz diferença, né? Então por que tá todo mundo comemorando ou chorando a eleição do Congresso americano? Aqui, a esquerda tem só cento e vinte e quatro dos quinhentos e treze deputados. O PT senta na cadeira, mas quem aprova as leis é outra turma."
+   "text": "Ah, mas Congresso não faz diferença, né? Então por que tá todo mundo comemorando ou chorando a eleição do Congresso americano? Aqui, a Câmara eleita agora tem só cento e vinte e quatro deputados de esquerda em quinhentos e treze. Pra aprovar qualquer coisa, tem que convencer a outra turma."
   },
   {
    "id": "n12",
-   "text": "Agora, sua pergunta é boa, Raul: como paga a conta? O imposto novo é um mínimo pra quem ganha mais de cinquenta mil por mês e pagava pouco. Quem ganha até cinco mil parou de pagar. E passou na Câmara por quatrocentos e noventa e três a zero. Até o PL votou sim."
+   "text": "Agora, sua pergunta é boa, Raul: como gerar riqueza pra pagar a conta? Produzindo mais, com juro menor, porto, estrada, gente formada e regra que não muda a cada governo. E no imposto, quem ganha até cinco mil parou de pagar, e quem ganha mais de cinquenta mil por mês agora paga um mínimo. Passou por quatrocentos e noventa e três a zero, até com o PL."
   },
   {
    "id": "n13",
-   "text": "Juro de quase catorze por cento quebra empresa? Quebra, nisso a gente concorda. Mas quem decide é o Banco Central, que é autônomo por uma lei que o Bolsonaro sancionou."
+   "text": "Juro de quase catorze por cento quebra empresa? Quebra, nisso a gente concorda. Inflação e contas do governo pesam, mas quem bate o martelo é o Banco Central, autônomo por uma lei que o Bolsonaro sancionou."
   },
   {
    "id": "n14",
-   "text": "E o fim da seis por um? Passou no Senado por setenta e cinco a um. Direita junto."
+   "text": "E o fim da seis por um? Passou no Senado por setenta e cinco a um, direita junto. E o custo pra empresa? Volta pra mesma resposta: produtividade."
   },
   {
    "id": "n16",
-   "text": "E a China? O barato de lá não é salário de fome: já em 2016, o salário da indústria chinesa passava o do Brasil. O preço baixo vem de escala, fornecedor do lado da fábrica, porto, energia, juro baixo e quarenta anos de plano."
+   "text": "E a China? O barato de lá não é salário de fome: já em 2016, o salário da indústria chinesa passava o do Brasil. O preço baixo vem de escala, fornecedor do lado, porto, energia, juro baixo e quarenta anos de plano."
   },
   {
    "id": "n17",
