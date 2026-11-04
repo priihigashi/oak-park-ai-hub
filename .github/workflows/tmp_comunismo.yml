@@ -1,0 +1,24 @@
+name: tmp-comunismo-job
+on:
+  push:
+    branches: [tmp-comunismo]
+    paths: ['job/job.json']
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: tmp-comunismo }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - run: pip install -q faster-whisper edge-tts
+      - run: python job/run.py
+      - run: |
+          git config user.name bot; git config user.email bot@example.com
+          git add -A out || true
+          git commit -m "out" || echo nothing
+          git push origin HEAD:tmp-comunismo
