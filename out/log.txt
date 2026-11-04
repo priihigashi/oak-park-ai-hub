@@ -1,5 +1,24 @@
-tts s3 72
-tts s4b 68
-tts s6 44
-tts s7 105
-tts s10 56
+dl s1 200 217789
+dl s2 200 138377
+dl s3 200 403363
+dl s4 200 168052
+dl s4b 200 417573
+dl s5 200 461041
+dl s6 200 230746
+dl s7 200 619866
+dl s8 200 370344
+dl s9 200 386644
+dl s9r 200 279229
+dl s10 200 295947
+asr s1 34 O Nicolas postou, ''Cadê a canetada?'' Foi uma cobrança ao governo federal, com uma manchete de 2022. O atual presidente dizia que o Bolsonaro podia baixar o combustível com uma canetada e não fazia.
+asr s2 21 Só que isso é uma meia verdade daquelas que viram desinformação. A canetada existiu e foi dada em maio de 2023.
+asr s3 73 A canetada era o PPI, uma regra de 2016 do governo Temer, que amarrava a gasolina ao petróleo lá de fora. Você recebe em real, mas pagava como se fosse em dólar. Essa regra não passou pelo Congresso, foi decisão da Petrobras. Então dava para desfazer do mesmo jeito. Foi isso que ele cobrou em 2022. 
+asr s4 31 Em maio de 2023, o governo atual mandou a Petrobras tirar o PPI, e ela passou a olhar também o custo daqui. Então, dizer que a canetada nunca veio é falso.
+asr s4b 71 E essa canetada mexeu no seu bolso. Dividindo o salário mínimo pelo preço do litro, de janeiro a setembro de 2022, último ano do Bolsonaro, o mínimo comprava cerca de 190 litros. E em 2026 compra cerca de 250. E olha que tem guerra, sem o PPI, a Petrobras vende a gasolina a cerca de um quarto abaixo
+asr s5 78 e tem a parte dos estados, quase um quarto do preço da gasolina imposto deles, o ICMS. Em 2026, o governo ofereceu pagar metade para zerar esse imposto no diesel importado. Os estados recusaram, como Goiás do Caíado, e o motivo foi dinheiro. Não quiseram abrir mão de cerca de 1 bilhão e meio por mês
+asr s6 46 E ele não ficou parado, zerou os impostos federais da gasolina até 9 de novembro, pagando com o dinheiro extra que o governo ganha com o petróleo caro. Só que é temporário, e para baixar de vez, falta o imposto que mais pesa, o dos estados.
+asr s7 110 Agora, olhe o que o governo ainda pode fazer e em que pé está. O PPI já saiu em 2023 e os impostos federais estão zerados. Contra quem abusa, já são mais de 700 milhões em multas para as distribuidoras. Mas a medida que deu esse poder para a NP venceu em agosto porque o Congresso não votou. Baixar o
+asr s8 82 Para você entender por que ainda está caro, a guerra no Oriente Médio fez o petróleo disparar no mundo inteiro. E o preço na bomba não é só a Petrobras. Tem o imposto dos governadores, a distribuidora, que deixou de ser da Petrobras no governo Bolsonaro, e o posto, que cobra o que quiser. Vir um pos
+asr s9 59 E em 2022, ele tinha razão de cobrar. Bolsonaro teve quatro presidentes na Petrobrás e não mexeu no PPI. Na gasolina, só cortou imposto federal em junho de 2022, a quatro meses da eleição, e só até dezembro. E obrigou os estados a baixar o ICMS, vetando a compensação. A conta, de 27 bilhões, ficou p
+asr s9r 45 Somando tudo, a gasolina subiu cerca de 30 centavos no último ano. Quem mais empurrou para cima? As distribuidoras, que são privadas, a guerra, o Bolsonaro que vendeu a distribuidora da Petrobrás e os governadores. E quem mais segurou o preço foi o governo atual.
+asr s10 56 Fiscalizar o governo é justo, e a gente vai continuar de olho. Mas culpar só um lado sem dar nome a todos os responsáveis não informa ninguém, só desenforma. Será que o Nícolas não sabe que o governo Bolsonaro e os Estados também têm parte nisso? Quem quiser cobrar, que cobre todo mundo que tem culp
