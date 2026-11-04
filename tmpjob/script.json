@@ -14,7 +14,7 @@
   },
   {
    "id": "s3",
-   "text": "A canetada era o PPI: regra de 2016, do governo Temer, que fazia a gasolina seguir o dólar e o petróleo lá de fora. Você recebe em real, mas pagava a gasolina como se fosse em dólar.¦ Era canetada porque o PPI não passou pelo Congresso: foi decisão da Petrobras. Então dava pra desfazer do mesmo jeito. Como ele mesmo disse em 2022:¦ pra tirar, também pode ser numa canetada. Bolsonaro manteve durante todo o seu mandato."
+   "text": "A canetada era o PPI, uma regra de 2016, do governo Temer, que amarrava a gasolina ao petróleo lá de fora: você recebe em real, mas pagava como se fosse em dólar.¦ Essa regra não passou pelo Congresso, foi decisão da Petrobras, então dava pra desfazer do mesmo jeito. Foi isso que ele cobrou em 2022:¦ pra tirar, também pode ser numa canetada. E Bolsonaro manteve o PPI durante todo o seu mandato."
   },
   {
    "id": "s4",
@@ -22,7 +22,7 @@
   },
   {
    "id": "s4b",
-   "text": "E essa canetada mexeu no seu bolso. É só dividir o salário mínimo pelo preço do litro. De janeiro a setembro de 2022, último ano do Bolsonaro, o mínimo comprava cerca de 190 litros. Em 2026, compra cerca de 250.¦ E olha que tem guerra: sem o PPI, a Petrobras vende a gasolina cerca de um quarto abaixo do preço de importar. Com o PPI, a guerra chegaria inteira na bomba."
+   "text": "E essa canetada mexeu no seu bolso. Dividindo o salário mínimo pelo preço do litro: de janeiro a setembro de 2022, último ano do Bolsonaro, o mínimo comprava cerca de 190 litros, e em 2026 compra cerca de 250.¦ E olha que tem guerra: sem o PPI, a Petrobras vende a gasolina cerca de um quarto abaixo do preço de importar. Com o PPI, a guerra chegaria inteira na bomba."
   },
   {
    "id": "s5",
@@ -30,11 +30,11 @@
   },
   {
    "id": "s6",
-   "text": "E ele não ficou parado: zerou os impostos federais da gasolina até 9 de novembro, pagando com o dinheiro extra que o governo ganha com o petróleo caro. Mas é temporário.¦ Pra baixar de vez, falta o imposto que mais pesa: o dos estados."
+   "text": "E ele não ficou parado: zerou os impostos federais da gasolina até 9 de novembro, pagando com o dinheiro extra que o governo ganha com o petróleo caro. Só que é temporário,¦ e pra baixar de vez falta o imposto que mais pesa, o dos estados."
   },
   {
    "id": "s7",
-   "text": "Agora, olha o que o governo ainda pode fazer, e em que pé está.¦ O PPI já saiu, em 2023.¦ Os impostos federais estão zerados.¦ Contra quem abusa, já são mais de 700 milhões em multas pras distribuidoras. Mas a medida que deu esse poder pra ANP venceu em agosto: o Congresso não votou.¦ Baixar o ICMS depende dos estados.¦ Voltar a ter postos da Petrobras está travado até 2029, por contrato da venda da BR, no governo Bolsonaro.¦ E a refinaria da Bahia foi vendida em 2021, também no governo Bolsonaro: desde então, quem define o preço lá não é a Petrobras. O governo negocia comprar de volta."
+   "text": "Agora, olha o que o governo ainda pode fazer, e em que pé está.¦ O PPI já saiu, em 2023, e os impostos federais estão zerados.¦ Contra quem abusa, já são mais de 700 milhões em multas pras distribuidoras, mas a medida que deu esse poder pra ANP venceu em agosto, porque o Congresso não votou.¦ Baixar o ICMS depende dos estados.¦ Voltar a ter postos da Petrobras está travado até 2029, por contrato da venda da BR, no governo Bolsonaro.¦ E a refinaria da Bahia, vendida em 2021, também no governo Bolsonaro, hoje tem o preço definido por uma empresa privada. O governo negocia comprar de volta."
   },
   {
    "id": "s8",
@@ -50,11 +50,14 @@
   },
   {
    "id": "s10",
-   "text": "Cobrar o governo é justo, e a gente vai continuar de olho.¦ Mas culpar só um lado, sem dar nome a todos os responsáveis, não informa ninguém: só desinforma. Será que o Nikolas não sabe que o governo Bolsonaro e os estados também têm parte nisso? Quem quiser cobrar, que cobre todo mundo que tem culpa."
+   "text": "Fiscalizar o governo é justo, e a gente vai continuar de olho.¦ Mas culpar só um lado, sem dar nome a todos os responsáveis, não informa ninguém: só desinforma. Será que o Nikolas não sabe que o governo Bolsonaro e os estados também têm parte nisso? Quem quiser cobrar, que cobre todo mundo que tem culpa."
   }
  ],
  "only": [
-  "s2",
+  "s3",
+  "s4b",
+  "s6",
+  "s7",
   "s10"
  ]
 }
