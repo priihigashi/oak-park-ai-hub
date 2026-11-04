@@ -8,9 +8,13 @@ async def tts():
     import edge_tts, time
     print('edge_tts', getattr(edge_tts,'__version__','?'))
     voices=[J['voice'],'pt-BR-FranciscaNeural','pt-BR-AntonioNeural']
+    tag = J['voice'] + J['rate']; vf = f'{OUT}/voice.txt'
+    same = os.path.exists(vf) and open(vf).read() == tag
     for sc in J['scenes']:
         mp3 = f"{OUT}/{sc['id']}.mp3"
-        if os.path.exists(mp3) and os.path.getsize(mp3) > 1000: continue
+        tf = f"{OUT}/{sc['id']}.txt"
+        if same and os.path.exists(mp3) and os.path.getsize(mp3) > 1000 and os.path.exists(tf) and open(tf).read() == sc['text']: continue
+        open(tf, 'w').write(sc['text'])
         ok=False
         for v in voices:
             for attempt in range(3):
@@ -28,6 +32,7 @@ async def tts():
                     print('fail', sc['id'], v, attempt, repr(ex)[:200])
                 await asyncio.sleep(3)
             if ok: break
+    open(vf, 'w').write(tag)
 try:
     asyncio.run(tts())
 except Exception:
