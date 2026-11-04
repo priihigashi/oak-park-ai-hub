@@ -1,0 +1,21 @@
+{
+    "programs": [
+
+    ],
+    "stream_groups": [
+
+    ],
+    "streams": [
+        {
+            "width": 1080,
+            "height": 1920,
+            "r_frame_rate": "30/1"
+        },
+        {
+            "r_frame_rate": "0/0"
+        }
+    ],
+    "format": {
+        "duration": "210.118005"
+    }
+}
