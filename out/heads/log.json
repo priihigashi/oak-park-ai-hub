@@ -1,0 +1,8 @@
+{
+ "collor": "ERR UnidentifiedImageError('cannot identify image file <_io.BytesIO object at 0x7c771918e930>')",
+ "bolsonaro": "ERR UnidentifiedImageError('cannot identify image file <_io.BytesIO object at 0x7c771918e930>')",
+ "fhc": "https://upload.wikimedia.org/wikipedia/commons/4/46/Fernando_Henrique_Cardoso_%281999%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+ "rasmussen": "ERR UnidentifiedImageError('cannot identify image file <_io.BytesIO object at 0x7c77183ab060>')",
+ "nunes": "ERR KeyError('original')",
+ "mendonca": "ERR UnidentifiedImageError('cannot identify image file <_io.BytesIO object at 0x7c77389f2c00>')"
+}
