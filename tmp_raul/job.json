@@ -1,6 +1,6 @@
 {
- "voice": "pt-BR-ThalitaMultilingualNeural",
- "rate": "+15%",
+ "voice": "pt-BR-FranciscaNeural",
+ "rate": "+12%",
  "drive_video": "1Sly1J8O4pnzmR_JlbcCeowTEpW-B73IN",
  "clips": [
   {
@@ -36,19 +36,7 @@
    "post": 0.25
   }
  ],
- "faces": [
-  {
-   "id": "collor",
-   "page": "Fernando_Collor_de_Mello",
-   "search": "Fernando Collor 1990 portrait"
-  },
-  {
-   "id": "bolsonaro",
-   "page": "Jair_Bolsonaro",
-   "file": "Jair_Bolsonaro_2019_Portrait.jpg",
-   "redo": true
-  }
- ],
+ "faces": [],
  "scenes": [
   {
    "id": "n03",
