@@ -1,0 +1,123 @@
+{
+ "voice": "pt-BR-ThalitaMultilingualNeural",
+ "rate": "+15%",
+ "drive_video": "1Sly1J8O4pnzmR_JlbcCeowTEpW-B73IN",
+ "clips": [
+  {
+   "id": "clipA",
+   "words": [
+    "mataram",
+    "a",
+    "nossa",
+    "indústria"
+   ],
+   "pre": 0.12,
+   "post": 0.3
+  },
+  {
+   "id": "clipB",
+   "words": [
+    "é",
+    "essa",
+    "a",
+    "resposta",
+    "que",
+    "o",
+    "cara",
+    "não",
+    "dá"
+   ],
+   "until": [
+    "esquerda",
+    "não",
+    "resolve"
+   ],
+   "pre": 0.1,
+   "post": 0.25
+  }
+ ],
+ "faces": [
+  {
+   "id": "collor",
+   "page": "Fernando_Collor_de_Mello"
+  },
+  {
+   "id": "fhc",
+   "page": "Fernando_Henrique_Cardoso"
+  },
+  {
+   "id": "jango",
+   "page": "João_Goulart"
+  },
+  {
+   "id": "bolsonaro",
+   "page": "Jair_Bolsonaro"
+  }
+ ],
+ "scenes": [
+  {
+   "id": "n03",
+   "text": "Raul, bora conversar? A gente pesquisou suas dúvidas uma por uma. E tem coisa aí que você não tá olhando."
+  },
+  {
+   "id": "n04",
+   "text": "Primeiro: a indústria não morreu agora. No auge, em 1985, ela era trinta e seis por cento do PIB. Em 2021, onze por cento."
+  },
+  {
+   "id": "n05",
+   "text": "A dívida que a ditadura deixou quebrou o país nos anos 80. Collor abriu tudo de uma vez. No Plano Real, com efe agá cê, o real valia mais que o dólar, e o juro passou de quarenta por cento."
+  },
+  {
+   "id": "n06",
+   "text": "E o PT? Surfou o boom das commodities e também não reverteu. Não teve um culpado só. Foram quarenta anos."
+  },
+  {
+   "id": "n07",
+   "text": "Aí, nos comentários, tá cheio de gente falando: a esquerda tá há vinte anos no poder. Gente, é 2026! Desde 1985, foram uns dezessete anos de esquerda na presidência. Com impeachment no meio."
+  },
+  {
+   "id": "n08",
+   "text": "E maioria no Congresso? Nunca. Agora mesmo, a esquerda elegeu só cento e vinte e quatro dos quinhentos e treze deputados."
+  },
+  {
+   "id": "n09",
+   "text": "Ah, mas Congresso não importa? Olha os Estados Unidos ontem: os democratas viraram a Câmara e o Senado, e agora o presidente de lá vai ter que negociar tudo."
+  },
+  {
+   "id": "n10",
+   "text": "E antes de 1985? Império, café com leite, ditadura. Quando o Jango, mais à esquerda, chegou lá, veio o golpe. Culpar vinte anos é esquecer uns cento e oitenta."
+  },
+  {
+   "id": "n11",
+   "text": "E dizer que não melhorou nada é sacanagem. O Brasil saiu do Mapa da Fome em 2014, voltou depois, e saiu de novo em 2025."
+  },
+  {
+   "id": "n12",
+   "text": "Agora, sua pergunta é boa, Raul: como paga a conta? O imposto que subiu foi pra quem ganha mais de cinquenta mil por mês. Quem ganha até cinco mil parou de pagar. E passou na Câmara por quatrocentos e noventa e três a zero. Até o PL votou sim."
+  },
+  {
+   "id": "n13",
+   "text": "Juro de quase catorze por cento quebra empresa? Quebra, nisso a gente concorda. Mas quem decide é o Banco Central, que é autônomo por uma lei que o Bolsonaro sancionou."
+  },
+  {
+   "id": "n14",
+   "text": "E o fim da seis por um? Passou no Senado por setenta e cinco a um. Direita junto."
+  },
+  {
+   "id": "n15",
+   "text": "E plano pra indústria tem: a reforma tributária, que acaba com o imposto em cascata, e mais de trezentos bilhões do bê ene dê é esse pra fábrica. A gente vai cobrar resultado. Mas dizer que não tem resposta não é verdade."
+  },
+  {
+   "id": "n16",
+   "text": "E a China? O barato de lá não é salário de fome: já em 2016, o salário da indústria chinesa passava o do Brasil. O preço baixo vem de escala gigante, fornecedor do lado da fábrica, porto, energia, juro baixo e quarenta anos de plano."
+  },
+  {
+   "id": "n17",
+   "text": "Tem denúncia da ONU de trabalho forçado em Xinjiang? Tem, e é séria. Só que o mesmo relatório cita trabalho escravo na nossa Amazônia."
+  },
+  {
+   "id": "n18",
+   "text": "Então, Raul: quem matou a chance do Brasil virar uma China não foi a esquerda de vinte anos. Foram décadas de juro alto, real caro e falta de plano, de quase todo mundo que passou por lá. E você, acha o quê? Comenta aí."
+  }
+ ]
+}
