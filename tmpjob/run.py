@@ -1,23 +1,21 @@
-import json, re, asyncio, os, subprocess, sys, traceback
+import os, json, subprocess, sys, traceback
 os.makedirs('out', exist_ok=True)
-log = open('out/log.txt','w')
-def L(*a):
-    print(*a); print(*a, file=log); log.flush()
-async def tts():
-  import edge_tts
-  d = json.load(open('tmpjob/script.json'))
-  for s in d['scenes']:
-    if d.get('only') and s['id'] not in d['only']: continue
-    spoken = re.sub(r'\{[^|}]*\|([^}]*)\}', r'\1', s['text']).replace('¦','')
-    for attempt in range(3):
-      try:
-        c = edge_tts.Communicate(spoken, d['voice'], rate=d['rate'], boundary="WordBoundary")
-        words=[]; audio=bytearray()
-        async for ch in c.stream():
-            if ch['type']=='audio': audio+=ch['data']
-            elif ch['type']=='WordBoundary': words.append({'t':ch['offset']/1e7,'d':ch['duration']/1e7,'w':ch['text']})
-        open(f"out/{s['id']}.mp3",'wb').write(audio); json.dump(words, open(f"out/{s['id']}.json",'w'), ensure_ascii=False)
-        L('tts', s['id'], len(words)); break
-      except Exception: L('retry', s['id'], traceback.format_exc()[-200:])
-try: asyncio.run(tts())
-except Exception: L(traceback.format_exc())
+log=open('out/log.txt','w')
+def L(*a): print(*a); print(*a,file=log); log.flush()
+import requests
+urls=json.load(open('tmpjob/el_urls.json'))
+for k,u in urls.items():
+    try:
+        r=requests.get(u,timeout=120); open(f'out/{k}.mp3','wb').write(r.content); L('dl',k,r.status_code,len(r.content))
+    except Exception: L('dl fail',k,traceback.format_exc())
+os.environ['HF_HUB_DISABLE_XET']='1'
+subprocess.run([sys.executable,'-m','pip','install','-q','faster-whisper'],check=False)
+from faster_whisper import WhisperModel
+m=WhisperModel('medium',compute_type='int8')
+for k in urls:
+    try:
+        segs,_=m.transcribe(f'out/{k}.mp3',language='pt',word_timestamps=True)
+        words=[{'t':w.start,'d':w.end-w.start,'w':w.word.strip()} for s in segs for w in s.words]
+        json.dump(words,open(f'out/{k}.json','w'),ensure_ascii=False)
+        L('asr',k,len(words),' '.join(x['w'] for x in words)[:300])
+    except Exception: L('asr fail',k,traceback.format_exc())
