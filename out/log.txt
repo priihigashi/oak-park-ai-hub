@@ -1,2 +1,5 @@
-tts s2 21
+tts s3 72
+tts s4b 68
+tts s6 44
+tts s7 105
 tts s10 56
