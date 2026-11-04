@@ -9,7 +9,7 @@
   },
   {
    "id": "s2",
-   "text": "Só que isso é meia verdade. E meias verdades espalham desinformação. Essa canetada existiu, e foi dada em maio de 2023.",
+   "text": "Só que isso é uma meia verdade, daquelas que viram desinformação: a canetada existiu, e foi dada em maio de 2023.",
    "speed": 1.1
   },
   {
@@ -50,15 +50,11 @@
   },
   {
    "id": "s10",
-   "text": "Cobrar o governo é justo, e a gente vai continuar de olho.¦ Mas culpar só um lado, sem dar nome a todos os responsáveis, não é informação: é desinformação. Será que o Nikolas não sabe que o governo Bolsonaro e os estados também têm parte nisso? Cobrar é direito de todo mundo. Só cobra todo mundo que tem culpa."
+   "text": "Cobrar o governo é justo, e a gente vai continuar de olho.¦ Mas culpar só um lado, sem dar nome a todos os responsáveis, não informa ninguém: só desinforma. Será que o Nikolas não sabe que o governo Bolsonaro e os estados também têm parte nisso? Quem quiser cobrar, que cobre todo mundo que tem culpa."
   }
  ],
  "only": [
-  "s3",
-  "s4",
-  "s4b",
-  "s5",
-  "s7",
-  "s9"
+  "s2",
+  "s10"
  ]
 }

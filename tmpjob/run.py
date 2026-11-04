@@ -21,11 +21,3 @@ async def tts():
       except Exception: L('retry', s['id'], traceback.format_exc()[-200:])
 try: asyncio.run(tts())
 except Exception: L(traceback.format_exc())
-try:
-    subprocess.run([sys.executable,'-m','pip','install','-q','faster-whisper'],check=False)
-    from faster_whisper import WhisperModel
-    m=WhisperModel('small',compute_type='int8')
-    for sid in json.load(open('tmpjob/script.json'))['only']:
-        segs,_=m.transcribe(f'out/{sid}.mp3',language='pt')
-        L('ASR',sid,' '.join(x.text for x in segs))
-except Exception: L('asr fail',traceback.format_exc())
