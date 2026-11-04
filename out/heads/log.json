@@ -1,8 +1,6 @@
 {
- "collor": "ERR UnidentifiedImageError('cannot identify image file <_io.BytesIO object at 0x7c771918e930>')",
- "bolsonaro": "ERR UnidentifiedImageError('cannot identify image file <_io.BytesIO object at 0x7c771918e930>')",
- "fhc": "https://upload.wikimedia.org/wikipedia/commons/4/46/Fernando_Henrique_Cardoso_%281999%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
- "rasmussen": "ERR UnidentifiedImageError('cannot identify image file <_io.BytesIO object at 0x7c77183ab060>')",
- "nunes": "ERR KeyError('original')",
- "mendonca": "ERR UnidentifiedImageError('cannot identify image file <_io.BytesIO object at 0x7c77389f2c00>')"
+ "rasmussen": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d0/Lars_L%C3%B8kke_Rasmussen_by_Christian_Ursilva_%282025%29.jpg/1920px-Lars_L%C3%B8kke_Rasmussen_by_Christian_Ursilva_%282025%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "nunes": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a6/Nunes_Marques%2C_February_2025_%28cropped%29.jpg/1920px-Nunes_Marques%2C_February_2025_%28cropped%29.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+ "mendonca": "https://upload.wikimedia.org/wikipedia/commons/d/de/Ministro_Andr%C3%A9_Mendon%C3%A7a_em_outubro_de_2025_%283x4%29.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+ "collor": "https://upload.wikimedia.org/wikipedia/commons/7/75/Foto_oficial_do_presidente_Fernando_Collor_de_Melo._%2838405801411%29.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled"
 }
