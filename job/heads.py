@@ -2,16 +2,22 @@ import json,os,io,requests,numpy as np
 from PIL import Image,ImageFilter
 os.makedirs('out/heads',exist_ok=True)
 job=json.load(open('job/job.json'))
-H={'User-Agent':'reelbot/1.0 (news reel research)'}
+H={'User-Agent':'ReelResearchBot/1.0 (https://github.com/priihigashi; contact via GitHub) python-requests'}
 from rembg import remove,new_session
 sess=new_session('birefnet-portrait')
 import mediapipe as mp
 fm=mp.solutions.face_mesh.FaceMesh(static_image_mode=True,max_num_faces=1,refine_landmarks=False)
 JAW=[234,93,132,58,172,136,150,149,176,148,152,377,400,378,379,365,397,288,361,323,454]
 def img_for(title,lang):
-    r=requests.get(f'https://{lang}.wikipedia.org/w/api.php',params={'action':'query','titles':title,'prop':'pageimages','piprop':'original','format':'json'},headers=H).json()
-    p=list(r['query']['pages'].values())[0]; u=p['original']['source']
-    return Image.open(io.BytesIO(requests.get(u,headers=H).content)).convert('RGB'),u
+    import time
+    r=requests.get(f'https://{lang}.wikipedia.org/w/api.php',params={'action':'query','titles':title,'prop':'pageimages','piprop':'thumbnail','pithumbsize':1400,'format':'json','redirects':1},headers=H).json()
+    p=list(r['query']['pages'].values())[0]; u=p['thumbnail']['source']
+    for k in range(5):
+        time.sleep(4+k*6)
+        q=requests.get(u,headers=H)
+        if q.status_code==200 and q.headers.get('content-type','').startswith('image'):
+            return Image.open(io.BytesIO(q.content)).convert('RGB'),u
+    raise Exception('download failed '+str(q.status_code))
 log={}
 for h in job.get('heads',[]):
     try:
