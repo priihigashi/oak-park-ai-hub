@@ -36,16 +36,7 @@
    "post": 0.25
   }
  ],
- "faces": [
-  {
-   "id": "virgilio",
-   "page": "Arthur_Virgílio_Neto"
-  },
-  {
-   "id": "agripino",
-   "page": "José_Agripino_Maia"
-  }
- ],
+ "faces": [],
  "scenes": [
   {
    "id": "n03",
@@ -57,7 +48,11 @@
   },
   {
    "id": "n05",
-   "text": "A dívida que a ditadura deixou quebrou o país nos anos 80. Collor acelerou a abertura às importações. No Plano Real, com efe agá cê, o real chegou a valer mais que o dólar. Parece bom, né? Só que aí o importado fica barato, e o que é feito aqui fica caro. E pra segurar o real, o juro passou de quarenta por cento. Com esse juro, nenhuma fábrica pega empréstimo pra crescer."
+   "text": "A dívida que a ditadura deixou quebrou o país nos anos 80. Collor acelerou a abertura às importações. No Plano Real, com efe agá cê, o real chegou a valer mais que o dólar. Parece bom, né? Só que aí o importado fica mais barato que o produto daqui. A fábrica brasileira paga salário, imposto e energia em real, não consegue baixar o preço, e perde venda aqui e lá fora."
+  },
+  {
+   "id": "n05b",
+   "text": "Ah, mas nos Estados Unidos também é assim? É, e lá também doeu: com o produto chinês, os Estados Unidos perderam uns dois milhões de empregos na indústria. Só que a fábrica americana pegava empréstimo barato pra se modernizar. Aqui, não. O Brasil tinha acabado de sair de uma inflação de mais de dois mil por cento ao ano, e pra segurar a inflação e o real, o governo usou o juro como freio. Ele passou de quarenta por cento várias vezes, a última em 1999. Com esse juro, nenhuma fábrica pega empréstimo pra crescer."
   },
   {
    "id": "n06",
