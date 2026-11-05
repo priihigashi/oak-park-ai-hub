@@ -1,0 +1,114 @@
+
+
+==== AMENDMENTS v8 (2026-11-04) · 2 PARTES ====
+Parte 1: https://claude.ai/artifact/Mdhnh67SGZAMtxNqwb66Ex (~3:40)
+Parte 2: https://claude.ai/artifact/3pwr73seYdeYsN7mcDebtQ (~3:17)
+Novas cenas: n05c (2004-2015 com culpados), n18a (fecho P1 + gancho), p2a (abertura P2). n07c abre com "Com a fome foi igual". n18 ganhou chip do Congresso.
+Fotos pendentes (mandar no Drive): Carlos Fernando dos Santos Lima, Benedito de Lira, Arthur Lira.
+Aviso: série do IBGE revisada (n04).
+
+PROMPT DE AUDITORIA (transcrição crua + storytelling + visuais):
+Você é um checador de fatos e editor de roteiro. Audite um reel em português dividido em 2 partes ("Respondendo o Raul"), que responde um vídeo de podcast em que o Raul diz que "mataram a indústria", pergunta como o Brasil volta a produzir e pagar a conta, fala de juros de 13,75% contra 3% na China, do fim da 6x1 e de jornada de 10-12 horas na China.
+
+REGRAS DA AUDITORIA
+1. Pesquise primeiro por conta própria. Depois confira as nossas fontes (lista no fim), sem se limitar a elas.
+2. Parte A (FATOS): aponte SÓ o que está errado, impreciso ou sem base: números, datas, nomes, partidos, classificação ideológica, atribuição de culpa. Para cada erro: cena [id], frase exata, o que está errado, a versão correta e a fonte com link.
+3. Não defenda lado nenhum. Não peça "equilíbrio" artificial: se o peso das evidências cai mais de um lado, tudo bem dizer isso. Só avise quando a culpa atribuída não tiver base.
+4. Não recuse por falta de número exato: se não houver dado preciso, diga a melhor estimativa disponível e a fonte.
+5. Parte B (STORYTELLING E VISUAIS): avalie se cada cena conecta com a anterior e a seguinte, se um leigo entende cada termo técnico, se toda causa citada tem um responsável nomeado, se o texto da TELA bate com a FALA, e se a divisão em 2 partes funciona (gancho no fim da Parte 1 e abertura da Parte 2). Aponte só problemas concretos, com a cena e a sugestão de troca (máx. 1 frase cada).
+6. Regras do canal que NÃO são erro: não citar o nome do presidente atual (usamos "governo atual"); toda pessoa aparece com nome, partido e ideologia (classificação Bolognesi et al.); sem travessão.
+7. Formato da resposta: Parte A em tabela (cena | frase | problema | correção | fonte). Parte B em lista curta. Se uma cena estiver ok, não comente.
+
+STORYTELLING (a espinha)
+PARTE 1: "Quem matou a indústria?" (~3:40)
+- Gancho: trecho do Raul + "bora conversar".
+- A indústria não morreu agora (27% em 1985 para 11% em 2021, série ajustada).
+- Anos 80 a 99: dívida da ditadura, Collor acelera a abertura, FHC com real caro + juro acima de 40%. Por que Coreia/China deram certo e nós não.
+- 2004 a 2015: indústria respira (quase 18%), boom das commodities, real forte (governo PT/BC Meirelles), China vira fábrica do mundo, Dilma baixa juro na marra e volta.
+- PT também errou (desonerações, preços segurados), mas a recessão teve outros donos: queda de commodities, freio da Lava Jato; gráfico de PIB por mandato.
+- Lava Jato tinha outro caminho (acordo de leniência): quem barrou (força-tarefa, PPS, Congresso/Benedito de Lira).
+- Os "20 anos de esquerda": conta certa (13 PT, 7 Temer/Bolsonaro, 4 atual) e o padrão constrói-para-recomeça.
+- Prova numa indústria só: estaleiros (2 mil, 82 mil, 21 mil, 86 mil).
+- Fecho + gancho para a Parte 2.
+PARTE 2: "Quem trava e quem paga?" (~3:17)
+- Abertura: recapitula o padrão dos estaleiros.
+- Fome: mesmo padrão (sai 2014, volta 2021, sai 2025).
+- O Congresso pesa (EUA e aqui), esquerda é minoria hoje e sempre foi (gráfico de linha 1990-2026; PL com 121).
+- Quem libera o dinheiro: CPMF (2007) e fintechs (2025) derrubadas x taxa das blusinhas aprovada em 15 segundos (contraste: trava em cima, cobra embaixo).
+- Volta à pergunta do Raul: como gerar riqueza + reforma do IR (493 x 0).
+- Juro: concordamos com ele; quem decide é o BC autônomo (lei sancionada por Bolsonaro).
+- 6x1: 75 x 1 no Senado.
+- China: mais barato não por salário de fome, e sim juro, fornecedor, escala, 40 anos de plano. Jornada: ONU sobre Xinjiang e, no mesmo relatório, trabalho escravo na Amazônia.
+- Conclusão + CTA para comentar.
+
+VISUAIS GERAIS
+Formato 1080x1920, tipografia cinética sobre fundos branco, verde e preto; legenda palavra a palavra embaixo. Rostos recortados com chip "nome · partido · ideologia" (Collor, FHC, Dilma, Temer, Bolsonaro, Deltan, Virgílio, Agripino, Kim Kataguiri; o governo atual aparece como uma lula desenhada). Gráficos: barras de PIB por mandato (períodos de direita/centro sombreados), barras de emprego naval com faixas por governo, hemiciclo da Câmara (124 vermelho, resto azul), linha da % de esquerda na Câmara 1990-2026, contador animado da Selic e do PIB industrial. Abaixo, por cena: FALA = narração exata; TELA = textos que aparecem na tela, em ordem.
+
+TRANSCRIÇÃO CRUA + TELA POR CENA
+
+=== PARTE 1 ===
+[clipA/clipB] Trechos do reel do Raul (podcast), o vídeo congela no último frame.
+[n03] FALA: Raul, bora conversar? Sua pergunta é boa: como o Brasil volta a produzir e pagar a conta? A gente pesquisou, e tem coisa aí que talvez você não tenha visto.
+   TELA: Respondendo o Raul / Raul, bora / conversar? / Como o Brasil volta a / produzir? / Tudo com fonte / E tem coisa que talvez você / não tenha visto
+[n04] FALA: Primeiro: a indústria não morreu agora. Numa série ajustada, as fábricas eram cerca de vinte e sete por cento da economia em 1985. Em 2021, uns onze por cento. Elas não pararam: perderam espaço.
+   TELA: A indústria no PIB / Fatia das fábricas em tudo que o país produz / No auge / Depois / 0 / % / 1985 / 2021 / Não pararam: / perderam espaço
+[n05] FALA: A dívida que a ditadura deixou quebrou o país nos anos 80. Collor acelerou a abertura às importações. No Plano Real, com efe agá cê, o real chegou a valer mais que o dólar. Parece bom, né? Só que aí o importado fica mais barato que o produto daqui. A fábrica brasileira paga salário, imposto e energia em real, não consegue baixar o preço, e perde venda aqui e lá fora.
+   TELA: Quem tava no comando / Anos 80 / A dívida da / ditadura / quebra o país / Collor · PRN · direita / 1990 / Acelera a abertura / FHC · PSDB · centro-direita / 1994-99 / Real vale mais que o dólar / Importado / Barato / Feito aqui / Perde venda / Custo em real
+[n05b] FALA: Ah, mas em outros países não foi assim? Os que deram certo fizeram o contrário. Coreia do Sul e China abriram aos poucos, com moeda barata e crédito barato pra fábrica. O Brasil abriu rápido, com real caro e juro altíssimo, tudo junto. E o nosso imposto é em cascata: cobra de novo em cada etapa, e o importado não carrega essa pilha. A Argentina fez parecido e quebrou em 2001. O Real acabou com a hiperinflação, e isso é mérito. Mas o governo segurou o real caro com juro que passou de quarenta por cento várias vezes, e só soltou o câmbio em 1999, depois da reeleição.
+   TELA: Por que lá deu certo e aqui não? / Coreia e China / Abrem aos poucos / Moeda barata / Crédito barato / Brasil / Abre rápido / Real caro / Juro altíssimo / Cascata / Imposto cobrado de novo em cada etapa / 2001 / Argentina faz parecido e quebra / Real acaba com a hiperinflação / Câmbio solto só em 1999 / Depois da reeleição
+[n05c] FALA: Depois disso, a indústria até respirou: em 2004, voltou a quase dezoito por cento. Mas aí veio o boom das commodities. Entrou muito dólar, o real ficou forte de novo, e o governo do PT, com o Banco Central do Henrique Meirelles, não segurou. A China virou a fábrica do mundo, e isso ninguém aqui decidiu. O juro seguiu alto: a Dilma tentou baixar na marra, pra sete vírgula vinte e cinco por cento, e teve que subir de novo. E aí veio a crise de 2015.
+   TELA: 2004 a 2015: por que caiu de novo? / 2004 / Indústria volta a quase 18% / Real forte / Boom das commodities / Governo PT · BC de Meirelles: não segurou / China / Vira a fábrica do mundo / Isso ninguém aqui decidiu / 2012 / Dilma baixa o juro na marra pra 7,25%... e sobe de novo / E aí veio a crise de 2015
+[n06] FALA: E o PT? Também errou: a Dilma deu desconto bilionário de imposto pra indústria e segurou na marra o preço da gasolina e da luz. Mas a conta da recessão não é só dela.
+   TELA: E o PT? / Também errou / Dilma · PT · esquerda / 1 / Desconto bilionário de imposto pra indústria / 2 / Gasolina e luz seguradas na marra / Mas a recessão não é só dela
+[n06b] FALA: O preço do que o Brasil vende lá fora caiu quase pela metade. A Lava Jato, que investigava corrupção, também travou obra e investimento da Petrobras: a consultoria Tendências calculou que, sem isso, a queda de 2015 seria três vezes menor. E a prova: a Dilma saiu em 2016, e o país cresceu só cerca de um e meio por cento por ano até 2019.
+   TELA: O resto da conta de 2015-16 / −48% / Preço do minério, petróleo e soja que o Brasil vende / 3x / Sem o freio da Lava Jato, a queda de 2015 seria 3x menor / PIB: crescimento médio por ano, por governo / 2,5 / FHC / 95-02 / 4,1 / PT / 03-10 / 2,4 / Dilma 1 / 11-14 / −3,4 / Dilma 2 / 15-16 / 1,6 / Temer / 17-18 / 1,4 / Bolsonaro / 19-22 / 3,0 / Atual / 23-25
+[n06c] FALA: E na Lava Jato, tinha outro caminho: acordo com multa e reparação, punindo quem roubou sem fechar a empresa. A Dilma mandou uma regra pra isso. A força-tarefa da Lava Jato, do Deltan Dallagnol, foi contra, e o procurador Carlos Fernando chamou de acordão. O PPS tentou barrar no Supremo.
+   TELA: Lava Jato: tinha outro caminho / Acordo / Multa e reparação: pune quem roubou, a empresa segue / Dez/2015 / Dilma manda uma MP pra isso / Dilma · PT · esquerda / Força-tarefa / contra / Deltan Dallagnol · chefe da força-tarefa / Carlos Fernando · procurador: "acordão" / PPS · centro: vai ao STF
+[n06d] FALA: E o Congresso? Na comissão, o DEM e a Rede pediram mais tempo, e o presidente dela, Benedito de Lira, do PP, disse que a regra tinha morrido. Era o mês do impeachment. Venceu sem votar.
+   TELA: E o Congresso? / Comissão / 4 tentativas, nenhum acordo / DEM · direita: mais tempo / Rede · centro-esquerda: esperar o STF / Benedito de Lira · PP · direita · presidente da comissão / "Ela morreu" / Mês do impeachment: vence / Em dez/2014, a própria Petrobras, ainda no governo Dilma, bloqueou empresas de 23 grupos.
+[n07] FALA: Então, quando alguém nos comentários diz que a esquerda tá há vinte anos no poder, olha o que fica de fora. Tá bom, vamos supor. A conta certa é: uns treze anos de PT, quase sete de Temer e Bolsonaro, e agora quase quatro do governo atual. Não foi estrada reta: construiu, alguém parou, recomeçou. E dá pra ver isso numa indústria só.
+   TELA: Então, os tais 20 anos / Comentário / A esquerda tá há 20 anos no poder / Vamos supor. A conta certa: / Direita e centro / Esquerda / ≈13 / PT, 2003-16 / ≈7 / Temer e Bolsonaro / ≈4 / Governo atual / Construiu, / parou / , recomeçou
+[n07b] FALA: Olha os estaleiros, as fábricas que constroem navio e plataforma de petróleo. Cada plataforma feita aqui dá emprego pra soldador, metalúrgico, engenheiro e pra quem fornece aço e motor. No fim dos anos 90, tinham uns dois mil empregos. Com encomenda da Petrobras e a regra de produzir aqui, o conteúdo local, chegaram a oitenta e dois mil em 2014. Veio a Lava Jato, e em 2017 o Temer afrouxou a regra: as plataformas foram pra Ásia, e o emprego foi junto. Sobraram uns vinte e um mil. Com novas encomendas e incentivo pra produzir aqui, hoje o setor passa de oitenta e seis mil.
+   TELA: Indústria naval: conteúdo local / Estaleiro: fábrica de navio e plataforma / Emprego pra soldador, metalúrgico, engenheiro e fornecedor / Esquerda / Direita e centro / 2 mil / Fim dos 90 / 82 mil / 2014 / dez. / 44 mil / 2016 / jun. / 29 mil / 2018 / abr. / 21 mil / 2022 / mai. / 86 mil / 2026 / jul. / Temer · MDB · centro-direita / 2017 / Afrouxa a regra. Plataformas vão pra Ásia
+[n18a] FALA: Então, Raul: a indústria não morreu num governo só. Foi real caro, juro alto e plano interrompido no meio, de quase todo mundo que passou por lá. Na parte dois: quem trava tudo no Congresso, quem paga a conta e o que a China faz diferente. Segue pra não perder.
+   TELA: Parte 1, resumindo / A indústria não morreu num governo só / Real caro / Juro alto / Plano interrompido / Parte 2: Congresso, quem paga, China / Segue pra / não perder
+
+=== PARTE 2 ===
+[p2a] FALA: Parte dois da resposta pro Raul. Na primeira, os estaleiros mostraram o padrão: constrói, alguém para, e depois tem que recomeçar.
+   TELA: Respondendo o Raul / Parte 2 / Na parte 1, os estaleiros mostraram o padrão: / Constrói / Para / Recomeça
+[n07c] FALA: Com a fome foi igual. E dizer que não teve melhoria é sacanagem. O Brasil saiu do Mapa da Fome em 2014 e voltou em 2021. E não sou eu que tô dizendo: a FAO, da ONU, culpa a mudança nas prioridades das políticas públicas e a pandemia. Em 2025, saímos de novo.
+   TELA: Com a fome foi igual. Dizer que não teve melhoria é / sacanagem / Mapa da Fome da ONU / ✓ / 2014 / Brasil sai / ✗ / 2021 / Volta pro mapa / FAO: / "Mudança nas prioridades das políticas públicas" e pandemia / 2025 / Sai de novo
+[n09] FALA: E tem uma peça que muita gente esquece: o Congresso. Se ele não fizesse diferença, não ia ter tanta gente comemorando ou chorando com o resultado, lá nos Estados Unidos e aqui. Na Câmara que o Brasil elegeu agora, a esquerda tem só cento e vinte e quatro deputados em quinhentos e treze. Pra aprovar qualquer coisa, tem que convencer a outra turma.
+   TELA: A peça que muita gente esquece / Se não fizesse diferença, ninguém chorava com o resultado / Câmara eleita em 2026 / Esquerda: 124 / Centro e direita: 389 / Precisa da outra turma
+[n09b] FALA: E se você acha que o Congresso já foi de esquerda, aí que se engana. Desde 1990, a esquerda nunca passou de um terço da Câmara: o máximo foi trinta e cinco por cento, em 2010. E olha que estranho: quanto mais a gente reclama, mais o Congresso vai pra direita. O PL acabou de eleger cento e vinte e um deputados, a maior bancada de um partido desde 1990.
+   TELA: Câmara eleita, de 1990 a 2026 / Já foi de esquerda? Nunca / Esquerda / Centro e direita / Maioria (50%) / 1990 / 1998 / 2006 / 2014 / 2022 / 2026 / 35% / 24% / Nunca passou de 1/3 / PL · direita: 121 deputados / Maior bancada de um partido desde 1990
+[n08] FALA: Pra investir, o governo precisa de dinheiro, e quem aprova é o Congresso. Exemplo um: a cê pê eme efe, o imposto do cheque. Era trinta e oito centavos a cada cem reais que passavam pelo banco, e ajudava a pagar a saúde. Em 2007, o governo precisava de quarenta e nove votos no Senado pra manter, e teve quarenta e cinco. O PSDB do Arthur Virgílio e o DEM do José Agripino votaram contra em peso. Foram cerca de quarenta bilhões por ano a menos.
+   TELA: Quem libera o dinheiro · exemplo 1 / CPMF, o imposto do cheque / R$ 0,38 / A cada R$ 100 que passavam pelo banco · ajudava a pagar a saúde / 2007 / Precisava de 49 votos no Senado. Teve 45 / Arthur Virgílio · PSDB · centro-direita / José Agripino · DEM · direita / R$ 40 bi por ano a menos
+[n08b] FALA: Exemplo dois, em 2025. O governo quis cobrar mais das fintechs, os bancos digitais, que pagavam nove por cento de imposto sobre o lucro, enquanto banco comum paga vinte por cento. O deputado Kim Kataguiri, do União, pediu pra tirar da pauta, ganhou por duzentos e cinquenta e um a cento e noventa e três, e a medida venceu. Agora compara: em 2024, a taxa das blusinhas, vinte por cento na comprinha da Shein, passou na Câmara em menos de quinze segundos, empurrada pelo Arthur Lira, do PP, com acordo do governo.
+   TELA: Exemplo 2 · 2025 / Imposto sobre o lucro: / Fintech / 9% / Banco comum / 20% / 251 x 193 / Tira da pauta / Kim Kataguiri · União · direita / Vence: R$ 17 bi a menos / 2024 / Taxa das blusinhas: 20% na compra da Shein / Passou em 15 segundos
+[n12] FALA: Agora, voltando à sua pergunta, Raul: como gerar riqueza pra pagar a conta? Produzindo mais, com juro menor, porto, estrada, gente formada e regra que não muda a cada governo. E no imposto, quem ganha até cinco mil parou de pagar, e quem ganha mais de cinquenta mil por mês agora paga um mínimo. Passou por quatrocentos e noventa e três a zero, até com o PL.
+   TELA: A pergunta boa / Como gerar / riqueza? / Juro menor / Porto e estrada / Gente formada / Regra estável / Até R$ 5 mil/mês / Isento / Parou de pagar IR / Mais de R$ 50 mil/mês / Mínimo / Se pagava pouco / 493 x 0 / Até o PL · direita
+[n13] FALA: Juro de quase catorze por cento quebra empresa? Quebra, nisso a gente concorda. Inflação e contas do governo pesam, mas quem bate o martelo é o Banco Central, autônomo por uma lei que o Bolsonaro sancionou.
+   TELA: Juro básico (Selic) / ≈ / 0 / % / Quebra? Quebra. / Nisso a gente / concorda / com você / Quem decide é o Banco Central / Bolsonaro · PL · direita / Sancionou a / autonomia / do BC (2021)
+[n14] FALA: E o fim da seis por um? Passou no Senado por setenta e cinco a um, direita junto.
+   TELA: Fim da escala / 6x1 / No Senado: / 75 x 1 / Direita junto
+[n16] FALA: E a China, Raul? Você disse que trazer de lá sai mais barato que fabricar no andar de baixo. É verdade, mas não é por salário de fome: já em 2016, o salário da indústria chinesa passava o do Brasil. É porque lá a fábrica tem juro baixo, como você mesmo disse, fornecedor do lado e escala gigante: faz milhões de peças de uma vez, e cada uma sai barata. E foram quarenta anos de plano sem parar.
+   TELA: Raul: "da China sai mais barato" / Verdade. Mas não é salário de fome / Salário por hora na indústria, 2016 / US$ 3,60 / US$ 2,70 / China / Brasil / O preço baixo vem de: / Juro baixo / Fornecedor do lado / Escala: milhões de peças / 40 anos de plano
+[n17] FALA: E as dez, doze horas de trabalho que você falou? Tem lugar com jornada pesada, sim, e a ONU denunciou trabalho forçado em Xinjiang. Só que o mesmo relatório cita trabalho escravo na nossa Amazônia. Ou seja: o problema não é o brasileiro ganhar demais.
+   TELA: Raul: "lá trabalha 10, 12 horas" / China / Jornada pesada e trabalho forçado em Xinjiang / Denúncia da ONU, 2022 / Brasil / Trabalho escravo na Amazônia / No mesmo relatório / O problema não é o brasileiro / ganhar demais
+[n18] FALA: Então, Raul: quem matou a chance do Brasil virar uma China não foi a esquerda de vinte anos. Foram décadas de juro alto, real caro e plano interrompido no meio, com um Congresso que trava o que cobra de cima e aprova o que cobra de baixo. E você, acha o quê? Comenta aí.
+   TELA: Então, Raul / Quem matou a chance do Brasil virar uma China? / Não foi a esquerda de 20 anos / Décadas / Juro alto / Real caro / Plano interrompido / Congresso: trava em cima, cobra embaixo / E você, acha o quê? / Comenta aí
+
+NOSSAS FONTES (confira, mas pesquise além delas)
+[n05b] BC (Selic: 45% em mar/1999; câmbio flutuante em jan/1999) · IBGE (IPCA: 2.477% em 1993, 1,65% em 1998) · FMI (calote argentino, dez/2001)
+[n05c] FGV IBRE (indústria: 17,8% do PIB em 2004) · BC (Selic 7,25% em out/2012) · IEDI (China: 12% para 24% da indústria mundial, 2005-2016)
+[n06] USP (governo Dilma, PIB 2015-16) · Correio Braziliense
+[n06b] FGV IBRE (cesta de commodities exportadas: -48%, mai/2014 a fev/2016) · Tendências, via BBC Brasil (dez/2015) · IBGE (PIB, média anual por mandato; atual: 2023-25)
+[n06c] Exposição de motivos da MP 703/2015 · ConJur (força-tarefa contra a MP) · JOTA (procurador: "acordão") · STF (ação do PPS)
+[n07c] FAO/ONU, SOFI 2014, 2022 e 2025 · FAO Brasil, 13/ago/2025
+[n09b] DIAP/CEPESP-FGV (bancadas eleitas 1990-2022) · Poder360 (2026: 124 de esquerda) · O Bastidor (PL: 121)
+[n08] Agência Senado e Congresso em Foco (CPMF: 45 x 34, eram precisos 49; R$ 40 bi em 2008)
+[n08b] Agência Câmara (MP 1.303, 8/out/2025) · Jornal de Brasília/Estadão (CSLL de fintechs 9%, bancos 20%) · Canal Rural (Kataguiri) · Diário de Pernambuco e Correio Braziliense (taxa das blusinhas, 2024)
+- Comissão mista da MP 703/2015 (leniência): Agência Senado/Câmara, 2016
+- ONU, relatório A/HRC/51/26 (2022), relatora especial sobre escravidão contemporânea (cita Xinjiang e Amazônia brasileira); Poder360
+- IBGE Contas Nacionais (atenção: a série nova do IBGE dá 16,8% em 1995 e 14,4% em 2024 para a indústria de transformação; a série antiga/ajustada da FGV dá 27% em 1985 e 11,3% em 2021. Diga qual série é mais defensável para a frase da cena n04.)
