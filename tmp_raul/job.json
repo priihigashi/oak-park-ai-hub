@@ -36,7 +36,12 @@
    "post": 0.25
   }
  ],
- "faces": [],
+ "faces": [
+  {
+   "id": "deltan",
+   "page": "Deltan_Dallagnol"
+  }
+ ],
  "scenes": [
   {
    "id": "n03",
@@ -57,6 +62,10 @@
   {
    "id": "n06b",
    "text": "O preço do que o Brasil vende lá fora caiu quase pela metade. A Lava Jato, que investigava corrupção, também travou obra e investimento da Petrobras: a consultoria Tendências calculou que, sem isso, a queda de 2015 seria três vezes menor. E a prova: a Dilma saiu em 2016, e o país cresceu só cerca de um por cento por ano até 2019."
+  },
+  {
+   "id": "n06c",
+   "text": "E tinha outro caminho. A Dilma mandou uma regra pra fechar acordo com as empresas: punir quem roubou e deixar a obra andar. Os procuradores da Lava Jato, do Deltan Dallagnol, foram contra, e o Congresso deixou vencer."
   },
   {
    "id": "n07",
