@@ -36,12 +36,7 @@
    "post": 0.25
   }
  ],
- "faces": [
-  {
-   "id": "carlosfernando",
-   "page": "Carlos_Fernando_dos_Santos_Lima"
-  }
- ],
+ "faces": [],
  "scenes": [
   {
    "id": "n03",
@@ -61,7 +56,7 @@
   },
   {
    "id": "n06b",
-   "text": "O preço do que o Brasil vende lá fora caiu quase pela metade. A Lava Jato, que investigava corrupção, também travou obra e investimento da Petrobras: a consultoria Tendências calculou que, sem isso, a queda de 2015 seria três vezes menor. E a prova: a Dilma saiu em 2016, e o país cresceu só cerca de um por cento por ano até 2019."
+   "text": "O preço do que o Brasil vende lá fora caiu quase pela metade. A Lava Jato, que investigava corrupção, também travou obra e investimento da Petrobras: a consultoria Tendências calculou que, sem isso, a queda de 2015 seria três vezes menor. E a prova: a Dilma saiu em 2016, e o país cresceu só cerca de um e meio por cento por ano até 2019."
   },
   {
    "id": "n06c",
