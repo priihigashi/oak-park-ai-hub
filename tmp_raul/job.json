@@ -40,7 +40,7 @@
  "scenes": [
   {
    "id": "n03",
-   "text": "Raul, bora conversar? A gente pesquisou suas dúvidas. E tem coisa aí que você não tá olhando."
+   "text": "Raul, bora conversar? Sua pergunta é boa: como o Brasil volta a produzir e pagar a conta? A gente pesquisou, e tem coisa aí que você não tá olhando."
   },
   {
    "id": "n04",
@@ -71,16 +71,16 @@
    "text": "E dizer que não teve melhoria é sacanagem. O Brasil saiu do Mapa da Fome em 2014 e voltou em 2021. E não sou eu que tô dizendo: a FAO, da ONU, culpa a mudança nas prioridades das políticas públicas e a pandemia. Em 2025, saímos de novo."
   },
   {
-   "id": "n08",
-   "text": "E o Congresso? Em 2007, a cê pê eme efe, o imposto do cheque, precisava de quarenta e nove votos no Senado e teve quarenta e cinco: cerca de quarenta bilhões por ano a menos, que também iam pra saúde. Em 2025, a Câmara deixou vencer, por duzentos e cinquenta e um a cento e noventa e três, a medida que aumentava impostos sobre investimentos e fintechs: uns dezessete bilhões previstos pra 2026."
-  },
-  {
    "id": "n09",
    "text": "Ah, mas Congresso não faz diferença, né? Então por que tá todo mundo comemorando ou chorando a eleição do Congresso americano? Aqui, a Câmara eleita agora tem só cento e vinte e quatro deputados de esquerda em quinhentos e treze. Pra aprovar qualquer coisa, tem que convencer a outra turma."
   },
   {
+   "id": "n08",
+   "text": "Pra investir, o governo precisa de dinheiro, e quem aprova é o Congresso. Em 2007, a cê pê eme efe, o imposto do cheque, precisava de quarenta e nove votos no Senado e teve quarenta e cinco: cerca de quarenta bilhões por ano a menos, que também iam pra saúde. Em 2025, a Câmara deixou vencer, por duzentos e cinquenta e um a cento e noventa e três, a medida que aumentava impostos sobre investimentos e fintechs: uns dezessete bilhões previstos pra 2026."
+  },
+  {
    "id": "n12",
-   "text": "Agora, sua pergunta é boa, Raul: como gerar riqueza pra pagar a conta? Produzindo mais, com juro menor, porto, estrada, gente formada e regra que não muda a cada governo. E no imposto, quem ganha até cinco mil parou de pagar, e quem ganha mais de cinquenta mil por mês agora paga um mínimo. Passou por quatrocentos e noventa e três a zero, até com o PL."
+   "text": "Agora, voltando à sua pergunta, Raul: como gerar riqueza pra pagar a conta? Produzindo mais, com juro menor, porto, estrada, gente formada e regra que não muda a cada governo. E no imposto, quem ganha até cinco mil parou de pagar, e quem ganha mais de cinquenta mil por mês agora paga um mínimo. Passou por quatrocentos e noventa e três a zero, até com o PL."
   },
   {
    "id": "n13",
@@ -88,15 +88,15 @@
   },
   {
    "id": "n14",
-   "text": "E o fim da seis por um? Passou no Senado por setenta e cinco a um, direita junto. E o custo pra empresa? Volta pra mesma resposta: produtividade."
+   "text": "E o fim da seis por um? Passou no Senado por setenta e cinco a um, direita junto."
   },
   {
    "id": "n16",
-   "text": "E a China? O barato de lá não é salário de fome: já em 2016, o salário da indústria chinesa passava o do Brasil. O preço baixo vem de escala, fornecedor do lado, porto, energia, juro baixo e quarenta anos de plano."
+   "text": "E a China? O barato de lá não é salário de fome: já em 2016, o salário da indústria chinesa passava o do Brasil. O preço baixo vem de escala, fornecedor do lado, juro baixo e quarenta anos de plano."
   },
   {
    "id": "n17",
-   "text": "Tem denúncia da ONU de trabalho forçado em Xinjiang? Tem, e é séria. Só que o mesmo relatório cita trabalho escravo na nossa Amazônia."
+   "text": "E as condições de trabalho de lá? Tem denúncia da ONU de trabalho forçado em Xinjiang, e é séria. Só que o mesmo relatório cita trabalho escravo na nossa Amazônia."
   },
   {
    "id": "n18",
