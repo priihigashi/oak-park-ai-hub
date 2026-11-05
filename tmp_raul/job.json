@@ -36,7 +36,12 @@
    "post": 0.25
   }
  ],
- "faces": [],
+ "faces": [
+  {
+   "id": "arthurlira",
+   "page": "Arthur_Lira"
+  }
+ ],
  "scenes": [
   {
    "id": "n03",
@@ -96,7 +101,7 @@
   },
   {
    "id": "n08b",
-   "text": "Exemplo dois, em 2025. O governo quis cobrar mais das fintechs, os bancos digitais, que pagavam nove por cento de imposto sobre o lucro, enquanto banco comum paga vinte por cento. O deputado Kim Kataguiri, do União, pediu pra tirar da pauta, ganhou por duzentos e cinquenta e um a cento e noventa e três, e a medida venceu. Eram uns dezessete bilhões previstos pra 2026."
+   "text": "Exemplo dois, em 2025. O governo quis cobrar mais das fintechs, os bancos digitais, que pagavam nove por cento de imposto sobre o lucro, enquanto banco comum paga vinte por cento. O deputado Kim Kataguiri, do União, pediu pra tirar da pauta, ganhou por duzentos e cinquenta e um a cento e noventa e três, e a medida venceu. Agora compara: em 2024, a taxa das blusinhas, vinte por cento na comprinha da Shein, passou na Câmara em menos de quinze segundos, empurrada pelo Arthur Lira, do PP, com acordo do governo."
   },
   {
    "id": "n12",
