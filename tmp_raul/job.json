@@ -36,7 +36,13 @@
    "post": 0.25
   }
  ],
- "faces": [],
+ "faces": [
+  {
+   "id": "carlosfernando",
+   "page": "Carlos_Fernando_dos_Santos_Lima",
+   "search": "Carlos Fernando Santos Lima Lava Jato"
+  }
+ ],
  "scenes": [
   {
    "id": "n03",
