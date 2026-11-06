@@ -4,10 +4,8 @@
  ],
  "rate": "+50%",
  "segs": {
-  "R": "Esse imposto vem embutido no preço de tudo que você compra. A reforma junta cinco impostos em dois: a CBS, federal, de 11,3%, e o IBS, de estados e municípios, de cerca de 18,7%. A regra é arrecadar o mesmo de antes. Então, se alguém paga menos, o resto paga mais.",
-  "L": "A gente pediu uma análise de quem ajudou a chegar nesses 30%. E deu isso: 40% vem de estados e municípios, 24% de governos anteriores e 14% do Congresso. Será que tá certo? Vamos conferir.",
-  "B": "Número 2: governos anteriores, de vários partidos, que criaram e aumentaram PIS, Cofins e IPI por décadas. Só PIS e Cofins já somam 9,25%, e o IPI vem por cima. A CBS troca os três.",
-  "C": "O PL pediu a carne na cesta e ganhou, mas votou contra o pacote inteiro, dizendo que é aumento de imposto. Só que também pediu isenção pra setores: petróleo e gás, construção e cooperativas. Não era desconto direto pra você. E cada isenção dessas sobe a taxa de todo o resto.",
-  "T": "Ainda falta o número 5, o governo atual, com uma escolha que pôs um ponto a mais na sua conta. Mas antes, o número 4:"
+  "N5": "A média de 2012 a 2021, quando se arrecadava mais, está na emenda que o Congresso aprovou em 2023. E a lei do governo usou essa média pra calcular a CBS.",
+  "IS": "E tem o imposto do pecado, sobre cigarro e bebida. Ele vai cobrir só uma parte do que o IPI arrecadava. O resto foi pra CBS de todo mundo: mais de um ponto.",
+  "X": "Os 30% são a conta de hoje. Mas a lei tem uma trava."
  }
 }
