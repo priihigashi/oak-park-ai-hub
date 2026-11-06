@@ -1,0 +1,36 @@
+name: tmp castr tts
+on:
+  push:
+    branches: [tmp-castracao]
+    paths: ['tmp_castr/lines.json','tmp_castr/tts.py']
+permissions:
+  contents: write
+jobs:
+  go:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: tmp-castracao}
+      - run: pip install edge-tts==7.0.2
+      - working-directory: tmp_castr
+        run: |
+          python tts.py pt-BR-ThalitaMultilingualNeural
+          mkdir -p img
+          curl -sL -H 'Accept: application/json' https://legis.senado.leg.br/dadosabertos/senador/lista/atual.json -o lista.json || true
+          python - <<'PY'
+          import json,urllib.request
+          try:
+            d=json.load(open('lista.json'))
+            for p in d['ListaParlamentarEmExercicio']['Parlamentares']['Parlamentar']:
+              i=p['IdentificacaoParlamentar']; n=i['NomeParlamentar']
+              if any(k in n for k in ['Styvenson','Moro','Flávio Bolsonaro']):
+                u=i.get('UrlFotoParlamentar'); print(n,u)
+                if u: urllib.request.urlretrieve(u,'img/'+n.split()[0].lower()+'_'+i['CodigoParlamentar']+'.jpg')
+          except Exception as e: print('ERR',e)
+          PY
+          ls -la tts img
+      - run: |
+          git config user.name bot; git config user.email bot@users.noreply.github.com
+          git add tmp_castr/tts tmp_castr/img || true
+          git commit -m "tts out" || true
+          git push
