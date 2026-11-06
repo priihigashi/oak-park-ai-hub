@@ -1,0 +1,28 @@
+name: tmp castr clip
+on:
+  push:
+    branches: [tmp-castracao]
+    paths: ['tmp_castr/clips.txt','.github/workflows/tmp_castr_clip.yml']
+permissions:
+  contents: write
+jobs:
+  go:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: tmp-castracao}
+      - run: pip install -U yt-dlp
+      - working-directory: tmp_castr
+        run: |
+          mkdir -p clips
+          while read -r name url; do
+            [ -z "$name" ] && continue
+            yt-dlp -f 'mp4/best' -o "clips/$name.%(ext)s" "$url" || echo FAIL $name
+          done < clips.txt
+          ls -la clips
+      - run: |
+          git config user.name bot; git config user.email bot@users.noreply.github.com
+          git pull --rebase || true
+          git add tmp_castr/clips || true
+          git commit -m "clips" || true
+          git push
