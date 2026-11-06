@@ -53,9 +53,11 @@ for i, sg in enumerate(cfg["segments"]):
         run(["-ss", str(sg["start"]), "-to", str(sg["end"]), "-i", src, "-filter_complex", TV,
              "-map", "[v]", "-map", "0:a", "-af", AUD, "-c:v", "libx264", "-preset", "veryfast",
              "-crf", "20", "-c:a", "aac", "-b:a", "160k", out])
-        wav = f"work/{i:02d}.wav"
-        run(["-i", out, "-vn", "-ac", "1", "-ar", "16000", wav])
-        segs, _ = model.transcribe(wav, language="pt", word_timestamps=True, beam_size=5)
+        raw = f"work/{i:02d}.raw"
+        run(["-i", out, "-vn", "-ac", "1", "-ar", "16000", "-f", "s16le", raw])
+        import numpy as np
+        pcm = np.fromfile(raw, np.int16).astype(np.float32) / 32768.0
+        segs, _ = model.transcribe(pcm, language="pt", word_timestamps=True, beam_size=5)
         for s in segs:
             for w in s.words:
                 words.append({"w": w.word.strip(), "s": round(t + w.start, 3), "e": round(t + w.end, 3), "seg": sg["id"]})
