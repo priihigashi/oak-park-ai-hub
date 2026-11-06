@@ -2,10 +2,12 @@
  "voices": [
   "en-US-AndrewMultilingualNeural"
  ],
+ "rate": "+50%",
  "segs": {
-  "R": "Esse imposto vem embutido no preço de tudo que você compra. A reforma junta cinco impostos em dois. A CBS, federal, que o TCU calculou em 11,3%. Em 2020, o governo Bolsonaro chegou a propor 12% pra ela. E o IBS, de estados e municípios, estimado em cerca de 18,7%. A regra é arrecadar o mesmo que os cinco arrecadavam. Então, quando alguém paga menos, o resto paga mais.",
-  "L": "A gente pediu uma análise pra ver quem ajudou a chegar nesses 30%, e deu isso: 40% vem de estados e municípios, 24% de governos anteriores, e 14% do Congresso. Será que tá certo? Vamos conferir, um por um.",
-  "B": "Número 2: governos anteriores, que criaram e aumentaram PIS, Cofins e IPI por décadas, governos de vários partidos. Hoje, PIS e Cofins juntos já chegam a 9,25%, e o IPI ainda vem por cima, conforme o produto. A CBS, de 11,3%, troca esses três.",
-  "C": "O PL pediu a carne na cesta e ganhou. Mas votou contra o pacote inteiro, dizendo que é aumento de imposto. Só que o mesmo PL pediu isenção pra setores: petróleo e gás, construção e cooperativas. Não era desconto direto pra você. E cada isenção dessas sobe a taxa de todo o resto, inclusive a sua."
+  "R": "Esse imposto vem embutido no preço de tudo que você compra. A reforma junta cinco impostos em dois: a CBS, federal, de 11,3%, e o IBS, de estados e municípios, de cerca de 18,7%. A regra é arrecadar o mesmo de antes. Então, se alguém paga menos, o resto paga mais.",
+  "L": "A gente pediu uma análise de quem ajudou a chegar nesses 30%. E deu isso: 40% vem de estados e municípios, 24% de governos anteriores e 14% do Congresso. Será que tá certo? Vamos conferir.",
+  "B": "Número 2: governos anteriores, de vários partidos, que criaram e aumentaram PIS, Cofins e IPI por décadas. Só PIS e Cofins já somam 9,25%, e o IPI vem por cima. A CBS troca os três.",
+  "C": "O PL pediu a carne na cesta e ganhou, mas votou contra o pacote inteiro, dizendo que é aumento de imposto. Só que também pediu isenção pra setores: petróleo e gás, construção e cooperativas. Não era desconto direto pra você. E cada isenção dessas sobe a taxa de todo o resto.",
+  "T": "Ainda falta o número 5, o governo atual, com uma escolha que pôs um ponto a mais na sua conta. Mas antes, o número 4:"
  }
 }
