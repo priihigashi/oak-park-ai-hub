@@ -1,0 +1,24 @@
+name: tmp-flavio-tv
+on:
+  push:
+    branches: [tmp-flavio-tv]
+    paths: ['tvbuild/go']
+permissions:
+  contents: write
+  actions: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: resource-router-IG-DfYSliYJ28X-brazil
+          run-id: 42147945510
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: art
+      - run: pip install -q faster-whisper imageio-ffmpeg "edge-tts>=7"
+      - run: python tvbuild/build.py
+      - run: |
+          git config user.name bot; git config user.email bot@users.noreply.github.com
+          git add out && git commit -m "media" && git push
