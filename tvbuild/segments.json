@@ -1,0 +1,20 @@
+{
+  "voice": "pt-BR-ThalitaMultilingualNeural",
+  "fallback_voice": "en-US-AndrewMultilingualNeural",
+  "rate": "+6%",
+  "segments": [
+    {"id": "c_hook", "type": "clip", "start": 175.0, "end": 178.7},
+    {"id": "n1", "type": "tts", "text": "Fizemos a conta estado por estado, com os números do tê-ésse-é. As porcentagens que ele usa estão erradas. E tem um truque nelas: porcentagem engana quando um começa bem menor que o outro.", "still": 52.0},
+    {"id": "c_go", "type": "clip", "start": 52.0, "end": 57.5},
+    {"id": "n2", "type": "tts", "text": "Em Goiás, não foram 43%. Foram 33%. E ele esquece um detalhe: o Caiado, que é de lá, teve cerca de 470 mil votos no primeiro turno. No segundo, esses eleitores tiveram que escolher outro.", "still": 57.0},
+    {"id": "c_sp", "type": "clip", "start": 77.0, "end": 84.8},
+    {"id": "n3", "type": "tts", "text": "Em São Paulo, foram 27%, não 35. E ele cresceu, sim: cerca de 1 milhão e 200 mil votos a mais.", "still": 84.0},
+    {"id": "c_rj", "type": "clip", "start": 119.0, "end": 124.0},
+    {"id": "n4", "type": "tts", "text": "No Rio, ele tem razão numa parte: cresceu pouco, cerca de 200 mil votos. Mas o governo atual cresceu 24%, não 30.", "still": 123.5},
+    {"id": "c_sc", "type": "clip", "start": 166.0, "end": 170.0},
+    {"id": "n5", "type": "tts", "text": "Aqui tá o truque. Em Santa Catarina, o Flávio já tinha 3 milhões de votos e ganhou 220 mil. O governo atual tinha 1 milhão e 100 mil e ganhou 290 mil. Em porcentagem, parece três vezes mais. Em votos, foi só um pouco mais que o dele.", "still": 169.5},
+    {"id": "c_nat", "type": "clip", "start": 7.0, "end": 12.5},
+    {"id": "n6", "type": "tts", "text": "E os 10 milhões? No segundo turno, cerca de 14 milhões de votos ficaram livres: de quem votou nos outros candidatos, de quem tinha anulado e voltou, e de quase 3 milhões de pessoas que nem tinham ido votar. Os dois juntos cresceram exatamente isso.", "still": 12.0},
+    {"id": "n7", "type": "tts", "text": "O teste das urnas bateu com o papel, a OEA conferiu, e até o partido dele reconheceu o resultado. A conta fecha. Só precisa fazer ela inteira.", "still": 178.0}
+  ]
+}
