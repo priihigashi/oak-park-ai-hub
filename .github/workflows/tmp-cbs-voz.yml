@@ -1,0 +1,17 @@
+name: tmp-cbs-voz
+on:
+  push:
+    branches: [tmp-cbs-voz]
+    paths: ['tmp_cbs/job.json']
+permissions:
+  contents: write
+jobs:
+  tts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install edge-tts
+      - run: python tmp_cbs/job.py
+      - run: |
+          git config user.name tts-bot; git config user.email tts@bot
+          git add out_cbs && git commit -m "tts out" && git push
