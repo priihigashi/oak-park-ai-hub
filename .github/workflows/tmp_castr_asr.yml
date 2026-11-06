@@ -1,0 +1,22 @@
+name: tmp castr asr
+on:
+  push:
+    branches: [tmp-castracao]
+    paths: ['tmp_castr/asr.py']
+permissions:
+  contents: write
+jobs:
+  go:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: tmp-castracao}
+      - run: sudo apt-get install -y -q ffmpeg >/dev/null || true; pip install faster-whisper numpy
+      - working-directory: tmp_castr
+        run: python asr.py
+      - run: |
+          git config user.name bot; git config user.email bot@users.noreply.github.com
+          git pull --rebase || true
+          git add tmp_castr/asr || true
+          git commit -m "asr" || true
+          git push
