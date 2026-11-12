@@ -198,5 +198,37 @@
   "artist": "United States Congress",
   "w": 471,
   "h": 640
+ },
+ "bottoms2": {
+  "title": "File:Keisha Lance Bottoms 2019.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Keisha_Lance_Bottoms_2019.jpg",
+  "license": "Public domain",
+  "artist": "Office of U.S. Senator David Perdue",
+  "w": 474,
+  "h": 640
+ },
+ "hinojosa2": {
+  "title": "File:Gina Hinojosa 16 February 2017 (cropped).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Gina_Hinojosa_16_February_2017_(cropped).jpg",
+  "license": "Public domain",
+  "artist": "LBJ Library from Austin",
+  "w": 478,
+  "h": 640
+ },
+ "mamdani2": {
+  "title": "File:New York State Assemblymember Zohran Mamdani.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:New_York_State_Assemblymember_Zohran_Mamdani.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Karamccurdy",
+  "w": 319,
+  "h": 640
+ },
+ "mamdani3": {
+  "title": "File:Zohran Mamdani 05.25.25 (c).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Zohran_Mamdani_05.25.25_(c).jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Dmitryshein",
+  "w": 496,
+  "h": 640
  }
 }
