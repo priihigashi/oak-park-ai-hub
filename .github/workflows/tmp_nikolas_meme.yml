@@ -1,0 +1,21 @@
+name: tmp-nikolas-meme
+on:
+  push:
+    branches: [tmp-nikolas-meme]
+    paths: [tmpjob/**]
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - run: pip install -q yt-dlp faster-whisper
+      - run: bash tmpjob/run.sh
+      - run: |
+          git config user.email bot@x; git config user.name bot
+          git add out; git commit -qm "out [skip ci]" || true; git push
