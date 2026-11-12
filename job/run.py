@@ -3,6 +3,8 @@ from PIL import Image
 from rembg import remove, new_session
 
 H = {"User-Agent": "midterms-reel-research/1.0 (priscila@oakpark-construction.com)"}
+CROPS={"mamdani":(560,340,880,1440),"elsayed":(500,120,1030,455)}
+ONLY=["mamdani","elsayed"]
 FILES = {
  "talarico": "File:James Talarico Open Congress Austin 2023.jpg",
  "talarico2": "File:James Talarico Press Conference (cropped).jpg",
@@ -33,7 +35,7 @@ FILES = {
 os.makedirs("job/out", exist_ok=True)
 sess = new_session("birefnet-portrait")
 meta = {}
-for k, t in FILES.items():
+for k, t in [(k,FILES[k]) for k in ONLY]:
     for a in range(4):
         r = requests.get("https://commons.wikimedia.org/w/api.php", params={"action": "query", "titles": t, "prop": "imageinfo", "iiprop": "url|extmetadata", "iiurlwidth": 1100, "format": "json"}, headers=H, timeout=30)
         if r.status_code == 200:
@@ -49,6 +51,7 @@ for k, t in FILES.items():
         time.sleep(5)
     img = Image.open(io.BytesIO(b.content)).convert("RGB")
     img.save(f"job/out/{k}_orig.jpg", quality=80)
+    if k in CROPS: img = img.crop(CROPS[k])
     cut = remove(img, session=sess, alpha_matting=True, alpha_matting_foreground_threshold=240, alpha_matting_background_threshold=10, alpha_matting_erode_size=10)
     bb = cut.getchannel("A").point(lambda v: 255 if v > 20 else 0).getbbox()
     if bb:
@@ -60,15 +63,4 @@ for k, t in FILES.items():
     meta[k] = {"title": t, "page": ii["descriptionurl"], "license": m.get("LicenseShortName", {}).get("value"), "artist": re.sub("<[^>]+>", "", m.get("Artist", {}).get("value", "")).strip()[:80], "w": cut.width, "h": cut.height}
     print(k, meta[k]["license"], cut.size, flush=True)
     time.sleep(1)
-json.dump(meta, open("job/out/meta.json", "w"), indent=1)
-# contact sheet on grey
-tiles = []
-for k in FILES:
-    c = Image.open(f"job/out/{k}.webp").convert("RGBA"); c.thumbnail((220, 300))
-    bg = Image.new("RGBA", (230, 310), (120, 160, 120, 255)); bg.alpha_composite(c, ((230 - c.width) // 2, 310 - c.height))
-    tiles.append(bg)
-cols = 7; rows = (len(tiles) + cols - 1) // cols
-sheet = Image.new("RGB", (cols * 230, rows * 310), "white")
-for i, t in enumerate(tiles):
-    sheet.paste(t.convert("RGB"), ((i % cols) * 230, (i // cols) * 310))
-sheet.save("job/out/_sheet.jpg", quality=80)
+old=json.load(open("job/out/meta.json"));old.update(meta);json.dump(old, open("job/out/meta.json", "w"), indent=1)
