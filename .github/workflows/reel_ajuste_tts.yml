@@ -20,7 +20,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: pip install edge-tts google-auth google-api-python-client
+      - run: pip install edge-tts google-auth google-api-python-client "rembg[cpu]" opencv-python-headless pillow
       - name: Voz (Thalita) + tempos por palavra
         run: |
           mkdir -p reels/ajuste-fiscal/out
@@ -38,6 +38,30 @@ jobs:
                           words.append({"t": round(ch["offset"]/1e7, 3), "d": round(ch["duration"]/1e7, 3), "w": ch["text"]})
               json.dump(words, open("reels/ajuste-fiscal/out/words.json", "w", encoding="utf-8"), ensure_ascii=False)
           asyncio.run(main())
+          EOF
+      - name: Recorte do Braga (foto oficial do Senado)
+        run: |
+          curl -sSL -o /tmp/braga.jpg https://www.senado.leg.br/senadores/img/fotos-oficiais/senador4994.jpg || true
+          python - <<'EOF'
+          try:
+              import cv2, numpy as np
+              from rembg import remove
+              from PIL import Image
+              im = Image.open("/tmp/braga.jpg").convert("RGB")
+              cut = remove(im)
+              g = cv2.cvtColor(np.array(im), cv2.COLOR_RGB2GRAY)
+              fc = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+              f = fc.detectMultiScale(g, 1.1, 5)
+              x, y, w, h = sorted(f, key=lambda r: -r[2])[0]
+              a = np.array(cut)
+              bottom = min(a.shape[0], int(y + h * 1.12))
+              a[bottom:, :, 3] = 0
+              ys, xs = np.where(a[:, :, 3] > 10)
+              crop = Image.fromarray(a).crop((xs.min(), ys.min(), xs.max(), bottom))
+              crop.save("reels/ajuste-fiscal/out/braga.png")
+              print("ok braga", crop.size)
+          except Exception as e:
+              print("braga falhou:", e)
           EOF
       - name: Fotos do Drive
         env:
@@ -65,6 +89,7 @@ jobs:
         run: |
           git config user.name "reel-bot"
           git config user.email "reel-bot@users.noreply.github.com"
+          git pull --rebase || true
           git add reels/ajuste-fiscal/out
           git commit -m "voz provisoria + fotos" || true
           git push
