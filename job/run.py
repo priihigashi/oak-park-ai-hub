@@ -4,9 +4,11 @@ from rembg import remove, new_session
 
 H = {"User-Agent": "midterms-reel-research/1.0 (priscila@oakpark-construction.com)"}
 CROPS={"mamdani":(560,340,880,1440),"elsayed":(500,120,1030,455)}
-ONLY=["mamdani","elsayed"]
+ONLY=["bottoms2","hinojosa2"]
 FILES = {
  "talarico": "File:James Talarico Open Congress Austin 2023.jpg",
+ "bottoms2": "File:Keisha Lance Bottoms 2019.jpg",
+ "hinojosa2": "File:Gina Hinojosa 16 February 2017 (cropped).jpg",
  "talarico2": "File:James Talarico Press Conference (cropped).jpg",
  "hinojosa": "File:Gina Hinojosa at the AFL-CIO COPE convention in 2024.jpg",
  "elsayed": "File:Abdul El-Sayed meet-and-greet by Conlan Houston 10.jpg",
