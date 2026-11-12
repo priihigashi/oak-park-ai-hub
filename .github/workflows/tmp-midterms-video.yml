@@ -1,0 +1,26 @@
+name: tmp-midterms-video
+on:
+  push:
+    branches: [tmp-midterms-fotos]
+    paths: ['job/video.py']
+permissions:
+  contents: write
+jobs:
+  vid:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - run: pip install "rembg[cpu]" pillow requests openai-whisper
+      - run: python job/video.py
+      - run: whisper job/vid/audio16k.wav --model small --language en --output_format json --output_dir job/vid --word_timestamps True || true
+      - run: |
+          git config user.name "midterms-bot"
+          git config user.email "bot@users.noreply.github.com"
+          rm -f job/vid/audio16k.wav
+          git add job/vid
+          git commit -m "video cut [skip ci]"
+          for i in 1 2 3; do git pull --rebase origin tmp-midterms-fotos && git push && break; sleep 5; done
