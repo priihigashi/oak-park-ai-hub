@@ -1,0 +1,70 @@
+name: reel ajuste fiscal - voz provisoria
+
+on:
+  push:
+    branches: [reel/ajuste-fiscal]
+    paths: ["reels/ajuste-fiscal/script.txt", ".github/workflows/reel_ajuste_tts.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  tts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: reel/ajuste-fiscal
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install edge-tts google-auth google-api-python-client
+      - name: Voz (Thalita) + tempos por palavra
+        run: |
+          mkdir -p reels/ajuste-fiscal/out
+          python - <<'EOF'
+          import asyncio, json, edge_tts
+          txt = open("reels/ajuste-fiscal/script.txt", encoding="utf-8").read()
+          async def main():
+              c = edge_tts.Communicate(txt, "pt-BR-ThalitaMultilingualNeural", rate="+8%", boundary="WordBoundary")
+              words = []
+              with open("reels/ajuste-fiscal/out/voz.mp3", "wb") as f:
+                  async for ch in c.stream():
+                      if ch["type"] == "audio":
+                          f.write(ch["data"])
+                      elif ch["type"] == "WordBoundary":
+                          words.append({"t": round(ch["offset"]/1e7, 3), "d": round(ch["duration"]/1e7, 3), "w": ch["text"]})
+              json.dump(words, open("reels/ajuste-fiscal/out/words.json", "w", encoding="utf-8"), ensure_ascii=False)
+          asyncio.run(main())
+          EOF
+      - name: Fotos do Drive
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: |
+          python - <<'EOF'
+          import os, json, io
+          from google.oauth2.credentials import Credentials
+          from googleapiclient.discovery import build
+          from googleapiclient.http import MediaIoBaseDownload
+          try:
+              info = json.loads(os.environ["SHEETS_TOKEN"])
+              creds = Credentials.from_authorized_user_info(info)
+              d = build("drive", "v3", credentials=creds)
+              for fid, name in [("1h5piQiFHINmbH3SrKTnfta_av4Q0_E4g", "alcolumbre.png")]:
+                  req = d.files().get_media(fileId=fid, supportsAllDrives=True)
+                  buf = io.BytesIO(); dl = MediaIoBaseDownload(buf, req); done = False
+                  while not done: _, done = dl.next_chunk()
+                  open("reels/ajuste-fiscal/out/" + name, "wb").write(buf.getvalue())
+                  print("ok", name)
+          except Exception as e:
+              print("foto falhou:", e)
+          EOF
+      - name: Commit
+        run: |
+          git config user.name "reel-bot"
+          git config user.email "reel-bot@users.noreply.github.com"
+          git add reels/ajuste-fiscal/out
+          git commit -m "voz provisoria + fotos" || true
+          git push
