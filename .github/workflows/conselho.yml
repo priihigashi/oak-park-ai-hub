@@ -1,0 +1,77 @@
+name: Conselho (auditoria ChatGPT por tras)
+
+# Rota B da skill /conselho: o Claude dispara, o ChatGPT (API) revisa, o resultado sai como artifact.
+# Uso: workflow_dispatch com packet (texto do pacote) e tema (slug curto).
+on:
+  workflow_dispatch:
+    inputs:
+      tema:
+        description: "slug curto do tema (ex.: cop31-gastos)"
+        required: true
+        type: string
+      packet:
+        description: "pacote completo em texto (comeca com REVIEWER RULES)"
+        required: true
+        type: string
+      models:
+        description: "modelos a tentar, em ordem, separados por virgula"
+        required: false
+        default: "gpt-6-sol,gpt-5.6-terra,gpt-5.6,gpt-5.5,gpt-5,gpt-4.1"
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Rodar revisao
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          PACKET: ${{ inputs.packet }}
+          TEMA: ${{ inputs.tema }}
+          MODELS: ${{ inputs.models }}
+        run: |
+          mkdir -p out
+          python3 - <<'PY'
+          import os, json, urllib.request, urllib.error
+          key=os.environ["OPENAI_API_KEY"]; packet=os.environ["PACKET"]; tema=os.environ["TEMA"]
+          models=[m.strip() for m in os.environ["MODELS"].split(",") if m.strip()]
+          log=[]
+          def call(model, tools):
+              body={"model":model,"input":packet}
+              if tools: body["tools"]=[{"type":"web_search"}]
+              req=urllib.request.Request("https://api.openai.com/v1/responses",data=json.dumps(body).encode(),
+                  headers={"Authorization":"Bearer "+key,"Content-Type":"application/json"})
+              with urllib.request.urlopen(req,timeout=900) as r: return json.load(r)
+          result=None
+          for m in models:
+              for tools in (True, False):
+                  try:
+                      j=call(m,tools)
+                      text="".join(c.get("text","") for o in j.get("output",[]) if o.get("type")=="message" for c in o.get("content",[]))
+                      if text.strip():
+                          result=(m,tools,text,j.get("usage")); break
+                      log.append(f"{m} tools={tools}: resposta vazia")
+                  except urllib.error.HTTPError as e:
+                      log.append(f"{m} tools={tools}: HTTP {e.code} {e.read().decode()[:300]}")
+                  except Exception as e:
+                      log.append(f"{m} tools={tools}: {e}")
+              if result: break
+          with open(f"out/review_{tema}.md","w") as f:
+              if result:
+                  m,tools,text,usage=result
+                  f.write(f"MODELO: {m} | busca na web: {tools} | uso: {json.dumps(usage)}\n\n{text}\n")
+              f.write("\n\n--- LOG DE TENTATIVAS ---\n"+"\n".join(log)+"\n")
+          print("modelo usado:", result[0] if result else "NENHUM"); print("\n".join(log))
+          if not result: raise SystemExit(1)
+          PY
+      - name: Subir resultado
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: conselho-${{ inputs.tema }}-${{ github.run_id }}
+          path: out/
+          retention-days: 7
