@@ -1,0 +1,24 @@
+name: tmp-refs
+on:
+  push:
+    branches: [tmp-midterms-fotos]
+    paths: ['job/refs.py']
+permissions:
+  contents: write
+jobs:
+  refs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - run: pip install -U yt-dlp "rembg[cpu]" pillow requests
+      - run: python job/refs.py
+      - run: |
+          git config user.name "midterms-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add job/refs
+          git commit -m "refs [skip ci]" || true
+          for i in 1 2 3; do git pull --rebase origin tmp-midterms-fotos && git push && break; sleep 5; done
