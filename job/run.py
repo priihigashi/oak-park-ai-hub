@@ -4,7 +4,7 @@ from rembg import remove, new_session
 
 H = {"User-Agent": "midterms-reel-research/1.0 (priscila@oakpark-construction.com)"}
 CROPS={"mamdani":(560,340,880,1440),"elsayed":(500,120,1030,455)}
-ONLY=["mamdani2","mamdani3"]
+ONLY=["bottoms2","hinojosa2","mamdani2","mamdani3"]
 FILES = {
  "talarico": "File:James Talarico Open Congress Austin 2023.jpg",
  "bottoms2": "File:Keisha Lance Bottoms 2019.jpg",
@@ -37,7 +37,11 @@ FILES = {
  "chiproy": "File:Chip Roy, official portrait, 116th Congress (cropped 2).jpg",
 }
 os.makedirs("job/out", exist_ok=True)
-sess = new_session("birefnet-portrait")
+for _a in range(5):
+    try:
+        sess = new_session("birefnet-portrait"); break
+    except Exception as e:
+        print("retry model", e); time.sleep(30)
 meta = {}
 for k, t in [(k,FILES[k]) for k in ONLY]:
     for a in range(4):
