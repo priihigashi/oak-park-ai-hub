@@ -8,7 +8,7 @@ STATUS
 ONDE ESTÁ TUDO
 - Prévia v17 (artefato pesado): https://claude.ai/artifact/GHRGv7SJf5LVreuTmfVRhg (áudio final a/s3nh0r23.mp3, voz ElevenLabs "Senhor M.", toca a 1,15x, ordem dos trechos do áudio em SEG: [0-38.947],[39.526-89.360],[128.471-150.121],[89.969-127.871],[150.721-fim])
 - Roteiro: Google Doc "ROTEIRO · Ajuste fiscal (PLP 299)" 11_FrL15g6vohhg1T4D13ErnqgY55zPd0P2Icb1bhTwk
-- Vozes novas (geradas por GitHub, branch reel/plp299-fix, pasta reels/plp299-fix/out): c07.mp3, c09.mp3, c12.mp3, c13.mp3, c14.mp3 + tempos por palavra (cXX.json)
+- Vozes novas: AINDA NÃO GERADAS. A chave ELEVENLABS_API_KEY do GitHub é de outra conta (grátis, só vozes padrão) e não tem acesso ao Senhor M. Gerar pelo conector do ElevenLabs da conta paga: voz "Senhor M. - Natural Brazilian Voice", voice_id ABk5L8OvHPMxly8DhhIg, 1 geração por fala, com tempos por palavra. Salvar na pasta falas_novas_13-11 (1eejzLTSAQTC8UdiVy_TrsKzFMITfRGqZ). Os textos também estão em falas.json no GitHub (branch reel/plp299-fix).
 
 POR QUE MUDA (checado em 13/11)
 - Lei Kandir: o vídeo diz que os R$ 3 bi ficam "pra depois de 2030". ERRADO. Pelo texto-base aprovado no Senado, a diferença de cada ano é devolvida em parcelas a partir do ANO SEGUINTE, até 2037 (Rádio Senado, Monitor do Mercado, Contábeis, 12/11). O adiamento ainda é um dos 4 destaques votados na terça 17/11.
@@ -61,6 +61,8 @@ Um piso menor da saúde não obriga o governo a gastar menos, mas diminui a gara
 Parte do dinheiro vem de reduzir benefícios que algumas empresas já recebem
 Também estão em debate emendas, supersalários e cobrar mais de quem tem renda alta, bancos e títulos isentos, mas cada um depende de decisões diferentes
 O vídeo traz críticas dos dois lados e o texto ainda pode mudar no Senado e na Câmara
+
+CENA 1 (se postar em 14/11): trocar só a primeira frase "Ontem o Senado aprovou" por "Na quinta, o Senado aprovou" (gerar como fala c01a e emendar no começo da cena 1).
 
 PROMPT PRA OUTRO CHAT (se este travar)
 "Abre o Google Doc 'MUDANÇAS DE ÚLTIMA HORA · Reel PLP 299' na pasta do conteúdo do reel do PLP 299 (mesma pasta do ROTEIRO 11_FrL15g6vohhg1T4D13ErnqgY55zPd0P2Icb1bhTwk) e segue o PLANO DE MONTAGEM inteiro, sem parar pra perguntar. As vozes novas já estão no GitHub priihigashi/oak-park-ai-hub, branch reel/plp299-fix, pasta reels/plp299-fix/out. Se faltar alguma voz, gera com ElevenLabs, voz 'Senhor M.', 1 geração por fala, texto exatamente como no doc. Não mexe no artefato v17: cria um artefato novo só com as 5 cenas, me mostra, e depois de eu aprovar renderiza só esses pedaços e emenda no MP4 original. Post remarcado pra 14/11 no Metricool: lembra de trocar o 'Ontem' da abertura."
