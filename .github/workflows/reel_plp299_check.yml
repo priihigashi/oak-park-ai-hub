@@ -1,0 +1,17 @@
+name: reel PLP 299 - conferir segredos
+on:
+  push:
+    branches: [reel/plp299-fix]
+    paths: [".github/workflows/reel_plp299_check.yml"]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: nomes dos segredos (sem valores)
+        env:
+          ALL: ${{ toJSON(secrets) }}
+        run: echo "$ALL" | jq -r 'keys[]' | sed 's/^/SECRET: /'
+      - name: plano da chave ELEVENLABS_API_KEY
+        env:
+          K: ${{ secrets.ELEVENLABS_API_KEY }}
+        run: curl -s -H "xi-api-key: $K" https://api.elevenlabs.io/v1/user/subscription | jq -r '"PLANO: \(.tier) usados \(.character_count)/\(.character_limit) status \(.status)"'
