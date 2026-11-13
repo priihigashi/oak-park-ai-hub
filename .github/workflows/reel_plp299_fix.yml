@@ -31,8 +31,18 @@ jobs:
           vs = requests.get("https://api.elevenlabs.io/v1/voices", headers=H, timeout=60).json()["voices"]
           print("vozes:", [v["name"] for v in vs])
           cand = [v for v in vs if re.search(r"senhor\s*m", v["name"], re.I)]
-          if not cand: raise SystemExit("voz Senhor M. nao encontrada")
-          vid = cand[0]["voice_id"]; print("usando", cand[0]["name"], vid)
+          if cand:
+              vid = cand[0]["voice_id"]
+          else:
+              sh = requests.get("https://api.elevenlabs.io/v1/shared-voices", headers=H, params={"search": "Senhor M", "page_size": 20}, timeout=60).json().get("voices", [])
+              print("biblioteca:", [(v.get("name"), v.get("language"), v.get("voice_id")) for v in sh])
+              sh = [v for v in sh if re.search(r"senhor\s*m", v.get("name",""), re.I)] or sh
+              if not sh: raise SystemExit("voz Senhor M. nao encontrada nem na biblioteca")
+              v = sh[0]
+              a = requests.post(f"https://api.elevenlabs.io/v1/voices/add/{v['public_owner_id']}/{v['voice_id']}", headers=H, json={"new_name": "Senhor M."}, timeout=60)
+              print("add:", a.status_code, a.text[:200])
+              vid = a.json().get("voice_id", v["voice_id"]) if a.status_code == 200 else v["voice_id"]
+          print("usando voz", vid)
           falas = json.load(open("reels/plp299-fix/falas.json", encoding="utf-8"))
           for k, txt in falas.items():
               if os.path.exists(f"{out}/{k}.mp3"): print("ja existe", k); continue
@@ -55,6 +65,7 @@ jobs:
               print("ok", k, round(words[-1]["t"]+words[-1]["d"], 2), "s")
           PY
       - name: Doc e audios no Drive (pasta do conteudo)
+        if: always()
         env:
           SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
         run: |
@@ -85,6 +96,7 @@ jobs:
               d.files().create(body={"name": n, "parents": [sub]}, media_body=MediaFileUpload(f), supportsAllDrives=True).execute(); print("subiu", n)
           PY
       - name: Salvar no branch
+        if: always()
         run: |
           git config user.name "github-actions[bot]"; git config user.email "github-actions[bot]@users.noreply.github.com"
           git add reels/plp299-fix/out || true
