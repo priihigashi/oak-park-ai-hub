@@ -3,7 +3,7 @@ name: reel plp299 video2 - voz provisoria
 on:
   push:
     branches: [reel/plp299-video2]
-    paths: ["reels/plp299-video2/script.txt"]
+    paths: ["reels/plp299-video2/script.txt", "reels/plp299-video2/rate.txt", ".github/workflows/reel_plp299v2_tts.yml"]
   workflow_dispatch:
 
 permissions:
