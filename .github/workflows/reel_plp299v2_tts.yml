@@ -64,4 +64,5 @@ jobs:
           git config user.email "actions@github.com"
           git add reels/plp299-video2/out
           git commit -m "voz provisoria plp299 video2" || true
+          git pull --rebase -q || true
           git push
