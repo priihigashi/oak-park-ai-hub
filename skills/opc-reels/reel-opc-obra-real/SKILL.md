@@ -42,3 +42,12 @@ Herda tudo do reel-opc-dica-pontilhado (regras gerais OPC, marca, voz, prévia, 
 * Duração e ritmo dentro da regra.
 * Nenhum dado de cliente sem autorização.
 * CTA de serviço ligado ao tema.
+
+
+## Quando um conector cair
+
+### REGRA 1, três cópias por 24 horas
+Toda mídia de trabalho de um conteúdo em andamento (MP4 renderizado, mp3 das vozes, HTML/fonte da prévia) é salva em 3 lugares: Google Drive (pasta do conteúdo), GitHub (repo priihigashi/oak-park-ai-hub, pasta temporária) e meu computador. Assim, se um conector cair, os outros seguram. Depois de ~24 horas, apague as cópias extras do GitHub e do computador e deixe só a do Google Drive.
+
+### REGRA 2, rotas reserva quando um conector cair
+Nunca pare o trabalho porque um conector caiu. Avance o máximo possível (troque telas e textos, faça voz provisória grátis com as falas novas) e já me ofereça uma rota reserva pronta: um prompt pra eu colar em outro Claude que busque o arquivo (Drive, Composio, meu computador ou GitHub) e me devolva o texto inteiro, palavra por palavra, pra eu trazer de volta. Antes de dizer que algo travou, confira status.claude.com.
