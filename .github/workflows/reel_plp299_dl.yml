@@ -1,8 +1,8 @@
-name: reel PLP 299 - baixar vozes
+name: reel PLP 299 - baixar video original
 on:
   push:
     branches: [reel/plp299-fix]
-    paths: ["reels/plp299-fix/urls.json"]
+    paths: ["reels/plp299-fix/orig_url.txt"]
 permissions:
   contents: write
 jobs:
@@ -13,8 +13,11 @@ jobs:
         with:
           ref: reel/plp299-fix
       - run: |
-          mkdir -p reels/plp299-fix/vozes
-          i=0; for u in $(jq -r '.[]' reels/plp299-fix/urls.json); do curl -sSL -o reels/plp299-fix/vozes/v$i.mp3 "$u"; i=$((i+1)); done
-          ls -la reels/plp299-fix/vozes
+          sudo apt-get install -y -qq ffmpeg >/dev/null
+          mkdir -p reels/plp299-fix/orig
+          curl -sSL -o /tmp/o.mp4 "$(cat reels/plp299-fix/orig_url.txt)"
+          ls -la /tmp/o.mp4; ffprobe -v error -show_entries format=duration:stream=codec_name,width,height,r_frame_rate,sample_rate,bit_rate -of compact /tmp/o.mp4 | tee reels/plp299-fix/orig/info.txt
+          split -b 90m /tmp/o.mp4 reels/plp299-fix/orig/o.mp4.part_
+          ls -la reels/plp299-fix/orig
           git config user.name "github-actions[bot]"; git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add reels/plp299-fix/vozes; git commit -m "vozes [skip ci]"; git push
+          git add reels/plp299-fix/orig; git commit -m "video original [skip ci]"; git push
