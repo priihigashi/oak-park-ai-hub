@@ -1,0 +1,95 @@
+name: Transcrever por palavra (relay)
+
+# Baixa 1+ vídeos (Instagram/TikTok/YouTube), transcreve com faster-whisper
+# com minutagem por palavra e publica tudo num branch temporário relay/<slug>
+# (mp4 + words.json + .srt + .txt), pra qualquer sessão do Claude puxar via git.
+# Depois de usar: apagar o branch (git push origin --delete relay/<slug>).
+#
+#   gh workflow run transcribe_words.yml -f slug=moro-triplex -f urls="URL1 URL2"
+#   (ou Composio GITHUB_CREATE_A_WORKFLOW_DISPATCH_EVENT, inputs como string JSON)
+
+on:
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: "Nome curto (vira o branch relay/<slug>)"
+        required: true
+        type: string
+      urls:
+        description: "Links dos vídeos separados por espaço"
+        required: true
+        type: string
+      model:
+        description: "Modelo whisper"
+        required: false
+        default: "medium"
+        type: choice
+        options: [small, medium, large-v3]
+
+permissions:
+  contents: write
+
+jobs:
+  transcribe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: actions/setup-python@v5.6.0
+        with:
+          python-version: "3.11"
+      - name: Deps
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+          pip install -q yt-dlp faster-whisper requests python-dotenv
+      - name: Baixar e transcrever
+        env:
+          APIFY_API_KEY: ${{ secrets.APIFY_API_KEY }}
+          PRI_OP_IG_COOKIES: ${{ secrets.PRI_OP_IG_COOKIES }}
+          PRI_OP_YT_COOKIES: ${{ secrets.PRI_OP_YT_COOKIES }}
+          URLS: ${{ inputs.urls }}
+          MODEL: ${{ inputs.model }}
+          CI: "true"
+        run: |
+          mkdir -p out
+          python - <<'PY'
+          import json, os, shutil, sys
+          from pathlib import Path
+          sys.path.insert(0, "scripts/capture")
+          import video_downloader as vd
+          from faster_whisper import WhisperModel
+          model = WhisperModel(os.environ.get("MODEL", "medium"), device="cpu", compute_type="int8")
+          def ts(t):
+              h, r = divmod(t, 3600); m, s = divmod(r, 60)
+              return f"{int(h):02d}:{int(m):02d}:{s:06.3f}".replace(".", ",")
+          for i, url in enumerate(os.environ["URLS"].split(), start=1):
+              tag = f"v{i}"
+              res = vd.download_url(url, staging=Path("/tmp/dl"), filename_hint=tag)
+              print(tag, res.get("ok"), res.get("error"))
+              if not res.get("ok"):
+                  continue
+              mp4 = Path("out") / f"{tag}.mp4"
+              shutil.copy(res["local_path"], mp4)
+              segs, info = model.transcribe(str(mp4), language="pt", word_timestamps=True, vad_filter=False, beam_size=5)
+              data, srt, txt = [], [], []
+              for k, s in enumerate(segs, start=1):
+                  words = [{"w": w.word, "s": round(w.start, 2), "e": round(w.end, 2)} for w in (s.words or [])]
+                  data.append({"start": round(s.start, 2), "end": round(s.end, 2), "text": s.text.strip(), "words": words})
+                  srt.append(f"{k}\n{ts(s.start)} --> {ts(s.end)}\n{s.text.strip()}\n")
+                  txt.append(f"[{int(s.start//60)}:{s.start%60:05.2f}] {s.text.strip()}")
+              meta = {"url": url, "title": res.get("title", ""), "duration": res.get("duration_sec"), "segments": data}
+              (Path("out") / f"{tag}_words.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1))
+              (Path("out") / f"{tag}.srt").write_text("\n".join(srt))
+              (Path("out") / f"{tag}.txt").write_text("\n".join(txt))
+          PY
+          ls -la out
+      - name: Publicar no branch relay
+        run: |
+          B="relay/${{ inputs.slug }}"
+          git config user.name "relay-bot"; git config user.email "relay-bot@users.noreply.github.com"
+          git checkout --orphan "$B"
+          git rm -rq --cached . && find . -mindepth 1 -maxdepth 1 ! -name out ! -name .git -exec rm -rf {} +
+          git add out && git commit -qm "relay ${{ inputs.slug }}"
+          git push -f origin "$B"
