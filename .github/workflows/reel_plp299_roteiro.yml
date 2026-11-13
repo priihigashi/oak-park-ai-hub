@@ -1,0 +1,33 @@
+name: reel PLP 299 - roteiro final no Drive
+on:
+  push:
+    branches: [reel/plp299-fix]
+    paths: ["reels/plp299-fix/ROTEIRO_FINAL_NO_VIDEO.txt", ".github/workflows/reel_plp299_roteiro.yml"]
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: reel/plp299-fix}
+      - run: pip install google-auth google-api-python-client
+      - env: {SHEETS_TOKEN: "${{ secrets.SHEETS_TOKEN }}"}
+        run: |
+          python - <<'PY'
+          import os, json
+          from google.oauth2.credentials import Credentials
+          from googleapiclient.discovery import build
+          from googleapiclient.http import MediaFileUpload
+          d = build("drive", "v3", credentials=Credentials.from_authorized_user_info(json.loads(os.environ["SHEETS_TOKEN"])))
+          P = "1aUacaMpXcBRXhoHyk8038vLxHlVT_cq8"
+          name = "ROTEIRO FINAL NO VÍDEO (palavra por palavra) · PLP 299 · 13-11"
+          q = f"name = '{name}' and '{P}' in parents and trashed = false"
+          r = d.files().list(q=q, supportsAllDrives=True, includeItemsFromAllDrives=True, fields="files(id)").execute()["files"]
+          m = MediaFileUpload("reels/plp299-fix/ROTEIRO_FINAL_NO_VIDEO.txt", mimetype="text/plain")
+          if r: fid = r[0]["id"]; d.files().update(fileId=fid, media_body=m, supportsAllDrives=True).execute()
+          else: fid = d.files().create(body={"name": name, "parents": [P], "mimeType": "application/vnd.google-apps.document"}, media_body=m, supportsAllDrives=True, fields="id").execute()["id"]
+          open("reels/plp299-fix/roteiro_link.txt","w").write("https://docs.google.com/document/d/" + fid + "\nhttps://drive.google.com/drive/folders/" + P + "\n")
+          PY
+          git config user.name "github-actions[bot]"; git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add reels/plp299-fix/roteiro_link.txt; git commit -m "link roteiro [skip ci]"; git push
