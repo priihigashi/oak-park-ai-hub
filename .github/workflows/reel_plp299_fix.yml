@@ -1,0 +1,92 @@
+name: reel PLP 299 - falas novas (ElevenLabs) + doc no Drive
+
+on:
+  push:
+    branches: [reel/plp299-fix]
+    paths: ["reels/plp299-fix/falas.json", "reels/plp299-fix/MUDANCAS_DE_ULTIMA_HORA.md", ".github/workflows/reel_plp299_fix.yml"]
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: reel/plp299-fix
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install requests google-auth google-api-python-client
+      - name: Vozes novas (so as que faltam, 1 geracao cada)
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+        run: |
+          python - <<'PY'
+          import os, json, base64, requests, re
+          K = os.environ["ELEVENLABS_API_KEY"]; H = {"xi-api-key": K}
+          out = "reels/plp299-fix/out"; os.makedirs(out, exist_ok=True)
+          vs = requests.get("https://api.elevenlabs.io/v1/voices", headers=H, timeout=60).json()["voices"]
+          print("vozes:", [v["name"] for v in vs])
+          cand = [v for v in vs if re.search(r"senhor\s*m", v["name"], re.I)]
+          if not cand: raise SystemExit("voz Senhor M. nao encontrada")
+          vid = cand[0]["voice_id"]; print("usando", cand[0]["name"], vid)
+          falas = json.load(open("reels/plp299-fix/falas.json", encoding="utf-8"))
+          for k, txt in falas.items():
+              if os.path.exists(f"{out}/{k}.mp3"): print("ja existe", k); continue
+              r = requests.post(f"https://api.elevenlabs.io/v1/text-to-speech/{vid}/with-timestamps",
+                  headers=H, timeout=180,
+                  json={"text": txt, "model_id": "eleven_multilingual_v2",
+                        "voice_settings": {"stability": 0.55, "similarity_boost": 0.8, "style": 0.0, "use_speaker_boost": True}})
+              if r.status_code != 200: print(k, r.status_code, r.text[:300]); continue
+              j = r.json(); open(f"{out}/{k}.mp3", "wb").write(base64.b64decode(j["audio_base64"]))
+              al = j["alignment"]; ch, st, en = al["characters"], al["character_start_times_seconds"], al["character_end_times_seconds"]
+              words, cur, t0 = [], "", None
+              for c, a, b in zip(ch, st, en):
+                  if c.isspace():
+                      if cur: words.append({"t": round(t0,3), "d": round(last-t0,3), "w": cur}); cur = ""
+                  else:
+                      if not cur: t0 = a
+                      cur += c; last = b
+              if cur: words.append({"t": round(t0,3), "d": round(last-t0,3), "w": cur})
+              json.dump(words, open(f"{out}/{k}.json", "w", encoding="utf-8"), ensure_ascii=False)
+              print("ok", k, round(words[-1]["t"]+words[-1]["d"], 2), "s")
+          PY
+      - name: Doc e audios no Drive (pasta do conteudo)
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: |
+          python - <<'PY'
+          import os, json, glob
+          from google.oauth2.credentials import Credentials
+          from googleapiclient.discovery import build
+          from googleapiclient.http import MediaFileUpload
+          d = build("drive", "v3", credentials=Credentials.from_authorized_user_info(json.loads(os.environ["SHEETS_TOKEN"])))
+          P = "1aUacaMpXcBRXhoHyk8038vLxHlVT_cq8"
+          def find(name):
+              q = f"name = '{name}' and '{P}' in parents and trashed = false"
+              r = d.files().list(q=q, supportsAllDrives=True, includeItemsFromAllDrives=True, fields="files(id)").execute()
+              return r["files"][0]["id"] if r["files"] else None
+          name = "MUDANÇAS DE ÚLTIMA HORA · Reel PLP 299 (13-11)"
+          m = MediaFileUpload("reels/plp299-fix/MUDANCAS_DE_ULTIMA_HORA.md", mimetype="text/plain")
+          fid = find(name)
+          if fid: d.files().update(fileId=fid, media_body=m, supportsAllDrives=True).execute()
+          else: fid = d.files().create(body={"name": name, "parents": [P], "mimeType": "application/vnd.google-apps.document"}, media_body=m, supportsAllDrives=True, fields="id").execute()["id"]
+          print("DOC https://docs.google.com/document/d/" + fid)
+          sub = find("falas_novas_13-11")
+          if not sub: sub = d.files().create(body={"name": "falas_novas_13-11", "parents": [P], "mimeType": "application/vnd.google-apps.folder"}, supportsAllDrives=True, fields="id").execute()["id"]
+          print("PASTA https://drive.google.com/drive/folders/" + sub)
+          for f in sorted(glob.glob("reels/plp299-fix/out/*")):
+              n = os.path.basename(f)
+              q = f"name = '{n}' and '{sub}' in parents and trashed = false"
+              if d.files().list(q=q, supportsAllDrives=True, includeItemsFromAllDrives=True).execute()["files"]: continue
+              d.files().create(body={"name": n, "parents": [sub]}, media_body=MediaFileUpload(f), supportsAllDrives=True).execute(); print("subiu", n)
+          PY
+      - name: Salvar no branch
+        run: |
+          git config user.name "github-actions[bot]"; git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add reels/plp299-fix/out || true
+          git commit -m "falas novas PLP 299 [skip ci]" || echo nada
+          git push || true
