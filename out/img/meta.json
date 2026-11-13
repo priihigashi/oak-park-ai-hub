@@ -1,1 +1,224 @@
-{}
+{
+ "motta": {
+  "src": "Câmara dos Deputados (foto oficial)",
+  "nome": "Hugo Motta",
+  "partido": "REPUBLICANOS",
+  "uf": "PB",
+  "size": [
+   354,
+   472
+  ]
+ },
+ "nikolas": {
+  "src": "Câmara dos Deputados (foto oficial)",
+  "nome": "Nikolas Ferreira",
+  "partido": "PL",
+  "uf": "MG",
+  "size": [
+   354,
+   472
+  ]
+ },
+ "sostenes": {
+  "src": "Câmara dos Deputados (foto oficial)",
+  "nome": "Sóstenes Cavalcante",
+  "partido": "PL",
+  "uf": "RJ",
+  "size": [
+   114,
+   152
+  ]
+ },
+ "marinho": {
+  "src": "Senado Federal (foto oficial)",
+  "nome": "Rogerio Marinho",
+  "partido": "PL",
+  "size": [
+   480,
+   600
+  ]
+ },
+ "alcolumbre": {
+  "src": "Senado Federal (foto oficial)",
+  "nome": "Davi Alcolumbre",
+  "partido": "UNIÃO",
+  "size": [
+   480,
+   600
+  ]
+ },
+ "tereza": {
+  "src": "Senado Federal (foto oficial)",
+  "nome": "Tereza Cristina",
+  "partido": "PP",
+  "size": [
+   1152,
+   1441
+  ]
+ },
+ "plen_0": {
+  "file": "Mônica Benício no Plenário da Câmara dos Deputados em 2026.jpg",
+  "license": "CC BY 3.0",
+  "artist": "Bruno Spada / Câmara dos Deputados",
+  "w": 3244,
+  "h": 2000,
+  "size": [
+   1920,
+   1184
+  ]
+ },
+ "plen_1": {
+  "file": "Mônica Benício no Plenário da Câmara dos Deputados em 2026 (2).jpg",
+  "license": "CC BY 3.0",
+  "artist": "Bruno Spada / Câmara dos Deputados",
+  "w": 2000,
+  "h": 3244,
+  "size": [
+   1920,
+   3114
+  ]
+ },
+ "plen_2": {
+  "file": "Plenário da Câmara dos Deputados (17029446093).jpg",
+  "license": "CC BY 2.0",
+  "artist": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/87134755@N04\">MDB Nacional</a>",
+  "w": 4080,
+  "h": 2720,
+  "size": [
+   1920,
+   1280
+  ]
+ },
+ "senado_0": {
+  "file": "Plenário do Senado Federal 2.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Boaventuravinicius\" title=\"User:Boaventuravinicius\">Boaventuravinicius</a>",
+  "w": 2907,
+  "h": 2509,
+  "size": [
+   1920,
+   1657
+  ]
+ },
+ "senado_1": {
+  "file": "Plenário do Senado Federal 3.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Boaventuravinicius\" title=\"User:Boaventuravinicius\">Boaventuravinicius</a>",
+  "w": 4080,
+  "h": 3060,
+  "size": [
+   1920,
+   1440
+  ]
+ },
+ "senado_2": {
+  "file": "Plenário do Senado Federal 4.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Boaventuravinicius\" title=\"User:Boaventuravinicius\">Boaventuravinicius</a>",
+  "w": 4080,
+  "h": 3060,
+  "size": [
+   1920,
+   1440
+  ]
+ },
+ "cong_0": {
+  "file": "Brazilian National Congress.jpg",
+  "license": "CC BY-SA 2.5",
+  "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Zimbres\" title=\"User:Zimbres\">Eurico Zimbres</a>",
+  "w": 2130,
+  "h": 1343,
+  "size": [
+   1920,
+   1211
+  ]
+ },
+ "cong_1": {
+  "file": "Brasilia Eixo Monumental Nat Congress Ministries from TV Tower.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Cayambe\" title=\"User:Cayambe\">Cayambe</a>",
+  "w": 4124,
+  "h": 2176,
+  "size": [
+   1920,
+   1013
+  ]
+ },
+ "cong_2": {
+  "file": "Congresso Nacional BSB 06 2014 8856 cropped.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Mariordo (Mario Roberto Durán Ortiz)",
+  "w": 1855,
+  "h": 1712,
+  "size": [
+   1855,
+   1712
+  ]
+ },
+ "painel_0": {
+  "file": "CCJ - 24 09 2025 - Painel eletrônico de votação.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Agência Senado",
+  "w": 2370,
+  "h": 1580,
+  "size": [
+   1920,
+   1280
+  ]
+ },
+ "painel_1": {
+  "file": "Plenário do Senado (54614481010).jpg",
+  "license": "CC BY 4.0",
+  "artist": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/49143546@N06\">Agência Senado</a> from Brasilia, Brazil",
+  "w": 3231,
+  "h": 2154,
+  "size": [
+   1920,
+   1280
+  ]
+ },
+ "painel_2": {
+  "file": "Plenário do Senado (54614211784).jpg",
+  "license": "CC BY 4.0",
+  "artist": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/49143546@N06\">Agência Senado</a> from Brasilia, Brazil",
+  "w": 3098,
+  "h": 2065,
+  "size": [
+   1920,
+   1280
+  ]
+ },
+ "eleicao_0": {
+  "file": "Eleição para presidente e demais cargos da Mesa Diretora da Câmara 01 (cropped).jpg",
+  "license": "CC BY 3.0",
+  "artist": "Câmara dos Deputados",
+  "w": 1235,
+  "h": 1647,
+  "size": [
+   1235,
+   1647
+  ]
+ },
+ "eleicao_1": {
+  "file": "2011 Eleição para presidente e demais cargos da Mesa Diretora da Câmara 01.jpg",
+  "license": "CC BY 3.0",
+  "artist": "Câmara dos Deputados",
+  "w": 2000,
+  "h": 1312,
+  "size": [
+   1920,
+   1260
+  ]
+ },
+ "eleicao_2": {
+  "file": "2011 Eleição para presidente e demais cargos da Mesa Diretora da Câmara 02.jpg",
+  "license": "CC BY 3.0",
+  "artist": "Câmara dos Deputados",
+  "w": 2000,
+  "h": 1312,
+  "size": [
+   1920,
+   1260
+  ]
+ }
+}
