@@ -1,0 +1,55 @@
+name: reel PLP 299 - renderizar cenas e emendar
+on:
+  push:
+    branches: [reel/plp299-fix]
+    paths: ["reels/plp299-fix/site/index.html", "reels/plp299-fix/splice.sh", ".github/workflows/reel_plp299_render.yml"]
+permissions:
+  contents: write
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - {lab: "Cena 7", key: c07}
+          - {lab: "Cena 9", key: c09}
+          - {lab: "Cena 12", key: c12}
+          - {lab: "Cena 13", key: c13}
+          - {lab: "Cena 14", key: c14}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: reel/plp299-fix}
+      - run: pip install playwright && python -m playwright install --with-deps chromium
+      - run: python reels/plp299-fix/render_scene.py "$PWD/reels/plp299-fix/site" "${{ matrix.lab }}" frames/${{ matrix.key }}
+      - uses: actions/upload-artifact@v4
+        with: {name: "${{ matrix.key }}", path: "frames/${{ matrix.key }}", retention-days: 3}
+  splice:
+    needs: render
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: reel/plp299-fix}
+      - run: sudo apt-get install -y -qq ffmpeg >/dev/null
+      - uses: actions/download-artifact@v4
+        with: {path: reels/plp299-fix/frames}
+      - run: bash reels/plp299-fix/splice.sh
+      - run: pip install google-auth google-api-python-client
+      - name: Drive
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: |
+          python - <<'PY'
+          import os, json
+          from google.oauth2.credentials import Credentials
+          from googleapiclient.discovery import build
+          from googleapiclient.http import MediaFileUpload
+          d = build("drive", "v3", credentials=Credentials.from_authorized_user_info(json.loads(os.environ["SHEETS_TOKEN"])))
+          f = d.files().create(body={"name": "PLP299_final_cenas_novas_13-11.mp4", "parents": ["1eejzLTSAQTC8UdiVy_TrsKzFMITfRGqZ"]}, media_body=MediaFileUpload("/tmp/final.mp4", mimetype="video/mp4", resumable=True), supportsAllDrives=True, fields="id").execute()
+          print("FINAL https://drive.google.com/file/d/" + f["id"] + "/view")
+          PY
+      - name: guardar no branch
+        run: |
+          mkdir -p reels/plp299-fix/final && split -b 90m /tmp/final.mp4 reels/plp299-fix/final/final.mp4.part_
+          git config user.name "github-actions[bot]"; git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull -q --rebase origin reel/plp299-fix || true
+          git add reels/plp299-fix/final; git commit -m "final [skip ci]"; git push
