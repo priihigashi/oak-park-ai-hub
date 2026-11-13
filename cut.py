@@ -2,7 +2,7 @@ from rembg import remove,new_session
 from PIL import Image
 import os
 s=new_session('u2net_human_seg')
-for k in ['motta','nikolas','marinho','alcolumbre','tereza','adriana','sostenes']:
+for k in ['motta','nikolas','marinho','alcolumbre','tereza','adriana','sostenes','gilberto']:
     p=f'out/img/{k}.jpg'
     if not os.path.exists(p): continue
     im=Image.open(p).convert('RGB');im.thumbnail((900,1200))
