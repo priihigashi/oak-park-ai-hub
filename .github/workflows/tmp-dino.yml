@@ -1,0 +1,25 @@
+name: tmp-dino-6x1 assets
+on:
+  push:
+    branches: [tmp-dino-6x1]
+    paths: ['tmp/dino/narration.json', '.github/workflows/tmp-dino.yml']
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+      - run: pip install edge-tts "rembg[cpu]" pillow opencv-python-headless numpy
+      - working-directory: tmp/dino
+        run: python build.py
+      - name: commit outputs
+        run: |
+          git config user.name "priihigashi"; git config user.email "mcfollingproperties@gmail.com"
+          git add tmp/dino/out
+          git commit -m "tmp dino outputs [skip ci]" || true
+          git push
