@@ -2,7 +2,7 @@ name: reel PLP 299 - roteiro final no Drive
 on:
   push:
     branches: [reel/plp299-fix]
-    paths: ["reels/plp299-fix/ROTEIRO_FINAL_NO_VIDEO.txt", ".github/workflows/reel_plp299_roteiro.yml"]
+    paths: ["reels/plp299-fix/ROTEIRO_FINAL_NO_VIDEO.txt", "reels/plp299-fix/final2/**", ".github/workflows/reel_plp299_roteiro.yml"]
 permissions:
   contents: write
 jobs:
@@ -27,7 +27,11 @@ jobs:
           m = MediaFileUpload("reels/plp299-fix/ROTEIRO_FINAL_NO_VIDEO.txt", mimetype="text/plain")
           if r: fid = r[0]["id"]; d.files().update(fileId=fid, media_body=m, supportsAllDrives=True).execute()
           else: fid = d.files().create(body={"name": name, "parents": [P], "mimeType": "application/vnd.google-apps.document"}, media_body=m, supportsAllDrives=True, fields="id").execute()["id"]
+          vq = f"name = 'PLP299_final_v2.mp4' and '{P}' in parents and trashed = false"
+          if not d.files().list(q=vq, supportsAllDrives=True, includeItemsFromAllDrives=True).execute()["files"]:
+              vid = d.files().create(body={"name": "PLP299_final_v2.mp4", "parents": [P]}, media_body=MediaFileUpload("reels/plp299-fix/final2/PLP299_final_v2.mp4", resumable=True), supportsAllDrives=True, fields="id").execute()["id"]
+              open("reels/plp299-fix/video_link.txt","w").write("https://drive.google.com/file/d/" + vid + "/view\n")
           open("reels/plp299-fix/roteiro_link.txt","w").write("https://docs.google.com/document/d/" + fid + "\nhttps://drive.google.com/drive/folders/" + P + "\n")
           PY
           git config user.name "github-actions[bot]"; git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add reels/plp299-fix/roteiro_link.txt; git commit -m "link roteiro [skip ci]"; git push
+          git add reels/plp299-fix/roteiro_link.txt reels/plp299-fix/video_link.txt; git commit -m "link roteiro [skip ci]"; git push
