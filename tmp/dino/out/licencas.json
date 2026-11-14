@@ -14,21 +14,45 @@
   "Credit": "<a rel=\"nofollow\" class=\"external free\" href=\"https://www.flickr.com/photos/supremotribunalfederal/55367094448/\">https://www.flickr.com/photos/supremotribunalfederal/55367094448/</a>"
  },
  "carmen": {
-  "err": "             ^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 563, in error\n    return self._call_chain(*args)\n           ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 496, in _call_chain\n    result = func(*args)\n             ^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 643, in http_error_default\n    raise HTTPError(req.full_url, code, msg, hdrs, fp)\nurllib.error.HTTPError: HTTP Error 429: Too many requests (f061ab2)\n"
+  "file": "Cármen_Lúcia_em_outubro_de_2019.jpg",
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/aa/C%C3%A1rmen_L%C3%BAcia_em_outubro_de_2019.jpg/1280px-C%C3%A1rmen_L%C3%BAcia_em_outubro_de_2019.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "LicenseShortName": "Attribution",
+  "Artist": "Rosinei Coutinho",
+  "Credit": "Supremo Tribunal Federal: <a rel=\"nofollow\" class=\"external text\" href=\"http://www.stf.jus.br/arquivo/cms/bancoImagemFotoAudiencia/bancoImagemFotoAudiencia_AP_427047.jpg\">I</a>, <a rel=\"nofollow\" class=\"external text\" href=\"http://www.stf.jus.br/portal/cms/listarImagem.asp?servico=&amp;palavraChave=C%E1rmen+L%FAcia&amp;pagina=4&amp;dataDE=&amp;dataATE=\">II</a>"
  },
  "stf": {
-  "err": "             ^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 563, in error\n    return self._call_chain(*args)\n           ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 496, in _call_chain\n    result = func(*args)\n             ^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 643, in http_error_default\n    raise HTTPError(req.full_url, code, msg, hdrs, fp)\nurllib.error.HTTPError: HTTP Error 429: Too many requests (f061ab2)\n"
+  "file": "Supremo_Brasil.jpg",
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/17/Supremo_Brasil.jpg/1280px-Supremo_Brasil.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "LicenseShortName": "CC BY 2.0",
+  "Artist": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/photos/leandrociuffo/\">Leandro Ciuffo</a>",
+  "Credit": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/photos/leandrociuffo/5944394217/in/set-72157627086723777\">Flickr</a>"
  },
  "congresso": {
-  "err": "             ^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 563, in error\n    return self._call_chain(*args)\n           ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 496, in _call_chain\n    result = func(*args)\n             ^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 643, in http_error_default\n    raise HTTPError(req.full_url, code, msg, hdrs, fp)\nurllib.error.HTTPError: HTTP Error 429: Too many requests (f061ab2)\n"
+  "file": "Congresso_do_Brasil.jpg",
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e4/Congresso_do_Brasil.jpg/1280px-Congresso_do_Brasil.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "LicenseShortName": "CC BY-SA 2.0",
+  "Artist": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/paulandaline/\">P - A - S</a>",
+  "Credit": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/photos/paulandaline/753524443/sizes/o/in/photostream/\">Flickr</a>"
  },
  "rua": {
-  "err": "             ^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 563, in error\n    return self._call_chain(*args)\n           ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 496, in _call_chain\n    result = func(*args)\n             ^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 643, in http_error_default\n    raise HTTPError(req.full_url, code, msg, hdrs, fp)\nurllib.error.HTTPError: HTTP Error 429: Too many requests (f061ab2)\n"
+  "file": "Rua_25_de_Março_1.jpg",
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/23/Rua_25_de_Mar%C3%A7o_1.jpg/1280px-Rua_25_de_Mar%C3%A7o_1.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "LicenseShortName": "CC BY-SA 3.0",
+  "Artist": "<a href=\"//commons.wikimedia.org/wiki/User:Pedu0303\" title=\"User:Pedu0303\">Peter Louiz</a>",
+  "Credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>"
  },
  "motta": {
-  "err": "             ^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 563, in error\n    return self._call_chain(*args)\n           ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 496, in _call_chain\n    result = func(*args)\n             ^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 643, in http_error_default\n    raise HTTPError(req.full_url, code, msg, hdrs, fp)\nurllib.error.HTTPError: HTTP Error 429: Too many requests (f061ab2)\n"
+  "file": "Hugo_Motta_-_PEC_da_Segurança_Pública_2025_(3x4).jpg",
+  "src": "https://upload.wikimedia.org/wikipedia/commons/d/df/Hugo_Motta_-_PEC_da_Seguran%C3%A7a_P%C3%BAblica_2025_%283x4%29.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "LicenseShortName": "CC BY-SA 2.0",
+  "Artist": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/157736962@N05\">Lula Oficial</a>",
+  "Credit": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/photos/lulaoficial/54472250685/\">23.04.2025 - Entrega da PEC da Segurança Pública</a>"
  },
  "gilmar": {
-  "err": "             ^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 563, in error\n    return self._call_chain(*args)\n           ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 496, in _call_chain\n    result = func(*args)\n             ^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 643, in http_error_default\n    raise HTTPError(req.full_url, code, msg, hdrs, fp)\nurllib.error.HTTPError: HTTP Error 429: Too many requests (f061ab2)\n"
+  "file": "Gilmar_Mendes_2016.jpg",
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f3/Gilmar_Mendes_2016.jpg/1280px-Gilmar_Mendes_2016.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "LicenseShortName": "CC BY 2.0",
+  "Artist": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/49143546@N06\">Senado Federal</a>",
+  "Credit": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/photos/agenciasenado/30076771056/\">Congressos. Seminários. Palestras</a>"
  }
 }
