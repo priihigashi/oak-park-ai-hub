@@ -18,6 +18,11 @@ jobs:
     timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
+      - name: Check maintained Python complexity
+        run: |
+          python3 -m venv /tmp/private-sync-quality
+          /tmp/private-sync-quality/bin/pip -q install ruff==0.16.0
+          /tmp/private-sync-quality/bin/ruff check --select C901 --config 'lint.mccabe.max-complexity=10' scripts/private_sheet_sync.py
       - name: Append confirmed private records without logging personal data
         env:
           SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
