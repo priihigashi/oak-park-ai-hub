@@ -5,6 +5,9 @@ on:
     paths: ['tmp/dino/narration.json', '.github/workflows/tmp-dino.yml']
 permissions:
   contents: write
+concurrency:
+  group: tmp-dino-build
+  cancel-in-progress: true
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,10 +19,14 @@ jobs:
       - run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg
       - run: pip install edge-tts "rembg[cpu]" pillow opencv-python-headless numpy
       - working-directory: tmp/dino
-        run: python build.py
+        run: |
+          sed -i "s/'motta': ('pt','Hugo Motta'),/'motta': ('pt','Hugo Motta'), 'gilmar': ('pt','Gilmar Mendes'),/" build.py
+          sed -i "s/for k in ('dino','moraes','carmen','motta'):/for k in ('dino','moraes','carmen','motta','gilmar'):/" build.py
+          python build.py
       - name: commit outputs
         run: |
           git config user.name "priihigashi"; git config user.email "mcfollingproperties@gmail.com"
           git add tmp/dino/out
           git commit -m "tmp dino outputs [skip ci]" || true
+          git pull --rebase || true
           git push
