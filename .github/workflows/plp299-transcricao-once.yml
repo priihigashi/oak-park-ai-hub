@@ -20,10 +20,10 @@ jobs:
               workflow_id: 'capture_pipeline.yml',
               ref: 'main',
               inputs: {
-                url: 'https://www.instagram.com/reel/DfuEXI_Ba3b/',
+                url: 'https://www.instagram.com/reel/DfuXytMRuZD/',
                 project: 'brazil',
-                story_id: 'NWS-PLP299-EDUARDO-20261114',
-                notes: 'Transcricao integral solicitada para analise da afirmacao juridica final. Apenas transcrever e salvar. Nao criar conteudo nem publicar.',
+                story_id: 'NWS-PLP299-VIDEO2-20261114',
+                notes: 'Segunda transcricao integral solicitada para checagem e comparacao com o dossie PLP299. Apenas transcrever e salvar. Nao criar conteudo nem publicar.',
                 credits: 'false',
                 mode: 'transcribe_only'
               }
