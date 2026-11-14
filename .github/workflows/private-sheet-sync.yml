@@ -25,5 +25,6 @@ jobs:
           /tmp/private-sync-quality/bin/ruff check --select C901 --config 'lint.mccabe.max-complexity=10' scripts/private_sheet_sync.py
       - name: Append confirmed private records without logging personal data
         env:
+          REVIEW_ORIGIN: ${{ secrets.PRI_OP_REVIEW_ORIGIN }}
           SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
         run: python3 scripts/private_sheet_sync.py
