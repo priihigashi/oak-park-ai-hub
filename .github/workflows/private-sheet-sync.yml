@@ -1,0 +1,24 @@
+name: Private sheet review sync
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '15 */6 * * *'
+  push:
+    branches: [codex/plp299-review-sync-20261114]
+    paths: [.github/workflows/private-sheet-sync.yml, scripts/private_sheet_sync.py]
+permissions:
+  contents: read
+  id-token: write
+concurrency:
+  group: private-sheet-review-sync
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Append confirmed private records without logging personal data
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: python3 scripts/private_sheet_sync.py
