@@ -1,0 +1,28 @@
+name: tmp-dino-6x1 fetch artifacts
+on:
+  push:
+    branches: [tmp-dino-6x1]
+    paths: ['.github/workflows/tmp-dino-fetch.yml', 'tmp/dino/fetch.txt']
+permissions:
+  contents: write
+  actions: read
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: download
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p tmp/dino/fetched
+          gh run download 43530698557 -R ${{ github.repository }} -D tmp/dino/fetched/conselho || true
+          gh run download 43530266053 -R ${{ github.repository }} -D tmp/dino/fetched/capture || true
+          ls -R tmp/dino/fetched
+      - name: commit
+        run: |
+          git config user.name "priihigashi"; git config user.email "mcfollingproperties@gmail.com"
+          git pull --rebase || true
+          git add tmp/dino/fetched
+          git commit -m "tmp dino fetched [skip ci]" || true
+          git push
