@@ -1,0 +1,6 @@
+Private review sync complexity baseline
+Tool: Ruff 0.16.0; C901 max-complexity 10.
+Scope: scripts/private_sheet_sync.py (new maintained file; existing helper unchanged).
+Command: ruff check --select C901 --config 'lint.mccabe.max-complexity=10' scripts/private_sheet_sync.py
+Result: all checks passed; no above-threshold functions in this scope.
+Integration evidence: private records exported with scoped OIDC and appended to separate review/test tabs; no personal data logged.
