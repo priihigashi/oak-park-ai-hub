@@ -1,0 +1,49 @@
+STORY ID: NWS-202611141252  
+PROJECT: NEWS  
+DATE: 2026-11-14  
+SOURCE URL: https://www.instagram.com/reel/Dfp3-EXDJsZ/  
+
+SPEAKER ANALYSIS:  
+  Known speaker (from Apify metadata): Flávio Dino, Ministro do STF (confirm from transcript)
+  Who: Flávio Dino, Minister of the Supreme Federal Court of Brazil
+  Credibility: HIGH 
+  Red flags: Limited perspective on the implications, need for diverse sources
+
+CONTENT ANALYSIS:  
+  Main message: The Brazilian Supreme Federal Court, led by Minister Flávio Dino, has decided that the workweek will be reduced, affecting working hours without impacting wages.
+  Emotional tone: Neutral, informational
+  What works: The content provides a clear and concise explanation of a significant legal decision, using bullet points for clarity.
+  What's missing: Real-world examples of how this affects individuals, and a balance of opinions or perspectives on the decision.
+
+NEWS POST ANGLE:  
+  Core message: A new judicial decision by the STF changes working hours without decreasing wages; here's what it means for employees.
+  Teaching moment: This post informs employees about their new rights and helps them understand the trade-offs between work hours and breaks.
+  Format: Text overlay on relevant images
+  CTA: Engage with the discussion about whether this exchange of working hours for more breaks is beneficial.
+
+HOOK OPTIONS:
+
+HOOK A — Contrarian (challenge a belief the audience holds):  
+    EN: "Think longer breaks are a dream? Not anymore—discover how Brazil's workweek is changing for good."
+    PT-BR: "Acredita que pausas mais longas são um sonho? Não mais—descubra como a semana de trabalho no Brasil está mudando para sempre."
+    Why: This hook challenges the common belief that longer breaks are unattainable, piquing curiosity about the new policy changes.
+
+HOOK B — Curiosity Gap (open an information gap they must close):  
+    EN: "Why are Brazilian workers welcoming a 42-hour workweek with open arms?"
+    PT-BR: "Por que os trabalhadores brasileiros estão abraçando uma semana de trabalho de 42 horas?"
+    Why: This creates curiosity about the motivations and benefits behind the shift to a 42-hour workweek.
+
+HOOK C — Pain Agitate or Pattern Interrupt:  
+    EN: "Tired of extra hours with no pay? The recent STF ruling may change your life."
+    PT-BR: "Cansado de horas extras sem pagamento? A recente decisão do STF pode mudar sua vida."
+    Why: This hook directly addresses a common frustration among workers, prompting them to learn more about the ruling's impact.
+
+RECOMMENDED FOR REEL COVER: C — Directly addresses a common pain point and promises a solution, which is engaging and relatable.  
+RECOMMENDED FOR CAROUSEL SLIDE 1: B — Opens with a question that creates a strong curiosity gap and invites the audience to explore further.
+
+STUDY NOTES (3 specific ways to do it better):  
+  1. Include more real-life examples or testimonials from workers affected by this ruling to provide practical, relatable context.  
+  2. Balance the presentation by incorporating a diversity of perspectives, potentially interviewing both advocates and critics of the decision.  
+  3. Integrate more visuals and graphics that clearly compare the old and new workweeks to aid in comprehension.
+
+CONTENT READY: NEEDS REFINEMENT
