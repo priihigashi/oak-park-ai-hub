@@ -2,7 +2,7 @@ name: tmp-dino-6x1 assets
 on:
   push:
     branches: [tmp-dino-6x1]
-    paths: ['tmp/dino/narration.json', '.github/workflows/tmp-dino.yml']
+    paths: ['tmp/dino/narration.json', 'tmp/dino/build.py', '.github/workflows/tmp-dino.yml']
 permissions:
   contents: write
 concurrency:
@@ -19,11 +19,9 @@ jobs:
       - run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg
       - run: pip install edge-tts "rembg[cpu]" pillow opencv-python-headless numpy
       - working-directory: tmp/dino
-        run: |
-          sed -i "s/'motta': ('pt','Hugo Motta'),/'motta': ('pt','Hugo Motta'), 'gilmar': ('pt','Gilmar Mendes'),/" build.py
-          sed -i "s/for k in ('dino','moraes','carmen','motta'):/for k in ('dino','moraes','carmen','motta','gilmar'):/" build.py
-          python build.py
+        run: python build.py || echo BUILD_FAILED >> out/log.txt
       - name: commit outputs
+        if: always()
         run: |
           git config user.name "priihigashi"; git config user.email "mcfollingproperties@gmail.com"
           git add tmp/dino/out

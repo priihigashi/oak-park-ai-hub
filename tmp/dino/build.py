@@ -26,8 +26,14 @@ async def main():
     lst.close()
     json.dump(tl, open('out/timeline.json','w'), ensure_ascii=False)
 subprocess.run(['ffmpeg','-y','-f','lavfi','-i','anullsrc=r=24000:cl=mono','-t','0.10','-q:a','9','out/gap.mp3'],check=True)
-asyncio.run(main())
-subprocess.run(['ffmpeg','-y','-f','concat','-safe','0','-i','out/list.txt','-ac','1','-b:a','64k','out/narracao.mp3'],check=True)
+try:
+    asyncio.run(main())
+except Exception:
+    import traceback; open('out/log.txt','a').write('TTS\n'+traceback.format_exc())
+try:
+  subprocess.run(['ffmpeg','-y','-f','concat','-safe','0','-i','out/list.txt','-ac','1','-b:a','64k','out/narracao.mp3'],check=True)
+except Exception:
+  import traceback; open('out/log.txt','a').write('CONCAT\n'+traceback.format_exc())
 for f in os.listdir('out'):
     if (f.startswith('s') and f.endswith('.mp3')) or f in ('gap.mp3','list.txt'): os.remove('out/'+f)
 
@@ -48,7 +54,7 @@ def license_of(fname):
 targets = {
  'dino': ('pt','Flávio Dino'), 'moraes': ('pt','Alexandre de Moraes'), 'carmen': ('pt','Cármen Lúcia'),
  'stf': ('pt','Supremo Tribunal Federal'), 'congresso': ('pt','Palácio do Congresso Nacional'),
- 'rua': ('pt','Rua 25 de Março'), 'motta': ('pt','Hugo Motta'),
+ 'rua': ('pt','Rua 25 de Março'), 'motta': ('pt','Hugo Motta'), 'gilmar': ('pt','Gilmar Mendes'),
 }
 from PIL import Image
 lic = {}
@@ -62,21 +68,24 @@ for k,(lang,title) in targets.items():
         try: lic[k] = {'file': name, 'src': src, **license_of(name)}
         except Exception as e: lic[k] = {'file': name, 'src': src, 'err': str(e)}
     except Exception as e:
-        lic[k] = {'err': str(e)}
+        import traceback; lic[k] = {'err': traceback.format_exc()[-600:]}
 json.dump(lic, open('out/licencas.json','w'), ensure_ascii=False, indent=1)
 
 import cv2, numpy as np
-from rembg import remove, new_session
-sess = new_session('u2net_human_seg')
+try:
+    from rembg import remove, new_session
+    sess = new_session('u2net_human_seg')
+except Exception:
+    import traceback; open('out/log.txt','a').write('REMBG\n'+traceback.format_exc())
 casc = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-for k in ('dino','moraes','carmen','motta'):
+def headcut(k):
     p = f'out/raw_{k}.jpg'
-    if not os.path.exists(p): continue
+    if not os.path.exists(p): return
     im = Image.open(p).convert('RGB')
-    cut = remove(im, session=sess, alpha_matting=True, alpha_matting_foreground_threshold=240, alpha_matting_background_threshold=10, alpha_matting_erode_size=10)
+    cut = remove(im, session=sess, alpha_matting=False)
     g = cv2.cvtColor(np.array(im), cv2.COLOR_RGB2GRAY)
     faces = casc.detectMultiScale(g, 1.1, 5, minSize=(60,60))
-    if len(faces)==0: cut.save(f'out/cut_{k}_full.png'); continue
+    if len(faces)==0: cut.save(f'out/cut_{k}_full.png'); return
     x,y,w,h = max(faces, key=lambda f:f[2]*f[3])
     x0,x1 = int(x-0.45*w), int(x+1.45*w); y0,y1 = int(y-0.75*h), int(y+1.18*h)
     W,H = im.size; x0,y0 = max(0,x0),max(0,y0); x1,y1 = min(W,x1),min(H,y1)
@@ -93,4 +102,8 @@ for k in ('dino','moraes','carmen','motta'):
     bb = out.getbbox()
     if bb: out = out.crop(bb)
     out.thumbnail((700,700)); out.save(f'out/head_{k}.png')
+for k in ('dino','moraes','carmen','motta','gilmar'):
+    try: headcut(k)
+    except Exception:
+        import traceback; open('out/log.txt','a').write('HEAD '+k+'\n'+traceback.format_exc())
 print(open('out/licencas.json').read())
