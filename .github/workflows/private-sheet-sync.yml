@@ -1,0 +1,29 @@
+name: Private sheet review sync
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '15 */6 * * *'
+  push:
+    branches: [codex/plp299-review-sync-20261114]
+    paths: [.github/workflows/private-sheet-sync.yml, scripts/private_sheet_sync.py]
+permissions:
+  contents: read
+  id-token: write
+concurrency:
+  group: private-sheet-review-sync
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check maintained Python complexity
+        run: |
+          python3 -m venv /tmp/private-sync-quality
+          /tmp/private-sync-quality/bin/pip -q install ruff==0.16.0
+          /tmp/private-sync-quality/bin/ruff check --select C901 --config 'lint.mccabe.max-complexity=10' scripts/private_sheet_sync.py
+      - name: Append confirmed private records without logging personal data
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: python3 scripts/private_sheet_sync.py
