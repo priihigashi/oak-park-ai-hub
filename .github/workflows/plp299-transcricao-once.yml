@@ -1,0 +1,31 @@
+name: PLP299 requested transcript dispatcher
+on:
+  push:
+    branches: [codex/plp299-transcricao-20261114]
+    paths: [.github/workflows/plp299-transcricao-once.yml]
+permissions:
+  actions: write
+  contents: read
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'capture_pipeline.yml',
+              ref: 'main',
+              inputs: {
+                url: 'https://www.instagram.com/reel/DfuEXI_Ba3b/',
+                project: 'brazil',
+                story_id: 'NWS-PLP299-EDUARDO-20261114',
+                notes: 'Transcricao integral solicitada para analise da afirmacao juridica final. Apenas transcrever e salvar. Nao criar conteudo nem publicar.',
+                credits: 'false',
+                mode: 'transcribe_only'
+              }
+            });
+            core.info('Requested existing Capture Pipeline v2 in transcribe_only mode.');
