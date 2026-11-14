@@ -16,13 +16,13 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p tmp/dino/fetched
-          gh run download 43530698557 -R ${{ github.repository }} -D tmp/dino/fetched/conselho || true
-          gh run download 43530266053 -R ${{ github.repository }} -D tmp/dino/fetched/capture || true
+          gh run watch 43596822776 -R ${{ github.repository }} --interval 20 || true
+          gh run download 43596822776 -R ${{ github.repository }} -D tmp/dino/fetched/capture2 || true
           ls -R tmp/dino/fetched
       - name: commit
         run: |
           git config user.name "priihigashi"; git config user.email "mcfollingproperties@gmail.com"
           git pull --rebase || true
           git add tmp/dino/fetched
-          git commit -m "tmp dino fetched [skip ci]" || true
+          git commit -m "tmp dino fetched 2 [skip ci]" || true
           git push
