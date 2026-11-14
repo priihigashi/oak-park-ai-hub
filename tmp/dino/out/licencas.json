@@ -1,0 +1,34 @@
+{
+ "dino": {
+  "file": "Flávio_Dino_no_voto_da_Ação_Penal_(AP)_2668_(cropped).jpg",
+  "src": "https://upload.wikimedia.org/wikipedia/commons/7/74/Fl%C3%A1vio_Dino_no_voto_da_A%C3%A7%C3%A3o_Penal_%28AP%29_2668_%28cropped%29.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=original",
+  "LicenseShortName": "Attribution",
+  "Artist": "Gustavo Moreno/STF",
+  "Credit": "<a rel=\"nofollow\" class=\"external free\" href=\"https://noticias.stf.jus.br/postsnoticias/segundo-a-votar-ministro-flavio-dino-defende-condenacao-de-reus-por-tentativa-de-golpe/\">https://noticias.stf.jus.br/postsnoticias/segundo-a-votar-ministro-flavio-dino-defende-condenacao-de-reus-por-tentativa-de-golpe/</a>"
+ },
+ "moraes": {
+  "file": "Sessão_da_Primeira_Turma_do_STF_-_30062026_(cropped_2).jpg",
+  "src": "https://upload.wikimedia.org/wikipedia/commons/c/c3/Sess%C3%A3o_da_Primeira_Turma_do_STF_-_30062026_%28cropped_2%29.jpg?utm_source=pt.wikipedia.org&utm_campaign=api&utm_content=original",
+  "LicenseShortName": "Public domain",
+  "Artist": "Supremo Tribunal Federal STF",
+  "Credit": "<a rel=\"nofollow\" class=\"external free\" href=\"https://www.flickr.com/photos/supremotribunalfederal/55367094448/\">https://www.flickr.com/photos/supremotribunalfederal/55367094448/</a>"
+ },
+ "carmen": {
+  "err": "             ^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 563, in error\n    return self._call_chain(*args)\n           ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 496, in _call_chain\n    result = func(*args)\n             ^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 643, in http_error_default\n    raise HTTPError(req.full_url, code, msg, hdrs, fp)\nurllib.error.HTTPError: HTTP Error 429: Too many requests (f061ab2)\n"
+ },
+ "stf": {
+  "err": "             ^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 563, in error\n    return self._call_chain(*args)\n           ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 496, in _call_chain\n    result = func(*args)\n             ^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 643, in http_error_default\n    raise HTTPError(req.full_url, code, msg, hdrs, fp)\nurllib.error.HTTPError: HTTP Error 429: Too many requests (f061ab2)\n"
+ },
+ "congresso": {
+  "err": "             ^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 563, in error\n    return self._call_chain(*args)\n           ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 496, in _call_chain\n    result = func(*args)\n             ^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 643, in http_error_default\n    raise HTTPError(req.full_url, code, msg, hdrs, fp)\nurllib.error.HTTPError: HTTP Error 429: Too many requests (f061ab2)\n"
+ },
+ "rua": {
+  "err": "             ^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 563, in error\n    return self._call_chain(*args)\n           ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 496, in _call_chain\n    result = func(*args)\n             ^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 643, in http_error_default\n    raise HTTPError(req.full_url, code, msg, hdrs, fp)\nurllib.error.HTTPError: HTTP Error 429: Too many requests (f061ab2)\n"
+ },
+ "motta": {
+  "err": "             ^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 563, in error\n    return self._call_chain(*args)\n           ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 496, in _call_chain\n    result = func(*args)\n             ^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 643, in http_error_default\n    raise HTTPError(req.full_url, code, msg, hdrs, fp)\nurllib.error.HTTPError: HTTP Error 429: Too many requests (f061ab2)\n"
+ },
+ "gilmar": {
+  "err": "             ^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 563, in error\n    return self._call_chain(*args)\n           ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 496, in _call_chain\n    result = func(*args)\n             ^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.11.18/x64/lib/python3.11/urllib/request.py\", line 643, in http_error_default\n    raise HTTPError(req.full_url, code, msg, hdrs, fp)\nurllib.error.HTTPError: HTTP Error 429: Too many requests (f061ab2)\n"
+ }
+}
