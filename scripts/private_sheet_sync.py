@@ -46,7 +46,7 @@ def append_missing(sheet_id, tab, rows, google):
     return len(additions)
 
 def main():
-    origin = os.environ.get('REVIEW_ORIGIN', 'https://plp299-nota-aos-deputados.vercel.app')
+    origin = os.environ['REVIEW_ORIGIN']
     assert origin.startswith('https://') and '/' not in origin[8:]
     google = get_token()
     identity = oidc_token()
