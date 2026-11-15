@@ -1,0 +1,30 @@
+name: tmp-dino-curto
+on:
+  push:
+    branches: [tmp-dino-6x1]
+    paths: ['tmp/dino_curto/narration.json', 'tmp/dino_curto/build.py', 'tmp/dino_curto/buscas.json', '.github/workflows/tmp-dino-curto.yml']
+permissions:
+  contents: write
+concurrency:
+  group: tmp-dino-curto
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+      - run: pip install edge-tts pillow
+      - working-directory: tmp/dino_curto
+        run: mkdir -p out && (python build.py || echo BUILD_FAILED >> out/log.txt)
+      - name: commit outputs
+        if: always()
+        run: |
+          git config user.name "priihigashi"; git config user.email "mcfollingproperties@gmail.com"
+          git add tmp/dino_curto/out
+          git commit -m "tmp dino curto outputs [skip ci]" || true
+          git pull --rebase || true
+          git push
