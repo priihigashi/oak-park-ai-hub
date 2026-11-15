@@ -38,6 +38,7 @@ except Exception:
 for f in os.listdir('out'):
     if (f.startswith('s') and f.endswith('.mp3')) or f in ('gap.mp3','list.txt'): os.remove('out/'+f)
 
+# ---------- fotos ----------
 UA = {'User-Agent': 'ReelResearchBot/1.0 (news reel image lookup; python-urllib)'}
 import time
 def get(url):
@@ -63,7 +64,7 @@ def license_of(fname):
 targets = {
  'dino': ('pt','Flávio Dino'), 'moraes': ('pt','Alexandre de Moraes'), 'carmen': ('pt','Cármen Lúcia'),
  'stf': ('pt','Supremo Tribunal Federal'), 'congresso': ('pt','Palácio do Congresso Nacional'),
- 'rua': ('pt','Rua 25 de Março'), 'motta': ('pt','Hugo Motta'), 'gilmar': ('pt','Gilmar Mendes'),
+ 'rua': ('pt','Rua 25 de Março'), 'motta': ('pt','Hugo Motta'), 'gilmar': ('pt','Gilmar Mendes'), 'fux': ('pt','Luiz Fux'),
 }
 from PIL import Image
 lic = {}
@@ -82,4 +83,6 @@ for k,(lang,title) in targets.items():
     except Exception as e:
         import traceback; lic[k] = {'err': traceback.format_exc()[-600:]}
 json.dump(lic, open('out/licencas.json','w'), ensure_ascii=False, indent=1)
+
+# ---------- recorte de cabeça ----------
 print(open('out/licencas.json').read())
