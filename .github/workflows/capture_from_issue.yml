@@ -38,7 +38,7 @@ jobs:
           # Strict defaults: only transcribe; no publishing or downstream queue.
           cmd = ["gh", "workflow", "run", "capture_pipeline.yml", "--repo", os.environ["GH_REPO"], "--ref", "main",
                  "-f", "url="+url, "-f", "project=brazil", "-f", "mode=transcribe_only",
-                 "-f", "notes=Compare transcript with Lula x Moro triplex case study; assess part 2."]
+                 "-f", "notes="+(body[:1800] if body else "Transcribe and preserve source for future content.")]
           subprocess.run(cmd, check=True)
           print("Dispatched transcribe_only Capture for", url)
           PY
