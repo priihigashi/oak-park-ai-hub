@@ -4,7 +4,7 @@ name: Capture from GitHub Issue
 # creating a private-repository issue. No user-provided shell code is executed.
 on:
   issues:
-    types: [opened]
+    types: [opened, edited]
 
 permissions:
   actions: write
