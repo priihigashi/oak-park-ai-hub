@@ -1,0 +1,44 @@
+name: Capture from GitHub Issue
+
+# This bridge lets the GitHub connector request an existing Capture job by
+# creating a private-repository issue. No user-provided shell code is executed.
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  actions: write
+  contents: read
+  issues: read
+
+jobs:
+  dispatch:
+    if: >-
+      github.event.issue.user.login == 'priihigashi' &&
+      startsWith(github.event.issue.title, '[capture]')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate reel URL and dispatch transcribe-only Capture
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, os, re, subprocess, sys, urllib.parse
+          body = os.environ.get("ISSUE_BODY", "")
+          urls = re.findall(r"https://(?:www\.)?(?:instagram\.com/reel|instagram\.com/p|youtu\.be|youtube\.com/watch|tiktok\.com/[^\s]+)/(?:[^\s<>]+)", body, re.I)
+          if len(urls) != 1:
+              sys.exit("Expected exactly one supported video URL in issue body")
+          url = urls[0].rstrip("),.]")
+          parts = urllib.parse.urlparse(url)
+          if parts.scheme != "https" or parts.hostname not in ("www.instagram.com", "instagram.com", "youtu.be", "youtube.com", "www.youtube.com", "tiktok.com", "www.tiktok.com"):
+              sys.exit("Unsupported video URL")
+          # Strict defaults: only transcribe; no publishing or downstream queue.
+          cmd = ["gh", "workflow", "run", "capture_pipeline.yml", "--repo", os.environ["GH_REPO"], "--ref", "main",
+                 "-f", "url="+url, "-f", "project=brazil", "-f", "mode=transcribe_only",
+                 "-f", "notes=Compare transcript with Lula x Moro triplex case study; assess part 2."]
+          subprocess.run(cmd, check=True)
+          print("Dispatched transcribe_only Capture for", url)
+          PY
