@@ -59,3 +59,4 @@ for skill in children(root):
     for sub in children(skill["id"]):
         if sub["mimeType"] == FOLDER and sub["name"].lower() in ("chatgpt", "improved"):
             dump(sub["id"], os.path.join("chatgpt_dump", skill["name"], sub["name"]))
+# trigger snapshot
