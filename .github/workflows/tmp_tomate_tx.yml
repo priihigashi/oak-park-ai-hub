@@ -1,0 +1,78 @@
+name: tmp tomate tx
+on:
+  push:
+    branches: [tmp/tomate-tx]
+    paths: [".github/workflows/tmp_tomate_tx.yml"]
+permissions:
+  contents: write
+jobs:
+  go:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4.2.2
+        with: {ref: tmp/tomate-tx}
+      - uses: actions/setup-python@v5.6.0
+        with: {python-version: "3.11"}
+      - run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+      - run: pip install -q yt-dlp faster-whisper requests pillow
+      - name: download
+        env:
+          PRI_OP_IG_COOKIES: ${{ secrets.PRI_OP_IG_COOKIES }}
+          APIFY_API_KEY: ${{ secrets.APIFY_API_KEY }}
+        run: |
+          mkdir -p out
+          cd scripts/capture
+          python - <<'PY'
+          import video_downloader as v, shutil, inspect
+          print(inspect.signature(v.download_url))
+          res = v.download_url("https://www.instagram.com/reel/Df4d-mOz34y/")
+          print(res)
+          items = res if isinstance(res, list) else [res]
+          for r in items:
+              p = r.get("local_path") if isinstance(r, dict) else None
+              if p:
+                  shutil.copy(p, "../../out/reel.mp4"); break
+          PY
+          cd ../..
+          ls -la out
+      - name: transcribe
+        run: |
+          python - <<'PY'
+          import json
+          from faster_whisper import WhisperModel
+          m = WhisperModel("large-v3", device="cpu", compute_type="int8")
+          segs, info = m.transcribe("out/reel.mp4", language="pt", word_timestamps=True, beam_size=5,
+              initial_prompt="Tomate a 22 reais. Fiz o L. Dissonância cognitiva. A Revolução dos Bichos, George Orwell, o cavalo Boxer.")
+          out = []
+          with open("out/transcript.txt", "w") as f:
+              for s in segs:
+                  f.write(f"[{s.start:6.2f}-{s.end:6.2f}] {s.text.strip()}\n")
+                  out.append({"start": s.start, "end": s.end, "text": s.text, "words": [[w.word, round(w.start,2), round(w.end,2)] for w in s.words]})
+          json.dump(out, open("out/transcript.json", "w"), ensure_ascii=False, indent=0)
+          PY
+          cat out/transcript.txt
+      - name: frames
+        run: |
+          mkdir -p out/frames
+          ffmpeg -loglevel error -i out/reel.mp4 -vf "fps=1,scale=270:-1" out/frames/f_%03d.jpg
+          python - <<'PY'
+          from PIL import Image, ImageDraw
+          import glob
+          fs = sorted(glob.glob("out/frames/f_*.jpg"))
+          for k in range(0, len(fs), 30):
+              chunk = fs[k:k+30]; cols = 10
+              W, H = Image.open(chunk[0]).size
+              sh = Image.new("RGB", (cols*W, ((len(chunk)+cols-1)//cols)*H))
+              for i, p in enumerate(chunk):
+                  im = Image.open(p); d = ImageDraw.Draw(im); d.rectangle([0,0,44,14], fill="black"); d.text((2,1), f"{k+i}s", fill="yellow")
+                  sh.paste(im, ((i%cols)*W, (i//cols)*H))
+              sh.save(f"out/sheet_{k:03d}.jpg", quality=72)
+          PY
+          ffprobe -v error -show_entries format=duration -of csv=p=0 out/reel.mp4 > out/duration.txt
+      - name: commit
+        run: |
+          mkdir -p tomate_out && cp out/transcript.* out/sheet_*.jpg out/duration.txt tomate_out/
+          cp out/reel.mp4 tomate_out/reel.mp4
+          git config user.name "tomate-bot"; git config user.email "bot@example.com"
+          git add tomate_out && git commit -m "tomate tx output" && git push origin HEAD:tmp/tomate-tx
