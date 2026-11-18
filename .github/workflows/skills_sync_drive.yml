@@ -1,0 +1,29 @@
+name: Skills Sync to Drive
+
+on:
+  push:
+    branches: [main, skills/colonization-br-mirror]
+    paths:
+      - 'skills/colonization-br/**'
+      - 'skills/README_reels_carrosseis.md'
+      - 'scripts/skills_sync_drive.py'
+  workflow_dispatch:
+    inputs:
+      note:
+        description: 'O que mudou (linha nova no Skills Tracker)'
+        required: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install google-auth google-api-python-client
+      - name: Mirror to Drive
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+          TRACKER_NOTE: ${{ github.event.inputs.note }}
+        run: python scripts/skills_sync_drive.py
