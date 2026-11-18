@@ -1,0 +1,4 @@
+interface:
+  display_name: "Reel Editorial Vox"
+  short_description: "Criar reels em colagem jornalística com o Kit Vox"
+  default_prompt: "Use $reel-editorial-vox para criar ou revisar um reel editorial em colagem."

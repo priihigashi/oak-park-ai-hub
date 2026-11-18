@@ -1,0 +1,63 @@
+{
+  "style": "reel-editorial-guiado",
+  "source": "/Users/priscilahigashi/.agents/skills/reel-editorial-guiado",
+  "files": [
+    {
+      "path": "SKILL.md",
+      "sha256": "6d40bcec0de3fd60caa4a2313dd77a6437573d794d6ab6ec0400d962c489bbb3",
+      "bytes": 3742
+    },
+    {
+      "path": "references/processo-v4.md",
+      "sha256": "a413eb2c086aa41cc508f76f9e0451ad149bcdb03fafde384d36c35f0974f7d1",
+      "bytes": 10372
+    },
+    {
+      "path": "assets/base-v4/index.html",
+      "sha256": "6926af8058b54b5a9b086f5516b20eb4827a933dec02c605981908fcd5932ec9",
+      "bytes": 3446
+    },
+    {
+      "path": "assets/base-v4/preview.js",
+      "sha256": "3b7087d35c9f7b76a7a300f9274a3b71e06476b428021dd3a204c8f5f579df69",
+      "bytes": 9655
+    },
+    {
+      "path": "assets/base-v4/voz.mp3",
+      "sha256": "e55b113532af930db8895f8d4dcdc4f57974dac06242b3170ce17181272a6fb0",
+      "bytes": 278784
+    },
+    {
+      "path": "assets/base-v4/cenas.json",
+      "sha256": "6350835f529332e6090dab9fffded36794be32b4d9e2e7e2146e09125ea31762",
+      "bytes": 2082
+    },
+    {
+      "path": "assets/base-v4/manrope-800.ttf",
+      "sha256": "a8291b05b2732801abdbbb6d06866c57431c3b990638462423e692151b5e0895",
+      "bytes": 96816
+    },
+    {
+      "path": "assets/base-v4/data.js",
+      "sha256": "b1e10da2bd9825372bb2d364da26ca60b1d5fe823ea1ac9bf5f519ed8d8aba5a",
+      "bytes": 617449
+    },
+    {
+      "path": "assets/base-v4/style.css",
+      "sha256": "395f49d09c346ec8667f6c1af6d95b787d5213b0d673e13e24342bf518007b4c",
+      "bytes": 6402
+    },
+    {
+      "path": "assets/base-v4/palavras.json",
+      "sha256": "a25e561102168ec1ea59a94e0294799b2357f4e1d60e36df94c5a972febc8709",
+      "bytes": 5356
+    }
+  ],
+  "original_skill_sha256": "6d40bcec0de3fd60caa4a2313dd77a6437573d794d6ab6ec0400d962c489bbb3",
+  "revised_skill_sha256": "4e01b8122d15876c2869c333c3d7100a0034e721cc32052b8f8cbac6251eaee9",
+  "changes": [
+    "Somente nota de durabilidade/precedência inserida após YAML; corpo original integral preservado."
+  ],
+  "authorship": "Cópia local em uso no Codex; não comprova autor original.",
+  "drive_status": "pending_existing_ChatGPT_folder"
+}

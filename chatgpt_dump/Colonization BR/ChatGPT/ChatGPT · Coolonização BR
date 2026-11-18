@@ -1,0 +1,1289 @@
+# Coolonização BR · ChatGPT · 2026-11-18-v1
+
+Snapshot de instruções para leitura, sem instalar nem afirmar execução. Regras-priih prevalecem. Formato e acabamento são separados. Para Vox, carregar também a skill Vox, não fingir que BR por si só aplica o efeito.
+
+
+# ARQUIVO regras-priih/SKILL.md
+
+---
+name: regras-priih
+description: Regras fixas da Priih para TODO conteúdo (reels, posts, checagem política, design, voz, postagem, Drive). Ler antes de qualquer outra skill de conteúdo, news Brasil, UGC ou página/site.
+---
+
+# Regras da Priih (base de tudo)
+
+Leia SEMPRE antes de começar qualquer conteúdo. Estas regras vencem o padrão de qualquer outra skill quando houver conflito.
+
+1. `references/preferencias-gerais.md`: jeito de trabalhar, design, regras de base dos reels, voz.
+2. `references/reels-politicos-checagem.md`: checagem política, vereditos, auditoria com ChatGPT, chips de ideologia.
+3. `references/reels-visual-som-final.md`: layout, storytelling, som, final (CTA), zonas seguras.
+4. `references/postagem-drive-ferramentas.md`: página, collabs, Metricool, Drive, GitHub, Vercel.
+
+Leia só o(s) arquivo(s) que o pedido precisa (ex.: reel político = 1 + 2 + 3; agendar post = 1 + 4).
+
+Quando ela corrigir algo que vira regra fixa: acrescente uma linha no arquivo certo (nunca apague nem reescreva o que já existe) e avise em uma frase.
+
+
+# ARQUIVO regras-priih/references/_nota.md
+
+Estas regras vieram da memória do Claude da Priih (15/nov/2026). São regras dela, ditas por ela. Quando ela corrigir algo, atualize o arquivo certo aqui (só acrescentar, nunca apagar).
+
+
+# ARQUIVO regras-priih/references/postagem-drive-ferramentas.md
+
+# Postagem, Drive e ferramentas (News Brasil)
+
+## Página
+- Nome: "Tentando chegar até você" (@tentandochegaratevoce: Instagram, TikTok, Facebook). Página em inglês: @tryingtoreach.you (adaptar pros EUA).
+- Público no Brasil: horários em horário de Brasília. Espaçar posts no mínimo 3 h. Mesmo assunto não se repete em menos de 10 posts.
+- "Posta" = publicar agora. Ela não faz nada no pipeline: você renderiza, hospeda, sobe e agenda. Ela quer assistir o MP4 final uma vez antes de postar (deixar o post pronto sem horário até ela aprovar).
+- Postar em Instagram + TikTok + Facebook (e YouTube Shorts quando configurado).
+- Legenda de post de news começa com "COMPARTILHA NOS STORIES", recomenda criar lista de Melhores Amigos pra alcançar a família, depois o conteúdo. Evitar o nome do presidente atual e de políticos nas hashtags; evitar escrever "Trump". Nunca mencionar IA.
+- 1º comentário fixado: começa com o COMENTA (ex.: "comenta o nome da sua cidade..."), linha ".", linha ".", depois poucas fontes fortes. 2º comentário ela posta manualmente.
+- Collabs atuais em reels políticos: @brasilforadacaverna, @projeto.contraponto, @13mulheres, @LuzManifesto, @PortaVozLulaBR, @342artes (collab). Tags quando faltar vaga: @andrezaoliveira.pe, @brics_brasil, o político em destaque. Collab só pra contas aliadas da causa. Lista viva na aba "🤝 Collabs e marcações" da planilha News — Content Control. Trial reels: sem collab.
+- Metricool: copiar o arquivo final pra pasta pública temporária "Metricool public" (Drive ID 1_i1tkJDOz0LNKsWOvcNnAmSmDhll2SQ3), agendar pelo link, depois mandar a cópia pro lixo. Links públicos no GitHub também são temporários. "Instagram: ERROR" no Metricool pode ter postado mesmo assim.
+- Trial reels: pelo Metricool não dá (conta < 1K); ela posta do celular, precisa do arquivo pra baixar.
+- Depois de postar (skill reel-fechamento): uma versão final só, MP4 + capa + fonte da prévia na pasta do Drive, linha do tracker preenchida com conteúdo real; erros achados depois ficam registrados; prova da fonte (print com data) salva na pasta.
+- Ações que os posts pediram (consultas, PLs, e-mails): aba "🗳 Acompanhamento das ações"; revisar um mês depois.
+- Links que não deu pra baixar: aba "📥 Vídeos pra baixar".
+
+## Drive (News)
+- Shared drive News. Reels Brasil: News > Brazil > Reels_Shorts > v<N>_<slug> (pasta com ROTEIRO, TRANSCRIÇÕES, resources/, png/, motion/).
+- Pesquisa sobre político: pasta com o nome da pessoa dentro de News > Brazil.
+- Planilha de ideias/conteúdo: "News — Content Control" (News drive), não a Ideas & Inbox.
+- Fotos de políticos: News > "Políticos · Fotos" (ID 1p8NJEsfgyqdNabXwVTOWV8ZqJ__Rng64). Recortes de rosto em News > Templates (nunca apagar).
+- Nunca salvar no My Drive como destino final. Upload de arquivo: OAuth Python ou Composio Workbench (upload_local_file → GOOGLEDRIVE_UPLOAD_FILE), sempre supportsAllDrives=True. NUNCA create_file com content= (cria arquivo vazio).
+- Arquivos: só acrescentar/atualizar seções; nunca sobrescrever nem apagar texto existente.
+
+## Ferramentas
+- GitHub: priihigashi (repos privados). oak-park-ai-hub tem workflows: conselho.yml (auditoria ChatGPT), downloader de reels, replicate_batch.yml (secret PRI_OP_REPLICATE_API_KEY). Antes de pedir chave de API, olhe os GitHub Secrets.
+- Vercel: conta priihigashi; token "claude" guardado como secret FINANCE_VERCEL em priihigashi/priscila-workspace.
+- Composio: Sheets (passar `account` explicitamente; `googlesheets_allyl-rearm`), Calendar, GitHub, Outlook (Hotmail dela), Vercel.
+- Metricool: marca tentandochegaratevoce.
+- Tudo documentado em Drive e/ou GitHub pra que Claude e ChatGPT continuem de onde o outro parou.
+
+
+## 17/11/2026 · Preservação de ideias pesquisadas
+Usar a aba existente 🔎 Research / Content Ideas de News Content Control, sem criar planilha duplicada. Separar “Vídeo iniciado?”, etapa da pesquisa e etapa da produção; guardar motivo do adiamento, pasta, Resources, próxima ação, ID e histórico. Pasta de conteúdo ainda sem produção usa “(ideia de vídeo) nome do assunto”, dentro de News, com Resources contendo fontes, transcrição ou link canônico e materiais para retomar. Encontrar história não autoriza criar. Retomar lendo pesquisa e materiais existentes e somente produzir quando ela pedir criar. Não apagar o histórico quando a produção começar. A lista ganhou esses campos em K:T, em células previamente confirmadas vazias.
+
+
+# ARQUIVO regras-priih/references/preferencias-gerais.md
+
+# Preferências gerais da Priih (valem pra tudo)
+
+## Jeito de trabalhar
+- Fala muito por voz no celular: respostas curtas no celular. Tem TDAH: uma próxima ação clara por vez.
+- Executa antes de perguntar; prefere autonomia, sem perguntas desnecessárias.
+- Confere documentos existentes antes de pedir pra ela repetir algo.
+- Captura ideias paralelas no meio da conversa (nunca deixar ideia se perder).
+- Quando ela faz brainstorm, não só executa: procura a melhor opção e sugere algo melhor.
+- Salva as palavras ORIGINAIS dela de cada pedido (aba "🎙 Original (raw)" na planilha "Equipe · Feedback e Qualidade"); quando ela diz "não foi isso", relê o original.
+- Nunca larga o que ela pediu: ao cortar conteúdo, mantém o que ela pediu (se tirar, avisa e devolve). Ao adicionar algo numa lista, não remove o que já estava.
+- Ela é muito visual e não lê planos longos: pra trabalho visual, olha os designs recentes dela e entrega até uma prévia visual, em vez de mandar números/roteiros pra ler.
+- Quando o computador dela estiver offline, não trava: usa os caminhos pela nuvem.
+- Todo lembrete vai também pro Google Calendar.
+- E-mails que ela vai mandar: parecem escritos por ela, sem sinal de IA; sempre mostra o rascunho antes de enviar.
+- Sem travessão (em dash) em nenhum texto pra ela; sem dois-pontos nos comentários que ela posta; nesses comentários, números aproximados e descrições simples (nada de número exato ou nome oficial de lei, parece IA).
+- Pesquisa: cuidado com fonte partidária única (ex.: Fox News é de direita); corroborar com outras.
+- Quando existe estudo sobre o tema, sempre apresentar ("eu sempre gosto de apresentar estudo").
+- Imagens que a IA não consegue gerar: dar um prompt exato pro ChatGPT (citando imagens de inspiração numa pasta do Drive) + link da pasta; se ficar ruim, tentar ferramenta paga (ex.: Replicate).
+- Links do Instagram que ela manda: baixar você mesmo (o pipeline do GitHub oak-park-ai-hub tem downloader), não pedir pra ela subir.
+- Toda página/site/dashboard: responsivo (monitor grande, laptop, celular).
+
+## Visual e design
+- Fontes modernas, limpas, bold, levemente arredondadas (não muito; não gosta de fonte "gordinha").
+- Títulos preenchem as linhas por igual (nada de linha com 1-2 palavras); nunca deixar a frase colorida sozinha numa linha e o resto em outra.
+- Números grandes lado a lado começam na mesma altura, não importa o tamanho do texto embaixo.
+- Texto pequeno que precisa ser lido fica um pouco maior por padrão (ela vê num iPhone Pro Max; celulares menores sofrem). Fine print pode ser pequeno mas sem borrar.
+- Cor tema por dia da semana (dia em que a peça é feita): seg amarelo #FFD34D, ter rosa #FF5FA8, qua verde #4ADE80, qui laranja #FF8A3D, sex azul-céu #5BC0FF, sáb lilás #B48CFF, dom coral #FF6B57. Conteúdo político pula azul/coral (cores de partido) e usa a cor do dia seguinte. Preto, branco e vermelho continuam como fundos.
+
+## Reels: regras de base (detalhes nos outros arquivos)
+- Antes de renderizar MP4: prévia ao vivo (tamanho de celular, áudio sincronizado, play/seek, botões de pular 5/10/30 s, velocidades 1 / 1,05 / 1,1 / 1,2 / 1,5 / 2 / 3x desde a 1ª versão). Republica no mesmo link a cada rodada dizendo o que mudou; nova versão mantém a anterior intacta. MP4 só depois dela aprovar.
+- Toda prévia tem: botão de download (vídeo quando existir), campos prontos pra copiar com a legenda e o primeiro comentário, e uma caixa de notas embaixo dos botões de velocidade com botão de copiar (o texto copiado começa com título, ID e link da peça).
+- Conteúdo 10% pra dentro das bordas; texto de cima baixo o bastante pra não bater no @/collab do IG; legenda baixa, inteira na tela, só a palavra atual fica amarela; zero sobreposição; poucas caixas; linha de fonte sempre no mesmo lugar, bem embaixo, abaixo do @handle; nunca escrever "imagens geradas por IA"; look premium, editorial, feito por humano; nenhuma imagem repetida no vídeo; números com ponto de milhar.
+- Nunca escrever nem falar o nome do presidente atual: usar "governo atual" + 🦑 (na tela, uma lulinha desenhada fofa, não o emoji). O anterior (Bolsonaro) pode ser nomeado. Leis terminam com "sancionada pelo presidente".
+- Cores: amarelo #FFD34D, vermelho #FF4A3D, branco; governo anterior = azul royal (nada de azul acinzentado).
+- Legenda falada: sempre duas linhas cheias por página, equilibradas, com a cor seguindo a voz palavra por palavra.
+- Revisar texto na tela, legendas e narração por palavras que fazem o Instagram cortar alcance; trocar por palavras seguras.
+- Informação mais importante dentro do 1º minuto (é o que o story permite); os 10 primeiros segundos já ensinam algo do tema; contexto depois como desvio curto ("pra você entender isso...").
+- Narração: números grandes arredondados ("cerca de 60 mil"; prefere "cerca" a "aproximadamente"); anos exatos. TSE se fala "tê-ésse-é"; "bets" se fala "béts".
+- Rascunho de voz: voz grátis MS Andrew Multilingual (masc.) ou Thalita, NUNCA Francisca, até ela aprovar o vídeo todo. ElevenLabs só no final aprovado: sempre 1 take (generations_count=1), nunca Davi Menegon (1yAZgIF8C92U9qOmXARZ) nem Silas Lemos (mP51FBaz7jxNEIeFJwxX); entrega calma e suave, sem tags de emoção.
+- Roteiro em frases corridas como conversa ("funcionou porque..."), não pergunta-pausa-resposta; espelhar como ela fala; evitar o vício "rapidinho".
+- Gráficos: explicar pro público como ler (subiu, pico, caiu; políticas levam anos). Comparar governos esquerda x direita NO MESMO gráfico, mandato sobre mandato (eixo x = ano do mandato, uma linha por mandato, cor por lado). Comparações de dados sempre no mesmo período/mês, e dizer isso ao público.
+- Toda pessoa na tela: nome + partido + chip de ideologia (azul direita / vermelho esquerda). Ideologia segue a classificação do partido (Bolognesi et al.), não as alianças; explicar a classificação em vez de suavizar.
+- Comparação política: exemplo de um lado sempre com o equivalente do outro (melhor x melhor, pior x pior); red-team de cada ponto e antecipar contra-argumentos conhecidos em fine print legível, a não ser que isso entregue um argumento que eles não usam.
+- Dizer de quem é a responsabilidade (estado, federal, município); se dizem "o federal não ajudou", dizer se dinheiro foi enviado e se foi aplicado.
+- Público tem viés de confirmação: dizer a conclusão em voz alta (crédito explícito quando o governo atual fez algo bom; "não dá pra culpar um presidente só" quando subiu nos dois). Sem rótulo acusatório; preferir tom sutil/reflexivo.
+- Explicar conexões e "qual é o problema disso?" cedo e bem simples ("você tá falando com criança"), com mapas de conexão cabeça a cabeça.
+- Ser específico: contagens concretas de pessoas (quantos, qual partido, nomes) em vez de porcentagens abstratas.
+- "Plantar sementinhas": fatos extras como frases curtas ou fine print dentro das cenas existentes, nunca uma página nova por tema, nunca alongar o reel. Quando ela manda um lote de pontos, planejar onde encaixa antes de mexer.
+- Gancho de checagem que funciona: afirmar a alegação como o outro lado escreveria ("venham ver a pior queimada do século"), não como pergunta.
+- Termos técnicos: usar o termo real (até em inglês, ex. "gerrymandering") seguido da explicação simples com imagem concreta. Alvo: um adolescente, a avó dela e quem não sabe nada de política entendem. Cada trecho (5 s, 10 s...) dá um motivo pra continuar.
+- Conteúdo de "historinha"/bonequinho: perguntar se é 2D ou 3D antes (3D custa mais); em 2D ela prefere o "motion limpo"; testes baratos (trecho curto, sem agentes em paralelo); políticos em 3D = cabeça real em corpo de terno desde a 1ª versão; construir em HTML (prévia ao vivo) o máximo possível, Blender só quando o HTML não dá.
+- Assim que existir roteiro: criar a pasta do conteúdo (Brasil: News > Brazil > Reels_Shorts > v<N>_<slug>) com doc ROTEIRO (roteiro, explicação, visuais, fontes) e doc TRANSCRIÇÕES; responder com um prompt de auditoria pronto pra copiar com caminho e links (fatos, fluxo, tom de conversa, fácil de entender, termo técnico seguido de explicação simples), nunca um arquivo que ela tenha que abrir e copiar.
+- "Agenda": também sugerir se/quando repostar (notícia com prazo = sem repost; tema que segue quente = repost) e sugerir Reels de teste quando couber.
+
+- 16/11/2026, navegação de sites: antes de chamar um site de concluído, fazer auditoria do fluxo real em celular e computador. Verificar se a pessoa sabe por onde começar e qual é a próxima ação, se as cores ajudam a se localizar, se há contraste entre fundo e cartões, se o espaçamento e os níveis dos containers são claros. Preservar informação, reduzindo o que aparece ao mesmo tempo; evitar excesso de caixas dentro de caixas e fundos de cartões quase iguais ao fundo da página. Registrar capturas e corrigir os problemas encontrados.
+
+- 16/11/2026, documentação de conteúdo: em toda pasta/ROTEIRO de reel, preservar o pedido RAW integral da Priih no TOPO, nas palavras originais e em ordem, incluindo os feedbacks enviados durante a criação. A história e o roteiro do assistente vêm embaixo. Resumo ou lista de feedback não substituem o original. Nunca apagar ou sobrescrever texto existente; em docs já preenchidos, inserir o bloco RAW antes do conteúdo, preservando tudo abaixo.
+
+
+## 17/11/2026 · News e ideias que ainda não viraram vídeo
+Tudo de conteúdo News deve estar identificado como News, News Brasil ou News USA, nunca OPC. “Vamos ver só se tem algum assunto aqui” é pesquisa sem autorização de produção. Se tiver história, mas Priih pedir não criar por créditos ou prioridade, preservar a ideia, pesquisa e links, sem iniciar roteiro de produção, voz, animações ou MP4. Registrar motivo informado, sem inventar motivo que ela não deu.
+
+
+## 17/11/2026 · Player dentro do Painel da Manhã
+A interface externa do player deve seguir as cores, fontes, escala e modos claro/escuro do Painel da Manhã. A identidade editorial do vídeo fica dentro da prévia. Feedback original da Priih: “Eu acho que tá bom, você só não seguiu as cores e o design do painel da manhã, mas tá bom.” Aprovação do funcionamento do player não equivale à aprovação editorial de um vídeo ou autorização de MP4.
+
+
+## 17/11/2026 · Escopo de News e espelhos autorizados
+O repositório privado priihigashi/news é somente para criação de conteúdo de Brasil e EUA: ideias, pesquisa, transcrições, roteiros, auditorias, prévias das peças, assets e regras. Sites e aplicações usam o repositório privado separado priihigashi/news-sites. O Painel da Manhã continua no próprio repositório. A rotina automática de regras deve recusar outros repositórios, exclusões e caminhos de sites. Essa trava limita a rotina; a credencial GitHub CLI permanece mais ampla. GitHub é a fonte versionada e o pacote privado Codex é espelho: registrar caminhos e atualizar ambos no checkpoint de mudanças, sem declarar concluído um espelho que falhou.
+
+
+## 17/11/2026 · E-mails: aprovação obrigatória antes de cada envio
+Regra permanente da Priscila para todos os chats que carreguem estas instruções: nunca enviar e-mail, resposta, encaminhamento ou complemento sem antes mostrar o texto completo, remetente, destinatários e anexos e receber aprovação explícita para esse envio específico. Mesmo um pedido inicial para mandar e-mail não dispensa mostrar o texto e aguardar aprovação. Perguntas, conversa exploratória, reclamações, pensar em voz alta, pedidos de pesquisa e pedidos de verificar respostas não autorizam envio. Uma aprovação anterior não vale para outro e-mail, complemento, novos destinatários ou conteúdo alterado. Pode pesquisar, ler e preparar rascunho sem enviar. Esta regra prevalece sobre orientações de executar primeiro, autonomia, proatividade e skills de envio. Não afirmar que houve envio ou recebimento sem confirmação da ferramenta. Não prometer memória em todos os produtos ou chats existentes: informar exatamente quais instruções persistentes foram atualizadas.
+
+
+## 17/11/2026 · Capa obrigatória no Estúdio, inclusive sem vídeo
+Regra nova da Priih: toda peça, antiga ou nova, precisa aparecer com uma capa reconhecível no Estúdio e nas listas de conteúdo, mesmo antes de existir vídeo. Não deixar retângulo preto nem depender do título escrito só fora da capa. A capa pode ser simples: assunto/nome de localização e nomes das pessoas envolvidas, sem obrigação de reproduzir o título editorial final. Usar foto real da pessoa com foco central quando já disponível e pertinente. Sem foto, gerar capa tipográfica legível com identidade da marca; não inventar rosto, pessoa ou foto. Preservar capas já criadas e permitir título curto/nome das pessoas como metadados próprios. Quando não houver vídeo, avisar na capa “Vídeo ainda não disponível”. Se há prévia externa, sinalizar “Prévia no link”, sem afirmar que não existe. Falha no carregamento da imagem deve manter a capa tipográfica, nunca um vazio preto. Abrir player continua sendo ação explícita; capa não equivale a vídeo nem a aprovação.
+
+
+# ARQUIVO regras-priih/references/reels-visual-som-final.md
+
+# Reels: visual, storytelling, sound, endings, safe zones (her rules)
+
+## Visual / layout
+- Never leave a colored phrase alone on its own line. Every text block fills the line before wrapping; check ALL line breaks. Text in balloons/boxes is centered in the shape. Audit = screenshot the final card of each scene and fix alignment/breaks.
+- Text appears early enough to read; nothing new in the last ~1.5-2 s before a cut. Too much text = cut it. No fully static screen for more than ~3 s; reveal each text at the START of the sentence that mentions it.
+- Animations match the narration word by word (a list in the voice = one animated icon per item on its word). Plan beat by beat before building. Any chance for an animation or chart: do it unasked. Chart bars grow in one after another.
+- Big numbers, sometimes one word much bigger; modern + minimal; few text boxes; alternate font weights; consistent look.
+- Person cutouts: real photo head (never initials), big, thick white outline, slight wobble; no head when their own clip is on screen. Covers: half-body cutouts.
+- People without a party (economists, commentators): small positioning chip ("liberal, centro-direita"). Never anyone's @ in reels.
+- Fine print never near/below the caption. Collage kit sizes: fine print 23px, notes 24px, source 22px, sublabels 20px. Spread content full width and down to the caption; no gap above caption.
+- Phrases starting a block start with a capital letter.
+- Previews with speaker clips: real clips play in the preview. Previews built from someone else's video: tab with the full original video.
+- "Toque pra continuar assistindo" banner from 0:50 to 1:00 (+ "vendo pelo story? toque aqui"), below the caption and above the handle, light pulse, silent.
+- @tentandochegaratevoce handle: plain text, no pill, very bottom (black on light, white on dark).
+- Covers: grander than inside slides, readable in the profile grid; topic huge + main call big in the middle; deadline if any; overlays; don't repeat the last post's background color. Covers spark curiosity for BOTH sides, never give away the verdict. Made as soon as v1 of the video exists.
+- Part 2 videos look different (color, photos, cover).
+- AI images: no glitches (fake money, garbled text), people look Brazilian, shown with dignity; free/public images by default; temporary image with label if not found; paid AI (Replicate) only after her ok.
+- "Telas de descanso": rest screens with a giant edge-to-edge title + good image; giant poster type, vazado, light-yellow serif with sparkles.
+- Animated carousels: card 1 has everything on screen from frame 0 (it's the cover); ambient motion only.
+- When a reel runs long: don't remove on your own; scene notes in the preview with ⭐ keep / ◐ optional / ✕ would cut.
+- Credit nobody (creators, outlets) without asking her first.
+- Ask before lowering quality/fluidity to hit a deadline.
+- Cool vibe (coolonização): B&W photos with paper texture, duotone (orange/mustard + black), B&W with one element in color, half-body people, smooth motion, faded blacks, color as differentiator; palette options switchable in previews (orange, mustard, autumn). New templates go to the coolonização reference preview alongside the others, for every page.
+- One skill per visual style. Style references saved in Drive News > Templates > Estilos e Referências + GitHub.
+- News palette: no beige/cream backgrounds; Brazilian "raiz" colors; diverse, warm, smiling people.
+- Foreign-language clips: PT translation caption right under the speakers.
+- Clip cards: rounded corners + thin black outline slightly off and trembling; hide other outlets' logos; caption font less heavy.
+
+## Storytelling
+- Retention: hook in first ~3 s matching the cover; by ~10 s say what the viewer gets and start delivering; every ~15 s a reason to stay; partial reward mid-video; overall reward before the end.
+- Opening promise is clear, not cryptic ("por que isso acontece, quem tá por trás e o que a gente pode fazer").
+- No false balance; give gravity (chance of going wrong, how irreversible). If no balance can be determined, say so.
+- From the FIRST reference video: create the topic folder, save its transcription (all videos in one doc, appended), add to tracker; keep a running feedback list and reread it each version.
+- Our reel should be the best of all references; under ~3 min target; careful at 3:30-4 min; avoid 5 min.
+- Every narrated sentence has an image/animation. Mix styles (2D first; 3D only after the story is good, at the most engaging moments). Talking-head moments feel natural.
+- Explain a mechanism fully ONCE at the step where the doubt arises, then go fast, end with before/after recap.
+- Content should reach both sides; hardest audience = fearful right. Say the fear out loud first ("tem gente achando que...") then correct. Suggestions in optional tone ("você poderia pedir..."); attribute suggestions to third parties ("tem gente que sugere").
+- Never leave vague pointers ("isso", "daí") loose.
+- Objective narration: no process narration, short CTAs, no speeding the voice to fit; no backstage ("eu cortei o vídeo...").
+- Use her dictated wording lightly polished, keep her tics ("a gente verificou", "até o momento", "mas, sim", "e é isso que eu vou te mostrar"); avoid "tá rodando", "não é bem assim"; never use the defending side's praise words.
+- Layperson read separate from fact audit ("pé e cabeça"; explain term before using it; charts stay on screen long enough).
+- "Tá meio estranho / robotizado / sem flow" = push further toward her conversational way.
+- Compare reference videos line by line for lines that explain better; improve ours in our own words.
+- Say "ele" right after showing the person; repeat the name when saying something negative.
+- Make connections in the viewer's brain: remind them of the earlier fact a later one links to.
+
+## Sound
+- Every reel comes with low background music fitting the topic's culture (offer options), and SFX on key animations. Rotate music between videos. UGC calm music: lo-fi and marimba. No "tum tum tum" beats under news.
+- Narration as ONE continuous take, then split (no robotic sentence endings). Pauses always have narration or music.
+- Free draft voice first; paid voice only after full approval and after confirming which voice ("o Senhor", Senhor M.); send her the exact text before any paid re-record. Gentle voice cleanup only. Check balance/cost first.
+- Dubbed reels: voice gender matches the person; keep background ambience; keep burned-in subtitles.
+
+## Endings (CTA)
+- News CTA: "Pra ajudar a aumentar o engajamento, copia o link, curte, reposta aqui e nos stories, e segue a página pra não perder o próximo." Follow ask appears only once. Close with "e já segue pra mais conteúdo assim" only if not already asked.
+- Civic-action topics: say viewers can help; comments get every way to participate (e-mails, ready letter, links to vote on bills/consultas); invite them to write their own version. Prefer left-wing authors' bills.
+- The audit (folder, ROTEIRO, ChatGPT audit prompt, review) runs automatically whenever a reel skill starts.
+
+## Safe zones (1080x1920, Reels + Stories)
+- Text zone: x 150-915, y 268-1680. Nothing above y 268 (Stories header). Main text ends ~y 1500. Handle y 1626, source y 1668. Nothing below y 1840.
+- Reels viewer zooms ~1.3x (cuts ~52 px each side, ~105 px top); right buttons cover x > ~930 from y ~1060 down.
+- Approved layout: kicker 268, title 330, main panel 452-1152, legend 1512, footer 1572, handle 1626, source 1668.
+- Background can bleed; main elements never near the right edge.
+
+
+## Prévia de reel em player · correção da Priih em 16/11/2026
+Quando Priih pedir reel/prévia/player, a entrega precisa permitir ASSISTIR à montagem: palco vertical, voz grátis, clipes reais quando pertinentes, animações e legendas sincronizadas por palavra, play/pausa, busca, saltos, velocidades e notas. Página de roteiro, storyboard textual ou slides sem áudio não substituem o player. O roteiro e o plano ficam como apoio.
+`coolonizacao-br` define acabamento; combinar automaticamente com o formato pedido. Para a referência “o reel de divulgação do site que fizemos hoje”, ler `reel-editorial-guiado/SKILL.md` e sua base PLP299. Não exigir que Priih saiba ou invoque dois nomes. Preservar versões e testar a reprodução antes de entregar. MP4 final/voz paga continuam sujeitos à aprovação já estabelecida.
+
+
+### Entrega no celular · 16/11/2026
+Antes de entregar uma prévia à Priih, fornecer URL HTTPS acessível fora do computador, testar sem sessão autenticada e conferir áudio, clipes, busca e layout móvel no endereço hospedado. localhost, caminhos locais e ZIP no Drive são apoio técnico, nunca o único link para assistir no celular. Manter o endereço da peça nas revisões.
+
+
+## 17/11/2026 · Capa obrigatória no Estúdio, inclusive sem vídeo
+Regra nova da Priih: toda peça, antiga ou nova, precisa aparecer com uma capa reconhecível no Estúdio e nas listas de conteúdo, mesmo antes de existir vídeo. Não deixar retângulo preto nem depender do título escrito só fora da capa. A capa pode ser simples: assunto/nome de localização e nomes das pessoas envolvidas, sem obrigação de reproduzir o título editorial final. Usar foto real da pessoa com foco central quando já disponível e pertinente. Sem foto, gerar capa tipográfica legível com identidade da marca; não inventar rosto, pessoa ou foto. Preservar capas já criadas e permitir título curto/nome das pessoas como metadados próprios. Quando não houver vídeo, avisar na capa “Vídeo ainda não disponível”. Se há prévia externa, sinalizar “Prévia no link”, sem afirmar que não existe. Falha no carregamento da imagem deve manter a capa tipográfica, nunca um vazio preto. Abrir player continua sendo ação explícita; capa não equivale a vídeo nem a aprovação.
+
+
+# ARQUIVO regras-priih/references/reels-politicos-checagem.md
+
+# Political / fact-check reels and posts (her rules, verbatim from memory)
+
+- ChatGPT fact-check prompts: only check facts, don't hunt for arguments defending any side; report ONLY what is wrong. For content about attacks on women, don't defend sexist speech or add mitigating context. Review its audits critically: it sometimes defends politicians without full info, trusts false/incomplete/repeated articles, adds unnecessary caveats.
+- Facts harmful to women: never defend or minimize; ask how bad it would be for women if minimized; choose between stating it, a truly needed caveat, or explaining how problematic it is.
+- Political charts: right-wing government periods get dashed lines at start/end plus a very light blue background; extend the who-governed timeline back to earlier decades when the other side omits that the right controlled the state.
+- Don't just report a vote: investigate context (present? what he said before, freely or under pressure, his plan, proposals signed, likely allies).
+- Current president full drawn body = navy suit with trousers, head on collar (not a long black coat). Use the head cutout from the "Vai virar Venezuela?" reel, never the one from "Saidinha".
+- Other-country comparisons: give that country's actual figure with source.
+- Quote clips: cut to the key line but always show full context underneath (who asked, when, what was said).
+- Verdicts judge what the claim makes the audience conclude. Blaming the successor for something that started before = "Falso". Core is a lie = "Falso" even if context also missing; "Falta contexto" only for true-but-misleading. Imprecision against the speaker's own point isn't "Falso"; one that inflates in their favor leans "Falso". Same rule for both sides. Only flag a fact-checker's problem if verified; no artificial balancing. Be flexible with close numbers (130 vs 134 = true). Separate labels for partly true / fact + opinion.
+- Huge money figures: chart for scale + relatable reference (how many houses it buys).
+- A politician's excuse: say whether proven; if not, "não há prova, só a palavra dele". Avoid "would you accept this from the other side?" closers.
+- When a politician dodges: show him talking (fast-forwarded, last line at normal speed) before saying the question went unanswered.
+- Reels built on a speaker she backs: data is support only; true points stamped "Verdade"; no opinion/joke labels that pull off the point.
+- Placar reels: "Provavelmente" only on screen; narration says just "Fake." / "Meio termo." / "Verdade." One scoreboard per person.
+- Debunking a politician's posts: check whether he/his side voted for or against the very thing (nominal votes); no nominal vote = don't claim a position. Short "alfinetada" on his posture.
+- Research tips (e.g. AI prompt) go at the end, not the opening.
+- Debunk of a creator she disagrees with: don't name or credit him, no @, no collab, show him few times; neutral chip "Vídeo da direita". Never share the @ of anyone spreading disinformation anywhere.
+- First comments: few strong sources only (long lists make Meta cut reach). Direct official links, never bit.ly.
+- Appointed officials (STF etc.): show who appointed them or that they were elected; remind that appointment is a Senate vote; take the right's view of the group seriously.
+- Trial reels of an already-posted video need a changed caption. Trial reels get no collabs.
+- Vet regular people before featuring them (is the right trying to discredit them? anything wrong?).
+- Pros/cons explainers: every point gets an extra sentence on why it's good or bad.
+- Reference videos: go through every one and pull all critique points; they're for ideas/facts only, don't feature the people in them and never copy their example, analogy or opening line.
+- ChatGPT verification prompts: don't give our conclusion; include sources found (described by data), tell it to research on its own first, then check ours without limiting itself; don't refuse for lack of exact numbers, give best estimate. Cover story AND visuals in one shot (per scene "corrigir isso / colocar isso"), don't change the story much. Never rewrite our ROTEIRO: its own version goes appended at the end under "VERSÃO CHATGPT". Always ask: did we leave out any relevant point? easy wording? any line that invites "você não sabe como isso funciona" comments (misused terms, steps out of order, oversimplification)?
+- Whenever relevant (cesta básica etc.), say most of the PL voted against: ~3 main PL faces with a registered vote (prefer popular ones like Nikolas Ferreira); no registered vote = just "PL".
+- Estadão page: right-leaning, omits benefits, unbalanced blame; look for what it leaves out.
+- Repeat the exaggerations people hear in order to correct them, conversationally ("tem gente dizendo que... mas..."), varied phrasing.
+- Everyone a piece names gets a background check (does a committee member vote against the cause? suggest a third person if the one in charge doesn't fit). Unsure name = keep with caveat ("não temos certeza"), don't remove. Being Bolsonarista is an extra flag that shapes analysis.
+- Investigating who's behind a campaign: "works with both sides"/"no public money" proves nothing; dig into companies/business people; a piece that omits what the current government did can be an implicit attack. Each person found gets a card ("caguetar"), confirmed facts only, caveat tone.
+- Citizen letters: address who's responsible, CC a trusted person who cares (prefer left or non-Bolsonarista right); check Placar do Congresso for top parliamentarians.
+- Israel/Palestine: ChatGPT tends to side with Zionism, extra care. Alternatives: look first at left proposals; right-wing ones only if really good; wary of strongly Bolsonarista authors (e.g. Damares), can be shown as negative "vote NÃO".
+- Placar/fact-check method: define the accusation in the opening; find the person's real goal/position; check whether all elements together prove it (not just each true alone); hunt for omitted data; apply cognitive dissonance (how the opposing side would check it, what new arguments); then act as judge weighing support, data, studies, results. When numbers are true but conclusion isn't: "tem 3 verdades, mas a conclusão tá errada".
+- Proposals/systems (e.g. electoral reform): check whether other countries tried it and what happened.
+- Core mission: the press covers decisions one by one; "o nosso trabalho é pegar, achar e colocar junto essas informações" (connect separate decisions, licitações, bills).
+- Experts/commentators/outlets: investigate bias and interests ("um sincerão"); profile card on who they are (start or end), then callback ("lembra que eu falei que ele é isso?"); TV mostly invites market economists.
+- Critiquing left voices her audience admires (Jones Manoel, Glauber Braga): very respectful, acknowledge what they get right, critique level and proportion. Don't create a video just because; if weak, say so.
+- Technically true but irrelevant lines from the other side ("eu era o juiz do caso") don't earn "Verdade" or video time; weightier context first.
+- Fiscal/budget comparisons: like with like (same program, amount actually paid, both governments); check government sites before calling a cut negative; explain budget voted as a package when Congress cut it.
+- Never soften politicians or "balance" a negative fact with weak info; judge from the full record. Never say an institution "engavetou" without naming who (relator, committee, house president).
+- Party proposals: read the actual document (plano de governo on TSE/site).
+- Fact-checks of Flávio/the right: explain what it means for the viewer and briefly compare with Bolsonaro's record and the current government's on that topic.
+- Unprovable accusations: show who accused, when (e.g. months before an election), who used it politically.
+- Before classifying a claim as unconfirmed/false, check everywhere it could appear (incl. Instagram videos) and what the opposing side says; classify each point as fact, connection, or inference.
+- Scandal reels: name main people; say whether the current president is involved, low-key when he isn't.
+- US politicians to promote: only those who don't take AIPAC money; never Hakeem Jeffries.
+- "Rule of three": back a point with three examples.
+
+## Politician ideology chips (fix here when she corrects one)
+- Davi Alcolumbre (União Brasil-AP, presidente do Senado): centro-direita
+- Eduardo Braga (MDB-AM): centro
+- Party classification: Bolognesi et al., not DIAP.
+
+- 17/11/2026, correção da Priih no reel dos Correios: investigação precisa explicar para leigos o que aconteceu, o mecanismo, quem tomou cada decisão (nome, cargo, órgão, ato e data, sem se limitar ao presidente), quanto cada fator pesa quando houver base e a quem cabe responder. Procurar estudos, auditorias, propostas e andamento; atribuir responsabilidade no alcance da prova, sem usar incerteza para encerrar a apuração. Fechar com ação pública concreta: quem cobrar, por qual decisão ou proposta, e por qual canal. Não afirmar que ninguém propôs nada sem verificar.
+
+
+# ARQUIVO coolonizacao/SKILL.md
+
+---
+name: "coolonizacao"
+description: "Acabamento cool/editorial (fotos P&B, sticker recortado, papel, cor do dia num detalhe) por cima de qualquer formato de reel, mais o template Elenco P&B e o formato de checagem pausa e explica."
+---
+
+## Durabilidade e versão ChatGPT · 18/11/2026
+Esta é uma cópia versionada para ChatGPT/Codex; o original fica em `../original/`. Antes de concluir uma alteração, preservar nova versão no Drive Creations > Tools, Skills & Flows > Skills > Reels e Carrosséis > formato > ChatGPT (usar as pastas existentes criadas por Claude) E no GitHub privado `priihigashi/news`, em branch/PR sem merge. Conferir arquivo, pasta, tamanho/hash e links nos dois destinos; registrar pendência real se algum falhar. Nunca considerar apenas o arquivo local como entrega durável; GitHub não substitui Drive. Não sobrescrever versões existentes nem alterar a versão Claude. Consultar `MANIFESTO.json` e o índice desta entrega para origem e comprovantes.
+
+As regras atuais de `regras-priih` prevalecem sobre conflitos históricos abaixo, inclusive aprovação antes de MP4 e voz paga. Os arquivos locais citados no texto histórico não são presumidos disponíveis no celular. Dependências preservadas separadamente em `compartilhadas/`, sem fundir os formatos.
+
+
+# Coolonização
+
+Não é um estilo novo e NÃO substitui nada. É um acabamento padronizado que vai POR CIMA da skill de formato escolhida (pontilhado cinético, colagem, timeline, desabafos, motion limpo, doodle, livro ilustrado, estilo por referência...). Objetivo: sair da vibe fofinha/engraçadinha pra uma vibe cool, editorial, Gen Z, com cara de feita por gente e não "feita com IA".
+
+## Regra nº 1: não perder conquistas
+Tudo que já foi aprovado nos outros reels continua valendo e vence esta camada em caso de conflito:
+- Ciclo da reel-pasta-roteiro-auditoria (pasta, ROTEIRO com lista de feedback, TRANSCRIÇÕES, tracker, auditoria do ChatGPT, revisão visual), roteiro-storytelling, auditoria-dissonancia (político), reel-zona-segura, reel-som, reel-fechamento, auditoria-na-tela (recados leves na criação).
+- Prévia com velocidades, pulos de 5/10/30 s, caixa de anotações com marcar tempo e copiar, aba do vídeo original, download, legenda e 1º comentário.
+- Legenda de 2 linhas cheias com a palavra atual na cor do dia, banner de 0:50, CTA final, tamanhos mínimos (letra miúda 23 px, notas 24 px, fonte 22 px), conteúdo ocupando a tela até a legenda.
+- CTA final de News com a frase padrão, sempre igual: "Pra ajudar a aumentar o engajamento, copia o link, curte, reposta aqui e nos stories, e segue a página pra não perder o próximo." Ícones entrando na palavra, nesta ordem: Copia o link, Curte, Reposta, Segue (sem Salva). Vale igual na coolonização BR e é conferido na auditoria-na-tela.
+- Pessoas: recorte só de cabeça com contorno branco grosso, nome + partido + chip de ideologia; sem recorte quando o clipe da pessoa está na tela.
+- Fonte do kit: Rubik 800/900 + JetBrains Mono. Não trocar.
+Tudo que esta skill trouxer tem que MELHORAR a base, nunca piorar. Se uma ideia daqui vale pra todos os reels, sugerir a ela atualizar a skill base também.
+
+## Quando usar
+- Ela fala "coolonizar", "versão cool", "vibe cool", "deixa mais cool".
+- Sem pedido, NÃO aplicar.
+
+## Passo 0: referências (quando ela mandar reels de inspiração)
+- Baixar o reel (caminhos que já funcionaram: navegador do app no Mac com folha de quadros via canvas, ou capture_pipeline.yml / workflow temporário tmp-* com yt-dlp no oak-park-ai-hub, apagando o branch no fim).
+- Print de CADA tela: ffmpeg com detecção de troca de cena (`select='gt(scene,0.3)'`) + 1 quadro a cada 2 s nas cenas longas. Folha de quadros salva em News > Templates > Estilos e Referências, subpasta "Coolonizacao".
+- Ficha curta: como tratam as fotos, texturas, cores, tipografia, ritmo, como texto e imagem entram. Copiar o jeito, nunca a cena, personagem ou marca. Crédito a quem serviu de referência só com aprovação dela.
+
+## Tratamento de imagem (o coração da vibe)
+Três camadas, sempre nessa ordem:
+1. **Fundo: foto real em P&B.** Pessoas reais de corpo inteiro, cenas, detalhes (uma boca aberta, mãos, plenário, multidão). P&B com contraste alto, granulado e, se quiser, pontilhado. Pode virar loop curto (2–4 quadros ou trecho de vídeo em P&B).
+2. **Frente: objeto recortado.** Foto pública recortada ou objeto "quase real" gerado por IA (desenho realista mas não fotográfico: urna eletrônica, cofre, carteira de trabalho, microfone), com a mesma textura por cima pra parecer impresso.
+3. **Por cima de tudo: textura de papel** (multiply ~50%) + granulado. É isso que tira a cara de digital/IA.
+
+**Diferencial dela: a cor.** As referências são quase só P&B. Aqui entra a cor do dia, pouca: num detalhe (bloco atrás do objeto, uma palavra do título) ou o objeto colorido sobre o fundo P&B. Nunca a tela toda colorida. Político pula azul e coral.
+
+## Como conseguir cada imagem (nessa ordem)
+1. **Foto pública real, em mais de um banco (nunca só um):** Wikimedia Commons (API com `filetype:bitmap`; dá 429 se baixar rápido, esperar ~1 s entre arquivos), Agência Brasil (CC BY, creditar), Planalto, Câmara, Senado, Flickr com licença Creative Commons, rawpixel domínio público, Unsplash, Pexels e Pixabay (gratuitos; a API pede chave, então pelo navegador ou pedir a chave a ela), Openverse (busca vários bancos de uma vez; bloqueou no workbench, tentar do shell ou do Mac). Fotos do álbum dela só com autorização. Pra cada imagem, juntar 3 a 4 opções e mostrar lado a lado (folha de contato) antes de escolher; foto temporária também tem que combinar com a fala. Anotar licença e autor no ROTEIRO; crédito no 1º comentário quando a licença pedir. Se o shell não alcança, workbench do Composio ou branch temporário (apagar depois). Rostos de políticos: primeiro a pasta "Políticos · Fotos" no Drive de News.
+2. **Recorte:** rembg (birefnet-portrait pra pessoa, isnet-general-use pra objeto) com alpha_matting=True (fg 240, bg 10, erode 10). Depois o tratamento P&B + papel.
+**Regra de custo (dela, 12/nov/2026):** por padrão só imagem GRATUITA (passos 1 e 2). IA paga (Replicate) só depois que ela aprovar, cena por cena. No relatório da prévia, listar o que achei de grátis e o que recomendo gerar em IA, e esperar o ok dela. Quando esse fluxo for automatizado, essa conversa de aprovação continua existindo.
+3. **Não achou exatamente o que quer? Não travar:** pôr a melhor imagem temporária e marcar com recado 🔁 "Imagem temporária · recomendo refazer em IA" + o que a imagem final deveria mostrar (formato da skill auditoria-na-tela). Seguir o vídeo; a troca vem na conversa.
+4. **Gerar em IA (só com o ok dela; recomendado pra objetos e cenas que não existem em foto):** flux-1.1-pro pelo replicate_batch.yml (disparado via Composio GITHUB_CREATE_A_WORKFLOW_DISPATCH_EVENT). Prompt-base: "semi-realistic illustration of <objeto>, isolated on plain flat white background, soft studio light, slightly painterly, not photographic, high detail, centered with margin, no text, no logos". Recortar por flood-fill do branco ou rembg. Se não der pra gerar aqui, passar a ela o prompt exato pro ChatGPT + link da pasta de inspiração.
+- Nunca a mesma imagem duas vezes no vídeo. Nunca selo "imagem gerada por IA" na tela.
+- Sem rembg pesado no workbench do Composio (tem 1 GB de RAM e o processo morre): lá, recortar objeto de fundo claro por flood-fill da borda (scipy) e deixar o rembg pro shell local ou pro runner do GitHub.
+- Banco de stickers e fundos já tratados: Drive News > Templates > Estilos e Referências > Coolonizacao (1irSarOY8CL_xK4SFgHoCn_d2ZW-GBxhl), com fontes_e_licencas.json. Reaproveitar antes de buscar de novo; cada imagem nova tratada entra lá com a licença.
+
+## Stickers e movimento (regra de transição)
+- Sticker = recorte P&B com contorno de papel claro (~14 px), sombra curta deslocada e textura por cima.
+- Entrada "pop de papel": cai de cima girando uns 8°, quica 1 vez e assenta torto (−4° a 6°). Saída saindo de cena, nunca sumindo no lugar.
+- Na tela, todo sticker respira: balanço lento de 1° a 2°, sombra junto.
+- Profundidade: foto de fundo anda devagar (zoom de ~10% na cena), stickers andam o dobro, texto fica parado. Parece 3D sem ser.
+- Troca de cena por corte seco no ritmo da fala, ou por cortina (bloco preto ou de papel passa e já traz a cena nova). Nada de dissolver.
+- Recorte do fundo: o plenário (ou o cenário) some e só as pessoas recortadas ficam, viram stickers e vêm pra frente.
+- Entradas de 0,3 a 0,5 s com freada no fim; nada fica parado mais de 2 s sem algo se mexer.
+
+## Transição da palavra-chave vazada
+Quando a fala chega na palavra-chave do assunto (ex.: "qualificação" na pergunta "você acha que elas não estão lá por falta de..."): a cena mostra a foto/pessoas, a tela escurece, e a palavra entra gigante ocupando a tela, quebrada em linhas (QUA / LIFI / CA / ÇÃO), com a foto P&B vista POR DENTRO das letras (background-clip: text). A última linha pode vir na cor do dia. Letra com borda de tinta borrada e levemente imprecisa (filtro SVG: turbulência + deslocamento leve + blur de 1 px + corte de alfa).
+
+## Nossa identidade x a da referência (não copiar)
+Referência de vibe: página doantidoto (só como inspiração, nunca citar nem copiar). O que ELES fazem e a gente NÃO copia: a fonte deles (grotesca condensada borrada), palavra partida com hífen (HIPÓ-TESE, LIBER-DADE), legendinha amarela pequena no meio, capa só de palavra gigante no preto. O que é NOSSO:
+- Fonte do kit (Rubik 900) com o nosso filtro de tinta; palavra quebrada SEM hífen (regra de quebra dela continua).
+- Mais animação: eles quase só usam foto. A gente mistura foto/sticker com as cabeças recortadas, as pessoinhas andando e elementos 3D.
+- Um pouco de cor (a cor do dia num detalhe), mais tech.
+- **Diferencial principal: personagem 3D entre as camadas.** Foto mais atrás, sticker mais à frente, e um personagem 3D (cabeça real recortada em corpo de terno, regra do reel-3d-historinha) que ANDA entre elas, mostrando a profundidade e contando a história: assina a lei na frente, anda pra trás e muda o preço na bomba de gasolina lá no fundo, sai de cena e volta na próxima cena; ou carrega a caixa de precatórios pro ano seguinte. O personagem pode ser o próprio político de quem o vídeo fala, e pode fazer a troca de cena. Gráfico também pode ganhar um pouco de 3D. Construir em HTML (Three.js) sempre que der; Blender só se o HTML não chegar lá.
+- Ela gosta de misturar estéticas: não forçar uma só. A coolonização é o acabamento comum que deixa a mistura com cara de uma página só, inserida aos poucos.
+
+## Fase 2 (depois, não agora): Oak Park Construction
+Versão pra OPC com o Mike: cabeça real do Mike num corpo 3D, entrando na cena pra apresentar e corrigir ("não usa esse material, usa esse", "esse tá errado, esse tá certo"). É uma das opções de formato OPC, junto com as que já existem.
+
+## Acabamento cool (igual em qualquer estilo)
+- Fundo: papel cru (#F2EEE6) ou quase preto (#0B0B0C). Nada de pastel ou gradiente colorido.
+- Uma cor de destaque só (a cor do dia) + preto/branco (vermelho continua de apoio).
+- Título grande em Rubik 900, tracking um pouco apertado, linhas equilibradas, com o filtro de tinta borrada nos títulos grandes. Metadados em JetBrains Mono: EP.xx · TEMA · data, fonte (respeitando os tamanhos mínimos).
+- Entrada de texto por máscara (a palavra sobe de dentro da linha) ou digitação, entrando na palavra falada; nada de bounce ou pop fofo.
+- Elementos editoriais: linha de metadados no topo, letreiro rolando (ticker) com fonte/assunto, chips de borda fina, barras de progresso.
+- Pontilhado como textura (máscara suave, girando ou pulsando devagar).
+- Ritmo: cortes mais secos, menos elementos por tela, sem deixar vazio acima da legenda.
+- Proibido (cara de IA): gradiente roxo/azul, brilhos, ícones genéricos, sombra suave em tudo, emojis decorativos, carinhas fofas, tudo centralizado e simétrico.
+
+## Layout aprovado (ela, 12/nov/2026: "gostei pra caralho")
+**A · Janela:** fundo = a própria foto da pessoa em pontilhado grande P&B ocupando a tela toda, com papel e grão por cima; metadados em mono no topo (EP.xx · TEMA · data); título grande em 2 linhas, 1ª em branco-papel e 2ª na cor do dia; embaixo, a foto real numa janela retangular larga. Vale COM a faixa na cor do dia saindo de trás da janela (deslocada pra cima/direita) e SEM a faixa (só a janela). Ela gostou das duas e também da foto colorida na janela sobre o fundo P&B. Prints guardados na prévia (seção "Aprovados").
+Variações criadas a partir dele, pra testar: **B · Polaroid torta** (foto com borda de papel girada ~−3°, fita na cor do dia), **C · Pontilhado na cor do dia** (pontos coloridos no preto, foto num círculo com aro de papel), **D · Foto em cima, título embaixo**.
+
+**Contraste automático:** texto sobre foto tratada sempre mede o fundo atrás dele; fundo escuro = texto branco-papel (#F7F4EE) com sombra suave, fundo claro = texto quase preto. Nunca preto no pontilhado escuro (erro que ela apontou).
+
+## Fábrica de stickers (eu produzo, ela escolhe)
+Pra cada pessoa, objeto ou cena da história, eu mesmo faço o sticker do começo ao fim:
+1. **Buscar a imagem** gratuita (ordem da seção "Como conseguir cada imagem"). Político: pasta "Políticos · Fotos" primeiro.
+2. **Recortar o fundo** com rembg no shell local (isnet-general-use, alpha matting) ou no runner do GitHub. Workbench do Composio só com flood-fill (pouca RAM).
+3. **Tratar em várias versões** e mostrar lado a lado na prévia (laboratório de stickers): P&B com papel, cor original, pontilhado, duotone (preto + cor do dia), xerox (alto contraste com grão). Pode ainda: só granulado, só textura, só contorno. Contorno de papel ~10–14 px e sombra curta deslocada em todos.
+4. **Movimento** (escolher por cena; uns ficam estáticos, outros não): parado, respira (balanço leve), zoom lento, desliza pro lado, pop de papel (cai, quica, assenta torto), tremidinho de papel. Na prévia, menu pra ela trocar tratamento, movimento e fundo.
+5. Guardar cada sticker pronto (com licença) no banco da pasta Coolonizacao do Drive pra reusar.
+Sem foto boa grátis: sticker temporário + recado 🔁 recomendando IA; IA só com o ok dela.
+
+## Fundo de papel que ela aprovou
+A textura que ela curtiu é papel "de verdade": grão fino irregular + fibrinhas curtas (não textura falsa repetida), e combina com o pontinho. Vale em qualquer cor: papel cru, preto papel, cor do dia, vermelho, azul royal; com ou sem pontilhado em degradê. Receita: ruído por pixel ±13 + manchinhas raras + ~700 traços curtos de fibra a 10% de opacidade; pontinho com raio caindo a partir de um ponto de luz.
+
+## Acentos e til nas palavras gigantes
+Em palavra grande com máscara/recorte (palavra vazada, entrada por máscara), o til e o acento ficam acima da caixa da letra e são cortados: usar entrelinha ≥ 0,95, um respiro em cima (padding-top ~0,06em) e máscara final com folga (clip-path inset negativo em cima, ~-30%). Conferir no print todas as palavras com Ã, Õ, Á, É, Ç antes de entregar.
+
+## Transições prontas (na prévia de referência)
+- Palavra-chave vazada: letras entram nítidas, o borrão de tinta só chega depois da última linha e fica uns segundos. Opções dentro das letras: foto P&B com ou sem borrão, pontilhado P&B, pontilhado na cor do dia.
+- Cortina de papel rasgado: o papel sobe com borda rasgada e traz a cena nova.
+- Pontos que crescem: o pontilhado na cor do dia cresce até fechar a tela e vira a cena nova.
+- Pop de papel do sticker.
+- Cena 3D entre camadas: fundo pontilhado atrás, objeto 3D no meio (ex.: urna), sticker real na frente, personagem de terno com cabeça recortada que entra, anda pra trás, age (aperta o CONFIRMA, a tela acende na cor do dia) e sai; câmera com paralaxe leve. Feito em Three.js (cdnjs r128) dentro da prévia.
+
+## Referências de movimento (só pra tirar ideias, não trocar o estilo)
+Reel instagram.com/p/De9f9xygFTW: acelerado demais e carregado (não copiar o ritmo), mas tem ideias de transição, fundo com pontilhadinho e um personagem falando (melhor que os que eu já fiz, ela ainda quer melhor). Baixar e tirar prints pelo Mac ou pelo workflow do GitHub.
+
+## 2D ou 3D
+O diferencial é o 3D de verdade, mas 2D continua valendo. Quando ela quiser gastar pouco, fazer a cena em 2D primeiro e trocar por 3D depois, se ela pedir.
+
+## Template Elenco P&B (12/nov/2026, vale pra qualquer tema: Brasil, EUA, OPC)
+Várias pessoas reais na mesma cena, em P&B, saindo da base da tela em camadas. Fica salvo na prévia da coolonização (arquivo elenco.html + seção "Template novo"); toda rodada atualiza lá E no artefato do tema, e eu devolvo os dois links.
+- **Sem cabeça com contorno branco neste template** (ela: "as cabecinhas são o problema", "não misturar com tracejado"). Cabeça com contorno continua valendo nos outros formatos.
+- **Camadas:** atrás = corpo inteiro/meio corpo com desfoque leve (~1,6–1,8px) e um pouco mais escuro (ela adorou o desfoque); meio = quem é o foco; frente = meio corpo saindo da base da tela.
+- **Braços:** retrato oficial já vem cortado no ombro na foto original. Nunca usar retrato com corte lateral como meio corpo solto. Ou fica atrás de alguém que esconde os ombros, ou recebe esfumado nas bordas e na base (máscara lateral 0–14% e 86–100% + base). Meio corpo e corpo inteiro só com foto que mostra os braços inteiros (ex.: braços cruzados, braço levantado, comício). Detectar automático: alpha encostando na borda lateral no terço de baixo = corte lateral.
+- **Rosto:** conferir cada recorte ampliado antes de usar. Foto de rua/multidão perde rosto ou nariz no recorte (o fundo se mistura): trocar de foto em vez de entregar. Recorte com pedaços soltos (plateia, cabeças) = cortar reto acima ou manter só o maior componente.
+- **Etiquetas discretas:** sem caixa de fundo. Nome em Rubik 800 ~13px com sombra de texto; embaixo partido em 11px e só a ideologia num pill pequeno colorido (precisa ser legível em fundo colorido; texto vermelho em fundo laranja some).
+- **Títulos:** com a fonte real (Rubik 900) tudo fica bem mais largo; título de capa ~29px pra caber em 2 linhas cheias. Linha de fonte em 1 linha só.
+- **Seletor de cor na prévia:** laranja, mostarda, terracota, ferrugem, oliva, vinho (outono). Muda 2D e 3D juntos.
+- **3D:** as mesmas camadas da capa em profundidade de verdade, saindo da base (sem chão aparecendo), fundo pontilhado na cor mexendo devagar, sombra das pessoas no fundo. Nada de cabeça flutuando nem busto em cima de chão.
+- **Pontilhado:** bolinha pequena (ela pediu menores), não grade grossa.
+- **Transições na prévia:** tocam quando aparecem na tela (IntersectionObserver) e repetem sozinhas; nunca só uma vez no carregamento.
+
+## Formato de checagem "pausa e explica" (12/nov/2026)
+- Pessoa falando (vídeo com fundo recortado) na esquerda, não centralizada. À direita, nome quebrado em linhas, estado/partido e ideologia, e o assunto em poucas palavras, tudo estruturado numa coluna.
+- Legenda de 2 linhas EM CIMA da cabeça, puxada pro lado esquerdo, com a cor seguindo a fala.
+- Pausa: ícone de pausa, a pessoa vai pro fundo em ARCO (curva, não reta), diminui até o centro, fica mais escura e com desfoque leve; o bloco de nome/assunto sobe e centraliza no topo; gráfico (barras crescendo uma depois da outra) e fonte entram na frente, com narração.
+- Volta: tudo sai, aparece o play e ela volta pela mesma curva; o texto volta pro lado. Na prévia a volta é automática depois de ~4 s de dados, e também tem botão.
+- Vídeo livre: Wikimedia Commons (filetype:video), recorte quadro a quadro no runner do GitHub. birefnet em 720p é lento demais (40+ min); usar u2net_human_seg em 540p (~5 min). Se o vídeo já tiver legenda gravada, cortar o quadro acima dela e esfumar as bordas. Comprimir pra ~1 MB (VP9 com alfa) antes de embutir.
+- Sugestão de série: "3 melhores e 3 piores frases" de cada figura principal, misturando quem virou e quem segurou; frase com dado errado = pausa e explica no meio.
+
+## Animação casada com a fala (reclamação repetida dela, 12/nov/2026)
+O acabamento cool não vale nada se a tela não acompanha a voz. Antes de montar, mapa de batidas com o tempo de cada palavra; cada coisa citada entra NA palavra. Peças prontas que funcionaram no reel do PLP 299:
+- **Ícones de linha por item falado:** SVG de traço branco (stroke 6, pontas redondas) com 1 detalhe na cor do dia, dentro de um bloquinho de borda fina; entram um por um com pop curto (0,3–0,45 s). Ex.: prédio de colunas (governo), fábrica (empresas), alfinete (estados), soja/minério/carne, prédios pequeno/médio/grande com selo (JÁ FORA, POUPAR, COBRAR), microfone + chapéu (show sertanejo).
+- **Selos ENTRA / NÃO ENTRA / QUASE NÃO ENTRA:** pill colado DEPOIS do nome, antes do valor. ENTRA = verde cheio, NÃO e QUASE NÃO = vermelho cheio com letra branca (os dois iguais).
+- **Placar que conta + carimbo + etapas ("a decisão ainda não acabou"):** números sobem até o resultado, carimbo torto "TEXTO-BASE APROVADO" entra por cima e SAI quando aparecem as etapas (✓ feito → próxima → depois), que ficam.
+- **Pizza de 1/4:** círculo com uma fatia na cor do dia acendendo na palavra "um quarto".
+- **Barra de escala pra número abstrato:** ex.: teto R$ 46,3 mil (barra longa) x salário mínimo R$ 1.621 (barra minúscula) com "28 vezes menos".
+- **Pessoa entra na hora do nome:** foto/recorte com data-at no tempo do nome, na mesma fileira das outras pessoas da cena.
+
+## Estilos de edição criativos (14/nov/2026, valem aqui, no Cool BR, OPC, UGC e, quando couber, News)
+- **Texto atrás de quem passa:** recortar a pessoa quadro a quadro e deixá-la passar NA FRENTE do texto. Só em cena em que ela se move pela tela (atravessa de um lado pro outro, ou vem pra frente e cruza a altura do texto); antes e depois o texto fica inteiro e legível. Pode cortar no momento em que ela chega na altura do texto. Nunca em pessoa parada ou sempre centralizada (aí o texto vai na frente ou mais acima, fora da cabeça). 1 ou 2 vezes por vídeo, não em todas as cenas.
+- **Estrela ou sticker no rosto:** nunca da mesma cor (nem parecida) do texto da cena; cor de contraste.
+- **Comemoração:** na conquista, explosão de estrelinhas de 4 pontas coloridas + som de celebração bem baixinho.
+- **Sticker animado com sentido:** o sticker é do tema (bicicleta, não patinete) e tem um detalhe que mexe (a roda se solta e gira).
+- **Bonequinhos de palito** fazendo a ação da cena (andando de bike, rodas girando) passando pela parte vazia da tela.
+- **Doodle só com sentido:** nada de seta ou curva solta que não aponta pra nada.
+
+## Conferência antes de mandar (aprendido 12/nov/2026)
+- Tirar print de CADA tela sozinha, com a fonte de verdade carregada (Rubik/JetBrains via fontsource embutida no teste), não com fonte substituta: sobreposição só aparece com a fonte real.
+- Conferir: nada saindo da tela, nada em cima de rosto, título em 2 linhas cheias, broche/cor seletiva visível no peito, sem área vazia grande.
+- Ela percebe pressa: melhor entregar menos telas bem acabadas do que muitas com sobreposição.
+
+## Checklist antes de entregar
+- [ ] Nenhuma regra já aprovada nos outros reels foi perdida?
+- [ ] A skill base ainda é reconhecível?
+- [ ] Fundo em foto real P&B + objeto recortado + papel por cima?
+- [ ] A cor aparece só num detalhe (ou só no objeto)?
+- [ ] Imagens temporárias marcadas com recado (e só elas)?
+- [ ] Nenhum elemento fofo sobrando?
+
+## Referência visual
+Prévia inicial (3 direções, teste de tratamento de foto e exemplo de recados): https://claude.ai/artifact/GiKHumpZ5G7j1QmtuTT5mm
+Reels de inspiração que ela mandou: instagram.com/reel/DfpK21XRzPD e instagram.com/reel/DfcI2Auxa1z (prints de cada tela ainda pendentes: o Instagram bloqueia download na nuvem; fazer pelo Mac ou pelo workflow do GitHub). Print do perfil deles que ela mandou em 12/nov/2026 mostra a estética geral (palavra gigante borrada no preto, fotos P&B com luz de cinema, papel). Quando ela escolher a direção favorita, atualizar esta skill com ela como padrão.
+
+# ARQUIVO coolonizacao-br/SKILL.md
+
+---
+name: "coolonizacao-br"
+description: "Variação brasileira da coolonização: cartaz/papel brasileiro, estrela, foto quente do Brasil real, letra que mora na cena. Usar quando ela pedir coolonização BR, versão BR, vibe Brasileirada."
+---
+
+## Durabilidade e versão ChatGPT · 18/11/2026
+Esta é uma cópia versionada para ChatGPT/Codex; o original fica em `../original/`. Antes de concluir uma alteração, preservar nova versão no Drive Creations > Tools, Skills & Flows > Skills > Reels e Carrosséis > formato > ChatGPT (usar as pastas existentes criadas por Claude) E no GitHub privado `priihigashi/news`, em branch/PR sem merge. Conferir arquivo, pasta, tamanho/hash e links nos dois destinos; registrar pendência real se algum falhar. Nunca considerar apenas o arquivo local como entrega durável; GitHub não substitui Drive. Não sobrescrever versões existentes nem alterar a versão Claude. Consultar `MANIFESTO.json` e o índice desta entrega para origem e comprovantes.
+
+As regras atuais de `regras-priih` prevalecem sobre conflitos históricos abaixo, inclusive aprovação antes de MP4 e voz paga. Os arquivos locais citados no texto histórico não são presumidos disponíveis no celular. Dependências preservadas separadamente em `compartilhadas/`, sem fundir os formatos.
+
+
+# Coolonização BR
+
+É uma variação da skill **coolonizacao**. Não substitui nada: vai por cima da skill de formato escolhida (carrossel, reel, colagem, timeline, pontilhado...) e herda TODAS as regras da coolonização e dos reels (pasta + ROTEIRO + auditoria, legenda de 2 linhas, banner 0:50, CTA final, zona segura, som, tamanhos mínimos, chips de ideologia, cabeças recortadas, nada de @ de ninguém). Em conflito, as regras já aprovadas vencem.
+
+**Final com CTA (obrigatório também na versão BR, News Brasil e EUA):** a última cena usa a frase padrão, sempre igual:
+> "Pra ajudar a aumentar o engajamento, copia o link, curte, reposta aqui e nos stories, e segue a página pra não perder o próximo."
+Na tela, ícones grandes entrando um por um na palavra falada, nesta ordem: Copia o link, Curte, Reposta (aqui e nos stories), Segue. Sem "Salva". O visual pode ganhar o tratamento BR (cartaz, papel, estrela), mas a fala e a ordem dos ícones não mudam. Antes dele, quando o tema tem ação cívica, vem a cena "o que dá pra fazer" (sindicato, STF, deputados e senadores, links e cartinha nos comentários).
+
+A diferença: a coolonização é P&B, cinema e frio. A BR é **cartaz brasileiro**: cor quente, papel dobrado, estrela, foto do Brasil real com luz de fim de tarde e letra que parece feita à mão ou pintada no lugar.
+
+## Quando usar
+- Ela fala "coolonização BR", "versão BR", "vibe Brasileirada", "mais brasileiro".
+- Sem pedido, não aplicar.
+
+## Banco de referências e imagens (Brasileirada)
+- Pasta: Drive > Brasileirada (12dc1646gN4vJhv37MzGLu-JOps_mqv17). Ler o LEIA-ME antes de começar e registrar decisões nele.
+- 01 - Referencias enviadas (1VcC9K3zdokQyx4A6Hqhwj9n3qi-QiKMs): inspiração. Nunca usar essas imagens direto no post (direitos de outros criadores). Servem pra copiar o JEITO (luz, cor, papel, letra, composição), nunca a cena, o personagem, a pessoa famosa ou a marca. Arquivo novo: `AAAA-MM-DD_refNN_descricao.jpg`, sem duplicar.
+- 02 - Imagens geradas por IA (1z8IMOpwOlrP8psSaP71gVoCsGq2DnG5G): recriações próprias, prontas pra usar. Cada imagem nova entra aqui com o prompt usado no nome ou num .txt ao lado.
+- Distinguir sempre: "salvo no Drive", "só enviado na conversa" e "pendente de upload".
+
+## Recriar com IA (direito autoral)
+1. Escolher a referência e anotar o que pegar dela (luz, cor, enquadramento, textura).
+2. Escrever um prompt novo descrevendo uma cena ORIGINAL com o mesmo clima (pessoas comuns, sem rosto conhecido, sem marca, sem texto na imagem, texto entra depois no HTML).
+3. Gerar pelo Conselho ou ChatGPT (ela gera; eu entrego o prompt pronto + link da pasta 02). Replicate pago só com o ok dela, cena por cena.
+4. Prompt-base de foto: "documentary photo of <cena brasileira comum>, warm late-afternoon light, natural skin and proportions, light film grain, slightly retro color, plausible shadows, no text, no logos, no famous people, 4:5".
+5. Prompt-base de objeto/sticker: "<objeto brasileiro> isolated on plain white background, realistic but slightly printed look, soft light, no text, no logos".
+6. Sem imagem boa ainda: imagem temporária + recado 🔁 "temporária, recriar em IA" (skill auditoria-na-tela).
+
+## Os 4 visuais da BR (escolher 1 por peça, ou misturar aos poucos)
+**A · Cartaz estrela.** Fundo de cor chapada com textura de papel (vermelho PT com estrela branca, ou verde com estrela amarela). Estrela gigante saindo da borda, cortada. Texto pequeno e apertado embaixo, grotesca pesada, entrelinha colada. Bom pra capa e pra card de chamada.
+**B · Foto quente + título serifado com brilhos.** Foto do Brasil real do dia a dia (cadeira de plástico, pastel, criança com camisa da seleção, rua) com retícula leve (halftone) e grão. Título central em serifa condensada amarelo-claro com brilhinhos ✦ em volta, e o MESMO título repetido em todos os cards do carrossel trocando só a foto (série).
+**C · Colagem de luta em terracota.** Papel terracota, recortes P&B, faixa pintada à mão ("viva..."), papel rasgado, tecido colorido, texto mono vertical na lateral, título condensado off-white no topo. Bom pra pauta de mobilização.
+**D · Cartaz dobrado com sol.** Papel vermelho com vincos de dobra, círculo amarelo (sol) atrás de uma pessoa recortada colorida, chão de paisagem brasileira (mata, rio, cidade), títulos condensados nos 4 cantos.
+
+## Letra que mora na cena
+O texto principal pode virar parte da cena: faixa pintada na grade, muro pichado, cartaz de giz, letreiro de pincel na janela, adesivo no vidro. Sempre legível (mesmos tamanhos mínimos da base).
+- Corpo, legenda e metadados continuam no kit: Rubik + JetBrains Mono.
+- Títulos BR (testar e ela escolhe, registrar aqui a escolha): grotesca condensada de cartaz (tipo Anton/Bebas) pros cantos e chamadas; serifa condensada quente (tipo Fraunces/Recoleta condensada) pro título com brilhos; letra de pincel/marcador (tipo Permanent Marker) só pra faixa/muro/cartaz dentro da cena. Nada de fonte gordinha arredondada.
+- Quebra de linha sem hífen, linhas cheias e equilibradas (regra dela de sempre).
+
+## Paleta BR
+- Vermelho PT #E3342B · terracota #B5482E · amarelo sol #F2C94C · amarelo-claro do título #F7EFA0 · verde bandeira #3A9A4B · papel cru #F2E6D0 · preto #0B0B0C · branco papel #F7F4EE.
+- Substitui a cor do dia nesta skill. Vermelho + estrela branca do PT SÓ quando a peça é dirigida ao PT (ex.: "PT, bora conversar?"). Peça sobre o Brasil em geral = verde, amarelo, terracota. Peça sobre outro partido = cores neutras da BR, nunca a estrela do PT.
+- Azul royal continua sendo do governo anterior nos gráficos.
+
+## Texturas (todas as variações)
+- Papel de verdade: grão fino + fibras (receita da coolonização), mais vincos de dobra (2 linhas claras/escuras cruzando) e borda levemente amassada.
+- Retícula (halftone) leve sobre fotos, grão de filme.
+- Elementos brasileiros pra stickers/fundos (criar ou recriar, nunca copiar): estrela, sol, cadeira de plástico, mesa de bar, piso de caquinho, folhas tropicais, casario de morro, telhado de barro, bandeirinhas, faixa de pano, papagaio, pastel, copo americano.
+
+## Movimento
+Igual coolonização (pop de papel, respirar, paralaxe, corte seco no ritmo da fala, ícone entrando na palavra), mais:
+- Estrela entra girando devagar e assenta; brilhinhos ✦ piscam fora de sincronia.
+- Papel dobrado "abre" na entrada (vinco aparece).
+- Faixa pintada se escreve na palavra falada (traço revelado).
+
+## Carrossel animado
+- Card 1 = capa (o carrossel não tem capa separada): tudo na tela desde o quadro 0, sem revelar. Vida só por ambiente: brilho amarelado e colado na frase que fala com o público (nunca névoa branca larga no vermelho), shake na etiqueta, estrelas, faixa.
+- Cards 2+ podem revelar.
+- Texto branco que pode cair em cima da estrela branca (@, fonte) leva sombra.
+
+## Template "papel cartaz" (reel PLP 299, 14/nov/2026, aprovado e postado)
+O primeiro reel inteiro na BR. Serve de ponto de partida, não de molde fixo: papel, textura e cores podem mudar a cada peça.
+- Fundos alternando por batida: papel cru com vincos de dobra, vermelho, terracota, amarelo sol, preto. Nunca duas batidas seguidas com o mesmo fundo e o mesmo layout.
+- Título gigante em Anton esticado (scaleY ~1,2 a 1,6, entrelinha colada, espaço entre letras apertado), preenchendo a largura do filete. Palavra de destaque em outra cor na mesma linha, nunca sozinha.
+- Serifa quente (DM Serif Display) com brilhinhos ✦ pra telas de descanso sobre foto.
+- Corpo em Rubik; metadados e etiquetas em JetBrains Mono.
+- Ícones de linha com contorno preto e detalhe vermelho (grade "E tem mais 9"), com etiqueta preta do artigo em cada item.
+- Onde ficou: prévia https://claude.ai/artifact/3axJP8HTQN5XjccwfS25Vo (aba Reel v3). Cópia do HTML e prints de cada tela vão pra pasta Coolonizacao BR do Drive (abaixo).
+
+## Telas de descanso (regra dela)
+Entre telas cheias, uma tela que respira: título gigante + uma imagem boa, nada mais.
+- Vazado: foto DENTRO das letras (palavra-chave do assunto, ex.: SAÚDE, EMPRESAS), fundo chapado. Sem vinco de dobra passando por cima da palavra.
+- Inverso: foto de fundo e título chapado por cima (serifa com brilhos ou Anton).
+- Alternar vazado e inverso ao longo do vídeo; nunca dois descansos iguais seguidos.
+
+## Colagem P&B com cor (vale pra coolonização normal e BR)
+- Foto P&B recortada como sticker (contorno de papel, sombra curta, textura) sobre fundo de cor chapada. A cor fica no fundo, num círculo/sol atrás, ou numa palavra.
+- Estilo Vox/antídoto como inspiração: balões de comentário, setas, chips ✓/✗, palavras soltas em destaque entrando na fala. Nunca copiar layout de ninguém.
+- Foto do tema na colagem; foto que "não tem nada a ver" com a fala é erro, mesmo sendo temporária (ex.: tema conversa = mãos dadas, pessoas conversando; nunca criança aleatória).
+
+## Pasta no Drive
+News > Templates > Estilos e Referências > Coolonizacao BR (criar na 1ª vez, ao lado da pasta Coolonizacao). Guardar lá: HTML do template, prints de cada tela, stickers tratados com fontes_e_licencas.json. Toda pasta nova ganha uma linha no ÍNDICE · Estilos e Referências (Drive e GitHub docs/referencias/INDICE_ESTILOS.md). A Brasileirada continua sendo o banco de inspiração e de recriações em IA.
+
+## Checklist antes de entregar
+- [ ] Nenhuma regra da coolonização e dos reels foi perdida?
+- [ ] Nenhuma imagem da pasta 01 entrou no post (só recriações ou fotos livres)?
+- [ ] Nada copiado de cena, pessoa, personagem ou marca da referência; nenhum crédito sem ok dela?
+- [ ] Estrela do PT só em peça dirigida ao PT?
+- [ ] Letra da cena legível e linhas cheias?
+- [ ] Imagens novas salvas na pasta 02 com o prompt?
+- [ ] Telas de descanso alternando vazado e inverso, sem vinco em cima da palavra?
+- [ ] Toda foto (até a temporária) combina com o que a fala diz naquela hora?
+- [ ] Template e prints atualizados na pasta Coolonizacao BR e no ÍNDICE?
+
+## Prévia de reel em player · correção da Priih em 16/11/2026
+Quando Priih pedir reel/prévia/player, a entrega precisa permitir ASSISTIR à montagem: palco vertical, voz grátis, clipes reais quando pertinentes, animações e legendas sincronizadas por palavra, play/pausa, busca, saltos, velocidades e notas. Página de roteiro, storyboard textual ou slides sem áudio não substituem o player. O roteiro e o plano ficam como apoio.
+`coolonizacao-br` define acabamento; combinar automaticamente com o formato pedido. Para a referência “o reel de divulgação do site que fizemos hoje”, ler `reel-editorial-guiado/SKILL.md` e sua base PLP299. Não exigir que Priih saiba ou invoque dois nomes. Preservar versões e testar a reprodução antes de entregar. MP4 final/voz paga continuam sujeitos à aprovação já estabelecida.
+
+
+## News Brasil no Codex · fluxo automático · 17/11/2026
+Quando Priih mandar link e instrução básica de News Brasil com coolonizacao-br, executar também news-brasil-criar automaticamente. Não pedir que ela invoque uma segunda skill. Ler a skill em ~/.agents/skills/news-brasil-criar/SKILL.md ou ~/.codex/skills/news-brasil-criar/SKILL.md. Na nuvem, ler .agents/skills/news-brasil-criar/SKILL.md no repositório do Painel, branch codex/news-brasil-player-20261117, com dependências em news-codex/skill/dependencies/. Modo “só vê se tem história, não cria ainda” para antes da produção. Modo criar avança até prévia com voz grátis. Esta instrução não afirma que o runner em nuvem ou a hospedagem estejam prontos; consultar o tracker https://docs.google.com/spreadsheets/d/13056ppQinNuKd37jOW14NWmauHiFR2rcnG8v7EtIzqc.
+
+
+## News · ideia pesquisada sem produção · 17/11/2026
+Se Priih pedir só para ver se tem assunto, ou adiar por créditos/prioridade, guardar a ideia na aba 🔎 Research / Content Ideas de News Content Control e em pasta “(ideia de vídeo) assunto” com Resources. Registrar separadamente pesquisa e se o vídeo começou. Mesmo havendo história, não iniciar produção sem pedido explícito de criar. Sempre identificar News Brasil/News USA; nunca colocar News como OPC.
+
+
+## 17/11/2026 · Correção de acesso em sessões sem o Mac
+Esta nota corrige os caminhos de nuvem citados acima, preservados apenas como histórico. O repositório atual das skills News é priihigashi/news, privado. NÃO procurar a skill no repositório do Painel, nem exigir que /Users/... ou ~/.agents/... existam em sessão na nuvem. A instalação local e o pacote privado salvo na conta não comprovam descoberta automática em outro produto ou chat.
+
+Se a skill não aparecer no catálogo, ler os arquivos diretamente pelo conector GitHub usando repository_full_name=priihigashi/news e path exato. Não depender de busca ou indexação para achar arquivo conhecido:
+- news-brasil-criar: news-codex/skill/news-brasil-criar/SKILL.md
+- coolonizacao-br: news-codex/skill/dependencies/coolonizacao-br/SKILL.md
+- regras-priih: news-codex/skill/dependencies/regras-priih/SKILL.md
+- As quatro referências de regras-priih ficam em news-codex/skill/dependencies/regras-priih/references/.
+- Demais dependências: news-codex/skill/dependencies/<nome>/SKILL.md.
+- Lista e integridade: news-codex/skills.lock.json.
+
+Links diretos verificáveis:
+https://github.com/priihigashi/news/blob/main/news-codex/skill/news-brasil-criar/SKILL.md
+https://github.com/priihigashi/news/blob/main/news-codex/skill/dependencies/coolonizacao-br/SKILL.md
+
+Continuar o link, roteiro e feedback já presentes na conversa. Não pedir reenvio do conteúdo nem reconstruir o roteiro sem ler o existente. Se o conector GitHub não tiver acesso ao repositório privado, dizer especificamente qual acesso faltou; um caminho inexistente no Mac não prova ausência do arquivo remoto. Não prometer acesso no telefone sem testar nessa sessão.
+
+
+# ARQUIVO reel-editorial-guiado/SKILL.md
+
+---
+name: reel-editorial-guiado
+description: Criar prévias verticais de estudo ou apresentação de uma página, site ou documento com títulos cinéticos, recortes reais, gráficos simples e voz grátis, no estilo editorial da prévia PLP299 v4. Usar para repetir esse design, não como formato genérico de todo conteúdo News.
+---
+
+## Durabilidade e versão ChatGPT · 18/11/2026
+Esta é uma cópia versionada para ChatGPT/Codex; o original fica em `../original/`. Antes de concluir uma alteração, preservar nova versão no Drive Creations > Tools, Skills & Flows > Skills > Reels e Carrosséis > formato > ChatGPT (usar as pastas existentes criadas por Claude) E no GitHub privado `priihigashi/news`, em branch/PR sem merge. Conferir arquivo, pasta, tamanho/hash e links nos dois destinos; registrar pendência real se algum falhar. Nunca considerar apenas o arquivo local como entrega durável; GitHub não substitui Drive. Não sobrescrever versões existentes nem alterar a versão Claude. Consultar `MANIFESTO.json` e o índice desta entrega para origem e comprovantes.
+
+As regras atuais de `regras-priih` prevalecem sobre conflitos históricos abaixo, inclusive aprovação antes de MP4 e voz paga. Os arquivos locais citados no texto histórico não são presumidos disponíveis no celular. Dependências preservadas separadamente em `compartilhadas/`, sem fundir os formatos.
+
+
+# Reel editorial guiado
+
+Produza uma prévia de apresentação compreensível e reproduzível, com o design da referência aprovada. Se houver regras pessoais de conteúdo disponíveis, leia-as antes; o pedido atual determina tema, duração e escopo.
+
+## Referência e base
+
+- Leia [processo-v4.md](references/processo-v4.md) ao planejar estética, ritmo, voz, legendas e transporte da prévia.
+- Copie `assets/base-v4/` para uma **nova pasta/versionamento**. A base tem HTML/CSS/JS, dados, imagens incorporadas, fonte e voz da peça antiga. Não altere os assets da skill.
+- A base é exemplo visual, não um modelo editorial pronto para publicar. Substitua fatos, cifras, capturas, links, identidade, narração, tempos e textos de postagem da peça anterior. Não reaproveite promessas de privacidade sem conferir o novo produto.
+
+## O que caracteriza este design
+
+Palco 1080×1920, 9:16; Manrope bold; títulos grandes em linhas equilibradas; amarelo, vermelho, escuro e branco; textura pontilhada discreta; recortes reais com borda e sombra sólida; carimbos inclinados e SVG. Blocos entram com retorno elástico suave; títulos revelam palavras; barras crescem na fala. Alternar composições sem transformar tudo em cartões iguais.
+
+Use capturas autênticas ou gravação se o pedido exigir. Não apresente uma montagem de capturas como filmagem contínua. Valores e gráficos exigem fonte, período, hipótese e distinção entre fato, estimativa e proposta. O texto integral de um documento não deve ser confundido com leitura de trechos.
+
+## Produção e revisão
+
+Escreva narração contínua e planeje a ordem visual antes de montar. A referência dura 46,464s e tem 12 cenas; isso é exemplo, não quantidade obrigatória. Para pedidos como o original, manter 35–50s sem acelerar a voz para caber.
+
+O processo real usou Python para preparar dados, HTML/CSS/JavaScript e SVG para a prévia, e `edge_tts` com `pt-BR-ThalitaMultilingualNeural` para voz grátis e WordBoundary. Se esse serviço não estiver disponível, use alternativa gratuita autorizada e registre a mudança. Não consuma voz paga para reproduzir a base. Música opcional da referência é síntese simples via Web Audio, não faixa licenciada.
+
+Recalcule duração, páginas de legendas e entradas a partir da nova voz. Não basta trocar `fala.txt`: os horários da base são explícitos. Mantenha duas linhas legíveis, palavra atual destacada e áreas seguras. Ofereça play/pausa, busca, saltos, velocidades, notas e textos para copiar. Confirme reprodução completa, áudio e cada cena em celular e desktop; buscar uma posição deve reconstruir o quadro correto.
+
+Entregue prévia com todos os arquivos necessários ou uma página autocontida compatível com o destino. O `index.html` da base depende dos arquivos vizinhos. Preservar versões anteriores; MP4 ou voz paga somente após aprovação aplicável. A skill não concede autorização para publicar, enviar mensagens, acessar contas ou alterar configurações externas.
+
+
+### Entrega no celular · 16/11/2026
+Antes de entregar uma prévia à Priih, fornecer URL HTTPS acessível fora do computador, testar sem sessão autenticada e conferir áudio, clipes, busca e layout móvel no endereço hospedado. localhost, caminhos locais e ZIP no Drive são apoio técnico, nunca o único link para assistir no celular. Manter o endereço da peça nas revisões.
+
+
+# ARQUIVO reel-editorial-guiado/references/processo-v4.md
+
+# Processo e referência v4
+
+Esta é a documentação histórica da v4 de 16/11/2026, preservada como referência de estilo. O pacote `assets/base-v4/` é portátil para reprodução: todas as imagens estão em `data.js`, e fonte/voz/scripts são locais. Não depende das pastas v2 ou work para abrir. Os antigos construtores descritos abaixo NÃO foram incluídos, pois dependem de caminhos do projeto. Para criar uma nova peça, copie os assets para nova pasta, substitua cenas, fatos, imagens, voz e tempos; gere novos dados sem executar o construtor histórico sobre a referência.
+
+As afirmações de ausência de skill no guia histórico descrevem o momento anterior à preparação deste pacote. A skill se chama `$reel-editorial-guiado`; a presença deste diretório em outputs não significa que já esteja instalada.
+
+# Como repetir o estilo da prévia PLP299 v4
+
+Para repetir em outro chat, cole o pedido pronto no final deste guia e anexe este arquivo. **Não precisa usar o aplicativo Atalhos.** Podemos chamar a receita de **“Prévia editorial PLP”**. Esse é um apelido textual para você pedir o estilo, não uma skill, comando ou shortcut instalado.
+
+## A referência que você aprovou
+
+A referência portátil está em `../assets/base-v4/index.html`, com os arquivos vizinhos. Abra por um servidor local ao revisar.
+
+A v4 tem 12 cenas em 46,464 segundos. Combina títulos animados grandes, recortes autênticos do site e gráficos simples. É montagem editorial de capturas reais, não gravação contínua da navegação. O design aprovado é a referência; os números e afirmações precisam ser conferidos novamente em cada tema.
+
+## A receita visual
+
+- **Formato:** palco vertical 1080×1920, proporção 9:16, redimensionado inteiro para a tela de revisão. No computador, prévia ao lado dos controles; no celular, controles abaixo.
+- **Cores:** amarelo #FFD34D, vermelho #FF4A3D, tinta escura #171c2b e branco quase puro #fafbfc. Alternância de cenas claras, amarelas e escuras cria ritmo. O vermelho destaca o convite à participação.
+- **Tipografia:** Manrope em peso 800, títulos grandes e compactos, espaçamento apertado entre letras, frases quebradas em linhas equilibradas. Números podem ocupar quase toda a largura. A versão usa um arquivo local `manrope-800.ttf`; não depende de buscar a fonte na internet durante a reprodução.
+- **Elementos:** textura pontilhada muito discreta, círculos grandes ao fundo, linha editorial no topo, número da cena, carimbos inclinados, estrela recortada e desenhos vetoriais de documentos. Poucas caixas.
+- **Capturas:** janelas com borda escura, cantos discretos e sombra sólida deslocada, como recortes de papel. O enquadramento destaca o ponto citado; não tenta mostrar uma página inteira ilegível.
+- **Hierarquia:** título conduz a ideia, imagem explica e legenda acompanha a fala. Linha de contexto/fonte fica em posição fixa. O nome da página aparece na cena final desta v4.
+
+O código coloca o conteúdo principal entre x150–915, começando por volta de y390; cabeçalho em y268, legendas em y1485, identificação em y1626 e fonte em y1668. Esses valores são referência do arquivo atual, não licença para ignorar as áreas cobertas pela interface do Instagram. Conferir cada cena no tamanho real do celular.
+
+## Como o movimento funciona
+
+Os blocos entram de baixo para cima com uma pequena inclinação e retorno elástico. Títulos aparecem palavra por palavra, com cerca de 55 milissegundos entre entradas. Carimbos e recortes chegam em momentos diferentes, em vez de tudo surgir junto. Barras crescem da esquerda para a direita. Estrelas giram suavemente e círculos têm deslocamento discreto.
+
+A cena inicial já aparece montada no primeiro quadro. A animação é calculada pelo tempo da narração, então avançar ou voltar deve reconstruir o mesmo estado visual. A legenda tem duas linhas equilibradas e destaca apenas a palavra falada: amarelo nas cenas comuns, escuro na cena amarela. Ela usa tempos de palavras fornecidos junto à voz, não uma estimativa dividindo igualmente a duração.
+
+Há tratamento parcial de preferência por movimento reduzido. Não tratar isso como auditoria completa de acessibilidade: conferir também contraste, leitura, foco e conforto visual na nova peça.
+
+## Storyboard que deu o ritmo
+
+| Início | Função da cena |
+|---|---|
+|0s|Número/tema forte, promessa simples e recorte real|
+|3,84s|Explicar o benefício: entender por partes|
+|7,89s|Mostrar leitura comentada e acesso ao documento integral|
+|11,91s|Mostrar explicações abertas|
+|15,20s|Voltar às fontes originais|
+|17,65s|Comparação visual de hipóteses, com ressalva explícita|
+|22,63s|Informar que o material está em revisão|
+|24,95s|Convidar o público a ajudar|
+|27,37s|Revelar pergunta, sugestão e fato/caso em sequência|
+|33,76s|Mostrar o formulário real, sem fazer envio|
+|37,80s|Explicar identificação opcional e privacidade|
+|42,30s|Fechar com ação curta e endereço|
+
+Em outro assunto, preservar as funções e o ritmo, não copiar automaticamente o texto, os números, a lei ou as promessas de privacidade.
+
+## Ferramentas realmente utilizadas
+
+1. Capturas autênticas do site compõem a matéria-prima visual. O construtor da v4 reutiliza imagens da v2 e uma captura nova do menu. Alguns recursos carregados não aparecem nas cenas finais, por isso a lista de arquivos não substitui conferir o vídeo.
+2. **Python** prepara os dados, reúne as imagens e monta o arquivo de cenas. **HTML, CSS e JavaScript** fazem o layout, as animações e os controles no navegador. Os desenhos são **SVG** e CSS. Não há evidência de uso de Canva, After Effects, Remotion ou gerador de vídeo nesta v4.
+3. **`edge_tts`**, com a voz grátis **`pt-BR-ThalitaMultilingualNeural`**, gera uma narração contínua e os tempos de cada palavra. A geração depende do serviço disponível e de conexão; não é uma voz executada inteiramente no computador. A reprodução usa o MP3 local.
+4. **Web Audio API** oferece dois ambientes opcionais feitos de notas senoidais suaves. A opção inicial é sem trilha. Não há arquivo de música licenciada nem biblioteca de efeitos sonoros nesta versão.
+5. A prévia é uma página reproduzível, com play/pausa, posição, saltos de 5/10/30 segundos, velocidades de 1 a 3x, notas com copiar e campos de legenda/comentário. O botão de MP4 fica desativado até aprovação. A prévia HTML não é um MP4 pronto.
+
+## Onde estão os arquivos
+
+Raiz deste trabalho:
+
+`/Users/priscilahigashi/Documents/Codex/2026-11-16/principal-coisa-que-eu-n-o/`
+
+| Caminho a partir da raiz | O que guardar/reutilizar |
+|---|---|
+|`outputs/apresentacao-site/v4/index.html`|Página da prévia e controles|
+|`outputs/apresentacao-site/v4/style.css`|Identidade visual, tamanhos e áreas seguras|
+|`outputs/apresentacao-site/v4/preview.js`|Modelos das 12 cenas, movimento, legendas e reprodução|
+|`outputs/apresentacao-site/v4/data.js`|Dados e imagens incorporadas usados pela página|
+|`outputs/apresentacao-site/v4/cenas.json`|Resumo das cenas e horários|
+|`outputs/apresentacao-site/v4/palavras.json`|Palavras e seus tempos|
+|`outputs/apresentacao-site/v4/voz.mp3`|Narração grátis desta versão|
+|`outputs/apresentacao-site/v4/manrope-800.ttf`|Fonte local|
+|`work/apresentacao-site/v4/fala.txt`|Roteiro da narração|
+|`work/apresentacao-site/v4/voz.py`|Geração da voz e tempos de palavras|
+|`work/apresentacao-site/v4/build.py`|Preparação dos dados e das imagens|
+
+**Para transportar a prévia pronta:** levar a pasta v4 inteira. O `index.html` depende dos arquivos vizinhos; ele não é autocontido. **Para reconstruir:** levar também a pasta de trabalho, as capturas usadas e a fonte. O construtor atual aponta para imagens da v2 e para uma fonte no projeto do site; esses caminhos precisam ser ajustados no novo chat. Não executar o construtor diretamente sobre a v4 aprovada: copiar para uma versão nova.
+
+## Ordem para repetir sem perder o aprovado
+
+Copiar a referência para nova pasta/versionamento. Conferir o tema e suas fontes. Escrever narração curta, contínua e conversada. Planejar as cenas na ordem da fala. Capturar as telas necessárias. Gerar a voz grátis e os tempos. Atualizar cenas, legendas e duração real. Abrir a prévia e assistir inteira, com áudio, no computador e no celular. Conferir cada cena final, cortes, fontes, texto e legendas. Só depois da aprovação preparar eventual MP4 ou voz paga.
+
+Não acelerar a voz para caber. Na v4, tempos de cenas, páginas de legenda e duração estão definidos no código: trocar apenas o roteiro não sincroniza tudo automaticamente. A proporção e os controles devem funcionar desde a primeira versão. Ao hospedar, manter voz, fonte e scripts no domínio permitido, para não repetir o bloqueio de áudio ocorrido com recursos embutidos na versão anterior. A forma de publicação depende do projeto escolhido, não deste apelido textual.
+
+## Pedido pronto para colar em outro chat
+
+> Quero uma **Prévia editorial PLP**, seguindo o guia anexado e a referência visual da v4 do PLP299. Reproduza o estilo: Manrope bold, títulos enormes com linhas equilibradas, amarelo/vermelho/escuro/branco, textura pontilhada sutil, recortes reais com borda e sombra sólida, carimbos, elementos vetoriais e movimento elástico suave. Faça uma prévia vertical 9:16, de 35–50 segundos, com narração grátis contínua Thalita e legenda de duas linhas que acompanha cada palavra. O tema agora é **[TEMA]**, o objetivo é **[O QUE A PESSOA DEVE ENTENDER/FAZER]**, e as fontes/telas são **[LINKS OU ARQUIVOS]**. Preserve os originais e crie uma versão nova. Mostre uma sequência clara, com gráficos apenas quando sustentados pelas fontes. Não reutilize os números do PLP299 sem conferência. Inclua play/pausa, busca, saltos, velocidades, notas e texto pronto para copiar. Entregue uma prévia reproduzível e revise todas as cenas e o áudio no celular antes de pedir aprovação. Não produza MP4 nem use voz paga antes de eu aprovar. Se os arquivos da referência não estiverem acessíveis neste chat, use este guia e a imagem como referência e diga o que precisou reconstruir.
+
+Este guia documenta a receita existente. Nenhuma skill ou automação nova foi instalada, e nenhum arquivo aprovado da v4 foi alterado para produzi-lo.
+
+
+# ARQUIVO roteiro-storytelling/SKILL.md
+
+---
+name: "roteiro-storytelling"
+description: "Escrever a história/roteiro falado de qualquer reel ou post (voz, estrutura, conexões, falar com quem discorda). Use sozinho quando ela pedir só o roteiro, script ou história; os skills de reel chegam aqui pelo reel-pasta-roteiro-auditoria."
+---
+
+# Roteiro e storytelling (como a história é ESCRITA)
+
+Este skill é a única fonte das regras de escrita da história. O template (colagem, pontilhado, motion, 3D, timeline, placar, OPC...) muda como a história aparece; a voz e a estrutura da história são as mesmas em todos. Por isso nenhum skill de formato copia estas regras: todos apontam pra cá (pelo reel-pasta-roteiro-auditoria). Mudou uma regra de escrita, muda aqui e vale pra todos.
+
+**Sozinho:** quando ela pedir só a história, o script ou o roteiro ("não tô pedindo pra criar o vídeo ainda"), usar só este skill: entregar o roteiro em tabela narração | o que aparece, sem pasta, prévia nem render, a não ser que ela peça. Em conteúdo político ou de notícia, rodar depois o skill **auditoria-dissonancia** e entregar junto.
+
+## 1. Passada 1, só a história (sem pensar em tela, cor ou chip)
+Por que existe: quase todas as outras regras dizem O QUE incluir ou COMO fica na tela. Quando tudo entra junto na hora de escrever, o roteiro vira lista de fatos e soa robótico (v1 do reel das bets, nov/2026). As regras continuam valendo; elas entram na passada 2.
+- Antes de escrever, 3 linhas no topo: a pergunta que o vídeo responde; a virada (o que o público acha x o que é de verdade); a frase final, que volta ao começo.
+- Escrever como a Priih contaria pra uma amiga num áudio: frases corridas, de tamanhos diferentes, primeira pessoa quando couber ("fui conferir"), uma pergunta de vez em quando no meio da conversa. Sem "rapidinho" de enfeite.
+- Um fio só. Cada bloco termina abrindo o próximo ("só que", "mas aí", "e se...?", "fui conferir"). Se dá pra trocar dois blocos de lugar sem perder nada, falta ligação.
+- Uma pessoa, um caso ou uma cena concreta antes do número. O número vem pra provar o que a cena mostrou.
+- Uma ideia por cena, em corrente de causa e efeito. Se a cena precisa de duas imagens diferentes, são duas cenas.
+- Número grande vai na tela; a fala diz o que ele significa. Se precisar falar o número, arredondado ("cerca de 60 mil"); anos exatos.
+- Metáfora com objeto do mundo real (cofre, balança, régua, roda que gira) quando ajudar; não forçar quando gráfico, mapa ou clipe explicam melhor.
+- Pessoas não entram uma por uma em fila: agrupar numa colagem ou num mapa ligado ao argumento.
+- **Explicar um mecanismo uma vez só** (8/nov/2026): explicar por inteiro no passo exato em que a dúvida aparece (ex.: tela "antes | agora" parando naquele passo), passar rápido pelos outros sem reexplicar e fechar com um antes/depois. Repetir o que a pessoa ainda não entendeu não faz entrar. Ela precisa entender a matemática primeiro; a dúvida dela é a do público.
+- **Vídeo de outro criador é só fonte de fato** (8/nov/2026): nunca copiar o exemplo, a analogia, a frase ou a abertura dele. Criar exemplo próprio.
+
+## 2. Falar com quem discorda (principalmente a direita com medo)
+Por que existe (8/nov/2026): o público mais difícil é quem desconfia de tudo que vem do governo atual e já chega com medo. Se a pessoa sente que o vídeo é contra ela, ela para de ouvir antes do fato chegar. Aprendido do reel "o Brasil gasta muito?" (criador de economia que cresceu conversando com os dois lados) e das regras que ela já usa. Não substitui nada do que já funciona; soma.
+- **Premissa antes da conclusão.** Começar por um ponto que os dois lados aceitam e dizer isso em voz alta ("juro alto é problema: quem é de direita concorda, quem é de esquerda concorda"). A briga vem depois, sobre o remédio. Quem concordou com a primeira frase continua ouvindo.
+- **Mostrar o argumento do outro lado nas palavras dele, de forma justa, antes de responder.** A pessoa precisa se sentir ouvida ("o mercado diz que o Brasil é arriscado e que o juro é o prêmio pra quem empresta; faz sentido, então vamos ver"). Nunca a versão mais boba do argumento.
+- **Mensageiro e exemplo que o outro lado respeita.** Um dos pais do Plano Real, um economista conservador, o mercado, EUA e Europa, um empresário. Fato vindo de quem a pessoa confia passa pela porta; o mesmo fato vindo de quem ela já rejeita volta.
+- **Responder com pergunta e dado, não com acusação.** "Será que o Brasil é o país mais arriscado do mundo?" funciona melhor que "o mercado mente". Sem rótulo acusatório (já é regra dela).
+- **Falar do medo pelo nome.** Se o medo é "vai virar Venezuela", "vão mexer na poupança", "vai ter calote", dizer o medo e mostrar a trava que existe (ou dizer que o risco é real, quando é: peso, não empate).
+- **Não fazer a pessoa escolher entre o fato e a identidade dela.** Separar a pessoa do político: dá pra ser de direita e concordar com esse ponto. Nada de "quem votou em X...".
+- **Deixar a crença central como pergunta, não como ataque.** Se não dá pra desmontar tudo num vídeo, terminar abrindo a próxima pergunta ("mas o Brasil gasta muito? fica pro próximo").
+- **Gancho honesto de quem também não entendeu.** Quando o tema é confuso e todo mundo já falou dele, abrir assumindo isso sem diminuir quem assiste (ex. dela: "se você ainda não entendeu o que é a proposta do Lara Resende, talvez esse seja o vídeo que você tava esperando; foi assim que eu entendi"). A Priih entra junto na dúvida, então ninguém se sente burro.
+- Tudo isso vale com as regras políticas dela: mostrar o exemplo equivalente do outro lado, dizer de quem é a responsabilidade, peso e não empate, "governo atual" + 🦑.
+
+## 3. Estrutura de retenção (base, não fôrma)
+- **0 a 3 s, gancho:** a frase e a imagem que seguram o dedo. A capa usa o mesmo gancho (ou um irmão dele).
+- **3 a 10 s, a promessa:** dizer o que a pessoa vai levar se ficar e já entregar a primeira informação de verdade. Abertura com no máximo uns 10 s.
+- **Promessa, não bastidor (15/nov/2026).** O método é coisa que EU faço, não coisa que eu conto. "Eu cortei o vídeo dele, conferi e pus do lado" é bastidor e gasta 5 s de vídeo curto. Se o método precisar aparecer, é uma frase de no máximo 2 a 3 s ("a gente conferiu as falas dele nos documentos"). Só anunciar o que vem quando são vários itens, porque a contagem vira promessa e segura até o fim ("tem 3 coisas que ele não contou", "artigo por artigo do pacote"). Um ponto só: entra direto nele. Teste: tira a frase; se o vídeo não perde promessa nem contagem, ela sai. Palavras dela: "Eu acho que é muita introdução para vídeo curto... a gente vai analisar o que ele falou aqui, todo um caso de 3, 5 segundos só para falar isso."
+- **A cada uns 15 s, um ponto de checagem:** "isso faz a pessoa querer ficar?". Se não, abrir uma pergunta, mostrar um dado novo ou adiantar o que vem.
+- **No meio, uma recompensa parcial:** algo que já vale o vídeo.
+- **Pouco antes do fim, a recompensa geral:** a resposta prometida, a conclusão dita em voz alta e o guia de gravidade.
+- **Fim:** "segue pra mais vídeos assim", mais a chamada do skill do formato.
+- O mais importante cabe no primeiro minuto; a recompensa principal (ou a pergunta aberta que faz tocar) cai antes de 1:00.
+
+## 4. Peso, não empate (regra dela, 4/nov/2026)
+Colocar os dois lados no mesmo nível quando um pesa mais também é desinformação.
+- Quando as provas pesam mais pra um lado, dizer isso com todas as letras. O outro lado aparece com o peso que tem.
+- Risco se explica pela chance e pela gravidade: o que pode dar certo, o que pode dar errado, quão provável (com fonte) e se o estrago tem volta. Dano sem volta (floresta, vida, dinheiro de família) não é minimizado só porque também pode dar certo. Exemplos dela: Amazônia, bets.
+- Possibilidade é dita como possibilidade. Sem base pra dizer qual lado pesa mais, dizer que não dá pra saber.
+- No fim, um guia de gravidade: o tamanho do problema e por que importa.
+
+## 5. Conexões entre blocos
+- Cada bloco abre respondendo a objeção que o anterior provoca ("se você acha que comparar com o mundo não vale, vamos comparar o Brasil com ele mesmo"). Antes de escrever a transição: o que alguém do outro lado diria agora? A próxima frase responde isso.
+- Par de extremos concretos no lugar de média.
+- Ensinar a ferramenta antes de usar, com exemplo bobo do dia a dia.
+- Antecipar o comentário de quem discorda e mostrar por que ele não derruba o ponto (ou, se derruba em parte, dizer).
+- Abrir com o mito dito como afirmação, do jeito que o outro lado escreveria, e "vamos ver o que os números dizem".
+
+## 6. Cada frase tem imagem (5/nov/2026)
+O roteiro é uma tabela narração | o que aparece. Toda frase falada tem imagem ou animação que mostra o que está sendo dito (diagrama que se monta, gráfico que cresce, roda que gira, cabeça recortada com chip). Não vale só texto na tela, nem imagem pequena tipo emoji. Marcar cena por cena se é "rosto" (viradas, perguntas, conclusões) ou "desenho" (dados).
+
+## 6b. O que ela descreve acontecendo é AÇÃO, não fala (erro repetido, 11/nov/2026)
+Quando a Priih conta uma história ou cena ("passou alguém, bateu nas costas dela e falou: eu até votaria em você"), ela está descrevendo o que APARECE. Isso vai inteiro pra coluna "o que aparece" como animação (o gesto, o balão com a frase do personagem), nunca pra narração. A narração só diz o que ela mandou dizer, ou a ligação mínima pra entender a cena.
+- Antes de mostrar o roteiro: pegar cada frase dela que descreve gesto, movimento, fala de personagem ou reação ("bate nas costas", "vai embora", "fala assim", "aparece", "sobe") e conferir que ela está em "o que aparece" e NÃO está na narração.
+- Fala de personagem dentro da cena = balão na tela, sem voz.
+- Se não der pra mostrar sem falar, perguntar a ela antes de pôr na narração.
+
+## 7. Tamanho e cortes
+- Alvo abaixo de uns 3 min; passar uns 10 a 15% é melhor que perder frase importante (o áudio pode ser acelerado).
+- Antes de cortar: reler a lista de feedback dela e o mapa "o que entrou de cada vídeo". Primeiro mover detalhe pra tela ou letra miúda. Marcar "se precisar encurtar" e avisar.
+- Quando ela manda vários vídeos de referência, o nosso tem que ser o melhor de todos: comparar o storytelling e registrar a comparação.
+
+## 8. Passada 2, as regras
+Aplicar o skill do formato, as preferências e as regras políticas. Fato que não cabe no fio vai pra tela ou letra miúda ("sementinha"), não pra fala. Ponto que ela pediu e não coube na fala vai pra tela, e eu aviso onde ficou.
+
+### 8b. Plantar sementinhas: passo obrigatório, sem ela pedir (regra dela, 12/nov/2026)
+Ela sempre tinha que lembrar. A partir de agora todo roteiro passa por esta etapa antes de ir pra ela.
+- **O que é:** um fato ou uma ligação que faz o público pensar sozinho, sem acusar. Frase curta na fala ou na tela, ou letra miúda, dentro de uma cena que já existe. Nunca uma tela nova, nunca alongando o vídeo.
+- **Como achar:** pra cada cena, perguntar "o que mais alguém deveria saber aqui pra entender o jogo?". Ex.: "esse dinheiro não tem carimbo: entra no caixa geral do estado, e é o governador que decide de onde tira quando falta"; "1 de cada 4 reais desse repasse é das prefeituras"; quem ganha com a opinião de quem fala; quem votou; desde quando a regra existe.
+- **Didático e honesto juntos:** a sementinha explica o termo de forma simples e, quando não dá pra afirmar, diz com ressalva ("pode", "não tem conferência de onde esse real foi parar") em vez de deixar de fora. Sem rótulo acusatório.
+- **Todo termo citado ganha contexto curto** (de quando é, o que faz, por que aparece agora), como parte da sementinha. Ex.: Lei Kandir (1996, governo FHC, isenta de ICMS quem exporta; aparece porque o pacote mexe no acordo de pagamento de 2020).
+- **No ROTEIRO:** uma lista "Sementinhas" com cada uma, a cena onde entrou (fala, tela ou letra miúda) e a fonte.
+
+## 9. Checagem da batida (antes de mostrar)
+- Trecho de mais de 5 s sem nada concreto: reescrever.
+- 3 ou mais frases abstratas seguidas, ou frases do mesmo tamanho em fila: reescrever.
+- Os primeiros 10 s ensinam algo do tema e dizem o que a pessoa vai levar? O fim retoma o começo?
+- Teste do bastidor (seção 3): alguma frase conta como eu fiz o vídeo (cortei, conferi, analisei, pus do lado) por mais de 3 s? Encurtar pra uma frase ou cortar.
+- Marcar os pontos de checagem (a cada uns 15 s), a recompensa parcial e a geral, com o tempo de cada um.
+- Teste: se cabe "e aí" entre as frases, é história; se cabe marcador de lista, é lista.
+- Teste da ação (6b): alguma descrição de cena que ela fez virou fala? Se sim, tirar da narração e passar pra animação.
+- Cada cena em 3 coisas: a pergunta que resolve, a prova que mostra e o motivo da próxima existir. "Mas aí" não transforma lista em história. Só dizer que uma coisa causou outra com prova.
+- Teste do outro lado: alguém de direita (ou do lado que o vídeo contraria) para de ouvir em algum ponto antes do fato chegar? Se sim, reescrever com a seção 2.
+- Teste das sementinhas (8b): toda cena tem pelo menos uma sementinha ou um motivo pra não ter? Todo termo técnico ou lei citada tem o contexto curto?
+- Para a voz: cada fala começa e termina em palavra cheia e não tem só 3 palavras. Depois de gerar, transcrever de volta e comparar.
+
+## 10. Leitura de leigo: tá fazendo sentido e tá fácil? (obrigatória, 13/nov/2026)
+A auditoria do ChatGPT confere fato. Ela não confere se a história tem pé e cabeça. No vídeo 2 do PLP 299 os fatos estavam certos e mesmo assim a história ficou confusa. As duas checagens são obrigatórias, e esta vem antes de mostrar a ela.
+Ler o roteiro inteiro de cima a baixo, em voz alta, como alguém contra o assunto que nunca ouviu falar dele. Em cada frase, perguntar:
+- **De que texto ou coisa ele tá falando?** Pacote, Constituição, outra lei ou outro vídeo. Exemplo do erro: "o artigo fala em despesas previstas em lei" e logo depois "é inconstitucional". Não dava pra saber se era o texto do pacote ou o da Constituição. Conserto: "o artigo três **do pacote** fala em despesas previstas em lei, e o mínimo da saúde tá **na Constituição**", e na tela dois cartões de cores diferentes, PACOTE e CONSTITUIÇÃO.
+- **Isso soa como elogio a quem a pessoa rejeita?** Exemplo do erro: "o pacote melhora as contas de 2027" logo antes de dizer que mexe na saúde. A pessoa ouve um elogio e depois um problema, e não entende pra que serviu o elogio.
+- **O termo já foi explicado antes de ser usado?** Exemplo do erro: "o aperto vem pela trava", antes de explicar o que é a trava. Conserto: "o aperto ali vem por outro caminho: a trava de gastos", e a cena seguinte explica.
+- **Ficou abstrato?** "Segurar gasto, inclusive despesas previstas em lei" ganha exemplo: "como obra e equipamento".
+- **Tem começo, meio e fim, e cada frase puxa a próxima?** Se dá pra ler como lista de fatos, falta história.
+
+**Tempo de tela:** gráfico ou estimativa não pode aparecer e sumir. Deixar a primeira frase da parte seguinte rolar em cima do gráfico, sem acrescentar palavra, só mudando onde a cena troca (ex.: "O governo conta com essa queda" passou a ficar em cima das barras das estimativas).
+
+# ARQUIVO reel-zona-segura/SKILL.md
+
+---
+name: "reel-zona-segura"
+description: "Zona segura e revisão de quadro final para todos os reels, carrosséis e posts (palco 1080x1920)."
+---
+
+# Zona segura: Reels + Stories (palco 1080x1920)
+
+## REVISÃO DO QUADRO FINAL: obrigatória em TODO reel, de TODOS os skills de reel, sem ela pedir (10/nov/2026)
+Todo skill de reel aponta pra cá, então esta etapa vale pra todos. Assim que a primeira montagem existir, e de novo a cada versão, ANTES de mostrar a prévia:
+1. Print do último instante de cada cena (tudo já na tela) e rodar o verificador de sobreposição nesse instante.
+2. Olhar cada print um por um, procurando:
+   - **Sobreposição:** texto encostando ou por cima de outro texto, chip, cabeça, desenho ou legenda.
+   - **Eixo:** se o elemento principal está no centro (desenho, diagrama, porta), título e textos da cena ficam centralizados. Texto dentro de caixa ou balão é sempre centralizado, com o mesmo respiro dos dois lados.
+   - **Linhas equilibradas:** ajustar o tamanho da fonte pra que as linhas fiquem parecidas, sem palavra sozinha nem linha curta no fim (ex.: "Poderes não poderão ser superiores" numa linha, em vez de "Executivo federal." sobrando). Título que cabe numa linha fica numa linha.
+   - **Respiro:** texto não encosta em desenho; se faltar espaço, subir a cabeça ou o desenho de cima e o resto sobe junto.
+   - **Nome sem pontuação sobrando** no fim da linha ("Davi Alcolumbre ·").
+   - **Repetição:** frase na tela que repete a legenda sai.
+   - **Buraco:** bloco amontoado em cima com metade de baixo vazia.
+3. Corrigir, tirar print de novo, até limpar. Só então publicar.
+4. Na mesma passada, revisar o primeiro minuto da narração procurando frase lenta ou comprida que dá pra dizer mais rápido sem tirar conteúdo.
+
+Medida nos prints da Priih em 4/nov/2026 (reel "Bom dia, América" aberto no Reels e compartilhado no Story). Vale para TODOS os skills de reel e capa; quando um skill antigo disser "10% de margem" ou outro número, vale esta regra.
+
+## Vale também pra CARROSSEL e post estático (14/nov/2026)
+Toda criação de card (reel, carrossel 1080x1350, post) passa por esta skill ANTES de mostrar. Erros que ela pegou no carrossel do PLP 299 e que não podem repetir:
+- **Linha divisória cortando texto:** bloco com posição fixa (top) embaixo de uma grade que cresceu. Bloco que vem depois de lista/grade nunca tem top fixo: calcular pela altura real da grade (offsetTop+offsetHeight+respiro) ou usar fluxo normal.
+- **Lista amontoada em cima com buraco embaixo:** lista de itens (checks, números) se espalha até o bloco seguinte; aumentar fonte e espaço entre itens até ocupar o espaço, em vez de deixar vão.
+- **Número desalinhado do título do item:** número alinhado com a primeira linha do item (align-items:flex-start), não com a linha de baixo.
+- **Bloco encostando no @ / fonte:** respiro mínimo de 1 linha.
+- **Lista do reel invadindo a legenda:** o último item termina pelo menos 40 px acima da legenda falada (y 1290).
+Conferir com print de CADA card e cada cena com fonte real, olhando um por um, antes de publicar.
+
+## Camadas: texto atrás de quem passa (regra para todos os skills de reel, 14/nov/2026)
+- Efeito bom: a pessoa (ou criança na bike) passa NA FRENTE do texto, com recorte da pessoa por quadro. Usar só em cena em que ela se MOVE pela tela (ex.: atravessa da esquerda pra direita, ou vem pra frente e cruza a altura do texto); depois que ela passa, o texto volta a ficar inteiro e legível.
+- Nunca em pessoa parada ou sempre centralizada: aí o texto fica na frente ou sobe até sair da cabeça dela, senão ninguém lê a palavra.
+- Não em todas as cenas: 1 ou 2 por vídeo.
+- Estrela/sticker que cobre rosto nunca da mesma cor (nem parecida) do texto da cena; usar cor de contraste.
+
+## A regra
+- **TEXTO** só entre **x 150 e 915** e **y 268 e 1680**.
+- **Imagem, mapa, fundo, fogos, efeitos** podem ir até a borda (sangrar).
+- @handle em y 1616 e linha de fonte em y 1652 podem ir de x 150 a 930 (ficam logo acima do perfil do Reel).
+- **@handle sem fundo (regra dela, 15/nov/2026):** nada de pílula ou caixa escura atrás do @. É só o texto, embaixo de tudo, onde ficaria o comentário: preto em fundo claro (papel, amarelo) e branco em fundo escuro ou colorido (preto, vermelho, terracota, verde), trocando sozinho a cada cena. A linha de fonte fica logo embaixo do @, numa linha só (encurtar o crédito se não couber), terminando até y 1680.
+- Legenda falada: entre x 190 e 915 (foge da bolha de emoji e dos botões).
+- Nada importante em x < 220, y 1460-1550 (bolha "Drop an emoji", passageira).
+
+## Por quê (o que cobre o quê)
+- **Story:** faixa "@ e @collab" + tempo cobre y 0-250; barra de resposta cobre y 1840-1920.
+- **Reel aberto:** o Instagram dá zoom ~1,3x, cortando ~52 px de cada lado e ~105 px do topo. Botões da direita (curtir, comentar, repostar, enviar, salvar) cobrem x > 930 de y 1060 pra baixo. Perfil, collab, música e legenda começam em y ~1685.
+- **Grid do perfil:** capa vista no recorte 3:4 central (y ~285-1635): título e número grande da capa dentro disso.
+
+## Como conferir antes do MP4 (obrigatório)
+1. Playwright mede cada linha de texto visível (Range.getClientRects de cada nó de texto, ignorando opacidade < 0,3) e acusa qualquer uma fora da zona ou na bolha de emoji. Zero erros antes de publicar.
+2. Gerar 2 prints com a moldura simulada por cima e mostrar a ela: **Story** (rosa em y 0-250 e 1840-1920) e **Reel** (bordas de 52 px, topo 105, botões x > 930 desde y 1060, base desde 1685), com o retângulo verde da zona segura.
+3. Se algo não cabe: diminuir um pouco a fonte, estreitar a caixa ou descer o bloco, nunca jogar texto pra fora da zona.
+
+## Depois de ajustar a zona: sobreposição, espremido e quebra (obrigatório)
+Por que existe: no reel dos indígenas (7/nov/2026), ao estreitar o texto pra caber na zona, várias frases ganharam uma linha a mais e passaram a encostar no que vinha embaixo (cabeça recortada em cima do título, letra miúda em cima da frase, selo saindo pela direita, "r" de e-mail sozinho na linha). A Priih teve que apontar tudo por print. Ela não deve precisar.
+
+1. **Verificador de sobreposição** (Playwright, a cada 0,5 s do vídeo inteiro): caixa de cada texto e imagem visível da cena; acusa qualquer par que se cruze mais de 6 px, e qualquer texto que encoste na legenda falada. Zero erros. A cabeça recortada, o NÃO que cai e outras animações planejadas que atravessam a tela são a exceção, e só elas.
+2. **Verificador de espremido:** em selo, chip, cartão e item de lista, scrollWidth > clientWidth ou scrollHeight > clientHeight = texto saindo do container. Selo com white-space:nowrap que não cabe: encurtar a frase (ex.: "Trecho da lei derrubado · 2025" virou "Lei derrubada · 2025"), não diminuir até ficar ilegível.
+3. **Quebras de linha:** depois de qualquer mudança de largura, olhar cada título e item: nenhuma palavra sozinha na linha ("os", "regra", "48)"), nenhum trecho grifado sozinho numa linha com o resto em outra. Quebrar na mão com <br> quando precisar.
+4. **E-mail e link:** nunca word-break:break-all (deixa uma letra sozinha). E-mail longo ganha uma linha só pra ele.
+5. **Cabeça recortada e imagem:** se o título ganhou linha, descer a cabeça, o chip e a letra miúda juntos.
+6. **Não repetir a legenda:** texto na tela que diz a mesma frase da legenda, no mesmo momento e perto dela, sai.
+7. **Espalhar:** cena com tudo amontoado em cima e metade de baixo vazia é erro. Distribuir até perto da legenda.
+8. **Rótulo do 3D** (placa desenhada em canvas): a palavra tem que caber inteira na placa; diminuir a fonte do canvas se cortar.
+9. **Folha de conferência:** antes de publicar, prints de todas as cenas num momento cheio de cada uma (não só a abertura) e olhar uma por uma.
+9b. **Quadro final de cada card, em TODA versão (pedido dela, 10/nov/2026: "tem coisa overlapping em vários"):** pra cada cena, print no último instante antes de trocar de cena, com TODOS os elementos já na tela, e também o verificador de sobreposição nesse instante. Em cada print, olhar: algo encostando ou por cima de outra coisa; frase com palavra sozinha na linha; trecho colorido partido entre linhas; bloco amontoado em cima com buraco embaixo. Pra cada problema escolher a saída que fica mais bonita: aumentar a fonte (preenche o espaço e acerta a quebra), diminuir a fonte (pra caber numa linha só), quebrar a linha na mão com <br>, ou DESquebrar (tirar o <br>/alargar a caixa), ou subir/descer o bloco. Corrigir e tirar o print de novo até ficar limpo. Só depois publicar.
+9a. **A auditoria só vale com as fontes REAIS (falha de 10/nov/2026: no celular dela o título quebrou em 3 linhas e encavalou, no print da auditoria cabia em 2):** o Chromium local NÃO baixa Google Fonts, então a auditoria via fonte substituta e quebra de linha diferente. Antes de qualquer print: baixar os .ttf do repositório google/fonts no GitHub (ex.: raw.githubusercontent.com/google/fonts/main/ofl/rubik/Rubik[wght].ttf, e Caveat etc.), copiar pra ~/.fonts, rodar fc-cache -f, e no script conferir document.fonts.check('800 40px Rubik') == true. Se der false, a auditoria NÃO vale: parar e resolver.
+9a2. **Auditar CADA ESTADO, não só o fim da cena:** rodar o verificador em todo momento em que entra um elemento (tempo de entrada + 0,7 s, depois da animação), no fim de cada cena e no meio de cada página de legenda. Em cada momento checar: sobreposição de textos/imagens (>6 px), texto fora da zona segura, trecho colorido partido em duas linhas, palavra sozinha na última linha de título/nota, legenda com mais de 2 linhas. Salvar print só dos momentos com problema e OLHAR cada print. Corrigir, rodar de novo até zerar. Só publicar com zero.
+9c. **Legenda falada, conferir página por página:** imprimir a lista de páginas; nenhuma página com uma ou duas palavras soltas (ex.: "Nikolas.", "arriscada."), nenhuma página terminando em palavra de ligação (e, de, pra, que...), nome composto e "Estados Unidos" nunca partidos, e no máximo 2 linhas por página. Imprimir a largura de cada linha (cima | baixo): se a de baixo ficar bem menor que a de cima, rebalancear antes de publicar. Número falado por extenso aparece na legenda em algarismo (645, 2026, 88, 10%).
+10. **Fonte real no verificador (7/nov/2026):** o Playwright daqui não baixa Google Fonts e mede com fonte reserva mais estreita; passou "zero erro" e no celular a letra miúda encostou no @. Antes de medir, embutir a fonte (woff2 em data URI ou arquivo do artifact) ou rodar a medição na prévia publicada; deixar margem de 1 linha entre letra miúda e @.
+10b. **O verificador mede o que aparece, não a caixa do elemento (falha de 15/nov/2026, "Todo mundo de carteira assinada" em cima de "Mesmo sem ser filiado"):** título com transform (scaleY, rotate, scale) fica maior na tela do que a caixa do div que o contém. Medir a caixa do div deixou passar a sobreposição. A caixa de cada elemento é a união do getBoundingClientRect de TODOS os filhos (que já inclui o transform), nunca só o do div de fora. E bloco que vem embaixo de título transformado nunca tem top fixo calculado de cabeça: medir a altura real.
+10c. **Texto pequeno, mínimo pra celular menor (pedido dela, 15/nov/2026):** texto que precisa ser lido (chip de quem indicou, rótulo, nota, item de lista, etiqueta de caixa) tem no mínimo 23 a 24 px no palco 1080; nome em chip 26 px. Só letra miúda de fonte e crédito pode ficar em 20 a 22 px. Se aumentar faz o texto quebrar, encurtar a frase ("Ind. gov. atual") antes de diminuir a fonte.
+10d. **@handle:** o Instagram já mostra o nome do perfil embaixo no Reel e põe o @ sozinho no vídeo baixado, então o @ fixo em todas as cenas duplica e polui. Mostrar o @ só na cena final do CTA ("segue a página"), sem fundo.
+11. Falso alarme conhecido: elemento com entrada "slam" pode aparecer com escala 1,5 no verificador congelado; confirmar no print antes de mexer.
+
+## Montar a página já certa (lição do reel "Fome, 7 milhões", 7/nov/2026: ela não gostou do alinhamento nem das quebras)
+A zona segura passou com zero erros e mesmo assim ficou ruim: tudo pequeno, espremido no canto de cima à esquerda, caixas demais, legenda cortando frase no meio. Zero erros no verificador não basta.
+- **Uma coluna:** todo bloco começa em x 150 e usa a largura inteira (765 px). Par lado a lado = 2 colunas de 365 (x 150 e x 550). Nada solto fora dessas bordas.
+- **Tamanhos mínimos** (palco 1080): frase-guia 64, linha com ícone 58-62 (ícone ~118 px), texto médio 68-92, número/palavra gigante 140-160 (auto-ajuste com nowrap até caber em 765), letra miúda 30, rótulo de gráfico 36-46. Nada de 24 px em texto que precisa ser lido.
+- **Poucas caixas:** lista vira linha ícone + texto grande; citação vira texto com barra colorida à esquerda; caixa só pra peça original, carimbo, veredito e post-it.
+- **Quebra no texto da tela:** `text-wrap:balance` em todo texto; ` ` entre número e unidade (6,5 mi, R$ 150); `<br>` na mão quando a quebra natural cai errada. Animação com rotação (slam) não vai em texto gigante: a rotação joga letra pra fora da zona.
+- **Frase em itálico no topo:** em y 276, não 268 (o itálico sobe ~8 px e acusa fora da zona).
+- **Banner "toque pra continuar":** canto de cima à direita (x 600-915, y 262), com a frase curta da cena à esquerda.
+- **Card de print com muita gente:** cada item em ~1 linha e meia, 29-30 px, título de uma linha só.
+
+## Legenda falada: uma frase por página
+- Centralizada. Toda página tem 2 linhas EQUILIBRADAS (pedido dela, 12/nov/2026): a de baixo com mais ou menos a mesma largura da de cima, nunca uma linha cheia em cima e uma ou duas palavras embaixo. A linha de cima ideal ocupa quase toda a área da legenda. Medir a largura real na fonte (canvas measureText), não contar caracteres, e escolher a quebra que deixa as duas linhas mais parecidas. Preferir virar a página no começo de frase; nunca terminar linha nem página em palavra de ligação (e, de, pra, que, o, a...) nem partir nome composto. Página de uma linha só é exceção (frase muito curta no fim da cena).
+- Nomes e expressões que não se partem nem entre linhas nem entre páginas: nome + sobrenome, nomes de programa/entidade (ex.: Pacto Contra a Fome, Mapa da Fome, Bolsa Família), "governo atual", número + unidade.
+- Imprimir todas as páginas da legenda em texto e ler uma por uma antes de publicar.
+
+## Números de referência que funcionaram (reel Bom dia, América v15)
+Kicker topo 268, título 330, painel 452-1152 (x 165-915), mapa a partir de 1052 (pode sangrar), legenda dos partidos 1512 (x 220-915), rótulo 1572, @ 1626, fonte 1668.
+
+# ARQUIVO reel-pasta-roteiro-auditoria/SKILL.md
+
+---
+name: "reel-pasta-roteiro-auditoria"
+description: "Ciclo de todo reel: pasta + TRANSCRIÇÕES + ROTEIRO, auditoria e regras de ritmo/tela, vale para todos os skills de reel."
+---
+
+# Roteiro (história primeiro) + pasta do reel + prompt de auditoria
+
+Vale para TODOS os skills de reel (reel-motion-limpo, reel-colagem-jornalistica, reel-pontilhado-cinetico, reel-timeline-jornalistica, reel-placar-checagem, reel-desabafos-notinhas, reel-3d-historinha, reel-split-caderno-3d, reel-opc-split, quem-tem-culpa, reel-opc-dica-pontilhado).
+
+## Roda sozinho (regra dela, 7/nov/2026)
+Quando qualquer skill de formato de reel começa (split, pontilhado, colagem, timeline, motion, 3D, placar, desabafos, OPC, quem-tem-culpa), este ciclo inteiro vem junto sem ela pedir: pasta, TRANSCRIÇÕES, ROTEIRO, tracker, prompt de auditoria do ChatGPT, checagem de zona segura e a REVISÃO VISUAL abaixo antes de mostrar qualquer prévia. Ela ter que pedir auditoria ou revisão é erro. O pedido separado ("/reel-pasta-roteiro-auditoria") existe só pra quando ela quiser usar fora de um reel.
+
+**Revisão e feedback: como as skills se encaixam (regra dela, 12/nov/2026).** Ela não precisa saber qual chamar: ela fala normal e eu escolho. Todas continuam funcionando sozinhas (standalone) também.
+- **Rodam sozinhas em todo reel:** esta skill (pasta, ROTEIRO, prompt do ChatGPT), roteiro-storytelling (com as sementinhas), auditoria-dissonancia (político), reel-zona-segura.
+- **Recados na tela (auditoria-na-tela, modo leve):** toda prévia pode ter poucos recados vermelhos removíveis (✂️ 🔁 💬 📏 ⚠️ 🌱), botão "Com recados / Sem recados", nunca no MP4. Imagem temporária sempre ganha recado.
+- **Ela manda feedback:** pequeno, eu corrijo direto e conto em 1 linha; grande ou "não gostei de nada", vira card de antes e depois (cards-feedback).
+- **Ela pede auditoria, revisão ou diz que tá zoado:** auditoria-na-tela completa. O que a auditoria acha de pequeno vira recado; cena que ela sugere trocar inteira vira card na aba Feedback (cards-feedback).
+- A antiga recados-na-tela foi absorvida pela auditoria-na-tela (modo leve).
+
+## Planejar a entrega no Drive ANTES de começar (todos os skills, 15/nov/2026)
+Todo arquivo final (MP4, PNG, PDF) tem que chegar sozinho na pasta certa do Drive. Antes de produzir, escolher o caminho que permite isso, nesta ordem:
+1. Mac conectado (Claude no app do Mac): trabalhar com os arquivos lá e gravar o final direto na pasta sincronizada do Google Drive para desktop (Shared drives/<drive>/...). Se o Mac não estiver ligado à conversa, pedir no começo pra ela abrir a conversa no Mac, antes de gastar tempo.
+2. Arquivo pequeno (texto, doc, imagem leve): conector do Drive.
+3. Só nuvem (sem Mac): o conector não sobe vídeo grande. Avisar NO COMEÇO, não no fim, e combinar: ela salva pelo cartão do arquivo no celular (Compartilhar > Drive) ou abre a conversa no Mac.
+Se escolher qualquer caminho que não termine no Drive, dizer por quê em uma frase, no começo. Fontes que vêm do Mac (álbum, pastas) também: preferir trabalhar no Mac, onde a saída vai pro Drive sincronizado.
+
+## Ciclo completo de todo reel (vale pra todos os skills de formato)
+1. **Começo:** este skill (pasta, TRANSCRIÇÕES, linha no tracker), o roteiro escrito pelo skill **roteiro-storytelling**, a **auditoria-dissonancia** (em reel político ou de notícia, logo depois do roteiro) e o prompt de auditoria do ChatGPT.
+2. **Meio:** skill do formato (colagem, pontilhado, timeline, split, 3D, OPC...) + reel-zona-segura, com prévia, aprovação e MP4.
+3. **Postar:** postar-agendar.
+4. **Fechamento:** **reel-fechamento**, logo depois que o Metricool confirmar a publicação, sem ela pedir:
+   - MP4, capa e zip da fonte da prévia na pasta;
+   - NOTE no ROTEIRO;
+   - tracker completo (resumo, fatos, fontes, pessoas, ficha técnica, notas e repost);
+   - aba de collabs;
+   - repost no calendário;
+   - limpeza.
+   O mesmo skill cobre a correção quando acharem erro num post já publicado.
+
+## Crédito só com aprovação dela (regra de todos os reels, 10/nov/2026)
+Nunca dar crédito a ninguém sem perguntar antes: criador, comentarista, página ou veículo cujo vídeo ou post serviu de referência. Isso vale no vídeo, na legenda, no 1º comentário e no 2º comentário. Antes de colocar qualquer "Inspirado em", "via", @ ou nome de quem serviu de referência, perguntar a ela e só pôr se ela aprovar. Esta regra vale mais que qualquer linha de skill de formato que mande creditar. A única exceção é a atribuição que a licença exige (foto ou música CC BY): essa continua indo no comentário, mas avisar a ela no relatório.
+
+## Padrão mínimo de qualidade (todos os reels, mesmo que o skill do formato não repita)
+Por que existe: em 6/nov/2026 uma conferência mostrou que alguns skills de formato não tinham todos os itens abaixo. Eles ficam aqui, num lugar só, pra nenhum formato ficar pra trás.
+- **Prévia ao vivo antes de qualquer MP4:** tamanho de celular, áudio sincronizado, play e busca, botões de -30/-10/-5/+5/+10/+30 s e velocidades 1 / 1,05 / 1,1 / 1,2 / 1,5 / 2 / 3x. Republicar no mesmo link a cada rodada dizendo o que mudou, guardando a versão anterior.
+- **Notas na prévia:** caixa logo abaixo das velocidades, com botão de copiar, sem quebrar a rolagem da página.
+- **Na prévia também:** botão de baixar o vídeo (quando existir), legenda do post e 1º comentário prontos pra copiar, e a aba com o vídeo original quando o reel vier do vídeo de alguém.
+- **Labels "Card 1, 2, 3..." e aba Feedback (skill cards-feedback, 12/nov/2026):** labels temporários que somem em ~2 s e nunca entram no MP4; aba Feedback vazia desde a primeira versão. A resposta que entrega a prévia termina com "Feedback: me fala o card e eu respondo com a skill cards-feedback."
+- **Banner "toque pra continuar assistindo"** de 0:50 a 1:00, num espaço livre.
+- **Ritmo de tela: nada parado, nada piscando (pedido dela, 14/nov/2026, reel PLP 299: a cena 3 ficou 20 s com a mesma tela).**
+  - **A causa é texto demais.** Muito texto obriga a tela a ficar parada pra pessoa ler. Cada tela leva UMA ideia: palavra grande + no máximo uma linha curta. O resto vai pra fala ou pra legenda do post.
+  - **Tela parada no máximo ~3 s.** Parada = tudo já entrou e só a voz fala. Passou de 3 s, a cena muda: entra sticker, uma palavra solta ganha destaque conforme a fala, troca um elemento mantendo outros fixos, ou entra uma tela de descanso (palavra gigante, vazado, serifa com brilhos). Fala longa vira várias batidas, cada uma com cerca de 3 a 4 s.
+  - **O texto entra no COMEÇO da frase que fala dele**, nunca no fim.
+  - **Tempo mínimo de leitura antes do corte:** nada novo entra no último 1,5 s antes da troca de cena (o ideal é 2 s). Meio segundo NUNCA: parece glitch e ninguém lê. A última frase de uma cena precisa de mais tempo de tela; planejar o corte a partir disso.
+  - **Referência de leitura:** cerca de 2 s pra uma palavra grande, e mais uns 0,3 s por palavra além de 5. Se a conta passa de 3 s, o texto está grande demais: dividir.
+  - **Estilo pra variar (coolonização / BR / Vox):** alternar tela cheia e tela de descanso; stickers com textura (foto P&B recortada, balão de comentário, ícone com contorno preto) sobre fundo colorido; palavras soltas em destaque entrando no ritmo da fala.
+  - **Única exceção:** capa de carrossel (o quadro 0 do card 1 já tem tudo, sem revelação).
+  - **Duas batidas seguidas nunca parecem a mesma tela** (14/nov/2026: o fim repetia "TRECHO DO TEXTO" e só somava texto por cima). Informação nova = tela nova (outro fundo ou outro layout), nunca empilhada em cima do título.
+  - **Quando não vem mais nada, o bloco fica no meio** do espaço livre entre o topo seguro e a legenda. Título colado no alto com buraco embaixo é erro; conferir isso em todas as telas antes de renderizar, não só na que ela apontou.
+  - **A primeira tela já tem algo logo depois da primeira palavra** (ex.: "Gente," → a frase entra no "esquece").
+  - **Chamada na tela diz QUEM faz O QUÊ e ONDE** (ex.: "PT, responde aqui nos comentários com…" separado de "E VOCÊ? comenta, marca…"). Pedido pro político e pedido pro público nunca na mesma tela.
+  - **Informação que a pessoa vai querer guardar fica na tela com "📸 Tira print"** (ex.: o artigo de cada ponto), em vez de mandar procurar na legenda.
+  - **Auditoria obrigatória antes de mostrar:** pra cada cena e batida, medir (a) segundos parados depois da última entrada (máx. ~3 s), (b) tempo entre a última entrada e o corte (mín. 1,5 s), (c) palavras na tela por batida. O que falhar eu conserto sem ela pedir.
+- **Voz final (14/nov/2026):** quando ela aprova uma voz, ela vale pro vídeo INTEIRO na hora (nada de metade com a voz rascunho) e a velocidade que ela der vale pro vídeo todo. Gerar em poucas tomadas longas e cortar nas pausas. Trecho que ela tirar da fala sai também da tela.
+- **Marcações e collabs na postagem:** antes de perguntar, buscar a lista nos chats anteriores do mesmo tema (ex.: o carrossel). Conferir cada @ antes de postar e ter 2 reservas; o Metricool apaga @ inválido sem avisar antes (no PLP 299 caíram 4 de 15).
+- **Animação casada com a fala (pedido dela, 12/nov/2026, reclamação repetida: "toda hora tem que ficar pedindo"):** antes de montar qualquer cena, fazer o MAPA DE BATIDAS: pegar o tempo de cada palavra da narração e listar, cena por cena, tudo que a voz cita (pessoa, número, lista de coisas, lugar, objeto, data). Cada item ganha algo que ENTRA NA PALAVRA (data-at no tempo da palavra): ícone de linha, sticker, foto, número contando, selo, gráfico. Lista falada ("gasto do governo, imposto das empresas, dinheiro dos estados"; "soja, minério e carne"; "pequena, média, grande") = um ícone por item, entrando um depois do outro. Nenhum trecho de mais de ~3 s com a voz citando algo e nada novo mexendo. Na revisão, conferir o mapa contra a tela segundo a segundo; o que faltar eu faço sem ela pedir.
+- **Contador e placar começam quando aparecem:** número que sobe (placar, valor) conta a partir do momento em que o bloco entra na tela (data-at ou revelação), nunca escondido antes. Conferir com print em 3 tempos (início, meio, fim da contagem).
+- **Toda pessoa citada tem foto:** pedido dela desde o começo de cada vídeo. Foto oficial: API de dados abertos da Câmara (dadosabertos.camara.leg.br/api/v2/deputados?nome=...) traz urlFoto que baixa pelo workbench do Composio; Senado: página do senador. Recortar com rembg local. Nunca entregar a cena com nome e sem rosto.
+- **Notícia muda até a hora de postar (aprendido 12/nov/2026: o Senado aprovou o pacote enquanto a gente editava):** antes de gravar a voz final, antes de renderizar e no dia de postar, pesquisar de novo o assunto (busca extended do dia). Se mudou, avisar na hora, não postar o vídeo velho e reescrever só os trechos afetados. Ajustar "hoje/ontem/quinta" pro DIA EM QUE O VÍDEO VAI AO AR. Toda tela, legenda do post e 1º comentário entram na varredura.
+- **Velocidade por trecho e pausas:** a prévia já abre na velocidade que ela escolheu (ex.: 1,15x) e aceita ajuste por cena (data-boost, ex.: +0,05x só num card); o MP4 aplica o mesmo (atempo só no trecho). Entre blocos da narração, pausa de no máximo ~0,1 s; não deixar respiro de 0,35 s.
+- **ElevenLabs por blocos:** gravar a narração aprovada em blocos (1 take cada) pra poder trocar só um pedaço. Se um bloco sair com sotaque de Portugal ou errado, regravar só ele. Frase pra cortar: cortar no áudio pela pausa da frase, sem regravar.
+- **Mover legenda = mover o resto junto:** se a legenda descer ou subir, o banner, o @ e a linha de fonte andam juntos (conferir o print do rodapé).
+- **Blindagem contra "você não entende disso" (pedido dela, 12/nov/2026):** antes de mostrar a prévia, eu mesmo releio fala e tela procurando frase que um especialista usaria pra dizer que a página não sabe como o processo funciona (termo trocado, etapa fora de ordem, simplificação que vira erro, conclusão maior que a prova) e corrijo. O prompt do ChatGPT pede a mesma caça (item 6c).
+- **Título que não acusa:** em card de exemplos, nada de "lado ruim" sobre político; usar "o que é criticado" / "o que ajuda". Quem foi citado em reportagem ganha a resposta dele em letra miúda quando houver ("não quis comentar").
+- **Uma prévia só:** quando a voz final entra, a página mostra só a versão final; versões antigas ficam no histórico e não como link na página. Cabeçalho da prévia sempre diz a versão atual e a voz (ex.: "v16 · voz Senhor M."), pra ela saber que está vendo a certa.
+- **Toda pessoa citada passa por investigação de perfil antes do roteiro (pedido dela, 11/nov/2026), em todo reel e post, de qualquer formato:** relator, autor de projeto, presidente de comissão ou da Casa, ministro, quem assinou, quem votou, comentarista.
+  - Investigar o passado da pessoa: partido e ideologia (Bolognesi), lado de fato (ex.: partido de direita mas aliado do governo atual), cargos anteriores, votos e falas públicas sobre o tema, processos ou investigações, e se tem viés claro sobre o assunto. Anotar tudo no ROTEIRO, numa tabela "Pessoas no vídeo", com fonte.
+  - **Bolsonarista é sempre sinalizado na tabela** (ex-ministro ou ex-vice do Bolsonaro, eleito com apoio dele, defende ele em público, vota com o bloco dele nos temas-chave).
+  - **Isso serve pra análise, não pra rótulo.** Não precisa falar "bolsonarista" no vídeo toda vez. O que muda é a leitura: o que esperar dessa pessoa, se a notícia é boa ou ruim de verdade, o que pedir pro público. Ex.: "o projeto contra mentira na internet ganhou relator" parece avanço, mas o relator é o Mourão (Republicanos, direita, ex-vice do Bolsonaro), então a leitura certa talvez seja "agora é hora de cobrar", não "boa notícia". Só dizer o perfil em voz alta quando ele mudar o entendimento do tema, curto, com fonte e sem rótulo acusatório.
+  - A auditoria do ChatGPT e a auditoria de dissonância recebem essa tabela pra conferir.
+- **Ficha de quem dá opinião (pedido dela, 12/nov/2026), em todo reel e post:** vale pra toda voz que opina ou conclui, não só político: economista, analista, colunista, comentarista e o próprio jornal ou emissora que passa a notícia. Principalmente quando a gente vê distorção de informação ou de conclusão.
+  - Investigar: onde trabalha hoje (banco, corretora, consultoria, universidade, partido, governo), se é sócio, cargos anteriores, quem indicou, o que defende há anos (é coerente ou muda conforme o governo?) e quem ganha ou perde se a opinião dele vencer. Ex.: Mansueto Almeida é sócio e economista-chefe do BTG, ajudou a criar o teto de gastos e comandou o Tesouro com Temer e Bolsonaro, e o próprio BTG escreve que banco tende a ganhar com juro alto.
+  - No vídeo, a ficha vira uma tela curta com cabeça recortada e chip de posicionamento (ex.: "liberal, centro-direita"). A posição muda vídeo a vídeo: no começo quando a pessoa é o centro do vídeo, no final quando a ligação só faz sentido depois da opinião ("lembra que eu falei que ele trabalha em tal lugar? se isso acontecer, o mercado dele ganha assim; se acontecer aquilo, perde").
+  - Sincerão, sem rótulo acusatório: avisar de onde a pessoa fala não é descartar o ponto dela. Se trabalha no mercado e mesmo assim não tem viés no tema, dizer isso também. Mesmo tratamento pros dois lados (ex.: André Lara Resende também ganha ficha: ex-banqueiro, hoje próximo do governo atual).
+  - Guardar cada ficha no ROTEIRO (tabela "Pessoas no vídeo") pra comparar no futuro se as conclusões de pessoas do mesmo perfil se repetem.
+  - Quando existir estudo sobre o viés das fontes (ex.: pesquisa que olhou uma semana de O Globo e Valor num pacote fiscal e achou só fontes do mercado), apresentar o estudo.
+- **Legenda falada:** 2 linhas cheias e equilibradas por página (a de baixo mais ou menos do tamanho da de cima, nunca uma palavra sozinha embaixo; regra completa no reel-zona-segura), só a palavra atual na cor tema, conferindo cada quebra de linha.
+- **Zona segura:** skill reel-zona-segura.
+- **Voz:** grátis no rascunho; ElevenLabs só no final aprovado, 1 geração, narração inteira de uma vez (não cena por cena).
+- **Som (skill reel-som), em todo reel e em todo formato, OPC incluso:** fundo baixinho com 2 opções + "sem fundo" na prévia, e efeitos especiais nas animações (selo, queda, máquina, aldeia, porta, cadeado...). Entra na primeira prévia, sem ela pedir.
+- **Final com chamada (CTA), em quase todo reel:**
+  - **News (Brasil e EUA): frase padrão do CTA (pedido dela, 10/nov/2026, usar sempre igual):**
+    > "Pra ajudar a aumentar o engajamento, copia o link, curte, reposta aqui e nos stories, e segue a página pra não perder o próximo."
+    - "Copia o link" vem PRIMEIRO e substitui o "salva": copiar o link impulsiona o alcance. Pedir o engajamento de forma direta, pra viralizar.
+    - Pode vir antes uma frase do tema dizendo o porquê (ex.: "quanto mais gente souber, mais esclarecimento pode aparecer").
+    - Na tela: ícones grandes entrando um por um na palavra falada, nesta ordem: Copia o link, Curte, Reposta (aqui e nos stories), Segue. Sem ícone de "Salva".
+    - Essa frase já fecha o vídeo; não precisa repetir "e já segue pra mais conteúdo assim" depois dela.
+  - **OPC:** só nos de historinha (reel-3d-historinha, motion, dica). Texto próprio: manda pra alguém que tá querendo fazer uma obra, curte pra ajudar e salva pra ligar pra gente depois. Nos de antes e depois NÃO entra.
+  - O design pode variar por formato; o que não muda é a fala pedindo essas ações.
+  - **Fecho:** nos News, o fecho é o "segue a página pra não perder o próximo" da frase padrão acima. Nos OPC com CTA, continua fechando com "e já segue pra mais conteúdo assim" (pedido dela, 9/nov/2026).
+  - **Quem decidiu:** se o fim disser quem decidiu algo, nunca diluir com "direita e esquerda juntas" quando a maioria era de um lado; dar a proporção real (ex.: "um Senado com quase 80% de direita e centro-direita"). Lição do reel iPhones do Senado, 10/nov/2026.
+  - **Quando o tema tem ação cívica (projeto parado, votação, cobrança):** antes do CTA, dizer "mas você pode ajudar: nos comentários tem os e-mails, uma cartinha pronta e o link pra votar". No comentário de participação, listar TODOS os projetos ligados ao tema que estão parados (Senado e Câmara), cada um com uma linha simples e o link da consulta pública do e-Cidadania (www12.senado.leg.br/ecidadania/visualizacaomateria?id=...) ou da enquete da Câmara, sem https e sem dois-pontos. Aproveitar a oportunidade pra pôr o máximo de jeitos de participar; confirmar cada id antes de publicar.
+- **REVISÃO VISUAL antes de mostrar a prévia (lição do reel da carreata, 7/nov/2026, ela achou erro em vários cards):**
+  - Conferir com a fonte de verdade carregada (Figtree etc.); a fonte reserva do navegador de teste é mais estreita e esconde texto encostando.
+  - **Varredura segundo a segundo, não só no fim de cada cena** (9/nov/2026, ela achou texto encostando no meio das cenas): medir a caixa de cada linha de texto visível a cada 1 s e no fim de cada cena, e acusar qualquer linha de um elemento encostando na linha de outro (inclusive rótulo de gráfico, carimbo e legenda) e qualquer texto fora de x 140 a 925. Elemento que se move em 3D (página virando) esconde o que estiver por cima enquanto se move.
+  - Cabecinhas: todas recortadas pela cabeça de verdade (sem elipse, sem topo cortado reto), contorno branco seguindo a cabeça, mesmo estilo (cor ou P&B) em todo o vídeo; foto que ela já aprovou não troca sem perguntar.
+  - Quebra de linha em TODO card e em TODA página de legenda: nenhuma palavra sozinha ("Rio", "vezes."), nada de hífen partindo palavra ("Ex- / secretário"), nome de pessoa não se parte entre linhas.
+  - Texto na tela não repete a legenda no mesmo segundo (ex.: "Preso 2 vezes" enquanto a voz fala isso): trocar por um dado que a fala não diz.
+  - Mapa de conexões no padrão da referência dela (foto, nome, cargo, uma linha de status, linha azul = vínculo político, vermelha tracejada = investigação, legenda das linhas); nada cobrindo rosto.
+  - Folha com um print cheio de cada cena, olhada uma por uma, antes de mandar o link.
+- **MP4 só depois da aprovação dela.** Avisar o tempo de render antes e nunca baixar qualidade ou qps sem perguntar. Começa no passo P (pasta desde o primeiro vídeo), depois o passo 0 (a história) e, assim que existir um roteiro (antes de narração ElevenLabs e antes do MP4), seguir os passos 1 a 3 sem a Priih pedir.
+
+## P. Desde o PRIMEIRO vídeo de referência (antes de qualquer roteiro)
+Por que existe: no reel dos juros (nov/2026) ela mandou 16 vídeos ao longo de três dias e dois chats; um vídeo ficou fora da lista de transcrições, o tracker não tinha linha e ela teve de perguntar se nada estava se perdendo. Ela não deve ter que conferir isso.
+Assim que chegar o primeiro link de vídeo sobre um tema novo (mesmo que ela só diga "olha esse"), sem esperar roteiro:
+1. Criar (ou achar, se já existe) a pasta v<N>_<slug> no lugar do passo 1 (Brasil: News > Brazil > Reels_Shorts). O slug é o tema (ex.: v1_juros-tres-lados).
+2. Criar o doc TRANSCRIÇÕES — <pasta> e lançar o vídeo nele na hora, numerado: link, autor, duração, posição sobre o tema (a favor, contra, neutro, e o que acha que vai acontecer), resumo fiel e pontos úteis com o que precisa ser checado. Cada vídeo novo entra embaixo, com o próximo número, no mesmo turno em que chegou. Nunca apagar o que já está lá. Antes de responder, conferir que a numeração não pulou nenhum vídeo que ela mandou.
+3. Criar o doc ROTEIRO — <pasta> já com a LISTA DE FEEDBACK DA PRIIH no topo (ver abaixo), mesmo antes de existir roteiro.
+4. Abrir uma linha no tracker do nicho (Brasil: planilha "News — Content Control", aba "🇧🇷 Brazil In Production", conta do Composio googlesheets_allyl-rearm), com título, status, link da pasta, links dos docs, quantos vídeos de referência e a coluna Categoria (coluna P, ex.: "Economia e juros") sempre preenchida, nunca em branco. Atualizar o status a cada versão.
+5. O vídeo baixado fica em News > Brazil > Captures > resources_IG-<id> (é onde o downloader salva); no TRANSCRIÇÕES vai o link de cada um.
+
+### Lista de feedback (seção fixa no topo do ROTEIRO)
+- Todo feedback dela sobre o roteiro ou o preview entra na lista, com data, nas palavras dela resumidas ("não entendi X", "faltou Y", "isso não ficou claro"). Só acrescentar; nunca apagar.
+- A dúvida dela é a dúvida do público: cada item vira mudança no vídeo (cena, exemplo, explicação), não só resposta no chat.
+- Antes de qualquer versão nova, e sempre que ela mandar vídeo ou ponto novo, reler a lista inteira e conferir que nenhum item resolvido voltou a faltar. Se um chat novo começar, a lista é o primeiro lugar a ler.
+- Junto da lista, manter o mapa "o que entrou de cada vídeo" (número do vídeo → onde o ponto dele está no roteiro: fala, tela ou letra miúda). Ponto que ela mandou e não entrou tem que estar marcado com o motivo.
+
+
+## 0. Escrever a história: skill roteiro-storytelling
+Todas as regras de como a história é escrita (duas passadas, falar com quem discorda, estrutura de retenção, peso e não empate, conexões, cada frase com imagem, cortes, checagem da batida) moram só no skill **roteiro-storytelling**. Carregar ele aqui e seguir. Não copiar essas regras pra cá nem pros skills de formato: muda lá, vale pra todos. Em reel político ou de notícia, depois do roteiro rodar o skill **auditoria-dissonancia** e gravar o resultado no fim do ROTEIRO.
+
+## 0-antigo (substituído pelo roteiro-storytelling; não seguir esta parte)
+Por que existe: quase todas as regras dos skills e das preferências dizem O QUE incluir ou COMO fica na tela (números concretos, os dois lados, de quem é a responsabilidade, chips, letra miúda). Quando tudo isso entra junto na hora de escrever a fala, o roteiro vira uma lista de fatos, um por frase, e soa robótico. Foi o que aconteceu na v1 do reel das bets (nov/2026): a Priih achou frases soltas, sem conexão. As regras continuam valendo; elas só entram depois que a história existe.
+
+**Passada 1, só a história** (sem pensar em tela, cor ou chip):
+- Antes de escrever, 3 linhas no topo do ROTEIRO: a pergunta que o vídeo responde; a virada (o que o público acha x o que é de verdade); a frase final, que volta ao começo.
+- Escrever como a Priih contaria pra uma amiga num áudio: frases corridas, de tamanhos diferentes, primeira pessoa quando couber ("fui conferir"), uma pergunta de vez em quando no meio da conversa.
+- Um fio só. Cada bloco termina abrindo o próximo ("só que", "mas aí", "e se...?", "fui conferir"). Se dá pra trocar dois blocos de lugar sem perder nada, falta ligação.
+- Uma pessoa, um caso ou uma cena concreta antes do número. O número vem pra provar o que a cena mostrou.
+- Uma ideia por cena, em corrente de causa e efeito (isso levou àquilo, que levou àquilo). Se a cena precisa de duas imagens diferentes, são duas cenas.
+- Número grande vai na tela; a fala diz o que ele significa ("mais alto que um prédio de 50 andares"). Se precisar falar o número, arredondado ("cerca de 60 mil").
+- Quando ajudar a explicar, uma metáfora com objeto do mundo real (cofre, balança, régua, corda de área VIP) em vez de efeito de ficção científica. Ela pode voltar e mudar de estado ao longo do vídeo e conviver com outras imagens; não forçar quando gráfico, mapa ou clipe original explicam melhor.
+- Pessoas não entram uma por uma em fila: agrupar numa colagem ou num mapa ligado ao argumento.
+
+**Estrutura de retenção (base dela, 4/nov/2026; é base, não fôrma: quem escreve tem liberdade dentro dela).**
+- **0 a 3 s, gancho:** a frase e a imagem que seguram o dedo. A capa usa o mesmo gancho (ou um irmão dele), pra quem vem pelo perfil e pra quem vem pelo feed.
+- **3 a 10 s, a promessa:** dizer o que a pessoa vai levar se ficar ("vou te mostrar X, Y e, no fim, a resposta de Z") e já entregar a primeira informação de verdade. Abertura inteira com no máximo uns 10 s; nunca 15 s de introdução, porque perto dos 10 s quem não recebeu nada rola.
+- **A cada uns 15 s, um ponto de checagem:** reler a frase que está tocando ali e perguntar "isso faz a pessoa querer ficar?". Se não, reescrever pra abrir uma pergunta, mostrar um dado novo ou adiantar o que vem.
+- **No meio, uma recompensa parcial:** algo que já vale o vídeo (um dado que surpreende, uma revelação), pra quem saiu ali ir embora levando algo.
+- **Pouco antes do fim, a recompensa geral:** a resposta prometida, a conclusão dita em voz alta e o guia de gravidade (ver "Peso, não empate").
+- **Fim:** pedido curto pra seguir ("segue pra mais vídeos assim"), mais a pergunta pra comentar quando o skill do formato pedir.
+- Tudo isso conversa com a regra do primeiro minuto e com o banner de 0:50: a recompensa principal (ou a pergunta aberta que faz tocar) cai antes de 1:00.
+- O que é dito puxa o que aparece: cada imagem, chip ou gráfico entra na palavra que o cita (regra dos skills de formato), e a mistura de conversa com uma pergunta de vez em quando continua valendo.
+
+**Peso, não empate (regra dela, 4/nov/2026).** Colocar os dois lados no mesmo nível quando um pesa mais também é desinformação, e o outro lado vai explorar esse desequilíbrio. Então:
+- Quando as provas pesam mais pra um lado, dizer isso com todas as letras. Mostrar o outro lado com o peso que ele tem, não com o mesmo tamanho.
+- Risco se explica pela chance e pela gravidade: o que pode dar certo, o que pode dar errado, quão provável é cada coisa (com fonte) e se o estrago tem volta. Dano que não se recupera (floresta derrubada, vida, dinheiro perdido de família) pesa mais e não pode ser minimizado só porque também pode dar certo. Exemplos dela: Amazônia, liberação das bets.
+- Sempre fato: possibilidade é dita como possibilidade ("pode", "o risco é"), nunca como certeza. Quando não existe base pra dizer qual lado pesa mais, dizer que não dá pra saber, sem inventar empate nem vencedor.
+- Dar ao público um guia de gravidade: no fim, deixar claro o tamanho do problema e por que ele importa.
+- Vale também para o teste de sensibilidade do quem-tem-culpa: regra alternativa só conta se for tão defensável quanto a principal; não é pretexto para empatar o ranking.
+
+**Cada frase tem imagem (regra dela, 5/nov/2026).** O ROTEIRO é escrito como tabela narração | o que aparece. Toda frase falada tem uma imagem ou animação que mostra o que está sendo dito (diagrama que se monta, gráfico que cresce, mapa com setas, objeto que muda de estado, cabeça recortada com chip). Não vale só texto na tela, nem imagem pequena tipo emoji. Pode haver telas mais paradas, mas com algo se mexendo. Referência dela: o reel do @economaticonerd sobre o Lara Resende (quadro escuro com grade, capítulos "FOLHA 1, 2...", cada frase acrescenta um desenho e o diagrama vai crescendo).
+
+**Encurtar sem cortar o que importa (regra dela, 5/nov/2026).** O limite de tempo é alvo, não guilhotina: passar um pouco (uns 10 a 15%) é melhor que perder frase importante, porque o áudio ainda pode ser acelerado. Antes de cortar, reler a lista de feedback e o mapa "o que entrou de cada vídeo": não cortar frase que resolve um feedback, um exemplo do dia a dia que ela pediu, nem um ponto de vídeo que ela mandou. Primeiro mover detalhe pra tela ou letra miúda. No ROTEIRO, marcar "se precisar encurtar" com o que pode sair e dizer isso pra ela.
+
+**Juntar o melhor dos vídeos de referência.** Quando ela manda vários vídeos sobre o tema, o nosso tem que ser o melhor de todos: antes de escrever, comparar o nosso storytelling com o deles (quem explica melhor, qual exemplo funciona, qual visual prende) e registrar essa comparação no ROTEIRO.
+
+**Conexões entre blocos (aprendido do reel do Investland sobre Selic e déficit, 5/nov/2026).** O que faz a pessoa ir de um ponto pro outro sem sentir que é lista:
+- Cada bloco abre respondendo a objeção que o bloco anterior provoca na cabeça de quem assiste ("se você acha que comparar com o mundo não vale, vamos comparar o Brasil com ele mesmo"). Antes de escrever a transição, perguntar: o que alguém do outro lado diria agora? A próxima frase responde isso.
+- Par de extremos concretos no lugar de média: dois casos lado a lado que quebram a ideia (China com déficit grande e juro de 3% x Noruega com superávit e juro maior).
+- Ensinar a ferramenta antes de usar (o que é correlação, de -1 a +1), com um exemplo bobo do dia a dia, e só então mostrar o resultado.
+- Antecipar o comentário de quem discorda e mostrar por que ele não derruba o ponto (ou, se derruba em parte, dizer isso: "Peso, não empate").
+- Abrir com o mito dito como afirmação e "vamos ver o que os números dizem"; fechar puxando o próximo vídeo quando houver série.
+
+**Rosto + desenho (pedido dela, 5/nov/2026).** Fala de rosto soa mais natural; ela quer a mistura. Quando o formato tiver apresentador (clipe curto dela com troca de rosto, ou clipe de quem está sendo citado), o rosto entra nas viradas, nas perguntas e nas conclusões; o desenho/gráfico animado entra nos dados. Sem apresentador, a voz segue o mesmo ritmo e as viradas ganham a cabeça recortada de quem fala ou é citado. Marcar no ROTEIRO, cena por cena, se é "rosto" ou "desenho".
+
+**Passada 2, as regras:** aplicar o skill de reel de origem, as preferências e as regras políticas. Fato que não cabe no fio vai pra tela ou pra letra miúda ("sementinha"), não pra fala. Quando ela mandar pontos novos, encaixar aqui sem quebrar o fio; se um ponto que ela pediu não couber na fala, ele vai pra tela e eu aviso onde ficou.
+
+**Checagem da batida** (com os tempos por palavra da voz grátis), antes de mostrar pra ela:
+- Trecho de mais de 5 s sem nada concreto (nome, número, imagem que dá pra ver): reescrever.
+- 3 ou mais frases abstratas seguidas, ou várias frases do mesmo tamanho em fila (é isso que soa robô): reescrever.
+- Os primeiros 10 s já ensinam algo do tema e dizem o que a pessoa vai levar? A abertura termina antes de uns 10 s? O fim retoma a imagem ou a frase do começo?
+- Marcar no ROTEIRO os pontos de checagem (a cada uns 15 s), a recompensa parcial e a recompensa geral, com o tempo de cada um.
+- Teste rápido: se cabe "e aí" entre as frases, é história; se cabe marcador de lista, é lista.
+- Conferência do argumento: resumir cada cena em 3 coisas: a pergunta que ela resolve, a prova que mostra e o motivo da próxima cena existir. A ligação tem que ser de lógica; pôr "mas aí" ou "e então" não transforma lista em história. Só dizer que uma coisa causou outra quando houver prova; se for só sequência no tempo ou associação, dizer isso.
+- Para a voz: cada fala começa e termina em palavra cheia e não tem só 3 palavras (sai instável). Depois de gerar, transcrever cada fala de volta e comparar com o texto; refazer só as que não baterem (na voz grátis à vontade; no ElevenLabs, avisar antes, porque cada take custa).
+
+## 1. Pasta do conteúdo no Drive (a mesma onde vai o vídeo final)
+- Brasil (News Brasil): Shared drive News > Brazil > Reels_Shorts (folder ID 1IY4TJyv9Dk1qJPdhskyn4flj1g1jp0Kl).
+- EUA: Shared drive News > pasta dos EUA > Reels (procurar o ID no Drive; nunca inventar).
+- OPC: Shared drive Marketing / Oak Park Construction, na pasta da série (procurar o ID; nunca inventar).
+- Nome da pasta: v<N>_<slug> (slug só do tema, ex.: v1_juros-tres-lados). Antes de criar, listar a pasta-mãe: se já existe pasta do mesmo tema, usar ela; se for refação, v2. Conferir que o nome bate com o que o vídeo vai ser.
+- Nunca deixar em My Drive como destino final.
+
+## 2. Documentos dentro da pasta
+1. ROTEIRO — <pasta>: **LISTA DE FEEDBACK DA PRIIH no topo** (e o mapa "o que entrou de cada vídeo"); o que é o vídeo e o objetivo; **as 3 linhas do fio (pergunta, virada, frase final)**; **prazo de validade (AGORA / SEMANAS / PERENE, ver skill postar-agendar)**; roteiro completo da narração em tabela narração | o que aparece (animação de cada frase); versões antigas ficam embaixo como histórico, nunca apagadas; **seção GANCHOS ALTERNATIVOS** (ver abaixo); perguntas e respostas finais se houver; cenas e imagens planejadas (o que aparece na tela, rostos e chips, gráficos); texto que aparece na tela; fontes com link; seção NOTAS no fim (cada revisão vira um bloco novo "NOTE — AAAA-MM-DD", sem apagar as anteriores).
+2. TRANSCRIÇÕES — <pasta>: transcrição de cada vídeo de referência (link, autor, duração, resumo fiel e fala limpa) e os comentários úteis (sem nome de quem comentou). Avisar quando a transcrição é automática.
+- Imagens/recortes do vídeo vão em resources/ dentro da pasta quando existirem.
+- Quando o MP4 final sair, atualizar o ROTEIRO com a fala que foi realmente usada, os tempos reais, qual áudio entrou e os arquivos finais. O planejamento anterior fica como histórico (o roteiro planejado e o vídeo final costumam divergir).
+
+### Ganchos alternativos (para trial reels)
+Escrever, além do gancho principal, 2 a 3 aberturas alternativas (primeiros 3 a 5 s: fala + texto na tela + visual), cada uma de um tipo diferente, todas levando ao MESMO corpo do vídeo sem mudar nada depois da abertura:
+- Afirmação do outro lado (a que mais funciona na página política: a frase como o outro lado escreveria, nunca pergunta que entrega o desmentido)
+- Dado/número que surpreende
+- Aversão à perda ("isso tá saindo do seu bolso sem você perceber")
+- Identificação ("se você acha que…, olha isso")
+- Curiosidade ("tem uma coisa nessa história que quase ninguém comenta")
+- Contradição ("Água de chuva é doce. Então de onde vem o sal do mar?")
+- Consequência, levando a sério um "e se" ("E se o pedido fosse atendido?")
+Todas seguem as regras de sempre: ensinar algo já nos primeiros 10 s, nada de palavra que derruba alcance, "governo atual" + 🦑, sem @ de ninguém. Gancho específico (nome, número, lugar) ganha de gancho genérico. As alternativas só viram vídeo depois que a versão principal for aprovada, e só a cena de abertura é renderizada de novo. Como cada trial também muda capa, legenda e 1º comentário (pro Instagram não tratar como repetido), o teste mede o pacote de abertura inteiro, não só a frase falada: registrar assim no Trial Reels Log.
+
+Como criar pela nuvem (Composio):
+- Pasta: GOOGLEDRIVE_CREATE_FOLDER {name, parent_id}, account "priscila".
+- Doc: GOOGLEDOCS_CREATE_DOCUMENT_MARKDOWN {title, markdown_text} e depois GOOGLEDRIVE_MOVE_FILE {file_id, add_parents: <pasta>, remove_parents: "root", supportsAllDrives: true}, account "priscila".
+- Atualizar: GOOGLEDOCS_UPDATE_DOCUMENT_MARKDOWN {id, markdown}.
+- Conferir lendo o doc (read_file_content) que o conteúdo está lá e que o pai é a pasta certa. Nunca usar create_file do MCP com conteúdo (cria arquivo vazio).
+
+## 3. Resposta pra Priih: prompt pronto pra copiar
+**Uma auditoria só, completa (pedido dela, 14/nov/2026).** Quando ela manda pro ChatGPT, a peça já está quase pronta: o prompt pede TUDO de uma vez (fatos, história, fala, visual, animação, regras), pra não precisar de segunda rodada. Não mandar só fatos.
+
+Não mandar arquivo pra ela abrir e copiar. A resposta traz um bloco de texto único, pronto pra colar no ChatGPT, com:
+- caminho (ex.: News > Brazil > Reels_Shorts > v1_juros-tres-lados) e os links https da pasta e de cada doc;
+- **o pedido puro dela**: as mensagens dela sobre a peça, nas palavras dela (resumidas só se muito longas, sem reinterpretar), pra o ChatGPT julgar se o Claude entendeu certo o que ela pediu;
+- **as regras que valiam**: os trechos das skills usadas (formato, coolonização/estilo, zona segura, escrita-humana, storytelling, regras visuais da memória), colados no prompt em resumo de bullets, mais onde estão os templates/referências de arte (pasta do Drive, link da prévia do estilo) e qual tipo de arte devia ter sido criado;
+- **o link da prévia** (artifact) E, SEMPRE junto, uma folha de prints (pedido dela, 14/nov/2026: o ChatGPT não abre a prévia, pede login). A folha é um JPG único com um print de cada cena/batida no momento cheio (tudo já na tela, recados DESLIGADOS), em grade de 5 colunas, com etiqueta "Cena N.M" no canto de cada print, enviada com SendUserFile no mesmo turno do prompt. A cada versão nova, gerar a folha de novo e mandar com a resposta (ela repassa pro ChatGPT). O prompt diz: "Em anexo, a folha com uma tela de cada cena (Cena N.M); use ela para a parte visual."
+- o pedido de auditoria:
+  0. NÃO EDITE o que já existe. Não apague, não reescreva e não substitua nada no ROTEIRO, nas TRANSCRIÇÕES, no tracker ou em outro arquivo. Se quiser deixar a sua versão do roteiro, ACRESCENTE só no FIM do documento ROTEIRO, embaixo de um título novo "VERSÃO CHATGPT — <data>", sem tocar em nada acima dele (assim fica tudo num documento só pra pesquisa futura). Se não conseguir gravar, responda no chat e diga que não gravou. Nunca diga que salvou algo que não salvou.
+  1. Leia o ROTEIRO e as TRANSCRIÇÕES nos links.
+  2. Cheque só FATOS (números, datas, quem disse o quê, lado político de cada pessoa) e diga SÓ o que está errado, impreciso ou fora de contexto, com a frase, o certo e a fonte com link. Não procure argumentos pra defender nenhum lado, não acrescente ressalvas desnecessárias.
+  3. Pesquise sozinho primeiro; depois confira as fontes do roteiro sem se limitar a elas. Não recuse por falta de número exato: dê a melhor estimativa e de onde vem.
+  4. Storytelling: tem um fio só? Cada bloco puxa o próximo, ou dá pra trocar blocos de lugar? Aponte onde vira lista de fatos e reescreva esse trecho como conversa. O fim volta ao começo?
+  5. Dê sugestões de: fluxo (os primeiros 10 s ensinam algo? o mais importante está no primeiro minuto?), tom de conversa (soa falado ou robótico?), facilidade (um adolescente, uma avó e alguém que não entende de política entendem?), e equilíbrio entre mostrar expertise (termo técnico certo, número com fonte) e explicar de forma simples logo em seguida.
+  6. Aponte qualquer palavra que possa derrubar o alcance no Instagram.
+  6a. Para cada pessoa ou veículo que dá opinião no roteiro (economista, analista, jornal), confira a ficha: onde trabalha, cargos, quem ganha ou perde com a opinião dele. Aponte se falta ficha, se está errada, ou se a conclusão dele combina com o interesse de onde ele trabalha e o roteiro não avisa. Aponte também se o roteiro foi injusto com a pessoa.
+  6b. Não proponha empate artificial: se as provas pesam mais pra um lado, o roteiro deve dizer isso. Não peça para suavizar um risco grave e irreversível só porque também existe a chance de dar certo; aponte apenas se a chance ou a gravidade estiverem exageradas em relação às fontes.
+  6c. Caça ao "você não sabe como isso funciona" (pedido dela, 12/nov/2026): leia cada frase falada e cada texto na tela como um especialista do outro lado que quer desmoralizar o vídeo. Aponte toda frase que daria munição pra comentários do tipo "quem fez esse vídeo não entende de [tema], por isso falou isso": termo técnico usado errado ou trocado (ex.: urgência x aprovação, texto-base x destaques, PEC x PLP, corte x adiamento, imposto x desconto de imposto), etapa do processo dita fora de ordem ou como já decidida, simplificação que vira erro, número sem a unidade ou o período certo, comparação entre coisas que não se comparam, e conclusão maior do que a prova. Para cada uma: a frase, o comentário que ela provocaria, por que o comentário teria razão (ou não) e a troca exata, curta e no mesmo tom.
+  7. Diga qual dos ganchos (principal e alternativos) prende mais e por quê, e se algum promete algo que o corpo do vídeo não entrega.
+  8. Leia a seção AUDITORIA DE DISSONÂNCIA no fim do ROTEIRO (quando existir): diga se alguma objeção está certa, se falta alguma comum e se as respostas estão corretas.
+  9. Pedido x entrega: compare o pedido puro dela com o que foi feito. O Claude interpretou certo? Faltou algo que ela pediu? Entrou algo que ela não pediu ou que mudou o sentido?
+  10. Regras: confira, card por card ou cena por cena, se a peça seguiu as regras coladas acima (estilo/template, cores, zona segura, quebra de linha, tamanhos mínimos, escrita sem cara de IA, capa de carrossel com tudo no quadro 0 etc.). Liste o que fugiu e a correção.
+  11. Visual e animação: olhando a prévia, sugira animações que faltam (ícone entrando na palavra falada, número contando, brilho/shake no que importa, gráfico), cenas paradas demais e imagem fraca pro que a fala diz. Seja concreto: cena, o que entra, quando.
+  12. Teste da avó: leia cada tela e cada frase como uma avó que não entende de política. Ela consegue ler a tempo? Entende? Onde ela travaria e qual a frase mais simples? O que está faltando pra ela entender?
+- Depois do bloco, uma linha dizendo o que mudou desde a última versão, se houver.
+
+Quando a Priih trouxer a resposta, conferir no Drive se o ROTEIRO acima de "VERSÃO CHATGPT" continua igual ao que eu gravei (revisão e conteúdo). Se o ChatGPT mexeu na nossa parte, restaurar a nossa versão e mover a dele pra baixo do título "VERSÃO CHATGPT"; se ele disse que salvou e não salvou, avisar. A versão dele é sugestão: eu comparo e decido o que entra na nossa, registrando numa NOTE. Regra criada em 7/nov/2026, quando o ChatGPT respondeu "salvei a v2 no documento original" sem ela ter pedido (e não tinha salvado).
+
+A auditoria vale como independente porque é outro modelo (ChatGPT) que pesquisa sozinho antes de ver a nossa conclusão. Revisão feita por mim mesmo, já sabendo a conclusão, é revisão interna e deve ser chamada assim.
+
+Quando a auditoria voltar, ANTES de abrir a do ChatGPT, fazer e anotar a própria leitura do storytelling (onde vira lista, onde a ponte entre blocos é fraca, cena com ideia demais, se a promessa e o fim respondem o gancho, se há recompensa geral); só depois ler a auditoria e comparar. Pedido dela (5/nov/2026): o storytelling é o principal problema, e seguir o ChatGPT não é obrigação. Depois, revisar com senso crítico (o ChatGPT às vezes defende político sem informação completa, aceita artigo falso ou repetido como verdade e põe ressalva desnecessária), atualizar o ROTEIRO e registrar uma NOTE nova.
+
+## 4. Na hora de postar
+Quando ela disser "renderiza", "pode renderizar" ou "vamos renderizar", seguir o skill **reel-renderizar** (checagem final, render rápido, conferência quadro a quadro, pacote de comentários, collabs e marcações, Metricool), sem pesquisar outro caminho de render.
+
+Quando ela disser "posta", "agenda" ou "vamos postar", seguir o skill **postar-agendar** (prazo de validade, trials com os ganchos alternativos, horário, sugestão de repost no Google Calendar), junto com as regras de marca do skill de reel de origem.
+
+## 5. Antes de entregar o MP4 (vale para todos os reels)
+- Voz: transcrever de volta o áudio gerado e comparar com o roteiro aprovado (nomes, números, negativas, primeira e última palavra de cada fala). Os tempos que o sintetizador devolve não provam que ele falou certo. Na voz grátis, refazer à vontade. Na voz paga, essa conferência não autoriza gerar de novo: dizer qual trecho e qual defeito e esperar o ok dela (continua 1 take).
+- Som: se um barulho incômodo continuar depois de uma correção, medir voz, música e efeitos separados antes de trocar outra coisa. Testar trocas de cena sem "whoosh" e ouvir no alto-falante do celular.
+- Arquivo: entregar duas versões, uma pra postar e uma leve (menos de 30 MB) pra conferir no celular. Decodificar as duas inteiras (ffmpeg -v error -i arquivo -f null -) e exigir zero erros, além de conferir duração, emendas, sincronia, resolução e se é o áudio da versão aprovada. Zero erros não substitui olhar e ouvir.
+
+# ARQUIVO reel-som/SKILL.md
+
+---
+name: "reel-som"
+description: "Som de todo reel: voz contínua sem fim de frase robótico, música/ambiente de fundo baixinho e efeitos especiais nas animações. Use em todo reel (todos os formatos, OPC incluso), quando ela disser que faltou som, ou que a voz ficou picotada/robótica."
+---
+
+# Som do reel: fundo + efeitos especiais
+
+Por que existe: no reel dos indígenas (7/nov/2026) o vídeo ficou só com a voz. A Priih sentiu falta de som de trator quando a máquina aparece, de gente na aldeia, de um baque quando o NÃO cai, e de um fundo baixinho. Ela não quer pedir isso toda vez: todo reel já sai com som. Este skill também é o que ela chama quando diz "você esqueceu o som".
+
+## Quando
+- Em todo reel, de qualquer formato (colagem, pontilhado, timeline, split, 3D, desabafos, placar, quem-tem-culpa, OPC). Entra depois que a voz e os tempos estão prontos e antes de mostrar a prévia.
+- Na voz grátis do rascunho também, pra ela já ouvir o vídeo completo.
+
+## 0. Voz sem cara de "última frase" (vale pra voz grátis e pra ElevenLabs)
+Por que existe: no reel do PLP 299 (13/nov/2026) a voz original, gerada num take só, ficou boa. As falas novas, geradas cena por cena e emendadas, ficaram picotadas, cada frase terminando como se fosse a última do vídeo. Medido: no take único a pausa mediana entre frases era cerca de 0,2 s e nenhuma passava de 0,5 s. Nas falas soltas a mediana foi de 0,4 a 0,5 s, com 6 a 14 pausas acima de 0,5 s por fala.
+
+Regras:
+- Gerar o roteiro inteiro num take só e depois cortar por cena. Nunca uma geração por cena.
+- Se for trocar só um pedaço de um vídeo pronto:
+  - Gerar com contexto. Na API do ElevenLabs, mandar previous_text com a frase original que vem antes e next_text com a que vem depois.
+  - Se a ferramenta não tiver esses campos, gerar junto a última frase anterior e a primeira seguinte, e cortar as duas fora depois.
+  - Mesmo modelo, mesma voz e mesmos ajustes do original. Anotar no ROTEIRO o modelo e os ajustes de cada take.
+- Escrever pra fala corrida: menos frases curtas com ponto final. Ligar as ideias com vírgula, "e", "mas", "então", "só que". Cada ponto final vira uma descida de tom e uma pausa longa.
+- Depois de gerar, medir as pausas antes de montar:
+  - Toda pausa entre frases acima de 0,35 s cai pra uns 0,22 s.
+  - Pausa dentro da frase (vírgula) não mexe.
+  - Nunca cortar pausa abaixo de 0,15 s.
+  - Nunca "cortar metade de todas as pausas" às cegas: some fim de palavra baixinho e as palavras grudam.
+- Corte só em silêncio de verdade, com uns 80 ms de folga antes e depois da fala, e fade de 40 ms. Não cortar o rabo da última sílaba.
+- Conferir ouvindo as emendas, uma por uma, antes de mostrar.
+
+## 1. Fundo (sempre, baixinho)
+- Escolher pelo tema: natureza/ambiente pra temas de terra, floresta e clima; música calma e neutra pra política e economia; pra OPC, algo leve de obra ou acústico.
+- Oferecer 2 opções + "sem fundo" num seletor da prévia. Ela escolhe.
+- Volume: bem abaixo da voz, uns 22 a 26 dB a menos, com ducking (o fundo abaixa enquanto ela fala). Nunca pode atrapalhar uma palavra.
+- Fade de 1 s no começo e no fim.
+- Fonte, nesta ordem: gravação real com licença livre (Wikimedia Commons CC0/CC BY; Freesound; YouTube Audio Library; Pixabay), com crédito no 1º comentário quando a licença pedir. Anotar a licença no ROTEIRO.
+- Não gerar com IA "música indígena" ou de outra cultura específica: vira imitação. Se ela quiser, procurar gravação real com permissão e dar crédito.
+- O ElevenLabs (sfx) não serve pra fundo longo: sai com 1 a 2 s. Usar pra efeito curto.
+
+## 2. Efeitos especiais (mapa animação → som)
+Cada animação que tem peso na história ganha um som curto, no mesmo frame em que ela entra:
+- Selo/carimbo (slam): baque de carimbo no papel.
+- Cartão que entra (deal): folha de papel.
+- Chip/item que aparece (pop): pop suave.
+- Algo que cai (o NÃO, placa): baque quando bate no chão.
+- Máquina, trator, escavadeira no 3D: motor e esteira, por baixo, 2 a 4 s.
+- Árvore derrubada: estalo de madeira e queda.
+- Aldeia, gente, multidão: ambiente de vozes ao longe, sem palavras entendíveis.
+- Casa, porta, despejo: porta batendo.
+- Cadeado, lei, Constituição: clique de cadeado.
+- Martelo de juiz, Congresso decidindo: batida de martelo.
+- Placar/número contando: ticks suaves.
+- Barras de gráfico crescendo: subida suave (opcional).
+- Banner "toque pra continuar": continua sem som.
+- Sem "whoosh" de transição por padrão (já incomodou antes); só se ela pedir.
+
+Regras:
+- No máximo um efeito a cada uns 3 s; efeito nunca em cima de nome, número ou negativa da voz (puxar 0,2 s antes ou depois).
+- Volume: efeito uns 12 a 16 dB abaixo do pico da voz; motor e ambiente ainda mais baixos.
+- Efeito curto gerado no ElevenLabs: sfx, eleven_text_to_sound_v2, 1 geração por som (custa uns 17 créditos cada). Guardar cada som numa biblioteca no Drive (News > Templates > Sons; criar se não existir) e reaproveitar antes de gerar de novo.
+
+## 3. Como montar
+- Os tempos vêm das palavras da voz (os mesmos data-in das animações). Montar com ffmpeg: voz + efeitos (adelay) + fundo (volume, ducking com sidechaincompress), e loudnorm na mistura final (voz por volta de -16 LUFS).
+- Na prévia: o áudio já com efeitos, e um seletor de fundo (sem fundo / opção 1 / opção 2) que troca o arquivo mantendo o tempo e o play.
+- No MP4: a mistura escolhida, assada no vídeo.
+
+## 4. Conferir
+- Ouvir no alto-falante do celular (é onde a maioria assiste): nenhum efeito cobre palavra, fundo não briga com a voz, nada estoura.
+- Se algum som incomodar, medir voz, fundo e efeitos separados antes de trocar outra coisa.
+- No ROTEIRO: lista dos efeitos (tempo, som, fonte/licença) e qual fundo ela escolheu.

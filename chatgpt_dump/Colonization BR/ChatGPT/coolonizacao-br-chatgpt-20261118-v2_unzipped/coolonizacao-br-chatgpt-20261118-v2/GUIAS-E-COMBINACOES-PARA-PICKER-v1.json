@@ -1,0 +1,150 @@
+{
+  "version": "ChatGPT-20261118-v1",
+  "scope": "Coolonização BR, cinco famílias visuais; não altera o Estúdio nem o picker em produção",
+  "selection_rule": "Um estilo principal por card/cena e um apoio compatível quando necessário; a função da cena vem antes do efeito.",
+  "shared_constraints": [
+    "Sobreposição de imagens/GIFs pode ser intencional; colisão ilegível não.",
+    "Variar corpo inteiro/meio corpo/cabeça conforme composição.",
+    "Referência não concede licença de publicação.",
+    "Não fundir originais Claude/ChatGPT nem promover Improved sem comparar resultados.",
+    "Parâmetros de movimento são pontos de partida, não aprovação da Priih."
+  ],
+  "styles": {
+    "01": {
+      "purpose": "Brasil real com fotografia bem composta: luz, gesto, ambiente e diversidade regional reconhecíveis. Captura de celular serve como indicação de cenário, não como padrão final de qualidade.",
+      "combine": "Combina com 03 quando o recorte deixa a ação e o ambiente legíveis; com 05 quando a pessoa precisa dominar a atenção; com 02 em uma cena seguinte mais gráfica.",
+      "conflict": "Foto já muito cheia de cores e texturas perde hierarquia se receber cartaz, papel rasgado e vários stickers intensos ao mesmo tempo. Não é proibição universal: dessaturar um plano ou reduzir um dos tratamentos resolve a disputa.",
+      "alternate": "Foto ambiental ampla → detalhe/objeto → colagem de explicação → foto de respiro. Mudar enquadramento e sujeito; não repetir a mesma imagem ao longo do vídeo.",
+      "recipe": "Escolher primeiro o lugar e a ação, depois luz e enquadramento. Preservar pele e proporções naturais. Texto ocupa área tranquila, sem cobrir olhos, mãos e elementos que explicam a cena.",
+      "examples": [
+        "novo_walter_firmo_ticumbi",
+        "novo_joao_farkas_trancoso_1",
+        "novo_joao_farkas_trancoso_2"
+      ],
+      "limit": "As recriações antigas ficaram em uma subpasta própria e não são documentação fotográfica. Números e frases dessas peças não foram checados nesta pesquisa.",
+      "compatible_styles": [
+        "03",
+        "05"
+      ]
+    },
+    "02": {
+      "purpose": "Colagem editorial brasileira em profundidade: pessoa, fotografia/cenário e natureza local. Silvana Mendes é referência artística própria; sua obra não deve ser reduzida ao rótulo Vox. Vox Atlas é outra referência, jornalística e cartográfica.",
+      "combine": "Combina com 03 para pessoa em corpo inteiro ou meio corpo; com 04 em um gesto curto de entrada; com 01 em cenas de respiro. Folhas, aves e paisagem entram quando o contexto regional faz sentido.",
+      "conflict": "Vários GIFs podem se sobrepor intencionalmente. O conflito é a colisão que impede ler texto/dado/rosto, ou planos todos movendo com a mesma força. Não separar tudo em cartões só para zerar um verificador genérico.",
+      "alternate": "Colagem com 3 planos → foto limpa → cartaz tipográfico → pessoa recortada em ambiente. Alternar papel cru, terracota e outras cores BR conforme função, sem repetir o mesmo arranjo.",
+      "recipe": "Definir fundo reconhecível, pessoa/ação no meio e um elemento de frente. Registrar quem cobre quem e quando. Manter fonte/dado e legenda numa zona protegida. Textura e overlay leves, sem empilhar ruído em tudo.",
+      "examples": [
+        "novo_silvana_mendes_2",
+        "novo_silvana_mendes_3",
+        "novo_vox_amazonia"
+      ],
+      "limit": "Estrela e vermelho partidários só quando a peça se dirige ao partido correspondente. Referências artísticas têm história/autoria: estudar linguagem, não copiar personagem ou composição.",
+      "compatible_styles": [
+        "03",
+        "04"
+      ],
+      "overlap_policy": {
+        "intentional_gifs_and_images": "permitido e exigido quando solicitado",
+        "protect": [
+          "rosto principal",
+          "texto legível",
+          "dado",
+          "fonte",
+          "legenda"
+        ],
+        "proof": "inspecionar quadros de entrada, cruzamento e saída"
+      }
+    },
+    "03": {
+      "purpose": "Variar o enquadramento do sticker conforme a história: corpo inteiro para gesto e interação com cenário, meio corpo para fala/ação das mãos, cabeça para identificação compacta. Não transformar todo mundo em cabeças por padrão.",
+      "combine": "Combina com 02 para colagem, 01 para preservar ambiente e 04 para acentuar uma entrada. O mesmo tratamento de contorno/textura amarra as variações de corte.",
+      "conflict": "Corte lateral de ombro não serve como meio corpo solto. Pés sem apoio e proporções incoerentes quebram a composição. Sticker grande disputando com dado ou título não deve ser resolvido encolhendo todo o texto.",
+      "alternate": "Pessoa de corpo inteiro → plano de ambiente → meio corpo com gesto → dado limpo. Cabeça entra quando tem função, não como obrigação em todo card.",
+      "recipe": "Revisar a silhueta ampliada. Se a foto já está cortada, esconder o corte atrás de elemento ou trocar a imagem. Proteger rosto, mãos e o gesto. Contorno pode ser claro ou colorido conforme o projeto, sem tapar a pessoa.",
+      "examples": [
+        "novo_silvana_mendes_1",
+        "novo_joao_farkas_trancoso_2"
+      ],
+      "limit": "O exemplo fotográfico é base de composição, não um recorte licenciado pronto. A obra artística de Silvana também é referência, não asset liberado para reutilização.",
+      "compatible_styles": [
+        "01",
+        "02",
+        "04"
+      ],
+      "crop_variants": [
+        "corpo inteiro",
+        "meio corpo",
+        "cabeça conforme função"
+      ]
+    },
+    "04": {
+      "purpose": "Sticker com vida e materialidade: entrada curta, pequenos deslocamentos e textura perceptível. O movimento deve apresentar, conectar ou enfatizar algo; não chacoalhar tudo continuamente.",
+      "combine": "Combina com fundo de papel simples, 02 em uma camada focal e 03 com diferentes cortes de pessoa. Overlay leve pode unificar a impressão, sem esconder olhos e letras.",
+      "conflict": "Tremor contínuo durante leitura de gráfico compete com o dado. Frequência alta, blur forte e muitos elementos pulsando ao mesmo tempo deixam tudo excessivo. Reduzir ou pausar movimento na hora da leitura.",
+      "alternate": "Entrada animada → pose estável para ler → corte para foto/objeto → nova entrada diferente. Não repetir o mesmo pop em todas as cenas.",
+      "recipe": "Como ponto de partida a testar: cadência recortada em torno de 8–12 atualizações/s, giro pequeno e deslocamento curto. São parâmetros de teste, não aprovação estética automática. Avaliar também o meio da transição.",
+      "examples": [
+        "novo_ben_marriott_mixed_media",
+        "flavio_sticker_preview.gif",
+        "movimento-demo-historico-sequencia.png"
+      ],
+      "limit": "O GIF histórico do Flávio foi inspecionado: 4 s e colorido. O WebM não tem faixa de áudio. Não confirma o exemplo P&B com contorno colorido amado pela Priih. A capa do tutorial Ben Marriott não prova sozinha o timing do vídeo.",
+      "compatible_styles": [
+        "02",
+        "03"
+      ]
+    },
+    "05": {
+      "purpose": "Manter a pessoa natural/colorida na frente e tratar apenas o fundo original, em P&B ou desenho, preservando posição de prédios, árvores, rua, perspectiva e relação entre pessoa e cenário.",
+      "combine": "Combina com 01 como foto de origem e 03 se a separação precisa virar camada móvel. Um título discreto pode ocupar espaço do próprio cenário, respeitando contraste.",
+      "conflict": "Trocar o lugar por cenário genérico ou deslocar a pessoa para outro espaço descaracteriza esta técnica. Não desenhar o rosto junto com o fundo, nem inventar uma cena factual. Muitas outras cores de destaque anulam o foco na pessoa.",
+      "alternate": "Foto inteira original → mesma composição com fundo tratado → detalhe gráfico → outra cena. Esse antes/depois é pontual, não repetir a mesma foto em várias cenas da peça final.",
+      "recipe": "Preservar uma cópia intacta da foto. Separar máscara da pessoa e tratar somente a camada de cenário. Revisar cabelo, mãos, bordas e continuidade da luz. Para fundo desenhado, manter a geometria e o lugar reconhecíveis.",
+      "examples": [
+        "novo_aram_vartian_pessoa_cor_fundo_pb"
+      ],
+      "limit": "A referência nova é internacional e serve apenas para a técnica. O possível exemplo de Cuba e uma variante antiga com fundo desenhado ainda não foram comprovados.",
+      "compatible_styles": [
+        "01",
+        "03"
+      ]
+    }
+  },
+  "alternation_example": [
+    {
+      "scene": 1,
+      "primary": "01",
+      "function": "localizar o lugar"
+    },
+    {
+      "scene": 2,
+      "primary": "02",
+      "support": "03",
+      "crop": "corpo inteiro",
+      "function": "explicar a relação"
+    },
+    {
+      "scene": 3,
+      "primary": "01",
+      "function": "respiro visual, novo enquadramento"
+    },
+    {
+      "scene": 4,
+      "primary": "05",
+      "function": "pessoa no cenário reconhecível"
+    },
+    {
+      "scene": 5,
+      "primary": "02",
+      "motion": "reduzido ou parado na leitura",
+      "function": "dado ou comparação"
+    },
+    {
+      "scene": 6,
+      "primary": "03",
+      "support": "04",
+      "crop": "meio corpo",
+      "function": "ação/fecho"
+    }
+  ]
+}

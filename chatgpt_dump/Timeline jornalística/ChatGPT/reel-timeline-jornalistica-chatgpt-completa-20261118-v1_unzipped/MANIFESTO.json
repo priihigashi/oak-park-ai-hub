@@ -1,0 +1,18 @@
+{
+  "style": "reel-timeline-jornalistica",
+  "source": "/Users/priscilahigashi/.agents/skills/reel-timeline-jornalistica",
+  "files": [
+    {
+      "path": "SKILL.md",
+      "sha256": "99b594b3ec3dc0e17c8cdf0a5ed010a66f636f084999f013d3a65356eb35488f",
+      "bytes": 13078
+    }
+  ],
+  "original_skill_sha256": "99b594b3ec3dc0e17c8cdf0a5ed010a66f636f084999f013d3a65356eb35488f",
+  "revised_skill_sha256": "1f71bc7f1200e75736acdbc2bf26a8a2d38e71ab4a434284f31e3602dea65c5a",
+  "changes": [
+    "Somente nota de durabilidade/precedência inserida após YAML; corpo original integral preservado."
+  ],
+  "authorship": "Cópia local em uso no Codex; não comprova autor original.",
+  "drive_status": "pending_existing_ChatGPT_folder"
+}

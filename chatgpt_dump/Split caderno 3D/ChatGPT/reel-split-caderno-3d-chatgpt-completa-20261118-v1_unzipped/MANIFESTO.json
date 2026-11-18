@@ -1,0 +1,18 @@
+{
+  "style": "reel-split-caderno-3d",
+  "source": "/Users/priscilahigashi/.agents/skills/reel-split-caderno-3d",
+  "files": [
+    {
+      "path": "SKILL.md",
+      "sha256": "d88b3464822dfed93173a65b1cd6bdef7d655396a781d3c45ca50541c28c9fbd",
+      "bytes": 6590
+    }
+  ],
+  "original_skill_sha256": "d88b3464822dfed93173a65b1cd6bdef7d655396a781d3c45ca50541c28c9fbd",
+  "revised_skill_sha256": "6618e817e3e529618d313e6a2ff814280366b6ff2baa6486f75be3285691047a",
+  "changes": [
+    "Somente nota de durabilidade/precedência inserida após YAML; corpo original integral preservado."
+  ],
+  "authorship": "Cópia local em uso no Codex; não comprova autor original.",
+  "drive_status": "pending_existing_ChatGPT_folder"
+}

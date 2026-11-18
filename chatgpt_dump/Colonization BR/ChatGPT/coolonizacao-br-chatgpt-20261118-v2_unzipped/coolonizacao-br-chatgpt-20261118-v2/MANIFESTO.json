@@ -1,0 +1,47 @@
+{
+  "version": "ChatGPT-20261118-v2",
+  "scope": "Complemento aditivo da biblioteca visual BR. Originais v1 e Claude preservados. Não é Improved. Instalação ativa não alterada.",
+  "source_v1_sha256": "34860fb7c0fff4e76d5fb61063d1664bd8058a7e229e2fcb2c2ff86e282edd24",
+  "files": [
+    {
+      "path": "INVENTARIO-VISUAL-CHATGPT-v1.json",
+      "sha256": "4939113e31c4ba724aca663753ba61004188b654619e7288ef1a42e20633663a",
+      "bytes": 71961
+    },
+    {
+      "path": "SKILL.md",
+      "sha256": "99a9aac17ca8552573b4adb401d7e1ad04909a9476fcfcc8c42ec5002d14443d",
+      "bytes": 18496
+    },
+    {
+      "path": "GUIAS-E-COMBINACOES-PARA-PICKER-v1.json",
+      "sha256": "b2e4efa971909396663cb216bcb8eaa554f9f7338459527335fa51c9fbfc4697",
+      "bytes": 9491
+    },
+    {
+      "path": "references/GUIA-CHATGPT-01-v1.md",
+      "sha256": "33c1a004a43856f73e851f3c55dfa336b4589563639a3f18a9358f35a4c0fdd8",
+      "bytes": 2330
+    },
+    {
+      "path": "references/GUIA-CHATGPT-03-v1.md",
+      "sha256": "ac135a90eb3138b2bbae5903752d966e11c9cc4844664cdd9c85d9db77ae3538",
+      "bytes": 2144
+    },
+    {
+      "path": "references/GUIA-CHATGPT-05-v1.md",
+      "sha256": "697a011aeed58b4200c5d968a3c5bba991fbb75ce31db9996a24f4c6ebffed22",
+      "bytes": 1928
+    },
+    {
+      "path": "references/GUIA-CHATGPT-02-v1.md",
+      "sha256": "b9f9cc0cb46e6f21ed346924c71a20cdc02b3507f933ce6e46116077ec3d98f5",
+      "bytes": 2524
+    },
+    {
+      "path": "references/GUIA-CHATGPT-04-v1.md",
+      "sha256": "e282798545f734c0789c6b3db1fb1688f9c353e0cbdfac33ef2dc603547a75a2",
+      "bytes": 2642
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+---
+name: "reel-pintado-a-mao"
+description: "Reel com foto real transformada em pintura e transições por pinceladas (estilo Liam Perkins). Use quando a Priih pedir pintado, pintura, aquarela ou um antes e depois mais artístico."
+---
+
+## Durabilidade e versão ChatGPT · 18/11/2026
+Esta é uma cópia versionada para ChatGPT/Codex; o original fica em `../original/`. Antes de concluir uma alteração, preservar nova versão no Drive Creations > Tools, Skills & Flows > Skills > Reels e Carrosséis > formato > ChatGPT (usar as pastas existentes criadas por Claude) E no GitHub privado `priihigashi/news`, em branch/PR sem merge. Conferir arquivo, pasta, tamanho/hash e links nos dois destinos; registrar pendência real se algum falhar. Nunca considerar apenas o arquivo local como entrega durável; GitHub não substitui Drive. Não sobrescrever versões existentes nem alterar a versão Claude. Consultar `MANIFESTO.json` e o índice desta entrega para origem e comprovantes.
+
+As regras atuais de `regras-priih` prevalecem sobre conflitos históricos abaixo, inclusive aprovação antes de MP4 e voz paga. Os arquivos locais citados no texto histórico não são presumidos disponíveis no celular. Dependências preservadas separadamente em `compartilhadas/`, sem fundir os formatos.
+
+
+# Reel pintado à mão
+
+Um estilo, uma skill. Referência: Liam Perkins (Behance, "Down by the Old Railroad" e pintados à mão). Drive: Estilos e Referências > Liam Perkins 1_L58KYs-XbAVp23mBhOR2N8ZUOq4pGeY. Exemplo aprovado como ponto de partida: "Antes e depois pintado" (OPC, obra de Hollywood) em https://claude.ai/artifact/BkybeH3vq5z9zPmSh9CLFd.
+
+## Pra que serve
+Antes e depois da OPC com cara de arte, histórias calmas, cenas de lugar (quintal, cozinha, rua). Esconde foto de baixa resolução.
+
+## Como pintar a foto (Python, OpenCV)
+- Recortar pra 1080x1920, bilateralFilter(9,60,60) e depois cv2.stylization(sigma_s=80, sigma_r=0.35). Saturar um pouco (Color 1.15).
+- Textura de tela: padrão seno leve + ruído (ver template).
+- O oilPainting do OpenCV ficou com cara de mosaico: não usar.
+
+## Movimento
+- Transição do antes pro depois com pinceladas largas (elipses) que vão cobrindo a tela em faixas, em ordem.
+- Texto Rubik 800 em cima, legenda de 2 linhas embaixo, topo e rodapé levemente escurecidos.
+
+## Limite
+Código imita a pintura em cima de foto. Ilustração pintada do zero (paisagem inventada, personagem pintado) sai melhor gerada no ChatGPT com prompt exato + referências da pasta, e animada em cima.
+
+## Código do template (copiar daqui)
+- Drive, pasta "/motion" 1LLgeWSABpgBd8n1VoVti19vaYV834XuM: template_9-exemplos_4-estilos.html 1JqCvM8KhHfQX01dRhDKaIrGpua7hqLvz (antes e depois pintado, função painted()). Prévia: https://claude.ai/artifact/BkybeH3vq5z9zPmSh9CLFd
+- Pintura da foto: OpenCV bilateralFilter + cv2.stylization (oilPainting fica mosaico).
+
+## Como fazer
+Seguir reel-pasta-roteiro-auditoria, reel-zona-segura, reel-som e reel-fechamento. Conferir quadros com Playwright antes de publicar a prévia.
