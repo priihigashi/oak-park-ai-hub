@@ -7,6 +7,9 @@ on:
       - 'scripts/skills_fetch_chatgpt.py'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   fetch:
     runs-on: ubuntu-latest
@@ -20,8 +23,13 @@ jobs:
         env:
           SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
         run: python scripts/skills_fetch_chatgpt.py
-      - uses: actions/upload-artifact@v4
-        with:
-          name: chatgpt_dump
-          path: chatgpt_dump
-          retention-days: 3
+      - name: Unzip and commit dump to branch
+        run: |
+          cd chatgpt_dump
+          find . -name '*.zip' | while read z; do mkdir -p "${z%.zip}_unzipped"; unzip -oq "$z" -d "${z%.zip}_unzipped"; rm "$z"; done
+          cd ..
+          git config user.name skills-sync-bot
+          git config user.email actions@github.com
+          git add chatgpt_dump
+          git commit -m "skills: ChatGPT versions snapshot [skip ci]" || exit 0
+          git push
