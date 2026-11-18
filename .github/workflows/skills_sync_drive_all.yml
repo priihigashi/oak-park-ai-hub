@@ -1,0 +1,25 @@
+name: Skills Sync to Drive (all reel skills)
+
+on:
+  push:
+    branches: [main, skills/colonization-br-mirror]
+    paths:
+      - 'skills/reels_skills_map.json'
+      - 'skills/*/claude/**'
+      - '!skills/colonization-br/**'
+      - 'scripts/skills_sync_drive_all.py'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install google-auth google-api-python-client
+      - name: Mirror Claude skills to Drive
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: python scripts/skills_sync_drive_all.py
