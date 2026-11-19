@@ -19,14 +19,14 @@ jobs:
       - name: dl
         run: |
           mkdir -p ig_out
-          yt-dlp -q --no-warnings --write-info-json -o "ig_out/r4.%(ext)s" https://www.instagram.com/reel/Dfp-lApMXQ3/ || echo fail
+          yt-dlp -q --no-warnings --write-info-json -o "ig_out/r5.%(ext)s" https://www.instagram.com/reel/DfqFFTdM8m8/ || echo fail
       - name: tx
         run: |
           python - <<'PY'
-          import json, os, subprocess
+          import os, subprocess
           from faster_whisper import WhisperModel
           m = WhisperModel("small", device="cpu", compute_type="int8")
-          f = "ig_out/r4.mp4"
+          f = "ig_out/r5.mp4"
           if os.path.exists(f):
               b = f[:-4]
               segs, _ = m.transcribe(f, language="pt")
@@ -34,13 +34,13 @@ jobs:
               open(b + "_tx.txt", "w").write("\n".join(f"[{a}-{e}] {t}" for a, e, t in out))
               dur = float(subprocess.check_output(["ffprobe","-v","error","-show_entries","format=duration","-of","csv=p=0",f]).decode().strip() or 0)
               os.makedirs(b + "_frames", exist_ok=True)
-              for k in range(16):
-                  t = dur*(k+0.5)/16
+              for k in range(24):
+                  t = dur*(k+0.5)/24
                   subprocess.run(["ffmpeg","-v","error","-y","-ss",str(t),"-i",f,"-frames:v","1","-vf","scale=300:-2",f"{b}_frames/f{k:02d}.jpg"])
           PY
-          [ -f ig_out/r4.info.json ] && python -c "import json;d=json.load(open('ig_out/r4.info.json'));print(d.get('uploader'),d.get('upload_date'));print((d.get('description') or '')[:2000])" > ig_out/r4_meta.txt
+          [ -f ig_out/r5.info.json ] && python -c "import json;d=json.load(open('ig_out/r5.info.json'));print(d.get('uploader'),d.get('upload_date'));print((d.get('description') or '')[:2000])" > ig_out/r5_meta.txt
           rm -f ig_out/*.info.json
       - name: commit
         run: |
           git config user.name "tomate-bot"; git config user.email "bot@example.com"
-          git add ig_out && git commit -m "ig ref4 output" && (git push origin HEAD:tmp/tomate-tx || (git pull --rebase -X theirs origin tmp/tomate-tx && git push origin HEAD:tmp/tomate-tx))
+          git add ig_out && git commit -m "ig ref5 output" && (git push origin HEAD:tmp/tomate-tx || (git pull --rebase -X theirs origin tmp/tomate-tx && git push origin HEAD:tmp/tomate-tx))
