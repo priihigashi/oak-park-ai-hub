@@ -14,8 +14,7 @@ jobs:
         with: {ref: tmp/tomate-tx}
       - uses: actions/setup-python@v5.6.0
         with: {python-version: "3.11"}
-      - run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg
-      - run: pip install -q edge-tts mediapipe==0.10.14 opencv-python-headless numpy
+      - run: pip install -q edge-tts
       - name: tts
         run: |
           mkdir -p tomate_media
@@ -31,53 +30,11 @@ jobs:
                       elif ch["type"] == "WordBoundary":
                           words.append([ch["text"], round(ch["offset"]/1e7, 3), round((ch["offset"]+ch["duration"])/1e7, 3)])
               json.dump(words, open(out + ".json", "w"), ensure_ascii=False)
-          for v, o in [("pt-BR-ThalitaMultilingualNeural", "tomate_media/narr_thalita"), ("en-US-AndrewMultilingualNeural", "tomate_media/narr_andrew")]:
+          for v, o in [("pt-BR-ThalitaMultilingualNeural", "tomate_media/narr_thalita"),]:
               try: asyncio.run(go(v, o)); print("ok", v)
               except Exception as e: print("fail", v, e)
           PY
-      - name: clips
-        run: |
-          python - <<'PY'
-          import cv2, numpy as np, mediapipe as mp, subprocess
-          src = "tomate_out/reel.mp4"
-          clips = [("c1_homem", 0.0, 7.0, 0, 704, None),
-                   ("c2_dissonancia", 24.5, 31.25, 712, 1280, None),
-                   ("c3_livro", 45.25, 49.0, 712, 1280, (190, 900, 470, 1280))]
-          seg = mp.solutions.selfie_segmentation.SelfieSegmentation(model_selection=1)
-          for name, a, b, y0, y1, keep in clips:
-              cap = cv2.VideoCapture(src); fps = cap.get(cv2.CAP_PROP_FPS)
-              cap.set(cv2.CAP_PROP_POS_MSEC, a*1000)
-              h = y1 - y0; w = 720
-              vw = cv2.VideoWriter(f"/tmp/{name}.mp4", cv2.VideoWriter_fourcc(*"mp4v"), fps, (w, h))
-              n = int((b-a)*fps)
-              for i in range(n):
-                  ok, fr = cap.read()
-                  if not ok: break
-                  fr = fr[y0:y1]
-                  m = seg.process(cv2.cvtColor(fr, cv2.COLOR_BGR2RGB)).segmentation_mask
-                  m = cv2.GaussianBlur((m > 0.45).astype(np.float32), (7, 7), 0)
-                  gray = cv2.cvtColor(cv2.cvtColor(fr, cv2.COLOR_BGR2GRAY), cv2.COLOR_GRAY2BGR)
-                  bg = (gray * 0.55).astype(np.uint8)
-                  sil = np.full_like(fr, 12)
-                  hard = (m > 0.5).astype(np.uint8)
-                  edge = cv2.dilate(hard, np.ones((9, 9), np.uint8)) - hard
-                  out = (bg * (1 - m[..., None]) + sil * m[..., None]).astype(np.uint8)
-                  out[edge > 0] = (238, 244, 247)
-                  if keep:
-                      x0, ky0, x1, ky1 = keep
-                      ky0 -= y0; ky1 -= y0
-                      sat = cv2.cvtColor(fr[ky0:ky1, x0:x1], cv2.COLOR_BGR2HSV)[..., 1:2]
-                      out[ky0:ky1, x0:x1] = np.where(sat > 90, fr[ky0:ky1, x0:x1], out[ky0:ky1, x0:x1])
-                  vw.write(out)
-              vw.release()
-              subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-i", f"/tmp/{name}.mp4", "-ss", str(a), "-t", str(b-a), "-i", src,
-                  "-map", "0:v", "-map", "1:a", "-af", "rubberband=pitch=0.84:formant=shifted,volume=1.1",
-                  "-c:v", "libx264", "-crf", "26", "-preset", "veryfast", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "96k", "-shortest",
-                  f"tomate_media/{name}.mp4"], check=False)
-              print(name, "done")
-          PY
-          ls -la tomate_media
       - name: commit
         run: |
           git config user.name "tomate-bot"; git config user.email "bot@example.com"
-          git add tomate_media && git commit -m "tomate media output" && git push origin HEAD:tmp/tomate-tx
+          git add tomate_media && git commit -m "tomate media output" && (git push origin HEAD:tmp/tomate-tx || (git pull --rebase -X theirs origin tmp/tomate-tx && git push origin HEAD:tmp/tomate-tx))
