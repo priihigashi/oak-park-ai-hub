@@ -1,0 +1,52 @@
+name: tmp ig dl
+on:
+  push:
+    branches: [tmp/tomate-tx]
+    paths: [".github/workflows/tmp_ig_dl.yml"]
+permissions:
+  contents: write
+jobs:
+  go:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4.2.2
+        with: {ref: tmp/tomate-tx}
+      - uses: actions/setup-python@v5.6.0
+        with: {python-version: "3.11"}
+      - run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+      - run: pip install -q -U yt-dlp faster-whisper
+      - name: dl
+        run: |
+          mkdir -p ig_out
+          i=0
+          for u in https://www.instagram.com/reel/Dfr69QpxH6Z/ https://www.instagram.com/p/DcNKdB_mEJk/; do
+            i=$((i+1))
+            yt-dlp -q --no-warnings --write-info-json -o "ig_out/r$i.%(ext)s" "$u" || echo "fail $u"
+          done
+          ls -la ig_out
+      - name: tx
+        run: |
+          python - <<'PY'
+          import glob, json, os, subprocess
+          from faster_whisper import WhisperModel
+          m = WhisperModel("small", device="cpu", compute_type="int8")
+          for f in sorted(glob.glob("ig_out/r*.mp4")):
+              b = f[:-4]
+              segs, _ = m.transcribe(f, language="pt", word_timestamps=False)
+              out = [[round(s.start,2), round(s.end,2), s.text.strip()] for s in segs]
+              json.dump(out, open(b + "_tx.json", "w"), ensure_ascii=False, indent=0)
+              open(b + "_tx.txt", "w").write("\n".join(f"[{a}-{e}] {t}" for a, e, t in out))
+              dur = float(subprocess.check_output(["ffprobe","-v","error","-show_entries","format=duration","-of","csv=p=0",f]).decode().strip() or 0)
+              os.makedirs(b + "_frames", exist_ok=True)
+              n = 8
+              for k in range(n):
+                  t = dur*(k+0.5)/n
+                  subprocess.run(["ffmpeg","-v","error","-y","-ss",str(t),"-i",f,"-frames:v","1","-vf","scale=360:-2",f"{b}_frames/f{k}.jpg"])
+          PY
+          for j in ig_out/*.info.json; do python -c "import json,sys;d=json.load(open('$j'));print('$j',d.get('uploader'),d.get('upload_date'),d.get('timestamp'));print((d.get('description') or '')[:1500])" > "${j%.info.json}_meta.txt"; done
+          rm -f ig_out/*.info.json
+      - name: commit
+        run: |
+          git config user.name "tomate-bot"; git config user.email "bot@example.com"
+          git add ig_out && git commit -m "ig refs output" && (git push origin HEAD:tmp/tomate-tx || (git pull --rebase -X theirs origin tmp/tomate-tx && git push origin HEAD:tmp/tomate-tx))
