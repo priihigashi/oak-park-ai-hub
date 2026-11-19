@@ -1,0 +1,100 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/priihigashi/oak-park-ai-hub/schemas/edit_decision.schema.json",
+  "title": "EditDecision",
+  "description": "A fully-specified edit decision list (EDL) for a single content piece. Maps one-to-one with the EditDecision dataclass in contracts.py.",
+  "type": "object",
+  "required": ["project_id", "created_at", "approved_shots"],
+  "additionalProperties": false,
+  "properties": {
+    "project_id": {
+      "type": "string",
+      "description": "Unique identifier for the content project (e.g. 'opc-reel-2026-10-17')."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 timestamp when this EDL was created."
+    },
+    "approved_shots": {
+      "type": "array",
+      "description": "Ordered list of shots that form the final edit.",
+      "items": { "$ref": "#/definitions/ApprovedShot" }
+    },
+    "audio_path": {
+      "type": ["string", "null"],
+      "description": "Absolute local path to voiceover or music file. Null if no separate audio track."
+    },
+    "voiceover_provider": {
+      "type": ["string", "null"],
+      "enum": ["elevenlabs", "real_voice", null],
+      "description": "Which system produced the voiceover."
+    },
+    "caption_settings": {
+      "type": "object",
+      "description": "Caption rendering settings (font, size, position, color).",
+      "additionalProperties": true
+    },
+    "output_formats": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "examples": ["9x16_1080p", "1x1_1080p", "16x9_1080p"]
+      },
+      "description": "Render targets. First entry is the primary export."
+    },
+    "notes": {
+      "type": "string",
+      "description": "Free-text notes for this EDL version."
+    }
+  },
+  "definitions": {
+    "ApprovedShot": {
+      "type": "object",
+      "required": ["shot_id", "selected_candidate", "final_trim_start", "final_trim_end"],
+      "additionalProperties": false,
+      "properties": {
+        "shot_id": { "type": "string" },
+        "selected_candidate": { "$ref": "#/definitions/ClipCandidate" },
+        "final_trim_start": { "type": "number", "minimum": 0 },
+        "final_trim_end": { "type": "number", "minimum": 0 },
+        "crop": {
+          "type": ["object", "null"],
+          "required": ["x", "y", "w", "h"],
+          "properties": {
+            "x": { "type": "integer", "minimum": 0 },
+            "y": { "type": "integer", "minimum": 0 },
+            "w": { "type": "integer", "minimum": 1 },
+            "h": { "type": "integer", "minimum": 1 }
+          },
+          "additionalProperties": false
+        },
+        "caption": { "type": ["string", "null"] },
+        "transition": {
+          "type": ["string", "null"],
+          "enum": ["cut", "fade", "wipe", null]
+        }
+      }
+    },
+    "ClipCandidate": {
+      "type": "object",
+      "required": ["candidate_id", "score", "reason"],
+      "additionalProperties": false,
+      "properties": {
+        "candidate_id": { "type": "string" },
+        "scene_id": { "type": ["string", "null"] },
+        "public_url": { "type": ["string", "null"], "format": "uri" },
+        "score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "reason": { "type": "string" },
+        "thumbnail": { "type": ["string", "null"] },
+        "trim_start": { "type": ["number", "null"], "minimum": 0 },
+        "trim_end": { "type": ["number", "null"], "minimum": 0 },
+        "provenance": {
+          "type": "object",
+          "description": "License, source URL, download date, etc.",
+          "additionalProperties": true
+        }
+      }
+    }
+  }
+}
