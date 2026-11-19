@@ -1,3 +1,4 @@
+# run 2
 name: tmp ig dl
 on:
   push:
@@ -43,4 +44,4 @@ jobs:
       - name: commit
         run: |
           git config user.name "tomate-bot"; git config user.email "bot@example.com"
-          git add ig_out && git commit -m "ig zeus output" && (git push origin HEAD:tmp/zeus-lula || (git pull --rebase -X theirs origin tmp/zeus-lula && git push origin HEAD:tmp/zeus-lula))
+          git add -A ig_out && git commit -m "ig zeus output" && (git push origin HEAD:tmp/zeus-lula || (git pull --rebase -X theirs origin tmp/zeus-lula && git push origin HEAD:tmp/zeus-lula))
