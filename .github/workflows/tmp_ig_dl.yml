@@ -1,0 +1,53 @@
+name: tmp-ig-dl
+on:
+  push:
+    branches: ["tmp/cid-gomes-juros"]
+    paths: [".github/workflows/tmp_ig_dl.yml"]
+permissions:
+  contents: write
+jobs:
+  dl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      URL: "https://www.instagram.com/reel/Df5yHbdMAWH/"
+      N: "r1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: tmp/cid-gomes-juros
+      - run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+      - run: pip install -U yt-dlp faster-whisper
+      - name: download
+        env:
+          IGC: ${{ secrets.PRI_OP_IG_COOKIES }}
+        run: |
+          mkdir -p ig_out
+          if [ -n "$IGC" ]; then printf '%s' "$IGC" > /tmp/c.txt; CK="--cookies /tmp/c.txt"; fi
+          yt-dlp $CK -f "bv*+ba/b" --merge-output-format mp4 --write-info-json -o "ig_out/$N.%(ext)s" "$URL" || yt-dlp --write-info-json -o "ig_out/$N.%(ext)s" "$URL"
+          ls -la ig_out
+      - name: transcribe
+        run: |
+          python - <<'EOF'
+          import glob, json, os
+          from faster_whisper import WhisperModel
+          n=os.environ['N']
+          vid=[f for f in glob.glob(f'ig_out/{n}.*') if not f.endswith('.json')][0]
+          m=WhisperModel('small',device='cpu',compute_type='int8')
+          segs,_=m.transcribe(vid,language='pt',vad_filter=True)
+          with open(f'ig_out/{n}_tx.txt','w') as f:
+              for s in segs: f.write(f"[{int(s.start//60)}:{int(s.start%60):02d}] {s.text.strip()}\n")
+          for j in glob.glob(f'ig_out/{n}*.info.json'):
+              d=json.load(open(j))
+              open(f'ig_out/{n}_meta.txt','w').write(f"autor: {d.get('uploader') or d.get('channel')}\ndata: {d.get('upload_date')}\nduracao: {d.get('duration')}\nlegenda: {d.get('description')}\n")
+              os.remove(j)
+          os.remove(vid)
+          EOF
+          cat ig_out/${N}_tx.txt | head -5
+      - name: commit
+        run: |
+          git config user.name priihigashi
+          git config user.email mcfollingproperties@gmail.com
+          git add ig_out
+          git commit -m "ig_out $N" || exit 0
+          git push || (git pull --rebase && git push)
