@@ -1,0 +1,28 @@
+name: tmp-reel-heads
+on:
+  push:
+    branches: ["tmp/cid-gomes-juros"]
+    paths: [".github/workflows/tmp_reel_heads.yml", "tools/reel_heads.py", "tools/reel_heads.json"]
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: tmp/cid-gomes-juros
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -q requests pillow numpy opencv-python-headless "rembg[cpu]" mediapipe==0.10.14
+      - run: sed -i 's#tools/reel_juros.json#tools/reel_heads.json#' tools/reel_heads.py && python tools/reel_heads.py
+      - name: commit
+        if: always()
+        run: |
+          git config user.name priihigashi
+          git config user.email mcfollingproperties@gmail.com
+          git add reel_out/heads
+          git commit -m "heads v2" || exit 0
+          git push || (git pull --rebase && git push)
