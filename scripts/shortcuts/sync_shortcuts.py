@@ -67,10 +67,19 @@ def _ls(drive, parent_id, mime=None):
     q = f"'{parent_id}' in parents and trashed=false"
     if mime:
         q += f" and mimeType='{mime}'"
-    return drive.files().list(
-        q=q, supportsAllDrives=True, includeItemsFromAllDrives=True,
-        corpora="allDrives", fields="files(id,name,mimeType,shortcutDetails)"
-    ).execute().get("files", [])
+    # Paginate: without this only the first 100 items were read, so shortcuts
+    # past page 1 looked "missing" and got recreated every day (duplicates).
+    out, token = [], None
+    while True:
+        resp = drive.files().list(
+            q=q, supportsAllDrives=True, includeItemsFromAllDrives=True,
+            corpora="allDrives", pageSize=1000, pageToken=token,
+            fields="nextPageToken, files(id,name,mimeType,shortcutDetails)"
+        ).execute()
+        out.extend(resp.get("files", []))
+        token = resp.get("nextPageToken")
+        if not token:
+            return out
 
 
 def _find_version_folders(drive, root_id, skip_ids, depth=0):
@@ -136,7 +145,7 @@ def sync_niche(drive, niche, root_id, sc):
                        if f["name"] == "motion"]
         for motion_sub in motion_subs:
             mp4s = drive.files().list(
-                q=f"'{motion_sub['id']}' in parents and mimeType='video/mp4' and trashed=false",
+                q=f"'{motion_sub['id']}' in parents and mimeType='video/mp4' and trashed=false", pageSize=1000,
                 supportsAllDrives=True, includeItemsFromAllDrives=True,
                 fields="files(id,name)"
             ).execute().get("files", [])
