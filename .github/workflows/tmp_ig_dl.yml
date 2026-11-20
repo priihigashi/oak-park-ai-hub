@@ -1,0 +1,45 @@
+name: tmp ig dl (consciencia negra r6)
+on:
+  push:
+    branches: [tmp/consciencia-negra-r6]
+    paths: ['.github/workflows/tmp_ig_dl.yml']
+permissions:
+  contents: write
+jobs:
+  dl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: tmp/consciencia-negra-r6 }
+      - run: sudo apt-get update -y && sudo apt-get install -y ffmpeg && pip install -U yt-dlp faster-whisper
+      - name: download
+        env: { URL: "https://www.instagram.com/reel/Df9_1N-uXST/" }
+        run: |
+          mkdir -p ig_out/r6_frames
+          yt-dlp --write-info-json -o "ig_out/r6.%(ext)s" "$URL" || echo "DL_FAIL" > ig_out/r6_error.txt
+      - name: transcribe and frames
+        run: |
+          python - <<'PY'
+          import glob, json, os, subprocess
+          vids=[f for f in glob.glob('ig_out/r6.*') if f.split('.')[-1] in ('mp4','webm','mkv','mov')]
+          info=glob.glob('ig_out/r6*.info.json')
+          if info:
+              d=json.load(open(info[0]))
+              open('ig_out/r6_meta.txt','w').write(f"autor: {d.get('uploader')} / {d.get('channel')}\ndata: {d.get('upload_date')}\nduracao: {d.get('duration')}\nlegenda:\n{d.get('description')}\n")
+              os.remove(info[0])
+          if vids:
+              v=vids[0]
+              from faster_whisper import WhisperModel
+              m=WhisperModel('small',compute_type='int8')
+              segs,_=m.transcribe(v,language='pt')
+              with open('ig_out/r6_tx.txt','w') as f:
+                  for s in segs: f.write(f"[{s.start:6.1f}-{s.end:6.1f}] {s.text.strip()}\n")
+              dur=float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',v]).decode().strip())
+              for i in range(20):
+                  t=dur*(i+0.5)/20
+                  subprocess.run(['ffmpeg','-y','-ss',str(t),'-i',v,'-frames:v','1','-vf','scale=300:-1',f'ig_out/r6_frames/{i:02d}.jpg'],capture_output=True)
+              os.remove(v)
+          PY
+      - run: |
+          git config user.name "ig-dl-bot"; git config user.email "bot@users.noreply.github.com"
+          git add ig_out && git commit -m "r6 ig_out" && (git push || (git pull --rebase && git push))
