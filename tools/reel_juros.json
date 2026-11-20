@@ -1,1 +1,37 @@
-{"voice": "pt-BR-ThalitaMultilingualNeural", "rate": "+8%", "heads": {"cid": ["pt", "Cid Gomes"], "galipolo": ["pt", "Gabriel Galípolo"], "lara": ["pt", "André Lara Resende"], "cochrane": ["en", "John H. Cochrane"]}, "scenes": {"s01": "O Banco Central só escuta banqueiro antes de decidir os seus juros.", "s02": "Será? Eu abri a agenda oficial dos diretores e contei quem sentou com eles antes das últimas decisões. E no fim tem uma proposta de um dos economistas do Plano Real pra mudar o jogo.", "s03": "Primeiro, uma coisa em que direita e esquerda concordam: juro alto pesa no bolso de todo mundo. No Senado, o Cid Gomes falou que cada ponto da Selic custa cem bilhões por ano. As contas que eu achei dão cerca de metade, uns cinquenta bilhões. Ainda é muito dinheiro.", "s04": "Agora, a agenda. De setembro até o começo de novembro, foram dezessete reuniões fechadas com bancos e fundos de investimento, doze delas com estrangeiros. Mais oito encontros com economistas do mercado. E com indústria, comércio ou sindicato? Zero.", "s05": "O Banco Central diz que escuta as empresas de outro jeito, numa pesquisa chamada Firmus, com umas trezentas e cinquenta empresas. Isso é verdade. Só que ela sai a cada três meses. A pesquisa do mercado, o Focus, sai toda semana e entra direto na conta que projeta a inflação.", "s06": "E o trabalhador? Em dois mil e vinte e cinco, os metalúrgicos do ABC pediram um conselho pra também serem ouvidos. Até agora, eu não achei nenhuma resposta.", "s07": "Então o mercado manda no Banco Central? Aí a história complica. Em novembro, a maioria do mercado esperava um corte, e o Banco Central segurou a Selic em treze vírgula setenta e cinco por cento. Foi mais duro do que os bancos previam.", "s08": "E o caso do Banco Master? Esta semana, o presidente do Banco Central contou à Polícia Federal que informação de reunião interna chegava nos donos do banco. A suspeita é contra um ex-diretor de fiscalização, que nega. Isso é sobre fiscalização de banco, não sobre juros.", "s09": "Aí entra o André Lara Resende, um dos economistas do Plano Real. A proposta dele: o Banco Central anuncia uma faixa pra Selic. O piso é a inflação. O teto é o quanto a economia cresce em reais. Assim, a dívida para de crescer por causa dos juros.", "s10": "Quem é contra diz que juro não se decreta: se cair na marra, o dólar sobe e a inflação volta. E até o economista americano que ele cita, o John Cochrane, diz que só funciona com as contas do governo no controle.", "s11": "Então, com os dados que existem hoje: o Banco Central escuta muito mais o mercado do que o resto do país. Que ele decide pra agradar banco, isso eu não achei prova. O que dá pra cobrar é mais gente nessa mesa.", "s12": "Pra ajudar a aumentar o engajamento, copia o link, curte, reposta aqui e nos stories, e segue a página pra não perder o próximo."}}
+{
+"voice": "pt-BR-ThalitaMultilingualNeural",
+"rate": "+8%",
+"heads": {
+"cid": [
+"pt",
+"Cid Gomes"
+],
+"galipolo": [
+"pt",
+"Gabriel Galípolo"
+],
+"lara": [
+"pt",
+"André Lara Resende"
+],
+"cochrane": [
+"en",
+"John H. Cochrane"
+]
+},
+"scenes": {
+"s01": "O Banco Central só escuta banqueiro antes de decidir os seus juros.",
+"s02": "Será? Eu abri a agenda oficial dos diretores e contei quem sentou com eles antes das últimas decisões. E no fim tem uma proposta de um dos economistas do Plano Real pra mudar o jogo.",
+"s03": "Primeiro, uma coisa em que direita e esquerda concordam: juro alto pesa no bolso de todo mundo. No Senado, o Cid Gomes falou que cada ponto da Selic custa cem bilhões por ano. A conta do próprio Banco Central dá menos, uns setenta bilhões. Ainda é muito dinheiro.",
+"s04": "Agora, a agenda. De setembro até o começo de novembro, foram dezessete reuniões fechadas com bancos e fundos de investimento, doze delas com estrangeiros. Mais oito encontros com economistas do mercado. E com indústria, comércio ou sindicato? Zero.",
+"s05": "O Banco Central diz que escuta as empresas de outro jeito, numa pesquisa chamada Firmus, com umas trezentas e cinquenta empresas. Isso é verdade. Só que ela sai a cada três meses. A pesquisa do mercado, o Focus, sai toda semana e entra direto na conta que projeta a inflação.",
+"s06": "E o trabalhador? Em dois mil e vinte e cinco, os metalúrgicos do ABC pediram um conselho pra também serem ouvidos. Até agora, eu não achei nenhuma resposta.",
+"s07": "Então o mercado manda no Banco Central? Aí a história complica. Em novembro, a maioria do mercado esperava um corte, e o Banco Central segurou a Selic em treze vírgula setenta e cinco por cento. Foi mais duro do que os bancos previam.",
+"s08": "E o caso do Banco Master? Esta semana, o presidente do Banco Central contou à Polícia Federal que informação de reunião interna chegava nos donos do banco. A suspeita é contra um ex-diretor de fiscalização, que nega. Isso é sobre fiscalização de banco, não sobre juros.",
+"s09": "Aí entra o André Lara Resende, um dos economistas do Plano Real. A proposta dele: o Banco Central anuncia uma faixa pra Selic. O piso é a inflação. O teto é o quanto a economia cresce em reais. Assim, a dívida para de crescer por causa dos juros.",
+"s10": "Quem é contra diz que juro não se decreta: se cair na marra, o dólar sobe e a inflação volta. E até o economista americano que ele cita, o John Cochrane, diz que só funciona com as contas do governo no controle.",
+"s11": "Então, com os dados que existem hoje: o Banco Central escuta muito mais o mercado do que o resto do país. Que ele decide pra agradar banco, isso eu não achei prova. O que dá pra cobrar é mais gente nessa mesa.",
+"s12": "Pra ajudar a aumentar o engajamento, copia o link, curte, reposta aqui e nos stories, e segue a página pra não perder o próximo."
+},
+"skip_heads": true
+}
