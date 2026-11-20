@@ -10,8 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
-      URL: "https://www.instagram.com/reel/Df702HrJZXQ/"
-      N: "r4"
+      URL: "https://www.instagram.com/reel/Df4S6DEgiVp/"
+      N: "r5"
     steps:
       - uses: actions/checkout@v4
         with:
