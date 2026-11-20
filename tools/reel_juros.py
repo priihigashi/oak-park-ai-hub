@@ -27,6 +27,8 @@ async def allv():
                 print('retry', sid, e)
 asyncio.run(allv())
 # ---- rostos
+import sys
+if cfg.get('skip_heads'): sys.exit(0)
 UA = {'User-Agent': 'tentandochegaratevoce-reel/1.0 (mcfollingproperties@gmail.com)'}
 from rembg import remove, new_session
 import mediapipe as mp, cv2
