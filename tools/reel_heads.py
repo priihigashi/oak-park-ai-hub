@@ -10,42 +10,26 @@ sess = new_session('isnet-general-use')
 OVAL = [10,338,297,332,284,251,389,356,454,323,361,288,397,365,379,378,400,377,152,148,176,149,150,136,172,58,132,93,234,127,162,21,54,103,67,109]
 fm = mp.solutions.face_mesh.FaceMesh(static_image_mode=True, max_num_faces=1)
 def cands(lang, title, q):
-    urls = []
-    try:
-        r = requests.get(f'https://{lang}.wikipedia.org/w/api.php', params={'action':'query','titles':title,'prop':'pageimages','piprop':'original','format':'json','redirects':1}, headers=UA, timeout=30).json()
-        p = list(r['query']['pages'].values())[0]
-        if 'original' in p: urls.append(p['original']['source'])
-    except Exception as e: print('pi', e)
-    try:
-        r = requests.get('https://commons.wikimedia.org/w/api.php', params={'action':'query','generator':'search','gsrsearch':q,'gsrnamespace':6,'gsrlimit':8,'prop':'imageinfo','iiprop':'url|size','iiurlwidth':1400,'format':'json'}, headers=UA, timeout=30).json()
-        for pg in r.get('query',{}).get('pages',{}).values():
-            ii = pg['imageinfo'][0]
-            if ii['url'].lower().endswith(('.jpg','.jpeg','.png')): urls.append(ii.get('thumburl') or ii['url'])
-    except Exception as e: print('cs', e)
-    return urls
+    if lang == 'url': return [title]
+    return []
 def score(im):
     res = fm.process(np.array(im))
     if not res.multi_face_landmarks: return None, None
     lm = res.multi_face_landmarks[0].landmark
-    W, H = im.size
     l, r, n = lm[234].x, lm[454].x, lm[1].x
     asym = abs((n - l) - (r - n)) / max(1e-3, (r - l))
-    size = (r - l)
-    return asym - size * 0.5, lm
+    return asym - (r - l) * 0.5, lm
 for key, spec in cfg['heads'].items():
-    lang, title, q = spec[0], spec[1], spec[2] if len(spec) > 2 else spec[1]
     best = None
-    for i, u in enumerate(cands(lang, title, q)[:9]):
-        try:
-            raw = requests.get(u, headers=UA, timeout=60).content
-            im = Image.open(io.BytesIO(raw)).convert('RGB')
-            im.thumbnail((1400, 1400))
-            s, lm = score(im)
-            print(key, i, u[:100], s)
-            if s is None: continue
-            im.save(f'reel_out/heads/{key}_c{i}.jpg', quality=80)
-            if best is None or s < best[0]: best = (s, im, lm, u)
-        except Exception as e: print('err', key, e)
+    for i, u in enumerate(cands(spec[0], spec[1], spec[2])):
+        raw = requests.get(u, headers=UA, timeout=60).content
+        im = Image.open(io.BytesIO(raw)).convert('RGB')
+        im.thumbnail((1400, 1400))
+        s, lm = score(im)
+        print(key, i, s)
+        if s is None: continue
+        im.save(f'reel_out/heads/{key}_c{i}.jpg', quality=80)
+        best = (s, im, lm, u)
     if not best: print('none', key); continue
     s, im, lm, u = best
     open(f'reel_out/heads/{key}_src.txt', 'w').write(u)
