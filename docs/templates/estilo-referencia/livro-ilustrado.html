@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Template · livro ilustrado v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@600;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#111;color:#f4f4f4;font-family:Rubik,system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;padding:14px 10px 40px}
+h1{font-size:19px;margin:4px 0 2px}p.s{color:#aaa;font-size:14px;margin:0 0 10px;max-width:420px;text-align:center}
+#wrap{position:relative;width:min(92vw,405px);aspect-ratio:9/16;border-radius:22px;overflow:hidden;background:#3c5a33}
+#stage{position:absolute;left:0;top:0;width:1080px;height:1920px;transform-origin:0 0}
+canvas{position:absolute;inset:0}
+svg{position:absolute;inset:0}
+.title{position:absolute;left:108px;right:108px;top:300px;font-weight:800;font-size:96px;line-height:1.02;color:#fff;text-shadow:0 4px 18px rgba(0,0,0,.35);opacity:0}
+.title b{color:#FFD34D}
+.cap{position:absolute;left:130px;right:130px;top:1600px;text-align:center;font-weight:600;font-size:58px;line-height:1.3;color:#fff;opacity:0}
+.cap span{background:rgba(20,28,18,.62);padding:6px 16px;line-height:1.5;border-radius:10px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.cap .w{color:#FFD34D}
+.ctl{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;justify-content:center}
+.ctl button{border:1px solid #333;background:#1c1c1c;color:#fff;border-radius:12px;padding:10px 14px;font:700 15px Rubik;cursor:pointer}
+.ctl button.on{background:#FFD34D;color:#111}
+input[type=range]{width:min(92vw,405px);margin-top:10px}
+textarea{width:min(92vw,405px);min-height:90px;margin-top:10px;border-radius:12px;border:1px solid #333;background:#1c1c1c;color:#fff;padding:10px;font:15px Rubik}
+</style>
+</head>
+<body>
+<h1>Template · livro ilustrado v2</h1>
+<p class="s">v2: tremido do traço bem mais leve e só nas linhas paradas (varal e Plenário), pra não parecer glitch. Traço de caneta, cor chapada e fundo pintado com textura e luz. Assunto nosso: o projeto que pula a fila. Sem voz, só o visual.</p>
+<div id="wrap"><div id="stage">
+<canvas id="bg" width="1080" height="1920"></canvas>
+<svg viewBox="0 0 1080 1920" width="1080" height="1920">
+<defs>
+<filter id="boil"><feTurbulence id="turb" type="fractalNoise" baseFrequency="0.022" numOctaves="2" seed="1"/><feDisplacementMap in="SourceGraphic" scale="2"/></filter>
+</defs>
+<g id="ink">
+  <path id="line" filter="url(#boil)" d="M -40 820 Q 540 950 1120 800" fill="none" stroke="#1b1b1b" stroke-width="5" stroke-linecap="round"/>
+  <g id="papers"></g>
+  <g id="stamp" opacity="0"></g>
+  <g id="cong" filter="url(#boil)" transform="translate(0,90)" fill="none" stroke="#1b1b1b" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M 180 1420 H 900"/><path d="M 300 1420 Q 300 1330 400 1330 Q 500 1330 500 1420" fill="#F3EBD8"/><path d="M 600 1330 Q 600 1420 700 1420 Q 800 1420 800 1330 Z" fill="#F3EBD8"/><rect x="505" y="1080" width="34" height="340" fill="#F3EBD8"/><rect x="545" y="1080" width="34" height="340" fill="#F3EBD8"/><path d="M 505 1200 H 579"/><text x="540" y="1475" text-anchor="middle" font-family="Rubik, sans-serif" font-weight="800" font-size="38" fill="#F3EBD8" stroke="none">PLENÁRIO</text></g>
+</g>
+</svg>
+<div class="title" id="title">Esse projeto<br>pulou a fila.<br><b>Quem decidiu?</b></div>
+<div class="cap" id="cap"></div>
+</div></div>
+<input type="range" id="seek" min="0" max="12" step="0.01" value="0">
+<div class="ctl">
+<button id="play">▶ Play</button><button data-j="-5">-5s</button><button data-j="5">+5s</button>
+<button data-sp="1" class="on">1x</button><button data-sp="0.5">0,5x</button><button data-sp="2">2x</button>
+</div>
+<textarea id="nota" placeholder="Suas notas enquanto assiste"></textarea>
+<div class="ctl"><button id="cp">Copiar nota</button></div>
+<script>
+const W=1080,H=1920,D=12;
+// ---------- fundo pintado (folhagem + luz + grão), desenhado uma vez
+(function(){const c=document.getElementById('bg'),x=c.getContext('2d');
+let s=7;const r=()=>{s=(s*16807)%2147483647;return s/2147483647};
+const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,'#55744a');g.addColorStop(.55,'#3b5733');g.addColorStop(1,'#2a3f25');x.fillStyle=g;x.fillRect(0,0,W,H);
+const cols=['#6f8f5b','#8bab6c','#a9c48a','#4d6b40','#c9d9a6','#3f5a34'];
+for(let i=0;i<900;i++){const px=r()*W,py=r()*H*0.75,rad=8+r()*46;x.globalAlpha=.10+r()*.35*(1-py/H);x.fillStyle=cols[(r()*cols.length)|0];x.beginPath();
+ for(let k=0;k<7;k++){const a=k/7*Math.PI*2,rr=rad*(.6+r()*.6);k?x.lineTo(px+Math.cos(a)*rr,py+Math.sin(a)*rr):x.moveTo(px+Math.cos(a)*rr,py+Math.sin(a)*rr)}x.fill()}
+x.globalAlpha=1;
+// feixe de luz
+x.save();x.translate(760,0);x.rotate(.42);const lg=x.createLinearGradient(-160,0,160,0);lg.addColorStop(0,'rgba(255,250,210,0)');lg.addColorStop(.5,'rgba(255,250,210,.22)');lg.addColorStop(1,'rgba(255,250,210,0)');x.fillStyle=lg;x.fillRect(-160,0,320,2400);x.restore();
+// grão de papel
+const im=x.getImageData(0,0,W,H),d=im.data;for(let i=0;i<d.length;i+=4){const n=(r()-.5)*22;d[i]+=n;d[i+1]+=n;d[i+2]+=n}x.putImageData(im,0,0);
+// escurece o rodapé pra legenda
+const fg=x.createLinearGradient(0,1300,0,H);fg.addColorStop(0,'rgba(0,0,0,0)');fg.addColorStop(1,'rgba(0,0,0,.35)');x.fillStyle=fg;x.fillRect(0,1300,W,620);
+})();
+// ---------- papéis no varal
+const NS='http://www.w3.org/2000/svg';
+const line=document.getElementById('line'),L=line.getTotalLength();
+line.style.strokeDasharray=L;
+const P=[{u:.14,lab:'PL 412'},{u:.31,lab:'PL 88'},{u:.48,lab:'PL 1.903'},{u:.65,lab:'PL 2.167'},{u:.82,lab:'PL 77'}];
+const pg=document.getElementById('papers');
+P.forEach((p,i)=>{const g=document.createElementNS(NS,'g');g.innerHTML=`
+<g class="sw"><rect x="-70" y="10" width="140" height="190" rx="6" fill="#F3EBD8" stroke="#1b1b1b" stroke-width="4"/>
+<path d="M -44 70 h 88 M -44 100 h 70 M -44 130 h 82 M -44 160 h 50" stroke="#1b1b1b" stroke-width="3" stroke-linecap="round"/>
+<text x="0" y="48" text-anchor="middle" font-family="Rubik, sans-serif" font-weight="800" font-size="30" fill="#1b1b1b">${p.lab}</text>
+<rect x="-12" y="-22" width="24" height="44" rx="4" fill="${i===3?'#FF4A3D':'#d9b77e'}" stroke="#1b1b1b" stroke-width="4"/></g>`;pg.appendChild(g);p.g=g;p.sw=g.querySelector('.sw')});
+const st=document.getElementById('stamp');st.innerHTML=`<g transform="rotate(-12)"><rect x="-150" y="-46" width="300" height="92" rx="12" fill="none" stroke="#FF4A3D" stroke-width="9"/><text x="0" y="22" text-anchor="middle" font-family="Rubik, sans-serif" font-weight="800" font-size="60" fill="#FF4A3D">URGÊNCIA</text></g>`;
+const ease=t=>t<0?0:t>1?1:t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const cl=(a,b,t)=>Math.max(0,Math.min(1,(t-a)/(b-a)));
+const spring=t=>t<=0?0:t>=1?1:1-Math.cos(t*Math.PI*2.5)*Math.exp(-5*t);
+const CAP=[[7.2,'Urgência não quer dizer<br><span class="w">aprovação</span>.'],[9.4,'Quer dizer <span class="w">pressa</span>.<br>E quem decide são eles.']];
+let T=0,playing=false,sp=1,last=0;
+function render(t){
+ // traço treme 8 vezes por segundo
+ document.getElementById('turb').setAttribute('seed',1+Math.floor(t*4)%4);
+ line.style.strokeDashoffset=L*(1-ease(cl(0,1.1,t)));
+ P.forEach((p,i)=>{let pt=line.getPointAtLength(L*p.u);let x=pt.x,y=pt.y,a=0,o=1;
+  const tin=cl(.6+i*.18,1.3+i*.18,t);o=tin>0?1:0;y-=(1-spring(tin))*-0; const sw=Math.sin((t-.6-i*.18)*3.2)*10*Math.exp(-Math.max(0,t-.6-i*.18)*1.2)*(tin>0?1:0);a=sw+(1-spring(tin))*40;
+  if(i===3){const k=ease(cl(5.2,6.9,t));if(k>0){const q=line.getPointAtLength(L*0.14);const mx=(pt.x+q.x)/2,my=Math.min(pt.y,q.y)-330;
+   x=(1-k)*(1-k)*pt.x+2*(1-k)*k*mx+k*k*q.x+ (k>=1?0:0);y=(1-k)*(1-k)*pt.y+2*(1-k)*k*my+k*k*q.y;a=Math.sin(k*Math.PI)*-28+(k>=1?Math.sin((t-6.9)*4)*8*Math.exp(-(t-6.9)*1.5):0)}
+   }
+  else if(i<3){const k=ease(cl(5.6,6.9,t));if(k>0){const q=line.getPointAtLength(L*(p.u+0.17*k));x=q.x;y=q.y;a+=Math.sin(k*Math.PI)*6}}
+  p.g.setAttribute('transform',`translate(${x},${y})`);p.g.style.opacity=o;p.sw.setAttribute('transform',`rotate(${a}) scale(1.3)`)});
+ // carimbo
+ const sk=cl(3.4,3.75,t);const p3=P[3];const tr=p3.g.getAttribute('transform');
+ st.style.opacity=sk>0?1:0;st.setAttribute('transform',`${tr} translate(0,150) scale(${sk<1?2.2-1.6*ease(sk):0.6})`);
+ document.getElementById('cong').style.opacity=ease(cl(0.3,1.2,t));
+ // título
+ const ti=document.getElementById('title');const tk=ease(cl(1.6,2.3,t));ti.style.opacity=tk;ti.style.transform=`translateY(${(1-tk)*40}px)`;
+ // legenda 2 linhas por página
+ const cap=document.getElementById('cap');let html='';CAP.forEach(([s,h])=>{if(t>=s)html=`<span>${h}</span>`});cap.innerHTML=html;cap.style.opacity=t>=CAP[0][0]?1:0;
+ document.getElementById('seek').value=t;
+}
+function fit(){const w=document.getElementById('wrap').clientWidth;document.getElementById('stage').style.transform=`scale(${w/W})`}
+addEventListener('resize',fit);fit();
+function loop(now){if(playing){T+=(now-last)/1000*sp;if(T>=D){T=D;playing=false;document.getElementById('play').textContent='▶ Play'}}last=now;render(T);requestAnimationFrame(loop)}
+requestAnimationFrame(n=>{last=n;loop(n)});
+document.getElementById('play').onclick=e=>{if(T>=D)T=0;playing=!playing;e.target.textContent=playing?'❚❚ Pausa':'▶ Play'};
+document.getElementById('seek').oninput=e=>{T=+e.target.value};
+document.querySelectorAll('[data-j]').forEach(b=>b.onclick=()=>{T=Math.max(0,Math.min(D,T+ +b.dataset.j))});
+document.querySelectorAll('[data-sp]').forEach(b=>b.onclick=()=>{sp=+b.dataset.sp;document.querySelectorAll('[data-sp]').forEach(x=>x.classList.toggle('on',x===b))});
+document.getElementById('cp').onclick=e=>{const v=document.getElementById('nota').value;try{navigator.clipboard.writeText(v).then(()=>{e.target.textContent='Copiado ✓';setTimeout(()=>e.target.textContent='Copiar nota',1500)})}catch(_){}};
+</script>
+</body>
+</html>
