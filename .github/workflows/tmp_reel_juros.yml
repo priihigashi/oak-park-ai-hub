@@ -1,0 +1,25 @@
+name: tmp-reel-juros
+on:
+  push:
+    branches: ["tmp/cid-gomes-juros"]
+    paths: [".github/workflows/tmp_reel_juros.yml", "tools/reel_juros.py", "tools/reel_juros.json"]
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: tmp/cid-gomes-juros
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - run: pip install -q edge-tts requests pillow numpy opencv-python-headless "rembg[cpu]" mediapipe==0.10.14
+      - run: python tools/reel_juros.py
+      - name: commit
+        run: |
+          git config user.name priihigashi
+          git config user.email mcfollingproperties@gmail.com
+          git add reel_out
+          git commit -m "reel_out" || exit 0
+          git push || (git pull --rebase && git push)
