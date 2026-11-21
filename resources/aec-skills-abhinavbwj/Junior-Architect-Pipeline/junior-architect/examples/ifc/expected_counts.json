@@ -1,0 +1,10 @@
+{
+ "schema": "IFC4X3",
+ "IfcWall": 3,
+ "IfcDoor": 2,
+ "IfcSpace": 2,
+ "storeys": [
+  "Level 00",
+  "Level 01"
+ ]
+}

@@ -1,0 +1,13 @@
+{
+  "$comment": [
+    "TEMPLATE ONLY: not loaded automatically and not referenced by plugin.json.",
+    "Copy the entries you need into your project's .mcp.json, or add the server with `claude mcp add`.",
+    "Fill in each command from the vendor's own install instructions (see mcp/README.md). Some official servers are installed by the vendor's own tools: McNeel's Rhino MCP Platform from Rhino, Graphisoft's from Archicad's 'Configure Public MCP Server', Blender Lab's from Blender Extensions, Trimble's SketchUp connector from Claude's connector directory.",
+    "Verify every server before use: it receives tool access to your model."
+  ],
+  "mcpServers": {
+    "rhino": {"command": "REPLACE_WITH_THE_COMMAND_FROM_McNeel_Rhino_MCP_Platform", "args": [], "env": {}},
+    "revit": {"command": "REPLACE_WITH_THE_COMMAND_FROM_Autodesk_Revit_Public_MCP_Server", "args": [], "env": {}},
+    "blender": {"command": "REPLACE_WITH_THE_COMMAND_FROM_Blender_Lab_MCP_server", "args": [], "env": {}}
+  }
+}

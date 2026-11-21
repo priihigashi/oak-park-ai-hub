@@ -1,0 +1,33 @@
+{
+  "name": "junior-architect",
+  "displayName": "Junior Architect Pipeline",
+  "version": "2.0.0",
+  "description": "A gated pipeline that runs junior-architect production work in Claude Code: 45 tasks across brief and site, regulation, 3D modelling, BIM and Grasshopper, drafting and documentation, schedules and quantities, visualisation, coordination and exchange, and construction administration. Specialist subagents drive Rhino, Grasshopper, Revit and Blender; 20 deterministic checkers recompute every output; hooks keep every judgement step with the junior.",
+  "author": {
+    "name": "Abhinav Bhardwaj",
+    "url": "https://abhinavbhardwaj.com"
+  },
+  "homepage": "https://github.com/abhinavbwj/Junior-Architect-Pipeline",
+  "license": "MIT",
+  "hooks": "./hooks/hooks.json",
+  "keywords": [
+    "architecture",
+    "AEC",
+    "junior-architect",
+    "pipeline",
+    "agents",
+    "MCP",
+    "Rhino",
+    "Grasshopper",
+    "Revit",
+    "BIM",
+    "area-schedule",
+    "door-schedule",
+    "drawing-qa",
+    "code-compliance",
+    "specifications",
+    "RFI",
+    "RIBA-Plan-of-Work",
+    "ISO-19650"
+  ]
+}

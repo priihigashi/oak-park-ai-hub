@@ -1,0 +1,6 @@
+{"components":[
+ {"id":"a1","name":"Number Slider","nickname":"Floor height (mm)","kind":"slider","runtime":"ok","inputs":[]},
+ {"id":"a2","name":"Number Slider","nickname":"Number Slider","kind":"slider","runtime":"ok","inputs":[]},
+ {"id":"a3","name":"Loft","nickname":"Loft","kind":"component","runtime":"error","messages":["Curves could not be lofted"],"inputs":[{"name":"Curves","sources":1}]},
+ {"id":"a4","name":"Divide Curve","nickname":"Divide","kind":"component","runtime":"warning","messages":["Input parameter C failed to collect data"],"inputs":[{"name":"Curve","sources":0},{"name":"Count","sources":1}]},
+ {"id":"a5","name":"Curve","nickname":"Site boundary","kind":"param","runtime":"ok","internalised":true,"inputs":[]}]}

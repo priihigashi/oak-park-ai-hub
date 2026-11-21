@@ -1,0 +1,5 @@
+.jap/
+node_modules/
+*.log
+*.bak*
+_*.html

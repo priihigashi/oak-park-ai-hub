@@ -1,0 +1,65 @@
+[
+ {
+  "id": "ST-01",
+  "use": "default",
+  "risers": 17,
+  "riser_mm": 176.5,
+  "going_mm": 280,
+  "width_mm": 1200,
+  "headroom_mm": 2150,
+  "max_flight_risers": 9,
+  "floor_to_floor_mm": 3000
+ },
+ {
+  "id": "ST-02",
+  "use": "default",
+  "risers": 15,
+  "riser_mm": 200,
+  "going_mm": 240,
+  "width_mm": 1000,
+  "headroom_mm": 1950,
+  "max_flight_risers": 15,
+  "floor_to_floor_mm": 3000
+ },
+ {
+  "id": "ST-03",
+  "use": "default",
+  "risers": 17,
+  "riser_mm": 176.5,
+  "going_mm": 270,
+  "width_mm": 1200,
+  "headroom_mm": 2200,
+  "max_flight_risers": 17,
+  "floor_to_floor_mm": 3100,
+  "risers_mm": [
+   176,
+   176,
+   176,
+   176,
+   176,
+   176,
+   176,
+   176,
+   176,
+   176,
+   176,
+   176,
+   176,
+   176,
+   176,
+   176,
+   188
+  ]
+ },
+ {
+  "id": "ST-04",
+  "use": "default",
+  "risers": 20,
+  "riser_mm": 150,
+  "going_mm": 380,
+  "width_mm": 1200,
+  "headroom_mm": 2200,
+  "max_flight_risers": 10,
+  "floor_to_floor_mm": 3000
+ }
+]

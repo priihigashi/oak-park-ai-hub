@@ -1,0 +1,2 @@
+[{"view":"Level 00 - GA Plan","type":"FloorPlan","dimensions":36,"categories":{"Doors":{"elements":24,"tagged":24},"Rooms":{"elements":18,"tagged":17}}},
+ {"view":"Level 01 - GA Plan","type":"FloorPlan","dimensions":0,"categories":{"Doors":{"elements":20,"tagged":12}},"overlapping_tags":3}]

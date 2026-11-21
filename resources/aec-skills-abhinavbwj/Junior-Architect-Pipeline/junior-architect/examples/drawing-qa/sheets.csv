@@ -1,0 +1,5 @@
+number,title,revision,status,drawn_by,checked_by,date,references
+PRJ01-XYZ-00-GF-DR-A-1001,Ground floor plan,P03,S2,AB,CD,2026-11-10,PRJ01-XYZ-00-01-DR-A-1002
+PRJ01-XYZ-00-01-DR-A-1002,First floor plan,P02,S2,AB,AB,2026-11-10,PRJ01-XYZ-00-ZZ-DR-A-2001
+PRJ01-XYZ-00-ZZ-DR-A-3001,Section A-A,P01,S9,AB,CD,,
+GF-PLAN-2,Plan sketch,P01,S0,AB,CD,2026-11-12,

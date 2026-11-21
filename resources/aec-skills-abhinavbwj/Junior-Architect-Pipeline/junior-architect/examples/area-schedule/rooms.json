@@ -1,0 +1,523 @@
+[
+ {
+  "name": "Studio A",
+  "number": "0.01",
+  "layer": "ROOMS",
+  "closed": true,
+  "units": "mm",
+  "boundary": "internal",
+  "vertices": [
+   [
+    0,
+    0
+   ],
+   [
+    6000,
+    0
+   ],
+   [
+    6000,
+    4500
+   ],
+   [
+    0,
+    4500
+   ]
+  ]
+ },
+ {
+  "name": "Studio B",
+  "number": "0.02",
+  "layer": "ROOMS",
+  "closed": true,
+  "units": "mm",
+  "boundary": "internal",
+  "vertices": [
+   [
+    10000,
+    0
+   ],
+   [
+    16000,
+    0
+   ],
+   [
+    16000,
+    4500
+   ],
+   [
+    10000,
+    4500
+   ]
+  ]
+ },
+ {
+  "name": "Studio C",
+  "number": "0.03",
+  "layer": "ROOMS",
+  "closed": true,
+  "units": "mm",
+  "boundary": "internal",
+  "vertices": [
+   [
+    20000,
+    0
+   ],
+   [
+    26000,
+    0
+   ],
+   [
+    26000,
+    4500
+   ],
+   [
+    20000,
+    4500
+   ]
+  ]
+ },
+ {
+  "name": "Workshop",
+  "number": "0.04",
+  "layer": "ROOMS",
+  "closed": true,
+  "units": "mm",
+  "boundary": "internal",
+  "vertices": [
+   [
+    30000,
+    0
+   ],
+   [
+    39000,
+    0
+   ],
+   [
+    39000,
+    6000
+   ],
+   [
+    30000,
+    6000
+   ]
+  ]
+ },
+ {
+  "name": "Seminar",
+  "number": "0.05",
+  "layer": "ROOMS",
+  "closed": true,
+  "units": "mm",
+  "boundary": "internal",
+  "vertices": [
+   [
+    40000,
+    0
+   ],
+   [
+    47500,
+    0
+   ],
+   [
+    47500,
+    5000
+   ],
+   [
+    40000,
+    5000
+   ]
+  ]
+ },
+ {
+  "name": "Library",
+  "number": "0.06",
+  "layer": "ROOMS",
+  "closed": true,
+  "units": "mm",
+  "boundary": "internal",
+  "vertices": [
+   [
+    0,
+    8000
+   ],
+   [
+    8000,
+    8000
+   ],
+   [
+    8000,
+    14000
+   ],
+   [
+    0,
+    14000
+   ]
+  ]
+ },
+ {
+  "name": "Kitchen",
+  "number": "0.07",
+  "layer": "ROOMS",
+  "closed": true,
+  "units": "mm",
+  "boundary": "internal",
+  "vertices": [
+   [
+    10000,
+    8000
+   ],
+   [
+    14000,
+    8000
+   ],
+   [
+    14000,
+    11500
+   ],
+   [
+    10000,
+    11500
+   ]
+  ]
+ },
+ {
+  "name": "WC North",
+  "number": "0.08",
+  "layer": "ROOMS",
+  "closed": true,
+  "units": "mm",
+  "boundary": "internal",
+  "vertices": [
+   [
+    20000,
+    8000
+   ],
+   [
+    22400,
+    8000
+   ],
+   [
+    22400,
+    10000
+   ],
+   [
+    20000,
+    10000
+   ]
+  ]
+ },
+ {
+  "name": "WC South",
+  "number": "0.09",
+  "layer": "ROOMS",
+  "closed": true,
+  "units": "mm",
+  "boundary": "internal",
+  "vertices": [
+   [
+    30000,
+    8000
+   ],
+   [
+    32400,
+    8000
+   ],
+   [
+    32400,
+    10000
+   ],
+   [
+    30000,
+    10000
+   ]
+  ]
+ },
+ {
+  "name": "Plant",
+  "number": "0.10",
+  "layer": "ROOMS",
+  "closed": true,
+  "units": "mm",
+  "boundary": "internal",
+  "vertices": [
+   [
+    40000,
+    8000
+   ],
+   [
+    44000,
+    8000
+   ],
+   [
+    44000,
+    11000
+   ],
+   [
+    40000,
+    11000
+   ]
+  ]
+ },
+ {
+  "name": "Office 1",
+  "number": "0.11",
+  "layer": "ROOMS",
+  "closed": true,
+  "units": "mm",
+  "boundary": "internal",
+  "vertices": [
+   [
+    0,
+    20000
+   ],
+   [
+    16.4,
+    20000
+   ],
+   [
+    16.4,
+    20013.1
+   ],
+   [
+    0,
+    20013.1
+   ]
+  ]
+ },
+ {
+  "name": "Office 2",
+  "number": "0.12",
+  "layer": "ROOMS",
+  "closed": false,
+  "units": "mm",
+  "boundary": "internal",
+  "vertices": [
+   [
+    10000,
+    20000
+   ],
+   [
+    14000,
+    20000
+   ],
+   [
+    14000,
+    25000
+   ],
+   [
+    10000,
+    25000
+   ]
+  ]
+ },
+ {
+  "name": "Studio A",
+  "number": "0.01b",
+  "layer": "ROOMS",
+  "closed": true,
+  "units": "mm",
+  "boundary": "internal",
+  "vertices": [
+   [
+    0,
+    0
+   ],
+   [
+    6000,
+    0
+   ],
+   [
+    6000,
+    4500
+   ],
+   [
+    0,
+    4500
+   ]
+  ]
+ },
+ {
+  "name": "Store",
+  "number": "0.13",
+  "layer": "A-WALL",
+  "closed": true,
+  "units": "mm",
+  "boundary": "internal",
+  "vertices": [
+   [
+    20000,
+    20000
+   ],
+   [
+    23000,
+    20000
+   ],
+   [
+    23000,
+    22000
+   ],
+   [
+    20000,
+    22000
+   ]
+  ]
+ },
+ {
+  "name": "Semnar Room",
+  "number": "0.14",
+  "layer": "ROOMS",
+  "closed": true,
+  "units": "mm",
+  "boundary": "internal",
+  "vertices": [
+   [
+    30000,
+    20000
+   ],
+   [
+    35000,
+    20000
+   ],
+   [
+    35000,
+    24000
+   ],
+   [
+    30000,
+    24000
+   ]
+  ]
+ },
+ {
+  "name": "Foyer",
+  "number": "0.15",
+  "layer": "ROOMS",
+  "closed": true,
+  "units": "mm",
+  "boundary": "internal",
+  "vertices": [
+   [
+    40000,
+    20000
+   ],
+   [
+    48000,
+    20000
+   ],
+   [
+    48000,
+    26000
+   ],
+   [
+    40000,
+    26000
+   ]
+  ],
+  "has_arcs": true
+ },
+ {
+  "name": "Library Store",
+  "number": "0.16",
+  "layer": "ROOMS",
+  "closed": true,
+  "units": "mm",
+  "boundary": "internal",
+  "vertices": [
+   [
+    1000,
+    9000
+   ],
+   [
+    3000,
+    9000
+   ],
+   [
+    3000,
+    10500
+   ],
+   [
+    1000,
+    10500
+   ]
+  ]
+ },
+ {
+  "name": "Office 3",
+  "number": "0.17",
+  "layer": "ROOMS",
+  "closed": true,
+  "units": "mm",
+  "boundary": "centreline",
+  "vertices": [
+   [
+    0,
+    30000
+   ],
+   [
+    4200,
+    30000
+   ],
+   [
+    4200,
+    35200
+   ],
+   [
+    0,
+    35200
+   ]
+  ]
+ },
+ {
+  "name": "Print Room",
+  "number": "0.18",
+  "layer": "ROOMS",
+  "closed": true,
+  "units": "mm",
+  "boundary": "internal",
+  "vertices": [
+   [
+    10000,
+    30000
+   ],
+   [
+    13000,
+    30000
+   ],
+   [
+    13000,
+    33000
+   ],
+   [
+    10000,
+    33000
+   ]
+  ]
+ },
+ {
+  "name": "Meeting",
+  "number": "0.19",
+  "layer": "ROOMS",
+  "closed": true,
+  "units": "mm",
+  "boundary": "internal",
+  "vertices": [
+   [
+    20000,
+    30000
+   ],
+   [
+    24000,
+    30000
+   ],
+   [
+    24000,
+    34700
+   ],
+   [
+    20000,
+    34700
+   ]
+  ]
+ }
+]
