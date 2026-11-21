@@ -18,7 +18,7 @@ jobs:
           mkdir -p ig_out
           python3 - <<'PY'
           import json,glob,subprocess,os,numpy as np
-          reels={'r4':'https://www.instagram.com/reel/DceDzUhIclm/'}
+          reels={'r5':'https://www.instagram.com/reel/DZFIU3rBUen/'}
           from faster_whisper import WhisperModel
           m=WhisperModel('small',compute_type='int8')
           for n,u in reels.items():
@@ -52,5 +52,5 @@ jobs:
           git config user.name bot; git config user.email bot@users.noreply.github.com
           git pull --rebase || true
           git add ig_out
-          git commit -m 'tmp ig_out r4'
+          git commit -m 'tmp ig_out r5'
           git push || (git pull --rebase && git push)
