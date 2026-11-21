@@ -19,7 +19,7 @@ jobs:
         run: |
           mkdir -p ig_out bin
           FF=$(python -c 'import imageio_ffmpeg;print(imageio_ffmpeg.get_ffmpeg_exe())'); ln -sf $FF bin/ffmpeg; export PATH=$PWD/bin:$PATH
-          yt-dlp -q --no-warnings --write-info-json -o "ig_out/r9.%(ext)s" https://www.instagram.com/reel/DfXDSqyMYWI/ || echo fail
+          yt-dlp -q --no-warnings --write-info-json -o "ig_out/r10.%(ext)s" https://www.instagram.com/reel/DfVKsmYODHe/ || echo fail
       - name: tx
         run: |
           export PATH=$PWD/bin:$PATH
@@ -27,19 +27,18 @@ jobs:
           import os, subprocess
           from faster_whisper import WhisperModel
           m = WhisperModel("small", device="cpu", compute_type="int8")
-          f = "ig_out/r9.mp4"
+          f = "ig_out/r10.mp4"
           if os.path.exists(f):
               b = f[:-4]
               segs, _ = m.transcribe(f, language="pt")
               out = [[round(s.start,2), round(s.end,2), s.text.strip()] for s in segs]
               open(b + "_tx.txt", "w").write("\n".join(f"[{a}-{e}] {t}" for a, e, t in out))
               os.makedirs(b + "_frames", exist_ok=True)
-              for k in range(12):
-                  subprocess.run(["ffmpeg","-v","error","-y","-ss",str(2+k*5),"-i",f,"-frames:v","1","-vf","scale=300:-2",f"{b}_frames/f{k:02d}.jpg"])
+              subprocess.run(["ffmpeg","-v","error","-y","-i",f,"-vf","fps=1,scale=360:-2",f"{b}_frames/f%03d.jpg"])
           PY
-          [ -f ig_out/r9.info.json ] && python -c "import json;d=json.load(open('ig_out/r9.info.json'));print(d.get('uploader'),d.get('channel'),d.get('upload_date'));print((d.get('description') or '')[:2000])" > ig_out/r9_meta.txt
+          [ -f ig_out/r10.info.json ] && python -c "import json;d=json.load(open('ig_out/r10.info.json'));print(d.get('uploader'),d.get('channel'),d.get('upload_date'));print((d.get('description') or '')[:2000])" > ig_out/r10_meta.txt
           rm -f ig_out/*.info.json; rm -rf bin
       - name: commit
         run: |
           git config user.name "tomate-bot"; git config user.email "bot@example.com"
-          git add ig_out && git commit -m "ig ref9 output" && (git push origin HEAD:tmp/tomate-tx || (git pull --rebase -X theirs origin tmp/tomate-tx && git push origin HEAD:tmp/tomate-tx))
+          git add ig_out && git commit -m "ig ref10 output" && (git push origin HEAD:tmp/tomate-tx || (git pull --rebase -X theirs origin tmp/tomate-tx && git push origin HEAD:tmp/tomate-tx))
