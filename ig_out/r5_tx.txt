@@ -1,0 +1,2 @@
+lang en 0.76
+[0.0-15.0]  Thanks for watching guys!
