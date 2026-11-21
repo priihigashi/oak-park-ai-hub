@@ -1,0 +1,35 @@
+{
+ "title": "Example board",
+ "subtitle": "Pipeline example, 2026-11-19",
+ "size_mm": [
+  841,
+  594
+ ],
+ "min_text_mm": 3,
+ "columns": 3,
+ "items": [
+  {
+   "type": "image",
+   "file": "../render/sun_dec21_1200.png",
+   "caption": "Court at noon, winter solstice",
+   "source": "Own render"
+  },
+  {
+   "type": "image",
+   "file": "../render/eye_01.png",
+   "caption": "Street view"
+  },
+  {
+   "type": "drawing",
+   "file": "../render/axo_01.png",
+   "caption": "Ground floor plan",
+   "plan": true
+  },
+  {
+   "type": "text",
+   "caption": "Concept",
+   "text": "Two wings around a south-facing court.",
+   "text_mm": 2.5
+  }
+ ]
+}

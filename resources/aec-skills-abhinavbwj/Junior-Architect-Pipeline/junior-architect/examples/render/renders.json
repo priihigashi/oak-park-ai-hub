@@ -1,0 +1,46 @@
+[
+ {
+  "file": "render/eye_01.png",
+  "kind": "eye-level",
+  "camera": {
+   "height_m": 12,
+   "focal_mm": 16,
+   "projection": "perspective"
+  }
+ },
+ {
+  "file": "render/sun_dec21_1200.png",
+  "kind": "sun-study",
+  "sun": {
+   "azimuth": 176.58,
+   "altitude": 6.61
+  },
+  "datetime": "2026-12-21T12:00",
+  "tz": 1,
+  "lat": 59.91,
+  "lon": 10.75
+ },
+ {
+  "file": "render/sun_jun21_1500.png",
+  "kind": "sun-study",
+  "sun": {
+   "azimuth": 180,
+   "altitude": 60
+  },
+  "datetime": "2026-06-21T15:00",
+  "tz": 2,
+  "lat": 59.91,
+  "lon": 10.75
+ },
+ {
+  "file": "render/axo_01.png",
+  "kind": "axonometric",
+  "camera": {
+   "projection": "perspective"
+  }
+ },
+ {
+  "file": "render/missing.png",
+  "kind": "aerial"
+ }
+]

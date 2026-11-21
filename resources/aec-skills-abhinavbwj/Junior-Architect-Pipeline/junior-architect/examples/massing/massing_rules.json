@@ -1,0 +1,5 @@
+[{"metric":"height_m","op":"<=","value":28,"source":"example zoning plan §4.2 (verify)"},
+ {"metric":"far","op":"between","min":2.5,"max":3.5,"source":"example zoning plan §4.1 (verify)"},
+ {"metric":"coverage_pct","op":"<=","value":60,"source":"example zoning plan §4.3 (verify)"},
+ {"metric":"gfa_m2","op":"within","value":17000,"tol_pct":5,"source":"client brief p.3"},
+ {"metric":"court_sun_hours_mar21","op":">=","value":5}]

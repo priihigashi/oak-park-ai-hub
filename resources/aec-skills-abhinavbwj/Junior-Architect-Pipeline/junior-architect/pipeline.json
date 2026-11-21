@@ -1,0 +1,1370 @@
+{
+ "$comment": "Junior Architect Pipeline task map, v2. One entry per junior task: family, RIBA stages (AIA and HOAI in 'stages'), autonomy ceiling, agent, skill, deterministic checker and its inputs, the hosts it works in and the capabilities it needs from them (described in plain words, so any MCP server that provides them can be used), the judgement step the junior keeps, and the failure modes. Hooks, scripts/jap.js and the commands read this file. Edit it to fit your office.",
+ "$author": "Abhinav Bhardwaj (https://abhinavbhardwaj.com)",
+ "version": "2.0.0",
+ "autonomy_levels": {
+  "A0": "The junior does the task. The agent stays silent unless asked a question.",
+  "A1": "The agent drafts only after the junior has written a prediction. The junior rewrites or approves every line.",
+  "A2": "The agent executes. Deterministic checks gate the output. The junior reviews the redline and accepts or rejects each item with a reason.",
+  "A3": "The agent executes and checks. The junior signs off a sample of at least 20% of items.",
+  "A4": "Fully automatic. Not used for any task in this map by default."
+ },
+ "stages": {
+  "0": {
+   "riba": "0 Strategic Definition",
+   "aia": "Pre-design",
+   "hoai": "-"
+  },
+  "1": {
+   "riba": "1 Preparation and Briefing",
+   "aia": "Pre-design",
+   "hoai": "LPH 1 Grundlagenermittlung"
+  },
+  "2": {
+   "riba": "2 Concept Design",
+   "aia": "Schematic Design",
+   "hoai": "LPH 2 Vorplanung"
+  },
+  "3": {
+   "riba": "3 Spatial Coordination",
+   "aia": "Design Development",
+   "hoai": "LPH 3 Entwurfsplanung"
+  },
+  "4": {
+   "riba": "4 Technical Design",
+   "aia": "Construction Documents",
+   "hoai": "LPH 4-5 Genehmigungs- und Ausführungsplanung"
+  },
+  "5": {
+   "riba": "5 Manufacturing and Construction",
+   "aia": "Construction Administration",
+   "hoai": "LPH 6-8 Vergabe, Bauüberwachung"
+  },
+  "6": {
+   "riba": "6 Handover",
+   "aia": "Closeout",
+   "hoai": "LPH 8"
+  },
+  "7": {
+   "riba": "7 Use",
+   "aia": "Post-occupancy",
+   "hoai": "LPH 9 Objektbetreuung"
+  }
+ },
+ "families": {
+  "BRIEF-SITE": "Brief and site",
+  "REGULATION": "Regulation and envelope",
+  "MODELLING": "3D modelling, BIM and Grasshopper",
+  "DRAFTING": "Drafting and documentation",
+  "SCHEDULES": "Schedules and quantities",
+  "VISUAL": "Visualisation and presentation",
+  "COORDINATION": "Analysis, coordination and exchange",
+  "ADMIN": "Specification and construction administration"
+ },
+ "tasks": {
+  "brief-digest": {
+   "family": "BRIEF-SITE",
+   "stages": [
+    "0",
+    "1"
+   ],
+   "ceiling": "A2",
+   "agent": "brief-analyst",
+   "skill": "brief-and-site",
+   "checker": "check_trace",
+   "check": "<run>/brief_digest.md brief.txt",
+   "deliverable": "brief_digest.md",
+   "inputs": "the client brief as plain text (brief.txt, extracted from the PDF)",
+   "junior_keeps": "Before reading the digest, rank the three requirements that will drive the plan and say why.",
+   "failure_modes": [
+    "dropped requirement",
+    "invented requirement",
+    "requirement paraphrased into a different meaning"
+   ],
+   "hosts": [],
+   "capabilities": []
+  },
+  "site-dossier": {
+   "family": "BRIEF-SITE",
+   "stages": [
+    "1"
+   ],
+   "ceiling": "A2",
+   "agent": "brief-analyst",
+   "skill": "brief-and-site",
+   "checker": "check_trace",
+   "check": "<run>/site_dossier.md site.txt",
+   "deliverable": "site_dossier.md",
+   "inputs": "site sources (survey, cadastre extract, planning portal pages) saved as text (site.txt)",
+   "junior_keeps": "Predict the two site constraints that will matter most, then check them against the dossier.",
+   "failure_modes": [
+    "outdated data source",
+    "wrong parcel",
+    "unsourced figure"
+   ],
+   "hosts": [],
+   "capabilities": [
+    "fetch open map data (buildings, streets) for the site"
+   ]
+  },
+  "site-model": {
+   "family": "BRIEF-SITE",
+   "stages": [
+    "1",
+    "2"
+   ],
+   "ceiling": "A2",
+   "agent": "rhino-modeller",
+   "skill": "site-modelling",
+   "checker": "check_metrics",
+   "check": "<run>/site_metrics.json <run>/site_rules.json",
+   "deliverable": "site_metrics.json",
+   "inputs": "the parcel boundary and survey or terrain source; site_rules.json with the surveyed parcel area, levels and north angle",
+   "junior_keeps": "Write the parcel area, the level difference across the site and true north before the model is built.",
+   "failure_modes": [
+    "model not georeferenced",
+    "true north and project north confused",
+    "terrain from a coarse dataset presented as survey",
+    "parcel traced from the wrong source"
+   ],
+   "hosts": [
+    "Rhino",
+    "Revit"
+   ],
+   "capabilities": [
+    "set document units",
+    "create layers to the office standard",
+    "import open map data (buildings, streets, parcels)",
+    "build terrain from survey points or a terrain dataset",
+    "measure areas and elevations",
+    "capture a viewport"
+   ]
+  },
+  "code-research": {
+   "family": "REGULATION",
+   "stages": [
+    "1",
+    "2",
+    "3"
+   ],
+   "ceiling": "A1",
+   "agent": "code-researcher",
+   "skill": "code-research",
+   "checker": "check_clauses",
+   "check": "<run>/code_notes.md codes/<document>.txt",
+   "deliverable": "code_notes.md",
+   "inputs": "the question and the code documents in force as plain text (codes/*.txt) with editions in project.json",
+   "junior_keeps": "Predict the governing clause and its threshold before the search; explain any disagreement with the agent's result.",
+   "failure_modes": [
+    "fabricated clause",
+    "real but irrelevant clause",
+    "wrong edition or jurisdiction",
+    "paraphrase that changes a threshold"
+   ],
+   "hosts": [],
+   "capabilities": []
+  },
+  "planning-constraints": {
+   "family": "REGULATION",
+   "stages": [
+    "1",
+    "2"
+   ],
+   "ceiling": "A1",
+   "agent": "code-researcher",
+   "skill": "code-research",
+   "checker": "check_clauses",
+   "check": "<run>/planning_constraints.md codes/<document>.txt",
+   "deliverable": "planning_constraints.md",
+   "inputs": "the parcel and the zoning and planning documents as plain text (codes/*.txt)",
+   "junior_keeps": "Sketch the buildable envelope by hand first; compare it with the agent's envelope.",
+   "failure_modes": [
+    "missed overlay or conservation designation",
+    "height measured from the wrong datum",
+    "setback applied to the wrong boundary"
+   ],
+   "hosts": [],
+   "capabilities": []
+  },
+  "buildable-envelope": {
+   "family": "REGULATION",
+   "stages": [
+    "2"
+   ],
+   "ceiling": "A2",
+   "agent": "bim-modeller",
+   "skill": "massing-and-envelope",
+   "checker": "check_metrics",
+   "check": "<run>/envelope_metrics.json <run>/envelope_rules.json",
+   "deliverable": "envelope_metrics.json",
+   "inputs": "the verified planning constraints (planning_constraints.md, checked) turned into envelope_rules.json with a source per rule",
+   "junior_keeps": "Predict the maximum gross floor area the envelope allows before the model computes it.",
+   "failure_modes": [
+    "rule entered without a source clause",
+    "height plane from the wrong datum",
+    "envelope ignores daylight or angle planes",
+    "setback from kerb instead of boundary"
+   ],
+   "hosts": [
+    "Rhino",
+    "Revit"
+   ],
+   "capabilities": [
+    "offset and extrude boundary curves",
+    "boolean solids",
+    "cut solids with planes (height and angle planes)",
+    "measure volumes and floor areas",
+    "capture a viewport"
+   ]
+  },
+  "regulation-check": {
+   "family": "REGULATION",
+   "stages": [
+    "2",
+    "3",
+    "4"
+   ],
+   "ceiling": "A1",
+   "agent": "bim-modeller",
+   "skill": "massing-and-envelope",
+   "checker": "check_metrics",
+   "check": "<run>/regulation_metrics.json <run>/regulation_rules.json",
+   "deliverable": "regulation_metrics.json",
+   "inputs": "the design model and regulation_rules.json (height, coverage, FAR, setbacks, parking, outdoor space) with sources",
+   "junior_keeps": "Name the rule you expect the design to fail, and by how much.",
+   "failure_modes": [
+    "measured to a different area standard than the rule",
+    "rule paraphrased into a different limit",
+    "compliance claimed from an unchecked number"
+   ],
+   "hosts": [
+    "Revit",
+    "Rhino"
+   ],
+   "capabilities": [
+    "read room and area boundaries",
+    "measure heights, footprints and floor areas",
+    "read schedules and quantities"
+   ]
+  },
+  "massing-study": {
+   "family": "MODELLING",
+   "stages": [
+    "2"
+   ],
+   "ceiling": "A2",
+   "agent": "rhino-modeller",
+   "skill": "massing-and-envelope",
+   "checker": "check_metrics",
+   "check": "<run>/massing_metrics.json <run>/massing_rules.json",
+   "deliverable": "massing_metrics.json",
+   "inputs": "the brief areas, the buildable envelope and the site model; massing_rules.json (GFA target, height, coverage, FAR, sun to the court)",
+   "junior_keeps": "Sketch two alternative massings by hand and predict which meets the brief with more daylight.",
+   "failure_modes": [
+    "options that differ only in form, not in strategy",
+    "GFA counted to the wrong standard",
+    "massing exceeds the envelope",
+    "triangular or token forms with no reasoning about access and circulation"
+   ],
+   "hosts": [
+    "Rhino",
+    "Revit"
+   ],
+   "capabilities": [
+    "create and extrude footprints",
+    "boolean solids",
+    "slice masses into floors",
+    "measure floor areas and heights",
+    "save named views",
+    "capture a viewport"
+   ]
+  },
+  "bim-setup": {
+   "family": "MODELLING",
+   "stages": [
+    "2",
+    "3"
+   ],
+   "ceiling": "A3",
+   "agent": "bim-modeller",
+   "skill": "bim-production",
+   "checker": "check_schedule",
+   "check": "<run>/levels_grids.csv <run>/model_levels_grids.json levels",
+   "deliverable": "levels_grids.csv",
+   "inputs": "the levels and grids schedule (names, elevations, spacing), the office template and project info",
+   "junior_keeps": "Write the floor-to-floor heights and structural zone before the levels are created.",
+   "failure_modes": [
+    "levels named against the office convention",
+    "grid spacing in the wrong units",
+    "no shared coordinates",
+    "types created without materials or layers"
+   ],
+   "hosts": [
+    "Revit"
+   ],
+   "capabilities": [
+    "set project units and information",
+    "create levels and grids",
+    "create wall, floor and roof types with layers",
+    "apply view templates",
+    "organise the project browser",
+    "set up worksets"
+   ]
+  },
+  "building-model": {
+   "family": "MODELLING",
+   "stages": [
+    "2",
+    "3",
+    "4"
+   ],
+   "ceiling": "A2",
+   "agent": "bim-modeller",
+   "skill": "bim-production",
+   "checker": "check_areas",
+   "check": "<run>/rooms.json targets.csv",
+   "deliverable": "rooms.json",
+   "inputs": "the approved plan (sketch, DWG or Rhino plan), the levels and grids, the room targets (targets.csv)",
+   "junior_keeps": "Mark on the plan where you expect the model to disagree with the sketch (walls that do not close, rooms that will not bound).",
+   "failure_modes": [
+    "walls that do not join, so rooms will not bound",
+    "walls drawn to centreline where the plan measures faces",
+    "doors placed in the wrong host or swing",
+    "rooms placed in unbounded spaces"
+   ],
+   "hosts": [
+    "Revit",
+    "Rhino"
+   ],
+   "capabilities": [
+    "link or import a CAD plan",
+    "create joined walls, floors, ceilings and roofs",
+    "create openings",
+    "place doors and windows in host walls",
+    "create and read rooms",
+    "read model warnings"
+   ]
+  },
+  "stairs-and-cores": {
+   "family": "MODELLING",
+   "stages": [
+    "3",
+    "4"
+   ],
+   "ceiling": "A2",
+   "agent": "bim-modeller",
+   "skill": "stairs-and-cores",
+   "checker": "check_stairs",
+   "check": "<run>/stairs.json",
+   "deliverable": "stairs.json",
+   "inputs": "the core layout, floor-to-floor heights and the stair rules of the code in force (set stair_rules in project.json)",
+   "junior_keeps": "Calculate the number of risers, the riser height and the going by hand from the floor-to-floor height before the stair is modelled.",
+   "failure_modes": [
+    "2R+G outside the comfort range",
+    "uneven risers at the top or bottom",
+    "headroom clash under the flight above",
+    "too many risers in one flight"
+   ],
+   "hosts": [
+    "Revit",
+    "Rhino"
+   ],
+   "capabilities": [
+    "create stairs and railings",
+    "create shafts",
+    "read stair parameters (risers, goings, widths, headroom)",
+    "create sections"
+   ]
+  },
+  "facade-and-curtain-wall": {
+   "family": "MODELLING",
+   "stages": [
+    "3",
+    "4"
+   ],
+   "ceiling": "A2",
+   "agent": "bim-modeller",
+   "skill": "facades-and-panels",
+   "checker": "check_panels",
+   "check": "<run>/panels.json",
+   "deliverable": "panels.json",
+   "inputs": "the facade strategy (module, glazing ratio, panel limits in project.json fabrication)",
+   "junior_keeps": "Choose the module and predict how many unique panel types it produces.",
+   "failure_modes": [
+    "panels beyond transport or glass-size limits",
+    "slivers at corners",
+    "too many unique types",
+    "double-curved panels assumed flat"
+   ],
+   "hosts": [
+    "Revit",
+    "Rhino",
+    "Grasshopper"
+   ],
+   "capabilities": [
+    "create curtain walls and grids",
+    "panelise faces",
+    "divide curves and surfaces",
+    "read panel sizes and planarity"
+   ]
+  },
+  "families": {
+   "family": "MODELLING",
+   "stages": [
+    "3",
+    "4"
+   ],
+   "ceiling": "A2",
+   "agent": "bim-modeller",
+   "skill": "bim-production",
+   "checker": "check_schedule",
+   "check": "<run>/families.csv <run>/model_families.json families",
+   "deliverable": "families.csv",
+   "inputs": "the family brief: category, parameters, types and naming per the office standard (required_fields.families)",
+   "junior_keeps": "Sketch the family's reference planes and parameters before the agent builds it.",
+   "failure_modes": [
+    "geometry not locked to reference planes, so it breaks on flex",
+    "wrong category, so it schedules wrongly",
+    "type names off the naming convention"
+   ],
+   "hosts": [
+    "Revit"
+   ],
+   "capabilities": [
+    "create and edit families from templates",
+    "add family parameters",
+    "load families",
+    "read family parameters"
+   ]
+  },
+  "grasshopper-definition": {
+   "family": "MODELLING",
+   "stages": [
+    "2",
+    "3",
+    "4"
+   ],
+   "ceiling": "A2",
+   "agent": "grasshopper-builder",
+   "skill": "grasshopper",
+   "checker": "check_gh",
+   "check": "<run>/gh_export.json",
+   "deliverable": "gh_export.json",
+   "inputs": "the design rule in words and the inputs it reads from the Rhino model",
+   "junior_keeps": "Draw the dataflow (inputs, operations, outputs) on paper before the definition is built.",
+   "failure_modes": [
+    "components in error or warning",
+    "required inputs left unconnected",
+    "unnamed sliders",
+    "internalised geometry that stops following the model",
+    "data trees grafted or flattened by accident"
+   ],
+   "hosts": [
+    "Grasshopper",
+    "Rhino"
+   ],
+   "capabilities": [
+    "create or open a definition",
+    "add and wire components",
+    "set slider values",
+    "solve and read each component's runtime state",
+    "bake to named layers",
+    "save the definition"
+   ]
+  },
+  "fabrication-prep": {
+   "family": "MODELLING",
+   "stages": [
+    "4",
+    "5"
+   ],
+   "ceiling": "A2",
+   "agent": "rhino-modeller",
+   "skill": "facades-and-panels",
+   "checker": "check_panels",
+   "check": "<run>/parts.json",
+   "deliverable": "parts.json",
+   "inputs": "the element to fabricate and the stock sheet sizes in project.json fabrication.stock",
+   "junior_keeps": "Predict how many parts and sheets the element needs.",
+   "failure_modes": [
+    "parts larger than the stock sheet",
+    "unlabelled parts",
+    "double-curved surfaces unrolled with distortion"
+   ],
+   "hosts": [
+    "Rhino"
+   ],
+   "capabilities": [
+    "unroll developable surfaces",
+    "contour and section",
+    "label parts with text",
+    "measure parts",
+    "export cutting files"
+   ]
+  },
+  "view-set": {
+   "family": "DRAFTING",
+   "stages": [
+    "3",
+    "4"
+   ],
+   "ceiling": "A3",
+   "agent": "documentation-lead",
+   "skill": "drawings-and-sheets",
+   "checker": "check_views",
+   "check": "<run>/views.json",
+   "deliverable": "views.json",
+   "inputs": "the drawing list for the stage (levels, sections, elevations, scales in project.json view_requirements)",
+   "junior_keeps": "Mark the section lines on the plan yourself: where a section cuts decides what it explains.",
+   "failure_modes": [
+    "sections that cut nothing informative",
+    "views without templates",
+    "duplicate or default names",
+    "wrong scale for the stage"
+   ],
+   "hosts": [
+    "Revit"
+   ],
+   "capabilities": [
+    "create plans per level, sections, elevations, callouts and 3D views",
+    "set crops and scope boxes",
+    "apply view templates and filters",
+    "rename and list views"
+   ]
+  },
+  "annotation": {
+   "family": "DRAFTING",
+   "stages": [
+    "3",
+    "4"
+   ],
+   "ceiling": "A3",
+   "agent": "documentation-lead",
+   "skill": "drawings-and-sheets",
+   "checker": "check_annotation",
+   "check": "<run>/annotation.json",
+   "deliverable": "annotation.json",
+   "inputs": "the views to annotate and the tag coverage required (project.json tag_coverage)",
+   "junior_keeps": "Dimension one plan by hand: which strings a builder needs, in which order.",
+   "failure_modes": [
+    "untagged doors or rooms",
+    "dimension strings that do not close",
+    "overlapping tags",
+    "keynotes without a legend"
+   ],
+   "hosts": [
+    "Revit",
+    "Rhino"
+   ],
+   "capabilities": [
+    "tag elements and rooms",
+    "create dimensions and spot elevations",
+    "add text, keynotes and legends",
+    "count tags and dimensions per view"
+   ]
+  },
+  "detailing": {
+   "family": "DRAFTING",
+   "stages": [
+    "4"
+   ],
+   "ceiling": "A1",
+   "agent": "documentation-lead",
+   "skill": "detailing",
+   "checker": "check_views",
+   "check": "<run>/detail_views.json",
+   "deliverable": "detail_views.json",
+   "inputs": "the wall, floor and roof build-ups (layers, thicknesses, materials) and the details list",
+   "junior_keeps": "Draw the junction by hand first: the line of insulation, the airtight layer, the drainage path.",
+   "failure_modes": [
+    "insulation line broken at the junction",
+    "airtight layer discontinuous",
+    "build-up thicknesses differ from the wall type",
+    "detail not referenced from the plan"
+   ],
+   "hosts": [
+    "Revit",
+    "Rhino"
+   ],
+   "capabilities": [
+    "create wall sections and drafting views",
+    "place detail components, repeating details and insulation",
+    "draw filled regions and detail lines",
+    "cut sections and hatch"
+   ]
+  },
+  "sheet-production": {
+   "family": "DRAFTING",
+   "stages": [
+    "3",
+    "4",
+    "5"
+   ],
+   "ceiling": "A2",
+   "agent": "documentation-lead",
+   "skill": "drawings-and-sheets",
+   "checker": "check_sheets",
+   "check": "<run>/sheets.csv",
+   "deliverable": "sheets.csv",
+   "inputs": "the drawing list, the title block, the naming convention and status codes in project.json",
+   "junior_keeps": "Lay out one sheet by hand: what goes where so the drawing reads in order.",
+   "failure_modes": [
+    "views placed at the wrong scale",
+    "title block fields empty",
+    "revision not recorded",
+    "names off the convention"
+   ],
+   "hosts": [
+    "Revit"
+   ],
+   "capabilities": [
+    "create sheets and place views",
+    "fill title block fields",
+    "create revisions and revision clouds",
+    "build sheet sets and export PDF",
+    "list sheets"
+   ]
+  },
+  "rhino-2d-drawings": {
+   "family": "DRAFTING",
+   "stages": [
+    "2",
+    "3",
+    "4"
+   ],
+   "ceiling": "A2",
+   "agent": "cad-drafter",
+   "skill": "drafting-standards",
+   "checker": "check_dxf",
+   "check": "<run>/drawing.dxf",
+   "deliverable": "drawing.dxf",
+   "inputs": "the 3D model, the drawings to extract (plans, sections, elevations) and the CAD standard in project.json cad",
+   "junior_keeps": "Decide the line weights for cut, beyond and below before the drawing is extracted.",
+   "failure_modes": [
+    "entities on layer 0",
+    "layers off the convention",
+    "units not millimetres",
+    "text heights off the series",
+    "Make2D output not cleaned (duplicate and hidden lines)"
+   ],
+   "hosts": [
+    "Rhino"
+   ],
+   "capabilities": [
+    "create layers to the CAD standard",
+    "cut sections and clipping planes",
+    "extract 2D linework (Make2D)",
+    "hatch, dimension and add text",
+    "export DXF and DWG"
+   ]
+  },
+  "dwg-export": {
+   "family": "DRAFTING",
+   "stages": [
+    "3",
+    "4",
+    "5"
+   ],
+   "ceiling": "A3",
+   "agent": "cad-drafter",
+   "skill": "drafting-standards",
+   "checker": "check_dxf",
+   "check": "<run>/export.dxf",
+   "deliverable": "export.dxf",
+   "inputs": "the views or sheets to exchange and the receiving party's CAD standard",
+   "junior_keeps": "Open the export in a CAD viewer and check one layer and one dimension yourself.",
+   "failure_modes": [
+    "layer mapping lost",
+    "units changed on export",
+    "xrefs bound or missing",
+    "text exploded"
+   ],
+   "hosts": [
+    "Revit",
+    "Rhino"
+   ],
+   "capabilities": [
+    "export DWG and DXF with a layer mapping"
+   ]
+  },
+  "drawing-qa": {
+   "family": "DRAFTING",
+   "stages": [
+    "3",
+    "4",
+    "5"
+   ],
+   "ceiling": "A2",
+   "agent": "drawing-checker",
+   "skill": "drawing-qa",
+   "checker": "check_sheets",
+   "check": "sheets.csv",
+   "deliverable": "redline.csv",
+   "inputs": "the sheet list export (sheets.csv) and the PDFs or the model",
+   "junior_keeps": "Accept or reject each redline item with a one-line reason; flag items the checker cannot see.",
+   "failure_modes": [
+    "confident false positive",
+    "missed coordination clash",
+    "title block field wrong",
+    "reference to a non-existent sheet"
+   ],
+   "hosts": [
+    "Revit"
+   ],
+   "capabilities": [
+    "list sheets and their views",
+    "capture views",
+    "export PDF"
+   ]
+  },
+  "sheet-register": {
+   "family": "DRAFTING",
+   "stages": [
+    "4",
+    "5"
+   ],
+   "ceiling": "A3",
+   "agent": "document-controller",
+   "skill": "records-and-correspondence",
+   "checker": "check_sheets",
+   "check": "<run>/sheet_register.csv",
+   "deliverable": "sheet_register.csv",
+   "inputs": "the sheet list export from the model (sheets.csv)",
+   "junior_keeps": "Confirm the revision and status codes of every sheet issued for construction.",
+   "failure_modes": [
+    "revision not incremented",
+    "status code wrong for the purpose",
+    "name not compliant with the naming convention"
+   ],
+   "hosts": [
+    "Revit"
+   ],
+   "capabilities": [
+    "list sheets and revisions"
+   ]
+  },
+  "area-schedule": {
+   "family": "SCHEDULES",
+   "stages": [
+    "2",
+    "3",
+    "4"
+   ],
+   "ceiling": "A2",
+   "agent": "quantity-scheduler",
+   "skill": "area-measurement",
+   "checker": "check_areas",
+   "check": "<run>/rooms.json targets.csv",
+   "deliverable": "area_schedule.csv",
+   "inputs": "the model and the brief targets (targets.csv: room,target_m2)",
+   "junior_keeps": "Estimate the total and the three largest deviations from the brief before the run.",
+   "failure_modes": [
+    "feet versus metres",
+    "wrong area definition (centreline versus internal face)",
+    "open or duplicate boundaries",
+    "nested rooms counted twice",
+    "arcs under-measured"
+   ],
+   "hosts": [
+    "Revit",
+    "Rhino"
+   ],
+   "capabilities": [
+    "read room boundaries as polylines with units",
+    "read area plans",
+    "measure closed curves"
+   ]
+  },
+  "room-data-sheets": {
+   "family": "SCHEDULES",
+   "stages": [
+    "3",
+    "4"
+   ],
+   "ceiling": "A2",
+   "agent": "quantity-scheduler",
+   "skill": "schedules",
+   "checker": "check_schedule",
+   "check": "<run>/room_data_sheets.csv <run>/model_rooms.json rooms",
+   "deliverable": "room_data_sheets.csv",
+   "inputs": "the model and the office room data sheet fields (required_fields.rooms)",
+   "junior_keeps": "Fill one room data sheet by hand per room type, then compare with the agent's.",
+   "failure_modes": [
+    "missing required field",
+    "finishes inconsistent with the room type",
+    "stale model state"
+   ],
+   "hosts": [
+    "Revit"
+   ],
+   "capabilities": [
+    "read rooms and their parameters",
+    "set parameters",
+    "read schedule data"
+   ]
+  },
+  "door-schedule": {
+   "family": "SCHEDULES",
+   "stages": [
+    "4"
+   ],
+   "ceiling": "A3",
+   "agent": "quantity-scheduler",
+   "skill": "schedules",
+   "checker": "check_schedule",
+   "check": "<run>/door_schedule.csv <run>/model_doors.json doors",
+   "deliverable": "door_schedule.csv",
+   "inputs": "the model and the office door standard (required_fields.doors)",
+   "junior_keeps": "Explain every deviation from the office door standard (fire rating, width, ironmongery set).",
+   "failure_modes": [
+    "count mismatch with the model",
+    "duplicate mark",
+    "fire rating inconsistent with the wall"
+   ],
+   "hosts": [
+    "Revit"
+   ],
+   "capabilities": [
+    "read doors and their parameters",
+    "renumber marks",
+    "read schedule data"
+   ]
+  },
+  "window-schedule": {
+   "family": "SCHEDULES",
+   "stages": [
+    "4"
+   ],
+   "ceiling": "A3",
+   "agent": "quantity-scheduler",
+   "skill": "schedules",
+   "checker": "check_schedule",
+   "check": "<run>/window_schedule.csv <run>/model_windows.json windows",
+   "deliverable": "window_schedule.csv",
+   "inputs": "the model and the office window standard (required_fields.windows)",
+   "junior_keeps": "Check the three windows that carry the most risk (largest, highest, fire or acoustic) by hand.",
+   "failure_modes": [
+    "count mismatch",
+    "U-value or g-value missing",
+    "opening size from the wrong reference"
+   ],
+   "hosts": [
+    "Revit"
+   ],
+   "capabilities": [
+    "read windows and their parameters",
+    "renumber marks",
+    "read schedule data"
+   ]
+  },
+  "quantity-takeoff": {
+   "family": "SCHEDULES",
+   "stages": [
+    "2",
+    "3",
+    "4"
+   ],
+   "ceiling": "A2",
+   "agent": "quantity-scheduler",
+   "skill": "schedules",
+   "checker": "check_quantities",
+   "check": "<run>/takeoff.csv <area total m2>",
+   "deliverable": "takeoff.csv",
+   "inputs": "the model and the cost plan's measurement rules (allowed units per category in project.json quantity_units)",
+   "junior_keeps": "Estimate the three biggest quantities (facade area, floor area, wall volume) before the takeoff.",
+   "failure_modes": [
+    "units mixed within a category",
+    "double counting of joined elements",
+    "takeoff area disagrees with the area schedule"
+   ],
+   "hosts": [
+    "Revit",
+    "Rhino"
+   ],
+   "capabilities": [
+    "read quantities by category and material",
+    "read schedule data",
+    "measure geometry"
+   ]
+  },
+  "viewport-captures": {
+   "family": "VISUAL",
+   "stages": [
+    "2",
+    "3",
+    "4"
+   ],
+   "ceiling": "A2",
+   "agent": "visualiser",
+   "skill": "visualisation",
+   "checker": "check_render",
+   "check": "<run>/renders.json",
+   "deliverable": "renders.json",
+   "inputs": "the views to capture: eye-level, aerial, axonometric, with the purpose of each",
+   "junior_keeps": "Choose each camera's position and say what it is meant to show before it is captured.",
+   "failure_modes": [
+    "eye-level camera at drone height",
+    "wide-angle lens distorting the space",
+    "axonometric in perspective",
+    "captures below the resolution the board needs"
+   ],
+   "hosts": [
+    "Rhino",
+    "Revit"
+   ],
+   "capabilities": [
+    "set camera position, target and lens",
+    "save named views",
+    "set display modes",
+    "capture views at a given resolution"
+   ]
+  },
+  "sun-shadow-study": {
+   "family": "VISUAL",
+   "stages": [
+    "2",
+    "3"
+   ],
+   "ceiling": "A2",
+   "agent": "visualiser",
+   "skill": "visualisation",
+   "checker": "check_render",
+   "check": "<run>/renders.json",
+   "deliverable": "renders.json",
+   "inputs": "the site latitude, longitude and time zone, and the dates and times required (equinox and solstices are typical)",
+   "junior_keeps": "Predict which spaces are in shade at 15:00 on the winter solstice before the study runs.",
+   "failure_modes": [
+    "sun not set to the real site and date",
+    "daylight saving time ignored",
+    "north misaligned",
+    "neighbouring buildings missing"
+   ],
+   "hosts": [
+    "Revit",
+    "Rhino",
+    "Blender"
+   ],
+   "capabilities": [
+    "set the sun from location, date and time",
+    "run a sun study",
+    "capture each step",
+    "render stills"
+   ]
+  },
+  "materials": {
+   "family": "VISUAL",
+   "stages": [
+    "2",
+    "3",
+    "4"
+   ],
+   "ceiling": "A3",
+   "agent": "visualiser",
+   "skill": "visualisation",
+   "checker": "check_schedule",
+   "check": "<run>/materials.csv <run>/model_materials.json materials",
+   "deliverable": "materials.csv",
+   "inputs": "the material palette with real products, colours and finishes",
+   "junior_keeps": "Choose the palette with real samples, then compare the rendered colours with the samples.",
+   "failure_modes": [
+    "texture scale wrong",
+    "generic materials left in the model",
+    "render colour far from the specified product"
+   ],
+   "hosts": [
+    "Revit",
+    "Rhino"
+   ],
+   "capabilities": [
+    "create and assign materials",
+    "set texture mapping at true scale",
+    "sample colours from a product image",
+    "read material properties"
+   ]
+  },
+  "rendering": {
+   "family": "VISUAL",
+   "stages": [
+    "2",
+    "3",
+    "4"
+   ],
+   "ceiling": "A2",
+   "agent": "visualiser",
+   "skill": "visualisation",
+   "checker": "check_render",
+   "check": "<run>/renders.json",
+   "deliverable": "renders.json",
+   "inputs": "the approved cameras, the materials, the site context and the date and time of each view",
+   "junior_keeps": "Write what each image must make a viewer understand, then check the render against it.",
+   "failure_modes": [
+    "sun at an impossible position for the site",
+    "context missing or invented",
+    "people at the wrong scale",
+    "image sharper or emptier than the place will ever be"
+   ],
+   "hosts": [
+    "Rhino",
+    "Revit",
+    "Blender"
+   ],
+   "capabilities": [
+    "set environment and sun",
+    "set camera",
+    "render stills",
+    "run long render jobs"
+   ]
+  },
+  "photo-match": {
+   "family": "VISUAL",
+   "stages": [
+    "2",
+    "3"
+   ],
+   "ceiling": "A2",
+   "agent": "visualiser",
+   "skill": "visualisation",
+   "checker": "check_metrics",
+   "check": "<run>/match_metrics.json <run>/match_rules.json",
+   "deliverable": "match_metrics.json",
+   "inputs": "a site photograph with its camera position if known, and the model",
+   "junior_keeps": "Mark three fixed points in the photo (a corner, a kerb, a roofline) that the model must line up with.",
+   "failure_modes": [
+    "camera matched by eye only",
+    "lens of the photo unknown",
+    "verified view not reproducible"
+   ],
+   "hosts": [
+    "Rhino",
+    "Revit"
+   ],
+   "capabilities": [
+    "place a reference image",
+    "match the camera to a photograph",
+    "compare a capture with the photograph"
+   ]
+  },
+  "diagrams": {
+   "family": "VISUAL",
+   "stages": [
+    "2",
+    "3"
+   ],
+   "ceiling": "A2",
+   "agent": "visualiser",
+   "skill": "visualisation",
+   "checker": "check_render",
+   "check": "<run>/renders.json",
+   "deliverable": "renders.json",
+   "inputs": "the argument each diagram makes (circulation, structure, program, phasing)",
+   "junior_keeps": "Sketch the diagram's one idea first: one diagram, one argument.",
+   "failure_modes": [
+    "diagram that shows everything and argues nothing",
+    "colour without a legend",
+    "axonometric in perspective"
+   ],
+   "hosts": [
+    "Rhino",
+    "Revit"
+   ],
+   "capabilities": [
+    "cut sections",
+    "colour elements by parameter",
+    "override graphics",
+    "set display modes and capture"
+   ]
+  },
+  "presentation-board": {
+   "family": "VISUAL",
+   "stages": [
+    "2",
+    "3",
+    "4"
+   ],
+   "ceiling": "A2",
+   "agent": "visualiser",
+   "skill": "visualisation",
+   "checker": "check_board",
+   "check": "<run>/board.json",
+   "deliverable": "board.json",
+   "inputs": "the checked drawings and images, captions and sources; compose with scripts/board.js",
+   "junior_keeps": "Lay out the board's reading order on paper: what a reviewer must see first, second, third.",
+   "failure_modes": [
+    "images without captions or sources",
+    "drawings without scale bars or north",
+    "text too small at print size"
+   ],
+   "hosts": [],
+   "capabilities": []
+  },
+  "daylight-and-sun": {
+   "family": "COORDINATION",
+   "stages": [
+    "2",
+    "3",
+    "4"
+   ],
+   "ceiling": "A2",
+   "agent": "analyst",
+   "skill": "analysis",
+   "checker": "check_metrics",
+   "check": "<run>/daylight_metrics.json <run>/daylight_rules.json",
+   "deliverable": "daylight_metrics.json",
+   "inputs": "the model, the daylight and sun requirements of the code in force (daylight_rules.json with sources)",
+   "junior_keeps": "Predict the three worst-lit rooms before the analysis runs.",
+   "failure_modes": [
+    "window-to-floor ratio used where the code asks for a daylight factor",
+    "obstruction from neighbours omitted",
+    "metric from the wrong standard"
+   ],
+   "hosts": [
+    "Revit",
+    "Rhino"
+   ],
+   "capabilities": [
+    "compute window-to-floor ratios per room",
+    "run sun-hour or daylight analysis",
+    "read room areas"
+   ]
+  },
+  "clash-detection": {
+   "family": "COORDINATION",
+   "stages": [
+    "3",
+    "4"
+   ],
+   "ceiling": "A2",
+   "agent": "bim-coordinator",
+   "skill": "bim-coordination",
+   "checker": "check_clash",
+   "check": "<run>/clashes.json",
+   "deliverable": "clashes.json",
+   "inputs": "the federated model (linked discipline models) and the clash matrix (which categories against which, tolerance)",
+   "junior_keeps": "Predict the two discipline pairs with the most clashes before the run.",
+   "failure_modes": [
+    "tolerance so tight that noise hides real clashes",
+    "clashes closed without an owner",
+    "duplicate clashes counted separately"
+   ],
+   "hosts": [
+    "Revit"
+   ],
+   "capabilities": [
+    "link discipline models",
+    "run clash detection between categories",
+    "zoom to and capture clashing elements"
+   ]
+  },
+  "model-audit": {
+   "family": "COORDINATION",
+   "stages": [
+    "3",
+    "4",
+    "5"
+   ],
+   "ceiling": "A2",
+   "agent": "model-auditor",
+   "skill": "model-audit",
+   "checker": "check_schedule",
+   "check": "<run>/model_audit.csv <run>/model_audit.json audit",
+   "deliverable": "model_audit.csv",
+   "inputs": "the model",
+   "junior_keeps": "Predict the three worst model-health problems before the audit runs.",
+   "failure_modes": [
+    "unplaced or unbounded rooms",
+    "elements on wrong level or layer",
+    "unit settings wrong",
+    "orphaned views and sheets"
+   ],
+   "hosts": [
+    "Revit",
+    "Rhino"
+   ],
+   "capabilities": [
+    "read model warnings and health",
+    "read element statistics",
+    "list layers and document settings",
+    "purge unused (with the junior's go-ahead)"
+   ]
+  },
+  "apartment-mix": {
+   "family": "COORDINATION",
+   "stages": [
+    "2",
+    "3"
+   ],
+   "ceiling": "A2",
+   "agent": "analyst",
+   "skill": "analysis",
+   "checker": "check_metrics",
+   "check": "<run>/mix_metrics.json <run>/mix_rules.json",
+   "deliverable": "mix_metrics.json",
+   "inputs": "the unit plans and the brief's mix and minimum sizes (mix_rules.json)",
+   "junior_keeps": "Predict the mix the plan actually achieves before it is counted.",
+   "failure_modes": [
+    "units counted to a different area standard than the brief",
+    "dual aspect claimed for single-aspect units",
+    "minimum sizes from the wrong standard"
+   ],
+   "hosts": [
+    "Revit",
+    "Rhino"
+   ],
+   "capabilities": [
+    "assign rooms to units",
+    "read unit areas",
+    "count units by type"
+   ]
+  },
+  "ifc-export": {
+   "family": "COORDINATION",
+   "stages": [
+    "3",
+    "4",
+    "5",
+    "6"
+   ],
+   "ceiling": "A3",
+   "agent": "bim-coordinator",
+   "skill": "bim-coordination",
+   "checker": "check_ifc",
+   "check": "<run>/model.ifc <run>/expected_counts.json",
+   "deliverable": "model.ifc",
+   "inputs": "the model, the exchange requirements (schema, required entities) and the counts from the model (expected_counts.json)",
+   "junior_keeps": "Open the IFC in a free viewer and check one storey and one door by hand.",
+   "failure_modes": [
+    "elements exported as IfcBuildingElementProxy",
+    "storeys missing or renamed",
+    "spaces without names",
+    "units lost"
+   ],
+   "hosts": [
+    "Revit"
+   ],
+   "capabilities": [
+    "export IFC with a category mapping",
+    "read element statistics and levels"
+   ]
+  },
+  "spec-section": {
+   "family": "ADMIN",
+   "stages": [
+    "4"
+   ],
+   "ceiling": "A1",
+   "agent": "spec-writer",
+   "skill": "specifications",
+   "checker": "check_spec",
+   "check": "<run>/spec_section.md standards_register.csv <schedule>.csv",
+   "deliverable": "spec_section.md",
+   "inputs": "the section to write, the standards register (standards_register.csv) and the related schedule",
+   "junior_keeps": "Write the performance clause by hand once per section type before the agent drafts the rest.",
+   "failure_modes": [
+    "wrong or withdrawn standard reference",
+    "product line with no schedule item",
+    "prescriptive and performance clauses in conflict"
+   ],
+   "hosts": [
+    "Revit"
+   ],
+   "capabilities": [
+    "read types and material information"
+   ]
+  },
+  "rfi-response": {
+   "family": "ADMIN",
+   "stages": [
+    "5"
+   ],
+   "ceiling": "A1",
+   "agent": "document-controller",
+   "skill": "construction-admin",
+   "checker": "check_refs",
+   "check": "<run>/rfi_response.md sheets.csv",
+   "deliverable": "rfi_response.md",
+   "inputs": "the RFI text and the current sheet register (sheets.csv)",
+   "junior_keeps": "Write the intent of the answer in one sentence before the agent words it.",
+   "failure_modes": [
+    "answer changes scope without saying so",
+    "reference to a superseded drawing",
+    "contractual commitment the architect cannot give"
+   ],
+   "hosts": [
+    "Revit"
+   ],
+   "capabilities": [
+    "find elements and capture views"
+   ]
+  },
+  "submittal-review": {
+   "family": "ADMIN",
+   "stages": [
+    "5"
+   ],
+   "ceiling": "A1",
+   "agent": "drawing-checker",
+   "skill": "construction-admin",
+   "checker": "check_refs",
+   "check": "<run>/submittal_review.md sheets.csv",
+   "deliverable": "submittal_review.md",
+   "inputs": "the submittal, the specification section and the current sheet register",
+   "junior_keeps": "List what you expect to be wrong in the submittal before the agent compares it with the specification.",
+   "failure_modes": [
+    "accepting a substitution silently",
+    "reviewing against a superseded specification",
+    "missing a performance requirement"
+   ],
+   "hosts": [],
+   "capabilities": []
+  },
+  "meeting-minutes": {
+   "family": "ADMIN",
+   "stages": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6"
+   ],
+   "ceiling": "A3",
+   "agent": "document-controller",
+   "skill": "records-and-correspondence",
+   "checker": "check_minutes",
+   "check": "<run>/minutes.md transcript.txt",
+   "deliverable": "minutes.md",
+   "inputs": "the meeting transcript or notes (transcript.txt)",
+   "junior_keeps": "Flag every decision that changes scope, cost or programme.",
+   "failure_modes": [
+    "decision attributed to the wrong person",
+    "action without owner or date",
+    "quote not in the transcript"
+   ],
+   "hosts": [],
+   "capabilities": []
+  },
+  "site-visit-report": {
+   "family": "ADMIN",
+   "stages": [
+    "5",
+    "6"
+   ],
+   "ceiling": "A2",
+   "agent": "document-controller",
+   "skill": "construction-admin",
+   "checker": "check_minutes",
+   "check": "<run>/site_visit_report.md site_notes.txt",
+   "deliverable": "site_visit_report.md",
+   "inputs": "site photos and notes (site_notes.txt)",
+   "junior_keeps": "Write your three observations first; then compare with the agent's report of the photos and notes.",
+   "failure_modes": [
+    "observation without a location",
+    "defect without an owner or date",
+    "photo misattributed"
+   ],
+   "hosts": [],
+   "capabilities": []
+  }
+ }
+}

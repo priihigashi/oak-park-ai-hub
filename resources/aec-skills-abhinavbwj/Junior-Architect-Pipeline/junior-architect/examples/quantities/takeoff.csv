@@ -1,0 +1,9 @@
+category,item,quantity,unit
+Walls,External wall EW1,1240.5,m2
+Walls,Internal wall IW2,380,m
+Doors,D-FD30,24,no
+Doors,D-FD30,24,no
+Floors,Slab 250,0,m2
+Rooms,All rooms,402.10,m2
+Windows,W1,36,
+Doors,D-EXT,12.5,m2

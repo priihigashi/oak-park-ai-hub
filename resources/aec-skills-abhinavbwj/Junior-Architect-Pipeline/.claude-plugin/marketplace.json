@@ -1,0 +1,33 @@
+{
+  "name": "junior-architect-marketplace",
+  "description": "Hosts the Junior Architect Pipeline: gated, checked, junior-architect production work in Claude Code.",
+  "owner": {
+    "name": "Abhinav Bhardwaj",
+    "url": "https://abhinavbhardwaj.com"
+  },
+  "plugins": [
+    {
+      "name": "junior-architect",
+      "source": "./junior-architect",
+      "displayName": "Junior Architect Pipeline",
+      "description": "45 junior-architect tasks as gated runs across brief, regulation, 3D modelling and BIM, Grasshopper, drafting, schedules, visualisation, coordination and admin: subagents, Rhino/Revit/Blender integration, 20 deterministic checkers, hooks that keep prediction and review with the junior.",
+      "version": "2.0.0",
+      "author": {
+        "name": "Abhinav Bhardwaj",
+        "url": "https://abhinavbhardwaj.com"
+      },
+      "keywords": [
+        "architecture",
+        "AEC",
+        "junior-architect",
+        "pipeline",
+        "MCP",
+        "Rhino",
+        "Revit",
+        "BIM"
+      ],
+      "category": "productivity",
+      "defaultEnabled": true
+    }
+  ]
+}

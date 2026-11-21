@@ -1,0 +1,5 @@
+[{"id":1,"name":"Level 00 - GA Plan","type":"FloorPlan","level":"Level 00","scale":100,"template":"A-PLAN-100","on_sheet":"A-100"},
+ {"id":2,"name":"Copy of Level 00 - GA Plan","type":"FloorPlan","level":"Level 00","scale":100,"template":"A-PLAN-100"},
+ {"id":3,"name":"Section 1","type":"Section","scale":75,"on_sheet":"A-200"},
+ {"id":4,"name":"North Elevation","type":"Elevation","scale":100,"template":"A-ELEV-100","on_sheet":"A-300"},
+ {"id":5,"name":"North Elevation","type":"Elevation","scale":100,"template":"A-ELEV-100","on_sheet":"A-300"}]

@@ -1,0 +1,4 @@
+[{"id":"C-001","a":"Duct 600x400","b":"Beam B12","type":"hard","depth_mm":85,"status":"active","owner":"MEP"},
+ {"id":"C-002","a":"Pipe 110","b":"Wall IW2","type":"hard","depth_mm":40,"status":"new"},
+ {"id":"C-003","a":"Duct 300x200","b":"Column C4","type":"hard","depth_mm":4,"status":"new"},
+ {"id":"C-004","a":"Tray 300","b":"Beam B14","type":"hard","depth_mm":60,"status":"approved"}]
