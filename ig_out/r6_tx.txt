@@ -1,0 +1,16 @@
+lang en 0.98
+[0.0-3.0]  I made Claude way smarter at architecture and urbanism.
+[3.8-5.8]  Claude doesn't really know design.
+[5.8-9.8]  It can't read a building code or panel of facade, that's what these plugins fix.
+[10.6-15.8]  The first plugin is urban design with 18 skills covering master plans, streets, zoning and
+[15.8-21.7]  transit oriented development. It handles block typologies, walkability scoring, form-based
+[21.7-24.8]  codes and sustainability ratings all backed by real numbers.
+[25.5-31.0]  The second one covers architecture with another 18 skills for building codes, envelopes, spatial
+[31.0-37.1]  planning and daylight. From programming a building and sizing its structure through acoustics and
+[37.1-42.8]  accessibility all the way to construction documents. The third plugin covers computational
+[42.8-47.8]  design with parametric modeling, generative algorithms, optimization and digital fabrication.
+[48.5-53.9]  Claude now speaks grasshopper, rhino, dynamo, ladybug and every other tool a designer actually
+[53.9-60.3]  uses. Inside these plugins live 50 theorists, 30 tools and hundreds of benchmarks all loaded
+[60.3-67.2]  when Claude needs them. Ask Claude to design a mixed use quarter and all three plugins kick in
+[67.2-72.6]  working together. Installing is just three get clones. Drop each folder where Claude keeps
+[72.6-77.4]  its skills and you're done.

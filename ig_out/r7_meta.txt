@@ -1,0 +1,14 @@
+uploader: Abhinav Bhardwaj
+uploader_id: 2217171388
+channel: abhinavbwj
+upload_date: 20260421
+duration: None
+description: Grasshopper writes itself!
+track: None
+artist: None
+album: None
+like_count: 3
+view_count: None
+width: None
+height: None
+fps: None
