@@ -1,0 +1,14 @@
+uploader: Abhinav Bhardwaj
+uploader_id: 2217171388
+channel: abhinavbwj
+upload_date: 20261101
+duration: None
+description: It's all about perspective!
+track: None
+artist: None
+album: None
+like_count: 3
+view_count: None
+width: None
+height: None
+fps: None
