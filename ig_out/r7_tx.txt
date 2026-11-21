@@ -1,8 +1,0 @@
-lang en 0.98
-[0.0-3.7]  I built a Grasshopper plugin that writes the whole script for you.
-[3.7-6.1]  Grasshopper has over a thousand components.
-[6.1-9.3]  Learning which does what and how they wire together takes years.
-[10.1-13.8]  So I built a plugin, you describe what you want, it builds the script.
-[14.5-18.1]  You type what you want and the plugin picks the components,
-[18.1-20.7]  wires them and builds the whole canvas live.
-[21.4-25.5]  The plugin parses your intent, places every component and draws the wires between them.
