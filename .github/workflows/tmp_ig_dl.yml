@@ -10,23 +10,31 @@ jobs:
     runs-on: ubuntu-latest
     env:
       URL: 'https://www.instagram.com/reel/DgA42bEPpcc/'
-      N: 'r1'
+      N: 'r2'
     steps:
       - uses: actions/checkout@v4
       - run: sudo apt-get update && sudo apt-get install -y ffmpeg
       - run: pip install -U yt-dlp faster-whisper
       - name: download
+        continue-on-error: true
         run: |
           mkdir -p ig_out
-          yt-dlp --write-info-json -o "ig_out/$N.%(ext)s" "$URL"
-          ls -la ig_out
+          yt-dlp -v --write-info-json -f 'b/bv*+ba' --merge-output-format mp4 -o "ig_out/$N.%(ext)s" "$URL" > ig_out/${N}_dllog.txt 2>&1 || true
+          ls -la ig_out >> ig_out/${N}_dllog.txt
       - name: transcribe
+        continue-on-error: true
         run: |
-          python - <<'EOF'
+          python - <<'EOF' >> ig_out/${N}_dllog.txt 2>&1
           import glob, os, json, subprocess
           from faster_whisper import WhisperModel
           n=os.environ['N']
-          vids=[f for f in glob.glob(f'ig_out/{n}.*') if f.endswith(('.mp4','.webm','.mkv','.mov'))]
+          vids=[f for f in glob.glob(f'ig_out/{n}.*') if not f.endswith(('.json','.txt'))]
+          print('vids',vids)
+          infos=glob.glob(f'ig_out/{n}*.json')
+          if infos:
+              info=json.load(open(infos[0]))
+              with open(f'ig_out/{n}_meta.txt','w') as f:
+                  f.write(f"autor: {info.get('uploader')} / {info.get('channel')}\ndata: {info.get('upload_date')}\nlegenda:\n{info.get('description')}\n")
           v=vids[0]
           m=WhisperModel('small',compute_type='int8')
           segs,_=m.transcribe(v,language='pt')
@@ -39,14 +47,12 @@ jobs:
           for i in range(k):
               t=dur*(i+0.5)/k
               subprocess.run(['ffmpeg','-y','-ss',str(t),'-i',v,'-frames:v','1','-vf','scale=300:-1',f'ig_out/{n}_frames/f{i:02d}_{t:05.1f}s.jpg'],check=False,capture_output=True)
-          info=json.load(open(glob.glob(f'ig_out/{n}*.info.json')[0]))
-          with open(f'ig_out/{n}_meta.txt','w') as f:
-              f.write(f"autor: {info.get('uploader')} / {info.get('channel')}\ndata: {info.get('upload_date')}\nduracao: {dur:.1f}s\nlegenda:\n{info.get('description')}\n")
-          for f in glob.glob(f'ig_out/{n}*.info.json'): os.remove(f)
-          for f in vids: os.remove(f)
+          print('dur',dur)
           EOF
       - name: commit
+        if: always()
         run: |
+          rm -f ig_out/*.json ig_out/*.mp4 ig_out/*.webm ig_out/*.m4a ig_out/*.mkv
           git config user.name bot && git config user.email bot@users.noreply.github.com
-          git add ig_out && git commit -m 'ig_out r1' || exit 0
+          git add ig_out && git commit -m 'ig_out r2' || exit 0
           git push || (git pull --rebase && git push)
