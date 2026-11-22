@@ -1,0 +1,39 @@
+[debug] Command-line config: ['-v', '--write-info-json', '-f', 'b/bv*+ba', '--merge-output-format', 'mp4', '-o', 'ig_out/r2.%(ext)s', 'https://www.instagram.com/reel/DgA42bEPpcc/']
+[debug] Encodings: locale UTF-8, fs utf-8, pref UTF-8, out utf-8 (No ANSI), error utf-8 (No ANSI), screen utf-8 (No ANSI)
+[debug] yt-dlp version stable@2026.10.26 from yt-dlp/yt-dlp [c91f8de0b] (pip)
+[debug] Python 3.14.4 (CPython x86_64 64bit) - Linux-7.0.0-1020-azure-x86_64-with-glibc2.43 (OpenSSL 3.5.5 27 Jan 2026, glibc 2.43)
+[debug] exe versions: ffmpeg 8.0.1 (setts), ffprobe 8.0.1
+[debug] Optional libraries: certifi-2026.01.04, requests-2.32.5, sqlite3-3.46.1, urllib3-2.6.3
+[debug] JS runtimes: none
+[debug] Proxy map: {}
+[debug] Request Handlers: urllib, requests
+[debug] Plugin directories: none
+[debug] Loaded 1747 extractors
+[Instagram] Setting up session
+[Instagram] Extracting URL: https://www.instagram.com/reel/DgA42bEPpcc/
+[Instagram] DgA42bEPpcc: Checking post accessibility
+[Instagram] DgA42bEPpcc: Downloading webpage
+[debug] Formats sorted by: hasvid, ie_pref, lang, quality, res, fps, hdr:12(7), vcodec, channels, acodec, size, br, asr, proto, vext, aext, hasaud, source, id
+[info] DgA42bEPpcc: Downloading 1 format(s): 3
+[info] Writing video metadata as JSON to: ig_out/r2.info.json
+[debug] Invoking http downloader on "https://scontent-sjc6-1.cdninstagram.com/o1/v/t2/f2/m86/AQP3xxnjciiWnEORXLB8DO5QUj5royaI5PwZKvKyJ0dna_OBHYwtY-5GhaAdBpNOfgxZLBjKdQAGr-bfsAbZjPhcBIrdVbEQLY8oiok.mp4?_nc_cat=108&_nc_sid=5e9851&_nc_ht=scontent-sjc6-1.cdninstagram.com&_nc_ohc=u3QMGj6cx2UQ7kNvwEcKRx7&efg=eyJ2ZW5jb2RlX3RhZyI6Inhwdl9wcm9ncmVzc2l2ZS5JTlNUQUdSQU0uQ0xJUFMuQzMuNzIwLmRhc2hfYmFzZWxpbmVfMV92MSIsInhwdl9hc3NldF9pZCI6MjI0OTU3NDUwMjI1Nzk0MCwiYXNzZXRfYWdlX2RheXMiOjEsInZpX3VzZWNhc2VfaWQiOjEwMDk5LCJkdXJhdGlvbl9zIjoxMTksInVybGdlbl9zb3VyY2UiOiJ3d3cifQ%3D%3D&ccb=17-1&vs=eba317dfbfdc5d41&_nc_vs=HBksFQIYUmlnX3hwdl9yZWVsc19wZXJtYW5lbnRfc3JfcHJvZC9FMjFBOTM4RUY3OEE0ODY3OUUxRUEyQzdFNkVCNDBFQ192aWRlb19kYXNoaW5pdC5tcDQVAALIARIAFQIYUWlnX3hwdl9wbGFjZW1lbnRfcGVybWFuZW50X3YyLzkzQUY1RDkyMTA4QzRDQjFCMDUyMEVGNDY5ODgzNzA0X2F1ZGlvX2Rhc2hpbml0Lm1wNBUCAsgBEgAoABgAGwOIB3VzZV9vaWwBMRJwcm9ncmVzc2l2ZV9yZWNpcGUBMRJjb3B5X3NhbXBsZV9ncm91cHMBMRUAACao1NKRvP7-BxUCKAJDMywXQF3qn752yLQYEmRhc2hfYmFzZWxpbmVfMV92MREAdf4HZeadAQA&_nc_gid=Y2pQEF_BKKOh52HMo-Yohw&_nc_ss=70689&_nc_map=urlgen_bucketless&_nc_zt=28&oh=00_AQScW1n1G1lVbI4M5M14OhOlMWRhIt7w6rYLcPfsgzaXaA&oe=6B053C11"
+[download] Destination: ig_out/r2.mp4
+[download]   0.0% of   14.58MiB at  948.94KiB/s ETA 00:15[download]   0.0% of   14.58MiB at    1.14MiB/s ETA 00:12[download]   0.0% of   14.58MiB at    1.58MiB/s ETA 00:09[download]   0.1% of   14.58MiB at    1.69MiB/s ETA 00:08[download]   0.2% of   14.58MiB at    1.01MiB/s ETA 00:14[download]   0.4% of   14.58MiB at    1.17MiB/s ETA 00:12[download]   0.9% of   14.58MiB at    1.62MiB/s ETA 00:08[download]   1.7% of   14.58MiB at    2.51MiB/s ETA 00:05[download]   3.4% of   14.58MiB at    4.05MiB/s ETA 00:03[download]   6.9% of   14.58MiB at    6.82MiB/s ETA 00:01[download]  13.7% of   14.58MiB at   11.77MiB/s ETA 00:01[download]  27.4% of   14.58MiB at   20.64MiB/s ETA 00:00[download]  54.9% of   14.58MiB at   35.09MiB/s ETA 00:00[download]  82.3% of   14.58MiB at   36.08MiB/s ETA 00:00[download] 100.0% of   14.58MiB at   35.47MiB/s ETA 00:00[download] 100% of   14.58MiB in 00:00:00 at 21.45MiB/s  
+total 14968
+drwxr-xr-x  2 runner runner     4096 Nov 22 21:23 .
+drwxr-xr-x 13 runner runner     4096 Nov 22 21:23 ..
+-rw-r--r--  1 runner runner    26476 Nov 22 21:23 r2.info.json
+-rw-r--r--  1 runner runner 15285936 Nov 22 21:23 r2.mp4
+-rw-r--r--  1 runner runner     3408 Nov 22 21:23 r2_dllog.txt
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+vids ['ig_out/r2.mp4']
+Traceback (most recent call last):
+  File "<stdin>", line 13, in <module>
+  File "/home/runner/.local/lib/python3.14/site-packages/faster_whisper/transcribe.py", line 876, in transcribe
+    audio = decode_audio(audio, sampling_rate=sampling_rate)
+  File "/home/runner/.local/lib/python3.14/site-packages/faster_whisper/audio.py", line 46, in decode_audio
+    with av.open(input_file, mode="r", metadata_errors="ignore") as container:
+         ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "av/container/core.py", line 479, in av.container.core.open
+    def open(
+TypeError: open() got an unexpected keyword argument 'metadata_errors'
