@@ -1,0 +1,14 @@
+[Instagram] Setting up session
+[Instagram] Extracting URL: https://www.instagram.com/reel/DgA42bEPpcc/
+[Instagram] DgA42bEPpcc: Checking post accessibility
+[Instagram] DgA42bEPpcc: Downloading webpage
+[info] DgA42bEPpcc: Downloading 1 format(s): dash-2249575968924460v+dash-2249575562257834a
+[download] Destination: ig_out/r3.fdash-2249575968924460v.mp4
+[download]   0.0% of   22.20MiB at  Unknown B/s ETA Unknown[download]   0.0% of   22.20MiB at    2.24MiB/s ETA 00:09  [download]   0.0% of   22.20MiB at    1.97MiB/s ETA 00:11[download]   0.1% of   22.20MiB at  462.75KiB/s ETA 00:49[download]   0.1% of   22.20MiB at  605.81KiB/s ETA 00:37[download]   0.3% of   22.20MiB at  734.19KiB/s ETA 00:30[download]   0.6% of   22.20MiB at    1.02MiB/s ETA 00:21[download]   1.1% of   22.20MiB at    1.54MiB/s ETA 00:14[download]   2.2% of   22.20MiB at    2.49MiB/s ETA 00:08[download]   4.5% of   22.20MiB at    4.17MiB/s ETA 00:05[download]   9.0% of   22.20MiB at    7.17MiB/s ETA 00:02[download]  18.0% of   22.20MiB at   12.57MiB/s ETA 00:01[download]  36.0% of   22.20MiB at   22.28MiB/s ETA 00:00[download]  54.1% of   22.20MiB at   31.12MiB/s ETA 00:00[download]  72.1% of   22.20MiB at   38.49MiB/s ETA 00:00[download]  90.1% of   22.20MiB at   45.96MiB/s ETA 00:00[download] 100.0% of   22.20MiB at   49.74MiB/s ETA 00:00[download] 100% of   22.20MiB in 00:00:00 at 33.12MiB/s  
+[download] Destination: ig_out/r3.fdash-2249575562257834a.m4a
+[download]   0.1% of  764.31KiB at  918.59KiB/s ETA 00:00[download]   0.4% of  764.31KiB at    2.01MiB/s ETA 00:00[download]   0.9% of  764.31KiB at    3.94MiB/s ETA 00:00[download]   2.0% of  764.31KiB at    7.28MiB/s ETA 00:00[download]   4.1% of  764.31KiB at   12.86MiB/s ETA 00:00[download]   8.2% of  764.31KiB at   18.42MiB/s ETA 00:00[download]  16.6% of  764.31KiB at   31.41MiB/s ETA 00:00[download]  33.4% of  764.31KiB at   34.87MiB/s ETA 00:00[download]  66.9% of  764.31KiB at   33.66MiB/s ETA 00:00[download] 100.0% of  764.31KiB at   31.70MiB/s ETA 00:00[download] 100% of  764.31KiB in 00:00:00 at 6.15MiB/s   
+[Merger] Merging formats into "ig_out/r3.mp4"
+Deleting original file ig_out/r3.fdash-2249575968924460v.mp4 (pass -k to keep)
+Deleting original file ig_out/r3.fdash-2249575562257834a.m4a (pass -k to keep)
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+dur 119.6538125
