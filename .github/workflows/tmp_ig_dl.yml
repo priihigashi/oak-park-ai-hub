@@ -26,7 +26,7 @@ jobs:
           import os,pathlib,subprocess,json
           from faster_whisper import WhisperModel
           opts=[]
-          c=os.environ.get('IG_COOKIES','').strip()
+          c=''  # segunda tentativa: acesso sem cookies
           if c:
               p=pathlib.Path('/tmp/ig-cookies.txt');p.write_text(c);p.chmod(0o600);opts=['--cookies',str(p)]
           cmd=['yt-dlp','--write-info-json','--no-playlist','-o','ig_out/original.%(ext)s',*opts,'https://www.instagram.com/reel/Df24IYDhxiX/']
