@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: sudo apt-get update -y && sudo apt-get install -y ffmpeg
-      - run: pip install -U yt-dlp faster-whisper "av==13.1.0"
+      - run: pip install -U yt-dlp faster-whisper
       - name: download
         run: |
           mkdir -p ig_out/r1_frames
@@ -24,7 +24,10 @@ jobs:
           from faster_whisper import WhisperModel
           v=[f for f in glob.glob("ig_out/r1.*") if not f.endswith(".json")][0]
           m=WhisperModel("small",compute_type="int8")
-          segs,info=m.transcribe(v)
+          import numpy as np
+          raw=subprocess.run(["ffmpeg","-i",v,"-f","f32le","-ac","1","-ar","16000","-"],capture_output=True).stdout
+          audio=np.frombuffer(raw,np.float32)
+          segs,info=m.transcribe(audio)
           with open("ig_out/r1_tx.txt","w") as f:
               f.write(f"lang={info.language}\n")
               for s in segs: f.write(f"[{s.start:6.1f}-{s.end:6.1f}] {s.text.strip()}\n")
