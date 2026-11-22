@@ -10,9 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      URL: "https://www.instagram.com/reel/DgDJd3OyC3I/"
-      N: "r2"
-      FOLDER: "1PUOPB_YygbMaxJ8Z2lis8LEA-capLKnq"
+      URL: "https://www.instagram.com/reel/Df_lLdCIyWj/"
+      N: "r3"
+      FOLDER: "1IY4TJyv9Dk1qJPdhskyn4flj1g1jp0Kl"
     steps:
       - uses: actions/checkout@v4
         with:
@@ -60,9 +60,17 @@ jobs:
           d=build('drive','v3',credentials=creds)
           n=os.environ['N']; meta=open(f'ig_out/{n}_meta.txt').read()
           au=re.search(r'autor: (.*)',meta).group(1).split(' (')[0].replace(' ','_')
-          name=f"ORIGINAL_2_{au}_DgDJd3OyC3I.mp4"
-          r=d.files().create(body={'name':name,'parents':[os.environ['FOLDER']]},media_body=MediaFileUpload(os.environ['V'],mimetype='video/mp4',resumable=True),supportsAllDrives=True,fields='id,name,size').execute()
-          open(f'ig_out/{n}_drive.txt','w').write(json.dumps(r))
+          name=f"ORIGINAL_{au}_Df_lLdCIyWj.mp4"
+          def fold(nm,par):
+              q=f"name='{nm}' and '{par}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false"
+              f=d.files().list(q=q,supportsAllDrives=True,includeItemsFromAllDrives=True,fields='files(id)').execute()['files']
+              return f[0]['id'] if f else d.files().create(body={'name':nm,'parents':[par],'mimeType':'application/vnd.google-apps.folder'},supportsAllDrives=True,fields='id').execute()['id']
+          ma=fold('Meio Ambiente',os.environ['FOLDER']); cop=fold('COP31',ma); ref=fold('_referencias',cop)
+          sc=d.files().list(q=f"name='v1_cop31-20261116' and '{cop}' in parents and trashed=false",supportsAllDrives=True,includeItemsFromAllDrives=True,fields='files(id)').execute()['files']
+          if not sc: d.files().create(body={'name':'v1_cop31-20261116','parents':[cop],'mimeType':'application/vnd.google-apps.shortcut','shortcutDetails':{'targetId':'1T5SPlkDrFAEQYuXWnXBY0tavP48AQgxU'}},supportsAllDrives=True).execute()
+          print('MA',ma,'COP',cop,'REF',ref)
+          r=d.files().create(body={'name':name,'parents':[ref]},media_body=MediaFileUpload(os.environ['V'],mimetype='video/mp4',resumable=True),supportsAllDrives=True,fields='id,name,size').execute()
+          r.update(ma=ma,cop=cop,ref=ref); open(f'ig_out/{n}_drive.txt','w').write(json.dumps(r))
           print(r)
           EOF
           rm -f ig_out/${N}.mp4 ig_out/${N}.*.json ig_out/${N}.info.json ig_out/${N}.webm
