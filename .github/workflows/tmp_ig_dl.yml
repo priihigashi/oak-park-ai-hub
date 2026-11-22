@@ -10,9 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      URL: "https://www.instagram.com/reel/DgDOGPqBZpU/"
-      N: "r4"
-      FOLDER: "1pYGnuoHiY-fSSKSbLJzeFP-YTAJdeG-U"
+      URL: "https://www.instagram.com/reel/DgDH5R2xIyw/"
+      N: "r5"
+      FOLDER: "1XcQGjThJXDU1Pcrom_VYDk73z-vYz-dk"
     steps:
       - uses: actions/checkout@v4
         with:
@@ -60,13 +60,8 @@ jobs:
           d=build('drive','v3',credentials=creds)
           n=os.environ['N']; meta=open(f'ig_out/{n}_meta.txt').read()
           au=re.search(r'autor: (.*)',meta).group(1).split(' (')[0].replace(' ','_')
-          name=f"ORIGINAL_{au}_DgDOGPqBZpU.mp4"
-          def fold(nm,par):
-              q=f"name='{nm}' and '{par}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false"
-              f=d.files().list(q=q,supportsAllDrives=True,includeItemsFromAllDrives=True,fields='files(id)').execute()['files']
-              return f[0]['id'] if f else d.files().create(body={'name':nm,'parents':[par],'mimeType':'application/vnd.google-apps.folder'},supportsAllDrives=True,fields='id').execute()['id']
-          ma=os.environ['FOLDER']; cop=fold('El Nino e Sul',ma); ref=fold('_referencias',cop)
-          print('EN',cop,'REF',ref)
+          name=f"INSPIRACAO_2_{au}_DgDH5R2xIyw.mp4"
+          ma=cop=ref=os.environ['FOLDER']
           r=d.files().create(body={'name':name,'parents':[ref]},media_body=MediaFileUpload(os.environ['V'],mimetype='video/mp4',resumable=True),supportsAllDrives=True,fields='id,name,size').execute()
           r.update(ma=ma,cop=cop,ref=ref); open(f'ig_out/{n}_drive.txt','w').write(json.dumps(r))
           print(r)
