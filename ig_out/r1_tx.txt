@@ -1,0 +1,18 @@
+lang=en
+[   0.0-   5.0] No, I know you didn't say it. You're not an unthinking liberal. Are you?
+[   5.0-  11.0] I know you like to use that word liberal as if it were a crime.
+[  11.0-  16.0] No, I'm sorry. I shouldn't have used that word. I know Democrats think liberal is a bad word.
+[  16.0-  20.0] So bad you had to change it, didn't you? What do you call yourselves now? Progressives?
+[  20.0-  24.0] It's true. Republicans have tried to turn liberal into a bad word.
+[  24.0-  27.0] Well, liberals ended slavery in this country.
+[  27.0-  36.0] A Republican president ended slavery.
+[  36.0-  42.0] Yes, a liberal Republican. What happened to them?
+[  42.0-  49.0] They got run out of your party. What did liberals do that was so offensive to the Republican Party, Senator?
+[  49.0-  56.0] I'll tell you what they did. Liberals got women the right to vote. Liberals got African-Americans the right to vote.
+[  56.0-  62.0] Liberals created Social Security and lifted millions of elderly people out of poverty. Liberals ended segregation.
+[  62.0-  68.0] Liberals passed the Civil Rights Act, the Voting Rights Act. Liberals created Medicare.
+[  68.0-  73.0] Liberals passed the Clean Air Act, the Clean Water Act. What did conservatives do?
+[  73.0-  78.0] They opposed every one of those programs, every one.
+[  78.0-  84.0] So when you try to hurl that word liberal at my feet as if it were something dirty, something to run away from,
+[  84.0-  91.0] something that I should be ashamed of, it won't work, Senator, because I will pick up that label and I will wear it as a badge of honor.
+[  91.0-  95.0] It is.
