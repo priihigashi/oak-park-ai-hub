@@ -10,9 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      URL: "https://www.instagram.com/reel/DgDH5R2xIyw/"
-      N: "r5"
-      FOLDER: "1XcQGjThJXDU1Pcrom_VYDk73z-vYz-dk"
+      URL: "https://www.instagram.com/reel/DgDSw-mhhcs/"
+      N: "r6"
+      FOLDER: "1cnYkvL4-C_Hfy-yxfJBQcrMVLJoSsoNc"
     steps:
       - uses: actions/checkout@v4
         with:
@@ -60,7 +60,7 @@ jobs:
           d=build('drive','v3',credentials=creds)
           n=os.environ['N']; meta=open(f'ig_out/{n}_meta.txt').read()
           au=re.search(r'autor: (.*)',meta).group(1).split(' (')[0].replace(' ','_')
-          name=f"INSPIRACAO_2_{au}_DgDH5R2xIyw.mp4"
+          name=f"REFERENCIA_{au}_DgDSw-mhhcs.mp4"
           ma=cop=ref=os.environ['FOLDER']
           r=d.files().create(body={'name':name,'parents':[ref]},media_body=MediaFileUpload(os.environ['V'],mimetype='video/mp4',resumable=True),supportsAllDrives=True,fields='id,name,size').execute()
           r.update(ma=ma,cop=cop,ref=ref); open(f'ig_out/{n}_drive.txt','w').write(json.dumps(r))
