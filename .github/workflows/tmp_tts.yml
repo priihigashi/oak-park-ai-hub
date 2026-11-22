@@ -1,0 +1,23 @@
+name: tmp-tts
+on:
+  push:
+    branches: ["tmp/dilma-lula-r2"]
+    paths: ["job/**"]
+permissions:
+  contents: write
+jobs:
+  tts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: tmp/dilma-lula-r2
+      - run: pip install -U edge-tts
+      - run: mkdir -p out && python job/tts.py && ls -la out
+      - run: |
+          git config user.name priihigashi
+          git config user.email mcfollingproperties@gmail.com
+          git add out
+          git commit -m "tts out" || exit 0
+          git push || (git pull --rebase && git push)
