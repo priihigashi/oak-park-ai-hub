@@ -1,0 +1,50 @@
+name: AIPAC Thalita preview audio
+on:
+  push:
+    branches: [aipac-thalita-preview]
+    paths: [.github/workflows/aipac-thalita-preview.yml]
+permissions: {}
+jobs:
+  voice:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - run: python -m pip install edge-tts
+      - name: Generate and verify Microsoft neural takes
+        run: |
+          mkdir -p takes
+          python - <<'PY'
+          import asyncio, json
+          from pathlib import Path
+          import edge_tts
+          voice = "pt-BR-ThalitaMultilingualNeural"
+          rate = "+17%"
+          lines = ["Did AY-pack change its name to hide its election spending?","","AY-pack is a U.S. lobbying group that pushes for a closer relationship with Israel.","In October, it said that after the midterms it would stop endorsing candidates and giving directly from its PAC.","It plans to recommend candidates and encourage members to donate directly.","Its super PAC, United Democracy Project, dates back to twenty twenty-one and will keep operating.","A super PAC can raise unlimited funds from eligible donors and pay for ads for or against candidates,","independently of their campaigns.","Federal filings show it reported fifty-three point six million dollars in independent spending from January twenty twenty-five through October fourteenth, twenty twenty-six.","Look at Michigan. The Washington Post reported that the super PAC spent more than thirty million dollars to boost Haley Stevens in the Democratic Senate primary.","Abdul El Sayed still won. Money buys airtime. Voters decide the race.","U.S. military aid to Israel comes from the federal budget. Congress sets that funding.","Want to see who paid for ads in your race? Go to F E C dot gov and search for your candidate.","Open Spending by Others to Support or Oppose. That's where you can follow the money."]
+          async def render(i, line):
+              async with gate:
+                  prefix = Path("takes") / f"{i:02d}"
+                  tts = edge_tts.Communicate(line, voice, rate=rate, boundary="WordBoundary")
+                  subtitles = edge_tts.SubMaker()
+                  with prefix.with_suffix(".mp3").open("wb") as output:
+                      async for chunk in tts.stream():
+                          if chunk["type"] == "audio":
+                              output.write(chunk["data"])
+                          elif chunk["type"] == "WordBoundary":
+                              subtitles.feed(chunk)
+                  assert prefix.with_suffix(".mp3").stat().st_size > 1000
+                  prefix.with_suffix(".srt").write_text(subtitles.get_srt())
+          async def main():
+              global gate
+              voices = await edge_tts.list_voices()
+              assert any(row["ShortName"] == voice for row in voices), voice
+              print(f"Voice: {voice}, rate: {rate}")
+              gate = asyncio.Semaphore(3)
+              await render(0, lines[0])
+              await asyncio.gather(*(render(i, line) for i, line in enumerate(lines) if i and line))
+          asyncio.run(main())
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: aipac-thalita-takes
+          path: takes/
+          retention-days: 3
