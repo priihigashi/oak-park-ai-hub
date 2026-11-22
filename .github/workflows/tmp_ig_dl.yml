@@ -10,38 +10,32 @@ jobs:
     runs-on: ubuntu-latest
     env:
       URL: 'https://www.instagram.com/reel/DgA42bEPpcc/'
-      N: 'r2'
+      N: 'r3'
     steps:
       - uses: actions/checkout@v4
       - run: sudo apt-get update && sudo apt-get install -y ffmpeg
-      - run: pip install -U yt-dlp faster-whisper
+      - run: pip install -U yt-dlp faster-whisper numpy
       - name: download
         continue-on-error: true
         run: |
           mkdir -p ig_out
-          yt-dlp -v --write-info-json -f 'b/bv*+ba' --merge-output-format mp4 -o "ig_out/$N.%(ext)s" "$URL" > ig_out/${N}_dllog.txt 2>&1 || true
-          ls -la ig_out >> ig_out/${N}_dllog.txt
+          yt-dlp -o "ig_out/$N.%(ext)s" "$URL" > ig_out/${N}_dllog.txt 2>&1 || true
       - name: transcribe
         continue-on-error: true
         run: |
           python - <<'EOF' >> ig_out/${N}_dllog.txt 2>&1
-          import glob, os, json, subprocess
+          import glob, os, subprocess, numpy as np
           from faster_whisper import WhisperModel
           n=os.environ['N']
-          vids=[f for f in glob.glob(f'ig_out/{n}.*') if not f.endswith(('.json','.txt'))]
-          print('vids',vids)
-          infos=glob.glob(f'ig_out/{n}*.json')
-          if infos:
-              info=json.load(open(infos[0]))
-              with open(f'ig_out/{n}_meta.txt','w') as f:
-                  f.write(f"autor: {info.get('uploader')} / {info.get('channel')}\ndata: {info.get('upload_date')}\nlegenda:\n{info.get('description')}\n")
-          v=vids[0]
+          v=[f for f in glob.glob(f'ig_out/{n}.*') if not f.endswith(('.json','.txt'))][0]
+          raw=subprocess.run(['ffmpeg','-i',v,'-f','s16le','-ac','1','-ar','16000','-'],capture_output=True).stdout
+          audio=np.frombuffer(raw,np.int16).astype(np.float32)/32768.0
           m=WhisperModel('small',compute_type='int8')
-          segs,_=m.transcribe(v,language='pt')
+          segs,_=m.transcribe(audio,language='pt')
           with open(f'ig_out/{n}_tx.txt','w') as f:
               for s in segs:
                   f.write(f'[{s.start:6.1f}-{s.end:6.1f}] {s.text.strip()}\n')
-          dur=float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',v]).strip())
+          dur=len(audio)/16000
           os.makedirs(f'ig_out/{n}_frames',exist_ok=True)
           k=20
           for i in range(k):
@@ -54,5 +48,5 @@ jobs:
         run: |
           rm -f ig_out/*.json ig_out/*.mp4 ig_out/*.webm ig_out/*.m4a ig_out/*.mkv
           git config user.name bot && git config user.email bot@users.noreply.github.com
-          git add ig_out && git commit -m 'ig_out r2' || exit 0
+          git add ig_out && git commit -m 'ig_out r3' || exit 0
           git push || (git pull --rebase && git push)
