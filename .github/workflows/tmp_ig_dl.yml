@@ -1,5 +1,6 @@
 name: tmp_ig_dl
 on:
+  workflow_dispatch:
   push:
     branches: [tmp/ig-usa-2211]
     paths: ['.github/workflows/tmp_ig_dl.yml']
@@ -11,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: sudo apt-get update -y && sudo apt-get install -y ffmpeg
-      - run: pip install -U yt-dlp faster-whisper
+      - run: pip install -U yt-dlp faster-whisper "av==13.1.0"
       - name: download
         run: |
           mkdir -p ig_out/r1_frames
