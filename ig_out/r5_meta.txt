@@ -1,0 +1,4 @@
+autor: Gabriel Terra (@gabrielpterra)
+data: 20261122
+duracao: None
+legenda: None
