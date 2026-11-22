@@ -17,36 +17,36 @@ jobs:
       - run: pip install -U yt-dlp faster-whisper
       - name: download
         env:
-          URL: 'https://www.instagram.com/reel/DgBUEVQu4Z3/'
+          URL: 'https://www.instagram.com/reel/DgBVQTMhONW/'
         run: |
           mkdir -p ig_out
-          yt-dlp --write-info-json -o 'ig_out/r1.%(ext)s' "$URL"
+          yt-dlp --write-info-json -o 'ig_out/r2.%(ext)s' "$URL"
       - name: transcribe and frames
         run: |
           python - <<'EOF'
           import json, glob, os, subprocess
           from faster_whisper import WhisperModel
-          vid = [f for f in glob.glob('ig_out/r1.*') if not f.endswith('.json')][0]
+          vid = [f for f in glob.glob('ig_out/r2.*') if not f.endswith('.json')][0]
           m = WhisperModel('small', compute_type='int8')
           segs, _ = m.transcribe(vid, language='pt')
-          with open('ig_out/r1_tx.txt','w') as f:
+          with open('ig_out/r2_tx.txt','w') as f:
               for s in segs:
                   f.write(f'[{s.start:6.1f}-{s.end:6.1f}] {s.text.strip()}\n')
           dur = float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',vid]).decode().strip())
-          os.makedirs('ig_out/r1_frames', exist_ok=True)
+          os.makedirs('ig_out/r2_frames', exist_ok=True)
           n=20
           for i in range(n):
               t = dur*(i+0.5)/n
-              subprocess.run(['ffmpeg','-y','-ss',str(t),'-i',vid,'-frames:v','1','-vf','scale=300:-1',f'ig_out/r1_frames/f{i:02d}.jpg'],check=False)
-          info = json.load(open('ig_out/r1.info.json'))
-          with open('ig_out/r1_meta.txt','w') as f:
+              subprocess.run(['ffmpeg','-y','-ss',str(t),'-i',vid,'-frames:v','1','-vf','scale=300:-1',f'ig_out/r2_frames/f{i:02d}.jpg'],check=False)
+          info = json.load(open('ig_out/r2.info.json'))
+          with open('ig_out/r2_meta.txt','w') as f:
               f.write(f"autor: {info.get('uploader')} / {info.get('channel')}\n")
               f.write(f"data: {info.get('upload_date')}\nduracao: {dur:.1f}s\n\nlegenda:\n{info.get('description')}\n")
-          os.remove('ig_out/r1.info.json')
+          os.remove('ig_out/r2.info.json')
           EOF
       - name: commit
         run: |
           git config user.name bot && git config user.email bot@users.noreply.github.com
           git add ig_out
-          git commit -m 'ig_out r1'
+          git commit -m 'ig_out r2'
           git push || (git pull --rebase && git push)
