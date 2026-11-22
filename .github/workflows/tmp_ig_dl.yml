@@ -1,0 +1,75 @@
+name: tmp-ig-dl
+on:
+  push:
+    branches: ["tmp/dilma-lula-r2"]
+    paths: [".github/workflows/tmp_ig_dl.yml"]
+permissions:
+  contents: write
+jobs:
+  dl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      URL: "https://www.instagram.com/reel/DgDJd3OyC3I/"
+      N: "r2"
+      FOLDER: "1PUOPB_YygbMaxJ8Z2lis8LEA-capLKnq"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: tmp/dilma-lula-r2
+      - run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+      - run: pip install -U yt-dlp faster-whisper numpy google-auth google-api-python-client
+      - name: download
+        env:
+          IGC: ${{ secrets.PRI_OP_IG_COOKIES }}
+        run: |
+          mkdir -p ig_out/${N}_frames
+          yt-dlp -f "bv*+ba/b" --merge-output-format mp4 --write-info-json -o "ig_out/$N.%(ext)s" "$URL" || { if [ -n "$IGC" ]; then printf '%s' "$IGC" > /tmp/c.txt; yt-dlp --cookies /tmp/c.txt -f "bv*+ba/b" --merge-output-format mp4 --write-info-json -o "ig_out/$N.%(ext)s" "$URL"; fi; }
+          ls -la ig_out
+          V=$(ls ig_out/$N.* | grep -v json | head -1)
+          echo "V=$V" >> $GITHUB_ENV
+          ffmpeg -loglevel error -y -i "$V" -vn -ac 1 -ar 16000 -f s16le /tmp/a.raw
+          D=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$V")
+          for i in $(seq 1 20); do T=$(python3 -c "print($D*($i-0.5)/20)"); ffmpeg -loglevel error -y -ss $T -i "$V" -frames:v 1 -vf scale=300:-1 ig_out/${N}_frames/f$(printf %02d $i).jpg; done
+      - name: transcribe
+        run: |
+          python - <<'EOF'
+          import glob, json, os, numpy as np
+          from faster_whisper import WhisperModel
+          n=os.environ['N']
+          audio=np.frombuffer(open('/tmp/a.raw','rb').read(),dtype=np.int16).astype(np.float32)/32768.0
+          m=WhisperModel('small',device='cpu',compute_type='int8')
+          segs,_=m.transcribe(audio,language='pt',vad_filter=True)
+          with open(f'ig_out/{n}_tx.txt','w') as f:
+              for s in segs: f.write(f"[{int(s.start//60)}:{int(s.start%60):02d}] {s.text.strip()}\n")
+          for j in glob.glob(f'ig_out/{n}*.info.json'):
+              d=json.load(open(j))
+              open(f'ig_out/{n}_meta.txt','w').write(f"autor: {d.get('uploader') or d.get('channel')} (@{d.get('channel') or d.get('uploader_id')})\ndata: {d.get('upload_date')}\nduracao: {d.get('duration')}\nlegenda: {d.get('description')}\n")
+          EOF
+      - name: upload to drive
+        env:
+          SHEETS_TOKEN: ${{ secrets.SHEETS_TOKEN }}
+        run: |
+          python - <<'EOF'
+          import json, os, re
+          from google.oauth2.credentials import Credentials
+          from googleapiclient.discovery import build
+          from googleapiclient.http import MediaFileUpload
+          info=json.loads(os.environ['SHEETS_TOKEN'])
+          creds=Credentials.from_authorized_user_info(info, info.get('scopes'))
+          d=build('drive','v3',credentials=creds)
+          n=os.environ['N']; meta=open(f'ig_out/{n}_meta.txt').read()
+          au=re.search(r'autor: (.*)',meta).group(1).split(' (')[0].replace(' ','_')
+          name=f"ORIGINAL_2_{au}_DgDJd3OyC3I.mp4"
+          r=d.files().create(body={'name':name,'parents':[os.environ['FOLDER']]},media_body=MediaFileUpload(os.environ['V'],mimetype='video/mp4',resumable=True),supportsAllDrives=True,fields='id,name,size').execute()
+          open(f'ig_out/{n}_drive.txt','w').write(json.dumps(r))
+          print(r)
+          EOF
+          rm -f ig_out/${N}.mp4 ig_out/${N}.*.json ig_out/${N}.info.json ig_out/${N}.webm
+      - name: commit
+        run: |
+          git config user.name priihigashi
+          git config user.email mcfollingproperties@gmail.com
+          git add ig_out
+          git commit -m "ig_out $N" || exit 0
+          git push || (git pull --rebase && git push)
