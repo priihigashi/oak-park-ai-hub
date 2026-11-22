@@ -1,0 +1,52 @@
+name: Download original Dilma para comparar V3
+on:
+  push:
+    branches: [tmp/dilma-original-20261121]
+    paths: [.github/workflows/tmp_ig_dl.yml]
+permissions:
+  contents: read
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -U yt-dlp faster-whisper
+      - run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+      - name: Download e transcrição
+        env:
+          IG_COOKIES: ${{ secrets.PRI_OP_IG_COOKIES }}
+        shell: bash
+        run: |
+          mkdir -p ig_out
+          python - <<'PY'
+          import os,pathlib,subprocess,json
+          from faster_whisper import WhisperModel
+          opts=[]
+          c=os.environ.get('IG_COOKIES','').strip()
+          if c:
+              p=pathlib.Path('/tmp/ig-cookies.txt');p.write_text(c);p.chmod(0o600);opts=['--cookies',str(p)]
+          cmd=['yt-dlp','--write-info-json','--no-playlist','-o','ig_out/original.%(ext)s',*opts,'https://www.instagram.com/reel/Df24IYDhxiX/']
+          r=subprocess.run(cmd,capture_output=True,text=True)
+          pathlib.Path('ig_out/download.log').write_text(r.stdout+r.stderr)
+          if r.returncode: raise SystemExit(r.returncode)
+          videos=[p for p in pathlib.Path('ig_out').iterdir() if p.suffix in ['.mp4','.webm','.mkv']]
+          if not videos: raise SystemExit('Sem vídeo')
+          v=videos[0]
+          model=WhisperModel('small',device='cpu',compute_type='int8')
+          segs,_=model.transcribe(str(v),language='pt')
+          pathlib.Path('ig_out/transcricao.txt').write_text('\n'.join(f'[{s.start:.2f}-{s.end:.2f}] {s.text}' for s in segs))
+          for p in pathlib.Path('ig_out').glob('*.info.json'):
+              d=json.loads(p.read_text());pathlib.Path('ig_out/meta.json').write_text(json.dumps({k:d.get(k) for k in ['uploader','uploader_id','upload_date','description','webpage_url','duration']},ensure_ascii=False));p.unlink()
+          duration=float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',str(v)]))
+          for i in range(20):subprocess.run(['ffmpeg','-loglevel','error','-ss',str(duration*(i+.5)/20),'-i',str(v),'-frames:v','1','-vf','scale=300:-1',f'ig_out/frame-{i:02}.jpg'],check=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dilma-original
+          path: ig_out/
+          retention-days: 7
