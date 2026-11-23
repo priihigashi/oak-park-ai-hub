@@ -1,0 +1,50 @@
+name: tmp_ig_dl
+on:
+  push:
+    branches: ['tmp/datacenter-ceara']
+    paths: ['.github/workflows/tmp_ig_dl.yml']
+permissions:
+  contents: write
+jobs:
+  dl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: deps
+        run: |
+          sudo apt-get update && sudo apt-get install -y ffmpeg
+          pip install -U yt-dlp faster-whisper
+      - name: download
+        run: |
+          mkdir -p ig_out
+          yt-dlp --write-info-json -o "ig_out/r1.%(ext)s" "https://www.instagram.com/reel/DgC3PQMBr77/"
+      - name: process
+        run: |
+          cat > p.py <<'EOF'
+          import json,glob,subprocess,os
+          from faster_whisper import WhisperModel
+          v=[f for f in glob.glob('ig_out/r1.*') if f.endswith(('.mp4','.webm','.mkv'))][0]
+          m=WhisperModel('small',compute_type='int8')
+          segs,_=m.transcribe(v,language='pt')
+          with open('ig_out/r1_tx.txt','w') as f:
+              for s in segs: f.write(f'[{s.start:6.1f}-{s.end:6.1f}] {s.text.strip()}\n')
+          d=float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',v]).decode().strip())
+          os.makedirs('ig_out/r1_frames',exist_ok=True)
+          n=20
+          for i in range(n):
+              t=d*(i+0.5)/n
+              subprocess.run(['ffmpeg','-y','-loglevel','error','-ss',str(t),'-i',v,'-frames:v','1','-vf','scale=300:-1',f'ig_out/r1_frames/f{i:02d}_{t:05.1f}s.jpg'])
+          info=json.load(open(glob.glob('ig_out/r1*.info.json')[0]))
+          with open('ig_out/r1_meta.txt','w') as f:
+              f.write(f"autor: {info.get('uploader')} / {info.get('channel')}\ndata: {info.get('upload_date')}\nduracao: {d:.1f}s\nlikes: {info.get('like_count')}\nlegenda:\n{info.get('description')}\n")
+          for j in glob.glob('ig_out/*.info.json'): os.remove(j)
+          os.remove(v)
+          EOF
+          python p.py
+      - name: commit
+        run: |
+          git config user.name bot && git config user.email bot@users.noreply.github.com
+          git add ig_out && git commit -m 'ig_out r1' && (git push || (git pull --rebase && git push))
