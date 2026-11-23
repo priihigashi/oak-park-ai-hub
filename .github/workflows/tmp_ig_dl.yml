@@ -1,0 +1,52 @@
+name: tmp_ig_dl
+on:
+  push:
+    branches: [tmp-garimpo-celio]
+    paths: ['.github/workflows/tmp_ig_dl.yml']
+permissions:
+  contents: write
+jobs:
+  dl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - run: pip install -U yt-dlp faster-whisper
+      - name: download
+        env:
+          URL: "https://www.instagram.com/reel/DgFZ-mQClGg/"
+          N: "r1"
+        run: |
+          mkdir -p ig_out/${N}_frames
+          yt-dlp --write-info-json -o "ig_out/${N}.%(ext)s" "$URL" || echo DLFAIL > ig_out/${N}_error.txt
+          python3 - <<'PY'
+          import json,glob,os
+          N=os.environ['N']
+          for f in glob.glob(f'ig_out/{N}*.info.json'):
+              d=json.load(open(f))
+              open(f'ig_out/{N}_meta.txt','w').write(f"uploader: {d.get('uploader')} / {d.get('channel')}\nupload_date: {d.get('upload_date')} ts {d.get('timestamp')}\nduration: {d.get('duration')}\nlikes: {d.get('like_count')} comments: {d.get('comment_count')}\n\nCAPTION:\n{d.get('description')}\n")
+              os.remove(f)
+          PY
+          V=$(ls ig_out/${N}.mp4 ig_out/${N}.webm ig_out/${N}.mkv 2>/dev/null | head -1)
+          if [ -n "$V" ]; then
+            D=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$V")
+            python3 - "$V" "$D" <<'PY'
+          import sys,subprocess,os
+          v,d=sys.argv[1],float(sys.argv[2]);N=os.environ['N']
+          n=40
+          for i in range(n):
+              t=d*(i+0.5)/n
+              subprocess.run(['ffmpeg','-y','-loglevel','error','-ss',str(t),'-i',v,'-frames:v','1','-vf','scale=360:-1',f'ig_out/{N}_frames/f{i:02d}_{t:05.1f}s.jpg'])
+          from faster_whisper import WhisperModel
+          m=WhisperModel('small',compute_type='int8')
+          segs,_=m.transcribe(v,language='pt')
+          with open(f'ig_out/{N}_tx.txt','w') as f:
+              for s in segs: f.write(f"[{s.start:6.1f}-{s.end:6.1f}] {s.text.strip()}\n")
+          PY
+            rm -f "$V"
+          fi
+      - name: push
+        run: |
+          git config user.name bot; git config user.email bot@users.noreply.github.com
+          git add ig_out; git commit -m "ig_out" || exit 0
+          git push || (git pull --rebase && git push)
