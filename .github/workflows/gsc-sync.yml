@@ -26,5 +26,6 @@ jobs:
         env:
           GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
           GOOGLE_SA_KEY:   ${{ secrets.GOOGLE_SA_KEY }}
-          GSC_SITE_URL:    ${{ secrets.GSC_SITE_URL }}
+          # Match the verified domain property seen in Search Console.
+          GSC_SITE_URL:    sc-domain:oakpark-construction.com
         run: node scripts/gsc-sync.js
