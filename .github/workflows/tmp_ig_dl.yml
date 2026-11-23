@@ -28,7 +28,10 @@ jobs:
           from faster_whisper import WhisperModel
           tag = os.environ["TAG"]; lang = os.environ.get("LANG_TX") or None
           vid = [f for f in glob.glob(f"ig_out/{tag}.*") if not f.endswith(".json")][0]
-          segs, info = WhisperModel("small", compute_type="int8").transcribe(vid, language=lang)
+          subprocess.run(["ffmpeg","-loglevel","error","-y","-i",vid,"-ac","1","-ar","16000","-f","s16le","ig_out/a.raw"],check=True)
+          import numpy as np
+          audio = np.fromfile("ig_out/a.raw", np.int16).astype(np.float32) / 32768.0; os.remove("ig_out/a.raw")
+          segs, info = WhisperModel("small", compute_type="int8").transcribe(audio, language=lang)
           with open(f"ig_out/{tag}_tx.txt", "w") as o:
               for s in segs:
                   o.write(f"[{s.start:6.1f}-{s.end:6.1f}] {s.text.strip()}\n")
