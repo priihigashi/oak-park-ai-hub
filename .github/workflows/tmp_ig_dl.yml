@@ -1,0 +1,46 @@
+name: tmp_ig_dl
+on:
+  workflow_dispatch:
+  push:
+    branches: [tmp/ig-imposto]
+    paths: ['.github/workflows/tmp_ig_dl.yml']
+permissions:
+  contents: write
+jobs:
+  dl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update -y && sudo apt-get install -y ffmpeg
+      - run: pip install -U yt-dlp faster-whisper
+      - name: download
+        run: |
+          mkdir -p ig_out/r1_frames
+          yt-dlp --write-info-json -o "ig_out/r1.%(ext)s" "https://www.instagram.com/reel/DgD1RKBsKAC/"
+      - name: transcribe
+        run: |
+          python - <<'EOF'
+          import glob,json,subprocess
+          from faster_whisper import WhisperModel
+          v=[f for f in glob.glob("ig_out/r1.*") if not f.endswith(".json")][0]
+          m=WhisperModel("small",compute_type="int8")
+          import numpy as np
+          raw=subprocess.run(["ffmpeg","-i",v,"-f","f32le","-ac","1","-ar","16000","-"],capture_output=True).stdout
+          audio=np.frombuffer(raw,np.float32)
+          segs,info=m.transcribe(audio,language="pt")
+          with open("ig_out/r1_tx.txt","w") as f:
+              f.write(f"lang={info.language}\n")
+              for s in segs: f.write(f"[{s.start:6.1f}-{s.end:6.1f}] {s.text.strip()}\n")
+          d=float(subprocess.check_output(["ffprobe","-v","error","-show_entries","format=duration","-of","csv=p=0",v]).strip())
+          for i in range(20):
+              t=d*(i+0.5)/20
+              subprocess.run(["ffmpeg","-y","-ss",str(t),"-i",v,"-frames:v","1","-vf","scale=300:-1",f"ig_out/r1_frames/f{i:02d}.jpg"],capture_output=True)
+          j=json.load(open("ig_out/r1.info.json"))
+          with open("ig_out/r1_meta.txt","w") as f:
+              f.write(f"uploader={j.get('uploader')} ({j.get('channel')})\nupload_date={j.get('upload_date')}\nduration={d}\n\nCAPTION:\n{j.get('description')}\n")
+          EOF
+          rm -f ig_out/r1.info.json ig_out/r1.mp4 ig_out/r1.webm
+      - name: commit
+        run: |
+          git config user.name bot && git config user.email bot@users.noreply.github.com
+          git add ig_out && git commit -m "ig_out r1" && (git push || (git pull --rebase && git push))
