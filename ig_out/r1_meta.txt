@@ -1,0 +1,16 @@
+autor: Izabela Anholett / izabela.anholett
+data: 20261122
+duracao: 141.5s
+likes: 56783
+legenda:
+A ByteDance, dona chinesa do TikTok, está investindo mais de R$ 200 bilhões para construir o maior data center da América Latina no Complexo do Pecém, no Ceará.
+
+Esse valor equivale a quase nove vezes tudo o que o estado arrecada em impostos durante um ano inteiro. O projeto ocupa uma área de 95 campos de futebol com 20 galpões gigantescos e vai aumentar sozinho em 28,5% toda a capacidade atual de processamento de dados do Brasil, operando com energia 100% renovável gerada pelos ventos do Nordeste.
+
+Na economia local, a obra movimenta 3.800 empregos diretos na construção, 9.500 indiretos e 400 vagas permanentes de operação com salário médio de R$ 5.000. Além dos chineses, as empresas francesas Voltalia e Qair também assinaram acordos para erguer data centers multibilionários na mesma região, atraídas pelo sol, pelo vento e pelos cabos submarinos que ligam o Ceará direto à Europa e à África.
+
+Enquanto potências estrangeiras constroem o cérebro físico da Inteligência Artificial no nosso quintal para colher os lucros no futuro, o Brasil segue apenas alugando terreno e energia como coadjuvante.
+
+Encaminhe este vídeo agora para aquele amigo que trabalha com tecnologia, investimentos ou mora no Nordeste e precisa enxergar o tamanho dessa movimentação.
+
+#inteligenciaartificial #tecnologia #economia #brasil #ceara
