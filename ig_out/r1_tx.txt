@@ -1,0 +1,27 @@
+lang=pt
+[   0.0-   3.7] Parece que tem uma raiva de pobre, o governo tem uma raiva gigantesca de pobre, oudeia pobre.
+[   3.7-   7.2] Aí as pessoas começam a investir, passou 30 anos sem tributar nada,
+[   7.2-  10.4] o Brasil começa bem na vez que o investidor pequenininho está começando a tributar,
+[  10.4-  14.1] porque foi só a classe média começar a investir e o pobre começar a investir um pouquinho,
+[  14.1-  16.8] que é nada do mercado que começou a vir mil tributos.
+[  16.8-  20.6] O Brasil é o único país que se propõe a copiar os impostos da Europa e a infraestrutura do Paraguai.
+[  20.6-  22.2] O que está na mesa hoje então?
+[  22.2-  26.9] LCI, LCA, CRI, CRA, 0% hoje de imposto de renda, você não paga, você recebe 100,
+[  26.9-  32.5] porque é investidor de LCI, LCA comenta aí, e a proposta é colocar para 7,5% de IR.
+[  32.5-  40.4] Os dividendos hoje é 0% até 50 mil por mês, eles querem cobrar agora 15% em cima de tudo.
+[  40.4-  46.3] Então como é que ficaria ali você investir 100 mil numa LCA de 90% do CDI por um ano,
+[  46.3-  50.1] com um CDI de 13,65% a ano, mais ou menos igual está hoje?
+[  50.1-  55.9] Hoje 100 você pega 12.285, com 921 reais de imposto, que seria esse 7,5,
+[  55.9-  62.2] você pegaria 11.364, olha a diferença aí, que dá, você pagou 920 reais de imposto a mais.
+[  62.2-  65.3] Então foram dois glom-pontos a do PIB há mais em dois anos,
+[  65.3-  69.0] é o maior nível da série do tesouro que começa em 2010,
+[  69.0-  72.8] a gente nunca pagou tanto imposto e detalhe, com o gasto do governo no talo.
+[  72.8-  76.3] Mas tem que lembrar que no Brasil você pode ter prejuízo e pagar imposto, é possível.
+[  76.3-  82.0] Você emite as notas fiscais etc, você tem prejuízo e paga imposto, é um milagre da multiplicação.
+[  82.1-  85.9] E a gente sabe que isso aqui para empresas grandes é fascínio de sair,
+[  85.9-  89.9] para empresário grande é fascínio de sair, para quem tem conta em outros países é fascínio de sair.
+[  89.9-  95.8] Toda vez que o governo fecha uma portinha, a gente deixa bem claro, ele abre uma janela enorme.
+[  95.8- 101.5] Por quê? Porque o que ele quer é pegar o grosso da classe média e deixar escapar quem tem mais dinheiro.
+[ 101.5- 107.4] Esse governo, ele é especialista em fazer isso, se você é pobre e ficou feliz com essa notícia,
+[ 107.4- 111.0] sinto muito te dizer, não afeta nenhum dos clientes gigantescos,
+[ 111.0- 113.2] afeta novamente só o pequeno investidor.
