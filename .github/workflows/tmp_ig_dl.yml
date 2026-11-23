@@ -16,35 +16,44 @@ jobs:
       - name: deps
         run: |
           sudo apt-get update && sudo apt-get install -y ffmpeg
-          pip install -U yt-dlp faster-whisper
+          pip install -U yt-dlp faster-whisper requests
+      - name: dados cambio
+        continue-on-error: true
+        run: |
+          mkdir -p ig_out/dados
+          curl -s -o ig_out/dados/ptax_usd.json "https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoDolarPeriodo(dataInicial=@dataInicial,dataFinalCotacao=@dataFinalCotacao)?@dataInicial='08-01-2026'&@dataFinalCotacao='11-21-2026'&\$format=json&\$select=cotacaoVenda,dataHoraCotacao"
+          curl -s -o ig_out/dados/ptax_usd_2024_25.json "https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoDolarPeriodo(dataInicial=@dataInicial,dataFinalCotacao=@dataFinalCotacao)?@dataInicial='11-01-2024'&@dataFinalCotacao='12-31-2025'&\$format=json&\$select=cotacaoVenda,dataHoraCotacao"
+          curl -s -L -o ig_out/dados/frankfurter_usd.json "https://api.frankfurter.app/2026-08-01..2026-11-21?from=USD&to=BRL,AUD,EUR,MXN,ZAR,NZD,NOK,CNY,INR,GBP,JPY,CAD,SEK,CHF,KRW,IDR,TRY"
+          curl -s -L -o ig_out/dados/frankfurter_dxy_proxy.json "https://api.frankfurter.app/2026-10-23..2026-11-21?from=USD"
+          ls -la ig_out/dados; head -c 400 ig_out/dados/ptax_usd.json; echo; head -c 400 ig_out/dados/frankfurter_usd.json
       - name: download
         run: |
-          mkdir -p ig_out
-          yt-dlp --write-info-json -o "ig_out/r3.%(ext)s" "https://www.instagram.com/reel/DgEImCmup6J/"
+          yt-dlp --write-info-json -o "ig_out/r4.%(ext)s" "https://www.instagram.com/reel/Df-EfqaycK1/"
       - name: process
         run: |
           cat > p.py <<'EOF'
           import json,glob,subprocess,os
           from faster_whisper import WhisperModel
-          v=[f for f in glob.glob('ig_out/r3.*') if f.endswith(('.mp4','.webm','.mkv'))][0]
+          v=[f for f in glob.glob('ig_out/r4.*') if f.endswith(('.mp4','.webm','.mkv'))][0]
           m=WhisperModel('small',compute_type='int8')
           segs,_=m.transcribe(v,language='pt')
-          with open('ig_out/r3_tx.txt','w') as f:
+          with open('ig_out/r4_tx.txt','w') as f:
               for s in segs: f.write(f'[{s.start:6.1f}-{s.end:6.1f}] {s.text.strip()}\n')
           d=float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',v]).decode().strip())
-          os.makedirs('ig_out/r3_frames',exist_ok=True)
+          os.makedirs('ig_out/r4_frames',exist_ok=True)
           n=20
           for i in range(n):
               t=d*(i+0.5)/n
-              subprocess.run(['ffmpeg','-y','-loglevel','error','-ss',str(t),'-i',v,'-frames:v','1','-vf','scale=300:-1',f'ig_out/r3_frames/f{i:02d}_{t:05.1f}s.jpg'])
-          info=json.load(open(glob.glob('ig_out/r3*.info.json')[0]))
-          with open('ig_out/r3_meta.txt','w') as f:
+              subprocess.run(['ffmpeg','-y','-loglevel','error','-ss',str(t),'-i',v,'-frames:v','1','-vf','scale=300:-1',f'ig_out/r4_frames/f{i:02d}_{t:05.1f}s.jpg'])
+          info=json.load(open(glob.glob('ig_out/r4*.info.json')[0]))
+          with open('ig_out/r4_meta.txt','w') as f:
               f.write(f"autor: {info.get('uploader')} / {info.get('channel')}\ndata: {info.get('upload_date')}\nduracao: {d:.1f}s\nlikes: {info.get('like_count')}\nlegenda:\n{info.get('description')}\n")
           for j in glob.glob('ig_out/*.info.json'): os.remove(j)
           os.remove(v)
           EOF
           python p.py
       - name: commit
+        if: always()
         run: |
           git config user.name bot && git config user.email bot@users.noreply.github.com
-          git add ig_out && git commit -m 'ig_out r3' && (git push || (git pull --rebase && git push))
+          git add ig_out && git commit -m 'ig_out r4 + dados' && (git push || (git pull --rebase && git push))
