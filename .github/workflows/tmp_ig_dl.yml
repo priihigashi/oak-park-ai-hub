@@ -11,7 +11,7 @@ jobs:
     timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
-      - run: pip install -q -U yt-dlp
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg && pip install -q -U yt-dlp
       - run: |
           yt-dlp -o '/tmp/original.%(ext)s' 'https://www.instagram.com/reel/DgGic0XDY4Z/'
           ffmpeg -loglevel error -ss 43.6 -i /tmp/original.* -t 6 -vf 'scale=360:-2' -c:v libx264 -pix_fmt yuv420p -crf 27 -c:a aac -movflags +faststart /tmp/clip.mp4
