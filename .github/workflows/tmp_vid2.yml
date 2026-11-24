@@ -1,0 +1,66 @@
+name: tmp-vid2
+on:
+  push:
+    branches: ['tmp/**']
+    paths: ['.github/workflows/tmp_vid2.yml']
+permissions:
+  contents: write
+jobs:
+  vid:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: deps
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - name: buscar no Wikimedia Commons (licenca livre)
+        run: |
+          mkdir -p vids
+          python3 - <<'PY'
+          import json, subprocess, urllib.request, urllib.parse
+          UA = {"User-Agent": "news-preview-bot/1.0 (https://github.com/priihigashi/oak-park-ai-hub)"}
+          buscas = {
+            "trigo": "wheat harvest combine",
+            "trigobr": "trigo colheita",
+            "posto": "gas station fuel pump",
+            "senado": "Senado Federal plenário",
+            "padaria": "bakery bread oven",
+            "refinaria": "oil refinery",
+          }
+          def api(p):
+              u = "https://commons.wikimedia.org/w/api.php?" + urllib.parse.urlencode(p)
+              return json.load(urllib.request.urlopen(urllib.request.Request(u, headers=UA), timeout=60))
+          lista = []
+          for k, q in buscas.items():
+              try:
+                  r = api({"action":"query","format":"json","generator":"search","gsrsearch":q+" filetype:video","gsrnamespace":6,"gsrlimit":8,
+                           "prop":"imageinfo","iiprop":"url|extmetadata|size|mime"})
+              except Exception as e:
+                  print("erro", k, e); continue
+              pages = sorted((r.get("query") or {}).get("pages", {}).values(), key=lambda p: p.get("index", 0))
+              n = 0
+              for p in pages:
+                  ii = (p.get("imageinfo") or [{}])[0]
+                  md = ii.get("extmetadata") or {}
+                  item = {"grupo": k, "titulo": p.get("title"), "url": ii.get("url"), "pagina": ii.get("descriptionurl"),
+                          "licenca": (md.get("LicenseShortName") or {}).get("value"),
+                          "autor": (md.get("Artist") or {}).get("value"), "dur": ii.get("duration")}
+                  lista.append(item)
+                  if n < 3 and ii.get("url"):
+                      out = f"vids/{k}_{n}.mp4"
+                      rc = subprocess.run(["ffmpeg","-loglevel","error","-y","-user_agent",UA["User-Agent"],"-ss","3","-t","10","-i",ii["url"],
+                                           "-vf","scale=-2:720","-an","-c:v","libx264","-crf","26","-preset","veryfast",out]).returncode
+                      if rc == 0:
+                          item["clipe"] = out; n += 1
+          json.dump(lista, open("vids/lista.json","w"), ensure_ascii=False, indent=1)
+          PY
+          ls -la vids
+      - name: gravar
+        if: always()
+        run: |
+          git config user.name github-actions
+          git config user.email actions@github.com
+          git add vids || true
+          git commit -m "vids commons" || exit 0
+          git pull --rebase -q origin "${GITHUB_REF_NAME}" || true
+          git push origin "HEAD:${GITHUB_REF_NAME}"
