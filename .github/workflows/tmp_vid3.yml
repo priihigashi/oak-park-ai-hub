@@ -1,0 +1,73 @@
+name: tmp-vid3
+on:
+  push:
+    branches: ['tmp/**']
+    paths: ['.github/workflows/tmp_vid3.yml']
+permissions:
+  contents: write
+jobs:
+  vid:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: deps
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - name: baixar videos escolhidos do Commons
+        run: |
+          mkdir -p vids3
+          python3 - <<'PY'
+          import json, subprocess, urllib.request, urllib.parse, os, time
+          UA = {"User-Agent": "news-preview-bot/1.0 (https://github.com/priihigashi/oak-park-ai-hub)"}
+          def api(p):
+              u = "https://commons.wikimedia.org/w/api.php?" + urllib.parse.urlencode(p)
+              return json.load(urllib.request.urlopen(urllib.request.Request(u, headers=UA), timeout=60))
+          titulos = ["File:Senado define nesta terça prioridades de votação em Plenário.webm",
+                     "File:Entenda como funciona o sistema de votação eletrônica do Senado.webm",
+                     "File:Baking the Best Persian Bread in a Traditional Oven - Iranian Bakery Street Food.webm"]
+          extra = {}
+          for q in ["wheat field wind", "Weizenernte", "harvesting wheat combine harvester", "wheat ears", "Mähdrescher Weizen", "petrol station refuelling car"]:
+              try:
+                  r = api({"action":"query","format":"json","generator":"search","gsrsearch":q+" filetype:video","gsrnamespace":6,"gsrlimit":4,"prop":"info"})
+                  for p in (r.get("query") or {}).get("pages", {}).values(): extra[p["title"]] = q
+              except Exception as e: print("busca", q, e)
+          titulos += list(extra)[:12]
+          out = []
+          for i, t in enumerate(titulos):
+              try:
+                  r = api({"action":"query","format":"json","titles":t,"prop":"imageinfo|videoinfo","viprop":"url|extmetadata|derivatives","iiprop":"url|extmetadata"})
+                  p = list(r["query"]["pages"].values())[0]
+                  vi = (p.get("videoinfo") or p.get("imageinfo") or [{}])[0]
+                  md = vi.get("extmetadata") or {}
+                  src = vi.get("url")
+                  for d in vi.get("derivatives") or []:
+                      if "480p" in (d.get("transcodekey") or "") or "360p" in (d.get("transcodekey") or ""):
+                          src = d["src"]; break
+                  f = f"vids3/raw{i}"
+                  req = urllib.request.Request(src, headers=UA)
+                  with urllib.request.urlopen(req, timeout=120) as resp, open(f, "wb") as fh:
+                      fh.write(resp.read())
+                  dur = float(subprocess.check_output(["ffprobe","-v","error","-show_entries","format=duration","-of","csv=p=0",f]).strip() or 0)
+                  ini = 2 if dur < 40 else dur*0.3
+                  clip = f"vids3/v{i}.mp4"
+                  subprocess.run(["ffmpeg","-loglevel","error","-y","-ss",str(ini),"-t","10","-i",f,"-vf","scale=-2:540","-an","-c:v","libx264","-crf","27","-preset","veryfast",clip])
+                  subprocess.run(["ffmpeg","-loglevel","error","-y","-i",clip,"-vf","fps=0.5,scale=240:-2,tile=5x1","-frames:v","1",f"vids3/v{i}_tira.jpg"])
+                  os.remove(f)
+                  out.append({"i": i, "titulo": t, "busca": extra.get(t), "clipe": clip, "dur_original": dur, "inicio": ini,
+                              "licenca": (md.get("LicenseShortName") or {}).get("value"), "autor": (md.get("Artist") or {}).get("value"),
+                              "pagina": "https://commons.wikimedia.org/wiki/" + urllib.parse.quote(t.replace(" ","_"))})
+              except Exception as e:
+                  out.append({"i": i, "titulo": t, "erro": str(e)})
+              time.sleep(1)
+          json.dump(out, open("vids3/lista.json","w"), ensure_ascii=False, indent=1)
+          PY
+          ls -la vids3
+      - name: gravar
+        if: always()
+        run: |
+          git config user.name github-actions
+          git config user.email actions@github.com
+          git add vids3 || true
+          git commit -m "vids3 commons" || exit 0
+          git pull --rebase -q origin "${GITHUB_REF_NAME}" || true
+          git push origin "HEAD:${GITHUB_REF_NAME}"
