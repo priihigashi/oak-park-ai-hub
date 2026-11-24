@@ -1,0 +1,62 @@
+name: tmp-vid
+on:
+  push:
+    branches: ['tmp/**']
+    paths: ['.github/workflows/tmp_vid.yml']
+permissions:
+  contents: write
+jobs:
+  vid:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: deps
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          pip install -q -U yt-dlp
+      - name: buscar e cortar
+        run: |
+          mkdir -p vids
+          python3 - <<'PY'
+          import json, subprocess
+          buscas = {
+            "senado": "ytsearch6:TV Senado aprova conta estabilização preço combustíveis PL 1472 2022",
+            "trigo": "ytsearch6:colheita de trigo cerrado Embrapa",
+            "trigosul": "ytsearch6:colheita de trigo Rio Grande do Sul colheitadeira",
+            "posto": "ytsearch6:posto de gasolina abastecendo preço combustível reportagem",
+            "padaria": "ytsearch6:pão francês padaria fornada reportagem preço trigo",
+          }
+          lista = []
+          for k, q in buscas.items():
+              out = subprocess.run(["yt-dlp", "--flat-playlist", "-J", q], capture_output=True, text=True).stdout
+              try:
+                  ents = json.loads(out).get("entries", [])
+              except Exception:
+                  ents = []
+              for i, e in enumerate(ents):
+                  url = e.get("url") or ("https://www.youtube.com/watch?v=" + e.get("id", ""))
+                  info = subprocess.run(["yt-dlp", "-J", "--skip-download", url], capture_output=True, text=True).stdout
+                  try:
+                      m = json.loads(info)
+                  except Exception:
+                      m = {}
+                  item = {"grupo": k, "n": i, "url": url, "titulo": m.get("title"), "canal": m.get("channel"),
+                          "licenca": m.get("license"), "dur": m.get("duration"), "data": m.get("upload_date")}
+                  lista.append(item)
+                  if i < 3 and (m.get("duration") or 0) > 20:
+                      ini = min(30, int((m.get("duration") or 60) * 0.25))
+                      subprocess.run(["yt-dlp", "-f", "bv*[height<=720][ext=mp4]+ba[ext=m4a]/b[height<=720]",
+                                      "--download-sections", f"*{ini}-{ini+14}", "--force-keyframes-at-cuts",
+                                      "-o", f"vids/{k}_{i}.%(ext)s", url])
+          json.dump(lista, open("vids/lista.json", "w"), ensure_ascii=False, indent=1)
+          PY
+          ls -la vids
+      - name: gravar
+        run: |
+          git config user.name github-actions
+          git config user.email actions@github.com
+          git add vids
+          git commit -m "vids"
+          git pull --rebase || true
+          git push
