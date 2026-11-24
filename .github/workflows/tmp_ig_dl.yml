@@ -53,3 +53,5 @@ jobs:
           git commit -m "out $TAG"
           git pull --rebase || true
           git push
+
+# Segunda tentativa de disparo na branch temporária.
