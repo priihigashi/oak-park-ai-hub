@@ -1,0 +1,23 @@
+lang: pt
+[   0.0-   6.4] O bitcoin caiu quase 30% já este mês e eu postei aqui semana passada explicando o processo
+[   6.4-   8.6] de short e liquidação.
+[   8.6-  14.0] Segundo uma conta que eu achei a vulsa aí no Twitter, essa pessoa fez um estudo e os
+[  14.0-  19.9] shorts que aparecem no bitcoin, as contas apostando contra, essas contas são apenas
+[  19.9-  25.2] bodes piatórios que fazem o bitcoin subir, criam short squeeze.
+[  25.2-  31.6] Nisso o preço do bitcoin sobe, nisso as baleias, os market makers, os liquidadores
+[  31.6-  34.0] vendem o bitcoin no preço acima.
+[  34.0-  39.7] Aí o bitcoin volta a cair de novo, no que o bitcoin cai, eles abrem mais short.
+[  39.7-  47.5] O que acontece vem o short squeeze, o preço do bitcoin sobe de novo artificialmente e
+[  47.5-  52.2] isso tem acontecido já há alguns meses se não anos.
+[  52.2-  58.0] Então se você não entende de bitcoin, por favor, estude o processo de liquidação e market
+[  58.0-  63.9] makers e short squeeze, pesquise sobre isso no Twitter, pesquise sobre isso em livros,
+[  63.9-  65.8] pesquise sobre isso em filmes.
+[  65.8-  73.3] A todo um sistema, a parte dos fundamentos do bitcoin, de qualquer projeto de satouche,
+[  73.3-  78.6] de qualquer plano de comprar e venecar, existe todo um outro sistema que é esse
+[  78.6-  82.0] que eu acabei de explicar, é só uma teoria dele.
+[  82.0-  83.0] Valeu.
+[  83.0-  89.0] 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
+[  89.0-  94.3] 25, 26, 27, 28, 30, 30, 30, 31, 32, 34, 35, 36, 37, 38, 39, 40 perus.
+[  94.3-  96.8] Quanto custa um peru de natal?
+[  96.8- 108.0] Acho que eu vou revender peru de natal, hein.
+[ 108.0- 109.0] Pode, será?
