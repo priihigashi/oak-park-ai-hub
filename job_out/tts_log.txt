@@ -1,3 +1,1 @@
-z1 pt-BR-ThalitaMultilingualNeural +8% OK
-z3 pt-BR-ThalitaMultilingualNeural +8% OK
-z5 pt-BR-ThalitaMultilingualNeural +8% OK
+q5 pt-BR-ThalitaMultilingualNeural +8% OK
