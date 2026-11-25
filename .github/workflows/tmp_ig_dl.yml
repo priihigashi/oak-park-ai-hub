@@ -1,0 +1,61 @@
+name: tmp_ig_dl
+on:
+  push:
+    branches: ['tmp/observa-reel']
+    paths: ['.github/workflows/tmp_ig_dl.yml']
+permissions:
+  contents: write
+jobs:
+  dl:
+    runs-on: ubuntu-latest
+    env:
+      URL: 'https://www.instagram.com/reel/DgK5f3xxc8S/'
+      LANG_TX: ''
+      N: r1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - run: pip install -q -U yt-dlp faster-whisper
+      - name: download
+        run: |
+          mkdir -p ig_out/${N}_frames
+          yt-dlp --write-info-json -o "ig_out/${N}.%(ext)s" "$URL" || echo DL_FAIL > ig_out/${N}_error.txt
+      - name: meta
+        run: |
+          python - <<'EOF'
+          import json,glob,os
+          n=os.environ['N']
+          for f in glob.glob(f'ig_out/{n}*.info.json'):
+              d=json.load(open(f))
+              open(f'ig_out/{n}_meta.txt','w').write('uploader: %s\nchannel: %s\ndate: %s\nduration: %s\nlikes: %s\ncomments: %s\n\nCAPTION:\n%s\n'%(d.get('uploader'),d.get('channel'),d.get('upload_date'),d.get('duration'),d.get('like_count'),d.get('comment_count'),d.get('description')))
+              os.remove(f)
+          EOF
+      - name: transcribe
+        run: |
+          python - <<'EOF'
+          import glob,os
+          from faster_whisper import WhisperModel
+          n=os.environ['N']; lang=os.environ.get('LANG_TX') or None
+          v=[f for f in glob.glob(f'ig_out/{n}.*') if f.endswith(('.mp4','.webm','.mkv','.mov'))]
+          if v:
+              m=WhisperModel('small',compute_type='int8')
+              segs,info=m.transcribe(v[0],language=lang)
+              with open(f'ig_out/{n}_tx.txt','w') as o:
+                  o.write(f'lang: {info.language}\n')
+                  for s in segs: o.write(f'[{s.start:6.1f}-{s.end:6.1f}] {s.text.strip()}\n')
+          EOF
+      - name: frames
+        run: |
+          V=$(ls ig_out/${N}.* 2>/dev/null | grep -E '\.(mp4|webm|mkv|mov)$' | head -1)
+          if [ -n "$V" ]; then
+            D=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$V")
+            for i in $(seq 1 20); do T=$(python -c "print($D*($i-0.5)/20)"); ffmpeg -loglevel error -ss $T -i "$V" -frames:v 1 -vf scale=300:-1 ig_out/${N}_frames/f$(printf %02d $i).jpg; done
+            rm -f "$V"
+          fi
+      - name: commit
+        run: |
+          git config user.name bot; git config user.email bot@users.noreply.github.com
+          git add ig_out && git commit -m 'ig_out' || exit 0
+          git push || (git pull --rebase && git push)
