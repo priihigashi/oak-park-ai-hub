@@ -1,0 +1,56 @@
+name: tmp_ig_dl
+on:
+  push:
+    branches: [tmp/pavinatto-erika]
+    paths: ['.github/workflows/tmp_ig_dl.yml']
+permissions:
+  contents: write
+jobs:
+  dl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - run: pip install -U yt-dlp faster-whisper
+      - name: download
+        run: |
+          mkdir -p ig_out
+          yt-dlp --write-info-json -o "ig_out/r1.%(ext)s" "https://www.instagram.com/reel/DgJOWdKh1Fx/" || echo FAIL1 > ig_out/r1_fail.txt
+          yt-dlp --write-info-json -o "ig_out/r2.%(ext)s" "https://www.instagram.com/reel/C56OhoPO7zj/" || echo FAIL2 > ig_out/r2_fail.txt
+          ls -la ig_out
+      - name: process
+        run: |
+          cat > /tmp/p.py <<'PY'
+          import json,glob,os,subprocess
+          from faster_whisper import WhisperModel
+          m=WhisperModel("small",compute_type="int8")
+          for r in ["r1","r2"]:
+              vids=[f for f in glob.glob(f"ig_out/{r}.*") if f.split('.')[-1] in ("mp4","webm","mkv","mov")]
+              ij=f"ig_out/{r}.info.json"
+              if os.path.exists(ij):
+                  d=json.load(open(ij))
+                  with open(f"ig_out/{r}_meta.txt","w") as f:
+                      for k in ["uploader","uploader_id","channel","upload_date","timestamp","duration","width","height","description","title"]:
+                          f.write(f"{k}: {d.get(k)}\n")
+                  os.remove(ij)
+              if not vids: continue
+              v=vids[0]
+              segs,_=m.transcribe(v,language="pt",word_timestamps=True)
+              with open(f"ig_out/{r}_tx.txt","w") as f, open(f"ig_out/{r}_words.json","w") as g:
+                  words=[]
+                  for s in segs:
+                      f.write(f"[{s.start:.2f}-{s.end:.2f}] {s.text}\n")
+                      for w in s.words: words.append([round(w.start,2),round(w.end,2),w.word])
+                  json.dump(words,g,ensure_ascii=False)
+              dur=float(subprocess.check_output(["ffprobe","-v","error","-show_entries","format=duration","-of","csv=p=0",v]).decode().strip())
+              os.makedirs(f"ig_out/{r}_frames",exist_ok=True)
+              for i in range(20):
+                  t=dur*(i+0.5)/20
+                  subprocess.run(["ffmpeg","-y","-loglevel","error","-ss",str(t),"-i",v,"-vframes","1","-vf","scale=300:-1",f"ig_out/{r}_frames/{i:02d}_{t:.1f}.jpg"])
+          PY
+          python /tmp/p.py
+      - name: commit
+        run: |
+          git config user.name "bot"; git config user.email "bot@users.noreply.github.com"
+          git add ig_out; git commit -m "ig_out" || exit 0
+          git push || (git pull --rebase && git push)
