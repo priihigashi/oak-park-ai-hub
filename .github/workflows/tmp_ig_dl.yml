@@ -10,9 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      URL: "https://www.instagram.com/reel/DgI_cyuSXPD/"
-      LANG_TX: ""
-      TAG: "r1"
+      URL: "https://www.instagram.com/reel/DgITteaxrhN/"
+      LANG_TX: "pt"
+      TAG: "dgitteaxrhn"
     steps:
       - uses: actions/checkout@v4
       - name: deps
