@@ -1,4 +1,5 @@
 name: tmp_tts_cut
+# r2
 on:
   push:
     branches: [tmp/pavinatto-erika]
@@ -13,10 +14,12 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: '3.11'}
       - run: sudo apt-get install -y -qq ffmpeg
-      - run: pip install -q edge-tts "rembg[cpu]" pillow
+      - run: pip install -q edge-tts "rembg[cpu]" pillow faster-whisper numpy
       - run: python job/tts.py
-      - run: python job/cut.py
-      - run: |
+      - if: always()
+        run: python job/cut.py
+      - if: always()
+        run: |
           git config user.name bot; git config user.email bot@users.noreply.github.com
           git add job_out; git commit -m job_out || exit 0
           git pull --rebase; git push
