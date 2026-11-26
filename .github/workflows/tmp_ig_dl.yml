@@ -10,9 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      URL: "https://www.instagram.com/reel/DgOLUvuKupg/"
+      URL: "https://www.instagram.com/reel/DgOBXMWAfun/"
       LANG_TX: ""
-      TAG: "r2"
+      TAG: "r3"
     steps:
       - uses: actions/checkout@v4
       - name: deps
@@ -50,5 +50,4 @@ jobs:
           git config user.email actions@github.com
           git add ig_out
           git commit -m "out $TAG"
-          git pull --rebase || true
-          git push
+          for i in 1 2 3 4 5; do git pull --rebase && git push && break; sleep 5; done
