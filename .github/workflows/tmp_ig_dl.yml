@@ -1,0 +1,47 @@
+name: tmp-ig-dl
+on:
+  push:
+    branches: ['tmp/**']
+    paths: ['.github/workflows/tmp_ig_dl.yml']
+permissions:
+  contents: read
+jobs:
+  dl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      URL: "https://www.instagram.com/p/Df_VhVDAHmy/"
+      TAG: "df-vhvdahmy"
+    steps:
+      - uses: actions/checkout@v4
+      - name: deps
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          pip install -q -U yt-dlp faster-whisper
+      - name: baixar e transcrever
+        run: |
+          mkdir -p ig_out
+          yt-dlp --write-info-json -o "ig_out/$TAG.%(ext)s" "$URL"
+          python3 - <<'PY'
+          import os, glob, json, subprocess
+          from faster_whisper import WhisperModel
+          import numpy as np
+          tag = os.environ["TAG"]
+          vid = [f for f in glob.glob(f"ig_out/{tag}.*") if not f.endswith(".json")][0]
+          subprocess.run(["ffmpeg","-loglevel","error","-y","-i",vid,"-ac","1","-ar","16000","-f","s16le","ig_out/a.raw"],check=True)
+          audio = np.fromfile("ig_out/a.raw", np.int16).astype(np.float32) / 32768.0
+          os.remove("ig_out/a.raw")
+          segs, info = WhisperModel("small", compute_type="int8").transcribe(audio)
+          with open(f"ig_out/{tag}_tx.txt","w") as o:
+              for s in segs:
+                  o.write(f"[{s.start:6.1f}-{s.end:6.1f}] {s.text.strip()}\n")
+          meta = json.load(open(f"ig_out/{tag}.info.json"))
+          with open(f"ig_out/{tag}_meta.txt","w") as o:
+              o.write(f"link: {os.environ['URL']}\nautor: {meta.get('uploader')}\nidioma: {info.language}\nlegenda: {meta.get('description')}\n")
+          os.remove(f"ig_out/{tag}.info.json")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ig-df-vhvdahmy
+          path: ig_out/
+          retention-days: 1
