@@ -1,0 +1,51 @@
+name: tmp-votos-plp299
+on:
+  push:
+    branches: ['tmp/**']
+    paths: ['.github/workflows/tmp_votos.yml']
+permissions:
+  contents: write
+jobs:
+  votos:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: baixar votacoes
+        run: |
+          mkdir -p votos_out
+          python3 - <<'PY'
+          import json, urllib.request, time
+          def get(u, accept="application/json"):
+              for i in range(3):
+                  try:
+                      r = urllib.request.Request(u, headers={"Accept": accept, "User-Agent": "Mozilla/5.0"})
+                      return urllib.request.urlopen(r, timeout=60).read()
+                  except Exception as e:
+                      print("erro", u, e); time.sleep(3)
+              return b""
+          B = "https://dadosabertos.camara.leg.br/api/v2"
+          lst = json.loads(get(f"{B}/proposicoes/2655570/votacoes") or b"{}")
+          json.dump(lst, open("votos_out/camara_lista.json", "w"), ensure_ascii=False, indent=1)
+          out = {}
+          for v in lst.get("dados", []):
+              vid = v["id"]
+              det = json.loads(get(f"{B}/votacoes/{vid}") or b"{}")
+              votos = json.loads(get(f"{B}/votacoes/{vid}/votos") or b"{}")
+              ori = json.loads(get(f"{B}/votacoes/{vid}/orientacoes") or b"{}")
+              out[vid] = {"resumo": v, "detalhe": det.get("dados"), "votos": votos.get("dados"), "orientacoes": ori.get("dados")}
+          json.dump(out, open("votos_out/camara_votos.json", "w"), ensure_ascii=False)
+          S = "https://legis.senado.leg.br/dadosabertos"
+          for name, u in [("senado_votacao.json", f"{S}/votacao?codigoMateria=176328"),
+                          ("senado_materia_votacoes.json", f"{S}/materia/votacoes/176328.json")]:
+              open(f"votos_out/{name}", "wb").write(get(u))
+          PY
+          ls -la votos_out
+      - name: gravar
+        run: |
+          git config user.name github-actions
+          git config user.email actions@github.com
+          git add votos_out
+          git commit -m "votos plp299"
+          git pull --rebase || true
+          git push
