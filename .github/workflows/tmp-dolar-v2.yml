@@ -1,0 +1,24 @@
+name: tmp-dolar-v2
+on:
+  push:
+    branches: [tmp-dolar-v2]
+    paths: ['job/**']
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install edge-tts==7.* 
+      - run: mkdir -p out && python job/tts.py
+      - name: wikimedia
+        run: |
+          UA="reel-preview-bot/1.0 (github actions)"
+          curl -sfL -A "$UA" -o out/plenario_senado.jpg "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/2026-11-03_Plen%C3%A1rio_do_Senado.jpg/1920px-2026-11-03_Plen%C3%A1rio_do_Senado.jpg" || true
+          curl -sfL -A "$UA" -o out/rogerio_full.jpg "https://upload.wikimedia.org/wikipedia/commons/8/8c/Senador_Rog%C3%A9rio_Carvalho.jpg" || true
+          ls -la out
+      - run: |
+          git config user.name "bot"; git config user.email "bot@users.noreply.github.com"
+          git add out && git commit -m "out" && git push
