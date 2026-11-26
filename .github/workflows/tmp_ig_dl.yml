@@ -1,7 +1,7 @@
 name: Temporary reel transcription
 on:
   push:
-    branches: ["tmp/ig-dgn1u8bu1bh"]
+    branches: ["tmp/ig-dgkv7evb5ot"]
 permissions:
   contents: read
 jobs:
@@ -20,7 +20,7 @@ jobs:
       - name: Capture public reel
         run: |
           mkdir -p ig_out
-          yt-dlp --no-playlist --no-progress --write-info-json --write-description -o 'ig_out/original.%(ext)s' 'https://www.instagram.com/reel/DgN1u8bu1Bh/'
+          yt-dlp --no-playlist --no-progress --write-info-json --write-description -o 'ig_out/original.%(ext)s' 'https://www.instagram.com/reel/DgKv7evB5oT/'
       - name: Transcribe
         run: |
           python - <<'PY'
@@ -38,6 +38,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: ig-dgn1u8bu1bh
+          name: ig-dgkv7evb5ot
           path: ig_out/
           retention-days: 3
