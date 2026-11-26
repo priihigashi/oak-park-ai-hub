@@ -1,0 +1,94 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>__TITULO__</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* Prévia da automação (regras dela): tamanho de celular, voz sincronizada, play/busca, pular 5/10/30 s,
+   velocidades 1 / 1,05 / 1,1 / 1,2 / 1,5 / 2 / 3, caixa de notas com copiar (começa com título, ID e link),
+   download, legenda e primeiro comentário prontos pra copiar. Sem MP4: a cena é desenhada no tempo do áudio. */
+:root{--bg:#0B0B0C;--fg:#F2EEE6;--mut:#9a958c;--ac:__COR__}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--fg);font-family:Rubik,system-ui,sans-serif}
+.wrap{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:28px;max-width:1100px;margin:0 auto;padding:20px}
+@media(max-width:820px){.wrap{grid-template-columns:minmax(0,1fr);padding:12px}}
+.meta{overflow-wrap:anywhere;font-family:"JetBrains Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--mut)}
+h1{font-weight:900;font-size:clamp(22px,3vw,32px);margin:6px 0 4px;line-height:1.05}
+.palcoBox{position:relative;width:min(100%,calc((100vh - 230px) * 9 / 16));min-width:260px;aspect-ratio:9/16;border-radius:14px;overflow:hidden;background:#111}
+#palco{position:absolute;inset:0;transform-origin:0 0}
+.cena{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:54px 54px 260px}
+.t{font-weight:900;font-size:46px;line-height:1.05;text-transform:uppercase}
+.q{font-weight:800;font-size:34px;line-height:1.15}
+.bar{display:flex;align-items:center;gap:10px;margin:8px 0;font-weight:800;font-size:20px}.bar i{display:block;height:26px;border-radius:6px}
+.fonte{position:absolute;left:54px;right:54px;bottom:24px;font-size:13px;opacity:.85}
+.leg{position:absolute;left:54px;right:54px;bottom:120px;font-weight:900;font-size:26px;line-height:1.2;color:#fff;text-align:center;
+  -webkit-text-stroke:1.2px #111;paint-order:stroke fill;text-shadow:0 2px 8px rgba(0,0,0,.85)}.leg b{color:#FFD34D}
+.ctl{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;align-items:center}
+button,.btn{font-family:Rubik,system-ui,sans-serif;font-weight:800;font-size:13px;border:1px solid #333;background:#17171a;color:var(--fg);border-radius:10px;padding:9px 12px;cursor:pointer;text-decoration:none}
+button.on{background:var(--ac);color:#111;border-color:var(--ac)}
+input[type=range]{width:100%;accent-color:var(--ac)}
+.card{border:1px solid #26262a;border-radius:14px;padding:14px;margin-bottom:12px;background:#121214}
+.card h2{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin:0 0 8px}
+textarea{width:100%;min-height:110px;background:#0e0e10;color:var(--fg);border:1px solid #2a2a2e;border-radius:10px;padding:10px;font:15px Rubik,system-ui,sans-serif}
+pre{white-space:pre-wrap;font:14px/1.45 Rubik,system-ui,sans-serif;margin:0}
+.selo{display:inline-block;background:var(--ac);color:#111;font-weight:800;border-radius:8px;padding:3px 8px;font-size:12px}
+</style><!--CARDS--></head><body>
+<div class="wrap">
+ <div>
+  <div class="meta">__ID__ · v__V__ · prévia com voz grátis · __QUANDO__</div>
+  <h1>__TITULO__</h1>
+  <!--REVISAO-BOTAO-->
+  <div class="palcoBox" id="box"><div id="palco"></div></div>
+  <input type="range" id="seek" min="0" max="1000" value="0">
+  <div class="ctl"><button id="play">▶ Play</button>
+   <button data-j="-30">-30</button><button data-j="-10">-10</button><button data-j="-5">-5</button>
+   <button data-j="5">+5</button><button data-j="10">+10</button><button data-j="30">+30</button>
+   <span class="meta" id="tempo">0:00</span></div>
+  <div class="ctl" id="vel"></div>
+  <div class="card"><h2>Notas</h2><textarea id="notas" placeholder="Escreva o que mudar (pode ser longo)"></textarea>
+   <div class="ctl"><button id="copiar">Copiar notas</button></div></div>
+ </div>
+ <div>
+  <div class="card"><h2>Situação</h2><pre>__SITUACAO__</pre></div>
+  <div class="card"><h2>Legenda do post</h2><pre id="leg">__LEGENDA__</pre><div class="ctl"><button data-c="leg">Copiar legenda</button></div></div>
+  <div class="card"><h2>Primeiro comentário</h2><pre id="com">__COMENTARIO__</pre><div class="ctl"><button data-c="com">Copiar comentário</button></div></div>
+  <div class="card"><h2>Baixar</h2><div class="ctl"><a class="btn" href="voz.mp3" download>Áudio (voz grátis)</a><a class="btn" href="manifest.json" download>Manifesto</a><a class="btn" href="LEIA-PRIMEIRO.md" download>O que mudou</a></div>
+   <div class="meta">MP4 só depois do seu Sim nesta versão.</div></div>
+ </div>
+</div>
+<audio id="a" src="voz.mp3" preload="auto"></audio>
+<script>
+const M=__MANIFESTO__;const a=document.getElementById('a');const P=document.getElementById('palco');
+function esc(s){return String(s??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
+function fit(){const b=document.getElementById('box');const k=b.clientWidth/1080;P.style.width='1080px';P.style.height='1920px';P.style.transform=`scale(${k})`}
+addEventListener('resize',fit);fit();
+P.style.fontSize='';
+function desenhar(t){const s=M.scenes.find(x=>t>=x.start&&t<x.end)||M.scenes[M.scenes.length-1];
+ if(s.type==='card'&&window.CARDS){P.innerHTML=CARDS.html(s,t,M.words);return}
+ const bg=s.background||'#F2E6D0',fg=s.color||'#161613';
+ let h=`<div class="cena" style="background:${bg};color:${fg};padding:108px 108px 520px">`;
+ const big=x=>x*2;
+ if(s.type==='quote')h+=`<div class="q" style="font-size:${big(34)}px">“${esc(s.quote||s.title)}”</div>`;
+ else if(s.type==='bars'){const mx=Math.max(...(s.bars||[]).map(b=>+b.value||0),1);h+=`<div class="t" style="font-size:68px;margin-bottom:32px">${esc(s.title)}</div>`;
+  for(const b of s.bars||[])h+=`<div class="bar" style="font-size:40px;margin:16px 0"><span style="width:300px">${esc(b.label)}</span><i style="height:52px;width:${Math.round(480*(+b.value||0)/mx)}px;background:${fg}"></i><span>${esc(b.value)}</span></div>`}
+ else h+=`<div class="t" style="font-size:92px">${esc(s.title)}</div>`;
+ if(s.source)h+=`<div class="fonte" style="font-size:26px;left:108px;right:108px;bottom:48px">Fonte: ${esc(s.source)}</div>`;
+ h+='</div>';
+ const at=M.words.find(w=>t>=w.start&&t<=w.end)||M.words.filter(w=>w.start<=t).pop();
+ if(at){const pg=M.words.filter(w=>w.page===at.page);const ls=[0,1].map(l=>pg.filter(w=>w.line===l).map(w=>w===at?`<b>${esc(w.text)}</b>`:esc(w.text)).join(' '));
+  h+=`<div class="leg" style="font-size:52px;left:108px;right:108px;bottom:240px">${ls.join('<br>')}</div>`}
+ P.innerHTML=h}
+const fim=M.scenes[M.scenes.length-1].end;const sk=document.getElementById('seek');const tp=document.getElementById('tempo');
+const mm=s=>Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
+function loop(){desenhar(a.currentTime);sk.value=Math.round(1000*a.currentTime/fim);tp.textContent=mm(a.currentTime)+' / '+mm(fim);requestAnimationFrame(loop)}loop();
+document.getElementById('play').onclick=e=>{if(a.paused){a.play();e.target.textContent='❚❚ Pausa'}else{a.pause();e.target.textContent='▶ Play'}};
+sk.oninput=()=>{a.currentTime=fim*sk.value/1000};
+document.querySelectorAll('[data-j]').forEach(b=>b.onclick=()=>{a.currentTime=Math.max(0,Math.min(fim,a.currentTime+ +b.dataset.j))});
+const V=document.getElementById('vel');[1,1.05,1.1,1.2,1.5,2,3].forEach(v=>{const b=document.createElement('button');b.textContent=String(v).replace('.',',')+'x';if(v===1)b.className='on';
+ b.onclick=()=>{a.playbackRate=v;V.querySelectorAll('button').forEach(x=>x.className='');b.className='on'};V.appendChild(b)});
+const cab=`${M.title} · ${M.id} · v${M.version} · ${location.href}\n\n`;
+document.getElementById('copiar').onclick=()=>navigator.clipboard.writeText(cab+document.getElementById('notas').value);
+document.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>navigator.clipboard.writeText(document.getElementById(b.dataset.c).innerText));
+try{const k='notas-'+M.id+'-'+M.version;const n=document.getElementById('notas');n.value=localStorage.getItem(k)||'';n.oninput=()=>localStorage.setItem(k,n.value)}catch(e){}
+</script>
+<!--REVISAO-->
+</body></html>
