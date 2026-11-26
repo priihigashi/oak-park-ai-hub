@@ -1,4 +1,4 @@
-name: tmp-tts-fotos  # v2 26/11
+name: tmp-tts-fotos  # v3 26/11
 on:
   push:
     branches: ['tmp/**']
@@ -22,5 +22,5 @@ jobs:
           git config user.name github-actions
           git config user.email actions@github.com
           git add tts_out
-          git commit -m 'tts v2'
+          git commit -m 'tts v3'
           for i in 1 2 3; do git pull --rebase origin "$GITHUB_REF_NAME" && git push origin HEAD:"$GITHUB_REF_NAME" && break; sleep 5; done

@@ -1,7 +1,7 @@
 import asyncio, json, os, subprocess, edge_tts
 VOICES=["pt-BR-ThalitaMultilingualNeural","pt-BR-ThalitaNeural"]
 async def one(seg, voice):
-    c=edge_tts.Communicate(seg["text"], voice, rate="+10%", boundary="WordBoundary")
+    c=edge_tts.Communicate(seg["text"], voice, rate="+5%", boundary="WordBoundary")
     words=[]; data=b""
     async for ch in c.stream():
         if ch["type"]=="audio": data+=ch["data"]
