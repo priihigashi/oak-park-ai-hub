@@ -1,0 +1,61 @@
+name: tmp-ig-dl
+on:
+  push:
+    branches: ["tmp/emendas-bolsonaro"]
+    paths: [".github/workflows/tmp_ig_dl.yml"]
+permissions:
+  contents: write
+jobs:
+  dl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      URL: "https://www.instagram.com/reel/DgNw_-EJx9w/"
+      N: "r1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: tmp/emendas-bolsonaro
+      - run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+      - run: pip install -U yt-dlp faster-whisper numpy
+      - name: download
+        env:
+          IGC: ${{ secrets.PRI_OP_IG_COOKIES }}
+        run: |
+          mkdir -p ig_out
+          if [ -n "$IGC" ]; then printf '%s' "$IGC" > /tmp/c.txt; CK="--cookies /tmp/c.txt"; fi
+          yt-dlp $CK -f "bv*+ba/b" --merge-output-format mp4 --write-info-json -o "ig_out/$N.%(ext)s" "$URL" || yt-dlp --write-info-json -o "ig_out/$N.%(ext)s" "$URL"
+          ls -la ig_out
+          V=$(ls ig_out/$N.* | grep -v json | head -1)
+          ffmpeg -loglevel error -y -i "$V" -vn -ac 1 -ar 16000 -f s16le /tmp/a.raw
+      - name: frames
+        run: |
+          V=$(ls ig_out/$N.* | grep -v json | head -1)
+          D=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$V")
+          mkdir -p ig_out/${N}_frames
+          for i in $(seq 1 20); do T=$(python3 -c "print($D*($i-0.5)/20)"); ffmpeg -loglevel error -y -ss $T -i "$V" -frames:v 1 -vf scale=300:-1 ig_out/${N}_frames/f$(printf %02d $i).jpg; done
+      - name: transcribe
+        run: |
+          python - <<'EOF'
+          import glob, json, os, numpy as np
+          from faster_whisper import WhisperModel
+          n=os.environ['N']
+          audio=np.frombuffer(open('/tmp/a.raw','rb').read(),dtype=np.int16).astype(np.float32)/32768.0
+          m=WhisperModel('small',device='cpu',compute_type='int8')
+          segs,_=m.transcribe(audio,language='pt',vad_filter=True)
+          with open(f'ig_out/{n}_tx.txt','w') as f:
+              for s in segs: f.write(f"[{int(s.start//60)}:{int(s.start%60):02d}] {s.text.strip()}\n")
+          for j in glob.glob(f'ig_out/{n}*.info.json'):
+              d=json.load(open(j))
+              open(f'ig_out/{n}_meta.txt','w').write(f"autor: {d.get('uploader') or d.get('channel')}\ndata: {d.get('upload_date')}\nduracao: {d.get('duration')}\nlegenda: {d.get('description')}\n")
+          for f in glob.glob(f'ig_out/{n}.*'):
+              if not f.endswith('.txt'): os.remove(f)
+          EOF
+          head -5 ig_out/${N}_tx.txt
+      - name: commit
+        run: |
+          git config user.name priihigashi
+          git config user.email mcfollingproperties@gmail.com
+          git add ig_out
+          git commit -m "ig_out $N" || exit 0
+          git push || (git pull --rebase && git push)
