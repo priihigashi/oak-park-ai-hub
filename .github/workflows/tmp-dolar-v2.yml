@@ -22,6 +22,21 @@ jobs:
           UA="reel-preview-bot/1.0 (github actions)"
           curl -sfL -A "$UA" -o out/plenario_senado.jpg "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/2026-11-03_Plen%C3%A1rio_do_Senado.jpg/1920px-2026-11-03_Plen%C3%A1rio_do_Senado.jpg" || true
           curl -sfL -A "$UA" -o out/rogerio_full.jpg "https://upload.wikimedia.org/wikipedia/commons/8/8c/Senador_Rog%C3%A9rio_Carvalho.jpg" || true
+          curl -sfL -A "$UA" -o out/eduardo.jpg "https://www.camara.leg.br/internet/deputado/bandep/92346.jpg" || true
+          python3 - <<'PY' || true
+          import json,urllib.request,urllib.parse
+          UA={'User-Agent':'reel-preview-bot/1.0 (github actions)'}
+          for nome,q in [('guedes','Paulo Guedes'),('eduardo_w','Eduardo Bolsonaro')]:
+              u='https://commons.wikimedia.org/w/api.php?action=query&format=json&generator=search&gsrnamespace=6&gsrlimit=8&prop=imageinfo&iiprop=url|size|extmetadata&iiurlwidth=1200&gsrsearch='+urllib.parse.quote(q+' filetype:bitmap')
+              d=json.load(urllib.request.urlopen(urllib.request.Request(u,headers=UA)))
+              pg=sorted(d['query']['pages'].values(),key=lambda p:p.get('index',99))
+              info=[]
+              for k,p in enumerate(pg[:5]):
+                  ii=p['imageinfo'][0];m=ii.get('extmetadata',{})
+                  info.append({'t':p['title'],'lic':m.get('LicenseShortName',{}).get('value'),'art':m.get('Artist',{}).get('value','')[:200]})
+                  open(f'out/{nome}_{k}.jpg','wb').write(urllib.request.urlopen(urllib.request.Request(ii['thumburl'],headers=UA)).read())
+              json.dump(info,open(f'out/{nome}_info.json','w'),ensure_ascii=False,indent=1)
+          PY
           ls -la out
       - run: |
           git config user.name "bot"; git config user.email "bot@users.noreply.github.com"
