@@ -1,0 +1,295 @@
+{
+  "cenas": [
+    {
+      "type": "card",
+      "card": "p89",
+      "paleta": "creme-amarelo",
+      "campos": {
+        "titulo": "Quem foram as mulheres mais votadas?",
+        "rotulo": "ELEIÇÕES 2026",
+        "apoio": "Eleições de 4/10/2026 · somente eleitas.",
+        "midia": "https://www.camara.leg.br/midias/image/2023/08/img20230823200106225-768x473.jpg",
+        "legenda_foto": "Imagem de arquivo · Agência Câmara"
+      },
+      "fala": "Eduarda Campopiano desafiou a militância feminista a conquistar o título de mulher mais votada do Brasil. O que mostram os resultados?",
+      "source": "Congresso em Foco, 25/11/2026",
+      "cor_tema": "#F2C94C"
+    },
+    {
+      "type": "card",
+      "card": "p137",
+      "paleta": "branco-verde",
+      "campos": {
+        "titulo": "Deputadas federais",
+        "rotulo": "TOP 5 | CÂMARA",
+        "itens": [
+          {
+            "texto": "Erika Hilton · PSOL · 1.596.472"
+          },
+          {
+            "texto": "Sâmia Bomfim · PSOL · 583.107"
+          },
+          {
+            "texto": "Júlia Zanatta · PL · 560.223"
+          },
+          {
+            "texto": "Ana Elisa · PT · 524.219"
+          },
+          {
+            "texto": "Tabata Amaral · PSB · 476.383"
+          }
+        ],
+        "apoio": "4 de 5 · esquerda e centro-esquerda",
+        "foto_fundo": "https://www.camara.leg.br/midias/image/2023/08/img20230823200106225-768x473.jpg"
+      },
+      "fala": "Na Câmara, Erika Hilton e Sâmia Bomfim lideram. Júlia Zanatta ficou em terceiro. Quatro das cinco mais votadas são de esquerda ou centro-esquerda.",
+      "source": "TSE / HubPolítico",
+      "cor_tema": "#F2C94C"
+    },
+    {
+      "type": "card",
+      "card": "p137",
+      "paleta": "creme-rosa",
+      "campos": {
+        "titulo": "Senadoras eleitas",
+        "rotulo": "TOP 5 | SENADO",
+        "itens": [
+          {
+            "texto": "Marília Campos · PT · 3.990.864"
+          },
+          {
+            "texto": "Luizianne Lins · REDE · 2.822.806"
+          },
+          {
+            "texto": "Caroline de Toni · PL · 2.694.918"
+          },
+          {
+            "texto": "Marília Arraes · PDT · 2.325.127"
+          },
+          {
+            "texto": "Gracinha Caiado · UNIÃO · 1.458.522"
+          }
+        ],
+        "apoio": "3 de 5 · esquerda e centro-esquerda",
+        "foto_fundo": "https://www12.senado.leg.br/noticias/materias/2026/03/04/relatorio-da-presidencia-senado-aprovou-448-proposicoes-legislativas-em-2025/whatsapp-image-2026-03-04-at-18-20-43.jpeg"
+      },
+      "fala": "No Senado, Marília Campos e Luizianne Lins ficaram em primeiro e segundo lugar entre as mulheres, seguidas de Caroline de Toni. Três das cinco são de esquerda ou centro-esquerda.",
+      "source": "TSE / HubPolítico",
+      "cor_tema": "#F2C94C"
+    },
+    {
+      "type": "card",
+      "card": "p137",
+      "paleta": "branco-laranja",
+      "campos": {
+        "titulo": "Deputadas estaduais",
+        "rotulo": "TOP 5 | ESTADUAIS",
+        "itens": [
+          {
+            "texto": "Eduarda Campopiano · PL · 1.956.238"
+          },
+          {
+            "texto": "Sofia Favero · PSOL · 407.773"
+          },
+          {
+            "texto": "Ana Campagnolo · PL · 387.523"
+          },
+          {
+            "texto": "Beatriz Cerqueira · PT · 328.402"
+          },
+          {
+            "texto": "Paula Bancada Feminista · PSOL · 326.190"
+          }
+        ],
+        "apoio": "3 de 5 · esquerda"
+      },
+      "fala": "Nas assembleias, Eduarda Campopiano lidera. Sofia Favero e Ana Campagnolo completam o pódio. Três das cinco são de esquerda.",
+      "source": "TSE / HubPolítico",
+      "cor_tema": "#F2C94C"
+    },
+    {
+      "type": "card",
+      "card": "p79",
+      "paleta": "creme-amarelo",
+      "campos": {
+        "titulo": "Dez das quinze",
+        "rotulo": "TRÊS TOP 5",
+        "grafico_titulo": "Pessoas por grupo",
+        "unidade": "mulheres",
+        "barras": [
+          {
+            "rotulo": "Esq. + centro-esq.",
+            "valor": 10
+          },
+          {
+            "rotulo": "Dir. + centro-dir.",
+            "valor": 5
+          }
+        ],
+        "nota": "Apenas os três Top 5, não a composição das Casas."
+      },
+      "fala": "Somando os três rankings, dez das quinze mulheres são de esquerda ou centro-esquerda. Mas votação individual não é maioria de cadeiras.",
+      "source": "TSE / HubPolítico",
+      "cor_tema": "#F2C94C"
+    },
+    {
+      "type": "card",
+      "card": "p79",
+      "paleta": "branco-verde",
+      "campos": {
+        "titulo": "Todas as deputadas",
+        "rotulo": "CÂMARA | 109 MULHERES",
+        "grafico_titulo": "Cadeiras por grupo",
+        "unidade": "cadeiras",
+        "barras": [
+          {
+            "rotulo": "Esquerda",
+            "valor": 47
+          },
+          {
+            "rotulo": "Centro",
+            "valor": 10
+          },
+          {
+            "rotulo": "Direita",
+            "valor": 52
+          }
+        ],
+        "nota": "GPS Partidário 2026",
+        "foto_fundo": "https://www.camara.leg.br/midias/image/2023/08/img20230823200106225-768x473.jpg"
+      },
+      "fala": "Na Câmara, a esquerda tem quarenta e sete deputadas, a direita cinquenta e duas e o centro dez. A esquerda representa quarenta e três por cento das mulheres, contra vinte e quatro por cento da Casa inteira.",
+      "source": "Folha, 05/10/2026",
+      "cor_tema": "#F2C94C"
+    },
+    {
+      "type": "card",
+      "card": "p79",
+      "paleta": "creme-rosa",
+      "campos": {
+        "titulo": "As novas senadoras",
+        "rotulo": "SENADO | ELEITAS EM 2026",
+        "grafico_titulo": "Novas eleitas",
+        "unidade": "cadeiras",
+        "barras": [
+          {
+            "rotulo": "Esquerda",
+            "valor": 4
+          },
+          {
+            "rotulo": "Centro",
+            "valor": 1
+          },
+          {
+            "rotulo": "Direita",
+            "valor": 7
+          }
+        ],
+        "nota": "19 senadoras projetadas em 2027; 7 de mandatos anteriores.",
+        "foto_fundo": "https://www12.senado.leg.br/noticias/materias/2026/03/04/relatorio-da-presidencia-senado-aprovou-448-proposicoes-legislativas-em-2025/whatsapp-image-2026-03-04-at-18-20-43.jpeg"
+      },
+      "fala": "Entre as doze novas senadoras, quatro são de esquerda ou centro-esquerda, uma de centro e sete de direita, pela classificação da Folha. Depois do segundo turno, o Senado passou a projetar dezenove mulheres para dois mil e vinte e sete.",
+      "source": "Agência Senado, 25/10/2026; GPS Partidário",
+      "cor_tema": "#F2C94C"
+    },
+    {
+      "type": "card",
+      "card": "p79",
+      "paleta": "creme-rosa",
+      "campos": {
+        "rotulo": "SENADO | 2027",
+        "titulo": "A bancada completa",
+        "foto_fundo": "https://www12.senado.leg.br/noticias/materias/2026/03/04/relatorio-da-presidencia-senado-aprovou-448-proposicoes-legislativas-em-2025/whatsapp-image-2026-03-04-at-18-20-43.jpeg",
+        "grafico_titulo": "Mulheres no Senado",
+        "unidade": "cadeiras",
+        "barras": [
+          {
+            "rotulo": "Esquerda",
+            "valor": 7
+          },
+          {
+            "rotulo": "Centro",
+            "valor": 2
+          },
+          {
+            "rotulo": "Direita",
+            "valor": 10
+          }
+        ],
+        "nota": "Esquerda: 36,8% entre elas; 19,8% de todas as cadeiras."
+      },
+      "fala": "Na projeção atual, são sete mulheres de esquerda, duas de centro e dez de direita. A esquerda representa cerca de trinta e sete por cento das senadoras, contra vinte por cento de toda a Casa.",
+      "source": "Agência Senado, 25/10/2026; GPS Partidário",
+      "cor_tema": "#F2C94C"
+    },
+    {
+      "type": "card",
+      "card": "p79",
+      "paleta": "branco-laranja",
+      "campos": {
+        "titulo": "O quadro estadual",
+        "rotulo": "ESTADUAIS | PRELIMINAR",
+        "grafico_titulo": "Representação nas assembleias",
+        "unidade": "cadeiras",
+        "barras": [
+          {
+            "rotulo": "Mulheres eleitas",
+            "valor": 213
+          },
+          {
+            "rotulo": "Demais cadeiras",
+            "valor": 822
+          }
+        ],
+        "nota": "TSE: 213 estaduais. Divisão por ideologia ainda não auditada."
+      },
+      "fala": "Nas assembleias estaduais, o Tribunal Superior Eleitoral informa duzentas e treze mulheres eleitas. A divisão por ideologia ainda precisa de conferência nominal. Não vamos tratar essa estimativa como definitiva.",
+      "source": "TSE, 13/11/2026; 1.035 cadeiras estaduais, HubPolítico",
+      "cor_tema": "#F2C94C"
+    },
+    {
+      "type": "card",
+      "card": "p116",
+      "paleta": "grafite-amarelo",
+      "campos": {
+        "titulo": "Votos e cadeiras são coisas diferentes",
+        "rotulo": "CONTEXTO",
+        "etiqueta": "Votos absolutos",
+        "apoio": "O tamanho do eleitorado importa."
+      },
+      "fala": "Estados maiores têm mais eleitores. Compare votos absolutos por cargo e a distribuição das cadeiras separadamente.",
+      "source": "TSE / HubPolítico",
+      "cor_tema": "#F2C94C"
+    },
+    {
+      "type": "card",
+      "card": "p112",
+      "paleta": "amarelo",
+      "campos": {
+        "rotulo": "RESUMO",
+        "titulo": "Rankings e cadeiras",
+        "itens": [
+          {
+            "texto": "Compare",
+            "sub": "a mesma disputa",
+            "entra": "compare"
+          },
+          {
+            "texto": "Confira",
+            "sub": "fontes e metodologia",
+            "entra": "confira"
+          },
+          {
+            "texto": "Compartilhe",
+            "sub": "o contexto completo",
+            "entra": "compartilhe"
+          }
+        ],
+        "apoio": "Resultados de 2026."
+      },
+      "fala": "Compare os rankings e a composição completa. Confira as fontes e a metodologia. Compartilhe a informação com o contexto.",
+      "source": "TSE; Agência Senado; GPS Partidário",
+      "cor_tema": "#F2C94C"
+    }
+  ]
+}
