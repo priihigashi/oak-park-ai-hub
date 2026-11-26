@@ -10,9 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      URL: "https://www.instagram.com/reel/DgOLUvuKupg/"
+      URL: "https://www.instagram.com/reel/DgNNTechzi9/"
       LANG_TX: ""
-      TAG: "r2"
+      TAG: "r6"
     steps:
       - uses: actions/checkout@v4
       - name: deps
@@ -22,7 +22,7 @@ jobs:
       - name: baixar e transcrever
         run: |
           mkdir -p ig_out
-          yt-dlp --write-info-json -o "ig_out/$TAG.%(ext)s" "$URL"
+          yt-dlp --write-info-json -o "ig_out/$TAG.%(ext)s" "$URL" || yt-dlp --write-info-json -o "ig_out/$TAG.%(ext)s" "https://www.instagram.com/p/DgNNTechzi9/"
           python3 - <<'PY'
           import os, glob, json, subprocess
           from faster_whisper import WhisperModel
@@ -45,9 +45,11 @@ jobs:
           os.remove(f"ig_out/{tag}.info.json"); os.remove(vid)
           PY
       - name: gravar resultado na branch
+        if: always()
         run: |
           git config user.name github-actions
           git config user.email actions@github.com
+          ls ig_out/${TAG}* >/dev/null 2>&1 || { mkdir -p ig_out; echo FALHOU > ig_out/${TAG}_FALHOU.txt; }
           git add ig_out
           git commit -m "out $TAG"
           for i in 1 2 3 4 5; do git pull --rebase && git push && break; sleep 5; done
