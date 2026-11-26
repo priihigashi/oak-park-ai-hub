@@ -12,7 +12,7 @@ jobs:
     env:
       URL: "https://www.instagram.com/reel/DgLsD8Xs-OR/"
       LANG_TX: "pt"
-      TAG: "r1"
+      TAG: "r2"
     steps:
       - uses: actions/checkout@v4
       - name: deps
@@ -50,5 +50,4 @@ jobs:
           git config user.email actions@github.com
           git add ig_out
           git commit -m "out $TAG"
-          git pull --rebase || true
-          git push
+          for i in 1 2 3; do git pull --rebase origin "$GITHUB_REF_NAME" && git push origin HEAD:"$GITHUB_REF_NAME" && break; sleep 5; done
