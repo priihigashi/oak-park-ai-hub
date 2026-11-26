@@ -1,0 +1,43 @@
+name: Temporary reel transcription
+on:
+  push:
+    branches: ["tmp/ig-dgn1u8bu1bh"]
+permissions:
+  contents: read
+jobs:
+  transcribe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install free local tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          pip install -U yt-dlp faster-whisper
+      - name: Capture public reel
+        run: |
+          mkdir -p ig_out
+          yt-dlp --no-playlist --no-progress --write-info-json --write-description -o 'ig_out/original.%(ext)s' 'https://www.instagram.com/reel/DgN1u8bu1Bh/'
+      - name: Transcribe
+        run: |
+          python - <<'PY'
+          import glob
+          from faster_whisper import WhisperModel
+          files = [p for p in glob.glob('ig_out/original.*') if p.endswith(('.mp4','.webm','.m4a','.mov','.mkv'))]
+          if not files: raise RuntimeError('No video captured')
+          model=WhisperModel('small',device='cpu',compute_type='int8')
+          segments, info=model.transcribe(files[0],vad_filter=True)
+          with open('ig_out/transcript.txt','w',encoding='utf-8') as out:
+              out.write(f'Language: {info.language}\n')
+              for s in segments:
+                  out.write(f'[{s.start:.2f}–{s.end:.2f}] {s.text.strip()}\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ig-dgn1u8bu1bh
+          path: ig_out/
+          retention-days: 3
