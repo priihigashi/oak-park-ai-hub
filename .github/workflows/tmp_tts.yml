@@ -1,0 +1,28 @@
+name: tmp-tts-fotos
+on:
+  push:
+    branches: ['tmp/**']
+    paths: ['.github/workflows/tmp_tts.yml']
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: deps
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          pip install -q edge-tts "rembg[cpu]" onnxruntime pillow
+      - name: voz
+        run: python3 tts_in/gen.py
+      - name: recortes
+        run: python3 tts_in/cut.py
+      - name: gravar
+        run: |
+          git config user.name github-actions
+          git config user.email actions@github.com
+          git add tts_out fotos_out
+          git commit -m 'tts e fotos'
+          for i in 1 2 3; do git pull --rebase origin "$GITHUB_REF_NAME" && git push origin HEAD:"$GITHUB_REF_NAME" && break; sleep 5; done
