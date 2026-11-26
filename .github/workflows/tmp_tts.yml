@@ -1,4 +1,4 @@
-name: tmp-tts-fotos
+name: tmp-tts-fotos  # v2 26/11
 on:
   push:
     branches: ['tmp/**']
@@ -14,14 +14,13 @@ jobs:
       - name: deps
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
-          pip install -q -U edge-tts
+          pip install -q edge-tts
       - name: voz
         run: python3 tts_in/gen.py
       - name: gravar
-        if: always()
         run: |
           git config user.name github-actions
           git config user.email actions@github.com
-          git add tts_out || true
-          git commit -m 'tts v2' || true
+          git add tts_out
+          git commit -m 'tts v2'
           for i in 1 2 3; do git pull --rebase origin "$GITHUB_REF_NAME" && git push origin HEAD:"$GITHUB_REF_NAME" && break; sleep 5; done
