@@ -1,6 +1,7 @@
 import collections
 import hashlib
 import json
+import shutil
 from pathlib import Path
 
 from playwright.sync_api import sync_playwright
@@ -11,7 +12,10 @@ manifest = json.loads(manifest_bytes)
 scenes = manifest['scenes']
 reports = []
 with sync_playwright() as browser:
-    chromium = browser.chromium.launch(args=['--no-sandbox'])
+    executable = shutil.which('google-chrome') or shutil.which('google-chrome-stable')
+    if not executable:
+        raise RuntimeError('Chrome indisponível no runner')
+    chromium = browser.chromium.launch(executable_path=executable, args=['--no-sandbox'])
     page = chromium.new_page(viewport={'width': 570, 'height': 1250})
     page.goto((root / 'index.html').as_uri(), wait_until='load')
     page.evaluate('() => document.fonts.ready')
