@@ -11,7 +11,11 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - run: pip install edge-tts==7.* 
+      - run: pip install edge-tts==7.* yt-dlp
+      - name: reel
+        run: |
+          if [ -f job/ig.txt ] && [ ! -f out/reel.mp4 ]; then mkdir -p out; yt-dlp -f 'bv*+ba/b' --merge-output-format mp4 -o out/reel.mp4 "$(cat job/ig.txt)" || yt-dlp -o out/reel.mp4 "$(cat job/ig.txt)" || true; fi
+          ls -la out || true
       - run: mkdir -p out && python job/tts.py
       - name: wikimedia
         run: |
