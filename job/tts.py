@@ -1,7 +1,7 @@
 import asyncio, json, edge_tts, sys
 async def main():
     text=open('job/roteiro.txt',encoding='utf-8').read().replace('\n',' ')
-    for voice,name in [('pt-BR-ThalitaMultilingualNeural','thalita'),('pt-BR-AntonioNeural','antonio')]:
+    for voice,name in [('pt-BR-ThalitaMultilingualNeural','thalita')]:
         c=edge_tts.Communicate(text,voice,rate='+8%',boundary='WordBoundary')
         words=[];audio=bytearray()
         async for ch in c.stream():
