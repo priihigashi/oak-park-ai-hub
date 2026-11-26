@@ -16,9 +16,13 @@ jobs:
           python-version: "3.12"
       - run: python -m pip install playwright==1.51.0
       - run: google-chrome --version
+      - run: python mulheres-render/saida/corrigir-abertura.py
       - run: python mulheres-render/saida/medir-zona.py
+      - run: python -c "import json; assert json.load(open('mulheres-render/saida/auditoria-area-segura.json'))['ok']"
       - uses: actions/upload-artifact@v4
         with:
           name: mulheres-2027-zona-segura
-          path: mulheres-render/saida/auditoria-area-segura.json
+          path: |
+            mulheres-render/saida/auditoria-area-segura.json
+            mulheres-render/saida/previa-corrigida.html
           if-no-files-found: error
