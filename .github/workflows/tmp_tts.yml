@@ -14,18 +14,14 @@ jobs:
       - name: deps
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
-          pip install -q -U edge-tts "rembg[cpu]" onnxruntime pillow
+          pip install -q -U edge-tts
       - name: voz
-        continue-on-error: true
         run: python3 tts_in/gen.py
-      - name: recortes
-        continue-on-error: true
-        run: python3 tts_in/cut.py
       - name: gravar
         if: always()
         run: |
           git config user.name github-actions
           git config user.email actions@github.com
-          git add tts_out fotos_out || true
-          git commit -m 'tts e fotos (2)' || true
+          git add tts_out || true
+          git commit -m 'tts v2' || true
           for i in 1 2 3; do git pull --rebase origin "$GITHUB_REF_NAME" && git push origin HEAD:"$GITHUB_REF_NAME" && break; sleep 5; done
