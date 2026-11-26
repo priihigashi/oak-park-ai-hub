@@ -1,0 +1,24 @@
+name: Mulheres 2027 zona segura
+on:
+  push:
+    branches: [tmp/mulheres-2027-zona-segura]
+    paths: [.github/workflows/tmp-mulheres-zona.yml, mulheres-render/saida/medir-zona.py]
+permissions:
+  contents: read
+jobs:
+  medir:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install playwright==1.51.0
+      - run: python -m playwright install chromium --with-deps
+      - run: python mulheres-render/saida/medir-zona.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mulheres-2027-zona-segura
+          path: mulheres-render/saida/auditoria-area-segura.json
+          if-no-files-found: error
