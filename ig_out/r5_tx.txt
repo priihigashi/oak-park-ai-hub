@@ -1,6 +1,0 @@
-[   0.0-   5.9] A notícia muito importante que acaba de chegar, fontes da Secretaria de Comunicação do Governo
-[   5.9-  11.9] confirmam que Luís Carlos Trabuco aceitou o convite para o Ministério da Fazenda.
-[  11.9-  18.5] Essa é a notícia mais importante para a área econômica em muito tempo e tende a diminuir
-[  18.5-  20.8] a pressão do mercado financeiro.
-[  20.8-  26.8] Trabuco na Fazenda ganha uma trégua, provavelmente mais duradoura do que se esperava.
-[  26.8-  31.2] A apuração com essa confirmação é do meu caro Guilherme...
