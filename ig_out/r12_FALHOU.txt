@@ -1,2 +1,0 @@
-https://www.instagram.com/reel/DgOKXCvqpD9/
-Command '['yt-dlp', '--write-info-json', '-o', 'ig_out/r12.%(ext)s', 'https://www.instagram.com/reel/DgOKXCvqpD9/']' returned non-zero exit status 1.
