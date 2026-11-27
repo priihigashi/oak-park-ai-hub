@@ -8,11 +8,9 @@ permissions:
 jobs:
   dl:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     env:
-      URL: "https://www.instagram.com/reel/DgOFd8SB4SZ/"
-      LANG_TX: ""
-      TAG: "r7"
+      LISTA: "r8 https://www.instagram.com/reel/DgONSPWAtrp/;r9 https://www.instagram.com/reel/DgOJLxrtweq/;r10 https://www.instagram.com/reel/DgOSp4dOhll/"
     steps:
       - uses: actions/checkout@v4
       - name: deps
@@ -22,34 +20,38 @@ jobs:
       - name: baixar e transcrever
         run: |
           mkdir -p ig_out
-          yt-dlp --write-info-json -o "ig_out/$TAG.%(ext)s" "$URL" || yt-dlp --write-info-json -o "ig_out/$TAG.%(ext)s" "https://www.instagram.com/p/DgOFd8SB4SZ/"
           python3 - <<'PY'
           import os, glob, json, subprocess
-          from faster_whisper import WhisperModel
-          tag = os.environ["TAG"]; lang = os.environ.get("LANG_TX") or None
-          vid = [f for f in glob.glob(f"ig_out/{tag}.*") if not f.endswith(".json")][0]
-          subprocess.run(["ffmpeg","-loglevel","error","-y","-i",vid,"-ac","1","-ar","16000","-f","s16le","ig_out/a.raw"],check=True)
           import numpy as np
-          audio = np.fromfile("ig_out/a.raw", np.int16).astype(np.float32) / 32768.0; os.remove("ig_out/a.raw")
-          segs, info = WhisperModel("small", compute_type="int8").transcribe(audio, language=lang)
-          with open(f"ig_out/{tag}_tx.txt", "w") as o:
-              for s in segs:
-                  o.write(f"[{s.start:6.1f}-{s.end:6.1f}] {s.text.strip()}\n")
-          meta = json.load(open(f"ig_out/{tag}.info.json"))
-          with open(f"ig_out/{tag}_meta.txt", "w") as o:
-              o.write(f"link: {os.environ['URL']}\nautor: {meta.get('uploader')}\ndata_postagem: {meta.get('upload_date')}\nidioma: {info.language}\nlegenda: {meta.get('description')}\n")
-          os.makedirs(f"ig_out/{tag}_frames", exist_ok=True)
-          dur = float(meta.get("duration") or 30)
-          for i in range(16):
-              subprocess.run(["ffmpeg", "-loglevel", "error", "-ss", str(dur * (i + 0.5) / 16), "-i", vid, "-frames:v", "1", "-vf", "scale=300:-1", f"ig_out/{tag}_frames/{i:02d}.jpg"])
-          os.remove(f"ig_out/{tag}.info.json"); os.remove(vid)
+          from faster_whisper import WhisperModel
+          model = WhisperModel("small", compute_type="int8")
+          for item in os.environ["LISTA"].split(";"):
+              tag, url = item.split()
+              try:
+                  subprocess.run(["yt-dlp","--write-info-json","-o",f"ig_out/{tag}.%(ext)s",url],check=True)
+                  vid = [f for f in glob.glob(f"ig_out/{tag}.*") if not f.endswith(".json")][0]
+                  subprocess.run(["ffmpeg","-loglevel","error","-y","-i",vid,"-ac","1","-ar","16000","-f","s16le","ig_out/a.raw"],check=True)
+                  audio = np.fromfile("ig_out/a.raw", np.int16).astype(np.float32) / 32768.0; os.remove("ig_out/a.raw")
+                  segs, info = model.transcribe(audio, language="pt")
+                  with open(f"ig_out/{tag}_tx.txt", "w") as o:
+                      for s in segs:
+                          o.write(f"[{s.start:6.1f}-{s.end:6.1f}] {s.text.strip()}\n")
+                  meta = json.load(open(f"ig_out/{tag}.info.json"))
+                  with open(f"ig_out/{tag}_meta.txt", "w") as o:
+                      o.write(f"link: {url}\nautor: {meta.get('uploader')}\ndata_postagem: {meta.get('upload_date')}\nlegenda: {meta.get('description')}\n")
+                  os.makedirs(f"ig_out/{tag}_frames", exist_ok=True)
+                  dur = float(meta.get("duration") or 30)
+                  for i in range(8):
+                      subprocess.run(["ffmpeg","-loglevel","error","-ss",str(dur*(i+0.5)/8),"-i",vid,"-frames:v","1","-vf","scale=300:-1",f"ig_out/{tag}_frames/{i:02d}.jpg"])
+                  os.remove(f"ig_out/{tag}.info.json"); os.remove(vid)
+              except Exception as e:
+                  open(f"ig_out/{tag}_FALHOU.txt","w").write(f"{url}\n{e}\n")
           PY
       - name: gravar resultado na branch
         if: always()
         run: |
           git config user.name github-actions
           git config user.email actions@github.com
-          ls ig_out/${TAG}* >/dev/null 2>&1 || { mkdir -p ig_out; echo FALHOU > ig_out/${TAG}_FALHOU.txt; }
           git add ig_out
-          git commit -m "out $TAG"
+          git commit -m "out lote" || true
           for i in 1 2 3 4 5; do git pull --rebase && git push && break; sleep 5; done
