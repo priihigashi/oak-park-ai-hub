@@ -1,0 +1,32 @@
+name: tmp-emendas
+on:
+  push:
+    branches: ["tmp/emendas-bolsonaro"]
+    paths: [".github/workflows/tmp_emendas.yml"]
+permissions:
+  contents: write
+jobs:
+  e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: tmp/emendas-bolsonaro
+      - name: baixar
+        run: |
+          mkdir -p /tmp/em em_out
+          curl -sSL -A 'Mozilla/5.0' -o /tmp/em/e.zip 'https://portaldatransparencia.gov.br/download-de-dados/emendas-parlamentares/UNICO' || true
+          ls -la /tmp/em; file /tmp/em/e.zip
+          cd /tmp/em && unzip -o e.zip && ls -la
+      - name: filtrar
+        run: |
+          cd /tmp/em
+          for f in *.csv; do iconv -f latin1 -t utf-8 "$f" > "u_$f" 2>/dev/null || cp "$f" "u_$f"; head -1 "u_$f" > "$GITHUB_WORKSPACE/em_out/head_$f"; grep -iE 'FLAVIO BOLSONARO|FLÁVIO BOLSONARO|EDUARDO BOLSONARO|RAMAGEM|JOSE OLIMPIO|JOSÉ OLÍMPIO|DR\. FLAVIO|DR\. FLÁVIO|DR FLAVIO|DR FLÁVIO' "u_$f" > "$GITHUB_WORKSPACE/em_out/hits_$f" || true; wc -l "$GITHUB_WORKSPACE/em_out/hits_$f"; done
+      - name: commit
+        run: |
+          git config user.name priihigashi
+          git config user.email mcfollingproperties@gmail.com
+          git add em_out
+          git commit -m 'em_out' || exit 0
+          git push || (git pull --rebase && git push)
