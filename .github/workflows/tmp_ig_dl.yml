@@ -10,9 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      URL: "https://www.instagram.com/reel/DgNNTechzi9/"
+      URL: "https://www.instagram.com/reel/DgOFd8SB4SZ/"
       LANG_TX: ""
-      TAG: "r6"
+      TAG: "r7"
     steps:
       - uses: actions/checkout@v4
       - name: deps
@@ -22,7 +22,7 @@ jobs:
       - name: baixar e transcrever
         run: |
           mkdir -p ig_out
-          yt-dlp --write-info-json -o "ig_out/$TAG.%(ext)s" "$URL" || yt-dlp --write-info-json -o "ig_out/$TAG.%(ext)s" "https://www.instagram.com/p/DgNNTechzi9/"
+          yt-dlp --write-info-json -o "ig_out/$TAG.%(ext)s" "$URL" || yt-dlp --write-info-json -o "ig_out/$TAG.%(ext)s" "https://www.instagram.com/p/DgOFd8SB4SZ/"
           python3 - <<'PY'
           import os, glob, json, subprocess
           from faster_whisper import WhisperModel
