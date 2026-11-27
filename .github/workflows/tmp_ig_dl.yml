@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      LISTA: "r20 https://www.instagram.com/reel/DgOhN4xRCAg/"
+      LISTA: "r21 https://www.instagram.com/reel/DgP-UwLzPMN/"
     steps:
       - uses: actions/checkout@v4
       - name: deps
