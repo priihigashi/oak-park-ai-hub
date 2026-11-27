@@ -1,0 +1,36 @@
+ession
+[Instagram] Extracting URL: https://www.instagram.com/reel/Dfoy-ortL-a/
+[Instagram] Dfoy-ortL-a: Checking post accessibility
+[Instagram] Dfoy-ortL-a: Downloading webpage
+[info] Dfoy-ortL-a: Downloading 1 format(s): dash-4474526899525316v+dash-4474338826210790a
+[info] Writing video metadata as JSON to: ig_out/r1.info.json
+[download] Destination: ig_out/r1.fdash-4474526899525316v.mp4
+
+[download]   0.0% of    4.23MiB at  Unknown B/s ETA Unknown
+[download]   0.1% of    4.23MiB at  Unknown B/s ETA Unknown
+[download]   0.2% of    4.23MiB at    6.03MiB/s ETA 00:00  
+[download]   0.3% of    4.23MiB at    1.18MiB/s ETA 00:03
+[download]   0.7% of    4.23MiB at    1.73MiB/s ETA 00:02
+[download]   1.5% of    4.23MiB at    2.29MiB/s ETA 00:01
+[download]   2.9% of    4.23MiB at    3.10MiB/s ETA 00:01
+[download]   5.9% of    4.23MiB at    4.71MiB/s ETA 00:00
+[download]  11.8% of    4.23MiB at    7.54MiB/s ETA 00:00
+[download]  23.6% of    4.23MiB at   12.66MiB/s ETA 00:00
+[download]  47.3% of    4.23MiB at   21.68MiB/s ETA 00:00
+[download]  94.6% of    4.23MiB at   37.80MiB/s ETA 00:00
+[download] 100.0% of    4.23MiB at   39.50MiB/s ETA 00:00
+[download] 100% of    4.23MiB in 00:00:00 at 9.08MiB/s   
+[download] Destination: ig_out/r1.fdash-4474338826210790a.m4a
+
+[download]   0.5% of  194.79KiB at  238.42KiB/s ETA 00:00
+[download]   1.5% of  194.79KiB at  666.43KiB/s ETA 00:00
+[download]   3.6% of  194.79KiB at    1.35MiB/s ETA 00:00
+[download]   7.7% of  194.79KiB at    1.02MiB/s ETA 00:00
+[download]  15.9% of  194.79KiB at    1.33MiB/s ETA 00:00
+[download]  32.3% of  194.79KiB at    1.72MiB/s ETA 00:00
+[download]  65.2% of  194.79KiB at    2.48MiB/s ETA 00:00
+[download] 100.0% of  194.79KiB at    3.21MiB/s ETA 00:00
+[download] 100% of  194.79KiB in 00:00:00 at 1.29MiB/s   
+[Merger] Merging formats into "ig_out/r1.mp4"
+Deleting original file ig_out/r1.fdash-4474526899525316v.mp4 (pass -k to keep)
+Deleting original file ig_out/r1.fdash-4474338826210790a.m4a (pass -k to keep)

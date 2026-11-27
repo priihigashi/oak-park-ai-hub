@@ -1,0 +1,31 @@
+[Instagram] Setting up session
+[Instagram] Extracting URL: https://www.instagram.com/p/Df2-3mKGjVR/
+[Instagram] Df2-3mKGjVR: Checking post accessibility
+[Instagram] Df2-3mKGjVR: Downloading webpage
+[download] Downloading playlist: Post by projetobrief
+[info] Writing playlist metadata as JSON to: ig_out/r3.info.json
+[Instagram] Playlist Post by projetobrief: Downloading 11 items of 11
+[download] Downloading item 1 of 11
+[download] Downloading item 2 of 11
+[download] Downloading item 3 of 11
+[download] Downloading item 4 of 11
+[download] Downloading item 5 of 11
+[download] Downloading item 6 of 11
+[download] Downloading item 7 of 11
+[download] Downloading item 8 of 11
+[download] Downloading item 9 of 11
+[download] Downloading item 10 of 11
+[download] Downloading item 11 of 11
+[info] Writing updated playlist metadata as JSON to: ig_out/r3.info.json
+[download] Finished downloading playlist: Post by projetobrief
+ERROR: [Instagram] Df2-N6vo5dT: No video formats found!; please report this issue on  https://github.com/yt-dlp/yt-dlp/issues?q= , filling out the appropriate issue template. Confirm you are on the latest version using  yt-dlp -U
+ERROR: [Instagram] Df2-OB5Iu-A: No video formats found!; please report this issue on  https://github.com/yt-dlp/yt-dlp/issues?q= , filling out the appropriate issue template. Confirm you are on the latest version using  yt-dlp -U
+ERROR: [Instagram] Df2-OFnoB2A: No video formats found!; please report this issue on  https://github.com/yt-dlp/yt-dlp/issues?q= , filling out the appropriate issue template. Confirm you are on the latest version using  yt-dlp -U
+ERROR: [Instagram] Df2-OKXI58R: No video formats found!; please report this issue on  https://github.com/yt-dlp/yt-dlp/issues?q= , filling out the appropriate issue template. Confirm you are on the latest version using  yt-dlp -U
+ERROR: [Instagram] Df2-ONZI7Hu: No video formats found!; please report this issue on  https://github.com/yt-dlp/yt-dlp/issues?q= , filling out the appropriate issue template. Confirm you are on the latest version using  yt-dlp -U
+ERROR: [Instagram] Df2-OSEI1Dg: No video formats found!; please report this issue on  https://github.com/yt-dlp/yt-dlp/issues?q= , filling out the appropriate issue template. Confirm you are on the latest version using  yt-dlp -U
+ERROR: [Instagram] Df2-OWOokxW: No video formats found!; please report this issue on  https://github.com/yt-dlp/yt-dlp/issues?q= , filling out the appropriate issue template. Confirm you are on the latest version using  yt-dlp -U
+ERROR: [Instagram] Df2-OaRo0fa: No video formats found!; please report this issue on  https://github.com/yt-dlp/yt-dlp/issues?q= , filling out the appropriate issue template. Confirm you are on the latest version using  yt-dlp -U
+ERROR: [Instagram] Df2-OfWI0MC: No video formats found!; please report this issue on  https://github.com/yt-dlp/yt-dlp/issues?q= , filling out the appropriate issue template. Confirm you are on the latest version using  yt-dlp -U
+ERROR: [Instagram] Df2-OkdonJW: No video formats found!; please report this issue on  https://github.com/yt-dlp/yt-dlp/issues?q= , filling out the appropriate issue template. Confirm you are on the latest version using  yt-dlp -U
+ERROR: [Instagram] Df2-O3XIEv1: No video formats found!; please report this issue on  https://github.com/yt-dlp/yt-dlp/issues?q= , filling out the appropriate issue template. Confirm you are on the latest version using  yt-dlp -U
