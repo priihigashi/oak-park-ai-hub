@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      LISTA: "r13 https://www.instagram.com/reel/DgOPyrxA7o6/"
+      LISTA: "r14 https://www.instagram.com/reel/DgOdYJ_Jtbo/"
     steps:
       - uses: actions/checkout@v4
       - name: deps
@@ -46,10 +46,6 @@ jobs:
                   meta = json.load(open(f"ig_out/{tag}.info.json"))
                   with open(f"ig_out/{tag}_meta.txt", "w") as o:
                       o.write(f"link: {url}\nautor: {meta.get('uploader')}\ndata_postagem: {meta.get('upload_date')}\nlegenda: {meta.get('description')}\n")
-                  os.makedirs(f"ig_out/{tag}_frames", exist_ok=True)
-                  dur = float(meta.get("duration") or 30)
-                  for i in range(12):
-                      subprocess.run(["ffmpeg","-loglevel","error","-ss",str(dur*(i+0.5)/12),"-i",vid,"-frames:v","1","-vf","scale=300:-1",f"ig_out/{tag}_frames/{i:02d}.jpg"])
                   os.remove(f"ig_out/{tag}.info.json"); os.remove(vid)
               except Exception as e:
                   open(f"ig_out/{tag}_FALHOU.txt","w").write(f"{url}\n{e}\n")
