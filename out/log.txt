@@ -1,13 +1,0 @@
-[Instagram] Setting up session
-[Instagram] Extracting URL: https://www.instagram.com/reel/DgBCgf8NUkI/
-[Instagram] DgBCgf8NUkI: Checking post accessibility
-[Instagram] DgBCgf8NUkI: Downloading webpage
-[info] DgBCgf8NUkI: Downloading 1 format(s): dash-1131003769821714v+dash-1128592413396183a
-[info] Writing video metadata as JSON to: out/reel.info.json
-[download] Destination: out/reel.fdash-1131003769821714v.mp4
-[download]   0.0% of   13.90MiB at  Unknown B/s ETA Unknown[download]   0.0% of   13.90MiB at  Unknown B/s ETA Unknown[download]   0.0% of   13.90MiB at  Unknown B/s ETA Unknown[download]   0.1% of   13.90MiB at    3.20MiB/s ETA 00:04  [download]   0.2% of   13.90MiB at    5.22MiB/s ETA 00:02[download]   0.4% of   13.90MiB at    6.24MiB/s ETA 00:02[download]   0.9% of   13.90MiB at    8.43MiB/s ETA 00:01[download]   1.8% of   13.90MiB at   12.86MiB/s ETA 00:01[download]   3.6% of   13.90MiB at   20.50MiB/s ETA 00:00[download]   7.2% of   13.90MiB at   32.56MiB/s ETA 00:00[download]  14.4% of   13.90MiB at   55.39MiB/s ETA 00:00[download]  28.8% of   13.90MiB at   95.15MiB/s ETA 00:00[download]  57.5% of   13.90MiB at  149.02MiB/s ETA 00:00[download]  86.3% of   13.90MiB at  182.48MiB/s ETA 00:00[download] 100.0% of   13.90MiB at  195.03MiB/s ETA 00:00[download] 100% of   13.90MiB in 00:00:00 at 85.07MiB/s  
-[download] Destination: out/reel.fdash-1128592413396183a.m4a
-[download]   0.1% of  798.87KiB at  Unknown B/s ETA Unknown[download]   0.4% of  798.87KiB at  Unknown B/s ETA Unknown[download]   0.9% of  798.87KiB at    6.49MiB/s ETA 00:00  [download]   1.9% of  798.87KiB at    3.21MiB/s ETA 00:00[download]   3.9% of  798.87KiB at    5.22MiB/s ETA 00:00[download]   7.9% of  798.87KiB at    6.28MiB/s ETA 00:00[download]  15.9% of  798.87KiB at    8.63MiB/s ETA 00:00[download]  31.9% of  798.87KiB at   12.97MiB/s ETA 00:00[download]  64.0% of  798.87KiB at   20.65MiB/s ETA 00:00[download] 100.0% of  798.87KiB at   28.67MiB/s ETA 00:00[download] 100% of  798.87KiB in 00:00:00 at 12.38MiB/s  
-[Merger] Merging formats into "out/reel.mp4"
-Deleting original file out/reel.fdash-1128592413396183a.m4a (pass -k to keep)
-Deleting original file out/reel.fdash-1131003769821714v.mp4 (pass -k to keep)
