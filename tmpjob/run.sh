@@ -1,8 +1,22 @@
 set -x
-mkdir -p out/frames
-yt-dlp -o "out/reel.%(ext)s" --write-info-json "https://www.instagram.com/reel/DgBCgf8NUkI/" || echo FAIL > out/fail.txt
+pip install -q gallery-dl instaloader || true
+rm -rf out; mkdir -p out/frames
+ID=DgBCgf8NUkI
+for u in "https://www.instagram.com/reel/$ID/" "https://www.instagram.com/p/$ID/" "https://www.instagram.com/reels/$ID/"; do
+  yt-dlp -o "out/reel.%(ext)s" --write-info-json "$u" >> out/log.txt 2>&1 && break
+done
 f=$(ls out/reel.* 2>/dev/null | grep -v json | head -1)
-[ -n "$f" ] || exit 0
+if [ -z "$f" ]; then
+  gallery-dl -D out/gdl "https://www.instagram.com/p/$ID/" >> out/log.txt 2>&1 || true
+  g=$(ls out/gdl/*.mp4 2>/dev/null | head -1); [ -n "$g" ] && mv "$g" out/reel.mp4
+fi
+if [ -z "$(ls out/reel.mp4 out/reel.webm 2>/dev/null)" ] && [ -z "$f" ]; then
+  (cd out && instaloader --no-metadata-json --dirname-pattern=il -- -$ID >> log.txt 2>&1) || true
+  g=$(ls out/il/*.mp4 2>/dev/null | head -1); [ -n "$g" ] && mv "$g" out/reel.mp4
+  cp out/il/*.txt out/caption_il.txt 2>/dev/null || true
+fi
+f=$(ls out/reel.* 2>/dev/null | grep -v json | head -1)
+[ -n "$f" ] || { echo FAIL > out/fail.txt; tail -60 out/log.txt; exit 0; }
 ffmpeg -v error -y -i "$f" -vf "fps=1/2,scale=360:-1" out/frames/f%03d.jpg
 python - <<'P'
 from faster_whisper import WhisperModel
@@ -17,5 +31,5 @@ m=WhisperModel('small',compute_type='int8')
 segs,info=m.transcribe(f)
 open('out/transcript.txt','w').write(f"lang {info.language}\n"+"\n".join(f"[{s.start:6.1f}-{s.end:6.1f}] {s.text}" for s in segs))
 P
-rm -f out/reel.*
+rm -rf out/reel.* out/gdl out/il
 ls -la out
