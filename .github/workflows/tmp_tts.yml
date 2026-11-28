@@ -1,0 +1,25 @@
+name: tmp-tts
+on:
+  push:
+    branches: ['tmp/**']
+    paths: ['.github/workflows/tmp_tts.yml', 'tmp_peca/narr.json']
+permissions:
+  contents: write
+jobs:
+  tts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: tts
+        run: |
+          pip install -q -U edge-tts
+          python3 tmp_peca/tts.py
+      - name: gravar
+        run: |
+          git config user.name github-actions
+          git config user.email actions@github.com
+          git add tts_out
+          git commit -m "tts out"
+          git pull --rebase || true
+          git push
